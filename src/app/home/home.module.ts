@@ -8,7 +8,7 @@ import {SidebarComponent} from '../template/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [HomeComponent, SidebarComponent],
-  imports: [CommonModule, SharedModule, HomeRoutingModule, BrowserAnimationsModule],
+  imports: [CommonModule, SharedModule, HomeRoutingModule, BrowserAnimationsModule]
 })
 export class HomeModule {
 }

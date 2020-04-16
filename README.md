@@ -34,7 +34,7 @@ With this sample, you can :
 Clone this repository locally :
 
 ``` bash
-git clone https://github.com/maximegris/office-container.git
+git clone http://git.dabacenter.ir/khosrojerdi/office-container-project.git
 ```
 
 Install dependencies with npm :

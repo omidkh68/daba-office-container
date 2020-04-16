@@ -11,7 +11,7 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('../components/tasks/tasks.module').then(m => m.TasksModule),
-        data: {depth: 1}
+        data: {depth: 1, page: 'one'}
       },
       {
         path: 'tasks',
@@ -20,7 +20,7 @@ const routes: Routes = [
       {
         path: 'users',
         loadChildren: () => import('../components/users/users.module').then(m => m.UsersModule),
-        data: {depth: 1}
+        data: {depth: 1, page: 'two'}
       }
     ]
   }

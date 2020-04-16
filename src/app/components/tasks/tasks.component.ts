@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MatTabChangeEvent} from '@angular/material/tabs';
@@ -20,7 +20,7 @@ export interface TaskEssentialInfo {
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss']
 })
-export class TasksComponent implements AfterViewInit, OnDestroy {
+export class TasksComponent implements OnDestroy {
   taskEssentialInfo: TaskEssentialInfo;
   activeTab: number = 0;
   refreshBoardData: boolean = false;
@@ -66,12 +66,6 @@ export class TasksComponent implements AfterViewInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog) {
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(_ => {
-      this.showFilter();
-    }, 1000);
   }
 
   addNewTask() {
