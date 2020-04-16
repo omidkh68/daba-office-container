@@ -1,0 +1,8 @@
+<mat-list color="text-white">
+  <h3 mat-subheader class="text-white">نرم افزار مدیریت پروژه دابا</h3>
+    <a mat-list-item *ngFor="let menu of menus" [routerLink]="[menu.link]" routerLinkActive="active-sidebar-link"
+       class="full-width no-padding text-white font-8-rem text-decoration-none">
+      <mat-icon class="text-white" mat-list-icon>{{menu.icon}}</mat-icon>
+      <h4 class="text-white" mat-line>{{menu.name | translate}}</h4>
+    </a>
+</mat-list>

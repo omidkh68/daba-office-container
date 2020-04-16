@@ -1,0 +1,42 @@
+$base-path: './assets/fonts/';
+
+$path-bold:           $base-path + 'iransans-fa-bold.woff';
+$path-medium:         $base-path + 'iransans-fa-medium.woff';
+$path-light:          $base-path + 'iransans-fa-light.woff';
+$path-ultralight:     $base-path + 'iransans-fa-ultralight.woff';
+$path-fa:             $base-path + 'iransans-fa.woff';
+
+@font-face {
+  font-family: 'IranSans';
+  font-style: normal;
+  font-weight: bold;
+  src: url($path-bold) format('woff');
+}
+
+@font-face {
+  font-family: 'IranSans';
+  font-style: normal;
+  font-weight: 500;
+  src: url($path-medium) format('woff');
+}
+
+@font-face {
+  font-family: 'IranSans';
+  font-style: normal;
+  font-weight: 300;
+  src: url($path-light) format('woff');
+}
+
+@font-face {
+  font-family: 'IranSans';
+  font-style: normal;
+  font-weight: 200;
+  src: url($path-ultralight) format('woff');
+}
+
+@font-face {
+  font-family: 'IranSans';
+  font-style: normal;
+  font-weight: normal;
+  src: url($path-fa) format('woff');
+}

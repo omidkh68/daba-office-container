@@ -1,0 +1,158 @@
+@mixin calculate($property, $a, $b) {
+  #{$property}: -webkit-calc(#{$a} - #{$b});
+  #{$property}:    -moz-calc(#{$a} - #{$b});
+  #{$property}:         calc(#{$a} - #{$b});
+}
+
+@mixin box-shadow-normal($left, $top, $blur, $color, $inset:'', $spread: 0) {
+  -moz-box-shadow: $left $top $blur $spread $color #{$inset};
+  -webkit-box-shadow: $left $top $blur $spread $color #{$inset};
+  box-shadow: $left $top $blur $spread $color #{$inset};
+}
+
+@mixin no-box-shadow() {
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+@mixin no-text-shadow() {
+  -moz-text-shadow: none !important;
+  -webkit-text-shadow: none !important;
+  text-shadow: none !important;
+}
+
+@mixin rounded($radius: 4px) {
+  -moz-border-radius: $radius !important;
+  -webkit-border-radius: $radius !important;
+  border-radius: $radius !important;
+}
+
+@mixin gradient($from, $to) {
+  background: $from !important; /* Old browsers */
+  background: -moz-linear-gradient(-45deg,$from 0%, $to 100%) !important; /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, $from 0%,$to 100%) !important; /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, $from 0%,$to 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from', endColorstr='$to',GradientType=1 ) !important; /* IE6-9 fallback on horizontal gradient */
+}
+
+
+@mixin radius-custom($radiusTop: 4px, $radiusRight: 4px, $radiusBottom: 4px, $radiusLeft: 4px) {
+  -moz-border-radius: $radiusTop $radiusRight $radiusBottom $radiusLeft !important;
+  -webkit-border-radius: $radiusTop $radiusRight $radiusBottom $radiusLeft !important;
+  border-radius: $radiusTop $radiusRight $radiusBottom $radiusLeft !important;
+}
+
+@mixin radius-all() {
+  -moz-border-radius: 100px !important;
+  -webkit-border-radius: 100px !important;
+  border-radius: 100px !important;
+}
+
+@mixin fi-icon-rotate($degrees, $rotation) {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation})";
+  -webkit-transform: rotate($degrees);
+  -ms-transform: rotate($degrees);
+  transform: rotate($degrees);
+}
+
+@mixin transition($args...) {
+  -webkit-transition: $args !important;
+  -moz-transition: $args !important;
+  -ms-transition: $args !important;
+  -o-transition: $args !important;
+  transition: $args !important;
+}
+
+@mixin margin($top: 0, $right: 0, $bottom: 0, $left: 0) {
+  margin: $top $right $bottom $left;
+}
+
+@mixin padding($top: 0, $right: 0, $bottom: 0, $left: 0) {
+  padding: $top $right $bottom $left;
+}
+
+@mixin opacity($opacity) {
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity = $opacity * 100)';
+  filter: alpha(opacity = $opacity * 100);
+  -moz-opacity: $opacity;
+  -khtml-opacity: $opacity;
+  opacity: $opacity;
+}
+
+@mixin transform-rotate($deg: 0) {
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+  -webkit-transform: rotate($deg+deg);
+  -ms-transform: rotate($deg+deg);
+  transform: rotate($deg+deg);
+}
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: ' '; // 1
+    display: table; // 2
+  }
+
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin container-fixed($gutter: 20px) {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: floor(($gutter / 2));
+  padding-right: ceil(($gutter / 2));
+
+  @include clearfix;
+}
+
+@mixin make-row($gutter: 20px) {
+  margin-left: ceil(($gutter / -2));
+  margin-right: floor(($gutter / -2));
+
+  @include clearfix;
+}
+
+@mixin make-grid-columns($i: 1, $list: ".col-xs-#{$i}, .col-sm-#{$i}, .col-md-#{$i}, .col-lg-#{$i}") {
+  @for $i from (1 + 1) through 12 {
+    $list: "#{$list}, .col-xs-#{$i}, .col-sm-#{$i}, .col-md-#{$i}, .col-lg-#{$i}";
+  }
+
+  #{$list} {
+    min-height: 1px;
+    padding-left: ceil((20px / 2));
+    padding-right: floor((20px / 2));
+    position: relative;
+  }
+}
+
+@mixin float-grid-columns($class, $i: 1, $list: ".col-#{$class}-#{$i}") {
+  @for $i from (1 + 1) through 12 {
+    $list: "#{$list}, .col-#{$class}-#{$i}";
+  }
+
+  #{$list} {
+    float: left;
+  }
+}
+
+@mixin calc-grid-column($index, $class, $type) {
+  @if ($type == width) and ($index > 0) {
+    .col-#{$class}-#{$index} {
+      width: percentage(($index / 12));
+    }
+  }
+}
+
+@mixin loop-grid-columns($columns, $class, $type) {
+  @for $i from 0 through $columns {
+    @include calc-grid-column($i, $class, $type);
+  }
+}
+
+@mixin make-grid($class) {
+  @include float-grid-columns($class);
+  @include loop-grid-columns(12, $class, width);
+}
