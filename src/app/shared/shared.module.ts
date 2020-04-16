@@ -1,15 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { TranslateModule } from '@ngx-translate/core';
-
-import { PageNotFoundComponent } from './components/';
-import { WebviewDirective } from './directives/';
-import { FormsModule } from '@angular/forms';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {MatCoreModule} from './mat-core.module';
+import {TranslateModule} from '@ngx-translate/core';
+import {PageNotFoundComponent} from './components/';
 
 @NgModule({
-  declarations: [PageNotFoundComponent, WebviewDirective],
-  imports: [CommonModule, TranslateModule, FormsModule],
-  exports: [TranslateModule, WebviewDirective, FormsModule]
+  declarations: [PageNotFoundComponent],
+  imports: [CommonModule, TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule],
+  exports: [TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule]
 })
-export class SharedModule {}
+export class SharedModule {
+}

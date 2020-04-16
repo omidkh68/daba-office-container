@@ -1,5 +1,8 @@
-<div class="container">
-  <h1 class="title">
-    {{ 'PAGES.HOME.TITLE' | translate }}
-  </h1>
-</div>
+<mat-drawer-container class="full-width full-height" dir="rtl">
+  <mat-drawer class="full-height" mode="side" opened>
+    <app-sidebar class="full-width full-height"></app-sidebar>
+  </mat-drawer>
+  <mat-drawer-content class="full-height overflow-hide">
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

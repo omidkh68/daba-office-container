@@ -1,7 +1,100 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'assets/extension';
+@import 'assets/iranSans';
+@import 'assets/grid';
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+
 html, body {
   margin: 0;
   padding: 0;
-
   height: 100%;
+  background-color: transparent;
+
+  $font-name: 'IranSans';
+
+  $custom-typography: mat-typography-config(
+    $font-family: $font-name
+  );
+
+  &,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span {
+    font-family: $font-name !important;
+  }
+
+  @include angular-material-typography($custom-typography);
+}
+
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  &, &::before, &::after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}
+
+:focus {
+  outline: none;
+}
+
+.title-container {
+  background-color: #FFF;
+  -webkit-box-shadow: 0 3px 1px -2px rgba(247, 247, 247, 0.2), 0 2px 2px 0 rgba(226, 226, 226, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 3px 1px -2px rgba(247, 247, 247, 0.2), 0 2px 2px 0 rgba(226, 226, 226, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 1px -2px rgba(247, 247, 247, 0.2), 0 2px 2px 0 rgba(226, 226, 226, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+  h1 {
+    font-weight: 300;
+  }
+}
+
+.content-container {
+  height: calc(100% - 150px);
+  overflow: auto;
+}
+
+.mat-tab-label {
+  min-width: 60px !important;
+  height: 35px !important;
+  padding: 0 1em !important;
+  align-items: start !important;
+}
+
+.mat-ink-bar {
+  background-color: #616161 !important;
+}
+
+/* todo: active sidebar link */
+.active-sidebar-link {
+}
+
+.mat-dialog-container {
+  padding: 0 !important;
+}
+
+.current-task-container {
+  -webkit-box-shadow: 0 -3px 1px -2px rgba(247, 247, 247, 0.2), 0 -2px 2px 0 rgba(226, 226, 226, 0.14), 0 -1px 5px 0 rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 -3px 1px -2px rgba(247, 247, 247, 0.2), 0 -2px 2px 0 rgba(226, 226, 226, 0.14), 0 -1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 -3px 1px -2px rgba(247, 247, 247, 0.2), 0 -2px 2px 0 rgba(226, 226, 226, 0.14), 0 -1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.mat-dialog-container {
+  position: relative;
+}
+
+.mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after,
+.mat-select-disabled .mat-select-value {
+  color: #333 !important;
 }

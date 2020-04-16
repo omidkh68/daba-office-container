@@ -1,0 +1,40 @@
+<mat-grid-list *ngIf="boards.length" cols="3" gutterSize="10" rowHeight="40px">
+  <mat-grid-tile
+    class="board-container"
+    *ngFor="let board of boards"
+    [colspan]="board.cols"
+    [rowspan]="board.rows">
+    <div class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l">
+      <span class="float-right font-8-em">{{board.name}}</span>
+
+      <span class="float-left task-count width-25 height-25 line-height-25 font-7-em text-center" [ngClass]="board.id">
+        {{board.tasks.length}}
+      </span>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+<mat-grid-list *ngIf="boards.length" class="grid-height" cols="3" gutterSize="10" rowHeight="fit">
+  <mat-grid-tile
+    class="board-container"
+    *ngFor="let board of boards"
+    [colspan]="board.cols"
+    [rowspan]="board.rows">
+    <div class="task-container full-height full-width padding-full overflow-x-hide overflow-y-auto"
+         id="{{board.id}}"
+         cdkDropList
+         (cdkDropListDropped)="drop($event)"
+         [cdkDropListData]="board.tasks"
+         [cdkDropListConnectedTo]="connectedTo">
+      <mat-card class="margin-b-full bg-white card-hover"
+                [cdkDragData]="task"
+                (click)="showTaskDetail(task, board.id)"
+                *ngFor="let task of board.tasks" cdkDrag>
+        {{task.taskName}}
+        <br>
+        <div class="font-8-em text-orange-400">{{task.assignTo.name + ' ' + task.assignTo.family}}</div>
+
+        <div class="font-8-em text-green-500">{{task.taskID}}</div>
+      </mat-card>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>

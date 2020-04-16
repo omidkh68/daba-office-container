@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { ElectronService } from './core/services';
-import { TranslateService } from '@ngx-translate/core';
-import { AppConfig } from '../environments/environment';
+import {Component} from '@angular/core';
+import {ElectronService} from './core/services';
+import {TranslateService} from '@ngx-translate/core';
+// import {AppConfig} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +13,8 @@ export class AppComponent {
     public electronService: ElectronService,
     private translate: TranslateService
   ) {
-    translate.setDefaultLang('en');
-    console.log('AppConfig', AppConfig);
+    translate.setDefaultLang('fa');
+    /*console.log('AppConfig', AppConfig);
 
     if (electronService.isElectron) {
       console.log(process.env);
@@ -23,6 +23,6 @@ export class AppComponent {
       console.log('NodeJS childProcess', electronService.childProcess);
     } else {
       console.log('Mode web');
-    }
+    }*/
   }
 }

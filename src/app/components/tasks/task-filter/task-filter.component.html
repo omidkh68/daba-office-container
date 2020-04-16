@@ -1,0 +1,132 @@
+<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
+  <form [formGroup]="form" (submit)="submit()" class="full-height">
+    <div class="dialog-content-container float-right full-width" dir="rtl">
+      <h1 class="margin-b-full text-right font-full-em text-weight-500">فیلتر تسک ها</h1>
+
+      <div class="row margin-b-full">
+        <div class="col-md-6 float-right">
+          <mat-form-field class="full-width font-8-em">
+            <mat-label>نوع فیلتر</mat-label>
+            <mat-select formControlName="type" tabIndex="1" required>
+              <mat-option *ngFor="let type of filterTypes" [value]="type.typeName">
+                {{type.textName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6 float-right" dir="rtl">
+          <mat-form-field class="full-width font-8-em">
+            <input matInput placeholder="نام تسک" class="full-width" type="text"
+                   formControlName="taskName" tabindex="2">
+            <mat-label>
+              نام تسک
+            </mat-label>
+
+            <mat-error *ngIf="!form.get('taskName').valid && form.get('taskName').touched">
+              لطفا نام تسک را وارد نمایید
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6 float-right">
+          <mat-form-field class="full-width font-8-em">
+            <mat-label>پروژه</mat-label>
+            <mat-select formControlName="projectID" tabIndex="3">
+              <mat-option *ngFor="let project of projectsList" [value]="project.projectID">
+                {{project.projectName}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="!form.get('projectID').valid && form.get('projectID').touched">
+              لطفا پروژه را مشخص نمایید
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6 float-right">
+          <mat-form-field class="full-width font-8-em">
+            <img matPrefix
+                 *ngIf="form.get('adminID').valid"
+                 [src]="'/assets/profileImg/'+form.get('adminID').value+'.jpg'"
+                 class="width-20 height-20 margin-l-half round-corner-all pos-rel top-three-tenth">
+            <mat-label>مسئول انجام</mat-label>
+            <mat-select formControlName="adminID" tabIndex="4">
+              <mat-option *ngFor="let user of usersList" [value]="user.adminId">
+                <img matPrefix
+                     class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
+                     [src]="'/assets/profileImg/'+user.adminId+'.jpg'">
+                {{user.name + ' ' + user.family}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="!form.get('adminID').valid && form.get('adminID').touched">
+              لطفا مسئول را مشخص نمایید
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6 float-right">
+          <mat-form-field class="full-width font-8-em">
+            <mat-label>از تاریخ</mat-label>
+            <input matInput [matDatepicker]="picker1" readonly
+                   (focus)="picker1.open()" (click)="picker1.open()"
+                   (dateChange)="dateToGregorian('dateStart', $event)"
+                   formControlName="dateStart" tabindex="5">
+            <mat-datepicker #picker1></mat-datepicker>
+
+            <button class="close-icon pos-rel top-half float-left" type="button"
+                    *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
+                    mat-button matSuffix mat-icon-button aria-label="Clear"
+                    (click)="form.get('dateStart').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="!form.get('dateStart').valid && form.get('dateStart').touched">
+              لطفا تاریخ را انتخاب نمایید
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6 float-right">
+          <mat-form-field class="full-width font-8-em">
+            <mat-label>تا تاریخ</mat-label>
+            <input matInput [matDatepicker]="picker2" readonly
+                   (focus)="picker2.open()" (click)="picker2.open()"
+                   (dateChange)="dateToGregorian('dateStop', $event)"
+                   formControlName="dateStop" tabindex="6">
+            <mat-datepicker #picker2></mat-datepicker>
+
+            <button class="close-icon pos-rel top-half float-left" type="button"
+                    *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
+                    mat-button matSuffix mat-icon-button aria-label="Clear"
+                    (click)="form.get('dateStop').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="!form.get('dateStop').valid && form.get('dateStop').touched">
+              لطفا تاریخ را انتخاب نمایید
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog-buttons height-30 float-right full-width" dir="rtl">
+      <button mat-raised-button
+              [disabled]="!form.valid && form.touched"
+              type="submit"
+              tabindex="13"
+              class="green-gradient float-left text-white line-height-30 font-7-em overflow-hide text-weight-normal">
+        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+        <span class="padding-mini-r-l">ثبت</span>
+      </button>
+
+      <button (click)="dialogRef.close(false)"
+              type="button"
+              class="no-bg no-border cursor-pointer float-left text-red-500 line-height-30 font-7-em overflow-hide text-weight-normal">
+        <span class="padding-mini-r-l">انصراف</span>
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,21 +1,15 @@
 {
-  "name": "angular-electron",
-  "version": "7.0.3",
-  "description": "Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "homepage": "https://github.com/maximegris/angular-electron",
+  "name": "office-container",
+  "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
+  "version": "0.1.1",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "email": "omidkh68@gmail.com",
+    "name": "Omid Khosrojerdi"
   },
-  "keywords": [
-    "angular",
-    "angular 9",
-    "electron",
-    "typescript",
-    "eslint",
-    "spectron",
-    "sass"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "http://git.dabacenter.ir/khosrojerdi/daba-desktop-project.git"
+  },
   "main": "main.js",
   "private": true,
   "scripts": {
@@ -87,6 +81,19 @@
     "wait-on": "4.0.2",
     "webdriver-manager": "12.1.7",
     "zone.js": "0.10.3"
+  },
+  "dependencies": {
+    "@angular/animations": "~9.1.1",
+    "@angular/cdk": "^9.2.1",
+    "@angular/material": "^9.2.1",
+    "@angular/material-moment-adapter": "^9.2.1",
+    "@fullcalendar/angular": "^4.4.5-beta",
+    "@fullcalendar/core": "^4.4.0",
+    "@fullcalendar/daygrid": "^4.4.0",
+    "electron-screenshot-service": "^4.0.3",
+    "electron-updater": "^4.2.5",
+    "jalali-moment": "^3.3.3",
+    "moment": "^2.24.0"
   },
   "engines": {
     "node": ">=10.13.0"
