@@ -34,7 +34,7 @@ With this sample, you can :
 Clone this repository locally :
 
 ``` bash
-git clone http://git.dabacenter.ir/khosrojerdi/office-container-project.git
+git clone https://github.com/omidkh68/daba-office-container.git
 ```
 
 Install dependencies with npm :
@@ -87,12 +87,6 @@ Maybe you want to execute the application in the browser with hot reload ? Just 
 **Note that you can't use Electron or NodeJS native libraries in this case.** Please check `providers/electron.service.ts` to watch how conditional import of electron/Native libraries is done.
 
 ## Branch & Packages version
-
-- Angular 4 & Electron 1 : Branch [angular4](https://github.com/maximegris/office-container/tree/angular4)
-- Angular 5 & Electron 1 : Branch [angular5](https://github.com/maximegris/office-container/tree/angular5)
-- Angular 6 & Electron 3 : Branch [angular6](https://github.com/maximegris/office-container/tree/angular6)
-- Angular 7 & Electron 3 : Branch [angular7](https://github.com/maximegris/office-container/tree/angular7)
-- Angular 8 & Electron 7 : Branch [angular8](https://github.com/maximegris/office-container/tree/angular8)
 - Angular 9 & Electron 8 : (master)
 
 [build-badge]: https://travis-ci.org/maximegris/office-container.svg?branch=master&style=style=flat-square

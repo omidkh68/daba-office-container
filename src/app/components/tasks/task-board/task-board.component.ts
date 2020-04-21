@@ -1,4 +1,4 @@
-import * as io from 'socket.io-client';
+// import * as io from 'socket.io-client';
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
@@ -26,7 +26,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   @Input()
   filterBoards: any;
 
-  socket = io('http://localhost:4000');
+  // socket = io('http://localhost:4000');
   rowHeight: string = '0';
   connectedTo = [];
   boards: BoardInterface[] = [];
@@ -44,9 +44,9 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
     this.getBoards();
 
-    this.socket.on('update-data', (data: any) => {
+    /*this.socket.on('update-data', (data: any) => {
       this.getBoards();
-    });
+    });*/
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -106,7 +106,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.socket.emit('updatedata', result);
+          // this.socket.emit('updatedata', result);
         }
       })
     );
@@ -220,7 +220,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.refreshData) {
-      this.socket.emit('updatedata');
+      // this.socket.emit('updatedata');
     }
 
     if (changes.filterBoards && !changes.filterBoards.firstChange) {

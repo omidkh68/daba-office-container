@@ -1,4 +1,4 @@
 appId: com.officeContainer.ElectronAutoUpdater
 publish:
   provider: github
-  token: 4bdd4dce28a38c7dfb53f3efbbb4555e9137f695
+  token: b12e1469a32730ef9ecf6322bddfa49937db8e2c

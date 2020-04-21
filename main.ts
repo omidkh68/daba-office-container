@@ -1,5 +1,5 @@
 import {app, BrowserWindow, screen, webFrame, ipcMain} from 'electron';
-import {autoUpdater} from 'electron-updater';
+// import {autoUpdater} from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -55,10 +55,10 @@ function createWindow(): BrowserWindow {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
-
+/*
     mainWindow.once('ready-to-show', () => {
         autoUpdater.checkForUpdatesAndNotify();
-    });
+    });*/
 
     return mainWindow;
 }
@@ -103,17 +103,17 @@ try {
         event.sender.send('app_version', {version: app.getVersion()});
     });
 
-    ipcMain.on('restart_app', () => {
+    /*ipcMain.on('restart_app', () => {
         autoUpdater.quitAndInstall();
-    });
+    });*/
 
-    autoUpdater.on('update-available', () => {
+    /*autoUpdater.on('update-available', () => {
         mainWindow.webContents.send('update_available');
     });
 
     autoUpdater.on('update-downloaded', () => {
         mainWindow.webContents.send('update_downloaded');
-    });
+    });*/
 
 } catch (e) {
     // Catch Error

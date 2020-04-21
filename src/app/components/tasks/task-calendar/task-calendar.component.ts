@@ -1,4 +1,4 @@
-import * as io from 'socket.io-client';
+// import * as io from 'socket.io-client';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {MatDialog} from '@angular/material/dialog';
@@ -18,7 +18,7 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   tasks: TaskInterface[] = [];
   usersList: UserInterface[] = [];
   projectsList: ProjectInterface[] = [];
-  socket = io('http://localhost:4000');
+  // socket = io('http://localhost:4000');
   calendarEvents = [];
   events = [
     {title: 'event 1', date: '2020-04-01'},
@@ -34,9 +34,9 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getBoards();
 
-    this.socket.on('update-data', (data: any) => {
+    /*this.socket.on('update-data', (data: any) => {
       this.getBoards();
-    });
+    });*/
   }
 
   getBoards() {

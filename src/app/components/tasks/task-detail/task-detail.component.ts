@@ -4,7 +4,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
-import * as io from 'socket.io-client';
+// import * as io from 'socket.io-client';
 import {TaskInterface} from '../logic/task-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {UserInterface} from '../../users/logic/user-interface';
@@ -17,7 +17,7 @@ import {TaskDataInterface} from '../logic/task-data-interface';
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
-  socket = io('http://localhost:4000');
+  // socket = io('http://localhost:4000');
   editable: boolean = false;
   task: TaskInterface;
   projectsList: ProjectInterface[] = [];

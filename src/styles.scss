@@ -4,6 +4,11 @@
 @import '~@fullcalendar/core/main.css';
 @import '~@fullcalendar/daygrid/main.css';
 
+:host {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 html, body {
   margin: 0;
   padding: 0;
