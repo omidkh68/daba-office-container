@@ -1,3 +1,6 @@
+import {RoleInterface} from '../../tasks/logic/role-interface';
+import {UserStatusInterface} from './user-status-interface';
+
 export interface UserInterface {
   adminId: number;
   username?: string;
@@ -5,12 +8,10 @@ export interface UserInterface {
   name: string;
   family: string;
   email?: string;
-  mailPass?: string;
   status?: string;
   permission?: string;
-  typeId?: number;
   darkMode?: number;
-  adminTypeId?: number;
-  typeName?: string;
-  parentId?: number;
+  role?: RoleInterface;
+  userCurrentStatus?: UserStatusInterface;
+  creationDate?: string;
 }

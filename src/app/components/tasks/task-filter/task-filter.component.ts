@@ -24,10 +24,10 @@ export interface filterType {
 export class TaskFilterComponent implements OnInit, OnDestroy {
   filterData: FilterInterface = {
     userId: 0,
-    adminID: 0,
+    adminId: 0,
     dateStart: '',
     dateStop: '',
-    projectID: 0,
+    projectId: 0,
     taskName: '',
     type: '',
     typeId: 0
@@ -103,11 +103,11 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
       });
     }
 
-    const projectIdExistIndex = this.projectsList.findIndex(project => project.projectID === 0);
+    const projectIdExistIndex = this.projectsList.findIndex(project => project.projectId === 0);
 
     if (projectIdExistIndex === -1) {
       this.projectsList.splice(0, 0, {
-        projectID: 0,
+        projectId: 0,
         projectName: 'همه'
       });
     }
@@ -117,10 +117,10 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
     this.createForm().then(() => {
       this.form.patchValue({
         taskName: this.filterData.taskName ? this.filterData.taskName : '',
-        projectID: this.filterData.projectID ? this.filterData.projectID : 0,
+        projectId: this.filterData.projectId ? this.filterData.projectId : 0,
         dateStart: this.filterData.dateStart ? this.filterData.dateStart : '',
         dateStop: this.filterData.dateStop ? this.filterData.dateStop : '',
-        adminID: this.filterData.adminID ? this.filterData.adminID : 0,
+        adminId: this.filterData.adminId ? this.filterData.adminId : 0,
         type: this.filterData.type ? this.filterData.type : ''
       });
 
@@ -138,11 +138,12 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         userId: new FormControl(1, Validators.required),
         typeId: new FormControl(9, Validators.required),
         taskName: new FormControl(''),
-        projectID: new FormControl(0),
+        projectId: new FormControl(0),
         dateStart: new FormControl(''),
         dateStop: new FormControl(''),
         type: new FormControl('byCreateDate', Validators.required),
-        adminID: new FormControl(0)
+        adminId: new FormControl(0),
+        page: new FormControl('-1')
       });
 
       resolve(true);
@@ -160,16 +161,16 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.subscribe((selectedValue: FilterInterface) => {
 
-      const projectIDControl = this.form.get('projectID');
-      const adminIDControl = this.form.get('adminID');
+      const projectIdControl = this.form.get('projectId');
+      const adminIdControl = this.form.get('adminId');
 
       switch (selectedValue.type) {
         case 'byProject':
           this.resetFormValidation();
 
-          if (projectIDControl.value === 0) {
-            projectIDControl.setErrors({'incorrect': true});
-            projectIDControl.markAsTouched();
+          if (projectIdControl.value === 0) {
+            projectIdControl.setErrors({'incorrect': true});
+            projectIdControl.markAsTouched();
           }
 
           break;
@@ -197,9 +198,9 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         case 'byUser':
           this.resetFormValidation();
 
-          if (adminIDControl.value === 0) {
-            adminIDControl.setErrors({'incorrect': true});
-            adminIDControl.markAsTouched();
+          if (adminIdControl.value === 0) {
+            adminIdControl.setErrors({'incorrect': true});
+            adminIdControl.markAsTouched();
           }
 
           break;
@@ -236,23 +237,25 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
   }
 
   resetFormValidation() {
-    this.form.get('projectID').setErrors(null);
+    this.form.get('projectId').setErrors(null);
     this.form.get('dateStart').setErrors(null);
     this.form.get('dateStop').setErrors(null);
-    this.form.get('adminID').setErrors(null);
+    this.form.get('adminId').setErrors(null);
   }
 
   submit() {
+    this.form.disable();
+
     const formValue: FilterInterface = Object.assign({}, this.form.value);
 
     this.filterData = Object.assign({}, this.form.value);
 
-    if (formValue.adminID === 0) {
-      delete (formValue.adminID);
+    if (formValue.adminId === 0) {
+      delete (formValue.adminId);
     }
 
-    if (formValue.projectID === 0) {
-      delete (formValue.projectID);
+    if (formValue.projectId === 0) {
+      delete (formValue.projectId);
     }
 
     if (formValue.taskName === '') {
@@ -274,9 +277,11 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
             {
               result: 1,
               filterData: this.filterData,
-              contents: resp.content
+              content: resp.content
             }
           );
+        } else {
+          this.form.enable();
         }
       })
     );

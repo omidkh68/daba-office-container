@@ -31,9 +31,14 @@
                 *ngFor="let task of board.tasks" cdkDrag>
         {{task.taskName}}
         <br>
-        <div class="font-8-em text-orange-400">{{task.assignTo.name + ' ' + task.assignTo.family}}</div>
 
-        <div class="font-8-em text-green-500">{{task.taskID}}</div>
+        <div class="font-8-em">
+          <span class="text-orange-400">{{task.assignTo.name + ' ' + task.assignTo.family}}</span>
+           -
+          <span class="text-grey-500">{{task.assignTo.role.roleNameFa}}</span>
+        </div>
+
+        <div class="font-8-em text-green-500">{{task.taskId}}</div>
       </mat-card>
     </div>
   </mat-grid-tile>

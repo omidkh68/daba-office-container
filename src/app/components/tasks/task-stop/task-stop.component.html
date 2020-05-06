@@ -1,0 +1,54 @@
+<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99 overflow-hide">
+  <form [formGroup]="form" (submit)="submit()" class="full-height">
+    <div class="dialog-content-container float-right full-width">
+      <h1 class="margin-b-full text-right font-full-em text-weight-500">{{'توضیح توقف تسک'}}</h1>
+
+      <div class="row margin-b-full">
+        <div class="col-md-9 float-right" dir="rtl">
+          <span>نام تسک: </span> <span class="text-orange-700">{{task.taskName}}</span>
+        </div>
+      </div>
+
+      <div class="row" dir="rtl">
+       <div class="col-md-12 no-padding-r-l">
+          <div class="font-8-em pos-abs top-half right-full">درصد پیشبرد
+            <span>{{form.get('percentage').value}}</span> ٪
+          </div>
+          <mat-slider
+            class="full-width no-padding-r-l pos-rel top-half"
+            formControlName="percentage"
+            [max]="100"
+            [min]="0"
+            [step]="5"
+            [thumbLabel]="true"
+            [tickInterval]="2" tabindex="3">
+          </mat-slider>
+        </div>
+      </div>
+
+      <div class="row margin-b-full" dir="rtl">
+        <div class="col-md-12">
+          <mat-form-field class="full-width font-8-em">
+            <mat-label>توضیح تسک</mat-label>
+            <textarea matInput required formControlName="description" placeholder="توضیح تسک" tabindex="12"></textarea>
+
+            <mat-error *ngIf="!form.get('description').valid && form.get('description').touched">
+              لطفا توضیح را وارد نمایید
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog-buttons height-30 float-right full-width" dir="rtl">
+      <button mat-raised-button
+              [disabled]="!form.valid"
+              type="submit"
+              tabindex="13"
+              class="green-gradient float-left text-white line-height-30 font-7-em overflow-hide text-weight-normal">
+        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+        <span class="padding-mini-r-l">ثبت</span>
+      </button>
+    </div>
+  </form>
+</div>

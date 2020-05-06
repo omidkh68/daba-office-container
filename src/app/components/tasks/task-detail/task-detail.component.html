@@ -1,6 +1,8 @@
 <div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
   <form [formGroup]="form" (submit)="submit()" class="full-height">
     <div class="dialog-content-container float-right full-width">
+      <h1 class="margin-b-full text-right font-full-em text-weight-500">{{data.action === 'detail' ? 'ویرایش تسک' : 'افزودن تسک'}}</h1>
+
       <div class="row margin-b-full">
         <div class="col-md-3 float-left">
           <button *ngIf="data.action === 'detail'"
@@ -55,7 +57,7 @@
             <span>{{form.get('percentage').value}}</span> ٪
           </div>
           <mat-slider
-            class="full-width no-padding-r-l pos-rel top-seven-tenth"
+            class="full-width no-padding-r-l pos-rel top-half"
             formControlName="percentage"
             [max]="100"
             [min]="0"
@@ -71,7 +73,7 @@
           <mat-form-field class="full-width font-8-em">
             <mat-label>پروژه</mat-label>
             <mat-select formControlName="project" tabIndex="4">
-              <mat-option *ngFor="let project of projectsList" [value]="project.projectID">
+              <mat-option *ngFor="let project of projectsList" [value]="project">
                 {{project.projectName}}
               </mat-option>
             </mat-select>
@@ -84,15 +86,14 @@
         <div class="col-md-6 float-right">
           <mat-form-field class="full-width font-8-em">
             <img matPrefix
-                 appImgFallback
-                 [srcset]="'http://project-v2.dabacenter.ir/statics/profileImg/'+form.get('assignTo').value+'/profile.png'"
-                 class="width-20 height-20 margin-l-half pos-rel top-three-tenth">
+                 [srcset]="'./assets/profileImg/'+form.get('assignTo').value.adminId +'.jpg'"
+                 class="width-20 height-20 round-corner-all margin-l-half pos-rel top-three-tenth">
             <mat-label>مسئول انجام تسک</mat-label>
             <mat-select formControlName="assignTo" tabIndex="5">
-              <mat-option *ngFor="let user of usersList" [value]="user.adminId">
+              <mat-option *ngFor="let user of usersList" [value]="user">
                 <img matPrefix
-                     class="width-20 height-20 margin-l-half pos-rel top-six-tenth"
-                     [srcset]="'http://project-v2.dabacenter.ir/statics/profileImg/'+user.adminId+'/profile.png'">
+                     class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
+                     [srcset]="'./assets/profileImg/'+ user.adminId +'.jpg'">
                 {{user.name + ' ' + user.family}}
               </mat-option>
             </mat-select>
@@ -196,6 +197,17 @@
             <mat-label>توضیح تسک</mat-label>
             <textarea matInput formControlName="taskDesc" placeholder="توضیح تسک" tabindex="12"></textarea>
           </mat-form-field>
+        </div>
+      </div>
+
+      <div class="ro  w margin-b-full" dir="rtl">
+        <div class="col-md-12">
+          <mat-slide-toggle
+            formControlName="trackable"
+            class="example-margin"
+            [color]="'primary'">
+            قابل ردیابی
+          </mat-slide-toggle>
         </div>
       </div>
     </div>

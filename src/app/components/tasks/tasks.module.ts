@@ -4,6 +4,7 @@ import {RouterModule} from '@angular/router';
 import {SharedModule} from '../../shared/shared.module';
 import {TasksComponent} from './tasks.component';
 import {TranslateModule} from '@ngx-translate/core';
+import {TaskStopComponent} from './task-stop/task-stop.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import {TaskBoardComponent} from './task-board/task-board.component';
 import {TaskNotesComponent} from './task-notes/task-notes.component';
@@ -11,7 +12,7 @@ import {TaskFilesComponent} from './task-files/task-files.component';
 import {TaskDetailComponent} from './task-detail/task-detail.component';
 import {TaskFilterComponent} from './task-filter/task-filter.component';
 import {TaskCurrentComponent} from './task-current/task-current.component';
-import {TaskMessagesComponent} from './task-messages/task-messages.component';
+/*import {TaskMessagesComponent} from './task-messages/task-messages.component';*/
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
 
 @NgModule({
@@ -23,8 +24,9 @@ import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
     TaskDetailComponent,
     TaskFilterComponent,
     TaskCurrentComponent,
-    TaskMessagesComponent,
-    TaskCalendarComponent
+    /*TaskMessagesComponent,*/
+    TaskCalendarComponent,
+    TaskStopComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,7 @@ import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
     TranslateModule.forChild({}),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [TaskDetailComponent, TaskFilterComponent],
+  entryComponents: [TaskDetailComponent, TaskFilterComponent, TaskStopComponent],
 })
 export class TasksModule {
 }

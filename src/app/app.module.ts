@@ -10,7 +10,9 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import {HomeModule} from './home/home.module';
+
 import {AppComponent} from './app.component';
+import {NbThemeModule} from '@nebular/theme';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -26,6 +28,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    NbThemeModule.forRoot({name: 'default'}),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -2,7 +2,7 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 
 export interface TaskInterface {
-  taskID: number;
+  taskId: number;
   taskName: string;
   assignTo: UserInterface;
   taskDurationHours: number;
@@ -18,5 +18,6 @@ export interface TaskInterface {
   assigner: UserInterface;
   taskDateStart: string;
   taskDateStop: string;
-  boardStatus?: string;
+  boardStatus: string;
+  trackable: number;
 }

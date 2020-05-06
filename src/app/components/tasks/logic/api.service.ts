@@ -25,7 +25,7 @@ export class ApiService {
   }
 
   boards(userId: number): Observable<BoardInterface[]> {
-    return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/?userId=${userId}`);
+    return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/?userId=${userId}&page=-1`);
   }
 
   createTask(task: TaskInterface): Observable<TaskInterface> {
@@ -37,7 +37,7 @@ export class ApiService {
   }
 
   deleteTask(task: TaskInterface): Observable<TaskInterface> {
-    return this._http.delete<TaskInterface>(`${this.API_URL}/boards/task/?taskId=${task.taskID}`, this.headers);
+    return this._http.delete<TaskInterface>(`${this.API_URL}/boards/task/?taskId=${task.taskId}`, this.headers);
   }
 
   taskChangeStatus(task: TaskInterface, boardStatus: string): Observable<TaskInterface> {
@@ -46,5 +46,9 @@ export class ApiService {
 
   filterTask(filters: FilterInterface): Observable<FilterInterface> {
     return this._http.post<FilterInterface>(`${this.API_URL}/boards/filter`, filters, this.headers);
+  }
+
+  taskStop(taskInfo: any): Observable<TaskInterface> {
+    return this._http.post<TaskInterface>(`${this.API_URL}/boards/stopTask`, taskInfo, this.headers);
   }
 }

@@ -4,7 +4,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
-// import * as io from 'socket.io-client';
+import * as io from 'socket.io-client';
 import {TaskInterface} from '../logic/task-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {UserInterface} from '../../users/logic/user-interface';
@@ -17,7 +17,7 @@ import {TaskDataInterface} from '../logic/task-data-interface';
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
-  // socket = io('http://localhost:4000');
+  socket = io('http://localhost:4000');
   editable: boolean = false;
   task: TaskInterface;
   projectsList: ProjectInterface[] = [];
@@ -80,7 +80,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.createForm().then(_ => {
+    this.createForm().then(() => {
       if (this.data.action === 'detail') {
         this.formPatchValue();
       } else {
@@ -94,21 +94,23 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   createForm() {
     return new Promise((resolve) => {
       this.form = this._fb.group({
-        taskID: new FormControl(0),
+        taskId: new FormControl(0),
         taskName: new FormControl('', Validators.required),
         percentage: new FormControl(0, Validators.required),
-        assignTo: new FormControl('', Validators.required),
+        assignTo: new FormControl({adminId: 0}, Validators.required),
         taskDurationHours: new FormControl(0, [Validators.required, Validators.pattern('^[0-9]+')]),
         taskDurationMinutes: new FormControl(0, Validators.required),
         startAt: new FormControl('', Validators.required),
         stopAt: new FormControl('', Validators.required),
         startTime: new FormControl('', Validators.required),
         stopTime: new FormControl('', Validators.required),
-        project: new FormControl('', Validators.required),
+        project: new FormControl({}, Validators.required),
         taskDesc: new FormControl(''),
         boardStatus: new FormControl('', Validators.required),
         taskDateStart: '0000-00-00 00:00:00',
-        taskDateStop: '0000-00-00 00:00:00'
+        taskDateStop: '0000-00-00 00:00:00',
+        assigner: new FormControl({adminId: 0}, Validators.required),
+        trackable: new FormControl(0)
       });
 
       resolve();
@@ -150,22 +152,28 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     const startTime = startTimeTmp[0] + ':' + startTimeTmp[1];
     const stopTime = stopTimeTmp[0] + ':' + stopTimeTmp[1];
 
+    const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
+    const selectedAssignTo = this.usersList.filter(user => user.adminId === this.task.assignTo.adminId).pop();
+    const selectedAssigner = this.usersList.filter(user => user.adminId === 1).pop(); // todo: 1 will be replace with logged in user id
+
     this.form.patchValue({
-      taskID: this.task.taskID,
+      taskId: this.task.taskId,
       taskName: this.task.taskName,
       percentage: this.task.percentage,
-      assignTo: this.task.assignTo.adminId,
+      assignTo: selectedAssignTo,
       taskDurationHours: this.task.taskDurationHours,
       taskDurationMinutes: this.task.taskDurationMinutes,
       startAt: startDate[0],
       startTime: startTime,
       stopAt: stopDate[0],
       stopTime: stopTime,
-      project: this.task.project.projectID,
+      project: selectedProject,
       taskDesc: this.task.taskDesc,
       boardStatus: this.data.boardStatus,
       taskDateStart: this.task.taskDateStart,
-      taskDateStop: this.task.taskDateStop
+      taskDateStop: this.task.taskDateStop,
+      assigner: selectedAssigner,
+      trackable: this.task.trackable
     });
   }
 
@@ -190,23 +198,39 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    this.form.disable();
+
     const formValue = Object.assign({}, this.form.value);
 
     formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
     formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
+    formValue.assigner = this.usersList.filter(user => user.adminId === 1).pop(); // todo: 1 will replace with user logged in user id
+
     if (this.data.action === 'detail') {
       this._subscription.add(
         this.api.updateTask(formValue).subscribe((resp: any) => {
-          this.dialogRef.close(true);
+          if (resp.result === 1) {
+            this.dialogRef.close(true);
+          } else {
+            this.form.enable();
+          }
+        }, error => {
+          this.form.enable();
         })
       );
     } else {
-      delete(formValue.taskID);
+      delete (formValue.taskId);
 
       this._subscription.add(
         this.api.createTask(formValue).subscribe((resp: any) => {
-          this.dialogRef.close(true);
+          if (resp.result === 1) {
+            this.dialogRef.close(true);
+          } else {
+            this.form.enable();
+          }
+        }, error => {
+          this.form.enable();
         })
       );
     }

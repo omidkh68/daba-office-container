@@ -2,6 +2,7 @@
   "PAGES": {
     "HOME": {
       "MENU": {
+        "DASHBOARD": "داشبورد",
         "USERS": "لیست کاربران",
         "TASKS": "مدیریت تسک ها"
       }

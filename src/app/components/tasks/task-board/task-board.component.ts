@@ -1,4 +1,4 @@
-// import * as io from 'socket.io-client';
+import * as io from 'socket.io-client';
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
@@ -10,6 +10,7 @@ import {BoardInterface} from '../logic/board-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import {TaskStopComponent} from '../task-stop/task-stop.component';
 
 @Component({
   selector: 'app-task-board',
@@ -26,7 +27,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   @Input()
   filterBoards: any;
 
-  // socket = io('http://localhost:4000');
+  socket = io('http://localhost:4000');
   rowHeight: string = '0';
   connectedTo = [];
   boards: BoardInterface[] = [];
@@ -44,9 +45,9 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
     this.getBoards();
 
-    /*this.socket.on('update-data', (data: any) => {
+    this.socket.on('update-data', (data: any) => {
       this.getBoards();
-    });*/
+    });
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -62,15 +63,15 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
       this._subscription.add(
         this.api.taskChangeStatus(taskData, event.container.id).subscribe(async (resp: any) => {
-          const newTask = resp.task;
-          const project: ProjectInterface = await this.projectsList.filter(project => project.projectID === newTask.project).pop();
-          const assignTo: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assignTo).pop();
-          const assigner: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assigner).pop();
+          const newTask = resp.content.task;
+          const project: ProjectInterface = await this.projectsList.filter(project => project.projectId === newTask.project.projectId).pop();
+          const assignTo: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assignTo.adminId).pop();
+          const assigner: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assigner.adminId).pop();
 
           await this.boards.map(board => {
             if (board.id === event.container.id) {
               board.tasks.map(task => {
-                if (task.taskID === newTask.taskID) {
+                if (task.taskId === newTask.taskId) {
                   newTask.assignTo = assignTo;
                   newTask.assigner = assigner;
                   newTask.project = project;
@@ -82,9 +83,33 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
               });
             }
           });
+
+          if (event.previousContainer.id === 'inProgress' && (event.container.id === 'todo' || event.container.id === 'done')) {
+            this.showTaskStopModal(newTask);
+          } else if (event.previousContainer.id === 'todo' && event.container.id === 'done') {
+            this.showTaskStopModal(newTask);
+          }
         })
       );
     }
+  }
+
+  showTaskStopModal(task) {
+    const dialogRef = this.dialog.open(TaskStopComponent, {
+      data: task,
+      autoFocus: false,
+      width: '500px',
+      height: '310px',
+      disableClose: true
+    });
+
+    this._subscription.add(
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.socket.emit('updatedata', result);
+        }
+      })
+    );
   }
 
   showTaskDetail(task, boardStatus) {
@@ -100,13 +125,13 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       data: data,
       autoFocus: false,
       width: '50%',
-      height: '520px'
+      height: '560px'
     });
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          // this.socket.emit('updatedata', result);
+          this.socket.emit('updatedata', result);
         }
       })
     );
@@ -130,33 +155,23 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
     this.boards = [];
     this.connectedTo = [];
 
-    console.log(info);
-
     this.usersList = info.content.users.list;
     this.projectsList = info.content.projects.list;
 
     this.pushTaskEssentialInfo.emit({usersList: this.usersList, projectsList: this.projectsList});
 
-    info.content.boards.list.map(task => {
+    info.content.boards.list.map((task: TaskInterface) => {
       // determine todoList, inProgressList, doneList into board array
-      switch (this.getBoardStatus(task)) {
-        case 0:
+      switch (task.boardStatus) {
+        case 'todo':
+          todo_tasks.push(task);
+          break;
+
+        case 'inProgress':
           inProgress_tasks.push(task);
           break;
 
-        case 1:
-          todo_tasks.push(task);
-          break;
-
-        case 2:
-          todo_tasks.push(task);
-          break;
-
-        case 3:
-          done_tasks.push(task);
-          break;
-
-        case 4:
+        case 'done':
           done_tasks.push(task);
           break;
       }
@@ -191,36 +206,9 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  getBoardStatus(task: TaskInterface): number {
-    let result = 0;
-
-    // 0- task is start and should show stop button (in progress list)
-    if (task.taskDateStart !== '0000-00-00 00:00:00' && task.taskDateStop === '0000-00-00 00:00:00') {
-      result = 0;
-    }
-    // 1- task was not start yet and should show play button (to-do list)
-    else if (task.taskDateStart === '0000-00-00 00:00:00' && task.taskDateStop === '0000-00-00 00:00:00' && task.percentage !== 100) {
-      result = 1;
-    }
-    // 2- task is not complete yet and should show play button (to-do list)
-    else if (task.taskDateStart !== '0000-00-00 00:00:00' && task.taskDateStop !== '0000-00-00 00:00:00' && task.percentage !== 100) {
-      result = 2;
-    }
-    // 3- task is completed and could show play button (done list)
-    else if (task.taskDateStart !== '0000-00-00 00:00:00' && task.taskDateStop !== '0000-00-00 00:00:00' && task.percentage === 100) {
-      result = 3;
-    }
-    // 4- task is not start yet by user but is completed then should show play button (done list)
-    else if (task.taskDateStart === '0000-00-00 00:00:00' && task.taskDateStop === '0000-00-00 00:00:00' && task.percentage === 100) {
-      result = 4;
-    }
-
-    return result;
-  };
-
   ngOnChanges(changes: SimpleChanges): void {
     if (this.refreshData) {
-      // this.socket.emit('updatedata');
+      this.socket.emit('updatedata');
     }
 
     if (changes.filterBoards && !changes.filterBoards.firstChange) {

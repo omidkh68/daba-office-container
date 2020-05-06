@@ -2,9 +2,9 @@ export interface FilterInterface {
   userId: number;
   typeId: number;
   taskName?: string;
-  projectID?: number;
+  projectId?: number;
   dateStart?: string;
   dateStop?: string;
   type?: string;
-  adminID?: number;
+  adminId?: number;
 }

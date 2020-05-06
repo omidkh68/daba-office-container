@@ -1,5 +1,5 @@
 export interface ProjectInterface {
-  projectID: number;
+  projectId: number;
   projectName: string;
   projectTime?: number;
   startAt?: string;

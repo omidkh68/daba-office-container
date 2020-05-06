@@ -1,7 +1,7 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "author": {
     "email": "omidkh68@gmail.com",
     "name": "Omid Khosrojerdi"
@@ -32,19 +32,6 @@
     "lint": "ng lint"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "9.1.0",
-    "@angular-devkit/build-angular": "0.901.1",
-    "@angular-eslint/builder": "0.0.1-alpha.18",
-    "@angular/cli": "9.1.1",
-    "@angular/common": "9.1.1",
-    "@angular/compiler": "9.1.1",
-    "@angular/compiler-cli": "9.1.1",
-    "@angular/core": "9.1.1",
-    "@angular/forms": "9.1.1",
-    "@angular/language-service": "9.1.1",
-    "@angular/platform-browser": "9.1.1",
-    "@angular/platform-browser-dynamic": "9.1.1",
-    "@angular/router": "9.1.1",
     "@ngx-translate/core": "12.1.2",
     "@ngx-translate/http-loader": "4.0.0",
     "@types/jasmine": "3.5.10",
@@ -82,8 +69,21 @@
     "zone.js": "0.10.3"
   },
   "dependencies": {
-    "@angular/animations": "~9.1.1",
-    "@angular/cdk": "^9.2.1",
+    "@angular-builders/custom-webpack": "9.1.0",
+    "@angular-devkit/build-angular": "0.901.1",
+    "@angular-eslint/builder": "0.0.1-alpha.18",
+    "@angular/cli": "9.1.1",
+    "@angular/common": "9.1.1",
+    "@angular/compiler": "9.1.1",
+    "@angular/compiler-cli": "9.1.1",
+    "@angular/core": "9.1.1",
+    "@angular/forms": "9.1.1",
+    "@angular/language-service": "9.1.1",
+    "@angular/platform-browser": "9.1.1",
+    "@angular/platform-browser-dynamic": "9.1.1",
+    "@angular/router": "9.1.1",
+    "@angular/animations": "9.1.4",
+    "@angular/cdk": "9.2.2",
     "@angular/material": "^9.2.1",
     "@angular/material-moment-adapter": "^9.2.1",
     "@fullcalendar/angular": "^4.4.5-beta",

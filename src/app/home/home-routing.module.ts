@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Routes, RouterModule} from '@angular/router';
 import {HomeComponent} from './home.component';
+import {DashboardComponent} from '../components/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -10,17 +11,18 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('../components/tasks/tasks.module').then(m => m.TasksModule),
+        component: DashboardComponent,
         data: {depth: 1, page: 'one'}
       },
       {
         path: 'tasks',
-        redirectTo: ''
+        loadChildren: () => import('../components/tasks/tasks.module').then(m => m.TasksModule),
+        data: {depth: 2, page: 'two'}
       },
       {
         path: 'users',
         loadChildren: () => import('../components/users/users.module').then(m => m.UsersModule),
-        data: {depth: 1, page: 'two'}
+        data: {depth: 3, page: 'three'}
       }
     ]
   }

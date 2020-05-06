@@ -26,10 +26,10 @@ export class TasksComponent implements OnDestroy {
   refreshBoardData: boolean = false;
   filterData: FilterInterface = {
     userId: 0,
-    adminID: 0,
+    adminId: 0,
     dateStart: '',
     dateStop: '',
-    projectID: 0,
+    projectId: 0,
     taskName: '',
     type: '',
     typeId: 0
@@ -79,7 +79,7 @@ export class TasksComponent implements OnDestroy {
       data: data,
       autoFocus: false,
       width: '50%',
-      height: '520px'
+      height: '560px'
     });
 
     this._subscription.add(

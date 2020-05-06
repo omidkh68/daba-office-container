@@ -9,10 +9,15 @@
 
     <button mat-raised-button (click)="closeApp()">بستن برنامه</button>
 
-    <label>
+    <button mat-raised-button (click)="openWebView()">Web View</button>
+
+    <br>
+
+    <label style="width: 100%; clear: both;">
       {{message}}
     </label>
 
-    <img *ngIf="img.length" [src]="img" alt="" width="400" height="300">
+    <webview #webFrame style="border: solid 1px red; display:inline-flex; width:640px; height:480px"></webview>
+
   </div>
 </div>

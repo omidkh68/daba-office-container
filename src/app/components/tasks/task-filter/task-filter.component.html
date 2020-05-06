@@ -32,13 +32,13 @@
         <div class="col-md-6 float-right">
           <mat-form-field class="full-width font-8-em">
             <mat-label>پروژه</mat-label>
-            <mat-select formControlName="projectID" tabIndex="3">
-              <mat-option *ngFor="let project of projectsList" [value]="project.projectID">
+            <mat-select formControlName="projectId" tabIndex="3">
+              <mat-option *ngFor="let project of projectsList" [value]="project.projectId">
                 {{project.projectName}}
               </mat-option>
             </mat-select>
 
-            <mat-error *ngIf="!form.get('projectID').valid && form.get('projectID').touched">
+            <mat-error *ngIf="!form.get('projectId').valid && form.get('projectId').touched">
               لطفا پروژه را مشخص نمایید
             </mat-error>
           </mat-form-field>
@@ -47,11 +47,11 @@
         <div class="col-md-6 float-right">
           <mat-form-field class="full-width font-8-em">
             <img matPrefix
-                 *ngIf="form.get('adminID').valid"
-                 [src]="'/assets/profileImg/'+form.get('adminID').value+'.jpg'"
+                 *ngIf="form.get('adminId').valid"
+                 [src]="'/assets/profileImg/'+form.get('adminId').value+'.jpg'"
                  class="width-20 height-20 margin-l-half round-corner-all pos-rel top-three-tenth">
             <mat-label>مسئول انجام</mat-label>
-            <mat-select formControlName="adminID" tabIndex="4">
+            <mat-select formControlName="adminId" tabIndex="4">
               <mat-option *ngFor="let user of usersList" [value]="user.adminId">
                 <img matPrefix
                      class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
@@ -60,7 +60,7 @@
               </mat-option>
             </mat-select>
 
-            <mat-error *ngIf="!form.get('adminID').valid && form.get('adminID').touched">
+            <mat-error *ngIf="!form.get('adminId').valid && form.get('adminId').touched">
               لطفا مسئول را مشخص نمایید
             </mat-error>
           </mat-form-field>
