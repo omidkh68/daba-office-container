@@ -15,6 +15,7 @@ import {ConferenceComponent} from '../conference/conference.component';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  containerRef: any;
   serviceList: ServiceItemsInterface[] = [
     {
       serviceId: 1,
