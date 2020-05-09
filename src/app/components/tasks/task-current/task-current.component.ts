@@ -16,7 +16,7 @@ export class TaskCurrentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /*this.electronService.ipcRenderer.send('app_version');
+    this.electronService.ipcRenderer.send('app_version');
 
     this.electronService.ipcRenderer.on('app_version', (event, arg) => {
       this.electronService.ipcRenderer.removeAllListeners('app_version');
@@ -35,7 +35,7 @@ export class TaskCurrentComponent implements OnInit {
       this.message = 'Update Downloaded. It will be installed on restart. Restart Now?';
       this.restartBtn = true;
       this.notification = true;
-    });*/
+    });
   }
 
   closeNotification() {
@@ -43,7 +43,7 @@ export class TaskCurrentComponent implements OnInit {
   }
 
   restartApp() {
-    // this.electronService.ipcRenderer.send('restart_app');
+    this.electronService.ipcRenderer.send('restart_app');
   }
 
 }

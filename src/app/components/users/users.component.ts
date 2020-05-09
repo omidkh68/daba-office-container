@@ -12,7 +12,6 @@ export class UsersComponent implements OnInit, AfterViewInit {
   @ViewChild('webFrame', {static: false}) webFrame: ElementRef;
 
   message = '';
-  img: string = '';
 
   constructor(private api: ApiService,
               private electron: ElectronService,
@@ -62,11 +61,43 @@ export class UsersComponent implements OnInit, AfterViewInit {
           }
         });*/
         // }
-      })
+      });
+
+      const data: ScreenshotInterface = {
+        userId: {
+          adminId: 1,
+          username: 'o.khosrojerdi',
+          password: '06df60287a737ebf3a177bd3b2c47e01',
+          name: 'امید',
+          family: 'خسروجردی',
+          email: 'khosrojerdi@dabacenter.ir',
+          status: '1',
+          permission: '11111100000000000000111111111111000000001110000000000000000011111100000000000000110000000000000000000',
+          darkMode: 0,
+          creationDate: '0000-00-00 00:00:00',
+          role: {
+            'roleId': 9,
+            'roleNameEn': 'UI Manager',
+            'roleNameFa': 'مدیر بخش کاربری'
+          },
+          userCurrentStatus: {
+            'statusId': 1,
+            'statusNameEn': 'Lunch Time',
+            'statusNameFa': 'وقت ناهار',
+            'statusStartDate': '2020-05-02 13:14:21',
+            'statusStopDate': '0000-00-00 00:00:00'
+          }
+        },
+        files: screenshots
+      };
+
+      this.api.createScreenshot(data).subscribe((resp: any) => {
+        console.log(resp);
+      });
 
     }).catch((err) => {
       throw err.message;
-    });*/
+    });
   }
 
   openWebView() {
