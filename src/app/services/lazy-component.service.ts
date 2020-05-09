@@ -5,7 +5,8 @@ import {Injectable, Compiler, Injector} from '@angular/core';
 })
 export class LazyComponentService {
   private componentRefs = {
-    tasksModuleId: import('../components/tasks/tasks.module')
+    tasksModuleId: import('../components/tasks/tasks.module'),
+    conferenceModuleId: import('../components/conference/conference.module')
   };
 
   constructor(private compiler: Compiler,

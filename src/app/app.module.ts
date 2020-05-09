@@ -14,7 +14,6 @@ import {HomeModule} from './home/home.module';
 import {AppComponent} from './app.component';
 import {NbThemeModule} from '@nebular/theme';
 import {SharedModule} from './shared/shared.module';
-import { ChangeStatusComponent } from './components/status/change-status/change-status.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -23,8 +22,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ChangeStatusComponent
+    AppComponent
   ],
   imports: [
     HomeModule,

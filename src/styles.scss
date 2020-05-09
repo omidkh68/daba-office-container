@@ -138,6 +138,9 @@ a {
   overflow: visible !important;
 }
 
+.nb-theme-default nb-card-body {
+  padding: 0 !important;
+}
 .mat-card-header-text {
   margin: 0 !important;
 }

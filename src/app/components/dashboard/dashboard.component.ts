@@ -7,6 +7,7 @@ import {StatusItemsInterface} from './logic/status-items.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeStatusComponent} from '../status/change-status/change-status.component';
+import {ConferenceComponent} from '../conference/conference.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -120,7 +121,7 @@ export class DashboardComponent implements OnInit {
       }
 
       case 4: {
-        component = TasksComponent;
+        component = ConferenceComponent;
         break;
       }
     }

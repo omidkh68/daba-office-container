@@ -23,7 +23,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.webFrame.nativeElement.setAttribute('src', 'http://192.168.110.125:90/main.php?username=omid');
+    this.webFrame.nativeElement.setAttribute('src', 'https://conference.dabacenter.ir/main.php?username=omid&confname=daba');
 
     this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
       console.log('did-start-loading');
@@ -80,7 +80,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
     view.setBounds({ x: 0, y: 0, width: 300, height: 300 });
     view.webContents.loadURL('http://192.168.110.125/main.php?username=jkasnoqiw')*/
 
-    this.webFrame.nativeElement.setAttribute('src', 'http://192.168.110.125:90/main.php?username=jkasnoqiw');
+    this.webFrame.nativeElement.setAttribute('src', 'https://conference.dabacenter.ir/main.php?username=omid&confname=daba');
   }
 
   closeApp() {

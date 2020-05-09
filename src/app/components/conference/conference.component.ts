@@ -1,12 +1,13 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild, ViewContainerRef} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ViewContainerRef} from '@angular/core';
 import {LazyComponentService} from '../../services/lazy-component.service';
 import {NbWindowRef} from '@nebular/theme';
 
 @Component({
-  selector: 'app-tasks',
-  templateUrl: './tasks.component.html'
+  selector: 'app-conference',
+  templateUrl: './conference.component.html',
+  styleUrls: ['./conference.component.scss']
 })
-export class TasksComponent implements AfterViewInit, OnDestroy {
+export class ConferenceComponent implements AfterViewInit {
   @ViewChild('container', {read: ViewContainerRef}) container;
 
   constructor(private lazyComponentService: LazyComponentService,
@@ -17,10 +18,10 @@ export class TasksComponent implements AfterViewInit, OnDestroy {
   }
 
   async ngAfterViewInit() {
-    this.lazyComponentService.loadComponent('tasksModuleId', this.container);
+    this.lazyComponentService.loadComponent('conferenceModuleId', this.container);
   }
 
   ngOnDestroy(): void {
-    console.log('des task');
+    console.log('des conf');
   }
 }
