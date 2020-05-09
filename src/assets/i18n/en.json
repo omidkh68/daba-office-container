@@ -1,11 +1,13 @@
 {
-  "PAGES": {
-    "HOME": {
-      "MENU": {
-        "DASHBOARD": "Dashboard",
-        "USERS": "Users List",
-        "TASKS": "Task Management"
-      }
+  "HOME": {
+    "MENU": {
+      "DASHBOARD": "Dashboard",
+      "USERS": "Users List",
+      "TASKS": "Task Management"
+    },
+    "DASHBOARD": {
+      "CLOSE": "Close App",
+      "MINIMIZE": "Minimize App"
     }
   }
 }

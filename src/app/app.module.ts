@@ -13,6 +13,7 @@ import {HomeModule} from './home/home.module';
 
 import {AppComponent} from './app.component';
 import {NbThemeModule} from '@nebular/theme';
+import {SharedModule} from './shared/shared.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -27,6 +28,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     HomeModule,
     BrowserModule,
     HttpClientModule,
+    SharedModule,
     AppRoutingModule,
     NbThemeModule.forRoot({name: 'default'}),
     TranslateModule.forRoot({

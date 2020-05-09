@@ -9,7 +9,7 @@ import {WebviewDirective} from './directives';
 @NgModule({
   declarations: [PageNotFoundComponent, WebviewDirective],
   imports: [CommonModule, TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule],
-  exports: [TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule]
+  exports: [CommonModule, TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule]
 })
 export class SharedModule {
 }

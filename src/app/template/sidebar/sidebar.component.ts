@@ -15,17 +15,17 @@ export class SidebarComponent {
   myComponent?: Type<any>;
   menus: Menu[] = [
     {
-      name: 'PAGES.HOME.MENU.DASHBOARD',
+      name: 'HOME.MENU.DASHBOARD',
       icon: 'dashboard',
       link: ''
     },
     {
-      name: 'PAGES.HOME.MENU.TASKS',
+      name: 'HOME.MENU.TASKS',
       icon: 'playlist_add_check',
       link: 'tasks'
     },
     {
-      name: 'PAGES.HOME.MENU.USERS',
+      name: 'HOME.MENU.USERS',
       icon: 'persons',
       link: 'users'
     }

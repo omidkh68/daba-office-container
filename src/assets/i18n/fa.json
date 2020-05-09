@@ -1,11 +1,13 @@
 {
-  "PAGES": {
-    "HOME": {
-      "MENU": {
-        "DASHBOARD": "داشبورد",
-        "USERS": "لیست کاربران",
-        "TASKS": "مدیریت تسک ها"
-      }
+  "HOME": {
+    "MENU": {
+      "DASHBOARD": "داشبورد",
+      "USERS": "لیست کاربران",
+      "TASKS": "مدیریت تسک ها"
+    },
+    "DASHBOARD": {
+      "CLOSE": "بستن برنامه",
+      "MINIMIZE": "محو کردن برنامه"
     }
   }
 }
