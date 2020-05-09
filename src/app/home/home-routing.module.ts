@@ -13,7 +13,7 @@ const routes: Routes = [
         path: '',
         component: DashboardComponent,
         data: {depth: 1, page: 'one'}
-      },
+      }/*,
       {
         path: 'tasks',
         loadChildren: () => import('../components/tasks/tasks.module').then(m => m.TasksModule),
@@ -23,7 +23,7 @@ const routes: Routes = [
         path: 'users',
         loadChildren: () => import('../components/users/users.module').then(m => m.UsersModule),
         data: {depth: 3, page: 'three'}
-      }
+      }*/
     ]
   }
 ];

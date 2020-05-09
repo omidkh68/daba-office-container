@@ -1,7 +1,7 @@
 @import '../../../assets/mixin';
 
 .banner {
-  background: url('/assets/bg/banner.jpg');
+  background: url('~/assets/bg/banner.jpg');
   border-bottom: solid 1px #c3c3c3;
 
   .close-icon,
@@ -170,21 +170,24 @@
 }
 
 .profile-info {
-  bottom: 2em;
-
   .profile-img {
     border: solid 5px #FFF;
     width: 150px;
     height: 150px;
+    position: relative;
+    top: -2em;
   }
 
   .profile-name {
     text-shadow: 0 0 11px #999;
-    top: 2em;
 
     .role-container {
       border: solid 1px #DDD;
       width: fit-content;
     }
   }
+}
+
+.change-status-btn {
+  bottom: 1.3em;
 }

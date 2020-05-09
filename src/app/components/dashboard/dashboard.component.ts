@@ -2,8 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {NbWindowService} from '@nebular/theme';
 import {TasksComponent} from '../tasks/tasks.component';
 import {ElectronService} from '../../core/services';
-import {ServiceItemsInterface} from './service-items.interface';
-// import {TaskMainComponent} from '../tasks/task-main/task-main.component';
+import {ServiceItemsInterface} from './logic/service-items.interface';
+import {StatusItemsInterface} from './logic/status-items.interface';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {MatDialog} from '@angular/material/dialog';
+import {ChangeStatusComponent} from '../status/change-status/change-status.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -42,8 +45,56 @@ export class DashboardComponent implements OnInit {
     }
   ];
 
+  statusList: StatusItemsInterface[] = [
+    {
+      statusId: 1,
+      statusNameEn: 'Lunch Time',
+      statusNameFa: 'وقت ناهار',
+      icon: ''
+    },
+    {
+      statusId: 2,
+      statusNameEn: 'Meeting',
+      statusNameFa: 'جلسه',
+      icon: ''
+    },
+    {
+      statusId: 3,
+      statusNameEn: 'Smoking',
+      statusNameFa: 'سیگار کشیدن',
+      icon: ''
+    },
+    {
+      statusId: 4,
+      statusNameEn: 'Mission',
+      statusNameFa: 'مأموریت',
+      icon: ''
+    },
+    {
+      statusId: 5,
+      statusNameEn: 'Leave',
+      statusNameFa: 'مرخصی',
+      icon: ''
+    },
+    {
+      statusId: 8,
+      statusNameEn: 'Other',
+      statusNameFa: 'موارد دیگر',
+      icon: ''
+    },
+    {
+      statusId: 9,
+      statusNameEn: 'Game',
+      statusNameFa: 'بازی',
+      icon: ''
+    }
+  ];
+
+  private _subscription: Subscription = new Subscription();
+
   constructor(private electronService: ElectronService,
-              private windowService: NbWindowService) {
+              private windowService: NbWindowService,
+              public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -78,6 +129,20 @@ export class DashboardComponent implements OnInit {
       title: service.serviceNameFa,
       windowClass: 'custom-window'
     });
+  }
+
+  changeStatus() {
+    const dialogRef = this.dialog.open(ChangeStatusComponent, {
+      autoFocus: false,
+      width: '500px',
+      height: '300px'
+    });
+
+    this._subscription.add(
+      dialogRef.afterClosed().subscribe(resp => {
+
+      })
+    );
   }
 
   closeApp() {

@@ -35,6 +35,12 @@
       </div>
       <!--/ end of boards container -->
 
+      <!-- calendar container -->
+      <div class="full-height" *ngSwitchCase="1">
+        <app-task-calendar></app-task-calendar>
+      </div>
+      <!--/ end of calendar container -->
+
       <!-- notes container -->
       <!--<div class="full-height" *ngSwitchCase="1">
         <app-task-notes></app-task-notes>
@@ -46,12 +52,6 @@
         <app-task-messages></app-task-messages>
       </div>-->
       <!--/ end of messages container -->
-
-      <!-- calendar container -->
-      <div class="full-height" *ngSwitchCase="1">
-        <app-task-calendar></app-task-calendar>
-      </div>
-      <!--/ end of calendar container -->
 
       <!-- files container -->
       <!--<div class="full-height" *ngSwitchCase="4">

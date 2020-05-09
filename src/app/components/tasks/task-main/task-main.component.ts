@@ -41,6 +41,11 @@ export class TaskMainComponent implements OnDestroy {
       icon: 'view_week',
       id: 'boards'
     },
+    {
+      name: 'تقویم',
+      icon: 'event_available',
+      id: 'calendar'
+    }
     /*{
       name: 'یادداشت ها',
       icon: 'description',
@@ -50,13 +55,8 @@ export class TaskMainComponent implements OnDestroy {
       name: 'پیام ها',
       icon: 'textsms',
       id: 'messages'
-    },*/
-    {
-      name: 'تقویم',
-      icon: 'event_available',
-      id: 'calendar'
     },
-    /*{
+    {
       name: 'فایل ها',
       icon: 'attach_file',
       id: 'files'

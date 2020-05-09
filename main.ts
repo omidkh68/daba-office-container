@@ -3,7 +3,7 @@ import {app, BrowserWindow, screen, webFrame, ipcMain} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
-let mainWindow: BrowserWindow = null;
+let win: BrowserWindow = null;
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
 
@@ -11,7 +11,7 @@ function createWindow(): BrowserWindow {
   let bound = screen.getPrimaryDisplay().bounds;
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({
+  win = new BrowserWindow({
     x: 0,
     y: 0,
     transparent: true,
@@ -30,18 +30,21 @@ function createWindow(): BrowserWindow {
   });
 
   if (serve) {
-    mainWindow.webContents.openDevTools();
+    require('devtron').install();
+
+    win.webContents.openDevTools();
+
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
-    mainWindow.loadURL('http://localhost:4200');
+    win.loadURL('http://localhost:4200');
 
   } else {
     /*mainWindow.webContents.on('devtools-opened', () => {
         mainWindow.webContents.closeDevTools();
     });*/
 
-    mainWindow.loadURL(url.format({
+    win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',
       slashes: true
@@ -49,31 +52,34 @@ function createWindow(): BrowserWindow {
   }
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', () => {
+  win.on('closed', () => {
     // Dereference the window object, usually you would store window
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null;
+    win = null;
   });
   /*
       mainWindow.once('ready-to-show', () => {
           autoUpdater.checkForUpdatesAndNotify();
       });*/
 
-  return mainWindow;
+  return win;
 }
 
 try {
 
+  app.allowRendererProcessReuse = true;
+
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
-  app.on('ready', createWindow);
+  // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
+  app.on('ready', () => setTimeout(createWindow, 400));
 
   app.commandLine.appendSwitch('disable-pinch');
 
-  if (mainWindow !== null) {
-    const webContents = mainWindow.webContents;
+  if (win !== null) {
+    const webContents = win.webContents;
 
     webContents.on('did-finish-load', () => {
       webFrame.setZoomLevel(1);
@@ -94,7 +100,7 @@ try {
   app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
+    if (win === null) {
       createWindow();
     }
   });

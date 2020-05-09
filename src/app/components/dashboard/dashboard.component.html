@@ -15,13 +15,13 @@
         </a>
       </div>
 
-      <div class="profile-info pos-abs full-width height-100">
+      <div class="profile-info pos-abs full-width height-100 bottom-0">
         <div
           class="profile-img float-right round-corner-all overflow-hide margin-r-full-3 margin-l-full mat-elevation-z3">
           <img class="full-width full-height" [src]="'/assets/profileImg/1.jpg'" alt="">
         </div>
 
-        <div class="profile-name float-right padding-full pos-rel">
+        <div class="profile-name float-right padding-full">
           <h1 class="font-full-plus-half-em text-weight-500 margin-b-four-tenth">
             امید خسروجردی
           </h1>
@@ -32,6 +32,13 @@
             </h4>
           </div>
         </div>
+
+        <button mat-raised-button
+                (click)="changeStatus()"
+                class="change-status-btn white-gradient pos-abs left-full line-height-30 font-7-em overflow-hide text-weight-normal">
+          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">sync_problem</mat-icon>
+          <span class="padding-mini-r-l">تغییر وضعیت</span>
+        </button>
       </div>
     </div>
 
