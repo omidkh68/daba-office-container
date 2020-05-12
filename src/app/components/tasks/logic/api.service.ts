@@ -4,12 +4,13 @@ import {Observable} from 'rxjs/internal/Observable';
 import {BoardInterface} from './board-interface';
 import {TaskInterface} from './task-interface';
 import {FilterInterface} from './filter-interface';
+import {AppConfig} from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private API_URL = 'http://localhost:3000/api';
+  private API_URL = AppConfig.apiUrl;
 
   /**
    * @type {HttpHeaders}

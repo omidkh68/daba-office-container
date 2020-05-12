@@ -10,6 +10,8 @@ import {ProjectInterface} from '../../projects/logic/project-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {ApiService} from '../logic/api.service';
 import {TaskDataInterface} from '../logic/task-data-interface';
+import {UserInfoService} from '../../../services/user-info.service';
+import {AppConfig} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-task-detail',
@@ -17,7 +19,8 @@ import {TaskDataInterface} from '../logic/task-data-interface';
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
-  socket = io('http://localhost:4000');
+  user: UserInterface;
+  socket = io(AppConfig.socketUrl);
   editable: boolean = false;
   task: TaskInterface;
   projectsList: ProjectInterface[] = [];
@@ -69,8 +72,14 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService,
               private _fb: FormBuilder,
+              private userInfoService: UserInfoService,
               public dialogRef: MatDialogRef<TaskDetailComponent>,
               @Inject(MAT_DIALOG_DATA) public data: TaskDataInterface) {
+
+    this._subscription.add(
+      this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
+    );
+
     this.usersList = this.data.usersList;
     this.projectsList = this.data.projectsList;
 
@@ -154,7 +163,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
 
     const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
     const selectedAssignTo = this.usersList.filter(user => user.adminId === this.task.assignTo.adminId).pop();
-    const selectedAssigner = this.usersList.filter(user => user.adminId === 1).pop(); // todo: 1 will be replace with logged in user id
+    const selectedAssigner = this.usersList.filter(user => user.adminId === this.user.adminId).pop();
 
     this.form.patchValue({
       taskId: this.task.taskId,
@@ -205,7 +214,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
     formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
-    formValue.assigner = this.usersList.filter(user => user.adminId === 1).pop(); // todo: 1 will replace with user logged in user id
+    formValue.assigner = this.usersList.filter(user => user.adminId === this.user.adminId).pop();
 
     if (this.data.action === 'detail') {
       this._subscription.add(

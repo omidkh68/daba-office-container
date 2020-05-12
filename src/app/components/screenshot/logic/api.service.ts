@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
-import {ChangeUserStatusInterface} from '../../status/logic/change-user-status.interface';
+import {ScreenshotInterface} from './screenshot-interface';
 import {AppConfig} from '../../../../environments/environment';
 
 @Injectable({
@@ -23,11 +23,11 @@ export class ApiService {
   constructor(private _http: HttpClient) {
   }
 
-  applyStatusToUser(userStatus: ChangeUserStatusInterface): Observable<ChangeUserStatusInterface> {
-    return this._http.post<ChangeUserStatusInterface>(`${this.API_URL}/users/applyStatusToUser`, userStatus, this.headers);
+  createScreenshot(screenshotData: ScreenshotInterface): Observable<ScreenshotInterface> {
+    return this._http.post<ScreenshotInterface>(`${this.API_URL}/screenshots/add`, screenshotData, this.headers);
   }
 
-  login(loginInfo): Observable<any> {
-    return this._http.post(`${this.API_URL}/users/login`, loginInfo, this.headers);
+  getTickTok() {
+    return this._http.get(`${this.API_URL}/screenshots/serverTickTok`, this.headers);
   }
 }

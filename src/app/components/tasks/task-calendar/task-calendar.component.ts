@@ -7,6 +7,7 @@ import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {ApiService} from '../logic/api.service';
+import {AppConfig} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-task-calendar',
@@ -18,7 +19,7 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   tasks: TaskInterface[] = [];
   usersList: UserInterface[] = [];
   projectsList: ProjectInterface[] = [];
-  socket = io('http://localhost:4000');
+  socket = io(AppConfig.socketUrl);
   calendarEvents = [];
   events = [
     {title: 'event 1', date: '2020-04-01'},

@@ -5,11 +5,13 @@ import {TranslateModule} from '@ngx-translate/core';
 import {DashboardComponent} from './dashboard.component';
 import {ChangeStatusComponent} from '../status/change-status/change-status.component';
 import {NbLayoutModule, NbWindowModule} from '@nebular/theme';
+import {ScreenshotComponent} from '../screenshot/screenshot.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    ChangeStatusComponent
+    ChangeStatusComponent,
+    ScreenshotComponent
   ],
   imports: [
     SharedModule,

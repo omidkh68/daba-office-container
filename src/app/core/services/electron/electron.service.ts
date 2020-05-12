@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ipcRenderer, webFrame, remote, screen, desktopCapturer, shell} from 'electron';
+import {ipcRenderer, webFrame, remote, screen, desktopCapturer, shell, Notification, systemPreferences} from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
@@ -19,6 +19,8 @@ export class ElectronService {
   fs: typeof fs;
   os: typeof os;
   path: typeof path;
+  notification: typeof Notification;
+  systemPreferences: typeof systemPreferences;
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
@@ -37,6 +39,8 @@ export class ElectronService {
       this.screen = window.require('electron').screen;
       this.os = os;
       this.path = path;
+      this.notification = Notification;
+      this.systemPreferences = window.require('electron').remote.systemPreferences;
 
       const win = remote.getCurrentWindow();
       win.center();

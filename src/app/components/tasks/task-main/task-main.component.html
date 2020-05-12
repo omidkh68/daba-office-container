@@ -1,8 +1,6 @@
-<div class="component-content full-width full-height pos-abs left-0 right-0 top-0">
-  <div class="title-container pos-rel height-100 overflow-hide full-width float-left" style="-webkit-app-region: drag">
-    <h1 class="no-margin line-height-55 padding-r-l font-full-em text-weight-500">مدیریت تسک ها</h1>
-
-    <mat-tab-group (selectedTabChange)="tabChange($event)" class="pos-rel top-seven-tenth padding-r-l" color="accent" disableRipple>
+<div class="component-content full-width full-height pos-abs left-0 right-0 top-0" dir="rtl">
+  <div class="title-container pos-rel height-60 overflow-hide full-width float-left" style="-webkit-app-region: drag">
+    <mat-tab-group (selectedTabChange)="tabChange($event)" class="pos-rel top-tab-container padding-r-l z-index-0" color="accent" disableRipple>
       <mat-tab *ngFor="let tab of tabs;">
         <ng-template mat-tab-label>
           <!--<mat-icon class="tab-icon pos-rel top-one-tenth font-full-plus-half-em text-right">{{tab.icon}}</mat-icon>-->
@@ -14,13 +12,14 @@
     <div class="pos-abs left-full top-full">
       <button mat-raised-button
               (click)="showFilter()"
-              class="white-gradient margin-l-full text-white line-height-30 font-7-em overflow-hide text-weight-normal">
-        <mat-icon class="text-black width-20 height-20 font-full-plus-two-tenth-rem">filter_list</mat-icon>
+              class="white-gradient margin-l-full text-black line-height-30 font-8-em overflow-hide text-weight-normal">
+        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">filter_list</mat-icon>
+        <span class="padding-mini-r-l">فیلتر</span>
       </button>
 
       <button mat-raised-button
               (click)="addNewTask()"
-              class="blue-gradient text-white line-height-30 font-7-em overflow-hide text-weight-normal">
+              class="green-gradient text-white line-height-30 font-8-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
         <span class="padding-mini-r-l">افزودن تسک</span>
       </button>

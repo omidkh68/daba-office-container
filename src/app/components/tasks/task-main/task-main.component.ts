@@ -117,6 +117,9 @@ export class TaskMainComponent implements OnDestroy {
       height: '300px'
     });
 
+    if (this.activeTab) {
+
+    }
     this._subscription.add(
       dialogRef.afterClosed().subscribe(resp => {
         if (resp && resp.result === 1) {

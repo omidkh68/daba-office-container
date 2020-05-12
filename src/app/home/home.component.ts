@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 import {trigger, transition, query, group, style, animate, animateChild} from '@angular/animations';
 
 @Component({
@@ -51,25 +51,8 @@ import {trigger, transition, query, group, style, animate, animateChild} from '@
     ])
   ],
 })
-export class HomeComponent implements OnInit {
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
+export class HomeComponent {
   getPage(outlet) {
     return outlet.activatedRouteData['page'] || 'one';
   }
-
-  /*closeApp() {
-    const window = remote.getCurrentWindow();
-
-    const prompt = confirm('آیا موافق هستید؟');
-
-    if (prompt) {
-      window.close();
-    }
-  }*/
-
 }

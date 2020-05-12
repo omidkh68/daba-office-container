@@ -1,10 +1,10 @@
 <nb-layout>
   <nb-layout-column class="no-padding">
-    <div class="height-250 banner pos-rel" style="-webkit-app-region: drag">
-      <div class="window-control pos-abs top-full left-full">
+    <div class="height-250 banner pos-rel">
+      <div class="window-control pos-abs top-eight-tenth left-full full-width height-35 padding-mini-t-b" style="-webkit-app-region: drag">
         <a (click)="closeApp()"
            matTooltip="{{'HOME.DASHBOARD.CLOSE' | translate}}" matTooltipPosition="below"
-           class="close-icon display-block float-left round-corner-all cursor-pointer margin-r-half">
+           class="close-icon display-block float-left round-corner-all cursor-pointer margin-r-full">
           <mat-icon class="full-width full-height text-center font-9-em text-white">close</mat-icon>
         </a>
 
@@ -34,16 +34,27 @@
         </div>
 
         <button mat-raised-button
-                (click)="changeStatus()"
-                class="change-status-btn white-gradient pos-abs left-full line-height-30 font-7-em overflow-hide text-weight-normal">
-          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">sync_problem</mat-icon>
-          <span class="padding-mini-r-l">تغییر وضعیت</span>
+                matTooltip="متوقف کردن این وضعیت" matTooltipPosition="right"
+                *ngIf="userCurrentStatus !== ''; else changeViewStatus"
+                (click)="changeStatus(false)"
+                [class]="'status-' + userCurrentStatus.statusNameEn.replace(' ', '_').toLocaleLowerCase() + ' status-item change-status-btn white-gradient text-weight-500 pos-abs left-full line-height-30 font-9-em overflow-hide'">
+          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">{{userCurrentStatus.statusIcon}}</mat-icon>
+          <span class="padding-mini-r-l">{{userCurrentStatus.statusNameFa}}</span>
         </button>
+
+        <ng-template #changeViewStatus>
+          <button mat-raised-button
+                  (click)="changeStatus(true)"
+                  class="change-status-btn white-gradient text-weight-500 pos-abs left-full line-height-30 font-9-em overflow-hide">
+            <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">sync_problem</mat-icon>
+            <span class="padding-mini-r-l">اعمال وضعیت</span>
+          </button>
+        </ng-template>
       </div>
     </div>
 
     <div class="padding-full-3">
-      <mat-grid-list *ngIf="serviceList.length" cols="4" gutterSize="30" rowHeight="200px">
+      <mat-grid-list *ngIf="serviceList.length" cols="4" gutterSize="30" rowHeight="150px">
         <mat-grid-tile
           class="board-container"
           *ngFor="let service of serviceList"
@@ -53,12 +64,12 @@
                     class="full-width full-height round-corner mat-elevation-z1 card-bg overflow-hide cursor-pointer"
                     [ngClass]="service.classList">
             <mat-card-header class="pos-rel z-index-99">
-              <mat-card-title>
+              <mat-card-title class="font-full-plus-two-tenth-em">
                 {{service.serviceNameFa}}
               </mat-card-title>
             </mat-card-header>
             <mat-card-content class="pos-rel z-index-99">
-              <mat-icon class="full-width full-height font-full-em-3-plus-half text-center line-height-100">
+              <mat-icon class="full-width full-height font-full-em-3-plus-half text-center line-height-65">
                 {{service.icon}}
               </mat-icon>
             </mat-card-content>
@@ -68,3 +79,5 @@
     </div>
   </nb-layout-column>
 </nb-layout>
+
+<app-screenshot></app-screenshot>

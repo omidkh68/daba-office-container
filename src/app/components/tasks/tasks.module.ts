@@ -13,9 +13,11 @@ import {TaskMessagesComponent} from './task-messages/task-messages.component';
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
 import {TaskMainComponent} from './task-main/task-main.component';
 import {NbLayoutModule, NbWindowModule, NbWindowState} from '@nebular/theme';
+import {JalaliPipe} from '../../pipes/jalali.pipe';
 
 @NgModule({
   declarations: [
+    JalaliPipe,
     TaskBoardComponent,
     TaskNotesComponent,
     TaskFilesComponent,

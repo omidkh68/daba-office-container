@@ -7,7 +7,7 @@
     <div class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l">
       <span class="float-right font-8-em">{{board.name}}</span>
 
-      <span class="float-left task-count width-25 height-25 line-height-25 font-7-em text-center text-weight-500"
+      <span class="float-left task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500"
             [ngClass]="board.id">
         {{board.tasks.length}}
       </span>
@@ -30,16 +30,50 @@
                 [cdkDragData]="task"
                 (click)="showTaskDetail(task, board.id)"
                 *ngFor="let task of board.tasks" cdkDrag>
-        {{task.taskName}}
-        <br>
+        <mat-card-header>
+          <mat-card-subtitle class="full-width text-gray-600">
+            <span class="float-right">
+              <mat-icon class="float-right width-18 height-18 font-full-plus-three-tenth-em margin-l-half">
+                access_alarm
+              </mat-icon>
 
-        <div class="font-8-em">
-          <span class="text-orange-400">{{task.assignTo.name + ' ' + task.assignTo.family}}</span>
-           -
-          <span class="text-grey-500">{{task.assignTo.role.roleNameFa}}</span>
-        </div>
+              {{task.stopAt | jalali}}
+            </span>
 
-        <div class="font-8-em text-green-500">{{task.taskId}}</div>
+            <span class="float-left">
+              #{{task.taskId}}
+            </span>
+          </mat-card-subtitle>
+          <mat-card-title class="full-width clear-both text-pink-600 font-full-em padding-t-full">
+            {{task.taskName}}
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="text-gray-600 margin-b-half">
+          <mat-icon class="float-right width-18 height-18 font-full-plus-three-tenth-em margin-l-half">work</mat-icon>
+
+          {{task.project.projectName}}
+        </mat-card-content>
+
+        <mat-card-footer class="padding-mini-t-b padding-r-l height-45">
+          <img [src]="'/assets/profileImg/'+task.assignTo.adminId+'.jpg'"
+               class="width-25 height-25 round-corner-all float-right mat-elevation-z1"
+               [matTooltip]="task.assignTo.name + ' ' + task.assignTo.family" matTooltipPosition="left">
+
+          <span class="float-right width-25 height-25 round-corner-all mat-elevation-z1 margin-r-full pos-rel"
+                [matTooltip]="'درصد پیشبرد'" matTooltipPosition="left">
+            <span class="font-6-em text-black pos-abs left-0 right-0 top-0 bottom-0 margin-auto text-center line-height-25 text-weight-500">
+              {{task.percentage}}
+            </span>
+            <mat-progress-spinner
+              [ngClass]="getColor(task.percentage)"
+              [diameter]="25"
+              [strokeWidth]="2"
+              [value]="task.percentage"
+              color="accent">
+            </mat-progress-spinner>
+          </span>
+        </mat-card-footer>
       </mat-card>
     </div>
   </mat-grid-tile>
