@@ -48,14 +48,14 @@
           <mat-form-field class="full-width font-8-em">
             <img matPrefix
                  *ngIf="form.get('adminId').valid"
-                 [src]="'/assets/profileImg/'+form.get('adminId').value+'.jpg'"
+                 [src]="'assets/profileImg/'+form.get('adminId').value+'.jpg'"
                  class="width-20 height-20 margin-l-half round-corner-all pos-rel top-three-tenth">
             <mat-label>مسئول انجام</mat-label>
             <mat-select formControlName="adminId" tabIndex="4">
               <mat-option *ngFor="let user of usersList" [value]="user.adminId">
                 <img matPrefix
                      class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
-                     [src]="'/assets/profileImg/'+user.adminId+'.jpg'">
+                     [src]="'assets/profileImg/'+user.adminId+'.jpg'">
                 {{user.name + ' ' + user.family}}
               </mat-option>
             </mat-select>
@@ -128,14 +128,14 @@
               [disabled]="!form.valid && form.touched"
               type="submit"
               tabindex="13"
-              class="green-gradient float-left text-white line-height-30 font-7-em overflow-hide text-weight-normal">
+              class="green-gradient float-left text-white line-height-30 font-9-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
         <span class="padding-mini-r-l">ثبت</span>
       </button>
 
       <button (click)="dialogRef.close(false)"
               type="button"
-              class="no-bg no-border cursor-pointer float-left text-red-500 line-height-30 font-7-em overflow-hide text-weight-normal">
+              class="no-bg no-border cursor-pointer float-left text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
         <span class="padding-mini-r-l">انصراف</span>
       </button>
     </div>

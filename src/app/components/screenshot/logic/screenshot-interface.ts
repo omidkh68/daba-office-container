@@ -1,4 +1,4 @@
-import {UserInterface} from './user-interface';
+import {UserInterface} from '../../users/logic/user-interface';
 
 export interface ScreenshotInterface {
   userId: UserInterface,

@@ -162,57 +162,59 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
       this.dateRequiredValidation();
     }
 
-    this.form.valueChanges.subscribe((selectedValue: FilterInterface) => {
+    this._subscription.add(
+      this.form.valueChanges.subscribe((selectedValue: FilterInterface) => {
 
-      const projectIdControl = this.form.get('projectId');
-      const adminIdControl = this.form.get('adminId');
+        const projectIdControl = this.form.get('projectId');
+        const adminIdControl = this.form.get('adminId');
 
-      switch (selectedValue.type) {
-        case 'byProject':
-          this.resetFormValidation();
+        switch (selectedValue.type) {
+          case 'byProject':
+            this.resetFormValidation();
 
-          if (projectIdControl.value === 0) {
-            projectIdControl.setErrors({'incorrect': true});
-            projectIdControl.markAsTouched();
-          }
+            if (projectIdControl.value === 0) {
+              projectIdControl.setErrors({'incorrect': true});
+              projectIdControl.markAsTouched();
+            }
 
-          break;
+            break;
 
-        case 'byCreateDate':
-          this.dateRequiredValidation();
-          break;
+          case 'byCreateDate':
+            this.dateRequiredValidation();
+            break;
 
-        case 'byStartDate':
-          this.dateRequiredValidation();
-          break;
+          case 'byStartDate':
+            this.dateRequiredValidation();
+            break;
 
-        case 'byStopDate':
-          this.dateRequiredValidation();
-          break;
+          case 'byStopDate':
+            this.dateRequiredValidation();
+            break;
 
-        case 'byUserStartDate':
-          this.dateRequiredValidation();
-          break;
+          case 'byUserStartDate':
+            this.dateRequiredValidation();
+            break;
 
-        case 'byUserStopDate':
-          this.dateRequiredValidation();
-          break;
+          case 'byUserStopDate':
+            this.dateRequiredValidation();
+            break;
 
-        case 'byUser':
-          this.resetFormValidation();
+          case 'byUser':
+            this.resetFormValidation();
 
-          if (adminIdControl.value === 0) {
-            adminIdControl.setErrors({'incorrect': true});
-            adminIdControl.markAsTouched();
-          }
+            if (adminIdControl.value === 0) {
+              adminIdControl.setErrors({'incorrect': true});
+              adminIdControl.markAsTouched();
+            }
 
-          break;
+            break;
 
-        default:
-          this.resetFormValidation();
-          break;
-      }
-    });
+          default:
+            this.resetFormValidation();
+            break;
+        }
+      })
+    );
   }
 
   dateRequiredValidation() {

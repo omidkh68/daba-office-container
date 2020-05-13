@@ -1,1 +1,53 @@
-<p>change-status works!</p>
+<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
+  <form [formGroup]="form" (submit)="submit()" class="full-height">
+    <div class="dialog-content-container float-right full-width" dir="rtl">
+      <h1 class="margin-b-full text-right font-full-em text-weight-500">اعمال وضعیت</h1>
+
+      <a (click)="closeDialog()" class="pos-abs left-full top-full cursor-pointer text-gray-600">
+        <mat-icon class="text-grey-500">close</mat-icon>
+      </a>
+
+      <mat-grid-list *ngIf="statusList.length" cols="4" gutterSize="30" rowHeight="100px" class="margin-b-full">
+        <mat-grid-tile
+          class="board-container"
+          *ngFor="let status of statusList"
+          [colspan]="1"
+          [rowspan]="1">
+          <mat-card (click)="activeStatus(status)"
+                    [ngClass]="{'active-status': status.statusId === form.get('status').value.statusId}"
+                    [class]="'status-' + status.statusNameEn.replace(' ', '_').toLocaleLowerCase() + ' status-item pos-rel full-width full-height round-corner mat-elevation-z1 card-bg cursor-pointer'">
+            <mat-icon
+              *ngIf="status.statusId === form.get('status').value.statusId"
+              class="pos-abs font-8-em text-center line-height-15 text-white bg-green bottom-half-reverse right-0 left-0 margin-auto width-15 height-15 round-corner-all">
+              check
+            </mat-icon>
+            <mat-card-content class="pos-rel z-index-99 no-margin">
+              <mat-icon class="full-width height-50 font-full-em-3-plus-half text-center line-height-40">
+                {{status.statusIcon}}
+              </mat-icon>
+            </mat-card-content>
+            <mat-card-footer class="mat-card-footer text-center text-weight-bold">
+              {{status.statusNameFa}}
+            </mat-card-footer>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <div *ngIf="form.get('status').value.statusId === 9" class="margin-b-half">
+        <mat-form-field class="full-width font-9-em">
+          <mat-label>توضیح وضعیت</mat-label>
+          <textarea matInput formControlName="description" placeholder="در مورد وضعیت دلخواه بنویس"></textarea>
+          <mat-error *ngIf="!form.get('description').valid && form.get('description').touched">
+            لطفا توضیح در مورد وضعیت را پر نمایید
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="dialog-buttons height-30 float-right full-width" dir="rtl">
+      <button [disabled]="!form.valid" type="submit" mat-raised-button class="green-gradient text-white full-width">
+        اعمال وضعیت
+      </button>
+    </div>
+  </form>
+</div>

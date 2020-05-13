@@ -1,0 +1,94 @@
+@import '../../../../assets/mixin';
+
+.bg-green {
+  background-color: #388e3c;
+}
+
+.status-item {
+  color: #304352;
+}
+
+.status-lunch_time {
+  @include transition(all .4s);
+
+  &:hover, &.active-status {
+    color: #f94850;
+
+    box-shadow:
+      0 2px 4px -1px #ff0844,
+      0px 10px 25px -7px #ffb199,
+      0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.status-meeting {
+  @include transition(all .4s);
+
+  &:hover, &.active-status {
+    color: #818cbc;
+
+    box-shadow: 0 2px 4px -1px #818cbc,
+    0px 10px 25px -7px #80d0c7,
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.status-smoking {
+  @include transition(all .4s);
+
+  &:hover, &.active-status {
+    color: #304352;
+
+    box-shadow: 0 2px 4px -1px #304352,
+    0px 10px 25px -7px #d7d2cc,
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.status-mission {
+  @include transition(all .4s);
+
+  &:hover, &.active-status {
+    color: #30cfd0;
+
+    box-shadow: 0 2px 4px -1px #30cfd0,
+    0px 10px 25px -7px #8fd3f4,
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.status-leave {
+  @include transition(all .4s);
+
+  &:hover, &.active-status {
+    color: #feb051;
+
+    box-shadow: 0 2px 4px -1px #fa709a,
+    0px 10px 25px -7px #fee140,
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.status-game {
+  @include transition(all .4s);
+
+  &:hover, &.active-status {
+    color: #c471f5;
+
+    box-shadow: 0 2px 4px -1px #fa71cd,
+    0px 10px 25px -7px #c471f5,
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.status-other_stuff {
+  @include transition(all .4s);
+
+  &:hover, &.active-status {
+    color: #98997e;
+
+    box-shadow: 0 2px 4px -1px #98997e,
+    0px 10px 25px -7px #fbfcdb,
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+}

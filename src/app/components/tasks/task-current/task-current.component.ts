@@ -1,5 +1,10 @@
 import {Component, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {TaskInterface} from '../logic/task-interface';
 import {ElectronService} from '../../../core/services';
+import {CurrentTaskService} from '../../../services/current-task.service';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {TaskDetailBottomSheetComponent} from '../task-detail-bottomSheet/task-detail-bottomSheet.component';
 
 @Component({
   selector: 'app-task-current',
@@ -7,12 +12,20 @@ import {ElectronService} from '../../../core/services';
   styleUrls: ['./task-current.component.scss']
 })
 export class TaskCurrentComponent implements OnInit {
+  currentTasks: Array<TaskInterface> | null = null;
   version;
   message: string = '';
   notification: boolean = false;
   restartBtn: boolean = false;
 
-  constructor(private electronService: ElectronService) {
+  private _subscription: Subscription = new Subscription();
+
+  constructor(private electronService: ElectronService,
+              private currentTaskService: CurrentTaskService,
+              private _bottomSheet: MatBottomSheet) {
+    this._subscription.add(
+      this.currentTaskService.currentTask.subscribe(currentTasks => this.currentTasks = currentTasks)
+    );
   }
 
   ngOnInit(): void {
@@ -35,6 +48,12 @@ export class TaskCurrentComponent implements OnInit {
       this.message = 'Update Downloaded. It will be installed on restart. Restart Now?';
       this.restartBtn = true;
       this.notification = true;
+    });
+  }
+
+  showTask(task: TaskInterface) {
+    this._bottomSheet.open(TaskDetailBottomSheetComponent, {
+      data: task,
     });
   }
 

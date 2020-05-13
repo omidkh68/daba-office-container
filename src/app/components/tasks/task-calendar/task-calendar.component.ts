@@ -11,6 +11,7 @@ import {ApiService} from '../logic/api.service';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import {MatTabChangeEvent} from "@angular/material/tabs";
 
+import {AppConfig} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-task-calendar',
@@ -25,7 +26,7 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   tasks: TaskInterface[] = [];
   usersList: UserInterface[] = [];
   projectsList: ProjectInterface[] = [];
-  socket = io('http://192.168.110.179:4000');
+  socket = io(AppConfig.socketUrl);
   calendarEvents = [];
 
   monthView = false;

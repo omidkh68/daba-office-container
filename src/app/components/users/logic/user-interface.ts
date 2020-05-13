@@ -12,6 +12,6 @@ export interface UserInterface {
   permission?: string;
   darkMode?: number;
   role?: RoleInterface;
-  userCurrentStatus?: UserStatusInterface;
+  userCurrentStatus?: UserStatusInterface | string;
   creationDate?: string;
 }

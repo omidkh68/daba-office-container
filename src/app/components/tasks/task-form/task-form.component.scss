@@ -1,0 +1,17 @@
+.task-count {
+  &.todo {
+    color: #F44336;
+  }
+
+  &.inProgress {
+    color: #eb9f4c;
+  }
+
+  &.done {
+    color: #388E3C;
+  }
+}
+
+.right-six-tenth {
+  right: .6em !important;
+}

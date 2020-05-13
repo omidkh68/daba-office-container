@@ -14,18 +14,18 @@
   @include radius-all;
 
   &.todo {
-    background-color: #F44336;
-    color: #FFF;
+    border: solid 2px #F44336;
+    color: #F44336;
   }
 
   &.inProgress {
-    background-color: #FFCC80;
-    color: #333;
+    border: solid 2px #ffa000;
+    color: #ffa000;
   }
 
   &.done {
-    background-color: #388E3C;
-    color: #FFF;
+    border: solid 2px #388E3C;
+    color: #388E3C;
   }
 }
 
@@ -53,4 +53,22 @@
 
 .tasks-list.cdk-drop-list-dragging .task-item:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.mat-card {
+  @include rounded(10px);
+
+  &:hover {
+    -webkit-box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  }
+}
+
+.mat-card-footer {
+  border-top: solid 1px #DDD;
+
+  img {
+    border: solid 1px #DDD;
+  }
 }
