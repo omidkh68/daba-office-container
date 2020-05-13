@@ -4,7 +4,7 @@ import {TaskInterface} from '../logic/task-interface';
 import {ElectronService} from '../../../core/services';
 import {CurrentTaskService} from '../../../services/current-task.service';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {TaskFilesComponent} from '../task-files/task-files.component';
+import {TaskDetailBottomSheetComponent} from '../task-detail-bottomSheet/task-detail-bottomSheet.component';
 
 @Component({
   selector: 'app-task-current',
@@ -52,9 +52,8 @@ export class TaskCurrentComponent implements OnInit {
   }
 
   showTask(task: TaskInterface) {
-    this._bottomSheet.open(TaskFilesComponent, {
+    this._bottomSheet.open(TaskDetailBottomSheetComponent, {
       data: task,
-
     });
   }
 

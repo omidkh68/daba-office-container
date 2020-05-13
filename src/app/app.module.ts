@@ -14,6 +14,7 @@ import {HomeModule} from './home/home.module';
 import {AppComponent} from './app.component';
 import {NbThemeModule} from '@nebular/theme';
 import {SharedModule} from './shared/shared.module';
+import { MessageComponent } from './components/message/message.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -22,7 +23,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MessageComponent
   ],
   imports: [
     HomeModule,

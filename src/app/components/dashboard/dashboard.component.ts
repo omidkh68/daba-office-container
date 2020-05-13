@@ -12,6 +12,10 @@ import {UserStatusInterface} from '../users/logic/user-status-interface';
 import {ChangeUserStatusInterface} from '../status/logic/change-user-status.interface';
 import {ApiService as UserApiService} from '../users/logic/api.service';
 import {systemPreferences} from 'electron';
+import {UserInterface} from '../users/logic/user-interface';
+import {CurrentTaskService} from '../../services/current-task.service';
+import {UserInfoService} from '../../services/user-info.service';
+import {MessageService} from '../../services/message.service';
 
 export interface INotification {
   onclick: () => void;
@@ -23,7 +27,7 @@ export interface INotification {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  notification;
+  loggedInUser: UserInterface;
   userCurrentStatus: UserStatusInterface | string;
   serviceList: ServiceItemsInterface[] = [
     {
@@ -63,13 +67,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private changeStatusService: ChangeStatusService,
               private userStatusService: ChangeStatusService,
               private userApiService: UserApiService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private messageService: MessageService,
+              private userInfoService: UserInfoService) {
+    this._subscription.add(
+      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
+    );
+
     this._subscription.add(
       this.changeStatusService.currentUserStatus.subscribe(status => this.userCurrentStatus = status)
     );
   }
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.messageService.durationInSeconds = 10;
+      this.messageService.showMessage(`${this.loggedInUser.name} ${this.loggedInUser.family} خوش آمدید `);
+    }, 2000);
+
     /*const notification: INotification = <INotification>(new Notification('Omid', {
       body: 'salam sosis',
       icon: 'icon'
@@ -87,11 +102,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       console.log('omodidimasoidoaisjoa');
     };*/
 
-    this.electronService.systemPreferences.askForMediaAccess('microphone').then(result => {
+    /*this.electronService.systemPreferences.askForMediaAccess('microphone').then(result => {
       console.log(result);
     });
 
-    console.log(this.electronService.systemPreferences.getMediaAccessStatus('microphone'));
+    console.log(this.electronService.systemPreferences.getMediaAccessStatus('microphone'));*/
   }
 
   openApi(service: ServiceItemsInterface) {
@@ -137,8 +152,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
 
       this._subscription.add(
-        dialogRef.afterClosed().subscribe(resp => {
-
+        dialogRef.afterClosed().subscribe((resp: any) => {
+          this.messageService.showMessage(`${resp.message}`);
         })
       );
     } else {
@@ -151,6 +166,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this._subscription.add(
         this.userApiService.applyStatusToUser(statusInfo).subscribe((resp: any) => {
           if (resp.result === 1) {
+            this.messageService.showMessage(`${resp.message}`);
+
             this.changeStatusService.changeUserStatus(resp.content.user.userCurrentStatus);
           }
         })

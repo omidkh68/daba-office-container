@@ -8,6 +8,7 @@ import {ApiService as UserApiService} from '../../users/logic/api.service';
 import {UserStatusInterface} from '../../users/logic/user-status-interface';
 import {StatusInterface} from '../logic/status-interface';
 import {ApiService as StatusApiService} from '../logic/api.service';
+import {MessageService} from '../../../services/message.service';
 
 @Component({
   selector: 'app-change-status',
@@ -23,6 +24,7 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
 
   constructor(private userStatusService: ChangeStatusService,
               private userApiService: UserApiService,
+              private messageService: MessageService,
               private statusApiService: StatusApiService,
               private fb: FormBuilder,
               public dialogRef: MatDialogRef<ChangeStatusComponent>,
@@ -118,14 +120,14 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
         this.userApiService.applyStatusToUser(formValue).subscribe((resp: any) => {
           if (resp.result === 1) {
             this.userStatusService.changeUserStatus(resp.content.user.userCurrentStatus);
-            this.dialogRef.close();
+            this.dialogRef.close(resp);
           } else {
             this.form.enable();
           }
         })
       );
     } else {
-      alert('fill required field');
+      this.messageService.showMessage(`توضیح وضعیت را وارد نمایید`);
     }
   }
 

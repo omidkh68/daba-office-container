@@ -1,7 +1,10 @@
 import {ComponentFactory, ComponentFactoryResolver, CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import {JalaliPipe} from '../../pipes/jalali.pipe';
 import {SharedModule} from '../../shared/shared.module';
 import {TranslateModule} from '@ngx-translate/core';
+import {TaskMainComponent} from './task-main/task-main.component';
 import {TaskStopComponent} from './task-stop/task-stop.component';
+import {TaskFormComponent} from './task-form/task-form.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import {TaskBoardComponent} from './task-board/task-board.component';
 import {TaskNotesComponent} from './task-notes/task-notes.component';
@@ -11,13 +14,15 @@ import {TaskFilterComponent} from './task-filter/task-filter.component';
 import {TaskCurrentComponent} from './task-current/task-current.component';
 import {TaskMessagesComponent} from './task-messages/task-messages.component';
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
-import {TaskMainComponent} from './task-main/task-main.component';
+import {TaskDetailBottomSheetComponent} from './task-detail-bottomSheet/task-detail-bottomSheet.component';
 import {NbLayoutModule, NbWindowModule, NbWindowState} from '@nebular/theme';
-import {JalaliPipe} from '../../pipes/jalali.pipe';
 
 @NgModule({
   declarations: [
     JalaliPipe,
+    TaskStopComponent,
+    TaskMainComponent,
+    TaskFormComponent,
     TaskBoardComponent,
     TaskNotesComponent,
     TaskFilesComponent,
@@ -26,8 +31,7 @@ import {JalaliPipe} from '../../pipes/jalali.pipe';
     TaskCurrentComponent,
     TaskMessagesComponent,
     TaskCalendarComponent,
-    TaskStopComponent,
-    TaskMainComponent
+    TaskDetailBottomSheetComponent
   ],
   imports: [
     SharedModule,
@@ -43,7 +47,8 @@ import {JalaliPipe} from '../../pipes/jalali.pipe';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class TasksModule {
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {
+  }
 
   public resolveComponent(): ComponentFactory<TaskMainComponent> {
     return this.componentFactoryResolver.resolveComponentFactory(TaskMainComponent);

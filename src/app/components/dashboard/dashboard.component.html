@@ -1,7 +1,7 @@
 <nb-layout>
   <nb-layout-column class="no-padding">
     <div class="height-250 banner pos-rel">
-      <div class="window-control pos-abs top-eight-tenth left-full full-width height-35 padding-mini-t-b" style="-webkit-app-region: drag">
+      <div class="window-control pos-abs top-eight-tenth left-full full-width height-35" style="-webkit-app-region: drag">
         <a (click)="closeApp()"
            matTooltip="{{'HOME.DASHBOARD.CLOSE' | translate}}" matTooltipPosition="below"
            class="close-icon display-block float-left round-corner-all cursor-pointer margin-r-full">
@@ -18,17 +18,17 @@
       <div class="profile-info pos-abs full-width height-100 bottom-0">
         <div
           class="profile-img float-right round-corner-all overflow-hide margin-r-full-3 margin-l-full mat-elevation-z3">
-          <img class="full-width full-height" [src]="'/assets/profileImg/1.jpg'" alt="">
+          <img class="full-width full-height" [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'" alt="">
         </div>
 
         <div class="profile-name float-right padding-full">
           <h1 class="font-full-plus-half-em text-weight-500 margin-b-four-tenth">
-            امید خسروجردی
+            {{loggedInUser.name + ' ' + loggedInUser.family}}
           </h1>
 
           <div class="role-container round-corner bg-white">
             <h4 class="padding-half height-30 line-height-15 no-margin text-weight-500 text-pink-500 font-9-em">
-              مسئول بخش طراحی
+              {{loggedInUser.role.roleNameFa}}
             </h4>
           </div>
         </div>

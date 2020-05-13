@@ -14,6 +14,7 @@ import {TaskStopComponent} from '../task-stop/task-stop.component';
 import {CurrentTaskService} from '../../../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {AppConfig} from '../../../../environments/environment';
+import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-task-board',
@@ -45,7 +46,8 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private api: ApiService,
               private userInfoService: UserInfoService,
               private currentTaskService: CurrentTaskService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              public bottomSheet: MatBottomSheet) {
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
@@ -150,7 +152,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       boardStatus: boardStatus
     };
 
-    const dialogRef = this.dialog.open(TaskDetailComponent, {
+    /*const dialogRef = this.dialog.open(TaskDetailComponent, {
       data: data,
       autoFocus: false,
       width: '50%',
@@ -163,7 +165,12 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
           this.socket.emit('updatedata', result);
         }
       })
-    );
+    );*/
+
+    const bottomSheetRef = this.bottomSheet.open(TaskDetailComponent, {
+      data: data,
+      autoFocus: false
+    })
   }
 
   getBoards() {
