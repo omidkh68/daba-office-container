@@ -27,7 +27,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   @Input()
   filterBoards: any;
 
-  socket = io('http://localhost:4000');
+  socket = io('http://192.168.110.179:4000');
   rowHeight: string = '0';
   connectedTo = [];
   boards: BoardInterface[] = [];
@@ -210,6 +210,9 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
     if (this.refreshData) {
       this.socket.emit('updatedata');
     }
+
+    console.log(changes.filterBoards , "HusinChange");
+
 
     if (changes.filterBoards && !changes.filterBoards.firstChange) {
       this.filterBoards = changes.filterBoards.currentValue;

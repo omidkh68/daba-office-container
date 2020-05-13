@@ -7,4 +7,5 @@ export interface FilterInterface {
   dateStop?: string;
   type?: string;
   adminId?: number;
+  percentageStatus?: boolean
 }

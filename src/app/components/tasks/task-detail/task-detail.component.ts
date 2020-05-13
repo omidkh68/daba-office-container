@@ -17,7 +17,7 @@ import {TaskDataInterface} from '../logic/task-data-interface';
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
-  socket = io('http://localhost:4000');
+  socket = io('http://localhost:3000');
   editable: boolean = false;
   task: TaskInterface;
   projectsList: ProjectInterface[] = [];

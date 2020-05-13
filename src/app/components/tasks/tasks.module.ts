@@ -11,8 +11,11 @@ import {TaskFilterComponent} from './task-filter/task-filter.component';
 import {TaskCurrentComponent} from './task-current/task-current.component';
 import {TaskMessagesComponent} from './task-messages/task-messages.component';
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
+import {TaskCalendarWeekdayComponent} from './task-calendar/task-calendar-weekday/task-calendar-weekday.component';
+import {TaskCalendarRateComponent} from './task-calendar/task-calendar-rate/task-calendar-rate.component';
 import {TaskMainComponent} from './task-main/task-main.component';
 import {NbLayoutModule, NbWindowModule, NbWindowState} from '@nebular/theme';
+import {A11yModule} from "@angular/cdk/a11y";
 
 @NgModule({
   declarations: [
@@ -24,19 +27,22 @@ import {NbLayoutModule, NbWindowModule, NbWindowState} from '@nebular/theme';
     TaskCurrentComponent,
     TaskMessagesComponent,
     TaskCalendarComponent,
+    TaskCalendarWeekdayComponent,
+    TaskCalendarRateComponent,
     TaskStopComponent,
     TaskMainComponent
   ],
-  imports: [
-    SharedModule,
-    FullCalendarModule,
-    NbLayoutModule,
-    NbWindowModule.forChild({
-      title: '',
-      initialState: NbWindowState.FULL_SCREEN
-    }),
-    TranslateModule.forChild({}),
-  ],
+    imports: [
+        SharedModule,
+        FullCalendarModule,
+        NbLayoutModule,
+        NbWindowModule.forChild({
+            title: '',
+            initialState: NbWindowState.FULL_SCREEN
+        }),
+        TranslateModule.forChild({}),
+        A11yModule,
+    ],
   exports: [SharedModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

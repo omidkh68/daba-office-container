@@ -4,12 +4,14 @@ import {Observable} from 'rxjs/internal/Observable';
 import {BoardInterface} from './board-interface';
 import {TaskInterface} from './task-interface';
 import {FilterInterface} from './filter-interface';
+import {TaskDurationInterface} from "./task-duration-interface";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   private API_URL = 'http://localhost:3000/api';
+  //private API_URL = 'http://192.168.110.179:3000/api';
 
   /**
    * @type {HttpHeaders}
@@ -26,6 +28,13 @@ export class ApiService {
 
   boards(userId: number): Observable<BoardInterface[]> {
     return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/?userId=${userId}&page=-1`);
+  }
+  boradsCalendar(userId: number): Observable<BoardInterface[]> {
+    return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/calendar/?userId=${userId}&page=-1`);
+  }
+
+  boradsCalendarDurationTask(task: TaskDurationInterface) {
+    return this._http.post<TaskDurationInterface>(`${this.API_URL}/boards/calendar/durationTask`, task, this.headers);
   }
 
   createTask(task: TaskInterface): Observable<TaskInterface> {
@@ -47,6 +56,7 @@ export class ApiService {
   filterTask(filters: FilterInterface): Observable<FilterInterface> {
     return this._http.post<FilterInterface>(`${this.API_URL}/boards/filter`, filters, this.headers);
   }
+
 
   taskStop(taskInfo: any): Observable<TaskInterface> {
     return this._http.post<TaskInterface>(`${this.API_URL}/boards/stopTask`, taskInfo, this.headers);

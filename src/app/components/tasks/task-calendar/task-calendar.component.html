@@ -1,6 +1,40 @@
-<full-calendar *ngIf="calendarEvents.length" defaultView="dayGridMonth"
-               [locale]="'fa'"
-               [dir]="'rtl'"
-               [events]="calendarEvents"
-               [plugins]="calendarPlugins">
-</full-calendar>
+<div class="content-container padding-full full-width full-height float-left">
+
+    <div class="text-center margin-b-full-2">
+        <mat-button-toggle-group #viewMode="matButtonToggleGroup"
+                                 (change)="changeViewMode(viewMode.value)"
+                                 [ngClass]="{'view-mode': viewMode}"
+                                 class="mat-button-custom line-height-20 center-block round-corner-all">
+            <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'calendar_task'">
+                <span>تقویم تسک</span>
+            </mat-button-toggle>
+            <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'calendar_task_rate'">
+                <span>تقویم کارکرد</span>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+
+
+
+<!--    <mat-tab-group (selectedTabChange)="tabChange($event)" class="pos-rel top-seven-tenth padding-r-l" color="accent" disableRipple>
+        <mat-tab *ngFor="let tab of tabs;">
+            <ng-template mat-tab-label>
+                &lt;!&ndash;<mat-icon class="tab-icon pos-rel top-one-tenth font-full-plus-half-em text-right">{{tab.icon}}</mat-icon>&ndash;&gt;
+                {{tab.name}}
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>-->
+
+    <ng-container class="full-height">
+        <!-- boards container -->
+        <div class="full-height" *ngIf="viewModeTypes == 'calendar_task'">
+            <app-task-calendar-weekday [calendarEvents]="calendarEvents"></app-task-calendar-weekday>
+        </div>
+        <!--/ end of boards container -->
+
+        <!-- calendar container -->
+        <div class="full-height" *ngIf="viewModeTypes == 'calendar_task_rate'">
+            <app-task-calendar-rate [usersList]="usersList"></app-task-calendar-rate>
+        </div>
+    </ng-container>
+</div>

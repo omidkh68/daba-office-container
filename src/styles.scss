@@ -3,12 +3,33 @@
 @import 'assets/grid';
 @import '~@fullcalendar/core/main.css';
 @import '~@fullcalendar/daygrid/main.css';
-
+@import '~@fullcalendar/timegrid/main.css';
 :host {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 html, body {
   margin: 0;
   padding: 0;
@@ -143,4 +164,82 @@ a {
 }
 .mat-card-header-text {
   margin: 0 !important;
+}
+
+
+
+
+.mat-button-toggle-group {
+  background-color: $light-primary-text;
+  width: 200px !important;
+}
+
+
+.mat-button-toggle {
+  width: $half-size;
+
+  .mat-button-toggle-label,
+  .mat-button-toggle-label-content {
+    height: $full-size;
+    margin: 0;
+    position: relative;
+    text-align: center;
+    top: -1px;
+    width: $full-size;
+
+    span {
+      display: block;
+      font-size: .8em;
+      height: $full-size;
+      line-height: 30px;
+      width: $full-size;
+    }
+  }
+}
+%mat-button-toggle-checked {
+  @include rounded(30px);
+
+  color: $light-primary-text;
+}
+
+.mat-button-toggle-checked {
+  @extend %mat-button-toggle-checked;
+
+  background-image: -webkit-linear-gradient(-20deg, map_get($mat-indigo, 600) 0%, map_get($mat-light-blue, 300) 100%);
+  background-image: linear-gradient(-20deg, map_get($mat-indigo, 600) 0%, map_get($mat-light-blue, 300) 100%);
+}
+
+.mat-button-toggle-checked.text-white,
+.mat-button-toggle-checked .mat-icon.text-white {
+  color: $dark-primary-text !important;
+}
+
+.mat-button-toggle-button {
+  height: $full-size;
+  width: $full-size;
+}
+
+.mat-button-toggle-label-content {
+  height: $full-size;
+  line-height: 30px !important;
+  position: relative;
+  width: $full-size;
+  z-index: 1;
+}
+
+
+.mat-button-toggle-checked {
+  @extend %mat-button-toggle-checked;
+
+  -webkit-border-radius: 30px !important;
+  -moz-border-radius: 30px !important;
+  border-radius: 30px !important;
+  color: $light-primary-text !important;
+  background-image: -webkit-linear-gradient(-20deg, map_get($mat-purple, 900) 0%, map_get($mat-purple, 200) 100%);
+  background-image: linear-gradient(-20deg, map_get($mat-purple, 900) 0%, map_get($mat-purple, 200) 100%);
+}
+
+.mat-button-toggle {
+  width: $half-size;
+  border: 0 !important;
 }

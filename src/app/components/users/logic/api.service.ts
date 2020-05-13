@@ -7,6 +7,7 @@ import {ScreenshotInterface} from './screenshot-interface';
   providedIn: 'root'
 })
 export class ApiService {
+  //private API_URL = 'http://192.168.110.179:3000/api';
   private API_URL = 'http://localhost:3000/api';
 
   /**
