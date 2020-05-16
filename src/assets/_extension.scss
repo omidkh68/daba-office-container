@@ -125,7 +125,7 @@ textarea {
 .font-6-rem {font-size: .6rem !important;}
 .font-7-em {font-size: .7em !important;}
 .font-7-rem {font-size: .7rem !important;}
-.font-8-em {font-size: .8em !important;}
+.font-9-em {font-size: .8em !important;}
 .font-8-rem {font-size: .8rem !important;}
 .font-9-em {font-size: .9em !important;}
 .font-9-rem {font-size: .9rem !important;}
@@ -209,7 +209,7 @@ textarea {
 .width-100 {width: 100px !important;}
 .width-110 {width: 110px !important;}
 .width-120 {width: 100% !important; max-width: 120px !important;}
-.width-144 {width: 100% !important; max-width: 144px !important;}
+.width-150 {width: 100% !important; max-width: 150px !important;}
 .width-200 {width: 100% !important; max-width: 200px !important;}
 .width-250 {width: 250px !important;}
 .width-300 {width: 100% !important; max-width: 300px !important;}
@@ -312,7 +312,7 @@ textarea {
 .text-weight-300 {font-weight: 300 !important;}
 .text-weight-500 {font-weight: 500 !important;}
 .text-weight-bold {font-weight: bold !important;}
-.text-italic-normal {font-style: normal !important;}
+.text-italic {font-style: italic !important;}
 .text-center {text-align: center !important;}
 .text-justify {text-align: justify !important;}
 .text-left {text-align: left !important;}
@@ -604,4 +604,11 @@ textarea {
   -ms-text-overflow: ellipsis;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.no-text-eclipse {
+  overflow: hidden !important;
+  -ms-text-overflow: inherit !important;
+  text-overflow: inherit !important;
+  white-space: normal !important;
 }

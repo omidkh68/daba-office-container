@@ -1,0 +1,11 @@
+.todo-content-container {
+  height: calc(100% - 60px);
+}
+
+.text-line-through {
+  text-decoration: line-through;
+}
+
+.todo-list-container {
+  max-height: calc(100% - 60px - 1em);
+}

@@ -262,24 +262,223 @@ nb-window:not(.full-screen) {
       stroke: #f44336 !important;
     }
   }
+
   &.spinner-color-redorange {
     circle {
       stroke: #f46b2b !important;
     }
   }
+
   &.spinner-color-orange {
     circle {
       stroke: #ffc349 !important;
     }
   }
+
   &.spinner-color-lightgreen {
     circle {
       stroke: #7dff6d !important;
     }
   }
+
   &.spinner-color-green {
     circle {
       stroke: #23943b !important;
     }
+  }
+}
+
+.mat-bottom-sheet-container {
+  padding: 0 !important;
+  max-width: calc(100vw - 190px) !important;
+  max-height: 85vh !important;
+}
+
+%mat-button-toggle-checked {
+  @include rounded(30px);
+
+  color: #FFF;
+}
+
+.mat-button-toggle {
+  border: none !important;
+
+  .mat-button-toggle-label,
+  .mat-button-toggle-label-content {
+    height: 100%;
+    margin: 0;
+    position: relative;
+    text-align: center;
+    top: -1px;
+    width: 100%;
+
+    span {
+      display: block;
+      font-weight: bold;
+      height: 100%;
+      line-height: 32px;
+      width: 100%;
+    }
+  }
+}
+
+.view-mode {
+  .mat-button-toggle-checked {
+    @extend %mat-button-toggle-checked;
+
+    background-image: -webkit-linear-gradient(-20deg, #3949ab 0%, #4fc3f7 100%);
+    background-image: linear-gradient(-20deg, #3949ab 0%, #4fc3f7 100%);
+  }
+}
+
+.mat-list-item-content {
+  padding: 0 !important;
+}
+
+.mat-form-field-appearance-outline.mat-focused.mat-accent .mat-form-field-outline-thick {
+  color: #513162 !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-start, .mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-end, .mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-gap {
+  border-width: 1px !important;
+}
+
+.mat-paginator-container {
+  justify-content: flex-start !important;
+}
+
+.mat-list-text {
+  padding: .5em !important;
+}
+
+// file uploader styles
+ngx-file-picker {
+  flex-direction: inherit !important;
+  max-width: inherit !important;
+}
+
+cloud-icon {
+  font-size: 35px !important;
+  margin: 0 !important;
+}
+
+.content-center-text {
+  margin: 0 !important;
+}
+
+.content-top-text {
+  font-size: 1em !important;
+}
+
+.file-drop-wrapper {
+  padding: .5em !important;
+  background-color: transparent !important;
+  height: 100% !important;
+  width: 50% !important;
+  float: left !important;
+}
+
+file-preview-item {
+  padding: .5em !important;
+}
+
+file-preview-container {
+  background-color: transparent !important;
+}
+
+.files-preview-wrapper {
+  width: 50% !important;
+  float: right !important;
+  height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+.file-browse-button {
+  padding: 10px 20px !important;
+  background: #0f6e5d !important;
+  font-size: 12px !important;
+  margin-top: .5em !important;
+}
+
+.cloud-upload-icon {
+  border-left: .0625em solid #0f6e5d !important;
+  border-top: .0625em solid #0f6e5d !important;
+  border-bottom: .0625em solid #0f6e5d !important;
+
+  &::before {
+    border-right-color: #0f6e5d !important;
+    border-top-color: #0f6e5d !important;
+    border-bottom-color: #0f6e5d !important;
+  }
+
+  &::after {
+    background-color: #0f6e5d !important;
+  }
+
+  i {
+    &::before {
+      background-color: #0f6e5d !important;
+    }
+
+    &::after {
+      border-top-color: #0f6e5d !important;
+      border-right-color: #0f6e5d !important;
+    }
+  }
+}
+
+#dropZone, file-drop {
+  height: 100% !important;
+  padding: 0 !important;
+}
+
+.file-preview-wrapper {
+  .file-upload-error-wrapper {
+    background-color: transparent !important;
+  }
+
+  .file-preview-thumbnail {
+    .img-preview-thumbnail, .other-preview-thumbnail {
+      width: 30px !important;
+      height: 30px !important;
+    }
+
+    .thumbnail-backdrop {
+      background-color: transparent !important;
+    }
+  }
+
+  .file-preview-description {
+    padding: 0 .5em !important;
+
+    .file-preview-title p {
+      text-align: left !important;
+    }
+
+    .file-preview-size {
+      position: relative !important;
+      top: -5px !important;
+    }
+  }
+
+  .file-preview-actions .ngx-close-icon-wrapper {
+    position: relative;
+    top: -3px;
+    left: -3px;
+  }
+}
+
+.ngx-close-icon {
+  width: .5em !important;
+  height: .5em !important;
+}
+
+.upload-refresh-icon {
+  margin-left: 0;
+  margin-top: -5px;
+
+  &::before {
+    top: 10px;
   }
 }

@@ -7,7 +7,11 @@ import * as jalaliMoment from 'jalali-moment';
 export class JalaliPipe implements PipeTransform {
 
   transform(value: unknown, ...args: unknown[]): string {
-    return jalaliMoment(value, 'YYYY-MM-DD HH:mm:ss').locale('fa').format('YYYY-MM-DD HH:mm:ss');
+    if (jalaliMoment(value, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') === value) {
+      return jalaliMoment(value, 'YYYY-MM-DD HH:mm:ss').locale('fa').format('YYYY-MM-DD HH:mm:ss');
+    } else {
+      return '-'
+    }
   }
 
 }

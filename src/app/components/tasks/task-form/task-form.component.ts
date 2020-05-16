@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {TaskInterface} from '../logic/task-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
@@ -25,9 +25,6 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
   @Output()
   cancel = new EventEmitter();
-
-  @Output()
-  deleteTaskEmitter = new EventEmitter();
 
   @Output()
   formOutput = new EventEmitter();
@@ -88,16 +85,8 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
     if (this.data.action === 'detail') {
       this.task = this.data.task;
-    }
-  }
-
-  editableForm(toggle) {
-    this.editable = toggle;
-
-    if (toggle) {
-      this.form.enable();
     } else {
-      this.form.disable();
+      this.selectCurrentTime();
     }
   }
 
@@ -105,16 +94,40 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     this.cancel.emit(true);
   }
 
-  deleteTask() {
-    this.deleteTaskEmitter.emit(true);
+  changeBoardStatus(event) {
+    if (event.value === 'done') {
+      this.form.get('percentage').setValue(100);
+    } else {
+      if (this.data.action === 'detail') {
+        if (this.data.boardStatus !== 'done') {
+          this.form.get('percentage').setValue(this.task.percentage);
+        }
+      } else {
+        this.form.get('percentage').setValue(0);
+      }
+    }
   }
 
-  changeBoardStatus(event) {
-    if (event.value === 'todo' && this.data.boardStatus === 'done') {
-      this.form.get('percentage').setValue(0);
-    } else if (event.value === 'done') {
-      this.form.get('percentage').setValue(100);
+  selectCurrentTime() {
+    const curDate = new Date();
+    const curHour = curDate.getHours() < 10 ? '0' + curDate.getHours() : curDate.getHours();
+    const curMinute = curDate.getMinutes();
+    let selectedMinute = '';
+
+    if (curMinute < 15) {
+      selectedMinute = '00';
+    } else if (curMinute >= 15 && curMinute < 30) {
+      selectedMinute = '15';
+    } else if (curMinute >= 30 && curMinute < 45) {
+      selectedMinute = '15';
+    } else if (curMinute >= 45) {
+      selectedMinute = '45';
     }
+
+    const totalCurrentTime = curHour + ':' + selectedMinute;
+
+    this.form.get('startTime').setValue(totalCurrentTime);
+    this.form.get('stopTime').setValue(totalCurrentTime);
   }
 
   submit() {

@@ -1,0 +1,60 @@
+<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height">
+  <div class="full-width full-height overflow-y-auto overflow-x-hide">
+    <table class="full-width" mat-table [dataSource]="dataSource" dir="rtl">
+      <!-- Name Column -->
+      <ng-container matColumnDef="taskDateStart">
+        <th mat-header-cell *matHeaderCellDef class="font-7-em"> تاریخ شروع</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="font-7-em display-block width-60">{{element.taskDateStart | jalali}}</span>
+        </td>
+      </ng-container>
+
+      <!-- lang Column -->
+      <ng-container matColumnDef="taskDateStop">
+        <th mat-header-cell *matHeaderCellDef class="font-7-em"> تاریخ توقف</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="font-7-em display-block width-60">{{element.taskDateStop | jalali}}</span>
+        </td>
+      </ng-container>
+
+      <!-- lang Column -->
+      <ng-container matColumnDef="adminIdStartTask">
+        <th mat-header-cell *matHeaderCellDef class="font-7-em"> شروع کننده</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="font-7-em display-block width-60">{{element.adminIdStartTask}}</span>
+        </td>
+      </ng-container>
+
+      <!-- lang Column -->
+      <ng-container matColumnDef="adminIdStopTask">
+        <th mat-header-cell *matHeaderCellDef class="font-7-em"> متوقف کننده تسک</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="font-7-em display-block width-60">{{element.adminIdStopTask}}</span>
+        </td>
+      </ng-container>
+
+      <!-- priority Column -->
+      <ng-container matColumnDef="percentage">
+        <th mat-header-cell *matHeaderCellDef class="font-7-em"> درصد پیشبرد</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="font-7-em display-block width-60">{{element.percentage}}%</span>
+        </td>
+      </ng-container>
+
+      <!-- priority Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef class="font-7-em"> توضیح</th>
+        <td mat-cell *matCellDef="let element">
+          <span
+            class="font-7-em display-block width-60">{{element.description.length ? element.description : '-'}}</span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator class="full-width" dir="rtl" [pageSizeOptions]="pageLimit" showFirstLastButtons></mat-paginator>
+
+  </div>
+</div>

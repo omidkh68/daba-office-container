@@ -1,0 +1,8 @@
+<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
+  <app-task-form
+    (cancel)="cancelBtn($event)"
+    (formOutput)="updateForm($event)"
+    [data]="data"
+    [form]="form"
+    [editable]="editable"></app-task-form>
+</div>

@@ -11,15 +11,17 @@
 
     <div class="pos-abs left-full top-full">
       <button mat-raised-button
+              [disabled]="!taskEssentialInfo"
               (click)="showFilter()"
-              class="white-gradient margin-l-full text-black line-height-30 font-8-em overflow-hide text-weight-normal">
+              class="white-gradient margin-l-full text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">filter_list</mat-icon>
         <span class="padding-mini-r-l">فیلتر</span>
       </button>
 
       <button mat-raised-button
+              [disabled]="!taskEssentialInfo"
               (click)="addNewTask()"
-              class="green-gradient text-white line-height-30 font-8-em overflow-hide text-weight-normal">
+              class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
         <span class="padding-mini-r-l">افزودن تسک</span>
       </button>
@@ -30,7 +32,10 @@
     <ng-container [ngSwitch]="activeTab">
       <!-- boards container -->
       <div class="full-height" *ngSwitchCase="0">
-        <app-task-board [filterBoards]="filteredBoardsData" [refreshData]="refreshBoardData" (pushTaskEssentialInfo)="getTaskEssentialInfo($event)"></app-task-board>
+        <app-task-board [filterBoards]="filteredBoardsData"
+                        [refreshData]="refreshBoardData"
+                        [pushTaskToBoard]="pushTaskToBoard"
+                        (pushTaskEssentialInfo)="getTaskEssentialInfo($event)"></app-task-board>
       </div>
       <!--/ end of boards container -->
 
@@ -51,16 +56,10 @@
         <app-task-messages></app-task-messages>
       </div>-->
       <!--/ end of messages container -->
-
-      <!-- files container -->
-      <!--<div class="full-height" *ngSwitchCase="4">
-        <app-task-files></app-task-files>
-      </div>-->
-      <!--/ end of files container -->
     </ng-container>
   </div>
 
   <div class="current-task-container bg-white height-50 full-width float-left padding-r-l line-height-50">
-    <app-task-current></app-task-current>
+    <app-task-current [taskEssentialInfo]="taskEssentialInfo" (pushTaskToBoard)="getTaskToBoardData($event)"></app-task-current>
   </div>
 </div>

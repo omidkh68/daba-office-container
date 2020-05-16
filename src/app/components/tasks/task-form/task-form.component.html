@@ -1,28 +1,11 @@
 <form [formGroup]="form" (submit)="submit()" class="full-height">
   <div class="dialog-content-container float-right full-width">
-    <h1 class="margin-b-full text-right font-full-em text-weight-500">{{data.action === 'detail' ? 'ویرایش تسک' : 'افزودن تسک'}}</h1>
-
-    <div class="row margin-b-full">
-      <div class="col-md-3 float-left">
-        <button *ngIf="data.action === 'detail'"
-                (click)="deleteTask()"
-                type="button"
-                matTooltip="حذف تسک"
-                matTooltipPosition="below"
-                class="no-border cursor-pointer margin-r-full no-bg text-center width-25 height-25 line-height-25 text-red-400 no-padding">
-          <mat-icon>delete</mat-icon>
-        </button>
-
-        <button *ngIf="data.action === 'detail' && !editable" type="button"
-                (click)="editableForm(editable)"
-                matTooltip="ویرایش تسک"
-                matTooltipPosition="below"
-                class="no-border cursor-pointer margin-r-full no-bg text-center width-25 height-25 line-height-25 text-green-400 no-padding">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </div>
-      <div class="col-md-9 float-right" dir="rtl">
-        <mat-form-field class="full-width font-8-em">
+    <h1 *ngIf="data.action !== 'detail'" class="margin-b-full text-gray-800 text-right font-full-em text-weight-500 margin-b-half">
+      {{'افزودن تسک'}}
+    </h1>
+    <div class="row margin-b-full" dir="rtl">
+      <div class="col-xs-12 col-sm-12 col-md-12 float-right" dir="rtl">
+        <mat-form-field class="full-width font-9-em">
           <input matInput placeholder="نام تسک" class="full-width" type="text"
                  formControlName="taskName" required tabindex="1">
           <mat-label>
@@ -35,10 +18,9 @@
         </mat-form-field>
       </div>
     </div>
-
-    <div class="row margin-b-full" dir="rtl">
-      <div class="col-md-6 float-right">
-        <mat-form-field class="full-width font-8-em">
+    <div class="row" dir="rtl">
+      <div class="col-xs-6 col-sm-6 col-md-6 float-right">
+        <mat-form-field class="full-width font-9-em">
           <mat-label>وضعیت</mat-label>
           <mat-select formControlName="boardStatus" tabIndex="2" (selectionChange)="changeBoardStatus($event)">
             <mat-option *ngFor="let board of boardsList" [value]="board.id">
@@ -51,8 +33,8 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="col-md-6 float-right no-padding-r-l">
-        <div class="font-8-em pos-abs top-nine-tenth right-six-tenth">درصد پیشبرد
+      <div class="col-xs-6 col-sm-6 col-md-6 float-right no-padding-r-l">
+        <div class="font-9-em pos-abs top-seven-tenth right-six-tenth">درصد پیشبرد
           <span>{{form.get('percentage').value}}</span> ٪
         </div>
         <mat-slider
@@ -68,8 +50,8 @@
     </div>
 
     <div class="row margin-b-full" dir="rtl">
-      <div class="col-md-6 float-right">
-        <mat-form-field class="full-width font-8-em">
+      <div class="col-xs-6 col-sm-6 col-md-6 float-right">
+        <mat-form-field class="full-width font-9-em">
           <mat-label>پروژه</mat-label>
           <mat-select formControlName="project" tabIndex="4">
             <mat-option *ngFor="let project of projectsList" [value]="project">
@@ -82,8 +64,8 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="col-md-6 float-right">
-        <mat-form-field class="full-width font-8-em">
+      <div class="col-xs-6 col-sm-6 col-md-6 float-right">
+        <mat-form-field class="full-width font-9-em">
           <img matPrefix
                [srcset]="'assets/profileImg/'+form.get('assignTo').value.adminId +'.jpg'"
                class="width-20 height-20 round-corner-all margin-l-half pos-rel top-three-tenth">
@@ -105,8 +87,8 @@
     </div>
 
     <div class="row margin-b-full" dir="rtl">
-      <div class="col-md-6 float-right">
-        <mat-form-field class="full-width font-8-em">
+      <div class="col-xs-6 col-sm-6 col-md-6 float-right">
+        <mat-form-field class="full-width font-9-em">
           <input matInput placeholder="مدت زمان کل(ساعت)" class="full-width" type="number"
                  formControlName="taskDurationHours" required tabindex="6">
           <mat-label>
@@ -118,8 +100,8 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="col-md-6 float-right">
-        <mat-form-field class="full-width font-8-em">
+      <div class="col-xs-6 col-sm-6 col-md-6 float-right">
+        <mat-form-field class="full-width font-9-em">
           <mat-label>مدت زمان کل(دقیقه)</mat-label>
           <mat-select formControlName="taskDurationMinutes" tabIndex="7">
             <mat-option *ngFor="let minute of durationMinute" [value]="minute">
@@ -130,9 +112,9 @@
       </div>
     </div>
 
-    <div class="row margin-b-full" dir="rtl">
-      <div class="col-md-3 float-right">
-        <mat-form-field class="full-width font-8-em">
+    <div class="row" dir="rtl">
+      <div class="col-xs-3 col-sm-3 col-md-3 float-right">
+        <mat-form-field class="full-width font-9-em">
           <mat-label>تاریخ شروع</mat-label>
           <input matInput [matDatepicker]="picker1" readonly
                  (focus)="picker1.open()" (click)="picker1.open()"
@@ -145,8 +127,8 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="col-md-3 float-right">
-        <mat-form-field class="full-width font-8-em">
+      <div class="col-xs-3 col-sm-3 col-md-3 float-right">
+        <mat-form-field class="full-width font-9-em">
           <mat-label>ساعت شروع تسک</mat-label>
           <mat-select formControlName="startTime" tabIndex="9">
             <mat-option *ngFor="let hour of hours" [value]="hour">
@@ -160,8 +142,8 @@
         </mat-form-field>
       </div>
 
-      <div class="col-md-3 float-right">
-        <mat-form-field class="full-width font-8-em">
+      <div class="col-xs-3 col-sm-3 col-md-3 float-right">
+        <mat-form-field class="full-width font-9-em">
           <mat-label>تاریخ اتمام</mat-label>
           <input matInput [matDatepicker]="picker2" readonly
                  (focus)="picker2.open()" (click)="picker2.open()"
@@ -174,8 +156,8 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="col-md-3 float-right">
-        <mat-form-field class="full-width font-8-em">
+      <div class="col-xs-3 col-sm-3 col-md-3 float-right">
+        <mat-form-field class="full-width font-9-em">
           <mat-label>ساعت اتمام تسک</mat-label>
           <mat-select formControlName="stopTime" tabIndex="11">
             <mat-option *ngFor="let hour of hours" [value]="hour">
@@ -191,16 +173,16 @@
     </div>
 
     <div class="row margin-b-full" dir="rtl">
-      <div class="col-md-12">
-        <mat-form-field class="full-width font-8-em">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <mat-form-field class="full-width font-9-em">
           <mat-label>توضیح تسک</mat-label>
           <textarea matInput formControlName="taskDesc" placeholder="توضیح تسک" tabindex="12"></textarea>
         </mat-form-field>
       </div>
     </div>
 
-    <div class="ro  w margin-b-full" dir="rtl">
-      <div class="col-md-12">
+    <div class="row margin-b-full" dir="rtl">
+      <div class="col-xs-12 col-sm-12 col-md-12">
         <mat-slide-toggle
           formControlName="trackable"
           class="example-margin"
@@ -222,7 +204,8 @@
       <span class="padding-mini-r-l">ثبت</span>
     </button>
 
-    <button (click)="cancelBtn()"
+    <button *ngIf="editable || data.action !== 'detail'"
+            (click)="cancelBtn()"
             type="button"
             class="no-bg no-border cursor-pointer float-left text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
       <span class="padding-mini-r-l">انصراف</span>

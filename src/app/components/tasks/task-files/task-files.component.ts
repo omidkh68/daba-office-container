@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {ApiService} from './logic/api.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-task-files',
@@ -6,8 +8,16 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./task-files.component.scss']
 })
 export class TaskFilesComponent implements OnInit {
+  adapter = new ApiService(this._http);
+  fileUploaderCaption = {
+    dropzone: {
+      title: 'فایل رو بکش و بنداز اینجا',
+      or: 'یا',
+      browse: 'روی این دکمه بزن',
+    }
+  };
 
-  constructor() {
+  constructor(private _http: HttpClient) {
   }
 
   ngOnInit(): void {

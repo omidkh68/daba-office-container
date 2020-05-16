@@ -1,11 +1,13 @@
 <div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
   <form [formGroup]="form" (submit)="submit()" class="full-height">
     <div class="dialog-content-container float-right full-width" dir="rtl">
-      <h1 class="margin-b-full text-right font-full-em text-weight-500">فیلتر تسک ها</h1>
+      <h1 class="margin-b-full text-gray-800 text-right font-full-em text-weight-500 margin-b-half">
+        فیلتر تسک ها
+       </h1>
 
       <div class="row margin-b-full">
         <div class="col-md-6 float-right">
-          <mat-form-field class="full-width font-8-em">
+          <mat-form-field class="full-width font-9-em">
             <mat-label>نوع فیلتر</mat-label>
             <mat-select formControlName="type" tabIndex="1" required>
               <mat-option *ngFor="let type of filterTypes" [value]="type.typeName">
@@ -16,7 +18,7 @@
         </div>
 
         <div class="col-md-6 float-right" dir="rtl">
-          <mat-form-field class="full-width font-8-em">
+          <mat-form-field class="full-width font-9-em">
             <input matInput placeholder="نام تسک" class="full-width" type="text"
                    formControlName="taskName" tabindex="2">
             <mat-label>
@@ -30,7 +32,7 @@
         </div>
 
         <div class="col-md-6 float-right">
-          <mat-form-field class="full-width font-8-em">
+          <mat-form-field class="full-width font-9-em">
             <mat-label>پروژه</mat-label>
             <mat-select formControlName="projectId" tabIndex="3">
               <mat-option *ngFor="let project of projectsList" [value]="project.projectId">
@@ -45,7 +47,7 @@
         </div>
 
         <div class="col-md-6 float-right">
-          <mat-form-field class="full-width font-8-em">
+          <mat-form-field class="full-width font-9-em">
             <img matPrefix
                  *ngIf="form.get('adminId').valid"
                  [src]="'assets/profileImg/'+form.get('adminId').value+'.jpg'"
@@ -67,7 +69,7 @@
         </div>
 
         <div class="col-md-6 float-right">
-          <mat-form-field class="full-width font-8-em">
+          <mat-form-field class="full-width font-9-em">
             <mat-label>از تاریخ</mat-label>
             <input matInput [matDatepicker]="picker1" readonly
                    (focus)="picker1.open()" (click)="picker1.open()"
@@ -89,7 +91,7 @@
         </div>
 
         <div class="col-md-6 float-right">
-          <mat-form-field class="full-width font-8-em">
+          <mat-form-field class="full-width font-9-em">
             <mat-label>تا تاریخ</mat-label>
             <input matInput [matDatepicker]="picker2" readonly
                    (focus)="picker2.open()" (click)="picker2.open()"

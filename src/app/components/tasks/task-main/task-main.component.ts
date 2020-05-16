@@ -6,7 +6,7 @@ import {ProjectInterface} from '../../projects/logic/project-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {FilterInterface} from '../logic/filter-interface';
 import {TaskDataInterface} from '../logic/task-data-interface';
-import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import {TaskAddComponent} from '../task-add/task-add.component';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
 
@@ -22,6 +22,7 @@ export interface TaskEssentialInfo {
 })
 export class TaskMainComponent implements OnDestroy {
   taskEssentialInfo: TaskEssentialInfo;
+  pushTaskToBoard;
   activeTab: number = 0;
   refreshBoardData: boolean = false;
   filterData: FilterInterface = {
@@ -75,7 +76,7 @@ export class TaskMainComponent implements OnDestroy {
       projectsList: this.taskEssentialInfo.projectsList
     };
 
-    const dialogRef = this.dialog.open(TaskDetailComponent, {
+    const dialogRef = this.dialog.open(TaskAddComponent, {
       data: data,
       autoFocus: false,
       width: '50%',
@@ -101,6 +102,10 @@ export class TaskMainComponent implements OnDestroy {
 
   getTaskEssentialInfo(event) {
     this.taskEssentialInfo = event;
+  }
+
+  getTaskToBoardData(event) {
+    this.pushTaskToBoard = event;
   }
 
   showFilter() {

@@ -15,6 +15,8 @@ function createWindow(): BrowserWindow {
     x: 0,
     y: 0,
     transparent: true,
+    /*width: 1600,
+    height: 900,*/
     width: 1350,
     height: 850,
     frame: false,
@@ -32,7 +34,7 @@ function createWindow(): BrowserWindow {
   if (serve) {
     require('devtron').install();
 
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
@@ -40,9 +42,9 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
 
   } else {
-    /*mainWindow.webContents.on('devtools-opened', () => {
-        mainWindow.webContents.closeDevTools();
-    });*/
+    win.webContents.on('devtools-opened', () => {
+        win.webContents.closeDevTools();
+    });
 
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),

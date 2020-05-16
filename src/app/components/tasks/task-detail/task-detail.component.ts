@@ -1,45 +1,46 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInterface} from '../../users/logic/user-interface';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {TaskInterface} from '../logic/task-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
+import {UserInterface} from '../../users/logic/user-interface';
+import {ApiService} from '../logic/api.service';
 import {TaskDataInterface} from '../logic/task-data-interface';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../../services/user-info.service';
+import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 
 @Component({
-  selector: 'app-task-detail',
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
+  user: UserInterface;
   editable: boolean = false;
-  form: FormGroup;
+  task: TaskInterface;
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
-  user: UserInterface;
+  form: FormGroup;
+  viewModeTypes = 'info';
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
               private _fb: FormBuilder,
               private userInfoService: UserInfoService,
-              public dialogRef: MatDialogRef<TaskDetailComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: TaskDataInterface) {
-    this.usersList = this.data.usersList;
-    this.projectsList = this.data.projectsList;
-
+              public bottomSheetRef: MatBottomSheetRef<TaskDetailComponent>,
+              @Inject(MAT_BOTTOM_SHEET_DATA) public data: TaskDataInterface) {
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
     );
+
+    this.usersList = this.data.usersList;
+    this.projectsList = this.data.projectsList;
+    this.task = this.data.task;
   }
 
   ngOnInit(): void {
     this.createForm().then(() => {
-      this.editable = true;
-
-      this.form.enable();
+      this.formPatchValue();
     });
   }
 
@@ -70,30 +71,81 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   }
 
   updateForm(event) {
-    console.log('update: ', event);
-    // this.form = event;
+    this.form = event;
+
+    this.submit();
   }
 
   cancelBtn(event) {
-    console.log('cancel: ', event);
-    /*if (this.data.action === 'detail') {
-      if (this.editable) {
-        this.formPatchValue();
+    this.form.disable();
+
+    if (event) {
+      if (this.data.action === 'detail') {
+        if (this.editable) {
+          this.formPatchValue();
+        } else {
+          this.bottomSheetRef.dismiss(false);
+        }
       } else {
-        this.dialogRef.close(false);
+        this.bottomSheetRef.dismiss(false);
       }
-    } else {
-      this.dialogRef.close(false);
-    }*/
+    }
   }
 
-  deleteTask(event) {
-    console.log(event);
-    /*this._subscription.add(
+  editableForm() {
+    this.editable = !this.editable;
+
+    if (this.editable) {
+      this.form.enable();
+    } else {
+      this.form.disable();
+    }
+  }
+
+  formPatchValue() {
+    this.form.disable();
+    this.editable = false;
+
+    const startDate = this.task.startAt.split(' ');
+    const stopDate = this.task.stopAt.split(' ');
+
+    const startTimeTmp = startDate[1].split(':');
+    const stopTimeTmp = stopDate[1].split(':');
+
+    const startTime = startTimeTmp[0] + ':' + startTimeTmp[1];
+    const stopTime = stopTimeTmp[0] + ':' + stopTimeTmp[1];
+
+    const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
+    const selectedAssignTo = this.usersList.filter(user => user.adminId === this.task.assignTo.adminId).pop();
+    const selectedAssigner = this.usersList.filter(user => user.adminId === this.user.adminId).pop();
+
+    this.form.patchValue({
+      taskId: this.task.taskId,
+      taskName: this.task.taskName,
+      percentage: this.task.percentage,
+      assignTo: selectedAssignTo,
+      taskDurationHours: this.task.taskDurationHours,
+      taskDurationMinutes: this.task.taskDurationMinutes,
+      startAt: startDate[0],
+      startTime: startTime,
+      stopAt: stopDate[0],
+      stopTime: stopTime,
+      project: selectedProject,
+      taskDesc: this.task.taskDesc,
+      boardStatus: this.data.boardStatus,
+      taskDateStart: this.task.taskDateStart,
+      taskDateStop: this.task.taskDateStop,
+      assigner: selectedAssigner,
+      trackable: this.task.trackable
+    });
+  }
+
+  deleteTask() {
+    this._subscription.add(
       this.api.deleteTask(this.task).subscribe((resp: any) => {
-        this.dialogRef.close(true);
+        this.bottomSheetRef.dismiss(true);
       })
-    );*/
+    );
   }
 
   submit() {
@@ -104,33 +156,29 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
     formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
-    if (this.data.action === 'detail') {
-      this._subscription.add(
-        this.api.updateTask(formValue).subscribe((resp: any) => {
-          if (resp.result === 1) {
-            this.dialogRef.close(true);
-          } else {
-            this.form.enable();
-          }
-        }, error => {
-          this.form.enable();
-        })
-      );
-    } else {
-      delete (formValue.taskId);
+    formValue.assigner = this.usersList.filter(user => user.adminId === this.user.adminId).pop();
 
-      this._subscription.add(
-        this.api.createTask(formValue).subscribe((resp: any) => {
-          if (resp.result === 1) {
-            this.dialogRef.close(true);
-          } else {
-            this.form.enable();
-          }
-        }, error => {
+    this._subscription.add(
+      this.api.updateTask(formValue).subscribe((resp: any) => {
+        const data = {
+          prevContainer: this.task.boardStatus,
+          newContainer: this.form.get('boardStatus').value,
+          task: resp.content.task
+        };
+
+        if (resp.result === 1) {
+          this.bottomSheetRef.dismiss(data);
+        } else {
           this.form.enable();
-        })
-      );
-    }
+        }
+      }, () => {
+        this.form.enable();
+      })
+    );
+  }
+
+  changeViewMode(mode) {
+    this.viewModeTypes = mode;
   }
 
   ngOnDestroy(): void {

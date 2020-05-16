@@ -5,7 +5,7 @@
     [colspan]="board.cols"
     [rowspan]="board.rows">
     <div class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l">
-      <span class="float-right font-8-em">{{board.name}}</span>
+      <span class="float-right font-9-em">{{board.name}}</span>
 
       <span class="float-left task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500"
             [ngClass]="board.id">
@@ -27,8 +27,13 @@
          [cdkDropListData]="board.tasks"
          [cdkDropListConnectedTo]="connectedTo">
 
-      <div *ngIf="!board.tasks.length" class="flex-center full-width full-height">
+      <div *ngIf="!board.tasks.length"
+           class="flex-center full-width full-height pos-abs left-0 right-0 top-0 bottom-0 z-index-0">
         <img [src]="'assets/board-empty-state/'+board.id+'.png'" [alt]="board.id" class="width-250">
+
+        <span class="pos-abs left-0 right-0 bottom-0 top-0 z-index-0 margin-auto text-gray-400 font-8-rem full-width height-45 line-height-150 text-center">
+          موردی نیست
+        </span>
       </div>
 
       <mat-card class="margin-b-full bg-white card-hover"
@@ -67,7 +72,8 @@
 
           <span class="float-right width-25 height-25 round-corner-all mat-elevation-z1 margin-r-full pos-rel"
                 [matTooltip]="'درصد پیشبرد'" matTooltipPosition="left">
-            <span class="font-6-em text-black pos-abs left-0 right-0 top-0 bottom-0 margin-auto text-center line-height-25 text-weight-500">
+            <span
+              class="font-6-em text-gray-800 pos-abs left-0 right-0 top-0 bottom-0 margin-auto text-center line-height-25 text-weight-500">
               {{task.percentage}}
             </span>
             <mat-progress-spinner

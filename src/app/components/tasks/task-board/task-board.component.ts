@@ -1,20 +1,20 @@
 import * as io from 'socket.io-client';
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {AppConfig} from '../../../../environments/environment';
 import {ApiService} from '../logic/api.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {TaskInterface} from '../logic/task-interface';
 import {BoardInterface} from '../logic/board-interface';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {UserInfoService} from '../../../services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskStopComponent} from '../task-stop/task-stop.component';
 import {CurrentTaskService} from '../../../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
-import {AppConfig} from '../../../../environments/environment';
-import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-task-board',
@@ -24,6 +24,9 @@ import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet'
 export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   @Output()
   pushTaskEssentialInfo = new EventEmitter();
+
+  @Input()
+  pushTaskToBoard;
 
   @Input()
   refreshData: boolean = false;
@@ -81,47 +84,51 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       this._subscription.add(
         this.api.taskChangeStatus(taskData, event.container.id).subscribe(async (resp: any) => {
           const newTask = resp.content.task;
-          const project: ProjectInterface = await this.projectsList.filter(project => project.projectId === newTask.project.projectId).pop();
-          const assignTo: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assignTo.adminId).pop();
-          const assigner: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assigner.adminId).pop();
 
-          this.myTasks = [];
-
-          await this.boards.map((board: BoardInterface) => {
-            if (board.id === event.container.id) {
-              board.tasks.map((task: TaskInterface) => {
-                if (task.taskId === newTask.taskId) {
-                  newTask.assignTo = assignTo;
-                  newTask.assigner = assigner;
-                  newTask.project = project;
-
-                  task = Object.assign(task, newTask);
-                }
-
-                if (task.assignTo.adminId === this.loggedInUser.adminId && task.boardStatus === 'inProgress') {
-                  this.myTasks.push(task);
-                }
-
-                return task;
-              });
-            }
-          });
-
-          this.currentTaskService.changeCurrentTask(this.myTasks);
-
-          if (event.container.id === 'inProgress') {
-
-          } else {
-            this.currentTaskService.changeCurrentTask(null);
-          }
-
-          if (event.previousContainer.id === 'inProgress' && (event.container.id === 'todo' || event.container.id === 'done')) {
-            this.showTaskStopModal(newTask);
-          } else if (event.previousContainer.id === 'todo' && event.container.id === 'done') {
-            this.showTaskStopModal(newTask);
-          }
+          this.assignNewTaskToBoard(newTask, event.previousContainer.id, event.container.id);
         })
       );
+    }
+  }
+
+  async assignNewTaskToBoard(newTask: TaskInterface, prevContainer, newContainer) {
+    const project: ProjectInterface = await this.projectsList.filter(project => project.projectId === newTask.project.projectId).pop();
+    const assignTo: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assignTo.adminId).pop();
+    const assigner: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assigner.adminId).pop();
+
+    this.myTasks = [];
+
+    await this.boards.map((board: BoardInterface) => {
+      if (board.id === newContainer) {
+        board.tasks.map((task: TaskInterface) => {
+          if (task.taskId === newTask.taskId) {
+            newTask.assignTo = assignTo;
+            newTask.assigner = assigner;
+            newTask.project = project;
+
+            task = Object.assign(task, newTask);
+          }
+
+          if (task.assignTo.adminId === this.loggedInUser.adminId && task.boardStatus === 'inProgress') {
+            this.myTasks.push(task);
+          }
+
+          return task;
+        });
+      }
+    });
+
+    if (this.myTasks.length) {
+      this.currentTaskService.changeCurrentTask(this.myTasks);
+      this.myTasks = [];
+    } else {
+      this.currentTaskService.changeCurrentTask(null);
+    }
+
+    if (prevContainer === 'inProgress' && (newContainer === 'todo' || newContainer === 'done')) {
+      this.showTaskStopModal(newTask);
+    } else if (prevContainer === 'todo' && newContainer === 'done') {
+      this.showTaskStopModal(newTask);
     }
   }
 
@@ -152,25 +159,20 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       boardStatus: boardStatus
     };
 
-    /*const dialogRef = this.dialog.open(TaskDetailComponent, {
-      data: data,
-      autoFocus: false,
-      width: '50%',
-      height: '560px'
-    });
-
-    this._subscription.add(
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.socket.emit('updatedata', result);
-        }
-      })
-    );*/
-
     const bottomSheetRef = this.bottomSheet.open(TaskDetailComponent, {
       data: data,
       autoFocus: false
-    })
+    });
+
+    this._subscription.add(
+      bottomSheetRef.afterDismissed().subscribe(result => {
+        if (result !== undefined && result !== false) {
+          this.assignNewTaskToBoard(result.task, result.prevContainer, result.newContainer);
+
+          this.socket.emit('updatedata');
+        }
+      })
+    );
   }
 
   getBoards() {
@@ -197,6 +199,8 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
     this.projectsList = info.content.projects.list;
 
     this.pushTaskEssentialInfo.emit({usersList: this.usersList, projectsList: this.projectsList});
+
+    this.myTasks = [];
 
     info.content.boards.list.map((task: TaskInterface) => {
       // collect all logged in user`s task into myTasks
@@ -249,6 +253,8 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.currentTaskService.changeCurrentTask(this.myTasks);
+
+    this.myTasks = [];
   }
 
   getColor(percentage: number) {
@@ -274,6 +280,14 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       this.filterBoards = changes.filterBoards.currentValue;
 
       this.putTasksToAllBoards(this.filterBoards.resp);
+    }
+
+    if (changes.pushTaskToBoard && !changes.pushTaskToBoard.firstChange) {
+      this.pushTaskToBoard = changes.pushTaskToBoard.currentValue;
+
+      this.assignNewTaskToBoard(this.pushTaskToBoard.task, this.pushTaskToBoard.prevContainer, this.pushTaskToBoard.newContainer);
+
+      this.socket.emit('updatedata');
     }
   }
 

@@ -1,11 +1,37 @@
 .full-page-size {
-  width: 90vw;
+  width: 100vw;
   height: 90vh;
   max-width: 100%;
   max-height: 100%;
-  overflow: hidden;
 }
 
-.dialog-content-container {
-  height: calc(100% - 30px);
+.task-heading {
+  border-bottom: solid 1px #e1e1e1;
+
+  h1 {
+    max-width: 450px;
+  }
+}
+
+.task-form-container, .task-todo-container {
+  height: calc(100% - 200px);
+}
+
+.task-report-container, .task-activity-container {
+  height: calc(100% - 45px);
+}
+
+.task-form-container, .task-report-container {
+  width: 65%;
+}
+
+.task-todo-container, .task-activity-container {
+  width: 35%;
+  background-color: #f5f5f5;
+}
+
+.task-file-container {
+  height: 155px;
+  border-top: solid 1px #ddd;
+  background-color: #eee;
 }
