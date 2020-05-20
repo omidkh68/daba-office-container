@@ -4,10 +4,9 @@ import {CommonModule} from '@angular/common';
 import {MatCoreModule} from './mat-core.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {PageNotFoundComponent} from './components/';
-import {WebviewDirective} from './directives';
 
 @NgModule({
-  declarations: [PageNotFoundComponent, WebviewDirective],
+  declarations: [PageNotFoundComponent],
   imports: [CommonModule, TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule],
   exports: [CommonModule, TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule]
 })

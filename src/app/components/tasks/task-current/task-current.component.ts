@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
@@ -16,7 +16,7 @@ import {TaskDetailComponent} from '../task-detail/task-detail.component';
   templateUrl: './task-current.component.html',
   styleUrls: ['./task-current.component.scss']
 })
-export class TaskCurrentComponent implements OnInit, OnChanges {
+export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   pushTaskToBoard = new EventEmitter();
 
@@ -113,4 +113,9 @@ export class TaskCurrentComponent implements OnInit, OnChanges {
     this.electronService.ipcRenderer.send('restart_app');
   }
 
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Inject, OnDestroy, ViewChild, ViewContainerRef} from '@angular/core';
 import {LazyComponentService} from '../../services/lazy-component.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {WindowInterface} from '../dashboard/logic/window.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -8,7 +8,8 @@ import {ServiceItemsInterface} from '../dashboard/logic/service-items.interface'
 
 @Component({
   selector: 'app-tasks',
-  templateUrl: './tasks.component.html'
+  templateUrl: './tasks.component.html',
+  providers: [WindowManagerService]
 })
 export class TasksComponent implements AfterViewInit, OnDestroy {
   @ViewChild('container', {read: ViewContainerRef}) container;
@@ -58,5 +59,9 @@ export class TasksComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     console.log('des task');
+
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

@@ -3,21 +3,21 @@ import {SharedModule} from '../../shared/shared.module';
 import {RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {DashboardComponent} from './dashboard.component';
+import {ScreenshotComponent} from '../screenshot/screenshot.component';
 import {ChangeStatusComponent} from '../status/change-status/change-status.component';
 import {NbLayoutModule, NbWindowModule} from '@nebular/theme';
-import {ScreenshotComponent} from '../screenshot/screenshot.component';
 // import {SocketioService} from '../../services/socketio.service';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    ChangeStatusComponent,
-    ScreenshotComponent
+    ScreenshotComponent,
+    ChangeStatusComponent
   ],
   imports: [
     SharedModule,
-    TranslateModule.forChild({}),
     NbLayoutModule,
+    TranslateModule.forChild({}),
     NbWindowModule.forChild({
       title: ''
     }),
@@ -26,7 +26,6 @@ import {ScreenshotComponent} from '../screenshot/screenshot.component';
     ])
   ],
   // providers: [SocketioService],
-  exports: [SharedModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DashboardModule {

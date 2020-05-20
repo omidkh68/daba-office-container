@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MatTableDataSource} from '@angular/material/table';
@@ -19,7 +19,7 @@ export interface TaskReportInterface {
   selector: 'app-task-report',
   templateUrl: './task-report.component.html'
 })
-export class TaskReportComponent implements OnInit {
+export class TaskReportComponent implements OnInit, OnDestroy {
   @ViewChild
   (MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -78,5 +78,11 @@ export class TaskReportComponent implements OnInit {
         }
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

@@ -21,7 +21,6 @@ import {TaskCurrentComponent} from './task-current/task-current.component';
 /*import {TaskMessagesComponent} from './task-messages/task-messages.component';*/
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
 import {TaskActivityComponent} from './task-activity/task-activity.component';
-import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -43,7 +42,6 @@ import {CommonModule} from '@angular/common';
     TaskActivityComponent
   ],
   imports: [
-    CommonModule,
     SharedModule,
     NbLayoutModule,
     NgxChartsModule,

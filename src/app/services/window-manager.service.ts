@@ -1,14 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDialog} from '@angular/material/dialog';
 import {WindowInterface} from '../components/dashboard/logic/window.interface';
 import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
 import {TasksComponent} from '../components/tasks/tasks.component';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class WindowManagerService {
   private _defaultWindows: Array<WindowInterface> = [];
 
@@ -17,8 +13,6 @@ export class WindowManagerService {
 
   // observable property
   public windowsList = this.windows.asObservable();
-
-  private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog) {
   }

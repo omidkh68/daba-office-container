@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy} from '@angular/core';
 import {ActivityInterface} from './logic/activity-interface';
 import {ApiService} from './logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -9,7 +9,7 @@ import {TaskInterface} from '../logic/task-interface';
   templateUrl: './task-activity.component.html',
   styleUrls: ['./task-activity.component.scss']
 })
-export class TaskActivityComponent implements AfterViewInit {
+export class TaskActivityComponent implements AfterViewInit, OnDestroy {
   @Input()
   task: TaskInterface;
 
@@ -60,5 +60,11 @@ export class TaskActivityComponent implements AfterViewInit {
         })
       );
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

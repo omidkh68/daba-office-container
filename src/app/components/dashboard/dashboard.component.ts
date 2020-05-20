@@ -30,7 +30,8 @@ export interface WindowInfo {
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  providers: [WindowManagerService]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   windowManager: Array<WindowInterface>;
@@ -196,7 +197,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       this._subscription.add(
         dialogRef.afterClosed().subscribe((resp: any) => {
-          this.messageService.showMessage(`${resp.message}`);
+          if (resp) {
+            this.messageService.showMessage(`${resp.message}`);
+          }
         })
       );
     } else {

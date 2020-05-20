@@ -3,9 +3,11 @@ import {SharedModule} from '../../shared/shared.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {NbLayoutModule, NbWindowModule, NbWindowState} from '@nebular/theme';
 import {ConferenceMainComponent} from './conference-main/conference-main.component';
+import {WebviewDirective} from '../../shared/directives';
 
 @NgModule({
   declarations: [
+    WebviewDirective
   ],
   imports: [
     SharedModule,

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {TodoInterface} from './logic/todo-interface';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {ApiService} from './logic/api.service';
@@ -11,7 +11,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
   templateUrl: './task-todo.component.html',
   styleUrls: ['./task-todo.component.scss']
 })
-export class TaskTodoComponent implements OnInit {
+export class TaskTodoComponent implements OnInit, OnDestroy {
   @Input()
   taskId: number = 0;
 
@@ -177,6 +177,12 @@ export class TaskTodoComponent implements OnInit {
           }
         })
       );
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
     }
   }
 }
