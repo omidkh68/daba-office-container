@@ -1,1 +1,22 @@
-<ng-container #container></ng-container>
+<div class="pos-abs left-0 right-0 bottom-0 top-0 full-width float-right">
+  <div class="full-width height-45">
+    <button mat-button (click)="minimize()">minimize</button>
+    <button mat-button (click)="maximize()">maximize</button>
+    <button mat-button (click)="restore()">restore</button>
+    <button mat-button (click)="close()">close</button>
+
+    <h1 *ngIf="canDrag; else draggableHeading;" mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+    <mat-icon>drag_handle</mat-icon>
+
+    {{data.serviceNameFa}}
+    </h1>
+
+
+    <ng-template #draggableHeading>
+      <h1 mat-dialog-title>{{data.serviceNameFa}}</h1>
+    </ng-template>
+  </div>
+  <div class="window-content pos-rel">
+    <ng-container #container></ng-container>
+  </div>
+</div>

@@ -12,15 +12,16 @@ import {TaskTodoComponent} from './task-todo/task-todo.component';
 import {TaskFormComponent} from './task-form/task-form.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import {TaskBoardComponent} from './task-board/task-board.component';
-import {TaskNotesComponent} from './task-notes/task-notes.component';
+/*import {TaskNotesComponent} from './task-notes/task-notes.component';*/
 import {TaskFilesComponent} from './task-files/task-files.component';
 import {TaskFilterComponent} from './task-filter/task-filter.component';
 import {TaskDetailComponent} from './task-detail/task-detail.component';
 import {TaskReportComponent} from './task-report/task-report.component';
 import {TaskCurrentComponent} from './task-current/task-current.component';
-import {TaskMessagesComponent} from './task-messages/task-messages.component';
+/*import {TaskMessagesComponent} from './task-messages/task-messages.component';*/
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
 import {TaskActivityComponent} from './task-activity/task-activity.component';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -31,17 +32,18 @@ import {TaskActivityComponent} from './task-activity/task-activity.component';
     TaskFormComponent,
     TaskTodoComponent,
     TaskBoardComponent,
-    TaskNotesComponent,
+    /*TaskNotesComponent,*/
     TaskFilesComponent,
     TaskDetailComponent,
     TaskFilterComponent,
     TaskReportComponent,
     TaskCurrentComponent,
-    TaskMessagesComponent,
+    /*TaskMessagesComponent,*/
     TaskCalendarComponent,
     TaskActivityComponent
   ],
   imports: [
+    CommonModule,
     SharedModule,
     NbLayoutModule,
     NgxChartsModule,

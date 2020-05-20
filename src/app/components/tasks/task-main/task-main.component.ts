@@ -23,6 +23,7 @@ export interface TaskEssentialInfo {
 export class TaskMainComponent implements OnDestroy {
   taskEssentialInfo: TaskEssentialInfo;
   pushTaskToBoard;
+  doResetFilter: boolean = false;
   activeTab: number = 0;
   refreshBoardData: boolean = false;
   filterData: FilterInterface = {
@@ -47,21 +48,6 @@ export class TaskMainComponent implements OnDestroy {
       icon: 'event_available',
       id: 'calendar'
     }
-    /*{
-      name: 'یادداشت ها',
-      icon: 'description',
-      id: 'notes'
-    },
-    {
-      name: 'پیام ها',
-      icon: 'textsms',
-      id: 'messages'
-    },
-    {
-      name: 'فایل ها',
-      icon: 'attach_file',
-      id: 'files'
-    },*/
   ];
 
   private _subscription: Subscription = new Subscription();
@@ -122,9 +108,6 @@ export class TaskMainComponent implements OnDestroy {
       height: '300px'
     });
 
-    if (this.activeTab) {
-
-    }
     this._subscription.add(
       dialogRef.afterClosed().subscribe(resp => {
         if (resp && resp.result === 1) {
@@ -132,10 +115,21 @@ export class TaskMainComponent implements OnDestroy {
 
           this.filteredBoardsData = {
             resp: resp
-          }
+          };
+
+          this.doResetFilter = true;
         }
       })
     );
+  }
+
+  resetFilter() {
+    this.refreshBoardData = true;
+
+    setTimeout(() => {
+      this.refreshBoardData = false;
+      this.doResetFilter = false;
+    }, 200);
   }
 
   ngOnDestroy(): void {

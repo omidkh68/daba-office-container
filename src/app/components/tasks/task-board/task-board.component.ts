@@ -1,7 +1,5 @@
-import * as io from 'socket.io-client';
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {AppConfig} from '../../../../environments/environment';
 import {ApiService} from '../logic/api.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -15,6 +13,7 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskStopComponent} from '../task-stop/task-stop.component';
 import {CurrentTaskService} from '../../../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import {SocketioService} from '../../../services/socketio.service';
 
 @Component({
   selector: 'app-task-board',
@@ -34,7 +33,8 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   @Input()
   filterBoards: any;
 
-  socket = io(AppConfig.socketUrl);
+  socket;
+
   loggedInUser: UserInterface;
   myTasks: Array<TaskInterface> = [];
   rowHeight: string = '0';
@@ -48,6 +48,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(private api: ApiService,
               private userInfoService: UserInfoService,
+              private socketService: SocketioService,
               private currentTaskService: CurrentTaskService,
               public dialog: MatDialog,
               public bottomSheet: MatBottomSheet) {
@@ -65,8 +66,19 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
     this.getBoards();
 
-    this.socket.on('update-data', (data: any) => {
+    /*this.socket.on('update-data', (data: any) => {
       this.getBoards();
+    });*/
+
+    // this.setupSocket();
+  }
+
+  setupSocket() {
+    this.socket = this.socketService.setupSocketConnection('boards');
+
+    this.socket.emit('getBoards');
+    this.socket.on('getBoards', data => {
+      console.log(data);
     });
   }
 
@@ -144,7 +156,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.socket.emit('updatedata', result);
+          // this.socket.emit('updatedata', result);
         }
       })
     );
@@ -169,7 +181,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
         if (result !== undefined && result !== false) {
           this.assignNewTaskToBoard(result.task, result.prevContainer, result.newContainer);
 
-          this.socket.emit('updatedata');
+          // this.socket.emit('updatedata');
         }
       })
     );
@@ -273,7 +285,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.refreshData) {
-      this.socket.emit('updatedata');
+      // this.socket.emit('updatedata');
     }
 
     if (changes.filterBoards && !changes.filterBoards.firstChange) {
@@ -287,7 +299,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
       this.assignNewTaskToBoard(this.pushTaskToBoard.task, this.pushTaskToBoard.prevContainer, this.pushTaskToBoard.newContainer);
 
-      this.socket.emit('updatedata');
+      // this.socket.emit('updatedata');
     }
   }
 

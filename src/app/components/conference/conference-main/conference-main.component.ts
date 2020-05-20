@@ -21,5 +21,4 @@ export class ConferenceMainComponent implements AfterViewInit {
       console.log('did-stop-loading');
     });
   }
-
 }

@@ -2,6 +2,7 @@ import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {ActivityInterface} from './logic/activity-interface';
 import {ApiService} from './logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {TaskInterface} from '../logic/task-interface';
 
 @Component({
   selector: 'app-task-activity',
@@ -10,20 +11,11 @@ import {Subscription} from 'rxjs/internal/Subscription';
 })
 export class TaskActivityComponent implements AfterViewInit {
   @Input()
-  taskId: number = 0;
+  task: TaskInterface;
 
   activityList: Array<ActivityInterface> = [];
 
-  single = [
-    {
-      "name": "تکمیل شده",
-      "value": 80
-    },
-    {
-      "name": "تکمیل نشده",
-      "value": 20
-    }
-  ];
+  single = [];
 
   gradient: boolean = false;
   showLegend: boolean = false;
@@ -41,31 +33,32 @@ export class TaskActivityComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.getActivities().then((activities: Array<ActivityInterface>) => {
-      this.activityList = activities;
+      setTimeout(() => {
+        this.activityList = activities;
+      });
+
+      this.single = [
+        {
+          "name": "تکمیل شده",
+          "value": this.task.percentage
+        },
+        {
+          "name": "تکمیل نشده",
+          "value": (100 - this.task.percentage)
+        }
+      ];
     });
   }
 
   getActivities() {
     return new Promise((resolve) => {
       this._subscription.add(
-        this.apiService.getActivities(this.taskId).subscribe((resp: any) => {
+        this.apiService.getActivities(this.task.taskId).subscribe((resp: any) => {
           if (resp.result === 1) {
             resolve(resp.contents);
           }
         })
       );
     });
-  }
-
-  onSelect(data): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-  }
-
-  onActivate(data): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
-
-  onDeactivate(data): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
 }

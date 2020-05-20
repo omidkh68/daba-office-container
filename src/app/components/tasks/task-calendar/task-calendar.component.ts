@@ -19,7 +19,7 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   tasks: TaskInterface[] = [];
   usersList: UserInterface[] = [];
   projectsList: ProjectInterface[] = [];
-  socket = io(AppConfig.socketUrl);
+  // socket = io(AppConfig.socketUrl);
   calendarEvents = [];
   events = [
     {title: 'event 1', date: '2020-04-01'},
@@ -35,9 +35,9 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getBoards();
 
-    this.socket.on('update-data', (data: any) => {
+    /*this.socket.on('update-data', (data: any) => {
       this.getBoards();
-    });
+    });*/
   }
 
   getBoards() {

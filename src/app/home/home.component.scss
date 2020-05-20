@@ -1,7 +1,7 @@
 @import '../../assets/mixin';
 
 .mat-drawer-container {
-  @include rounded(25px);
+  @include rounded(5px);
 
   color: #333;
   height: 100%;
@@ -11,9 +11,5 @@
     color: #333;
     width: 250px;
     background-image: linear-gradient(190deg, #815c8c 0%, #3b3b53 100%);
-    /*background: -moz-linear-gradient(-45deg,  rgba(0,0,0,0) 0%, rgba(150,150,150,0.3) 100%); !* FF3.6-15 *!
-    background: -webkit-linear-gradient(-45deg,  rgba(0,0,0,0) 0%,rgba(150,150,150,0.3) 100%); !* Chrome10-25,Safari5.1-6 *!
-    background: linear-gradient(135deg,  rgba(0,0,0,0) 0%,rgba(150,150,150,0.3) 100%); !* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ *!
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6ffffff',GradientType=1 ); !* IE6-9 fallback on horizontal gradient *!*/
   }
 }
