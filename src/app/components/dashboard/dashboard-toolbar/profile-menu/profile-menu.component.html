@@ -1,0 +1,18 @@
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'"
+     class="box mat-elevation-z1 pos-rel text-center round-corner width-45 height-45 overflow-hide">
+  <img [matMenuTriggerFor]="profileMenu" class="full-width full-height cursor-pointer"
+       [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'"
+       [alt]="loggedInUser.name + ' ' + loggedInUser.family">
+</div>
+<mat-menu class="toolbar-menu box-menu-profile padding-r-l" #profileMenu="matMenu" xPosition="before" yPosition="above">
+  <h6 mat-subheader class="padding-half text-weight-normal font-9-rem text-dark-mode-color">
+    پروفایل {{loggedInUser.name + ' ' + loggedInUser.family}}
+  </h6>
+  <div mat-menu-item class="font-7-rem padding-mini-r-l text-dark-mode-color">
+    سمت {{loggedInUser.role.roleNameFa}}
+  </div>
+  <button mat-menu-item class="font-7-rem padding-mini-r-l">
+    <mat-icon class="text-dark-mode-color">power_settings_new</mat-icon>
+    <span class="text-dark-mode-color">خروج از برنامه</span>
+  </button>
+</mat-menu>

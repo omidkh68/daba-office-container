@@ -10,11 +10,11 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import {HomeModule} from './home/home.module';
-import {NbThemeModule} from '@nebular/theme';
 import {SharedModule} from './shared/shared.module';
 import {AppComponent} from './app.component';
 
 import {MessageComponent} from './components/message/message.component';
+// import {AngularResizedEventModule} from './directives/angular-resized-event.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -32,7 +32,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    NbThemeModule.forRoot({name: 'default'}),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -41,6 +40,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       }
     })
   ],
+  exports: [SharedModule],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -22,8 +22,8 @@ export interface AvailableHoursInterface {
   selector: 'app-screenshot'
 })
 export class ScreenshotComponent implements OnDestroy {
-  timerDueTime: number = 5000;
-  timerPeriod: number = 5000;
+  timerDueTime: number = 30000;
+  timerPeriod: number = 30000;
   loggedInUser: UserInterface;
   userCurrentStatus: UserStatusInterface | string = '';
   currentTasks: Array<TaskInterface> | null = null;

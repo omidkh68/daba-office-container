@@ -13,7 +13,7 @@ export class ElectronService {
   webFrame: typeof webFrame;
   remote: typeof remote;
   shell: typeof shell;
-  screen: typeof screen;
+  screen;
   desktopCapturer: typeof desktopCapturer;
   childProcess: typeof childProcess;
   fs: typeof fs;
@@ -36,7 +36,7 @@ export class ElectronService {
       this.fs = window.require('fs');
       this.desktopCapturer = window.require('electron').desktopCapturer;
       this.shell = window.require('electron').shell;
-      this.screen = window.require('electron').screen;
+      this.screen = screen;
       this.os = os;
       this.path = path;
       this.notification = Notification;

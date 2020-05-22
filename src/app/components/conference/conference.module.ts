@@ -1,30 +1,29 @@
 import {ComponentFactory, ComponentFactoryResolver, CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {SharedModule} from '../../shared/shared.module';
+import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {NbLayoutModule, NbWindowModule, NbWindowState} from '@nebular/theme';
-import {ConferenceMainComponent} from './conference-main/conference-main.component';
 import {WebviewDirective} from '../../shared/directives';
+import {ConferenceMainComponent} from './conference-main/conference-main.component';
+import {ConferenceWindowComponent} from './conference-window/conference-window.component';
 
 @NgModule({
   declarations: [
-    WebviewDirective
+    WebviewDirective,
+    ConferenceMainComponent,
+    ConferenceWindowComponent,
   ],
   imports: [
+    CommonModule,
     SharedModule,
-    NbLayoutModule,
-    NbWindowModule.forChild({
-      title: '',
-      initialState: NbWindowState.FULL_SCREEN
-    }),
     TranslateModule.forChild({}),
   ],
-  exports: [SharedModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ConferenceModule {
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {
+  }
 
-  public resolveComponent(): ComponentFactory<ConferenceMainComponent> {
-    return this.componentFactoryResolver.resolveComponentFactory(ConferenceMainComponent);
+  public resolveComponent(): ComponentFactory<ConferenceWindowComponent> {
+    return this.componentFactoryResolver.resolveComponentFactory(ConferenceWindowComponent);
   }
 }

@@ -19,8 +19,8 @@ export class MessageService {
     this._snackBar.openFromComponent(MessageComponent, {
       data: title,
       duration: this._durationInSeconds * 1000,
-      horizontalPosition: 'left',
-      verticalPosition: 'bottom'
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
     });
   }
 }

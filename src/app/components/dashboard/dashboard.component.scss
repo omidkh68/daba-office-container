@@ -1,28 +1,8 @@
 @import '../../../assets/mixin';
 
-.banner {
-  background: url('assets/bg/banner.jpg');
-  border-bottom: solid 1px #c3c3c3;
-
-  .close-icon,
-  .minimize-icon {
-    width: 18px;
-    height: 18px;
-  }
-
-  .close-icon {
-    line-height: 21px;
-    background-color: #FF605B;
-  }
-
-  .minimize-icon {
-    line-height: 0;
-    background-color: #ffc02c;
-
-    .mat-icon {
-      line-height: 9px;
-    }
-  }
+.dashboard-container {
+  background: url('assets/bg/bg-16.jpg');
+  background-size: cover;
 }
 
 .card-bg {

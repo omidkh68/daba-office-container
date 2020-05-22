@@ -14,12 +14,12 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    transparent: true,
+    transparent: false,
     /*width: 1600,
     height: 900,*/
-    width: 1350,
-    height: 850,
-    frame: false,
+    width: screen.getPrimaryDisplay().bounds.width - 50,
+    height: screen.getPrimaryDisplay().bounds.height - 50,
+    frame: true,
     movable: true,
     resizable: false,
     center: true,

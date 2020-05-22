@@ -1,0 +1,28 @@
+<div class="toolbar-container display-flex flex-space-between" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <!-- Main Menu -->
+  <app-main-menu class="box-holder"
+                 [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
+                 [serviceList]="serviceList"
+                 [rtlDirection]="rtlDirection"></app-main-menu>
+  <!-- /Main Menu -->
+
+  <!-- Opened App Container -->
+  <app-window-app-container class="box-holder"
+                            [windowManager]="windowManager"
+                            [rtlDirection]="rtlDirection"></app-window-app-container>
+  <!-- Opened App Container -->
+
+  <div class="flex-spacer"></div>
+
+  <app-time-area class="box-holder"
+                 [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
+                 [loggedInUser]="loggedInUser"
+                 [rtlDirection]="rtlDirection"></app-time-area>
+
+  <!-- Profile Menu -->
+  <app-profile-menu class="box-holder"
+                    [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
+                    [loggedInUser]="loggedInUser"
+                    [rtlDirection]="rtlDirection"></app-profile-menu>
+  <!-- /Profile Menu -->
+</div>

@@ -1,12 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NbWindowRef, NbWindowService} from '@nebular/theme';
-import {TasksComponent} from '../tasks/tasks.component';
 import {ElectronService} from '../../core/services';
 import {ServiceItemsInterface} from './logic/service-items.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeStatusComponent} from '../status/change-status/change-status.component';
-import {ConferenceComponent} from '../conference/conference.component';
 import {ChangeStatusService} from '../../services/change-status.service';
 import {UserStatusInterface} from '../users/logic/user-status-interface';
 import {ChangeUserStatusInterface} from '../status/logic/change-user-status.interface';
@@ -17,26 +14,21 @@ import {UserInfoService} from '../../services/user-info.service';
 import {MessageService} from '../../services/message.service';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {WindowInterface} from './logic/window.interface';
+import {ViewDirectionService} from '../../services/view-direction.service';
 
 export interface INotification {
   onclick: () => void;
 }
 
-export interface WindowInfo {
-  componentName: string;
-  ref: NbWindowRef;
-}
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  providers: [WindowManagerService]
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  rtlDirection: boolean;
   windowManager: Array<WindowInterface>;
   loggedInUser: UserInterface;
-  openedWindow: Array<WindowInfo> = [];
   userCurrentStatus: UserStatusInterface | string;
   serviceList: ServiceItemsInterface[] = [
     {
@@ -72,8 +64,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private electronService: ElectronService,
+              private viewDirection: ViewDirectionService,
               private windowManagerService: WindowManagerService,
-              private windowService: NbWindowService,
               private changeStatusService: ChangeStatusService,
               private userStatusService: ChangeStatusService,
               private userApiService: UserApiService,
@@ -86,6 +78,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.changeStatusService.currentUserStatus.subscribe(status => this.userCurrentStatus = status)
+    );
+
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
 
     this._subscription.add(
@@ -121,69 +117,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
     console.log(this.electronService.systemPreferences.getMediaAccessStatus('microphone'));*/
+
   }
 
-  openServiceApi(service: ServiceItemsInterface) {
-    let component: any;
-    let componentName: string = service.serviceTitle;
+  changeDarkMode() {
+    this.userInfoService.changeDarkMode(this.loggedInUser);
+  }
 
-    if (this.openedWindow.length) {
-      const findOpenWindow = this.openedWindow.findIndex(item => item.componentName === service.serviceTitle);
-
-      if (findOpenWindow !== -1) {
-        const ref: NbWindowRef = this.openedWindow[findOpenWindow].ref;
-
-        ref.toPreviousState();
-
-        return;
-      }
-    }
-
-    switch (service.serviceId) {
-      case 1: {
-        component = TasksComponent;
-        break;
-      }
-
-      case 2: {
-        component = TasksComponent;
-        break;
-      }
-
-      case 3: {
-        component = TasksComponent;
-        break;
-      }
-
-      case 4: {
-        component = ConferenceComponent;
-        break;
-      }
-    }
-
-    const className = service.serviceNameEn.replace(' ', '_').replace(' ', '_').toLowerCase();
-
-    const windowRef = this.windowService.open(component, {
-      title: service.serviceNameFa,
-      windowClass: className
-    });
-
-    windowRef.stateChange.subscribe(state => {
-      if (state.oldState === undefined) {
-        this.openedWindow.push(
-          {
-            componentName: componentName,
-            ref: windowRef
-          }
-        );
-      }
-    });
-
-    windowRef.onClose.subscribe(result => {
-      const findIndex = this.openedWindow.findIndex(item => item.componentName === service.serviceTitle);
-
-      this.openedWindow.splice(findIndex, 1);
-    });
+  changeDirection() {
+    const rtlDirection: boolean = !this.rtlDirection;
+    this.viewDirection.changeDirection(rtlDirection);
   }
 
   changeStatus(startStatus: boolean) {
@@ -219,24 +162,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         })
       );
     }
-  }
-
-  openTaskWindow(windowName: string) {
-    const service: ServiceItemsInterface = this.serviceList.filter(item => item.serviceTitle === windowName).pop();
-
-    this.windowManagerService.openWindowState(service);
-  }
-
-  closeApp() {
-    const window = this.electronService.remote.getCurrentWindow();
-
-    window.close();
-  }
-
-  minimizeApp() {
-    const window = this.electronService.remote.getCurrentWindow();
-
-    window.minimize();
   }
 
   ngOnDestroy(): void {
