@@ -20,7 +20,6 @@ export class WindowAppContainerComponent {
   controlWindow(app: WindowInterface) {
     if (app.isMinimized) {
       this.windowManagerService.restoreWindow(app.windowService);
-      this.windowManagerService.activeWindow(app.windowService);
     } else if (!app.isMinimized) {
       this.windowManagerService.minimizeWindow(app.windowService);
     }

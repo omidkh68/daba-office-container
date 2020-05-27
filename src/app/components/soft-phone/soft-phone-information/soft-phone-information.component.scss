@@ -1,0 +1,42 @@
+@import '../../../../assets/mixin';
+
+.soft-phone-user {
+  border-bottom: solid 1px rgba(220, 220, 220, 0.93);
+  background-color: #f1f1f1;
+}
+
+.user-soft-phone-status {
+  &::before {
+    @include radius-all();
+
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+  }
+
+  &.online {
+    &::before {
+      background-color: #4ec060;
+    }
+  }
+
+  &.offline {
+    &::before {
+      background-color: #c30;
+    }
+  }
+}
+
+.highlight {
+  @include transition(background .4s);
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+}

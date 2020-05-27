@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {MatDialog} from '@angular/material/dialog';
-import {WindowInterface} from '../components/dashboard/logic/window.interface';
+import {DialogPositionInterface, WindowInterface} from '../components/dashboard/logic/window.interface';
 import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
 import {TasksComponent} from '../components/tasks/tasks.component';
 import {ConferenceComponent} from '../components/conference/conference.component';
-import has = Reflect.has;
+import {SoftPhoneComponent} from '../components/soft-phone/soft-phone.component';
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +22,16 @@ export class WindowManagerService {
   element: HTMLElement;
   cdkOverlayContainer: HTMLElement;
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog,
+              @Inject('windowObject') private window: Window) {
   }
 
   openWindowState(service: ServiceItemsInterface) {
     let component: any = null;
     let hasFrame: boolean = false;
+    let maximizable: boolean = true;
+    let windowWidth = 1200;
+    let windowHeight = 700;
 
     switch (service.serviceTitle) {
       case 'service-task': {
@@ -36,21 +40,18 @@ export class WindowManagerService {
         break;
       }
 
-      case 'service-conference': {
+      case 'service-pbx': {
+        component = SoftPhoneComponent;
+        windowWidth = 350;
+        windowHeight = 500;
+        maximizable = false;
+
+        break;
+      }
+
+      case 'service-video-conference': {
         component = ConferenceComponent;
         hasFrame = true;
-
-        break;
-      }
-
-      case 'service-crm': {
-        component = TasksComponent;
-
-        break;
-      }
-
-      case 'service-chat': {
-        component = TasksComponent;
 
         break;
       }
@@ -60,24 +61,38 @@ export class WindowManagerService {
 
     if (findIndex === -1) {
       try {
+        // const widthEmptyState = (this.window.innerWidth - windowWidth) / 2;
+        const widthEmptyState = (Math.random() * (this.window.innerWidth - windowWidth)).toFixed();
+        const heightEmptyState = (Math.random() * (this.window.innerWidth - windowWidth)).toFixed();
+
+
+        const rndNumForWidth = this.randint(50, widthEmptyState);
+        const rndNumForHeight = this.randint(50, heightEmptyState);
+
+        const position: DialogPositionInterface = {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`};
+
         const dialogRef = this.dialog.open(component, {
           data: service,
           autoFocus: false,
-          width: '1200px',
-          height: '700px',
+          width: `${windowWidth}px`,
+          height: `${windowHeight}px`,
           hasBackdrop: false,
-          panelClass: 'window-dialog'
+          panelClass: 'window-dialog',
+          disableClose: true,
+          //position: {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`}
         });
 
         const window: WindowInterface = {
           windowRef: dialogRef,
           minimizable: true,
-          maximizable: true,
+          maximizable: maximizable,
           isMaximized: false,
           isMinimized: false,
+          isDraggable: true,
+          isActive: false,
           hasFrame: hasFrame,
           resizable: true,
-          isDraggable: true,
+          position: position,
           windowService: service
         };
 
@@ -89,6 +104,10 @@ export class WindowManagerService {
     } else {
       this.restoreWindow(service);
     }
+  }
+
+  randint(min, max) {
+    return Math.round((Math.random() * Math.abs(max - min)) + min);
   }
 
   minimizeWindow(service: ServiceItemsInterface) {
@@ -121,10 +140,16 @@ export class WindowManagerService {
     windowInstance.isDraggable = true;
     windowInstance.windowRef.removePanelClass('minimized');
     windowInstance.windowRef.removePanelClass('maximized');
-    windowInstance.windowRef.updatePosition({});
+    windowInstance.windowRef.updatePosition(windowInstance.position);
+
+    this.activeWindow(service);
   }
 
   activeWindow(service: ServiceItemsInterface) {
+    if (this._defaultWindows.length === 1) {
+      return;
+    }
+
     const windowInstance = this._defaultWindows.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
 
     const dialogId = windowInstance.windowRef.id;
@@ -135,26 +160,25 @@ export class WindowManagerService {
 
     const cdkElements = this.cdkOverlayContainer.children;
 
-    if (!windowInstance.hasFrame) {
-      const lastElementId = cdkElements.item(cdkElements.length - 1).querySelector('.mat-dialog-container').getAttribute('id');
+    try {
+      if (!windowInstance.hasFrame) {
+        const lastElementId = cdkElements.item(cdkElements.length - 1).querySelector('.mat-dialog-container').getAttribute('id');
 
-      if (dialogId !== lastElementId) {
-        const godParentElement = this.element.parentElement.parentElement;
+        if (dialogId !== lastElementId) {
+          const godParentElement = this.element.parentElement.parentElement;
 
-        // const cloneParent = godParentElement;
-
-        // godParentElement.remove();
-
-        this.cdkOverlayContainer.insertAdjacentElement('beforeend', godParentElement);
-      }
-    } else {
-      Object.keys(cdkElements).map(index => {
-        let findId = cdkElements.item(index).querySelector('.mat-dialog-container').getAttribute('id');
-
-        if (findId !== dialogId) {
-          this.cdkOverlayContainer.insertAdjacentElement('afterbegin', cdkElements.item(index));
+          this.cdkOverlayContainer.insertAdjacentElement('beforeend', godParentElement);
         }
-      });
+      } else {
+        Object.keys(cdkElements).map((value, index) => {
+          let findId = cdkElements.item(index).querySelector('.mat-dialog-container').getAttribute('id');
+
+          if (findId !== dialogId) {
+            this.cdkOverlayContainer.insertAdjacentElement('afterbegin', cdkElements.item(index));
+          }
+        });
+      }
+    } catch (e) {
     }
   }
 

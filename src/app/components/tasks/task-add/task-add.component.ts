@@ -9,8 +9,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../../services/user-info.service';
 
 @Component({
-  templateUrl: './task-add.component.html',
-  styleUrls: ['./task-add.component.scss']
+  templateUrl: './task-add.component.html'
 })
 export class TaskAddComponent implements OnInit, OnDestroy {
   editable: boolean = false;

@@ -4,8 +4,7 @@ import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-task-files',
-  templateUrl: './task-files.component.html',
-  styleUrls: ['./task-files.component.scss']
+  templateUrl: './task-files.component.html'
 })
 export class TaskFilesComponent implements OnInit {
   adapter = new ApiService(this._http);

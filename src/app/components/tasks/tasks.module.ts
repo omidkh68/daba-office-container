@@ -1,5 +1,4 @@
-import {ComponentFactory, ComponentFactoryResolver, CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
-import {JalaliPipe} from '../../pipes/jalali.pipe';
+import {ComponentFactory, ComponentFactoryResolver, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {SharedModule} from '../../shared/shared.module';
 import {TranslateModule} from '@ngx-translate/core';
@@ -25,7 +24,6 @@ import {TaskActivityComponent} from './task-activity/task-activity.component';
 
 @NgModule({
   declarations: [
-    JalaliPipe,
     TaskAddComponent,
     TaskStopComponent,
     TaskMainComponent,
@@ -50,8 +48,7 @@ import {TaskActivityComponent} from './task-activity/task-activity.component';
     FilePickerModule,
     FullCalendarModule,
     TranslateModule.forChild({}),
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  ]
 })
 export class TasksModule {
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {

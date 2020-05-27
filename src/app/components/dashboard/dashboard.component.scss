@@ -1,8 +1,16 @@
 @import '../../../assets/mixin';
 
 .dashboard-container {
-  background: url('assets/bg/bg-16.jpg');
+  background: url('assets/bg/bg-18.jpg');
   background-size: cover;
+}
+
+.dashboard-app-boundary {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
 }
 
 .card-bg {
@@ -99,7 +107,7 @@
     }
   }
 
-  &.service-crm {
+  &.service-pbx {
     &:hover {
       box-shadow: 0 2px 4px -1px rgb(255, 51, 96),
       0px 10px 25px -7px #ff811d,
@@ -139,7 +147,7 @@
     }
   }
 
-  &.service-conference {
+  &.service-video-conference {
     &:hover {
       box-shadow: 0 2px 4px -1px rgb(5, 23, 50),
       0px 10px 25px -7px #3b6586,
@@ -173,181 +181,5 @@
       border: solid 1px #DDD;
       width: fit-content;
     }
-  }
-}
-
-.change-status-btn {
-  bottom: 1em;
-}
-
-.blink-effect {
-  animation: blink 1.6s infinite linear;
-}
-
-.status-item {
-  &.status-lunch_time {
-    @include transition(all .4s);
-
-    animation: blink-status-lunch_time 1s infinite linear;
-  }
-
-  &.status-meeting {
-    @include transition(all .4s);
-
-    animation: blink-status-meeting 1s infinite linear;
-  }
-
-  &.status-smoking {
-    @include transition(all .4s);
-
-    animation: blink-status-smoking 1s infinite linear;
-  }
-
-  &.status-mission {
-    @include transition(all .4s);
-
-    animation: blink-status-mission 1s infinite linear;
-  }
-
-  &.status-leave {
-    @include transition(all .4s);
-
-    animation: blink-status-leave 1s infinite linear;
-  }
-
-  &.status-game {
-    @include transition(all .4s);
-
-    animation: blink-status-game 1s infinite linear;
-  }
-
-  &.status-other {
-    @include transition(all .4s);
-
-    animation: blink-status-other 1s infinite linear;
-  }
-}
-
-@keyframes blink-status-lunch_time {
-  0% {
-    color: #888;
-    box-shadow: none;
-  }
-  33.33333% {
-    color: #f94850;
-
-    box-shadow: 0 2px 4px -1px #ff0844,
-    0px 10px 25px -7px #ffb199,
-    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  }
-  100% {
-    color: #888;
-    box-shadow: none;
-  }
-}
-@keyframes blink-status-meeting {
-  0% {
-    color: #888;
-    box-shadow: none;
-  }
-  33.33333% {
-    color: #818cbc;
-
-    box-shadow: 0 2px 4px -1px #818cbc,
-    0px 10px 25px -7px #80d0c7,
-    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  }
-  100% {
-    color: #888;
-    box-shadow: none;
-  }
-}
-@keyframes blink-status-smoking {
-  0% {
-    color: #888;
-    box-shadow: none;
-  }
-  33.33333% {
-    color: #304352;
-
-    box-shadow: 0 2px 4px -1px #304352,
-    0px 10px 25px -7px #d7d2cc,
-    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  }
-  100% {
-    color: #888;
-    box-shadow: none;
-  }
-}
-
-@keyframes blink-status-mission {
-  0% {
-    color: #888;
-    box-shadow: none;
-  }
-  33.33333% {
-    color: #30cfd0;
-
-    box-shadow: 0 2px 4px -1px #30cfd0,
-    0px 10px 25px -7px #8fd3f4,
-    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  }
-  100% {
-    color: #888;
-    box-shadow: none;
-  }
-}
-
-@keyframes blink-status-leave {
-  0% {
-    color: #888;
-    box-shadow: none;
-  }
-  33.33333% {
-    color: #feb051;
-
-    box-shadow: 0 2px 4px -1px #fa709a,
-    0px 10px 25px -7px #fee140,
-    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  }
-  100% {
-    color: #888;
-    box-shadow: none;
-  }
-}
-
-@keyframes blink-status-game {
-  0% {
-    color: #888;
-    box-shadow: none;
-  }
-  33.33333% {
-    color: #c471f5;
-
-    box-shadow: 0 2px 4px -1px #fa71cd,
-    0px 10px 25px -7px #c471f5,
-    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  }
-  100% {
-    color: #888;
-    box-shadow: none;
-  }
-}
-
-@keyframes blink-status-other {
-  0% {
-    color: #888;
-    box-shadow: none;
-  }
-  33.33333% {
-    color: #98997e;
-
-    box-shadow: 0 2px 4px -1px #98997e,
-    0px 10px 25px -7px #fbfcdb,
-    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  }
-  100% {
-    color: #888;
-    box-shadow: none;
   }
 }

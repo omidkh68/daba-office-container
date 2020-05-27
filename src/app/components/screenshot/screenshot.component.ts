@@ -19,7 +19,8 @@ export interface AvailableHoursInterface {
 }
 
 @Component({
-  selector: 'app-screenshot'
+  selector: 'app-screenshot',
+  template: ``
 })
 export class ScreenshotComponent implements OnDestroy {
   timerDueTime: number = 30000;

@@ -11,16 +11,18 @@ import {ChangeStatusComponent} from '../status/change-status/change-status.compo
 import {DashboardToolbarComponent} from './dashboard-toolbar/dashboard-toolbar.component';
 import {TimeAreaComponent} from './dashboard-toolbar/time-area/time-area.component';
 import {WindowAppContainerComponent} from './dashboard-toolbar/window-app-container/window-app-container.component';
+import {UserStatusComponent} from './dashboard-toolbar/user-status/user-status.component';
 
 @NgModule({
   declarations: [
     MainMenuComponent,
+    TimeAreaComponent,
     DashboardComponent,
+    UserStatusComponent,
     ScreenshotComponent,
     ProfileMenuComponent,
     ChangeStatusComponent,
     DashboardToolbarComponent,
-    TimeAreaComponent,
     WindowAppContainerComponent
   ],
   imports: [

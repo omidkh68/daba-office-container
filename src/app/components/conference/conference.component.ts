@@ -10,9 +10,6 @@ import {ServiceItemsInterface} from '../dashboard/logic/service-items.interface'
 export class ConferenceComponent implements AfterViewInit {
   @ViewChild('container', {read: ViewContainerRef}) container;
 
-  width: number = 0;
-  height: number = 0;
-
   constructor(private lazyComponentService: LazyComponentService,
               @Inject(MAT_DIALOG_DATA) public data: ServiceItemsInterface) {
   }

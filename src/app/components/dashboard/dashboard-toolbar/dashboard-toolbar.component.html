@@ -10,9 +10,16 @@
   <app-window-app-container class="box-holder"
                             [windowManager]="windowManager"
                             [rtlDirection]="rtlDirection"></app-window-app-container>
-  <!-- Opened App Container -->
+  <!-- /Opened App Container -->
 
   <div class="flex-spacer"></div>
+
+  <!-- Change User Status -->
+  <app-user-status class="box-holder"
+                   [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
+                   [loggedInUser]="loggedInUser"
+                   [rtlDirection]="rtlDirection"></app-user-status>
+  <!-- /Change User Status -->
 
   <app-time-area class="box-holder"
                  [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"

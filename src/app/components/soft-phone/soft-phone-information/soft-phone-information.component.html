@@ -1,0 +1,33 @@
+<div class="full-width full-height">
+  <mat-list class="soft-phone-user full-width height-50">
+    <mat-list-item class="padding-mini-r-l full-height">
+      <img matListAvatar [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'"
+           class="mat-elevation-z2"
+           [alt]="loggedInUser.name + ' ' + loggedInUser.family">
+      <h3 matLine class="font-8-rem text-weight-bold"> {{loggedInUser.name + ' ' + loggedInUser.family}} </h3>
+
+      <div [dir]="rtlDirection ? 'ltr' : 'rtl'" class="font-8-rem">
+        <mat-slide-toggle #slideToggle>
+          <span class="padding-mini-r-l">{{slideToggle.checked ? 'فعال' : 'غیر فعال'}}</span>
+        </mat-slide-toggle>
+      </div>
+    </mat-list-item>
+  </mat-list>
+
+  <div class="height-full-minus-50 overflow-x-hide overflow-y-auto padding-t-b">
+    <mat-list class="full-width">
+      <mat-list-item *ngFor="let user of users"
+                     (click)="openSheet(user)"
+                     class="highlight cursor-pointer padding-r-l full-height margin-b-full">
+        <img matListAvatar [src]="'assets/profileImg/'+ user.adminId +'.jpg'"
+             class="mat-elevation-z2 width-35 height-35" [alt]="user.name + ' ' + user.family">
+
+        <h3 matLine class="font-7-rem text-weight-bold"> {{user.name + ' ' + user.family}} </h3>
+        <p matLine class="font-6-em text-gray-600">{{user.creationDate | jalali}}</p>
+
+        <div [ngClass]="user.status === '1' ? 'online' : 'offline'"
+              class="user-soft-phone-status pos-rel text-gray-500 width-30 height-30 round-corner-all"></div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>

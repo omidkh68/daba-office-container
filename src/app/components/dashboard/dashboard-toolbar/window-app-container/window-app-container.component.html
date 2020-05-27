@@ -1,12 +1,12 @@
 <div *ngIf="windowManager.length"
      [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
-     class="box mat-elevation-z1 pos-rel text-center round-corner height-45 overflow-hide">
+     class="box mat-elevation-z1 pos-rel text-center round-corner height-40 overflow-hide">
   <button *ngFor="let app of windowManager"
           (click)="controlWindow(app)"
           [ngClass]="{'app-minimized': app.isMinimized}"
           [matTooltip]="rtlDirection ? app.windowService.serviceNameFa : app.windowService.serviceNameEn"
           matTooltipPosition="above"
-          class="app-open pos-rel no-bg no-border no-padding width-45 full-height cursor-pointer">
+          class="app-open pos-rel no-bg no-border no-padding width-40 full-height cursor-pointer">
     <mat-icon class="text-dark-mode-color">{{app.windowService.icon}}</mat-icon>
   </button>
 </div>

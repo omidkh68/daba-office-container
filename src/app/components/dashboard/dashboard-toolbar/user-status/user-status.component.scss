@@ -1,0 +1,179 @@
+@import '../../../../../assets/mixin';
+
+.mat-icon {
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.blink-effect {
+  animation: blink 1.6s infinite linear;
+}
+
+.status-item {
+  &.status-lunch_time {
+    @include transition(all .4s);
+
+    animation: blink-status-lunch_time 1s infinite linear;
+
+    .mat-icon {
+      animation: blink-status-lunch_time 1s infinite linear;
+    }
+  }
+
+  &.status-meeting {
+    @include transition(all .4s);
+
+    animation: blink-status-meeting 1s infinite linear;
+
+    .mat-icon {
+      animation: blink-status-meeting 1s infinite linear;
+    }
+  }
+
+  &.status-smoking {
+    @include transition(all .4s);
+
+    animation: blink-status-smoking 1s infinite linear;
+
+    .mat-icon {
+      animation: blink-status-smoking 1s infinite linear;
+    }
+  }
+
+  &.status-mission {
+    @include transition(all .4s);
+
+    animation: blink-status-mission 1s infinite linear;
+
+    .mat-icon {
+      animation: blink-status-mission 1s infinite linear;
+    }
+  }
+
+  &.status-leave {
+    @include transition(all .4s);
+
+    animation: blink-status-leave 1s infinite linear;
+
+    .mat-icon {
+      animation: blink-status-leave 1s infinite linear;
+    }
+  }
+
+  &.status-game {
+    @include transition(all .4s);
+
+    animation: blink-status-game 1s infinite linear;
+
+    .mat-icon {
+      animation: blink-status-game 1s infinite linear;
+    }
+  }
+
+  &.status-other {
+    @include transition(all .4s);
+
+    animation: blink-status-other 1s infinite linear;
+
+    .mat-icon {
+      animation: blink-status-other 1s infinite linear;
+    }
+  }
+}
+
+@keyframes blink-status-lunch_time {
+  0% {
+    color: #888;
+    box-shadow: none;
+  }
+  33.33333% {
+    color: #f94850;
+  }
+  100% {
+    color: #888;
+    box-shadow: none;
+  }
+}
+@keyframes blink-status-meeting {
+  0% {
+    color: #888;
+    box-shadow: none;
+  }
+  33.33333% {
+    color: #818cbc;
+  }
+  100% {
+    color: #888;
+    box-shadow: none;
+  }
+}
+@keyframes blink-status-smoking {
+  0% {
+    color: #888;
+    box-shadow: none;
+  }
+  33.33333% {
+    color: #304352;
+  }
+  100% {
+    color: #888;
+    box-shadow: none;
+  }
+}
+
+@keyframes blink-status-mission {
+  0% {
+    color: #888;
+    box-shadow: none;
+  }
+  33.33333% {
+    color: #30cfd0;
+  }
+  100% {
+    color: #888;
+    box-shadow: none;
+  }
+}
+
+@keyframes blink-status-leave {
+  0% {
+    color: #888;
+    box-shadow: none;
+  }
+  33.33333% {
+    color: #feb051;
+  }
+  100% {
+    color: #888;
+    box-shadow: none;
+  }
+}
+
+@keyframes blink-status-game {
+  0% {
+    color: #888;
+    box-shadow: none;
+  }
+  33.33333% {
+    color: #c471f5;
+  }
+  100% {
+    color: #888;
+    box-shadow: none;
+  }
+}
+
+@keyframes blink-status-other {
+  0% {
+    color: #888;
+    box-shadow: none;
+  }
+  33.33333% {
+    color: #98997e;
+  }
+  100% {
+    color: #888;
+    box-shadow: none;
+  }
+}

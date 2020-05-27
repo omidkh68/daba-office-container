@@ -27,8 +27,6 @@ export class ConferenceWindowComponent implements OnInit, OnDestroy {
     this._subscription.add(
       this.windowManagerService.windowsList.subscribe(window => {
         this.windowInstance = window.filter(item => item.windowService.serviceTitle === this.data.serviceTitle).pop();
-
-        console.log(this.windowInstance);
       })
     );
   }

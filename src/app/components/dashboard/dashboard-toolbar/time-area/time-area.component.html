@@ -1,18 +1,18 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'"
-     [matMenuTriggerFor]="mainMenu"
+     [matMenuTriggerFor]="timeAreaMenu"
      [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
-     class="box pos-rel mat-elevation-z1 padding-r-l text-center round-corner height-45 overflow-hide cursor-pointer">
+     class="box pos-rel mat-elevation-z1 padding-r-l text-center round-corner height-40 overflow-hide cursor-pointer">
   <mat-icon class="text-dark-mode-color">access_time</mat-icon>
 
   <div class="display-flex">
-    <mat-list>
+    <mat-list [ngClass]="rtlDirection ? 'text-right' : 'text-left'">
       <mat-list-item class="text-dark-mode-color">
         <div mat-line class="font-8-rem">۱ خرداد ۱۳۹۹</div>
         <div mat-line class="font-8-rem">پنجشنبه</div>
       </mat-list-item>
     </mat-list>
 
-    <mat-list>
+    <mat-list [ngClass]="rtlDirection ? 'text-left' : 'text-right'">
       <mat-list-item class="text-dark-mode-color font-8-rem">
         <div mat-line>۱۵:۴۰</div>
         <div mat-line dir="ltr" class="font-8-rem">+3:30 <span class="font-6-em">GMT</span></div>
@@ -20,14 +20,17 @@
     </mat-list>
   </div>
 </div>
-<mat-menu class="toolbar-menu main-menu" #mainMenu="matMenu" xPosition="before" yPosition="above">
-  <h6 mat-subheader class="padding-half text-weight-normal font-9-rem text-dark-mode-color">
-    سرویس ها
-  </h6>
-  <button mat-menu-item *ngFor="let service of serviceList"
-          (click)="openService(service)"
-          class="font-7-rem padding-mini-r-l text-dark-mode-color">
-    <mat-icon class="text-dark-mode-color">{{service.icon}}</mat-icon>
-    <span class="font-full-plus-two-tenth-em">{{rtlDirection ? service.serviceNameFa : service.serviceNameEn}}</span>
-  </button>
+<mat-menu class="toolbar-menu time-area-menu" #timeAreaMenu="matMenu" xPosition="before" yPosition="above">
+  <div>
+    <div class="clock center-block">
+      <div class="inner">
+        <div #hourHand class="hour hand"></div>
+        <div #minuteHand class="minute hand"></div>
+        <div #secondHand class="second hand"></div>
+        <div class="graduations">
+          <div *ngFor="let graduation of graduations" class="graduation"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </mat-menu>

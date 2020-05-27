@@ -1,25 +1,8 @@
 <div class="dashboard-container full-width full-height">
-  <!--<div class="height-250 banner pos-rel">
-    <div class="profile-info pos-abs full-width height-100 bottom-0">
-      <button mat-raised-button
-              matTooltip="متوقف کردن این وضعیت" matTooltipPosition="right"
-              *ngIf="userCurrentStatus !== ''; else changeViewStatus"
-              (click)="changeStatus(false)"
-              [class]="'status-' + userCurrentStatus.statusNameEn.replace(' ', '_').toLocaleLowerCase() + ' status-item change-status-btn white-gradient text-weight-500 pos-abs left-full line-height-30 font-9-em overflow-hide'">
-        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">{{userCurrentStatus.statusIcon}}</mat-icon>
-        <span class="padding-mini-r-l">{{userCurrentStatus.statusNameFa}}</span>
-      </button>
-
-      <ng-template #changeViewStatus>
-        <button mat-raised-button
-                (click)="changeStatus(true)"
-                class="change-status-btn white-gradient text-weight-500 pos-abs left-full line-height-30 font-9-em overflow-hide">
-          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">sync_problem</mat-icon>
-          <span class="padding-mini-r-l">اعمال وضعیت</span>
-        </button>
-      </ng-template>
-    </div>
-  </div>-->
+  <div class="dashboard-app-boundary height-full-minus-70 padding-full">
+    <button mat-raised-button (click)="changeDarkMode()">dark mode: {{loggedInUser.darkMode ? 'true' : 'false'}}</button>
+    <button mat-raised-button (click)="changeDirection()">direction mode: {{rtlDirection}}</button>
+  </div>
 
   <!--<div class="padding-full-3">
     <mat-grid-list class="half-width" *ngIf="serviceList.length" cols="4" gutterSize="30" rowHeight="150px">
@@ -48,11 +31,9 @@
 
   <app-screenshot></app-screenshot>
 
-  <button mat-raised-button (click)="changeDarkMode()">dark mode: {{loggedInUser.darkMode ? 'true' : 'false'}}</button>
-  <button mat-raised-button (click)="changeDirection()">direction mode: {{rtlDirection}}</button>
   <app-dashboard-toolbar [serviceList]="serviceList"
                          [rtlDirection]="rtlDirection"
                          [loggedInUser]="loggedInUser"
                          [windowManager]="windowManager"
-                         class="dashboard-toolbar pos-fix bottom-full right-full left-full height-45"></app-dashboard-toolbar>
+                         class="dashboard-toolbar pos-fix bottom-full right-full left-full height-40"></app-dashboard-toolbar>
 </div>

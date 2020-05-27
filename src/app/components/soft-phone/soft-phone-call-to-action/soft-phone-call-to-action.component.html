@@ -1,0 +1,26 @@
+<div class="full-width full-height padding-full">
+  <div class="full-width height-80 line-height-80 text-center">
+    <img [src]="'assets/profileImg/'+ user.adminId +'.jpg'"
+         class="mat-elevation-z2 width-70 height-70 round-corner-all margin-auto"
+         [alt]="user.name + ' ' + user.family">
+  </div>
+
+  <div class="height-35 line-height-35 display-flex flex-space-between">
+    <span>{{user.name}} {{user.family}}</span>
+
+    <div>{{user.creationDate | jalali}}</div>
+  </div>
+
+  <div class="height-60">
+    <button mat-raised-button [disabled]="user.status === '0'"
+            type="submit" class="green-gradient text-white full-width">
+      تماس
+    </button>
+
+    <button mat-raised-button type="submit"
+            (click)="closeBottomSheet()"
+            class="no-bg no-box-shadow text-red-300 full-width">
+      انصراف
+    </button>
+  </div>
+</div>

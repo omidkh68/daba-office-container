@@ -18,8 +18,7 @@ export interface filterType {
 
 @Component({
   selector: 'app-task-filter',
-  templateUrl: './task-filter.component.html',
-  styleUrls: ['./task-filter.component.scss']
+  templateUrl: './task-filter.component.html'
 })
 export class TaskFilterComponent implements OnInit, OnDestroy {
   filterData: FilterInterface = {
