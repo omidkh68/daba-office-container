@@ -22,7 +22,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit {
   loggedInUser: UserInterface;
 
   keys: Array<KeysInterface> = [
-    {num: 'volume_up'}, {num: 'keyboard_voice'}, {num: 'keyboard_voice'}
+    {num: 'volume_up'}, {num: 'keyboard_voice'}, {num: 'person_add'}
   ];
 
   private _subscription: Subscription = new Subscription();

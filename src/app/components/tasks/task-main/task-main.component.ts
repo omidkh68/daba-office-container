@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MatTabChangeEvent} from '@angular/material/tabs';
@@ -9,6 +9,9 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskAddComponent} from '../task-add/task-add.component';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
+import {BottomSheetComponent} from '../../bottom-sheet/bottom-sheet.component';
+import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
+import {SoftPhoneCallToActionComponent} from '../../soft-phone/soft-phone-call-to-action/soft-phone-call-to-action.component';
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];
@@ -21,6 +24,8 @@ export interface TaskEssentialInfo {
   styleUrls: ['./task-main.component.scss']
 })
 export class TaskMainComponent implements OnDestroy {
+  @ViewChild('bottomSheet', {static: false}) bottomSheet: BottomSheetComponent;
+
   taskEssentialInfo: TaskEssentialInfo;
   pushTaskToBoard;
   doResetFilter: boolean = false;
@@ -130,6 +135,10 @@ export class TaskMainComponent implements OnDestroy {
       this.refreshBoardData = false;
       this.doResetFilter = false;
     }, 200);
+  }
+
+  openButtonSheet(bottomSheetConfig: BottomSheetInterface) {
+    this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
   }
 
   ngOnDestroy(): void {

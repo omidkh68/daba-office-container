@@ -52,7 +52,7 @@ export class SoftPhoneKeypadComponent implements OnInit {
     if (contact) {
       this.oldNumeric = this.numeric;
 
-      this.numeric = contact;
+      this.numeric = contact.name + ' ' + contact.family;
     }
   }
 
@@ -74,7 +74,7 @@ export class SoftPhoneKeypadComponent implements OnInit {
     if (contact) {
       this.oldNumeric = this.numeric;
 
-      this.numeric = contact;
+      this.numeric = contact.name + ' ' + contact.family;
     }
   }
 
@@ -83,11 +83,21 @@ export class SoftPhoneKeypadComponent implements OnInit {
       return;
     }
 
+    let contactInfo: any;
+
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.oldNumeric.includes(item.extension)).pop();
+
+    if (contact) {
+      contactInfo = contact;
+    } else {
+      contactInfo = this.numeric;
+    }
+
     this.triggerBottomSheet.emit({
       component: SoftPhoneCallPopUpComponent,
       height: '100%',
       width: '100%',
-      data: this.numeric
+      data: contactInfo
     });
   }
 

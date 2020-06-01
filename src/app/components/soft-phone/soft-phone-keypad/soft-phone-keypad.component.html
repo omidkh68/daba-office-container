@@ -1,6 +1,7 @@
 <div class="full-height">
   <div class="input-holder padding-mini-t-b text-center pos-rel height-50 line-height-50">
     <input [ngModel]="numeric" (onValueChanged)="changeNumber($event)"
+           [readOnly]="oldNumeric !== ''"
            type="tel" digitOnly placeholder="شماره تلفن" dir="ltr"
            class="no-padding no-border no-bg font-full-plus-three-tenth-em full-width text-center">
   </div>
