@@ -6,7 +6,7 @@
            [alt]="loggedInUser.name + ' ' + loggedInUser.family">
       <h3 matLine class="font-8-rem text-weight-bold"> {{loggedInUser.name + ' ' + loggedInUser.family}} </h3>
 
-      <div [dir]="rtlDirection ? 'ltr' : 'rtl'" class="font-8-rem">
+      <div class="font-8-rem">
         <mat-slide-toggle #slideToggle>
           <span class="padding-mini-r-l">{{slideToggle.checked ? 'فعال' : 'غیر فعال'}}</span>
         </mat-slide-toggle>
@@ -16,7 +16,7 @@
 
   <div class="height-full-minus-50 overflow-x-hide overflow-y-auto padding-t-b">
     <mat-list class="full-width">
-      <mat-list-item *ngFor="let user of users"
+      <mat-list-item *ngFor="let user of softPhoneUsers"
                      (click)="openSheet(user)"
                      class="highlight cursor-pointer padding-r-l full-height margin-b-full">
         <img matListAvatar [src]="'assets/profileImg/'+ user.adminId +'.jpg'"

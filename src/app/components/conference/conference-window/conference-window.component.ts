@@ -51,6 +51,10 @@ export class ConferenceWindowComponent implements OnInit, OnDestroy {
     this.windowManagerService.closeWindow(this.data);
   }
 
+  centerWindow() {
+    this.windowManagerService.centerWindow(this.data);
+  }
+
   ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();

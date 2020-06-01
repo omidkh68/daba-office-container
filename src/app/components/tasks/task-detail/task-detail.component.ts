@@ -6,8 +6,8 @@ import {ProjectInterface} from '../../projects/logic/project-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {ApiService} from '../logic/api.service';
 import {TaskDataInterface} from '../logic/task-data-interface';
-import {UserInfoService} from '../../../services/user-info.service';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {UserInfoService} from '../../users/services/user-info.service';
 
 @Component({
   templateUrl: './task-detail.component.html',

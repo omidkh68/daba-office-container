@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 
 @Component({
   selector: 'app-soft-phone-settings',
@@ -8,6 +9,9 @@ import {Component, Input, OnInit} from '@angular/core';
 export class SoftPhoneSettingsComponent implements OnInit {
   @Input()
   rtlDirection: boolean;
+
+  @Input()
+  softPhoneUsers: Array<SoftphoneUserInterface>;
 
   constructor() {
   }

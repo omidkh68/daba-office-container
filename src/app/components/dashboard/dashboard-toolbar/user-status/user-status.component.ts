@@ -7,7 +7,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../../services/message.service';
 import {ApiService as UserApiService} from '../../../users/logic/api.service';
-import {ChangeStatusService} from '../../../../services/change-status.service';
+import {ChangeStatusService} from '../../../status/services/change-status.service';
 
 @Component({
   selector: 'app-user-status',

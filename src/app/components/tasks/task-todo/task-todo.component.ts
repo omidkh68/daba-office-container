@@ -2,9 +2,9 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {TodoInterface} from './logic/todo-interface';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {ApiService} from './logic/api.service';
-import {UserInfoService} from '../../../services/user-info.service';
 import {UserInterface} from '../../users/logic/user-interface';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {UserInfoService} from '../../users/services/user-info.service';
 
 @Component({
   selector: 'app-task-todo',

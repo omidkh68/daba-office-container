@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {SoftPhoneContactsComponent} from '../soft-phone-contacts/soft-phone-contacts.component';
 import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {SoftPhoneCallPopUpComponent} from './soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 
 export interface KeysInterface {
   num: string;
@@ -20,7 +22,11 @@ export class SoftPhoneKeypadComponent implements OnInit {
   @Input()
   rtlDirection: boolean;
 
-  numeric: string = '';
+  @Input()
+  softPhoneUsers: Array<SoftphoneUserInterface>;
+
+  numeric: string | any = '';
+  oldNumeric: string | any = '';
 
   keys: Array<KeysInterface> = [
     {num: '1', f1: 697, f2: 1209}, {num: '2', f1: 697, f2: 1336}, {num: '3', f1: 697, f2: 1477},
@@ -28,6 +34,8 @@ export class SoftPhoneKeypadComponent implements OnInit {
     {num: '7', f1: 852, f2: 1209}, {num: '8', f1: 852, f2: 1336}, {num: '9', f1: 852, f2: 1477},
     {num: '*', f1: 941, f2: 1209}, {num: '0', f1: 941, f2: 1336}, {num: '#', f1: 941, f2: 1477}
   ];
+
+  private _subscription: Subscription = new Subscription();
 
   constructor() {
   }
@@ -38,22 +46,54 @@ export class SoftPhoneKeypadComponent implements OnInit {
 
   keyPress(event, key: KeysInterface) {
     this.numeric += key.num;
+
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric.includes(item.extension)).pop();
+
+    if (contact) {
+      this.oldNumeric = this.numeric;
+
+      this.numeric = contact;
+    }
   }
 
   removeFromNumber() {
-    this.numeric = this.numeric.substring(0, this.numeric.length - 1);
+    if (this.oldNumeric !== '') {
+      this.numeric = this.oldNumeric;
 
-    console.log(this.numeric);
+      this.oldNumeric = '';
+    } else {
+      this.numeric = this.numeric.substring(0, this.numeric.length - 1);
+    }
   }
 
   changeNumber(event) {
     this.numeric = event;
+
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric.includes(item.extension)).pop();
+
+    if (contact) {
+      this.oldNumeric = this.numeric;
+
+      this.numeric = contact;
+    }
   }
 
   openButtonSheet() {
+    if (!this.numeric.length) {
+      return;
+    }
+
     this.triggerBottomSheet.emit({
-      component: SoftPhoneContactsComponent,
-      height: '90%'
+      component: SoftPhoneCallPopUpComponent,
+      height: '100%',
+      width: '100%',
+      data: this.numeric
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

@@ -7,13 +7,13 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {TaskInterface} from '../logic/task-interface';
 import {BoardInterface} from '../logic/board-interface';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {UserInfoService} from '../../../services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskStopComponent} from '../task-stop/task-stop.component';
-import {CurrentTaskService} from '../../../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {SocketioService} from '../../../services/socketio.service';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {CurrentTaskService} from '../services/current-task.service';
 
 @Component({
   selector: 'app-task-board',

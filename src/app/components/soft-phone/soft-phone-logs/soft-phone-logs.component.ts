@@ -1,50 +1,36 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {CallLogInterface} from '../logic/call-log.interface';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
+import {UserInterface} from '../../users/logic/user-interface';
+import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 
 @Component({
   selector: 'app-soft-phone-logs',
   templateUrl: './soft-phone-logs.component.html',
   styleUrls: ['./soft-phone-logs.component.scss']
 })
-export class SoftPhoneLogsComponent implements OnInit {
+export class SoftPhoneLogsComponent {
+  @Output()
+  triggerBottomSheet: EventEmitter<BottomSheetInterface> = new EventEmitter<BottomSheetInterface>();
+
   @Input()
   rtlDirection: boolean;
 
-  callLogs: Array<CallLogInterface> = [
-    {
-      name: 'آقای بصیری',
-      extension: 200,
-      type: 'incoming',
-      date: '2020-05-23',
-      time: '10:53'
-    },
-    {
-      name: 'محمود ملک لو',
-      extension: 202,
-      type: 'outgoing',
-      date: '2020-05-20',
-      time: '13:21'
-    },
-    {
-      name: 'محمد حسین سجادی',
-      extension: 231,
-      type: 'incoming',
-      date: '2020-05-18',
-      time: '09:19'
-    },
-    {
-      name: 'عمو رادان',
-      extension: 209,
-      type: 'missed',
-      date: '2020-05-13',
-      time: '14:44'
-    }
-  ];
+  @Input()
+  softPhoneUsers: Array<SoftphoneUserInterface>;
+
+  @Input()
+  loggedInUser: UserInterface;
 
   constructor() {
   }
 
-  ngOnInit(): void {
+  openSheet(user: SoftphoneUserInterface) {
+    this.triggerBottomSheet.emit({
+      component: SoftPhoneCallToActionComponent,
+      height: '200px',
+      width: '98%',
+      data: user
+    });
   }
-
 }

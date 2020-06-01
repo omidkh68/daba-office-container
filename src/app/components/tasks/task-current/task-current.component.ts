@@ -4,12 +4,12 @@ import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {ElectronService} from '../../../core/services';
-import {UserInfoService} from '../../../services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskEssentialInfo} from '../task-main/task-main.component';
 import {TaskDataInterface} from '../logic/task-data-interface';
-import {CurrentTaskService} from '../../../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import {CurrentTaskService} from '../services/current-task.service';
+import {UserInfoService} from '../../users/services/user-info.service';
 
 @Component({
   selector: 'app-task-current',

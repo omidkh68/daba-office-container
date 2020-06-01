@@ -133,7 +133,6 @@ export class TaskMainComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('des main');
     if (this._subscription) {
       this._subscription.unsubscribe();
     }

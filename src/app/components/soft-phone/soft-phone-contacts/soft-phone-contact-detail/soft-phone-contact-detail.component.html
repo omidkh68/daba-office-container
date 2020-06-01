@@ -1,0 +1,95 @@
+<div class="full-width full-height padding-r-l padding-b-full">
+  <button (click)="closeBottomSheet();"
+          [ngClass]="rtlDirection ? 'left-0' : 'right-0'"
+          class="width-30 height-30 pos-abs top-0 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+    <mat-icon
+      class="text-dark-mode-color line-height-35 full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
+      close
+    </mat-icon>
+  </button>
+
+  <div *ngIf="form" class="height-full-minus-35 float-right full-width">
+    <form [formGroup]="form" class="full-height">
+      <h1 class="margin-b-full text-gray-800 full-width font-full-em text-weight-500 margin-b-half">
+        افزودن مخاطب جدید
+      </h1>
+
+      <div class="row">
+        <div class="col-md-12 margin-b-half float-right">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>نام</mat-label>
+
+            <input matInput formControlName="name" tabindex="1">
+
+            <button class="close-icon pos-rel top-half float-left" type="button"
+                    *ngIf="form.get('name').touched && form.get('name').value.length"
+                    mat-button matSuffix mat-icon-button aria-label="Clear"
+                    (click)="form.get('name').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
+              لطفا نام را وارد نمایید
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-12 margin-b-half float-right">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>نام خانوادگی</mat-label>
+
+            <input matInput formControlName="family" tabindex="2">
+
+            <button class="close-icon pos-rel top-half float-left" type="button"
+                    *ngIf="form.get('family').touched && form.get('family').value.length"
+                    mat-button matSuffix mat-icon-button aria-label="Clear"
+                    (click)="form.get('family').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="!form.get('family').valid && form.get('family').touched">
+              لطفا نام خانوادگی را وارد نمایید
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-12 margin-b-half float-right">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>شماره</mat-label>
+
+            <input matInput formControlName="extension" tabindex="3">
+
+            <button class="close-icon pos-rel top-half float-left" type="button"
+                    *ngIf="form.get('extension').touched && form.get('extension').value.length"
+                    mat-button matSuffix mat-icon-button aria-label="Clear"
+                    (click)="form.get('extension').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="!form.get('extension').valid && form.get('extension').touched">
+              لطفا شماره را وارد نمایید
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="display-flex">
+        <button mat-raised-button
+                [disabled]="!form.valid && form.touched"
+                [ngClass]="data && data.action === 'edit' && rtlDirection ? 'margin-l-full' : data && data.action === 'edit' ? 'margin-r-full' : ''"
+                type="submit"
+                tabindex="4"
+                class="green-gradient full-width text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+          <span class="padding-mini-r-l">ثبت</span>
+        </button>
+
+        <button *ngIf="data && data.action === 'edit'"
+                mat-raised-button tabindex="5"
+                class="red-gradient width-30 height-30 text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">delete</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

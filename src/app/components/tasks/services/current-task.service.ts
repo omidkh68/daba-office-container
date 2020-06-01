@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {TaskInterface} from '../components/tasks/logic/task-interface';
+import {TaskInterface} from '../logic/task-interface';
 
 @Injectable({
   providedIn: 'root'

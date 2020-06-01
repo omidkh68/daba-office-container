@@ -21,6 +21,13 @@
 
     <div class="window-actions display-flex"
          [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'">
+      <button (click)="centerWindow(); $event.stopPropagation();"
+              class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
+          center_focus_strong
+        </mat-icon>
+      </button>
       <button (click)="minimize(); $event.stopPropagation();" *ngIf="!windowInstance.isMinimized"
               class="width-30 height-30 text-center line-height-25 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon

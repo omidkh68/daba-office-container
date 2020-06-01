@@ -2,13 +2,13 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ChangeUserStatusInterface} from '../logic/change-user-status.interface';
-import {ChangeStatusService} from '../../../services/change-status.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {ApiService as UserApiService} from '../../users/logic/api.service';
 import {UserStatusInterface} from '../../users/logic/user-status-interface';
 import {StatusInterface} from '../logic/status-interface';
 import {ApiService as StatusApiService} from '../logic/api.service';
 import {MessageService} from '../../../services/message.service';
+import {ChangeStatusService} from '../services/change-status.service';
 
 @Component({
   selector: 'app-change-status',

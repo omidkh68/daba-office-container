@@ -1,9 +1,9 @@
 import * as io from 'socket.io-client';
 import {AppConfig} from '../../environments/environment';
-import {UserInfoService} from './user-info.service';
 import {UserInterface} from '../components/users/logic/user-interface';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {Injectable} from '@angular/core';
+import {UserInfoService} from '../components/users/services/user-info.service';
 
 @Injectable({
   providedIn: 'root'

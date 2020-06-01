@@ -1,7 +1,8 @@
 <div class="padding-full">
   <mat-list class="full-height overflow-y-auto overflow-x-hide">
-    <mat-list-item disableRipple *ngFor="let info of callLogs"
-                   class="height-full-minus-45 margin-b-half overflow-y-auto overflow-x-hide">
+    <mat-list-item disableRipple *ngFor="let info of softPhoneUsers"
+                   (click)="openSheet(info)"
+                   class="height-full-minus-45 margin-b-half overflow-y-auto overflow-x-hide cursor-pointer">
       <div class="seventy-width">
         <ng-container [ngSwitch]="info.type">
           <mat-icon mat-list-icon *ngSwitchCase="'missed'"
@@ -19,7 +20,7 @@
             phone_forwarded
           </mat-icon>
         </ng-container>
-        <div mat-line class="padding-mini-r-l" [ngClass]="info.type === 'missed' ? 'text-red-500' : ''">{{info.name}}</div>
+        <div mat-line class="padding-mini-r-l" [ngClass]="info.type === 'missed' ? 'text-red-500' : ''">{{info.name + ' ' + info.family}}</div>
         <div mat-line class="padding-mini-r-l">{{info.extension}}</div>
       </div>
       <div class="thirty-width" [ngClass]="rtlDirection ? 'text-left' : 'text-right'">

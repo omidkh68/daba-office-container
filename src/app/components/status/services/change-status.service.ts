@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {UserStatusInterface} from '../components/users/logic/user-status-interface';
+import {UserStatusInterface} from '../../users/logic/user-status-interface';
 
 @Injectable({
   providedIn: 'root'

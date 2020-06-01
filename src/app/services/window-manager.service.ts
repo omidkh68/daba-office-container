@@ -30,8 +30,8 @@ export class WindowManagerService {
     let component: any = null;
     let hasFrame: boolean = false;
     let maximizable: boolean = true;
-    let windowWidth = 1200;
-    let windowHeight = 700;
+    let windowWidth = service.width;
+    let windowHeight = service.height;
 
     switch (service.serviceTitle) {
       case 'service-task': {
@@ -42,8 +42,6 @@ export class WindowManagerService {
 
       case 'service-pbx': {
         component = SoftPhoneComponent;
-        windowWidth = 350;
-        windowHeight = 500;
         maximizable = false;
 
         break;
@@ -79,7 +77,7 @@ export class WindowManagerService {
           hasBackdrop: false,
           panelClass: 'window-dialog',
           disableClose: true,
-          //position: {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`}
+          // position: {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`}
         });
 
         const window: WindowInterface = {
@@ -189,5 +187,18 @@ export class WindowManagerService {
     this._defaultWindows.splice(findIndex, 1);
 
     windowInstance.windowRef.close();
+  }
+
+  centerWindow(service: ServiceItemsInterface) {
+    const windowInstance = this._defaultWindows.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+
+    const centerWidth = (this.window.innerWidth - windowInstance.windowService.width) / 2;
+    const centerHeight = (this.window.innerHeight - windowInstance.windowService.height) / 2;
+
+    const updatePosition: DialogPositionInterface = {top: `${centerHeight}px`, left: `${centerWidth}px`};
+
+    windowInstance.windowRef.updatePosition(updatePosition);
+
+    this.activeWindow(service);
   }
 }

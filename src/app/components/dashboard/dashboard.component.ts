@@ -5,11 +5,11 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDialog} from '@angular/material/dialog';
 import {systemPreferences} from 'electron';
 import {UserInterface} from '../users/logic/user-interface';
-import {UserInfoService} from '../../services/user-info.service';
 import {MessageService} from '../../services/message.service';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {WindowInterface} from './logic/window.interface';
 import {ViewDirectionService} from '../../services/view-direction.service';
+import {UserInfoService} from '../users/services/user-info.service';
 
 export interface INotification {
   onclick: () => void;
@@ -31,7 +31,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       serviceNameEn: 'Task Management System',
       serviceTitle: 'service-task',
       icon: 'playlist_add_check',
-      status: 1
+      status: 1,
+      width: 1200,
+      height: 700
     },
     {
       serviceId: 2,
@@ -39,7 +41,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       serviceNameEn: 'PBX System',
       serviceTitle: 'service-pbx',
       icon: 'perm_phone_msg',
-      status: 1
+      status: 1,
+      width: 350,
+      height: 500
     },
     {
       serviceId: 3,
@@ -47,7 +51,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       serviceNameEn: 'Video Conference System',
       serviceTitle: 'service-video-conference',
       icon: 'picture_in_picture',
-      status: 0
+      status: 1,
+      width: 1200,
+      height: 700
     }
   ];
 

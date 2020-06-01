@@ -6,7 +6,7 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {UserInfoService} from '../../../services/user-info.service';
+import {UserInfoService} from '../../users/services/user-info.service';
 
 @Component({
   templateUrl: './task-add.component.html'
