@@ -28,7 +28,6 @@ import {UserStatusComponent} from './dashboard-toolbar/user-status/user-status.c
   imports: [
     CommonModule,
     SharedModule,
-    TranslateModule.forChild({}),
     RouterModule.forChild([
       {path: '', component: DashboardComponent},
     ])

@@ -6,7 +6,7 @@
 </div>
 <mat-menu class="toolbar-menu main-menu" #mainMenu="matMenu" xPosition="before" yPosition="above">
   <h6 mat-subheader class="padding-half text-weight-normal font-9-rem text-dark-mode-color">
-    سرویس ها
+    {{'dashboard.dashboard_toolbar.service_list' | translate}}
   </h6>
   <button mat-menu-item *ngFor="let service of serviceList"
           (click)="openService(service)"

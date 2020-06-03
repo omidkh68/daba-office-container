@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserInterface} from '../../users/logic/user-interface';
-import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {ViewDirectionService} from '../../../services/view-direction.service';
-import {NotificationService} from '../../../services/notification.service';
+import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {NotificationService} from '../../../services/notification.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
 
 @Component({
   selector: 'app-soft-phone-call-to-action',
@@ -38,7 +38,7 @@ export class SoftPhoneCallToActionComponent implements OnInit, OnDestroy {
   call(user: UserInterface) {
     const notification: Notification = new Notification(`${this.loggedInUser.name} ${this.loggedInUser.family}`, {
       body: `${user.name} ${user.family}`,
-      icon: 'assets/profileImg/'+ user.adminId +'.jpg',
+      icon: 'assets/profileImg/' + user.adminId + '.jpg',
       dir: 'auto',
       data: user
     });

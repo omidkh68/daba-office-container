@@ -1,16 +1,16 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ViewDirectionService} from '../../../services/view-direction.service';
+import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MatTabChangeEvent} from '@angular/material/tabs';
 import {UserInterface} from '../../users/logic/user-interface';
-import {BottomSheetComponent} from '../../bottom-sheet/bottom-sheet.component';
-import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
-import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
-import {SoftPhoneUsersService} from '../service/soft-phone-users.service';
-import {NotificationService} from '../../../services/notification.service';
-import {SoftPhoneCallPopUpComponent} from '../soft-phone-keypad/soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {not} from 'rxjs/internal-compatibility';
+import {TranslateService} from '@ngx-translate/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {NotificationService} from '../../../services/notification.service';
+import {BottomSheetComponent} from '../../bottom-sheet/bottom-sheet.component';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
+import {SoftPhoneUsersService} from '../service/soft-phone-users.service';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 
 @Component({
   selector: 'app-soft-phone-main',
@@ -23,33 +23,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   loggedInUser: UserInterface;
   rtlDirection: boolean;
   activeTab: number = 1;
-  tabs = [
-    {
-      nameFa: 'وضعیت',
-      nameEn: 'Status',
-      icon: 'home'
-    },
-    {
-      nameFa: 'دفتر تلفن',
-      nameEn: 'Contacts',
-      icon: 'contacts'
-    },
-    {
-      nameFa: 'شماره گیر',
-      nameEn: 'Keypad',
-      icon: 'dialpad'
-    },
-    {
-      nameFa: 'گزارش تماس',
-      nameEn: 'Logs',
-      icon: 'settings_phone'
-    },
-    {
-      nameFa: 'تنظیمات',
-      nameEn: 'Settings',
-      icon: 'settings'
-    }
-  ];
+  tabs = [];
 
   softPhoneUsers: Array<SoftphoneUserInterface> = [
     {
@@ -164,6 +138,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   constructor(private viewDirection: ViewDirectionService,
               private softPhoneUsersService: SoftPhoneUsersService,
               private notificationService: NotificationService,
+              private translate: TranslateService,
               private userInfoService: UserInfoService) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
@@ -195,6 +170,36 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.softPhoneUsersService.changeSoftPhoneUsers(this.softPhoneUsers);
+
+    setTimeout(() => {
+      this.tabs = [
+        {
+          nameFa: this.getTranslate('soft_phone.main.status'),
+          nameEn: 'Status',
+          icon: 'home'
+        },
+        {
+          nameFa: this.getTranslate('soft_phone.main.address_book'),
+          nameEn: 'Contacts',
+          icon: 'contacts'
+        },
+        {
+          nameFa: this.getTranslate('soft_phone.main.dial_pad'),
+          nameEn: 'Keypad',
+          icon: 'dialpad'
+        },
+        {
+          nameFa: this.getTranslate('soft_phone.main.call_logs'),
+          nameEn: 'Logs',
+          icon: 'settings_phone'
+        },
+        {
+          nameFa: this.getTranslate('global.settings'),
+          nameEn: 'Settings',
+          icon: 'settings'
+        }
+      ];
+    }, 200);
   }
 
   tabChange(event: MatTabChangeEvent) {
@@ -209,6 +214,10 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
 
   call(data: any) {
     this.openButtonSheet(data);
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

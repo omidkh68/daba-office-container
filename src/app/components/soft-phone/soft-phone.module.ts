@@ -10,10 +10,10 @@ import {SoftPhoneWindowComponent} from './soft-phone-window/soft-phone-window.co
 import {SoftPhoneKeypadComponent} from './soft-phone-keypad/soft-phone-keypad.component';
 import {SoftPhoneSettingsComponent} from './soft-phone-settings/soft-phone-settings.component';
 import {SoftPhoneContactsComponent} from './soft-phone-contacts/soft-phone-contacts.component';
+import {SoftPhoneCallPopUpComponent} from './soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneInformationComponent} from './soft-phone-information/soft-phone-information.component';
 import {SoftPhoneCallToActionComponent} from './soft-phone-call-to-action/soft-phone-call-to-action.component';
-import { SoftPhoneContactDetailComponent } from './soft-phone-contacts/soft-phone-contact-detail/soft-phone-contact-detail.component';
-import { SoftPhoneCallPopUpComponent } from './soft-phone-keypad/soft-phone-call-pop-up/soft-phone-call-pop-up.component';
+import {SoftPhoneContactDetailComponent} from './soft-phone-contacts/soft-phone-contact-detail/soft-phone-contact-detail.component';
 
 @NgModule({
   declarations: [
@@ -25,10 +25,10 @@ import { SoftPhoneCallPopUpComponent } from './soft-phone-keypad/soft-phone-call
     SoftPhoneWindowComponent,
     SoftPhoneSettingsComponent,
     SoftPhoneContactsComponent,
+    SoftPhoneCallPopUpComponent,
     SoftPhoneInformationComponent,
     SoftPhoneCallToActionComponent,
-    SoftPhoneContactDetailComponent,
-    SoftPhoneCallPopUpComponent
+    SoftPhoneContactDetailComponent
   ],
   imports: [
     CommonModule,

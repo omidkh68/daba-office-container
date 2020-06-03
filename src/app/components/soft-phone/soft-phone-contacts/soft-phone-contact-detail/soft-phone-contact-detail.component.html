@@ -11,82 +11,82 @@
   <div *ngIf="form" class="height-full-minus-35 float-right full-width">
     <form [formGroup]="form" class="full-height">
       <h1 class="margin-b-full text-gray-800 full-width font-full-em text-weight-500 margin-b-half">
-        افزودن مخاطب جدید
+        {{'soft_phone.soft_phone_contacts.add_new_contact' | translate}}
       </h1>
 
       <div class="row">
         <div class="col-md-12 margin-b-half float-right">
           <mat-form-field class="full-width font-9-em">
-            <mat-label>نام</mat-label>
+            <mat-label>{{'global.name' | translate}}</mat-label>
 
-            <input matInput formControlName="name" tabindex="1">
+            <input formControlName="name" matInput tabindex="1">
 
-            <button class="close-icon pos-rel top-half float-left" type="button"
-                    *ngIf="form.get('name').touched && form.get('name').value.length"
-                    mat-button matSuffix mat-icon-button aria-label="Clear"
-                    (click)="form.get('name').setValue('')">
+            <button (click)="form.get('name').setValue('')" *ngIf="form.get('name').touched && form.get('name').value.length"
+                    aria-label="Clear"
+                    class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
+                    type="button">
               <mat-icon>close</mat-icon>
             </button>
 
             <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
-              لطفا نام را وارد نمایید
+              {{'global.name_error' | translate}}
             </mat-error>
           </mat-form-field>
         </div>
 
         <div class="col-md-12 margin-b-half float-right">
           <mat-form-field class="full-width font-9-em">
-            <mat-label>نام خانوادگی</mat-label>
+            <mat-label>{{'global.family' | translate}}</mat-label>
 
-            <input matInput formControlName="family" tabindex="2">
+            <input formControlName="family" matInput tabindex="2">
 
-            <button class="close-icon pos-rel top-half float-left" type="button"
-                    *ngIf="form.get('family').touched && form.get('family').value.length"
-                    mat-button matSuffix mat-icon-button aria-label="Clear"
-                    (click)="form.get('family').setValue('')">
+            <button (click)="form.get('family').setValue('')" *ngIf="form.get('family').touched && form.get('family').value.length"
+                    aria-label="Clear"
+                    class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
+                    type="button">
               <mat-icon>close</mat-icon>
             </button>
 
             <mat-error *ngIf="!form.get('family').valid && form.get('family').touched">
-              لطفا نام خانوادگی را وارد نمایید
+              {{'global.family_error' | translate}}
             </mat-error>
           </mat-form-field>
         </div>
 
         <div class="col-md-12 margin-b-half float-right">
           <mat-form-field class="full-width font-9-em">
-            <mat-label>شماره</mat-label>
+            <mat-label>{{'global.extension' | translate}}</mat-label>
 
-            <input matInput formControlName="extension" tabindex="3">
+            <input formControlName="extension" matInput tabindex="3">
 
-            <button class="close-icon pos-rel top-half float-left" type="button"
-                    *ngIf="form.get('extension').touched && form.get('extension').value.length"
-                    mat-button matSuffix mat-icon-button aria-label="Clear"
-                    (click)="form.get('extension').setValue('')">
+            <button (click)="form.get('extension').setValue('')" *ngIf="form.get('extension').touched && form.get('extension').value.length"
+                    aria-label="Clear"
+                    class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
+                    type="button">
               <mat-icon>close</mat-icon>
             </button>
 
             <mat-error *ngIf="!form.get('extension').valid && form.get('extension').touched">
-              لطفا شماره را وارد نمایید
+              {{'global.extension_error' | translate}}
             </mat-error>
           </mat-form-field>
         </div>
       </div>
 
       <div class="display-flex">
-        <button mat-raised-button
-                [disabled]="!form.valid && form.touched"
+        <button [disabled]="!form.valid && form.touched"
                 [ngClass]="data && data.action === 'edit' && rtlDirection ? 'margin-l-full' : data && data.action === 'edit' ? 'margin-r-full' : ''"
-                type="submit"
+                class="green-gradient full-width text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+                mat-raised-button
                 tabindex="4"
-                class="green-gradient full-width text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+                type="submit">
           <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
-          <span class="padding-mini-r-l">ثبت</span>
+          <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
         </button>
 
         <button *ngIf="data && data.action === 'edit'"
-                mat-raised-button tabindex="5"
-                class="red-gradient width-30 height-30 text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+                class="red-gradient width-30 height-30 text-white line-height-30 font-9-em overflow-hide text-weight-normal" mat-raised-button
+                tabindex="5">
           <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">delete</mat-icon>
         </button>
       </div>

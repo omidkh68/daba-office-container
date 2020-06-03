@@ -1,34 +1,34 @@
-<div class="soft-phone-wrapper full-height bg-white display-flex" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="soft-phone-wrapper full-height bg-white display-flex">
   <div class="soft-phone-container height-full-minus-45 full-width pos-rel">
     <ng-container [ngSwitch]="activeTab">
       <!-- Show soft phone information -->
-      <app-soft-phone-information *ngSwitchCase="0"
-                                  [rtlDirection]="rtlDirection"
-                                  [softPhoneUsers]="softPhoneUsers"
+      <app-soft-phone-information (triggerBottomSheet)="openButtonSheet($event)"
+                                  *ngSwitchCase="0"
                                   [loggedInUser]="loggedInUser"
-                                  (triggerBottomSheet)="openButtonSheet($event)"></app-soft-phone-information>
+                                  [rtlDirection]="rtlDirection"
+                                  [softPhoneUsers]="softPhoneUsers"></app-soft-phone-information>
       <!-- /Show soft phone information -->
 
       <!-- Show Soft phone contacts -->
-      <app-soft-phone-contacts *ngSwitchCase="1"
-                               [rtlDirection]="rtlDirection"
-                               [softPhoneUsers]="softPhoneUsers"
+      <app-soft-phone-contacts (triggerBottomSheet)="openButtonSheet($event)"
+                               *ngSwitchCase="1"
                                [loggedInUser]="loggedInUser"
-                               (triggerBottomSheet)="openButtonSheet($event)"></app-soft-phone-contacts>
+                               [rtlDirection]="rtlDirection"
+                               [softPhoneUsers]="softPhoneUsers"></app-soft-phone-contacts>
       <!-- /Show Soft phone contacts -->
 
       <!-- Show soft phone keypad -->
-      <app-soft-phone-keypad *ngSwitchCase="2"
+      <app-soft-phone-keypad (triggerBottomSheet)="openButtonSheet($event)"
+                             *ngSwitchCase="2"
                              [rtlDirection]="rtlDirection"
-                             [softPhoneUsers]="softPhoneUsers"
-                             (triggerBottomSheet)="openButtonSheet($event)"></app-soft-phone-keypad>
+                             [softPhoneUsers]="softPhoneUsers"></app-soft-phone-keypad>
       <!-- /Show soft phone keypad -->
 
       <!-- Show soft phone logs -->
-      <app-soft-phone-logs *ngSwitchCase="3"
+      <app-soft-phone-logs (triggerBottomSheet)="openButtonSheet($event)"
+                           *ngSwitchCase="3"
                            [rtlDirection]="rtlDirection"
-                           [softPhoneUsers]="softPhoneUsers"
-                           (triggerBottomSheet)="openButtonSheet($event)"></app-soft-phone-logs>
+                           [softPhoneUsers]="softPhoneUsers"></app-soft-phone-logs>
       <!-- /Show soft phone logs -->
 
       <!-- Show soft phone settings -->
@@ -40,10 +40,11 @@
   </div>
 
   <div class="soft-phone-toolbar clear-both full-width height-45 z-index-1">
-    <mat-tab-group (selectedTabChange)="tabChange($event)" [selectedIndex]="activeTab" class="full-height soft-phone-tab" color="primary">
+    <mat-tab-group (selectedTabChange)="tabChange($event)" [selectedIndex]="activeTab"
+                   class="full-height soft-phone-tab" color="primary">
       <mat-tab *ngFor="let tab of tabs;" class="full-height">
-        <ng-template mat-tab-label class="full-height">
-          <mat-icon mat-list-icon class="clear-both text-gray-a300 height-20 width-20 font-full-plus-half-em">
+        <ng-template class="full-height" mat-tab-label>
+          <mat-icon class="clear-both text-gray-a300 height-20 width-20 font-full-plus-half-em" mat-list-icon>
             {{tab.icon}}
           </mat-icon>
           <span class="font-half-em clear-both text-weight-bold">{{rtlDirection ? tab.nameFa : tab.nameFa}}</span>

@@ -1,33 +1,33 @@
 <div class="full-width full-height">
   <mat-list class="soft-phone-user full-width height-50">
     <mat-list-item class="padding-mini-r-l full-height">
-      <img matListAvatar [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'"
+      <img [alt]="loggedInUser.name + ' ' + loggedInUser.family" [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'"
            class="mat-elevation-z2"
-           [alt]="loggedInUser.name + ' ' + loggedInUser.family">
-      <h3 matLine class="font-8-rem text-weight-bold"> {{loggedInUser.name + ' ' + loggedInUser.family}} </h3>
+           matListAvatar>
+      <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name + ' ' + loggedInUser.family}} </h3>
 
       <div class="font-8-rem">
-        <button mat-raised-button
-                (click)="addNewContact()"
-                class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+        <button (click)="addNewContact()"
+                class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+                mat-raised-button>
           <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
-          <span class="padding-mini-r-l">مخاطب جدید</span>
+          <span class="padding-mini-r-l">{{'soft_phone.soft_phone_contacts.new_contact' | translate}}</span>
         </button>
       </div>
     </mat-list-item>
   </mat-list>
   <div class="contact-search height-45 padding-half">
-    <input type="text"
-           #contactList
+    <input #contactList
            (input)="filterContacts(contactList.value)"
            class="full-width full-height round-corner padding-mini-r-l line-height-45"
-           placeholder="جستجو ...">
+           placeholder="{{'global.search' | translate}}"
+           type="text">
   </div>
 
   <div class="height-full-minus-95 padding-r-l overflow-x-hide overflow-y-auto">
     <mat-list>
-      <mat-list-item *ngFor="let contact of filteredUsers"
-                     (click)="openSheet(contact)"
+      <mat-list-item (click)="openSheet(contact)"
+                     *ngFor="let contact of filteredUsers"
                      class="cursor-pointer full-width height-45 font-8-rem">
         <mat-icon mat-list-icon>person</mat-icon>
 
@@ -37,7 +37,8 @@
 
         <button (click)="editContact(contact); $event.stopPropagation();"
                 class="cursor-pointer no-bg no-border width-30 height-30 text-center text-green-500">
-          <mat-icon class="full-width full-height text-center line-height-30 font-full-plus-two-tenth-rem">edit</mat-icon>
+          <mat-icon class="full-width full-height text-center line-height-30 font-full-plus-two-tenth-rem">edit
+          </mat-icon>
         </button>
 
         <mat-divider></mat-divider>

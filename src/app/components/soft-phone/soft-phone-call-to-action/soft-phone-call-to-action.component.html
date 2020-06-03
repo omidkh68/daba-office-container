@@ -10,17 +10,17 @@
 
   <mat-list class="margin-t-full">
     <mat-list-item>
-      <img matListAvatar [src]="'assets/profileImg/'+ data.adminId +'.jpg'"
+      <img [alt]="data.name + ' ' + data.family" [src]="'assets/profileImg/'+ data.adminId +'.jpg'"
            class="mat-elevation-z2 width-50 height-50 round-corner-all margin-auto"
-           [alt]="data.name + ' ' + data.family">
-      <h3 matLine class="text-weight-bold"> {{data.name + ' ' + data.family}} </h3>
+           matListAvatar>
+      <h3 class="text-weight-bold" matLine> {{data.name + ' ' + data.family}} </h3>
 
-      <p matLine class="font-8-rem">
-        <span> <b>وقت محلی</b> <span class="ltr padding-mini-r-l">{{data.date | jalali}}</span> </span>
+      <p class="font-8-rem" matLine>
+          <span> <b>{{'soft_phone.call_to_action.local_time' | translate}}</b> <span class="ltr padding-mini-r-l">{{data.date | jalali}}</span> </span>
       </p>
 
-      <p matLine class="font-8-rem">
-        <span> <b>شماره</b> <span class="ltr padding-mini-r-l">{{data.extension}}</span> </span>
+      <p class="font-8-rem" matLine>
+          <span> <b>{{'global.extension' | translate}}</b> <span class="ltr padding-mini-r-l">{{data.extension}}</span> </span>
       </p>
 
       <div [ngClass]="data.status === '1' ? 'online' : 'offline'"
@@ -31,26 +31,24 @@
   <mat-divider class="margin-mini-t-b"></mat-divider>
 
   <div class="height-60 display-flex flex-space-around">
-    <button mat-raised-button
-            (click)="call(data)"
+    <button (click)="call(data)"
             [disabled]="data.status === '0'"
-            type="submit" class="green-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l">
+            class="green-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
+            mat-raised-button type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">call</mat-icon>
-      <span class="padding-mini-r-l">تماس</span>
+      <span class="padding-mini-r-l">{{'soft_phone.call_to_action.call' | translate}}</span>
     </button>
 
-    <button mat-raised-button
-            (click)="call(data)"
-            type="submit" class="aqua-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l">
+    <button class="aqua-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
+            mat-raised-button type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">chat</mat-icon>
-      <span class="padding-mini-r-l">پیام</span>
+      <span class="padding-mini-r-l">{{'soft_phone.call_to_action.message' | translate}}</span>
     </button>
 
-    <button mat-raised-button
-            (click)="call(data)"
-            type="submit" class="blue-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l">
+    <button class="blue-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
+            mat-raised-button type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">record_voice_over</mat-icon>
-      <span class="padding-mini-r-l">صوتی</span>
+      <span class="padding-mini-r-l">{{'soft_phone.call_to_action.voice' | translate}}</span>
     </button>
   </div>
 </div>

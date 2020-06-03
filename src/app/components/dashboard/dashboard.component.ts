@@ -11,10 +11,6 @@ import {WindowInterface} from './logic/window.interface';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {UserInfoService} from '../users/services/user-info.service';
 
-export interface INotification {
-  onclick: () => void;
-}
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -83,30 +79,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.messageService.durationInSeconds = 10;
       this.messageService.showMessage(`${this.loggedInUser.name} ${this.loggedInUser.family} خوش آمدید `);
     }, 2000);
-
-    /*const notification: INotification = <INotification>(new Notification('Omid', {
-      body: 'salam sosis',
-      icon: 'icon'
-    }));
-
-    notification.onclick = () => {
-      console.log('from notification');
-    };*/
-
-    /*this.notification = new Notification('test message', {
-      body: 'omdioasd'
-    });
-
-    this.notification.onclick = () => {
-      console.log('omodidimasoidoaisjoa');
-    };*/
-
-    /*this.electronService.systemPreferences.askForMediaAccess('microphone').then(result => {
-      console.log(result);
-    });
-
-    console.log(this.electronService.systemPreferences.getMediaAccessStatus('microphone'));*/
-
   }
 
   changeDarkMode() {

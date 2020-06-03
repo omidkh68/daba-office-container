@@ -1,13 +1,47 @@
 {
-  "HOME": {
-    "MENU": {
-      "DASHBOARD": "Dashboard",
-      "USERS": "Users List",
-      "TASKS": "Task Management"
+  "global": {
+    "search": "Search...",
+    "name": "Name",
+    "name_error": "Please enter name",
+    "family": "Family",
+    "family_error": "Please enter family",
+    "extension": "Extension",
+    "extension_placeholder": "Extension Number",
+    "extension_error": "Please enter extension",
+    "submit": "Submit",
+    "active": "Active",
+    "deactivate": "Deactivate",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "dashboard_toolbar": {
+      "service_list": "Services",
+      "exist_app": "Quit App"
+    }
+  },
+  "status": {
+    "stop_status": "Stop Current Status",
+    "apply_status": "Apply Status"
+  },
+  "soft_phone": {
+    "main": {
+      "status": "Status",
+      "address_book": "Address Book",
+      "dial_pad": "Dialpad",
+      "call_logs": "Call Logs"
     },
-    "DASHBOARD": {
-      "CLOSE": "Close App",
-      "MINIMIZE": "Minimize App"
+    "call_pop_up": {
+      "hang_up": "Hang Up"
+    },
+    "call_to_action": {
+      "local_time": "Local Time",
+      "call": "Call",
+      "message": "Message",
+      "voice": "Voice"
+    },
+    "soft_phone_contacts": {
+      "new_contact": "New Contact",
+      "add_new_contact": "Add New Contact"
     }
   }
 }

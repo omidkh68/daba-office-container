@@ -9,6 +9,7 @@ import {StatusInterface} from '../logic/status-interface';
 import {ApiService as StatusApiService} from '../logic/api.service';
 import {MessageService} from '../../../services/message.service';
 import {ChangeStatusService} from '../services/change-status.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-change-status',
@@ -27,6 +28,7 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
               private messageService: MessageService,
               private statusApiService: StatusApiService,
               private fb: FormBuilder,
+              private translate: TranslateService,
               public dialogRef: MatDialogRef<ChangeStatusComponent>,
               @Inject(MAT_DIALOG_DATA) public data) {
   }
@@ -127,8 +129,12 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
         })
       );
     } else {
-      this.messageService.showMessage(`توضیح وضعیت را وارد نمایید`);
+      this.messageService.showMessage( this.getTranslate('status.status_description_error'));
     }
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

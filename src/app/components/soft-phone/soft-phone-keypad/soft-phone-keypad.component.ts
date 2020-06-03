@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {SoftPhoneCallPopUpComponent} from './soft-phone-call-pop-up/soft-phone-call-pop-up.component';
+import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 
 export interface KeysInterface {
   num: string;

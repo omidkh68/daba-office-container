@@ -42,13 +42,13 @@ export class SoftPhoneContactDetailComponent implements OnInit, OnDestroy {
 
   createForm() {
     return new Promise((resolve) => {
-        this.form = this.fb.group({
-          name: new FormControl('', Validators.required),
-          family: new FormControl('', Validators.required),
-          extension: new FormControl(0, Validators.required)
-        });
+      this.form = this.fb.group({
+        name: new FormControl('', Validators.required),
+        family: new FormControl('', Validators.required),
+        extension: new FormControl(0, Validators.required)
+      });
 
-        resolve();
+      resolve();
     });
   }
 

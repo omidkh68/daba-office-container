@@ -1,13 +1,48 @@
 {
-  "HOME": {
-    "MENU": {
-      "DASHBOARD": "داشبورد",
-      "USERS": "لیست کاربران",
-      "TASKS": "مدیریت تسک ها"
+  "global": {
+    "search": "جستجو...",
+    "name": "نام",
+    "name_error": "لطفا نام را وارد نمایید",
+    "family": "نام خانوادگی",
+    "family_error": "لطفا نام خانوادگی را وارد نمایید",
+    "extension": "شماره",
+    "extension_placeholder": "شماره تلفن",
+    "extension_error": "لطفا شماره را وارد نمایید",
+    "submit": "ثبت",
+    "active": "فعال",
+    "deactivate": "غیر فعال",
+    "settings": "تنظیمات"
+  },
+  "dashboard": {
+    "dashboard_toolbar": {
+      "service_list": "سرویس ها",
+      "exist_app": "خروج از برنامه"
+    }
+  },
+  "status": {
+    "stop_status": "متوقف کردن این وضعیت",
+    "apply_status": "اعمال وضعیت",
+    "status_description_error": "توضیح وضعیت را وارد نمایید"
+  },
+  "soft_phone": {
+    "main": {
+      "status": "وضعیت",
+      "address_book": "دفتر تلفن",
+      "dial_pad": "شماره گیر",
+      "call_logs": "گزارش تماس"
     },
-    "DASHBOARD": {
-      "CLOSE": "بستن برنامه",
-      "MINIMIZE": "محو کردن برنامه"
+    "call_pop_up": {
+      "hang_up": "قطع تماس"
+    },
+    "call_to_action": {
+      "local_time": "وقت محلی",
+      "call": "تماس",
+      "message": "پیام",
+      "voice": "صوتی"
+    },
+    "soft_phone_contacts": {
+      "new_contact": "مخاطب جدید",
+      "add_new_contact": "افزودن مخاطب جدید"
     }
   }
 }
