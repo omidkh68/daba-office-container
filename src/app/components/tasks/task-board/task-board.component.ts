@@ -14,6 +14,7 @@ import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {SocketioService} from '../../../services/socketio.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {CurrentTaskService} from '../services/current-task.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-board',
@@ -28,13 +29,15 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   pushTaskToBoard;
 
   @Input()
+  rtlDirection: boolean;
+
+  @Input()
   refreshData: boolean = false;
 
   @Input()
   filterBoards: any;
 
   socket;
-
   loggedInUser: UserInterface;
   myTasks: Array<TaskInterface> = [];
   rowHeight: string = '0';
@@ -51,6 +54,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
               private socketService: SocketioService,
               private currentTaskService: CurrentTaskService,
               public dialog: MatDialog,
+              private translate: TranslateService,
               public bottomSheet: MatBottomSheet) {
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
@@ -240,7 +244,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       id: 'todo',
       cols: 1,
       rows: 1,
-      name: 'آماده انجام',
+      name: this.getTranslate('tasks.boards.todo'),
       tasks: todo_tasks
     });
 
@@ -248,7 +252,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       id: 'inProgress',
       cols: 1,
       rows: 1,
-      name: 'در حال انجام',
+      name: this.getTranslate('tasks.boards.in_progress'),
       tasks: inProgress_tasks
     });
 
@@ -256,7 +260,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       id: 'done',
       cols: 1,
       rows: 1,
-      name: 'به اتمام رسیده',
+      name: this.getTranslate('tasks.boards.done'),
       tasks: done_tasks
     });
 
@@ -301,6 +305,10 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
       // this.socket.emit('updatedata');
     }
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

@@ -1,9 +1,10 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {ApiService} from '../logic/api.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ViewDirectionService} from '../../../services/view-direction.service';
 
 @Component({
   selector: 'app-task-stop',
@@ -13,13 +14,19 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 export class TaskStopComponent implements OnInit, OnDestroy {
   form: FormGroup;
   task: TaskInterface;
+  rtlDirection: boolean;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private viewDirection: ViewDirectionService,
               private _fb: FormBuilder,
               public dialogRef: MatDialogRef<TaskStopComponent>,
               @Inject(MAT_DIALOG_DATA) public data: TaskInterface) {
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
+
     this.task = data;
   }
 

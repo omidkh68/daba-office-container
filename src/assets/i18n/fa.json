@@ -9,9 +9,15 @@
     "extension_placeholder": "شماره تلفن",
     "extension_error": "لطفا شماره را وارد نمایید",
     "submit": "ثبت",
+    "dismiss": "انصراف",
     "active": "فعال",
     "deactivate": "غیر فعال",
-    "settings": "تنظیمات"
+    "settings": "تنظیمات",
+    "filter": "فیلتر",
+    "reset_filter": "حذف فیلتر",
+    "no_result": "موردی نیست",
+    "minutes": "دقیقه",
+    "hours": "ساعت"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -22,6 +28,7 @@
   "status": {
     "stop_status": "متوقف کردن این وضعیت",
     "apply_status": "اعمال وضعیت",
+    "status_description": "توضیح وضعیت",
     "status_description_error": "توضیح وضعیت را وارد نمایید"
   },
   "soft_phone": {
@@ -43,6 +50,57 @@
     "soft_phone_contacts": {
       "new_contact": "مخاطب جدید",
       "add_new_contact": "افزودن مخاطب جدید"
+    }
+  },
+  "tasks": {
+    "main": {
+      "add_new_task": "افزودن تسک",
+      "boards": "برد",
+      "calendar": "تقویم"
+    },
+    "form": {
+      "task_name": "نام تسک",
+      "task_name_error": "لطفا نام تسک را وارد نمایید",
+      "task_status": "وضعیت تسک",
+      "task_status_error": "لطفا وضعیت تسک را مشخص نمایید",
+      "task_project": "پروژه",
+      "task_project_error": "لطفا پروژه را مشخص نمایید",
+      "assign_to": "مسئول انجام تسک",
+      "assign_to_error": "لطفا مسئول را مشخص نمایید",
+      "task_durationHours": "مدت زمان کل(ساعت)",
+      "task_durationHours_error": "لطفا مدت انجام را مشخص نمایید",
+      "task_durationMinutes": "مدت زمان کل(دقیقه)",
+      "start_at": "تاریخ شروع",
+      "start_at_error": "لطفا تاریخ شروع را انتخاب نمایید",
+      "stop_at": "تاریخ شروع",
+      "stop_at_error": "لطفا تاریخ اتمام را انتخاب نمایید",
+      "start_time": "ساعت شروع تسک",
+      "start_time_error": "لطفا ساعت شروع را انتخاب نمایید",
+      "stop_time": "ساعت اتمام تسک",
+      "stop_time_error": "لطفا ساعت اتمام را انتخاب نمایید",
+      "task_description": "توضیح تسک",
+      "trackable_by_mobile": "قابل ردیابی با موبایل"
+    },
+    "activity": {
+      "activity_list": "لیست فعالیت ها",
+      "task_completion_percentage": "درصد تکمیل بودن تسک",
+      "completed": "تکمیل شده",
+      "not_completed": "تکمیل نشده"
+    },
+    "boards": {
+      "task_percentage": "درصد پیشبرد",
+      "todo": "آماده انجام",
+      "in_progress": "در حال انجام",
+      "done": "به اتمام رسیده"
+    },
+    "task_stop": {
+      "stop_description": "توضیح توقف تسک",
+      "description": "توضیح تسک",
+      "description_error": "لطفا توضیح تسک را وارد نمایید"
+    },
+    "task_detail": {
+      "overview": "اطلاعات کلی",
+      "reports": "گزارشات"
     }
   }
 }

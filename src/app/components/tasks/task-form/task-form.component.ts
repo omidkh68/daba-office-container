@@ -7,6 +7,8 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
 import {TaskDataInterface} from '../logic/task-data-interface';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-form',
@@ -29,6 +31,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   @Output()
   formOutput = new EventEmitter();
 
+  rtlDirection: boolean;
   task: TaskInterface;
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
@@ -59,24 +62,15 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     '22:00', '22:15', '22:30', '22:45',
     '23:00', '23:15', '23:30', '23:45'
   ];
-  boardsList = [
-    {
-      id: 'todo',
-      name: 'آماده انجام'
-    },
-    {
-      id: 'inProgress',
-      name: 'در حال انجام'
-    },
-    {
-      id: 'done',
-      name: 'به اتمام رسیده'
-    }
-  ];
+  boardsList = [];
 
   private _subscription: Subscription = new Subscription();
 
-  constructor() {
+  constructor(private viewDirection: ViewDirectionService,
+              private translate: TranslateService,) {
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
   }
 
   ngOnInit(): void {
@@ -88,6 +82,23 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     } else {
       this.selectCurrentTime();
     }
+
+    setTimeout(() => {
+      this.boardsList = [
+        {
+          id: 'todo',
+          name: this.getTranslate('tasks.boards.todo')
+        },
+        {
+          id: 'inProgress',
+          name: this.getTranslate('tasks.boards.in_progress')
+        },
+        {
+          id: 'done',
+          name: this.getTranslate('tasks.boards.done')
+        }
+      ]
+    }, 200);
   }
 
   cancelBtn() {
@@ -136,6 +147,10 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
   dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
     this.form.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

@@ -3,6 +3,7 @@ import {ActivityInterface} from './logic/activity-interface';
 import {ApiService} from './logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-activity',
@@ -28,7 +29,8 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService,
+              private translate: TranslateService) {
   }
 
   ngAfterViewInit(): void {
@@ -39,12 +41,12 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
 
       this.single = [
         {
-          "name": "تکمیل شده",
-          "value": this.task.percentage
+          name: this.getTranslate('tasks.activity.completed'),
+          value: this.task.percentage
         },
         {
-          "name": "تکمیل نشده",
-          "value": (100 - this.task.percentage)
+          name: this.getTranslate('tasks.activity.not_completed'),
+          value: (100 - this.task.percentage)
         }
       ];
     });
@@ -60,6 +62,10 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
         })
       );
     });
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

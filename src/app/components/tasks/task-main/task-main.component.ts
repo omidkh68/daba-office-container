@@ -1,4 +1,4 @@
-import {Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MatTabChangeEvent} from '@angular/material/tabs';
@@ -11,7 +11,8 @@ import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
 import {BottomSheetComponent} from '../../bottom-sheet/bottom-sheet.component';
 import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
-import {SoftPhoneCallToActionComponent} from '../../soft-phone/soft-phone-call-to-action/soft-phone-call-to-action.component';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {TranslateService} from '@ngx-translate/core';
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];
@@ -23,9 +24,10 @@ export interface TaskEssentialInfo {
   templateUrl: './task-main.component.html',
   styleUrls: ['./task-main.component.scss']
 })
-export class TaskMainComponent implements OnDestroy {
+export class TaskMainComponent implements AfterViewInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: BottomSheetComponent;
 
+  rtlDirection: boolean;
   taskEssentialInfo: TaskEssentialInfo;
   pushTaskToBoard;
   doResetFilter: boolean = false;
@@ -42,22 +44,33 @@ export class TaskMainComponent implements OnDestroy {
     typeId: 0
   };
   filteredBoardsData: any;
-  tabs = [
-    {
-      name: 'برد',
-      icon: 'view_week',
-      id: 'boards'
-    },
-    {
-      name: 'تقویم',
-      icon: 'event_available',
-      id: 'calendar'
-    }
-  ];
+  tabs = [];
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(public dialog: MatDialog) {
+  constructor(private viewDirection: ViewDirectionService,
+              private translate: TranslateService,
+              public dialog: MatDialog) {
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.tabs = [
+        {
+          name: this.getTranslate('tasks.main.boards'),
+          icon: 'view_week',
+          id: 'boards'
+        },
+        {
+          name: this.getTranslate('tasks.main.calendar'),
+          icon: 'event_available',
+          id: 'calendar'
+        }
+      ];
+    }, 200);
   }
 
   addNewTask() {
@@ -139,6 +152,10 @@ export class TaskMainComponent implements OnDestroy {
 
   openButtonSheet(bottomSheetConfig: BottomSheetInterface) {
     this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

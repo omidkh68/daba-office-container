@@ -14,7 +14,7 @@
 }
 
 %border-dark {
-  border: solid 1px rgba(0, 0, 0, .8);
+  border: solid 1px rgba(60, 60, 60, .8);
 }
 
 %before-light-bg {
@@ -31,7 +31,7 @@
 }
 
 %before-dark-bg {
-  background-color: rgba(0, 0, 0, .8);
+  background-color: rgba(30, 30, 30, .8);
 }
 
 html, body {
@@ -324,6 +324,10 @@ a {
 
 .mat-list-text {
   padding: 0 .5em !important;
+}
+
+.mat-form-field-wrapper {
+  height: 100%;
 }
 
 .mat-form-field-appearance-outline.mat-focused.mat-accent .mat-form-field-outline-thick {

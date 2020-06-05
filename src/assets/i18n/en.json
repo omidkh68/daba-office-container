@@ -9,9 +9,15 @@
     "extension_placeholder": "Extension Number",
     "extension_error": "Please enter extension",
     "submit": "Submit",
+    "dismiss": "Dismiss",
     "active": "Active",
     "deactivate": "Deactivate",
-    "settings": "Settings"
+    "settings": "Settings",
+    "filter": "Filter",
+    "reset_filter": "Reset Filter",
+    "no_result": "No Result",
+    "minutes": "Minutes",
+    "hours": "Hours"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -21,7 +27,9 @@
   },
   "status": {
     "stop_status": "Stop Current Status",
-    "apply_status": "Apply Status"
+    "apply_status": "Apply Status",
+    "status_description": "Status Description",
+    "status_description_error": "Please explain about status"
   },
   "soft_phone": {
     "main": {
@@ -42,6 +50,57 @@
     "soft_phone_contacts": {
       "new_contact": "New Contact",
       "add_new_contact": "Add New Contact"
+    }
+  },
+  "tasks": {
+    "main": {
+      "add_new_task": "Add New Task",
+      "boards": "Boards",
+      "calendar": "Calendar"
+    },
+    "form": {
+      "task_name": "Task Name",
+      "task_name_error": "Please enter task name",
+      "task_status": "Task Status",
+      "task_status_error": "Please choose task status",
+      "task_project": "Project",
+      "task_project_error": "Please choose project",
+      "assign_to": "Task assign to",
+      "assign_to_error": "Please choose task assign to",
+      "task_durationHours": "Task duration hour",
+      "task_durationHours_error": "Please enter task duration in hour",
+      "task_durationMinutes": "Task duration minute",
+      "start_at": "Start Date",
+      "start_at_error": "Please choose start date",
+      "stop_at": "Stop Date",
+      "stop_at_error": "Please choose end date",
+      "start_time": "Start Time",
+      "start_time_error": "Please choose start time",
+      "stop_time": "End Time",
+      "stop_time_error": "Please choose end time",
+      "task_description": "Task Description",
+      "trackable_by_mobile": "Trackable by mobile"
+    },
+    "activity": {
+      "activity_list": "Activity List",
+      "task_completion_percentage": "Task Completion Percentage",
+      "completed": "Completed",
+      "not_completed": "Not Completed"
+    },
+    "boards": {
+      "task_percentage": "Task Percentage",
+      "todo": "Todo",
+      "in_progress": "In Progress",
+      "done": "Done"
+    },
+    "task_stop": {
+      "stop_description": "Explain about stopped task",
+      "description": "Task Description",
+      "description_error": "Please enter task description"
+    },
+    "task_detail": {
+      "overview": "Overview",
+      "reports": "Reports"
     }
   }
 }

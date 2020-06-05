@@ -1,5 +1,5 @@
 import * as io from 'socket.io-client';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -7,7 +7,6 @@ import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {ApiService} from '../logic/api.service';
-import {AppConfig} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-task-calendar',
@@ -15,6 +14,9 @@ import {AppConfig} from '../../../../environments/environment';
   styleUrls: ['./task-calendar.component.scss']
 })
 export class TaskCalendarComponent implements OnInit, OnDestroy {
+  @Input()
+  rtlDirection: boolean;
+
   calendarPlugins = [dayGridPlugin];
   tasks: TaskInterface[] = [];
   usersList: UserInterface[] = [];

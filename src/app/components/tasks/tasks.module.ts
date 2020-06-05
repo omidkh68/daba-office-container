@@ -11,14 +11,12 @@ import {TaskTodoComponent} from './task-todo/task-todo.component';
 import {TaskFormComponent} from './task-form/task-form.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import {TaskBoardComponent} from './task-board/task-board.component';
-/*import {TaskNotesComponent} from './task-notes/task-notes.component';*/
 import {TaskFilesComponent} from './task-files/task-files.component';
 import {TaskFilterComponent} from './task-filter/task-filter.component';
 import {TaskDetailComponent} from './task-detail/task-detail.component';
 import {TaskReportComponent} from './task-report/task-report.component';
 import {TaskWindowComponent} from './task-window/task-window.component';
 import {TaskCurrentComponent} from './task-current/task-current.component';
-/*import {TaskMessagesComponent} from './task-messages/task-messages.component';*/
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
 import {TaskActivityComponent} from './task-activity/task-activity.component';
 
@@ -30,13 +28,11 @@ import {TaskActivityComponent} from './task-activity/task-activity.component';
     TaskFormComponent,
     TaskTodoComponent,
     TaskBoardComponent,
-    /*TaskNotesComponent,*/
     TaskFilesComponent,
     TaskDetailComponent,
     TaskFilterComponent,
     TaskReportComponent,
     TaskWindowComponent,
-    /*TaskMessagesComponent,*/
     TaskCurrentComponent,
     TaskCalendarComponent,
     TaskActivityComponent

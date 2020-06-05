@@ -18,7 +18,7 @@ export class JalaliPipe implements PipeTransform, OnDestroy {
   }
 
   transform(value: string, ...args: unknown[]): string {
-    if (this.viewDirection) {
+    if (this.rtlDirection) {
       if (jalaliMoment(value, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') === value) {
         return jalaliMoment(value, 'YYYY-MM-DD HH:mm:ss').locale('fa').format('YYYY/MM/DD HH:mm:ss');
       } else if (jalaliMoment(value, 'YYYY-MM-DD').format('YYYY-MM-DD') === value) {

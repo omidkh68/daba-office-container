@@ -27,7 +27,7 @@
               </mat-icon>
             </mat-card-content>
             <mat-card-footer class="mat-card-footer text-center text-weight-bold">
-              {{status.statusNameFa}}
+              {{rtlDirection ? status.statusNameFa : status.statusNameEn}}
             </mat-card-footer>
           </mat-card>
         </mat-grid-tile>
@@ -35,10 +35,11 @@
 
       <div *ngIf="form.get('status').value.statusId === 9" class="margin-b-half">
         <mat-form-field class="full-width font-9-em">
-          <mat-label>توضیح وضعیت</mat-label>
-          <textarea matInput formControlName="description" placeholder="در مورد وضعیت دلخواه بنویس"></textarea>
+          <mat-label>{{'status.status_description' | translate}}</mat-label>
+          <textarea matInput formControlName="description"
+                    placeholder="{{'status.status_description_error' | translate}}"></textarea>
           <mat-error *ngIf="!form.get('description').valid && form.get('description').touched">
-            لطفا توضیح در مورد وضعیت را پر نمایید
+            {{'status.status_description_error' | translate}}
           </mat-error>
         </mat-form-field>
       </div>
@@ -46,7 +47,7 @@
 
     <div class="dialog-buttons height-30 float-right full-width" dir="rtl">
       <button [disabled]="!form.valid" type="submit" mat-raised-button class="green-gradient text-white full-width">
-        اعمال وضعیت
+        {{'status.apply_status' | translate}}
       </button>
     </div>
   </form>

@@ -8,12 +8,14 @@ import {ApiService} from '../logic/api.service';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
 
 @Component({
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
+  rtlDirection: boolean;
   user: UserInterface;
   editable: boolean = false;
   task: TaskInterface;
@@ -26,11 +28,16 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService,
               private _fb: FormBuilder,
+              private viewDirection: ViewDirectionService,
               private userInfoService: UserInfoService,
               public bottomSheetRef: MatBottomSheetRef<TaskDetailComponent>,
               @Inject(MAT_BOTTOM_SHEET_DATA) public data: TaskDataInterface) {
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
+    );
+
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
 
     this.usersList = this.data.usersList;
@@ -40,7 +47,9 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.createForm().then(() => {
-      this.formPatchValue();
+      if (this.data.action === 'detail') {
+        this.formPatchValue();
+      }
     });
   }
 

@@ -10,6 +10,7 @@ import {ApiService as StatusApiService} from '../logic/api.service';
 import {MessageService} from '../../../services/message.service';
 import {ChangeStatusService} from '../services/change-status.service';
 import {TranslateService} from '@ngx-translate/core';
+import {ViewDirectionService} from '../../../services/view-direction.service';
 
 @Component({
   selector: 'app-change-status',
@@ -17,6 +18,7 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrls: ['./change-status.component.scss']
 })
 export class ChangeStatusComponent implements OnInit, OnDestroy {
+  rtlDirection: boolean;
   form: FormGroup;
   currentUserStatus: UserStatusInterface | string;
   statusList: StatusInterface[];
@@ -24,6 +26,7 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private userStatusService: ChangeStatusService,
+              private viewDirection: ViewDirectionService,
               private userApiService: UserApiService,
               private messageService: MessageService,
               private statusApiService: StatusApiService,
@@ -31,6 +34,9 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
               private translate: TranslateService,
               public dialogRef: MatDialogRef<ChangeStatusComponent>,
               @Inject(MAT_DIALOG_DATA) public data) {
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
   }
 
   async ngOnInit() {
