@@ -1,8 +1,8 @@
-<div class="full-page-size overflow-hide" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<div *ngIf="data" class="full-page-size overflow-hide" [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <div class="task-heading clear-both full-width height-45 display-flex flex-space-between">
     <h1
       class="no-margin height-45 line-height-45 font-full-plus-one-tenth-em text-eclipse padding-r-l text-pink-600 text-weight-500">
-      <span class="text-gray-700">#{{form.get('taskId').value}}</span> {{form.get('taskName').value}}
+      <span class="text-gray-700">#{{task.taskId}}</span> {{task.taskName}}
     </h1>
 
     <div class="task-detail-view-switcher pos-abs right-0 left-0 margin-auto width-150 height-45">
@@ -41,8 +41,9 @@
     </div>
   </div>
 
-  <div class="full-width full-height" *ngIf="viewModeTypes === 'info'; else reportView">
-    <div *ngIf="form" class="task-form-container display-flex padding-full overflow-hide pos-rel">
+  <div class="full-width height-full-minus-45" *ngIf="viewModeTypes === 'info'; else reportView">
+    <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+         class="task-form-container height-full-minus-155 padding-full overflow-hide pos-rel">
       <app-task-form
         (cancel)="cancelBtn($event)"
         (formOutput)="updateForm($event)"
@@ -51,23 +52,24 @@
         [editable]="editable"></app-task-form>
     </div>
 
-    <div class="task-todo-container padding-r-l padding-mini-t-b pos-rel">
-      <app-task-todo [taskId]="task.taskId"></app-task-todo>
+    <div [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
+         class="task-todo-container height-full-minus-155 padding-r-l padding-mini-t-b pos-rel">
+      <app-task-todo [rtlDirection]="rtlDirection" [taskId]="task.taskId"></app-task-todo>
     </div>
 
     <div class="task-file-container padding-r-l padding-mini-t-b clear-both full-width pos-rel">
-      <app-task-files></app-task-files>
+      <app-task-files [rtlDirection]="rtlDirection"></app-task-files>
     </div>
   </div>
 
   <ng-template #reportView>
-    <div class="full-width full-height">
-      <div class="task-report-container padding-r-l padding-mini-t-b float-right pos-rel">
-        <app-task-report [taskId]="task.taskId" [usersList]="usersList"></app-task-report>
+    <div *ngIf="task" class="full-width full-height">
+      <div class="task-report-container padding-r-l padding-mini-t-b full-height float-right pos-rel">
+        <app-task-report [rtlDirection]="rtlDirection" [taskId]="task.taskId" [usersList]="usersList"></app-task-report>
       </div>
 
-      <div class="task-activity-container height-full-minus-45 padding-r-l padding-mini-t-b float-left pos-rel">
-        <app-task-activity [task]="task"></app-task-activity>
+      <div class="task-activity-container full-height padding-r-l padding-mini-t-b float-left pos-rel">
+        <app-task-activity [rtlDirection]="rtlDirection" [task]="task"></app-task-activity>
       </div>
     </div>
   </ng-template>

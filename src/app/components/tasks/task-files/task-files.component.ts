@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ApiService} from './logic/api.service';
 import {HttpClient} from '@angular/common/http';
 
@@ -7,6 +7,9 @@ import {HttpClient} from '@angular/common/http';
   templateUrl: './task-files.component.html'
 })
 export class TaskFilesComponent implements OnInit {
+  @Input()
+  rtlDirection: boolean;
+
   adapter = new ApiService(this._http);
   fileUploaderCaption = {
     dropzone: {

@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
-import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 
 export interface KeysInterface {
   num: string;
@@ -17,7 +17,7 @@ export interface KeysInterface {
 })
 export class SoftPhoneKeypadComponent implements OnInit {
   @Output()
-  triggerBottomSheet: EventEmitter<BottomSheetInterface> = new EventEmitter<BottomSheetInterface>();
+  triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
   @Input()
   rtlDirection: boolean;

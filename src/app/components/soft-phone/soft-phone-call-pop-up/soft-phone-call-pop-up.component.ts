@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
-import {UserInterface} from '../../users/logic/user-interface';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {ViewDirectionService} from '../../../services/view-direction.service';
-import {NotificationService} from '../../../services/notification.service';
+import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {NotificationService} from '../../../services/notification.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 
 export interface KeysInterface {
   num: string;
@@ -17,7 +17,7 @@ export interface KeysInterface {
 })
 export class SoftPhoneCallPopUpComponent implements OnInit {
   rtlDirection;
-  bottomSheetData: BottomSheetInterface;
+  bottomSheetData: SoftPhoneBottomSheetInterface;
   data: any;
   loggedInUser: UserInterface;
 

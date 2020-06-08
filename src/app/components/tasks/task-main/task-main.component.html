@@ -41,6 +41,7 @@
                         [filterBoards]="filteredBoardsData"
                         [refreshData]="refreshBoardData"
                         [pushTaskToBoard]="pushTaskToBoard"
+                        (triggerBottomSheet)="openButtonSheet($event)"
                         (pushTaskEssentialInfo)="getTaskEssentialInfo($event)"></app-task-board>
       </div>
       <!--/ end of boards container -->
@@ -69,5 +70,5 @@
     <app-task-current [taskEssentialInfo]="taskEssentialInfo" (pushTaskToBoard)="getTaskToBoardData($event)"></app-task-current>
   </div>
 
-  <app-bottom-sheet #bottomSheet></app-bottom-sheet>
+  <app-task-bottom-sheet #bottomSheet></app-task-bottom-sheet>
 </div>

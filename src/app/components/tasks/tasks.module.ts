@@ -19,6 +19,7 @@ import {TaskWindowComponent} from './task-window/task-window.component';
 import {TaskCurrentComponent} from './task-current/task-current.component';
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
 import {TaskActivityComponent} from './task-activity/task-activity.component';
+import {TaskBottomSheetComponent} from './task-bottom-sheet/task-bottom-sheet.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {TaskActivityComponent} from './task-activity/task-activity.component';
     TaskWindowComponent,
     TaskCurrentComponent,
     TaskCalendarComponent,
-    TaskActivityComponent
+    TaskActivityComponent,
+    TaskBottomSheetComponent
   ],
   imports: [
     CommonModule,

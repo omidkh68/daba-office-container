@@ -1,13 +1,16 @@
-<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height padding-full">
-  <h1 class="margin-b-full text-gray-800 text-right font-full-em text-weight-500 no-margin height-45">
-    لیست انجام کار <span class="text-gray-500 font-7-em text-italic margin-r-half">
-  {{todoList.length ? todoList.length + ' مورد' : ''}}
-</span>
+<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height padding-full"
+     [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 no-margin height-45">
+    لیست انجام کار
+    <span [ngClass]="rtlDirection ? 'margin-r-half' : 'margin-l-half'"
+          class="text-gray-500 font-7-em text-italic">
+      {{todoList.length ? todoList.length + 'tasks.task_todo.items' : '' | translate}}
+    </span>
   </h1>
   <div class="todo-content-container">
     <form [formGroup]="form">
       <div *ngIf="todoList.length" class="todo-list-container overflow-y-auto overflow-x-hide padding-b-full">
-        <mat-list dir="rtl" class="no-padding">
+        <mat-list class="no-padding">
           <mat-list-item *ngFor="let todoItem of todoList"
                          (click)="checkTodo(todoItem)"
                          [ngClass]="todoItem.isChecked ? 'text-green-200' : 'text-gray-700'"
@@ -22,15 +25,16 @@
             <div mat-line class="text-italic font-7-em">{{todoItem.creationDate | jalali}}</div>
 
             <button
-              class="display-block cursor-pointer width-18 height-18 text-center margin-l-half no-padding no-border no-bg"
+              [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+              class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
               (click)="$event.stopPropagation(); updateTodo(todoItem)">
-              <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-em text-green-600">edit</mat-icon>
+              <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-green-600">edit</mat-icon>
             </button>
 
             <button
               class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
               (click)="$event.stopPropagation(); deleteTodo(todoItem)">
-              <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-em text-red-600">close</mat-icon>
+              <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-red-600">close</mat-icon>
             </button>
           </mat-list-item>
         </mat-list>
@@ -38,7 +42,7 @@
 
       <div class="enter-todo-container margin-t-full">
         <div formGroupName="todo">
-          <mat-form-field appearance="outline" class="full-width height-45" dir="rtl" color="primary">
+          <mat-form-field appearance="outline" class="full-width height-45 font-9-em" color="primary">
             <input matInput formControlName="text"
                    placeholder="یک مورد اضافه کن"
                    name="inputValue"

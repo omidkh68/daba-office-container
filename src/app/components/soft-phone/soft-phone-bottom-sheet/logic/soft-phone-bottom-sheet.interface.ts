@@ -1,6 +1,6 @@
 import {Type} from '@angular/core';
 
-export interface BottomSheetInterface {
+export interface SoftPhoneBottomSheetInterface {
   bottomSheetRef?;
   component: Type<any>;
   height: string;

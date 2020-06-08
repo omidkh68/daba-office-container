@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {UserInterface} from '../../users/logic/user-interface';
-import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
-import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 
 @Component({
   selector: 'app-soft-phone-information',
@@ -11,7 +11,7 @@ import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 })
 export class SoftPhoneInformationComponent {
   @Output()
-  triggerBottomSheet: EventEmitter<BottomSheetInterface> = new EventEmitter<BottomSheetInterface>();
+  triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
   @Input()
   rtlDirection: boolean;

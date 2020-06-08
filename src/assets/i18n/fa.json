@@ -101,6 +101,9 @@
     "task_detail": {
       "overview": "اطلاعات کلی",
       "reports": "گزارشات"
+    },
+    "task_todo": {
+      "items": "مورد"
     }
   }
 }

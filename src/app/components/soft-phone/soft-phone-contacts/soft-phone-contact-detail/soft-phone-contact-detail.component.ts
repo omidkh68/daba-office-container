@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {BottomSheetInterface} from '../../../bottom-sheet/logic/bottomSheet.interface';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
+import {SoftPhoneBottomSheetInterface} from '../../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 
 @Component({
   selector: 'app-soft-phone-contact-detail',
@@ -11,7 +11,7 @@ import {ViewDirectionService} from '../../../../services/view-direction.service'
 })
 export class SoftPhoneContactDetailComponent implements OnInit, OnDestroy {
   rtlDirection;
-  bottomSheetData: BottomSheetInterface;
+  bottomSheetData: SoftPhoneBottomSheetInterface;
   form: FormGroup;
   data;
 

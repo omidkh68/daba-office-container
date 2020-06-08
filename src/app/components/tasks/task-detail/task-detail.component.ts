@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskInterface} from '../logic/task-interface';
@@ -9,29 +9,32 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 @Component({
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
-export class TaskDetailComponent implements OnInit, OnDestroy {
+export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   rtlDirection: boolean;
-  user: UserInterface;
+  user: UserInterface = null;
   editable: boolean = false;
-  task: TaskInterface;
+  task: TaskInterface = null;
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
   form: FormGroup;
   viewModeTypes = 'info';
+  bottomSheetData: TaskBottomSheetInterface;
+  data: any;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
               private _fb: FormBuilder,
-              private viewDirection: ViewDirectionService,
+              // public bottomSheetRef: MatBottomSheetRef<TaskDetailComponent>,
               private userInfoService: UserInfoService,
-              public bottomSheetRef: MatBottomSheetRef<TaskDetailComponent>,
-              @Inject(MAT_BOTTOM_SHEET_DATA) public data: TaskDataInterface) {
+              private viewDirection: ViewDirectionService
+              /* @Inject(MAT_BOTTOM_SHEET_DATA) public data: TaskDataInterface*/) {
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
     );
@@ -39,14 +42,22 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
-
-    this.usersList = this.data.usersList;
-    this.projectsList = this.data.projectsList;
-    this.task = this.data.task;
   }
 
   ngOnInit(): void {
+    this.data = this.bottomSheetData.data;
+
+    // this.usersList = this.data.usersList;
+    this.usersList = this.data.usersList;
+    // this.projectsList = this.data.projectsList;
+    this.projectsList = this.data.projectsList;
+    // this.task = this.data.task;
+    this.task = this.data.task;
+  }
+
+  ngAfterViewInit(): void {
     this.createForm().then(() => {
+      // if (this.data.action === 'detail') {
       if (this.data.action === 'detail') {
         this.formPatchValue();
       }
@@ -89,14 +100,17 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     this.form.disable();
 
     if (event) {
+      // if (this.data.action === 'detail') {
       if (this.data.action === 'detail') {
         if (this.editable) {
           this.formPatchValue();
         } else {
-          this.bottomSheetRef.dismiss(false);
+          // this.bottomSheetRef.dismiss(false);
+          this.bottomSheetData.bottomSheetRef.close();
         }
       } else {
-        this.bottomSheetRef.dismiss(false);
+        // this.bottomSheetRef.dismiss(false);
+        this.bottomSheetData.bottomSheetRef.close();
       }
     }
   }
@@ -141,6 +155,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
       stopTime: stopTime,
       project: selectedProject,
       taskDesc: this.task.taskDesc,
+      // boardStatus: this.data.boardStatus,
       boardStatus: this.data.boardStatus,
       taskDateStart: this.task.taskDateStart,
       taskDateStop: this.task.taskDateStop,
@@ -152,7 +167,8 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   deleteTask() {
     this._subscription.add(
       this.api.deleteTask(this.task).subscribe((resp: any) => {
-        this.bottomSheetRef.dismiss(true);
+        // this.bottomSheetRef.dismiss(true);
+        this.bottomSheetData.bottomSheetRef.close();
       })
     );
   }
@@ -176,7 +192,8 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
         };
 
         if (resp.result === 1) {
-          this.bottomSheetRef.dismiss(data);
+          // this.bottomSheetRef.dismiss(data);
+          this.bottomSheetData.bottomSheetRef.close();
         } else {
           this.form.enable();
         }

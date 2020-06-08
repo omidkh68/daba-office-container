@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
 import {UserInterface} from '../../users/logic/user-interface';
-import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
-import {BottomSheetComponent} from '../../bottom-sheet/bottom-sheet.component';
+import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
+import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 import {SoftPhoneContactDetailComponent} from './soft-phone-contact-detail/soft-phone-contact-detail.component';
 
 @Component({
@@ -12,10 +12,10 @@ import {SoftPhoneContactDetailComponent} from './soft-phone-contact-detail/soft-
   styleUrls: ['./soft-phone-contacts.component.scss']
 })
 export class SoftPhoneContactsComponent implements OnInit {
-  @ViewChild('bottomSheet', {static: false}) bottomSheet: BottomSheetComponent;
+  @ViewChild('bottomSheet', {static: false}) bottomSheet: SoftPhoneBottomSheetComponent;
 
   @Output()
-  triggerBottomSheet: EventEmitter<BottomSheetInterface> = new EventEmitter<BottomSheetInterface>();
+  triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
   @Input()
   rtlDirection: boolean;

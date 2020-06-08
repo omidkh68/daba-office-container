@@ -24,6 +24,9 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   (MatPaginator, {static: true}) paginator: MatPaginator;
 
   @Input()
+  rtlDirection: boolean;
+
+  @Input()
   taskId: number = 0;
 
   @Input()

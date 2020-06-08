@@ -101,6 +101,9 @@
     "task_detail": {
       "overview": "Overview",
       "reports": "Reports"
+    },
+    "task_todo": {
+      "items": "Items"
     }
   }
 }

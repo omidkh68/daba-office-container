@@ -5,12 +5,12 @@ import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {NotificationService} from '../../../services/notification.service';
-import {BottomSheetComponent} from '../../bottom-sheet/bottom-sheet.component';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
 import {SoftPhoneUsersService} from '../service/soft-phone-users.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
+import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 
 @Component({
   selector: 'app-soft-phone-main',
@@ -18,7 +18,7 @@ import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-
   styleUrls: ['./soft-phone-main.component.scss']
 })
 export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('bottomSheet', {static: false}) bottomSheet: BottomSheetComponent;
+  @ViewChild('bottomSheet', {static: false}) bottomSheet: SoftPhoneBottomSheetComponent;
 
   loggedInUser: UserInterface;
   rtlDirection: boolean;
@@ -151,7 +151,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
     this._subscription.add(
       this.notificationService.currentNotification.subscribe(notification => {
         if (notification) {
-          const bottomSheetConfig: BottomSheetInterface = {
+          const bottomSheetConfig: SoftPhoneBottomSheetInterface = {
             component: SoftPhoneCallPopUpComponent,
             height: '100%',
             width: '100%',
@@ -206,7 +206,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
     this.activeTab = event.index;
   }
 
-  openButtonSheet(bottomSheetConfig: BottomSheetInterface) {
+  openButtonSheet(bottomSheetConfig: SoftPhoneBottomSheetInterface) {
     bottomSheetConfig.bottomSheetRef = this.bottomSheet;
 
     this.bottomSheet.toggleBottomSheet(bottomSheetConfig);

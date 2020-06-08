@@ -20,7 +20,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   @Input()
-  data: TaskDataInterface;
+  data: TaskDataInterface = null;
 
   @Input()
   editable: boolean;
@@ -32,7 +32,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   formOutput = new EventEmitter();
 
   rtlDirection: boolean;
-  task: TaskInterface;
+  task: TaskInterface = null;
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
   durationMinute: Array<number> = [0, 15, 30, 45];

@@ -1,5 +1,5 @@
-<form [formGroup]="form" (submit)="submit()" class="full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <div class="dialog-content-container full-width">
+<form *ngIf="form" [formGroup]="form" (submit)="submit()" class="full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <div class="dialog-content-container height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
     <h1 *ngIf="data.action !== 'detail'"
         class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
       {{'tasks.main.add_new_task' | translate}}
@@ -199,7 +199,7 @@
     </div>
   </div>
 
-  <div class="dialog-buttons height-30 display-flex justify-content-end full-width display-flex justify-content-end">
+  <div class="dialog-buttons height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
     <button *ngIf="editable || data.action !== 'detail'"
             (click)="cancelBtn()"
             type="button"

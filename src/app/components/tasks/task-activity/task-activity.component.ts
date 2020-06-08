@@ -14,6 +14,9 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
   @Input()
   task: TaskInterface;
 
+  @Input()
+  rtlDirection: boolean;
+
   activityList: Array<ActivityInterface> = [];
 
   single = [];

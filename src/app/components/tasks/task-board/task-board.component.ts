@@ -7,14 +7,15 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {TaskInterface} from '../logic/task-interface';
 import {BoardInterface} from '../logic/board-interface';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {ProjectInterface} from '../../projects/logic/project-interface';
-import {TaskDataInterface} from '../logic/task-data-interface';
-import {TaskStopComponent} from '../task-stop/task-stop.component';
-import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {SocketioService} from '../../../services/socketio.service';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {CurrentTaskService} from '../services/current-task.service';
+import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
+import {TaskDataInterface} from '../logic/task-data-interface';
+import {TaskStopComponent} from '../task-stop/task-stop.component';
+import {CurrentTaskService} from '../services/current-task.service';
+import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 @Component({
   selector: 'app-task-board',
@@ -22,6 +23,9 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrls: ['./task-board.component.scss']
 })
 export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
+  @Output()
+  triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
+
   @Output()
   pushTaskEssentialInfo = new EventEmitter();
 
@@ -175,7 +179,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       boardStatus: boardStatus
     };
 
-    const bottomSheetRef = this.bottomSheet.open(TaskDetailComponent, {
+    /*const bottomSheetRef = this.bottomSheet.open(TaskDetailComponent, {
       data: data,
       autoFocus: false
     });
@@ -188,7 +192,14 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
           // this.socket.emit('updatedata');
         }
       })
-    );
+    );*/
+
+    this.triggerBottomSheet.emit({
+      component: TaskDetailComponent,
+      height: '90%',
+      width: '95%',
+      data: data
+    });
   }
 
   getBoards() {

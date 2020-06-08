@@ -1,18 +1,18 @@
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MatTabChangeEvent} from '@angular/material/tabs';
-import {ProjectInterface} from '../../projects/logic/project-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {FilterInterface} from '../logic/filter-interface';
-import {TaskDataInterface} from '../logic/task-data-interface';
+import {ProjectInterface} from '../../projects/logic/project-interface';
+import {TranslateService} from '@ngx-translate/core';
 import {TaskAddComponent} from '../task-add/task-add.component';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {TaskDataInterface} from '../logic/task-data-interface';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
-import {BottomSheetComponent} from '../../bottom-sheet/bottom-sheet.component';
-import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {TranslateService} from '@ngx-translate/core';
+import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];
@@ -25,7 +25,7 @@ export interface TaskEssentialInfo {
   styleUrls: ['./task-main.component.scss']
 })
 export class TaskMainComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('bottomSheet', {static: false}) bottomSheet: BottomSheetComponent;
+  @ViewChild('bottomSheet', {static: false}) bottomSheet: TaskBottomSheetComponent;
 
   rtlDirection: boolean;
   taskEssentialInfo: TaskEssentialInfo;
@@ -150,7 +150,9 @@ export class TaskMainComponent implements AfterViewInit, OnDestroy {
     }, 200);
   }
 
-  openButtonSheet(bottomSheetConfig: BottomSheetInterface) {
+  openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {
+    bottomSheetConfig.bottomSheetRef = this.bottomSheet;
+
     this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
   }
 

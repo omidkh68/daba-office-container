@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {WindowInterface} from '../../dashboard/logic/window.interface';
-import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {WindowInterface} from '../../dashboard/logic/window.interface';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
 
 @Component({
   selector: 'app-soft-phone-window',

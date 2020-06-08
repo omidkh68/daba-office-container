@@ -4,7 +4,7 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interface';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 
 @Component({
   selector: 'app-soft-phone-call-to-action',
@@ -13,7 +13,7 @@ import {BottomSheetInterface} from '../../bottom-sheet/logic/bottomSheet.interfa
 })
 export class SoftPhoneCallToActionComponent implements OnInit, OnDestroy {
   rtlDirection;
-  bottomSheetData: BottomSheetInterface;
+  bottomSheetData: SoftPhoneBottomSheetInterface;
   data: any;
   loggedInUser: UserInterface;
 

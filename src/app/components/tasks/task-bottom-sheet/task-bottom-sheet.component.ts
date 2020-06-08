@@ -1,20 +1,12 @@
-import {
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  Input,
-  Renderer2, Type,
-  ViewChild,
-  ViewContainerRef
-} from '@angular/core';
-import {BottomSheetInterface} from './logic/bottomSheet.interface';
+import {Component, ComponentFactoryResolver, ElementRef, Renderer2, ViewChild, ViewContainerRef} from '@angular/core';
+import {TaskBottomSheetInterface} from './logic/TaskBottomSheet.interface';
 
 @Component({
-  selector: 'app-bottom-sheet',
-  templateUrl: './bottom-sheet.component.html',
-  styleUrls: ['./bottom-sheet.component.scss']
+  selector: 'app-task-bottom-sheet',
+  templateUrl: './task-bottom-sheet.component.html',
+  styleUrls: ['./task-bottom-sheet.component.scss']
 })
-export class BottomSheetComponent {
+export class TaskBottomSheetComponent {
   @ViewChild('oBottomSheet') oBottomSheet: ElementRef;
   @ViewChild('container', {read: ViewContainerRef}) container;
 
@@ -22,7 +14,7 @@ export class BottomSheetComponent {
               private cfr: ComponentFactoryResolver) {
   }
 
-  toggleBottomSheet(bottomSheetConfig: BottomSheetInterface, toggle: boolean = true) {
+  toggleBottomSheet(bottomSheetConfig: TaskBottomSheetInterface, toggle: boolean = true) {
     this.container.clear();
 
     const parentNode = this.oBottomSheet.nativeElement.parentNode.parentNode;

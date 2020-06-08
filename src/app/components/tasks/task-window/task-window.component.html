@@ -1,5 +1,6 @@
-<div class="pos-abs left-0 right-0 bottom-0 top-0 full-width" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <div (click)="activeWindow()" (dblclick)="!windowInstance.isMaximized ? maximize() : restore()" class="window-heading full-width height-45 padding-half display-flex">
+<div class="pos-abs left-0 right-0 bottom-0 top-0 full-width z-index-99" [dir]="rtlDirection ? 'rtl' : 'ltr'" cdkDragHandle>
+  <div (click)="activeWindow()" (dblclick)="!windowInstance.isMaximized ? maximize() : restore()"
+       class="window-heading full-width height-45 padding-half display-flex">
     <ng-template [ngIf]="windowInstance.isDraggable" [ngIfElse]="notDraggableHeading">
       <h3 (cdkDragStarted)="activeWindow()" cdkDrag
           cdkDragRootElement=".cdk-overlay-pane"

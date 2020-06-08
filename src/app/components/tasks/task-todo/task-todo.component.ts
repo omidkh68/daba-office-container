@@ -15,6 +15,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   @Input()
   taskId: number = 0;
 
+  @Input()
+  rtlDirection: boolean;
+
   form: FormGroup;
   edit: boolean = false;
   user: UserInterface;
