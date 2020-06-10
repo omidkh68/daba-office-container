@@ -17,7 +17,14 @@
     "reset_filter": "Reset Filter",
     "no_result": "No Result",
     "minutes": "Minutes",
-    "hours": "Hours"
+    "hours": "Hours",
+    "pagination": {
+      "item_per_page": "Item per page",
+      "from": "from"
+    },
+    "from_date": "From Date",
+    "to_date": "To Date",
+    "date_error": "Please choose date"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -79,7 +86,9 @@
       "stop_time": "End Time",
       "stop_time_error": "Please choose end time",
       "task_description": "Task Description",
-      "trackable_by_mobile": "Trackable by mobile"
+      "trackable_by_mobile": "Trackable by mobile",
+      "task_admin_start": "Task start user",
+      "task_admin_stop": "Task stop user"
     },
     "activity": {
       "activity_list": "Activity List",
@@ -103,7 +112,29 @@
       "reports": "Reports"
     },
     "task_todo": {
-      "items": "Items"
+      "todo_list": "Todo List",
+      "items": "Items",
+      "add_an_item": "Add an item"
+    },
+    "task_files": {
+      "file_manager": "File Manager",
+      "drop_files_here": "Drop files here",
+      "or": "Or",
+      "click_here": "Click here"
+    },
+    "task_filter": {
+      "all": "All",
+      "tasks_filter": "Task Filter",
+      "filter_types": "Filter types",
+      "by_create_date": "Based on task creation date",
+      "by_project":"Based on project name",
+      "by_user": "Based on task assigned to",
+      "by_start_date":"Based on task start date",
+      "by_stop_date": "Based on task due date",
+      "by_user_start_date":"Based on user started date",
+      "by_user_stop_date": "Based on user completed date",
+      "by_started_task":"Based on started tasks",
+      "by_postponed": "Based on postponed tasks"
     }
   }
 }

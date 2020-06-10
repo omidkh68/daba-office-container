@@ -9,6 +9,8 @@ import {ProjectInterface} from '../../projects/logic/project-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {ApiService} from '../logic/api.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {TranslateService} from '@ngx-translate/core';
 
 export interface filterType {
   index: number;
@@ -21,6 +23,7 @@ export interface filterType {
   templateUrl: './task-filter.component.html'
 })
 export class TaskFilterComponent implements OnInit, OnDestroy {
+  rtlDirection: boolean;
   filterData: FilterInterface = {
     userId: 0,
     adminId: 0,
@@ -38,78 +41,65 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
     {
       index: 0,
       typeName: 'byCreateDate',
-      textName: 'بر اساس تاریخ ایجاد تسک'
+      textName: 'tasks.task_filter.by_create_date'
     },
     {
       index: 1,
       typeName: 'byProject',
-      textName: 'بر اساس نام پروژه'
+      textName: 'tasks.task_filter.by_project'
     },
     {
       index: 2,
       typeName: 'byUser',
-      textName: 'بر اساس کاربر مورد نظر'
+      textName: 'tasks.task_filter.by_user'
     },
     {
       index: 3,
       typeName: 'byStartDate',
-      textName: 'بر اساس تاریخ شروع تسک'
+      textName: 'tasks.task_filter.by_start_date'
     },
     {
       index: 4,
       typeName: 'byStopDate',
-      textName: 'بر اساس تاریخ اتمام تسک'
+      textName: 'tasks.task_filter.by_stop_date'
     },
     {
       index: 5,
       typeName: 'byUserStartDate',
-      textName: 'بر اساس تاریخ شروع کاربر'
+      textName: 'tasks.task_filter.by_user_start_date'
     },
     {
       index: 6,
       typeName: 'byUserStopDate',
-      textName: 'بر اساس تاریخ اتمام کاربر'
+      textName: 'tasks.task_filter.by_user_stop_date'
     },
     {
       index: 7,
       typeName: 'byStartedTask',
-      textName: 'بر اساس تسک های شروع شده'
+      textName: 'tasks.task_filter.by_started_task'
     },
     {
       index: 8,
       typeName: 'byPostponed',
-      textName: 'بر اساس تسک های به تعویق افتاده'
+      textName: 'tasks.task_filter.by_postponed'
     }
   ];
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private viewDirection: ViewDirectionService,
               private _fb: FormBuilder,
+              private translate: TranslateService,
               public dialogRef: MatDialogRef<TaskFilterComponent>,
               @Inject(MAT_DIALOG_DATA) public data: FilterTaskInterface) {
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
+
     this.usersList = this.data.usersList;
     this.projectsList = this.data.projectsList;
     this.filterData = this.data.filterData;
-
-    const userIdExistIndex = this.usersList.findIndex(user => user.adminId === 0);
-
-    if (userIdExistIndex === -1) {
-      this.usersList.splice(0, 0, {
-        adminId: 0,
-        name: 'همه',
-        family: ''
-      });
-    }
-
-    const projectIdExistIndex = this.projectsList.findIndex(project => project.projectId === 0);
-
-    if (projectIdExistIndex === -1) {
-      this.projectsList.splice(0, 0, {
-        projectId: 0,
-        projectName: 'همه'
-      });
-    }
   }
 
   ngOnInit(): void {
@@ -129,6 +119,27 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         this.checkFormValidation();
       }, 1000);
     });
+
+    setTimeout(() => {
+      const userIdExistIndex = this.usersList.findIndex(user => user.adminId === 0);
+
+      if (userIdExistIndex === -1) {
+        this.usersList.splice(0, 0, {
+          adminId: 0,
+          name: this.getTranslate('tasks.task_filter.all'),
+          family: ''
+        });
+      }
+
+      const projectIdExistIndex = this.projectsList.findIndex(project => project.projectId === 0);
+
+      if (projectIdExistIndex === -1) {
+        this.projectsList.splice(0, 0, {
+          projectId: 0,
+          projectName: this.getTranslate('tasks.task_filter.all')
+        });
+      }
+    }, 500);
   }
 
   createForm() {
@@ -286,6 +297,10 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

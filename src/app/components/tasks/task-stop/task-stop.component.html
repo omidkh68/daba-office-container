@@ -21,6 +21,7 @@
           <mat-slider
             class="full-width no-padding-r-l pos-rel top-half"
             formControlName="percentage"
+            tabIndex="1"
             [max]="100"
             [min]="0"
             [step]="5"
@@ -36,7 +37,7 @@
           <mat-form-field class="full-width height-110 font-9-em">
             <mat-label>{{'tasks.task_stop.description' | translate}}</mat-label>
             <textarea matInput required formControlName="description"
-                      placeholder="{{'tasks.task_stop.description' | translate}}" tabindex="12"></textarea>
+                      placeholder="{{'tasks.task_stop.description' | translate}}" tabindex="2"></textarea>
 
             <mat-error *ngIf="!form.get('description').valid && form.get('description').touched">
               {{'tasks.task_stop.description_error' | translate}}
@@ -50,7 +51,7 @@
       <button mat-raised-button
               [disabled]="!form.valid"
               type="submit"
-              tabindex="13"
+              tabindex="3"
               class="green-gradient float-left text-white line-height-30 font-9-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
         <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>

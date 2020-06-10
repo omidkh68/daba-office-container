@@ -8,7 +8,7 @@ const DEFAULT_LANG = localStorage.getItem('defaultLang');
   providedIn: 'root'
 })
 export class ViewDirectionService {
-  private _defaultDirection: boolean = false;
+  private _defaultDirection: boolean = true;
   private _rtlDirection = new BehaviorSubject(this._defaultDirection);
   currentDirection = this._rtlDirection.asObservable();
   body = document.querySelector('html');

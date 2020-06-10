@@ -196,7 +196,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
     this.triggerBottomSheet.emit({
       component: TaskDetailComponent,
-      height: '90%',
+      height: '98%',
       width: '95%',
       data: data
     });

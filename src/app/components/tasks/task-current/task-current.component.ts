@@ -4,12 +4,13 @@ import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {ElectronService} from '../../../core/services';
+import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskEssentialInfo} from '../task-main/task-main.component';
 import {TaskDataInterface} from '../logic/task-data-interface';
-import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {CurrentTaskService} from '../services/current-task.service';
-import {UserInfoService} from '../../users/services/user-info.service';
+import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 @Component({
   selector: 'app-task-current',
@@ -17,6 +18,9 @@ import {UserInfoService} from '../../users/services/user-info.service';
   styleUrls: ['./task-current.component.scss']
 })
 export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
+  @Output()
+  triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
+
   @Output()
   pushTaskToBoard = new EventEmitter();
 
@@ -79,19 +83,27 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
       boardStatus: 'inProgress'
     };
 
-    const bottomSheetRef = this._bottomSheet.open(TaskDetailComponent, {
+    /*const bottomSheetRef = this.bottomSheet.open(TaskDetailComponent, {
       data: data,
+      autoFocus: false
     });
 
     this._subscription.add(
       bottomSheetRef.afterDismissed().subscribe(result => {
-        if (result !== undefined) {
-          this.currentTaskPushToBoard(result.task, result.prevContainer, result.newContainer);
+        if (result !== undefined && result !== false) {
+          this.assignNewTaskToBoard(result.task, result.prevContainer, result.newContainer);
 
-
+          // this.socket.emit('updatedata');
         }
       })
-    );
+    );*/
+
+    this.triggerBottomSheet.emit({
+      component: TaskDetailComponent,
+      height: '98%',
+      width: '95%',
+      data: data
+    });
   }
 
   currentTaskPushToBoard(task: TaskInterface, prevContainer, newContainer) {

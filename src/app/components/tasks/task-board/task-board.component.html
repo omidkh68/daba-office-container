@@ -1,14 +1,15 @@
-<mat-grid-list *ngIf="boards.length" cols="3" gutterSize="10" rowHeight="40px" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<mat-grid-list *ngIf="boards.length" [dir]="rtlDirection ? 'rtl' : 'ltr'" cols="3" gutterSize="10" rowHeight="40px">
   <mat-grid-tile
-    class="board-container"
     *ngFor="let board of boards"
     [colspan]="board.cols"
-    [rowspan]="board.rows">
-    <div class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l display-flex flex-space-between">
+    [rowspan]="board.rows"
+    class="board-container">
+    <div
+      class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l display-flex flex-space-between">
       <span class="font-9-em">{{board.name}}</span>
 
-      <span class="task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500"
-            [ngClass]="board.id">
+      <span [ngClass]="board.id"
+            class="task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500">
         {{board.tasks.length}}
       </span>
     </div>
@@ -30,7 +31,8 @@
            class="flex-center full-width full-height pos-abs left-0 right-0 top-0 bottom-0 z-index-0">
         <img [src]="'assets/board-empty-state/'+board.id+'.png'" [alt]="board.id" class="width-250">
 
-        <span class="pos-abs left-0 right-0 bottom-0 top-0 z-index-0 margin-auto text-gray-400 font-8-rem full-width height-45 line-height-150 text-center">
+        <span
+          class="pos-abs left-0 right-0 bottom-0 top-0 z-index-0 margin-auto text-gray-400 font-8-rem full-width height-45 line-height-150 text-center">
           {{'global.no_result' | translate}}
         </span>
       </div>
@@ -59,7 +61,6 @@
         <mat-card-content class="text-gray-600 margin-b-half display-flex">
           <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                     class="width-18 height-18 font-full-plus-three-tenth-em">work</mat-icon>
-
           {{task.project.projectName}}
         </mat-card-content>
 

@@ -1,4 +1,4 @@
-import {app, BrowserWindow, screen, webFrame, ipcMain} from 'electron';
+import {app, BrowserWindow, ipcMain, screen, webFrame} from 'electron';
 // import {autoUpdater} from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
@@ -43,7 +43,7 @@ function createWindow(): BrowserWindow {
 
   } else {
     win.webContents.on('devtools-opened', () => {
-        win.webContents.closeDevTools();
+      win.webContents.closeDevTools();
     });
 
     win.loadURL(url.format({

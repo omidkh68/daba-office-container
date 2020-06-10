@@ -1,12 +1,12 @@
-<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height">
+<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <div [ngClass]="rtlDirection ? 'float-left' : 'float-right'" class="uploader-container sixty-width full-height">
     <ngx-file-picker [adapter]="adapter" [captions]="fileUploaderCaption">
     </ngx-file-picker>
   </div>
 
-  <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="file-list-container float-right padding-full">
-    <h1 class="margin-b-full text-gray-800 text-right font-full-em text-weight-500 margin-b-half height-45">
-      مدیریت فایل
+  <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="file-list-container padding-full">
+    <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half height-45">
+      {{'tasks.task_files.file_manager' | translate}}
     </h1>
     <div class="file-content-container forty-width height-full-minus-45">
 

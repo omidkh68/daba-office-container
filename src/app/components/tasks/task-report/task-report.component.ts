@@ -4,6 +4,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {UserInterface} from '../../users/logic/user-interface';
+import {TranslateService} from '@ngx-translate/core';
 
 export interface TaskReportInterface {
   taskSheetId: number;
@@ -42,19 +43,20 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private apiService: ApiService,
+              private translate: TranslateService,
               private matPaginatorIntl: MatPaginatorIntl) {
   }
 
   ngOnInit(): void {
     this.getTaskReport();
 
-    this.matPaginatorIntl.itemsPerPageLabel = 'تعداد در هر صفحه';
+    this.matPaginatorIntl.itemsPerPageLabel = this.getTranslate('global.pagination.item_per_page');
     this.matPaginatorIntl.getRangeLabel = (page: number, pageSize: number, length: number) => {
-      if (length === 0 || pageSize === 0) { return `0 از ${length}`; }
+      if (length === 0 || pageSize === 0) { return `0 ${this.getTranslate('global.pagination.from')} ${length}`; }
       length = Math.max(length, 0);
       const startIndex = page * pageSize;
       const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
-      return `${startIndex + 1} - ${endIndex} از ${length}`;
+      return `${startIndex + 1} - ${endIndex} ${this.getTranslate('global.pagination.from')} ${length}`;
     };
   }
 
@@ -81,6 +83,10 @@ export class TaskReportComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

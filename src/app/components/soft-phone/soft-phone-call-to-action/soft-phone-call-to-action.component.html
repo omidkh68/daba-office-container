@@ -1,9 +1,9 @@
-<div class="full-width full-height padding-full">
+<div class="full-width full-height padding-full" [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <button (click)="closeBottomSheet();"
           [ngClass]="rtlDirection ? 'left-0' : 'right-0'"
           class="width-30 height-30 pos-abs top-0 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
     <mat-icon
-      class="text-dark-mode-color line-height-35 full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
+      class="line-height-35 full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
       close
     </mat-icon>
   </button>

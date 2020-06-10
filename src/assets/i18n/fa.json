@@ -17,7 +17,14 @@
     "reset_filter": "حذف فیلتر",
     "no_result": "موردی نیست",
     "minutes": "دقیقه",
-    "hours": "ساعت"
+    "hours": "ساعت",
+    "pagination": {
+      "item_per_page": "تعداد در هر صفحه",
+      "from": "از"
+    },
+    "from_date": "از تاریخ",
+    "to_date": "تا تاریخ",
+    "date_error": "لطغا تاریخ را انتخاب نمایید"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -79,7 +86,9 @@
       "stop_time": "ساعت اتمام تسک",
       "stop_time_error": "لطفا ساعت اتمام را انتخاب نمایید",
       "task_description": "توضیح تسک",
-      "trackable_by_mobile": "قابل ردیابی با موبایل"
+      "trackable_by_mobile": "قابل ردیابی با موبایل",
+      "task_admin_start": "شروع کننده تسک",
+      "task_admin_stop": "متوقف کننده تسک"
     },
     "activity": {
       "activity_list": "لیست فعالیت ها",
@@ -103,7 +112,29 @@
       "reports": "گزارشات"
     },
     "task_todo": {
-      "items": "مورد"
+      "todo_list": "لیست انجام کار",
+      "items": "مورد",
+      "add_an_item": "یک مورد اضافه کن"
+    },
+    "task_files": {
+      "file_manager": "مدیریت فایل",
+      "drop_files_here": "'فایل رو بکش و بنداز اینجا'",
+      "or": "یا",
+      "click_here": "روی دکمه بزن"
+    },
+    "task_filter": {
+      "all": "همه",
+      "tasks_filter": "فیلتر تسک ها",
+      "filter_types": "نوع فیلتر",
+      "by_create_date": "بر اساس تاریخ ایجاد تسک",
+      "by_project":"بر اساس نام پروژه",
+      "by_user": "بر اساس کاربر مورد نظر",
+      "by_start_date":"بر اساس تاریخ شروع تسک",
+      "by_stop_date": "بر اساس تاریخ اتمام تسک",
+      "by_user_start_date":"بر اساس تاریخ شروع کاربر",
+      "by_user_stop_date": "بر اساس تاریخ اتمام کاربر",
+      "by_started_task":"بر اساس تسک های شروع شده",
+      "by_postponed": "بر اساس تسک های به تعویق افتاده"
     }
   }
 }

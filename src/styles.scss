@@ -108,17 +108,22 @@ a {
   width: 100% !important;
   height: calc(100% - 75px) !important;
   max-width: 100% !important;
-  -webkit-transform: none !important;
-  -moz-transform: none !important;
-  -ms-transform: none !important;
-  -o-transform: none !important;
-  transform: none !important;
+  transform: translate3d(0, -40px, 0px) !important;
+  margin: inherit !important;
+  margin-top: 0 !important;
 
   .mat-dialog-container {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
     box-shadow: 0 0 3px -15px rgba(0, 0, 0, 0.2), 0 5px 20px 1px rgba(0, 0, 0, 0.14), 0 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  .window-title {
+    touch-action: none !important;
+    -webkit-user-drag: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none !important;
   }
 }
 

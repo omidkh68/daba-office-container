@@ -1,10 +1,10 @@
 <div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height padding-full"
      [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 no-margin height-45">
-    لیست انجام کار
+    {{'tasks.task_todo.todo_list' | translate}}
     <span [ngClass]="rtlDirection ? 'margin-r-half' : 'margin-l-half'"
           class="text-gray-500 font-7-em text-italic">
-      {{todoList.length ? todoList.length + 'tasks.task_todo.items' : '' | translate}}
+      {{todoList.length ? todoList.length : ''}} {{(todoList.length ? 'tasks.task_todo.items' : '') | translate}}
     </span>
   </h1>
   <div class="todo-content-container">
@@ -44,7 +44,7 @@
         <div formGroupName="todo">
           <mat-form-field appearance="outline" class="full-width height-45 font-9-em" color="primary">
             <input matInput formControlName="text"
-                   placeholder="یک مورد اضافه کن"
+                   placeholder="{{'tasks.task_todo.add_an_item' | translate}}"
                    name="inputValue"
                    (keydown)="$event.code === 'Enter' ? edit ? saveTodo() : addTodo() : ''">
 

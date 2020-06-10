@@ -1,18 +1,20 @@
-<div class="pos-abs left-0 right-0 bottom-0 top-0 full-width" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <div (click)="activeWindow()" (dblclick)="!windowInstance.isMaximized ? maximize() : restore()" class="window-heading full-width height-45 padding-half display-flex">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 bottom-0 top-0 full-width">
+  <div (click)="activeWindow()"
+       (dblclick)="!windowInstance.isMaximized ? maximize() : restore()"
+       class="window-heading full-width height-45 padding-half display-flex"
+       cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragBoundary=".dashboard-app-boundary"
+       (cdkDragStarted)="activeWindow()">
     <ng-template [ngIf]="windowInstance.isDraggable" [ngIfElse]="notDraggableHeading">
-      <h3 (cdkDragStarted)="activeWindow()" cdkDrag
-          cdkDragRootElement=".cdk-overlay-pane"
-          cdkDragBoundary=".dashboard-app-boundary"
-          class="window-title font-full-plus-one-tenth-em text-dark-mode-color display-flex">
-        <mat-icon class="text-dark-mode-color pos-rel top-one-tenth"
-                  [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">{{data.icon}}</mat-icon>
+      <h3 cdkDragHandle
+          class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex">
+        <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                  class="text-dark-mode-color pos-rel top-one-tenth">{{data.icon}}</mat-icon>
         {{rtlDirection ? data.serviceNameFa : data.serviceNameEn}}
       </h3>
     </ng-template>
 
     <ng-template #notDraggableHeading>
-      <h3 class="window-title font-full-plus-one-tenth-em text-dark-mode-color display-flex">
+      <h3 class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex">
         <mat-icon class="text-dark-mode-color pos-rel top-one-tenth"
                   [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">{{data.icon}}</mat-icon>
         {{rtlDirection ? data.serviceNameFa : data.serviceNameEn}}
@@ -28,21 +30,24 @@
           center_focus_strong
         </mat-icon>
       </button>
-      <button (click)="minimize(); $event.stopPropagation();" *ngIf="!windowInstance.isMinimized"
+      <button (click)="minimize(); $event.stopPropagation();"
+              *ngIf="!windowInstance.isMinimized"
               class="width-30 height-30 text-center line-height-25 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
           class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
           minimize
         </mat-icon>
       </button>
-      <button (click)="restore(); $event.stopPropagation();" *ngIf="windowInstance.isMaximized || windowInstance.isMinimized"
+      <button (click)="restore(); $event.stopPropagation();"
+              *ngIf="windowInstance.isMaximized || windowInstance.isMinimized"
               class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
           class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
           filter_none
         </mat-icon>
       </button>
-      <button (click)="maximize(); $event.stopPropagation();" *ngIf="!windowInstance.isMaximized && !windowInstance.isMinimized"
+      <button (click)="maximize(); $event.stopPropagation();"
+              *ngIf="!windowInstance.isMaximized && !windowInstance.isMinimized"
               class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
           class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">

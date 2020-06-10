@@ -1,11 +1,11 @@
 import {Inject, Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {MatDialog} from '@angular/material/dialog';
-import {DialogPositionInterface, WindowInterface} from '../components/dashboard/logic/window.interface';
-import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
 import {TasksComponent} from '../components/tasks/tasks.component';
-import {ConferenceComponent} from '../components/conference/conference.component';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {SoftPhoneComponent} from '../components/soft-phone/soft-phone.component';
+import {ConferenceComponent} from '../components/conference/conference.component';
+import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
+import {DialogPositionInterface, WindowInterface} from '../components/dashboard/logic/window.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -127,7 +127,7 @@ export class WindowManagerService {
     windowInstance.isDraggable = false;
     windowInstance.windowRef.removePanelClass('minimized');
     windowInstance.windowRef.addPanelClass('maximized');
-    windowInstance.windowRef.updatePosition({top: '0'});
+    // windowInstance.windowRef.updatePosition({top: '0'});
   }
 
   restoreWindow(service: ServiceItemsInterface) {
@@ -138,7 +138,7 @@ export class WindowManagerService {
     windowInstance.isDraggable = true;
     windowInstance.windowRef.removePanelClass('minimized');
     windowInstance.windowRef.removePanelClass('maximized');
-    windowInstance.windowRef.updatePosition(windowInstance.position);
+    // windowInstance.windowRef.updatePosition(windowInstance.position);
 
     this.activeWindow(service);
   }

@@ -6,7 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {SoftPhoneUsersService} from '../service/soft-phone-users.service';
+import {SoftPhoneService} from '../service/soft-phone.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
@@ -136,7 +136,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
-              private softPhoneUsersService: SoftPhoneUsersService,
+              private softPhoneService: SoftPhoneService,
               private notificationService: NotificationService,
               private translate: TranslateService,
               private userInfoService: UserInfoService) {
@@ -169,7 +169,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.softPhoneUsersService.changeSoftPhoneUsers(this.softPhoneUsers);
+    this.softPhoneService.changeSoftPhoneUsers(this.softPhoneUsers);
 
     setTimeout(() => {
       this.tabs = [

@@ -1,9 +1,11 @@
-<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
+<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99"
+     [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <form [formGroup]="form" (submit)="submit()" class="full-height">
-    <div class="dialog-content-container float-right full-width" dir="rtl">
-      <h1 class="margin-b-full text-right font-full-em text-weight-500">{{'status.apply_status' | translate}}</h1>
+    <div class="dialog-content-container full-width">
+      <h1 class="margin-b-full font-full-em text-weight-500">{{'status.apply_status' | translate}}</h1>
 
-      <a (click)="closeDialog()" class="pos-abs left-full top-full cursor-pointer text-gray-600">
+      <a (click)="closeDialog()" [ngClass]="rtlDirection ? 'left-full' : 'right-full'"
+         class="pos-abs top-full cursor-pointer text-gray-600">
         <mat-icon class="text-grey-500">close</mat-icon>
       </a>
 
@@ -26,7 +28,7 @@
                 {{status.statusIcon}}
               </mat-icon>
             </mat-card-content>
-            <mat-card-footer class="mat-card-footer text-center text-weight-bold">
+            <mat-card-footer class="mat-card-footer text-center font-9-em text-weight-bold">
               {{rtlDirection ? status.statusNameFa : status.statusNameEn}}
             </mat-card-footer>
           </mat-card>
@@ -34,7 +36,7 @@
       </mat-grid-list>
 
       <div *ngIf="form.get('status').value.statusId === 9" class="margin-b-half">
-        <mat-form-field class="full-width font-9-em">
+        <mat-form-field class="full-width height-110 font-9-em">
           <mat-label>{{'status.status_description' | translate}}</mat-label>
           <textarea matInput formControlName="description"
                     placeholder="{{'status.status_description_error' | translate}}"></textarea>
@@ -45,8 +47,9 @@
       </div>
     </div>
 
-    <div class="dialog-buttons height-30 float-right full-width" dir="rtl">
-      <button [disabled]="!form.valid" type="submit" mat-raised-button class="green-gradient text-white full-width">
+    <div class="dialog-buttons height-30 full-width">
+      <button mat-raised-button [disabled]="!form.valid" type="submit"
+              class="green-gradient text-white full-width font-9-em">
         {{'status.apply_status' | translate}}
       </button>
     </div>

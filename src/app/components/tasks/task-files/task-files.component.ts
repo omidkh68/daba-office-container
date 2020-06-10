@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ApiService} from './logic/api.service';
 import {HttpClient} from '@angular/common/http';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-files',
@@ -11,18 +12,23 @@ export class TaskFilesComponent implements OnInit {
   rtlDirection: boolean;
 
   adapter = new ApiService(this._http);
-  fileUploaderCaption = {
-    dropzone: {
-      title: 'فایل رو بکش و بنداز اینجا',
-      or: 'یا',
-      browse: 'روی این دکمه بزن',
-    }
-  };
+  fileUploaderCaption = {};
 
-  constructor(private _http: HttpClient) {
+  constructor(private _http: HttpClient,
+              private translate: TranslateService) {
   }
 
   ngOnInit(): void {
+    this.fileUploaderCaption = {
+      dropzone: {
+        title: this.getTranslate('tasks.task_files.drop_files_here'),
+        or: this.getTranslate('tasks.task_files.or'),
+        browse: this.getTranslate('tasks.task_files.click_here'),
+      }
+    };
   }
 
+  getTranslate(word) {
+    return this.translate.instant(word);
+  }
 }

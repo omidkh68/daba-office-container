@@ -5,8 +5,9 @@ import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class SoftPhoneUsersService {
+export class SoftPhoneService {
   private _users: Array<SoftphoneUserInterface> | null;
+  // private _config:
 
   // set observable behavior to property
   private users = new BehaviorSubject(this._users);
