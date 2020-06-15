@@ -46,7 +46,8 @@
       "call_logs": "Call Logs"
     },
     "call_pop_up": {
-      "hang_up": "Hang Up"
+      "hang_up": "Hang Up",
+      "unknown_number": "Unknown Caller"
     },
     "call_to_action": {
       "local_time": "Local Time",
@@ -57,6 +58,10 @@
     "soft_phone_contacts": {
       "new_contact": "New Contact",
       "add_new_contact": "Add New Contact"
+    },
+    "incoming_call": {
+      "accept": "Accept",
+      "decline": "Decline"
     }
   },
   "tasks": {

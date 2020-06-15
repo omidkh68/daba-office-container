@@ -1,13 +1,17 @@
 <div class="popup-container pos-rel full-height full-width padding-full">
   <h2 class="full-width height-40 line-height-40 text-center text-white text-weight-normal">
-    {{data.adminId ? data.name + ' ' + data.family : data}}
+    {{data.adminId ? data.name + ' ' + data.family : 'soft_phone.call_pop_up.unknown_number' | translate}}
   </h2>
 
+  <h3 class="full-width height-30 line-height-30 text-center text-gray-500 text-weight-normal">
+    {{data.adminId ? data.extension : data}}
+  </h3>
+
   <div class="full-width height-40 line-height-40 text-center text-white text-weight-normal">
-    {{'05:34'}}
+    {{callTimer}}
   </div>
 
-  <div class="text-center padding-t-b">
+  <div class="text-center">
     <img [alt]="data.name + ' ' + data.family" [src]="'assets/profileImg/'+ (data.adminId ? data.adminId : '0') +'.jpg'"
          class="mat-elevation-z3 width-150 height-150 round-corner-all"
          matListAvatar>

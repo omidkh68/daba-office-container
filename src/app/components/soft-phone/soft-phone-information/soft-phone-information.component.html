@@ -7,7 +7,7 @@
       <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name + ' ' + loggedInUser.family}} </h3>
 
       <div class="font-8-rem">
-        <mat-slide-toggle #slideToggle>
+        <mat-slide-toggle #slideToggle dir="ltr">
           <span class="padding-mini-r-l">{{(slideToggle.checked ? 'global.active' : 'global.deactivate') | translate}}</span>
         </mat-slide-toggle>
       </div>

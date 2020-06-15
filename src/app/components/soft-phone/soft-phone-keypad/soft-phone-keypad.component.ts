@@ -3,6 +3,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
+import {SoftPhoneService} from '../service/soft-phone.service';
 
 export interface KeysInterface {
   num: string;

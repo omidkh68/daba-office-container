@@ -1,0 +1,31 @@
+<div
+  [ngClass]="incomingStatus ? 'top-0' : 'top-full-reverse-percent'"
+  class="width-350 height-100 mat-elevation-z5 transition bg-white pos-fix left-0 right-0 margin-auto padding-mini-t-b padding-r-l z-index-9999 round-corner-bottom-left round-corner-bottom-right"
+  [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <mat-list class="soft-phone-user full-width height-50">
+    <mat-list-item class="padding-mini-r-l full-height">
+      <img [src]="'assets/profileImg/' + (onCallUser ? onCallUser.adminId : '0') + '.jpg'"
+           class="mat-elevation-z2"
+           matListAvatar>
+      <h3 class="font-8-rem text-weight-bold" matLine>
+        {{onCallUser ? (onCallUser.name + ' ' + onCallUser.family) : currentPhoneNumber}}
+      </h3>
+    </mat-list-item>
+  </mat-list>
+
+  <div class="height-30 display-flex justify-content-end" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+    <button mat-raised-button
+            (click)="decline_call()"
+            class="red-gradient padding-mini-r-l margin-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">phone_disabled</mat-icon>
+      <span class="padding-mini-r-l">{{'soft_phone.incoming_call.decline' | translate}}</span>
+    </button>
+
+    <button mat-raised-button
+            (click)="accept_call()"
+            class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">phone_callback</mat-icon>
+      <span class="padding-mini-r-l">{{'soft_phone.incoming_call.accept' | translate}}</span>
+    </button>
+  </div>
+</div>
