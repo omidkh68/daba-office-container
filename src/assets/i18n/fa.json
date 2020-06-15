@@ -1,13 +1,140 @@
 {
-  "HOME": {
-    "MENU": {
-      "DASHBOARD": "داشبورد",
-      "USERS": "لیست کاربران",
-      "TASKS": "مدیریت تسک ها"
+  "global": {
+    "search": "جستجو...",
+    "name": "نام",
+    "name_error": "لطفا نام را وارد نمایید",
+    "family": "نام خانوادگی",
+    "family_error": "لطفا نام خانوادگی را وارد نمایید",
+    "extension": "شماره",
+    "extension_placeholder": "شماره تلفن",
+    "extension_error": "لطفا شماره را وارد نمایید",
+    "submit": "ثبت",
+    "dismiss": "انصراف",
+    "active": "فعال",
+    "deactivate": "غیر فعال",
+    "settings": "تنظیمات",
+    "filter": "فیلتر",
+    "reset_filter": "حذف فیلتر",
+    "no_result": "موردی نیست",
+    "minutes": "دقیقه",
+    "hours": "ساعت",
+    "pagination": {
+      "item_per_page": "تعداد در هر صفحه",
+      "from": "از"
     },
-    "DASHBOARD": {
-      "CLOSE": "بستن برنامه",
-      "MINIMIZE": "محو کردن برنامه"
+    "from_date": "از تاریخ",
+    "to_date": "تا تاریخ",
+    "date_error": "لطغا تاریخ را انتخاب نمایید"
+  },
+  "dashboard": {
+    "dashboard_toolbar": {
+      "service_list": "سرویس ها",
+      "exist_app": "خروج از برنامه"
+    }
+  },
+  "status": {
+    "stop_status": "متوقف کردن این وضعیت",
+    "apply_status": "اعمال وضعیت",
+    "status_description": "توضیح وضعیت",
+    "status_description_error": "توضیح وضعیت را وارد نمایید"
+  },
+  "soft_phone": {
+    "main": {
+      "status": "وضعیت",
+      "address_book": "دفتر تلفن",
+      "dial_pad": "شماره گیر",
+      "call_logs": "گزارش تماس"
+    },
+    "call_pop_up": {
+      "hang_up": "قطع تماس"
+    },
+    "call_to_action": {
+      "local_time": "وقت محلی",
+      "call": "تماس",
+      "message": "پیام",
+      "voice": "صوتی"
+    },
+    "soft_phone_contacts": {
+      "new_contact": "مخاطب جدید",
+      "add_new_contact": "افزودن مخاطب جدید"
+    }
+  },
+  "tasks": {
+    "main": {
+      "add_new_task": "افزودن تسک",
+      "boards": "برد",
+      "calendar": "تقویم"
+    },
+    "form": {
+      "task_name": "نام تسک",
+      "task_name_error": "لطفا نام تسک را وارد نمایید",
+      "task_status": "وضعیت تسک",
+      "task_status_error": "لطفا وضعیت تسک را مشخص نمایید",
+      "task_project": "پروژه",
+      "task_project_error": "لطفا پروژه را مشخص نمایید",
+      "assign_to": "مسئول انجام تسک",
+      "assign_to_error": "لطفا مسئول را مشخص نمایید",
+      "task_durationHours": "مدت زمان کل(ساعت)",
+      "task_durationHours_error": "لطفا مدت انجام را مشخص نمایید",
+      "task_durationMinutes": "مدت زمان کل(دقیقه)",
+      "start_at": "تاریخ شروع",
+      "start_at_error": "لطفا تاریخ شروع را انتخاب نمایید",
+      "stop_at": "تاریخ شروع",
+      "stop_at_error": "لطفا تاریخ اتمام را انتخاب نمایید",
+      "start_time": "ساعت شروع تسک",
+      "start_time_error": "لطفا ساعت شروع را انتخاب نمایید",
+      "stop_time": "ساعت اتمام تسک",
+      "stop_time_error": "لطفا ساعت اتمام را انتخاب نمایید",
+      "task_description": "توضیح تسک",
+      "trackable_by_mobile": "قابل ردیابی با موبایل",
+      "task_admin_start": "شروع کننده تسک",
+      "task_admin_stop": "متوقف کننده تسک"
+    },
+    "activity": {
+      "activity_list": "لیست فعالیت ها",
+      "task_completion_percentage": "درصد تکمیل بودن تسک",
+      "completed": "تکمیل شده",
+      "not_completed": "تکمیل نشده"
+    },
+    "boards": {
+      "task_percentage": "درصد پیشبرد",
+      "todo": "آماده انجام",
+      "in_progress": "در حال انجام",
+      "done": "به اتمام رسیده"
+    },
+    "task_stop": {
+      "stop_description": "توضیح توقف تسک",
+      "description": "توضیح تسک",
+      "description_error": "لطفا توضیح تسک را وارد نمایید"
+    },
+    "task_detail": {
+      "overview": "اطلاعات کلی",
+      "reports": "گزارشات"
+    },
+    "task_todo": {
+      "todo_list": "لیست انجام کار",
+      "items": "مورد",
+      "add_an_item": "یک مورد اضافه کن"
+    },
+    "task_files": {
+      "file_manager": "مدیریت فایل",
+      "drop_files_here": "'فایل رو بکش و بنداز اینجا'",
+      "or": "یا",
+      "click_here": "روی دکمه بزن"
+    },
+    "task_filter": {
+      "all": "همه",
+      "tasks_filter": "فیلتر تسک ها",
+      "filter_types": "نوع فیلتر",
+      "by_create_date": "بر اساس تاریخ ایجاد تسک",
+      "by_project":"بر اساس نام پروژه",
+      "by_user": "بر اساس کاربر مورد نظر",
+      "by_start_date":"بر اساس تاریخ شروع تسک",
+      "by_stop_date": "بر اساس تاریخ اتمام تسک",
+      "by_user_start_date":"بر اساس تاریخ شروع کاربر",
+      "by_user_stop_date": "بر اساس تاریخ اتمام کاربر",
+      "by_started_task":"بر اساس تسک های شروع شده",
+      "by_postponed": "بر اساس تسک های به تعویق افتاده"
     }
   }
 }

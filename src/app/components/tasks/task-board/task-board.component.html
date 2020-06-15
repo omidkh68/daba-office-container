@@ -1,14 +1,15 @@
-<mat-grid-list *ngIf="boards.length" cols="3" gutterSize="10" rowHeight="40px">
+<mat-grid-list *ngIf="boards.length" [dir]="rtlDirection ? 'rtl' : 'ltr'" cols="3" gutterSize="10" rowHeight="40px">
   <mat-grid-tile
-    class="board-container"
     *ngFor="let board of boards"
     [colspan]="board.cols"
-    [rowspan]="board.rows">
-    <div class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l">
-      <span class="float-right font-8-em">{{board.name}}</span>
+    [rowspan]="board.rows"
+    class="board-container">
+    <div
+      class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l display-flex flex-space-between">
+      <span class="font-9-em">{{board.name}}</span>
 
-      <span class="float-left task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500"
-            [ngClass]="board.id">
+      <span [ngClass]="board.id"
+            class="task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500">
         {{board.tasks.length}}
       </span>
     </div>
@@ -26,48 +27,55 @@
          (cdkDropListDropped)="drop($event)"
          [cdkDropListData]="board.tasks"
          [cdkDropListConnectedTo]="connectedTo">
-
-      <div *ngIf="!board.tasks.length" class="flex-center full-width full-height">
+      <div *ngIf="!board.tasks.length"
+           class="flex-center full-width full-height pos-abs left-0 right-0 top-0 bottom-0 z-index-0">
         <img [src]="'assets/board-empty-state/'+board.id+'.png'" [alt]="board.id" class="width-250">
+
+        <span
+          class="pos-abs left-0 right-0 bottom-0 top-0 z-index-0 margin-auto text-gray-400 font-8-rem full-width height-45 line-height-150 text-center">
+          {{'global.no_result' | translate}}
+        </span>
       </div>
 
       <mat-card class="margin-b-full bg-white card-hover"
                 [cdkDragData]="task"
                 (click)="showTaskDetail(task, board.id)"
                 *ngFor="let task of board.tasks" cdkDrag>
-        <mat-card-header>
-          <mat-card-subtitle class="full-width text-gray-600">
-            <span class="float-right">
-              <mat-icon class="float-right width-18 height-18 font-full-plus-three-tenth-em margin-l-half">
-                access_alarm
-              </mat-icon>
-
+        <mat-card-header class="full-width">
+          <mat-card-subtitle class="full-width height-30 text-gray-600 display-flex flex-space-between no-margin">
+            <span class="display-flex">
+              <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                        class="width-18 height-18 font-full-plus-three-tenth-em">access_alarm</mat-icon>
               {{task.stopAt | jalali}}
             </span>
 
-            <span class="float-left">
+            <span>
               #{{task.taskId}}
             </span>
           </mat-card-subtitle>
-          <mat-card-title class="full-width clear-both text-pink-600 font-full-em padding-t-full">
+          <mat-card-title class="full-width clear-both text-pink-600 font-full-em padding-t-half">
             {{task.taskName}}
           </mat-card-title>
         </mat-card-header>
 
-        <mat-card-content class="text-gray-600 margin-b-half">
-          <mat-icon class="float-right width-18 height-18 font-full-plus-three-tenth-em margin-l-half">work</mat-icon>
-
+        <mat-card-content class="text-gray-600 margin-b-half display-flex">
+          <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                    class="width-18 height-18 font-full-plus-three-tenth-em">work</mat-icon>
           {{task.project.projectName}}
         </mat-card-content>
 
-        <mat-card-footer class="padding-mini-t-b padding-r-l height-45">
+        <mat-card-footer class="padding-mini-t-b padding-r-l height-45 display-flex justify-content-start">
           <img [src]="'assets/profileImg/'+task.assignTo.adminId+'.jpg'"
-               class="width-25 height-25 round-corner-all float-right mat-elevation-z1"
-               [matTooltip]="task.assignTo.name + ' ' + task.assignTo.family" matTooltipPosition="left">
+               class="width-25 height-25 round-corner-all mat-elevation-z1"
+               [matTooltip]="task.assignTo.name + ' ' + task.assignTo.family"
+               [matTooltipPosition]="rtlDirection ? 'left' : 'right'">
 
-          <span class="float-right width-25 height-25 round-corner-all mat-elevation-z1 margin-r-full pos-rel"
-                [matTooltip]="'درصد پیشبرد'" matTooltipPosition="left">
-            <span class="font-6-em text-black pos-abs left-0 right-0 top-0 bottom-0 margin-auto text-center line-height-25 text-weight-500">
+          <span [ngClass]="rtlDirection ? 'margin-r-l' : 'margin-r-l'"
+                class="width-25 height-25 round-corner-all mat-elevation-z1 pos-rel"
+                matTooltip="{{'tasks.boards.task_percentage' | translate}}"
+                [matTooltipPosition]="rtlDirection ? 'left' : 'right'">
+            <span
+              class="font-6-em text-gray-800 pos-abs left-0 right-0 top-0 bottom-0 margin-auto text-center line-height-25 text-weight-500">
               {{task.percentage}}
             </span>
             <mat-progress-spinner

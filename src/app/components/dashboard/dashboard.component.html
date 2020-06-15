@@ -1,83 +1,39 @@
-<nb-layout>
-  <nb-layout-column class="no-padding">
-    <div class="height-250 banner pos-rel">
-      <div class="window-control pos-abs top-eight-tenth left-full full-width height-35" style="-webkit-app-region: drag">
-        <a (click)="closeApp()"
-           matTooltip="{{'HOME.DASHBOARD.CLOSE' | translate}}" matTooltipPosition="below"
-           class="close-icon display-block float-left round-corner-all cursor-pointer margin-r-full">
-          <mat-icon class="full-width full-height text-center font-9-em text-white">close</mat-icon>
-        </a>
+<div class="dashboard-container full-width full-height">
+  <div class="dashboard-app-boundary height-full-minus-70 padding-full">
+    <button mat-raised-button (click)="changeDarkMode()">dark mode: {{loggedInUser.darkMode ? 'true' : 'false'}}</button>
+    <button mat-raised-button (click)="changeDirection()">direction mode: {{rtlDirection}}</button>
+  </div>
 
-        <a (click)="minimizeApp()"
-           matTooltip="{{'HOME.DASHBOARD.MINIMIZE' | translate}}" matTooltipPosition="below"
-           class="minimize-icon display-block float-left round-corner-all cursor-pointer">
-          <mat-icon class="full-width full-height text-center font-9-em text-white">minimize</mat-icon>
-        </a>
-      </div>
+  <!--<div class="padding-full-3">
+    <mat-grid-list class="half-width" *ngIf="serviceList.length" cols="4" gutterSize="30" rowHeight="150px">
+      <mat-grid-tile
+        class="board-container"
+        *ngFor="let service of serviceList"
+        [colspan]="1"
+        [rowspan]="1">
+        <mat-card (click)="openTaskWindow(service)"
+                  class="full-width full-height round-corner mat-elevation-z1 card-bg overflow-hide cursor-pointer"
+                  [ngClass]="service.serviceTitle">
+          <mat-card-header class="pos-rel z-index-99">
+            <mat-card-title class="font-full-plus-two-tenth-em">
+              {{service.serviceNameFa}}
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="pos-rel z-index-99">
+            <mat-icon class="full-width full-height font-full-em-3-plus-half text-center line-height-65">
+              {{service.icon}}
+            </mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>-->
 
-      <div class="profile-info pos-abs full-width height-100 bottom-0">
-        <div
-          class="profile-img float-right round-corner-all overflow-hide margin-r-full-3 margin-l-full mat-elevation-z3">
-          <img class="full-width full-height" [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'" alt="">
-        </div>
+  <app-screenshot></app-screenshot>
 
-        <div class="profile-name float-right padding-full">
-          <h1 class="font-full-plus-half-em text-weight-500 margin-b-four-tenth">
-            {{loggedInUser.name + ' ' + loggedInUser.family}}
-          </h1>
-
-          <div class="role-container round-corner bg-white">
-            <h4 class="padding-half height-30 line-height-15 no-margin text-weight-500 text-pink-500 font-9-em">
-              {{loggedInUser.role.roleNameFa}}
-            </h4>
-          </div>
-        </div>
-
-        <button mat-raised-button
-                matTooltip="متوقف کردن این وضعیت" matTooltipPosition="right"
-                *ngIf="userCurrentStatus !== ''; else changeViewStatus"
-                (click)="changeStatus(false)"
-                [class]="'status-' + userCurrentStatus.statusNameEn.replace(' ', '_').toLocaleLowerCase() + ' status-item change-status-btn white-gradient text-weight-500 pos-abs left-full line-height-30 font-9-em overflow-hide'">
-          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">{{userCurrentStatus.statusIcon}}</mat-icon>
-          <span class="padding-mini-r-l">{{userCurrentStatus.statusNameFa}}</span>
-        </button>
-
-        <ng-template #changeViewStatus>
-          <button mat-raised-button
-                  (click)="changeStatus(true)"
-                  class="change-status-btn white-gradient text-weight-500 pos-abs left-full line-height-30 font-9-em overflow-hide">
-            <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">sync_problem</mat-icon>
-            <span class="padding-mini-r-l">اعمال وضعیت</span>
-          </button>
-        </ng-template>
-      </div>
-    </div>
-
-    <div class="padding-full-3">
-      <mat-grid-list *ngIf="serviceList.length" cols="4" gutterSize="30" rowHeight="150px">
-        <mat-grid-tile
-          class="board-container"
-          *ngFor="let service of serviceList"
-          [colspan]="1"
-          [rowspan]="1">
-          <mat-card (click)="openApi(service)"
-                    class="full-width full-height round-corner mat-elevation-z1 card-bg overflow-hide cursor-pointer"
-                    [ngClass]="service.classList">
-            <mat-card-header class="pos-rel z-index-99">
-              <mat-card-title class="font-full-plus-two-tenth-em">
-                {{service.serviceNameFa}}
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="pos-rel z-index-99">
-              <mat-icon class="full-width full-height font-full-em-3-plus-half text-center line-height-65">
-                {{service.icon}}
-              </mat-icon>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-      </mat-grid-list>
-    </div>
-  </nb-layout-column>
-</nb-layout>
-
-<app-screenshot></app-screenshot>
+  <app-dashboard-toolbar [serviceList]="serviceList"
+                         [rtlDirection]="rtlDirection"
+                         [loggedInUser]="loggedInUser"
+                         [windowManager]="windowManager"
+                         class="dashboard-toolbar pos-fix bottom-full right-full left-full height-40"></app-dashboard-toolbar>
+</div>

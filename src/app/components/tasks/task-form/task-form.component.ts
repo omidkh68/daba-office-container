@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {TaskInterface} from '../logic/task-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
@@ -7,6 +7,8 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
 import {TaskDataInterface} from '../logic/task-data-interface';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-form',
@@ -18,7 +20,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   @Input()
-  data: TaskDataInterface;
+  data: TaskDataInterface = null;
 
   @Input()
   editable: boolean;
@@ -27,12 +29,10 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   cancel = new EventEmitter();
 
   @Output()
-  deleteTaskEmitter = new EventEmitter();
-
-  @Output()
   formOutput = new EventEmitter();
 
-  task: TaskInterface;
+  rtlDirection: boolean;
+  task: TaskInterface = null;
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
   durationMinute: Array<number> = [0, 15, 30, 45];
@@ -62,24 +62,15 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     '22:00', '22:15', '22:30', '22:45',
     '23:00', '23:15', '23:30', '23:45'
   ];
-  boardsList = [
-    {
-      id: 'todo',
-      name: 'آماده انجام'
-    },
-    {
-      id: 'inProgress',
-      name: 'در حال انجام'
-    },
-    {
-      id: 'done',
-      name: 'به اتمام رسیده'
-    }
-  ];
+  boardsList = [];
 
   private _subscription: Subscription = new Subscription();
 
-  constructor() {
+  constructor(private viewDirection: ViewDirectionService,
+              private translate: TranslateService,) {
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
   }
 
   ngOnInit(): void {
@@ -88,33 +79,66 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
     if (this.data.action === 'detail') {
       this.task = this.data.task;
-    }
-  }
-
-  editableForm(toggle) {
-    this.editable = toggle;
-
-    if (toggle) {
-      this.form.enable();
     } else {
-      this.form.disable();
+      this.selectCurrentTime();
     }
+
+    setTimeout(() => {
+      this.boardsList = [
+        {
+          id: 'todo',
+          name: this.getTranslate('tasks.boards.todo')
+        },
+        {
+          id: 'inProgress',
+          name: this.getTranslate('tasks.boards.in_progress')
+        },
+        {
+          id: 'done',
+          name: this.getTranslate('tasks.boards.done')
+        }
+      ]
+    }, 200);
   }
 
   cancelBtn() {
     this.cancel.emit(true);
   }
 
-  deleteTask() {
-    this.deleteTaskEmitter.emit(true);
+  changeBoardStatus(event) {
+    if (event.value === 'done') {
+      this.form.get('percentage').setValue(100);
+    } else {
+      if (this.data.action === 'detail') {
+        if (this.data.boardStatus !== 'done') {
+          this.form.get('percentage').setValue(this.task.percentage);
+        }
+      } else {
+        this.form.get('percentage').setValue(0);
+      }
+    }
   }
 
-  changeBoardStatus(event) {
-    if (event.value === 'todo' && this.data.boardStatus === 'done') {
-      this.form.get('percentage').setValue(0);
-    } else if (event.value === 'done') {
-      this.form.get('percentage').setValue(100);
+  selectCurrentTime() {
+    const curDate = new Date();
+    const curHour = curDate.getHours() < 10 ? '0' + curDate.getHours() : curDate.getHours();
+    const curMinute = curDate.getMinutes();
+    let selectedMinute = '';
+
+    if (curMinute < 15) {
+      selectedMinute = '00';
+    } else if (curMinute >= 15 && curMinute < 30) {
+      selectedMinute = '15';
+    } else if (curMinute >= 30 && curMinute < 45) {
+      selectedMinute = '15';
+    } else if (curMinute >= 45) {
+      selectedMinute = '45';
     }
+
+    const totalCurrentTime = curHour + ':' + selectedMinute;
+
+    this.form.get('startTime').setValue(totalCurrentTime);
+    this.form.get('stopTime').setValue(totalCurrentTime);
   }
 
   submit() {
@@ -123,6 +147,10 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
   dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
     this.form.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

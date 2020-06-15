@@ -1,0 +1,33 @@
+<div class="padding-full">
+  <mat-list class="full-height overflow-y-auto overflow-x-hide">
+    <mat-list-item (click)="openSheet(info)" *ngFor="let info of softPhoneUsers"
+                   class="height-full-minus-45 margin-b-half overflow-y-auto overflow-x-hide cursor-pointer"
+                   disableRipple>
+      <div class="seventy-width">
+        <ng-container [ngSwitch]="info.type">
+          <mat-icon *ngSwitchCase="'missed'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+                    class="text-red-500" mat-list-icon>
+            phone_missed
+          </mat-icon>
+
+          <mat-icon *ngSwitchCase="'incoming'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+                    class="text-blue-500" mat-list-icon>
+            phone_callback
+          </mat-icon>
+
+          <mat-icon *ngSwitchCase="'outgoing'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+                    class="text-green-500" mat-list-icon>
+            phone_forwarded
+          </mat-icon>
+        </ng-container>
+        <div [ngClass]="info.type === 'missed' ? 'text-red-500' : ''" class="padding-mini-r-l"
+             mat-line>{{info.name + ' ' + info.family}}</div>
+        <div class="padding-mini-r-l" mat-line>{{info.extension}}</div>
+      </div>
+      <div [ngClass]="rtlDirection ? 'text-left' : 'text-right'" class="thirty-width">
+        <div class="text-gray-600 font-7-rem" mat-line>{{info.date | jalali}}</div>
+        <div class="text-gray-600 font-7-rem" mat-line>{{info.time}}</div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>

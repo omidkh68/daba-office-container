@@ -1,26 +1,27 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild, ViewContainerRef} from '@angular/core';
+import {AfterViewInit, Component, Inject, ViewChild, ViewContainerRef} from '@angular/core';
 import {LazyComponentService} from '../../services/lazy-component.service';
-import {NbWindowRef} from '@nebular/theme';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {ServiceItemsInterface} from '../dashboard/logic/service-items.interface';
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html'
 })
-export class TasksComponent implements AfterViewInit, OnDestroy {
+export class TasksComponent implements AfterViewInit {
   @ViewChild('container', {read: ViewContainerRef}) container;
 
-  constructor(private lazyComponentService: LazyComponentService,
-              private windowRef: NbWindowRef) {
-  }
+  width: number = 0;
+  height: number = 0;
 
-  ngOnInit() {
+  constructor(private lazyComponentService: LazyComponentService,
+              @Inject(MAT_DIALOG_DATA) public data: ServiceItemsInterface) {
   }
 
   async ngAfterViewInit() {
-    this.lazyComponentService.loadComponent('tasksModuleId', this.container);
-  }
+    const ref = this.lazyComponentService.loadComponent('tasksModuleId', this.container);
 
-  ngOnDestroy(): void {
-    console.log('des task');
+    ref.then(result => {
+      result.instance.data = this.data;
+    });
   }
 }

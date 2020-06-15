@@ -6,8 +6,8 @@ import {catchError, map} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {UserInterface} from '../components/users/logic/user-interface';
 import {ApiService} from '../components/users/logic/api.service';
-import {UserInfoService} from '../services/user-info.service';
-import {ChangeStatusService} from '../services/change-status.service';
+import {UserInfoService} from '../components/users/services/user-info.service';
+import {ChangeStatusService} from '../components/status/services/change-status.service';
 
 export interface Result {
   result: number;

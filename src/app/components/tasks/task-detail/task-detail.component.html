@@ -1,9 +1,76 @@
-<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
-  <app-task-form
-    (cancel)="cancelBtn($event)"
-    (deleteTaskEmitter)="deleteTask($event)"
-    (formOutput)="updateForm($event)"
-    [data]="data"
-    [form]="form"
-    [editable]="editable"></app-task-form>
+<div *ngIf="data" class="full-page-size overflow-hide" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <div class="task-heading clear-both full-width height-45 display-flex flex-space-between">
+    <h1
+      class="no-margin height-45 line-height-45 font-full-plus-one-tenth-em text-eclipse padding-r-l text-pink-600 text-weight-500">
+      <span class="text-gray-700">#{{task.taskId}}</span> {{task.taskName}}
+    </h1>
+
+    <div class="task-detail-view-switcher pos-abs right-0 left-0 margin-auto width-150 height-45">
+      <mat-button-toggle-group #viewMode="matButtonToggleGroup"
+                               (change)="changeViewMode(viewMode.value)"
+                               [ngClass]="{'view-mode': viewMode}"
+                               class="full-width mat-button-custom line-height-20 round-corner-all margin-t-half"
+                               [value]="viewModeTypes">
+        <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'info'">
+          <span>{{'tasks.task_detail.overview' | translate}}</span>
+        </mat-button-toggle>
+        <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'report'">
+          <span>{{'tasks.task_detail.reports' | translate}}</span>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <div class="task-detail-actions display-flex flex-direction-row-reverse">
+      <button (click)="cancelBtn(true)"
+              type="button"
+              class="no-border cursor-pointer no-bg text-center width-45 height-45 text-gray-600 no-padding">
+        <mat-icon class="line-height-30">close</mat-icon>
+      </button>
+
+      <button *ngIf="viewModeTypes === 'info'" (click)="deleteTask()"
+              type="button"
+              class="no-border cursor-pointer no-bg text-center width-45 height-45 text-red-400 no-padding">
+        <mat-icon class="line-height-30">delete</mat-icon>
+      </button>
+
+      <button *ngIf="viewModeTypes === 'info'" type="button"
+              (click)="editableForm()"
+              class="no-border cursor-pointer no-bg text-center width-45 height-45 text-green-400 no-padding">
+        <mat-icon class="line-height-30">edit</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="full-width height-full-minus-45" *ngIf="viewModeTypes === 'info'; else reportView">
+    <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+         class="task-form-container height-full-minus-155 padding-full overflow-hide pos-rel">
+      <app-task-form
+        (cancel)="cancelBtn($event)"
+        (formOutput)="updateForm($event)"
+        [data]="data"
+        [form]="form"
+        [editable]="editable"></app-task-form>
+    </div>
+
+    <div [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
+         class="task-todo-container height-full-minus-155 padding-r-l padding-mini-t-b pos-rel">
+      <app-task-todo [rtlDirection]="rtlDirection" [taskId]="task.taskId"></app-task-todo>
+    </div>
+
+    <div class="task-file-container padding-r-l padding-mini-t-b clear-both full-width pos-rel">
+      <app-task-files [rtlDirection]="rtlDirection"></app-task-files>
+    </div>
+  </div>
+
+  <ng-template #reportView>
+    <div *ngIf="task" class="full-width full-height">
+      <div class="task-report-container padding-r-l padding-mini-t-b full-height float-right pos-rel">
+        <app-task-report [rtlDirection]="rtlDirection" [taskId]="task.taskId" [usersList]="usersList"></app-task-report>
+      </div>
+
+      <div class="task-activity-container full-height padding-r-l padding-mini-t-b float-left pos-rel">
+        <app-task-activity [rtlDirection]="rtlDirection" [task]="task"></app-task-activity>
+      </div>
+    </div>
+  </ng-template>
 </div>

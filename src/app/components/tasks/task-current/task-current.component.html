@@ -1,13 +1,19 @@
-<div class="float-left">Version: {{version}}</div>
-<div class="float-right" *ngIf="currentTasks">
-  <div *ngFor="let task of currentTasks" class="float-right">
-    <a (click)="showTask(task)">{{task.taskName}}</a>
+<div class="display-flex flex-space-between">
+  <div>Version: {{version}}</div>
+  <div *ngIf="currentTasks">
+    <button *ngFor="let task of currentTasks" mat-raised-button
+            [disabled]="!taskEssentialInfo"
+            (click)="showTask(task)"
+            class="blink-effect white-gradient margin-l-full text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">
+      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem rotate-180">play_arrow</mat-icon>
+      <span class="padding-mini-r-l">{{task.taskName}}</span>
+    </button>
   </div>
+
+  <!--<div id="notification" *ngIf="notification">
+    <p id="message" *ngIf="!message.length"></p>
+    <button id="close-button" (click)="closeNotification()">Close</button>
+
+    <button id="restart-button" *ngIf="restartBtn" (click)="restartApp()">Restart</button>
+  </div>-->
 </div>
-
-<!--<div id="notification" *ngIf="notification">
-  <p id="message" *ngIf="!message.length"></p>
-  <button id="close-button" (click)="closeNotification()">Close</button>
-
-  <button id="restart-button" *ngIf="restartBtn" (click)="restartApp()">Restart</button>
-</div>-->

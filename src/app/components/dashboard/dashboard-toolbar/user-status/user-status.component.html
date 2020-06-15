@@ -1,0 +1,19 @@
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'"
+     [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
+     class="box pos-rel width-150 mat-elevation-z1 text-center round-corner height-40 cursor-pointer overflow-hide">
+  <button mat-raised-button
+          *ngIf="userCurrentStatus !== ''; else changeViewStatus"
+          (click)="changeStatus(false)"
+          [class]="'status-' + userCurrentStatus.statusNameEn.replace(' ', '_').toLocaleLowerCase() + ' blink-effect status-item change-status-btn text-weight-500 line-height-40 full-height font-9-em overflow-hide no-bg mat-elevation-z0 text-dark-mode-color'">
+    <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem text-dark-mode-color">{{userCurrentStatus.statusIcon}}</mat-icon>
+    <span class="padding-mini-r-l">{{userCurrentStatus.statusNameFa}}</span>
+  </button>
+  <ng-template #changeViewStatus>
+    <button mat-raised-button
+            (click)="changeStatus(true)"
+            class="change-status-btn text-weight-500 line-height-30 font-9-em full-height overflow-hide no-bg mat-elevation-z0 text-dark-mode-color">
+      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem text-dark-mode-color">sync_problem</mat-icon>
+      <span class="padding-mini-r-l">{{'status.apply_status' | translate}}</span>
+    </button>
+  </ng-template>
+</div>

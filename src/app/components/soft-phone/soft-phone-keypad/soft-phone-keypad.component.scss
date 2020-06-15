@@ -1,0 +1,25 @@
+.key {
+  background-color: #f2f2f7;
+  min-width: inherit !important;
+}
+
+.key-container {
+  height: calc(100% - 120px);
+  padding: 1em 4em;
+}
+
+.input-holder {
+  padding: .5em 3em !important;
+}
+
+.dialer {
+  height: 50px;
+
+  .key {
+    background-color: #4ec060;
+  }
+}
+
+.remove-number {
+  right: 6.5em;
+}

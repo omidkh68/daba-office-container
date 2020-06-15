@@ -1,15 +1,14 @@
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
 import {MatCoreModule} from './mat-core.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {PageNotFoundComponent} from './components/';
-import {WebviewDirective} from './directives';
+import {JalaliPipe} from '../pipes/jalali.pipe';
 
 @NgModule({
-  declarations: [PageNotFoundComponent, WebviewDirective],
-  imports: [CommonModule, TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule],
-  exports: [CommonModule, TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule]
+  declarations: [PageNotFoundComponent, JalaliPipe],
+  imports: [TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule],
+  exports: [TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule, JalaliPipe]
 })
 export class SharedModule {
 }

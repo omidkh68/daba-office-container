@@ -61,4 +61,8 @@ export class ApiService {
   taskStop(taskInfo: any): Observable<TaskInterface> {
     return this._http.post<TaskInterface>(`${this.API_URL}/boards/stopTask`, taskInfo, this.headers);
   }
+
+  getTaskReport(taskId: number): Observable<any> {
+    return this._http.get<any>(`${this.API_URL}/boards/getTaskReport?taskId=${taskId}`);
+  }
 }

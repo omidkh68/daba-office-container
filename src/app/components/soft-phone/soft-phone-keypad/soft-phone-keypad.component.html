@@ -1,0 +1,39 @@
+<div class="full-height">
+  <div class="input-holder padding-mini-t-b text-center pos-rel height-50 line-height-50">
+    <input (onValueChanged)="changeNumber($event)" [ngModel]="numeric"
+           [readOnly]="oldNumeric !== ''"
+           class="no-padding no-border no-bg font-full-plus-three-tenth-em full-width text-center" digitOnly dir="ltr"
+           placeholder="{{'global.extension_placeholder' | translate}}"
+           type="tel">
+  </div>
+
+  <div class="key-container">
+    <mat-grid-list class="full-height" cols="3" gutterSize="30" rowHeight="fit">
+      <mat-grid-tile
+        *ngFor="let key of keys"
+        [colspan]="1"
+        [rowspan]="1">
+        <button (mousedown)="keyPress($event, key)"
+                class="key cursor-pointer no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 line-height-50 text-center round-corner-all"
+                mat-raised-button>
+          {{key.num}}
+        </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <div class="dialer text-center padding-mini-t-b pos-rel">
+    <button
+      (click)="openButtonSheet()"
+      class="key cursor-pointer no-padding no-box-shadow no-border font-full-plus-three-tenth-em width-45 height-45 line-height-45 text-center round-corner-all"
+      mat-raised-button>
+      <mat-icon class="line-height-25 text-white">phone</mat-icon>
+    </button>
+
+    <button (click)="removeFromNumber()"
+            *ngIf="numeric.length"
+            class="remove-number top-full-plus-half no-bg no-border no-padding cursor-pointer pos-abs">
+      <mat-icon>backspace</mat-icon>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+@import '../../../../../assets/mixin';
+
+.service-status {
+  &::before {
+    @include radius-all();
+
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+  }
+
+  &.online {
+    &::before {
+      background-color: #4ec060;
+    }
+  }
+
+  &.offline {
+    &::before {
+      background-color: #c30;
+    }
+  }
+}

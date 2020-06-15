@@ -1,4 +1,4 @@
-import {app, BrowserWindow, screen, webFrame, ipcMain} from 'electron';
+import {app, BrowserWindow, ipcMain, screen, webFrame} from 'electron';
 // import {autoUpdater} from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
@@ -14,10 +14,12 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    transparent: true,
-    width: 1350,
-    height: 850,
-    frame: false,
+    transparent: false,
+    /*width: 1600,
+    height: 900,*/
+    width: screen.getPrimaryDisplay().bounds.width - 50,
+    height: screen.getPrimaryDisplay().bounds.height - 50,
+    frame: true,
     movable: true,
     resizable: false,
     center: true,
@@ -32,7 +34,7 @@ function createWindow(): BrowserWindow {
   if (serve) {
     require('devtron').install();
 
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
@@ -40,9 +42,9 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
 
   } else {
-    /*mainWindow.webContents.on('devtools-opened', () => {
-        mainWindow.webContents.closeDevTools();
-    });*/
+    win.webContents.on('devtools-opened', () => {
+      win.webContents.closeDevTools();
+    });
 
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),

@@ -1,0 +1,66 @@
+.toolbar-container {
+  .box-holder {
+    margin: 0 1em;
+  }
+
+  .box {
+    .mat-icon {
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      transform-origin: bottom;
+    }
+  }
+
+  .app-open {
+    margin: 0 .5em;
+
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      right: 0;
+      width: 75%;
+      height: 3px;
+      background-color: #f57c00;
+    }
+
+    &.app-minimized {
+      &::before {
+        width: 20%;
+      }
+    }
+
+    &:hover {
+      .mat-icon {
+        animation-name: bounce-7;
+        animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+      }
+    }
+  }
+}
+
+@keyframes bounce-7 {
+  0% {
+    transform: scale(1, 1) translateY(0);
+  }
+  10% {
+    transform: scale(1.1, .9) translateY(0);
+  }
+  30% {
+    transform: scale(.9, 1.1) translateY(-8px);
+  }
+  50% {
+    transform: scale(1.05, .95) translateY(0);
+  }
+  57% {
+    transform: scale(1, 1) translateY(-5px);
+  }
+  64% {
+    transform: scale(1, 1) translateY(0);
+  }
+  100% {
+    transform: scale(1, 1) translateY(0);
+  }
+}

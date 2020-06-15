@@ -1,27 +1,24 @@
-import {AfterViewInit, Component, ViewChild, ViewContainerRef} from '@angular/core';
+import {AfterViewInit, Component, Inject, ViewChild, ViewContainerRef} from '@angular/core';
 import {LazyComponentService} from '../../services/lazy-component.service';
-import {NbWindowRef} from '@nebular/theme';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {ServiceItemsInterface} from '../dashboard/logic/service-items.interface';
 
 @Component({
   selector: 'app-conference',
-  templateUrl: './conference.component.html',
-  styleUrls: ['./conference.component.scss']
+  templateUrl: './conference.component.html'
 })
 export class ConferenceComponent implements AfterViewInit {
   @ViewChild('container', {read: ViewContainerRef}) container;
 
   constructor(private lazyComponentService: LazyComponentService,
-              private windowRef: NbWindowRef) {
-  }
-
-  ngOnInit() {
+              @Inject(MAT_DIALOG_DATA) public data: ServiceItemsInterface) {
   }
 
   async ngAfterViewInit() {
-    this.lazyComponentService.loadComponent('conferenceModuleId', this.container);
-  }
+    const ref = this.lazyComponentService.loadComponent('conferenceModuleId', this.container);
 
-  ngOnDestroy(): void {
-    console.log('des conf');
+    ref.then(result => {
+      result.instance.data = this.data;
+    });
   }
 }

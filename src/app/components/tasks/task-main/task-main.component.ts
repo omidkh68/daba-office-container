@@ -1,14 +1,18 @@
-import {Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MatTabChangeEvent} from '@angular/material/tabs';
-import {ProjectInterface} from '../../projects/logic/project-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {FilterInterface} from '../logic/filter-interface';
+import {ProjectInterface} from '../../projects/logic/project-interface';
+import {TranslateService} from '@ngx-translate/core';
+import {TaskAddComponent} from '../task-add/task-add.component';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 import {TaskDataInterface} from '../logic/task-data-interface';
-import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];
@@ -20,8 +24,13 @@ export interface TaskEssentialInfo {
   templateUrl: './task-main.component.html',
   styleUrls: ['./task-main.component.scss']
 })
-export class TaskMainComponent implements OnDestroy {
+export class TaskMainComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('bottomSheet', {static: false}) bottomSheet: TaskBottomSheetComponent;
+
+  rtlDirection: boolean;
   taskEssentialInfo: TaskEssentialInfo;
+  pushTaskToBoard;
+  doResetFilter: boolean = false;
   activeTab: number = 0;
   refreshBoardData: boolean = false;
   filterData: FilterInterface = {
@@ -35,37 +44,33 @@ export class TaskMainComponent implements OnDestroy {
     typeId: 0
   };
   filteredBoardsData: any;
-  tabs = [
-    {
-      name: 'برد',
-      icon: 'view_week',
-      id: 'boards'
-    },
-    {
-      name: 'تقویم',
-      icon: 'event_available',
-      id: 'calendar'
-    }
-    /*{
-      name: 'یادداشت ها',
-      icon: 'description',
-      id: 'notes'
-    },
-    {
-      name: 'پیام ها',
-      icon: 'textsms',
-      id: 'messages'
-    },
-    {
-      name: 'فایل ها',
-      icon: 'attach_file',
-      id: 'files'
-    },*/
-  ];
+  tabs = [];
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(public dialog: MatDialog) {
+  constructor(private viewDirection: ViewDirectionService,
+              private translate: TranslateService,
+              public dialog: MatDialog) {
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.tabs = [
+        {
+          name: this.getTranslate('tasks.main.boards'),
+          icon: 'view_week',
+          id: 'boards'
+        },
+        {
+          name: this.getTranslate('tasks.main.calendar'),
+          icon: 'event_available',
+          id: 'calendar'
+        }
+      ];
+    }, 200);
   }
 
   addNewTask() {
@@ -75,7 +80,7 @@ export class TaskMainComponent implements OnDestroy {
       projectsList: this.taskEssentialInfo.projectsList
     };
 
-    const dialogRef = this.dialog.open(TaskDetailComponent, {
+    const dialogRef = this.dialog.open(TaskAddComponent, {
       data: data,
       autoFocus: false,
       width: '50%',
@@ -103,6 +108,10 @@ export class TaskMainComponent implements OnDestroy {
     this.taskEssentialInfo = event;
   }
 
+  getTaskToBoardData(event) {
+    this.pushTaskToBoard = event;
+  }
+
   showFilter() {
     const data: FilterTaskInterface = {
       filterData: this.filterData,
@@ -117,9 +126,6 @@ export class TaskMainComponent implements OnDestroy {
       height: '300px'
     });
 
-    if (this.activeTab) {
-
-    }
     this._subscription.add(
       dialogRef.afterClosed().subscribe(resp => {
         if (resp && resp.result === 1) {
@@ -127,14 +133,34 @@ export class TaskMainComponent implements OnDestroy {
 
           this.filteredBoardsData = {
             resp: resp
-          }
+          };
+
+          this.doResetFilter = true;
         }
       })
     );
   }
 
+  resetFilter() {
+    this.refreshBoardData = true;
+
+    setTimeout(() => {
+      this.refreshBoardData = false;
+      this.doResetFilter = false;
+    }, 200);
+  }
+
+  openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {
+    bottomSheetConfig.bottomSheetRef = this.bottomSheet;
+
+    this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
+  }
+
   ngOnDestroy(): void {
-    console.log('des main');
     if (this._subscription) {
       this._subscription.unsubscribe();
     }

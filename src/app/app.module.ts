@@ -5,16 +5,14 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
-
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import {HomeModule} from './home/home.module';
+import {SharedModule} from './shared/shared.module';
 
 import {AppComponent} from './app.component';
-import {NbThemeModule} from '@nebular/theme';
-import {SharedModule} from './shared/shared.module';
-import { MessageComponent } from './components/message/message.component';
+import {MessageComponent} from './components/message/message.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -28,11 +26,10 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   ],
   imports: [
     HomeModule,
+    SharedModule,
     BrowserModule,
     HttpClientModule,
-    SharedModule,
     AppRoutingModule,
-    NbThemeModule.forRoot({name: 'default'}),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -41,6 +38,10 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       }
     })
   ],
+  providers: [
+    {provide: 'windowObject', useValue: window},
+  ],
+  exports: [SharedModule],
   bootstrap: [AppComponent]
 })
 export class AppModule {

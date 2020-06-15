@@ -1,0 +1,37 @@
+<div class="popup-container pos-rel full-height full-width padding-full">
+  <h2 class="full-width height-40 line-height-40 text-center text-white text-weight-normal">
+    {{data.adminId ? data.name + ' ' + data.family : data}}
+  </h2>
+
+  <div class="full-width height-40 line-height-40 text-center text-white text-weight-normal">
+    {{'05:34'}}
+  </div>
+
+  <div class="text-center padding-t-b">
+    <img [alt]="data.name + ' ' + data.family" [src]="'assets/profileImg/'+ (data.adminId ? data.adminId : '0') +'.jpg'"
+         class="mat-elevation-z3 width-150 height-150 round-corner-all"
+         matListAvatar>
+  </div>
+
+  <div class="height-100 text-center width-250 center-block">
+    <mat-grid-list class="full-height" cols="3" gutterSize="40" rowHeight="fit">
+      <mat-grid-tile
+        *ngFor="let key of keys"
+        [colspan]="1"
+        [rowspan]="1">
+        <button class="key cursor-pointer text-white mat-elevation-z3 no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 text-center round-corner-all"
+                mat-raised-button>
+          <mat-icon>{{key.num}}</mat-icon>
+        </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <div class="full-width text-center">
+    <button (click)="hangUp()"
+            class="red-gradient text-white font-8-rem margin-auto width-250 height-35 padding-mini-r-l"
+            mat-raised-button type="submit">
+      {{'soft_phone.call_pop_up.hang_up' | translate}}
+    </button>
+  </div>
+</div>

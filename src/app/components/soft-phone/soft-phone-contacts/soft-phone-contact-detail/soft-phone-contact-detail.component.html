@@ -1,0 +1,95 @@
+<div class="full-width full-height padding-r-l padding-b-full">
+  <button (click)="closeBottomSheet();"
+          [ngClass]="rtlDirection ? 'left-0' : 'right-0'"
+          class="width-30 height-30 pos-abs top-0 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+    <mat-icon
+      class="text-dark-mode-color line-height-35 full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
+      close
+    </mat-icon>
+  </button>
+
+  <div *ngIf="form" class="height-full-minus-35 float-right full-width">
+    <form [formGroup]="form" class="full-height">
+      <h1 class="margin-b-full text-gray-800 full-width font-full-em text-weight-500 margin-b-half">
+        {{'soft_phone.soft_phone_contacts.add_new_contact' | translate}}
+      </h1>
+
+      <div class="row">
+        <div class="col-md-12 margin-b-half float-right">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>{{'global.name' | translate}}</mat-label>
+
+            <input formControlName="name" matInput tabindex="1">
+
+            <button (click)="form.get('name').setValue('')" *ngIf="form.get('name').touched && form.get('name').value.length"
+                    aria-label="Clear"
+                    class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
+                    type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
+              {{'global.name_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-12 margin-b-half float-right">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>{{'global.family' | translate}}</mat-label>
+
+            <input formControlName="family" matInput tabindex="2">
+
+            <button (click)="form.get('family').setValue('')" *ngIf="form.get('family').touched && form.get('family').value.length"
+                    aria-label="Clear"
+                    class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
+                    type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="!form.get('family').valid && form.get('family').touched">
+              {{'global.family_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-12 margin-b-half float-right">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>{{'global.extension' | translate}}</mat-label>
+
+            <input formControlName="extension" matInput tabindex="3">
+
+            <button (click)="form.get('extension').setValue('')" *ngIf="form.get('extension').touched && form.get('extension').value.length"
+                    aria-label="Clear"
+                    class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
+                    type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="!form.get('extension').valid && form.get('extension').touched">
+              {{'global.extension_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="display-flex">
+        <button [disabled]="!form.valid && form.touched"
+                [ngClass]="data && data.action === 'edit' && rtlDirection ? 'margin-l-full' : data && data.action === 'edit' ? 'margin-r-full' : ''"
+                class="green-gradient full-width text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+                mat-raised-button
+                tabindex="4"
+                type="submit">
+          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+          <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
+        </button>
+
+        <button *ngIf="data && data.action === 'edit'"
+                class="red-gradient width-30 height-30 text-white line-height-30 font-9-em overflow-hide text-weight-normal" mat-raised-button
+                tabindex="5">
+          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">delete</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -5,13 +5,13 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../users/logic/user-interface';
 import {TaskInterface} from '../tasks/logic/task-interface';
 import {ElectronService} from '../../core/services';
-import {UserInfoService} from '../../services/user-info.service';
-import {CurrentTaskService} from '../../services/current-task.service';
-import {ChangeStatusService} from '../../services/change-status.service';
 import {UserStatusInterface} from '../users/logic/user-status-interface';
 import {ScreenshotInterface} from './logic/screenshot-interface';
 import * as moment from 'moment';
 import * as lodash from 'lodash';
+import {ChangeStatusService} from '../status/services/change-status.service';
+import {CurrentTaskService} from '../tasks/services/current-task.service';
+import {UserInfoService} from '../users/services/user-info.service';
 
 export interface AvailableHoursInterface {
   time: string;
@@ -19,11 +19,12 @@ export interface AvailableHoursInterface {
 }
 
 @Component({
-  selector: 'app-screenshot'
+  selector: 'app-screenshot',
+  template: ``
 })
 export class ScreenshotComponent implements OnDestroy {
-  timerDueTime: number = 5000;
-  timerPeriod: number = 5000;
+  timerDueTime: number = 30000;
+  timerPeriod: number = 30000;
   loggedInUser: UserInterface;
   userCurrentStatus: UserStatusInterface | string = '';
   currentTasks: Array<TaskInterface> | null = null;

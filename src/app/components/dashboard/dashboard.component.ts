@@ -1,25 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NbWindowService} from '@nebular/theme';
-import {TasksComponent} from '../tasks/tasks.component';
 import {ElectronService} from '../../core/services';
 import {ServiceItemsInterface} from './logic/service-items.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDialog} from '@angular/material/dialog';
-import {ChangeStatusComponent} from '../status/change-status/change-status.component';
-import {ConferenceComponent} from '../conference/conference.component';
-import {ChangeStatusService} from '../../services/change-status.service';
-import {UserStatusInterface} from '../users/logic/user-status-interface';
-import {ChangeUserStatusInterface} from '../status/logic/change-user-status.interface';
-import {ApiService as UserApiService} from '../users/logic/api.service';
 import {systemPreferences} from 'electron';
 import {UserInterface} from '../users/logic/user-interface';
-import {CurrentTaskService} from '../../services/current-task.service';
-import {UserInfoService} from '../../services/user-info.service';
 import {MessageService} from '../../services/message.service';
-
-export interface INotification {
-  onclick: () => void;
-}
+import {WindowManagerService} from '../../services/window-manager.service';
+import {WindowInterface} from './logic/window.interface';
+import {ViewDirectionService} from '../../services/view-direction.service';
+import {UserInfoService} from '../users/services/user-info.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,46 +17,47 @@ export interface INotification {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  rtlDirection: boolean;
+  windowManager: Array<WindowInterface>;
   loggedInUser: UserInterface;
-  userCurrentStatus: UserStatusInterface | string;
   serviceList: ServiceItemsInterface[] = [
     {
       serviceId: 1,
       serviceNameFa: 'سیستم مدیریت تسک',
       serviceNameEn: 'Task Management System',
-      classList: 'service-task-management',
-      icon: 'playlist_add_check'
+      serviceTitle: 'service-task',
+      icon: 'playlist_add_check',
+      status: 1,
+      width: 1200,
+      height: 700
     },
     {
       serviceId: 2,
-      serviceNameFa: 'سیستم CRM',
-      serviceNameEn: 'CRM System',
-      classList: 'service-crm',
-      icon: 'device_hub'
+      serviceNameFa: 'سیستم تلفنی',
+      serviceNameEn: 'PBX System',
+      serviceTitle: 'service-pbx',
+      icon: 'perm_phone_msg',
+      status: 1,
+      width: 350,
+      height: 500
     },
     {
       serviceId: 3,
-      serviceNameFa: 'سیستم چت',
-      serviceNameEn: 'Chat System',
-      classList: 'service-chat',
-      icon: 'chat'
-    },
-    {
-      serviceId: 4,
-      serviceNameFa: 'سیستم کنفرانس',
-      serviceNameEn: 'Conference System',
-      classList: 'service-conference',
-      icon: 'perm_phone_msg'
+      serviceNameFa: 'سیستم کنفرانس ویدیویی',
+      serviceNameEn: 'Video Conference System',
+      serviceTitle: 'service-video-conference',
+      icon: 'picture_in_picture',
+      status: 1,
+      width: 1200,
+      height: 700
     }
   ];
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private electronService: ElectronService,
-              private windowService: NbWindowService,
-              private changeStatusService: ChangeStatusService,
-              private userStatusService: ChangeStatusService,
-              private userApiService: UserApiService,
+              private viewDirection: ViewDirectionService,
+              private windowManagerService: WindowManagerService,
               public dialog: MatDialog,
               private messageService: MessageService,
               private userInfoService: UserInfoService) {
@@ -75,11 +66,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     this._subscription.add(
-      this.changeStatusService.currentUserStatus.subscribe(status => {
-        console.log(status);
-        this.userCurrentStatus = status
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
 
-      })
+    this._subscription.add(
+      this.windowManagerService.windowsList.subscribe(windowList => this.windowManager = windowList)
     );
   }
 
@@ -88,107 +79,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.messageService.durationInSeconds = 10;
       this.messageService.showMessage(`${this.loggedInUser.name} ${this.loggedInUser.family} خوش آمدید `);
     }, 2000);
-
-    /*const notification: INotification = <INotification>(new Notification('Omid', {
-      body: 'salam sosis',
-      icon: 'icon'
-    }));
-
-    notification.onclick = () => {
-      console.log('from notification');
-    };*/
-
-    /*this.notification = new Notification('test message', {
-      body: 'omdioasd'
-    });
-
-    this.notification.onclick = () => {
-      console.log('omodidimasoidoaisjoa');
-    };*/
-
-    /*this.electronService.systemPreferences.askForMediaAccess('microphone').then(result => {
-      console.log(result);
-    });
-
-    console.log(this.electronService.systemPreferences.getMediaAccessStatus('microphone'));*/
   }
 
-  openApi(service: ServiceItemsInterface) {
-    let component: any;
-
-    switch (service.serviceId) {
-      case 1: {
-        component = TasksComponent;
-        break;
-      }
-
-      case 2: {
-        component = TasksComponent;
-        break;
-      }
-
-      case 3: {
-        component = TasksComponent;
-        break;
-      }
-
-      case 4: {
-        component = ConferenceComponent;
-        break;
-      }
-    }
-
-    const className = service.serviceNameEn.replace(' ', '_').replace(' ', '_').toLowerCase();
-
-    const windowRef = this.windowService.open(component, {
-      title: service.serviceNameFa,
-      windowClass: className
-    });
+  changeDarkMode() {
+    this.userInfoService.changeDarkMode(this.loggedInUser);
   }
 
-  changeStatus(startStatus: boolean) {
-    if (startStatus) {
-      const dialogRef = this.dialog.open(ChangeStatusComponent, {
-        autoFocus: false,
-        width: '500px',
-        height: '355px',
-        panelClass: 'status-dialog'
-      });
-
-      this._subscription.add(
-        dialogRef.afterClosed().subscribe((resp: any) => {
-          this.messageService.showMessage(`${resp.message}`);
-        })
-      );
-    } else {
-      const statusInfo: ChangeUserStatusInterface = {
-        userId: 1,
-        assigner: 1,
-        statusTime: 'stop'
-      };
-
-      this._subscription.add(
-        this.userApiService.applyStatusToUser(statusInfo).subscribe((resp: any) => {
-          if (resp.result === 1) {
-            this.messageService.showMessage(`${resp.message}`);
-
-            this.changeStatusService.changeUserStatus(resp.content.user.userCurrentStatus);
-          }
-        })
-      );
-    }
-  }
-
-  closeApp() {
-    const window = this.electronService.remote.getCurrentWindow();
-
-    window.close();
-  }
-
-  minimizeApp() {
-    const window = this.electronService.remote.getCurrentWindow();
-
-    window.minimize();
+  changeDirection() {
+    const rtlDirection: boolean = !this.rtlDirection;
+    this.viewDirection.changeDirection(rtlDirection);
   }
 
   ngOnDestroy(): void {
