@@ -28,6 +28,7 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   projectsList: ProjectInterface[] = [];
   socket = io(AppConfig.socketUrl);
   calendarEvents = [];
+  sumTimes = 0;
 
   monthView = false;
   events = [
@@ -96,7 +97,6 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
 
 
   getBoards(resp = null) {
-
     if(resp){
       //this._subscription.add(
       if (resp.result === 1) {
@@ -106,7 +106,7 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
 
         const calendarEvent = [];
 
-        console.log(this.tasks , "Husin");
+        //console.log(this.tasks , "Husin");
 
         this.tasks.map(task => {
           const taskEvent = {

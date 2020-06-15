@@ -75,7 +75,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     this._subscription.add(
-      this.changeStatusService.currentUserStatus.subscribe(status => this.userCurrentStatus = status)
+      this.changeStatusService.currentUserStatus.subscribe(status => {
+        console.log(status);
+        this.userCurrentStatus = status
+
+      })
     );
   }
 

@@ -1,5 +1,5 @@
 export interface TaskDurationInterface {
   adminId: number;
-  startAt: string;
-  stopAt: string;
+  dateStart: string;
+  dateStop: string;
 }

@@ -1,78 +1,90 @@
-<form [formGroup]="form" (submit)="submit()">
-    <div class="col-md-3">
-        <mat-form-field class="full-width font-8-em">
-            <img matPrefix
-                 *ngIf="form.get('adminId').valid"
-                 [src]="'/assets/profileImg/'+form.get('adminId').value+'.jpg'"
-                 class="width-20 height-20 margin-l-half round-corner-all pos-rel top-three-tenth">
-            <mat-label>مسئول انجام</mat-label>
-            <mat-select formControlName="adminId" tabIndex="4">
-                <mat-option *ngFor="let user of usersList" [value]="user.adminId">
+<div class="row">
+    <div class="col-md-2">
+        <div *ngIf="sumTime">
+            <h4>جمع ساعات کاری</h4>
+            <h2>{{sumTime}}</h2>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <form [formGroup]="form" (submit)="submit()"
+              class="bg-white display-table full-width margin-b-full-2 ng-dirty ng-touched ng-valid padding-full round-corner rtl w-100">
+            <div class="col-md-3 float-right">
+                <mat-form-field class="full-width font-8-em">
                     <img matPrefix
-                         class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
-                         [src]="'/assets/profileImg/'+user.adminId+'.jpg'">
-                    {{user.name + ' ' + user.family}}
-                </mat-option>
-            </mat-select>
+                         *ngIf="form.get('adminId').valid"
+                         [src]="'/assets/profileImg/'+form.get('adminId').value+'.jpg'"
+                         class="width-20 height-20 margin-l-half round-corner-all pos-rel top-three-tenth">
+                    <mat-label>مسئول انجام</mat-label>
+                    <mat-select formControlName="adminId" tabIndex="4">
+                        <mat-option *ngFor="let user of usersList" [value]="user.adminId">
+                            <img matPrefix
+                                 class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
+                                 [src]="'/assets/profileImg/'+user.adminId+'.jpg'">
+                            {{user.name + ' ' + user.family}}
+                        </mat-option>
+                    </mat-select>
 
-            <mat-error *ngIf="!form.get('adminId').valid && form.get('adminId').touched">
-                لطفا مسئول را مشخص نمایید
-            </mat-error>
-        </mat-form-field>
+                    <mat-error *ngIf="!form.get('adminId').valid && form.get('adminId').touched">
+                        لطفا مسئول را مشخص نمایید
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-3 float-right">
+                <mat-form-field class="full-width font-8-em">
+                    <mat-label>از تاریخ</mat-label>
+                    <input matInput [matDatepicker]="picker1" readonly
+                           (focus)="picker1.open()" (click)="picker1.open()"
+                           (dateChange)="dateToGregorian('dateStart', $event)"
+                           formControlName="dateStart" tabindex="5">
+                    <mat-datepicker #picker1></mat-datepicker>
+
+                    <button class="close-icon pos-rel top-half float-left" type="button"
+                            *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
+                            mat-button matSuffix mat-icon-button aria-label="Clear"
+                            (click)="form.get('dateStart').setValue('')">
+                        <mat-icon>close</mat-icon>
+                    </button>
+
+                    <mat-error *ngIf="!form.get('dateStart').valid && form.get('dateStart').touched">
+                        لطفا تاریخ را انتخاب نمایید
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-3 float-right">
+                <mat-form-field class="full-width font-8-em">
+                    <mat-label>تا تاریخ</mat-label>
+                    <input matInput [matDatepicker]="picker2" readonly
+                           (focus)="picker2.open()" (click)="picker2.open()"
+                           (dateChange)="dateToGregorian('dateStop', $event)"
+                           formControlName="dateStop" tabindex="6">
+                    <mat-datepicker #picker2></mat-datepicker>
+
+                    <button class="close-icon pos-rel top-half float-left" type="button"
+                            *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
+                            mat-button matSuffix mat-icon-button aria-label="Clear"
+                            (click)="form.get('dateStop').setValue('')">
+                        <mat-icon>close</mat-icon>
+                    </button>
+
+                    <mat-error *ngIf="!form.get('dateStop').valid && form.get('dateStop').touched">
+                        لطفا تاریخ را انتخاب نمایید
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-3 float-right">
+                <button mat-raised-button
+                        type="submit"
+                        tabindex="13"
+                        class="margin-t-b green-gradient float-left text-white line-height-30 font-7-em overflow-hide text-weight-normal">
+                    <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+                    <span class="padding-mini-r-l">جستجو</span>
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="col-md-3">
-        <mat-form-field class="full-width font-8-em">
-            <mat-label>از تاریخ</mat-label>
-            <input matInput [matDatepicker]="picker1" readonly
-                   (focus)="picker1.open()" (click)="picker1.open()"
-                   (dateChange)="dateToGregorian('dateStart', $event)"
-                   formControlName="dateStart" tabindex="5">
-            <mat-datepicker #picker1></mat-datepicker>
-
-            <button class="close-icon pos-rel top-half float-left" type="button"
-                    *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
-                    mat-button matSuffix mat-icon-button aria-label="Clear"
-                    (click)="form.get('dateStart').setValue('')">
-                <mat-icon>close</mat-icon>
-            </button>
-
-            <mat-error *ngIf="!form.get('dateStart').valid && form.get('dateStart').touched">
-                لطفا تاریخ را انتخاب نمایید
-            </mat-error>
-        </mat-form-field>
-    </div>
-    <div class="col-md-3">
-        <mat-form-field class="full-width font-8-em">
-            <mat-label>تا تاریخ</mat-label>
-            <input matInput [matDatepicker]="picker2" readonly
-                   (focus)="picker2.open()" (click)="picker2.open()"
-                   (dateChange)="dateToGregorian('dateStop', $event)"
-                   formControlName="dateStop" tabindex="6">
-            <mat-datepicker #picker2></mat-datepicker>
-
-            <button class="close-icon pos-rel top-half float-left" type="button"
-                    *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
-                    mat-button matSuffix mat-icon-button aria-label="Clear"
-                    (click)="form.get('dateStop').setValue('')">
-                <mat-icon>close</mat-icon>
-            </button>
-
-            <mat-error *ngIf="!form.get('dateStop').valid && form.get('dateStop').touched">
-                لطفا تاریخ را انتخاب نمایید
-            </mat-error>
-        </mat-form-field>
-    </div>
-    <div class="col-md-3">
-        <button mat-raised-button
-                type="submit"
-                tabindex="13"
-                class="green-gradient float-left text-white line-height-30 font-7-em overflow-hide text-weight-normal">
-            <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
-            <span class="padding-mini-r-l">جستجو</span>
-        </button>
-    </div>
-</form>
+</div>
 <full-calendar class="float-right w-100" defaultView="dayGridMonth"
+               #calendar
                [locale]="'fa'"
                [dir]="'rtl'"
                [editable]="false"
@@ -98,9 +110,10 @@
                   buttonText: 'ماه'
                 }
                }"
+               [firstDay]="1"
                [events]="calendarDifferentEvents"
                [plugins]="calendarPlugins"
                [allDaySlot]="false"
-               [displayEventTime]="true"
+               [displayEventTime]="false"
                [eventLimit]="2">
 </full-calendar>

@@ -1,15 +1,14 @@
-import {Component, Inject, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component , Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
+import { Calendar } from "@fullcalendar/core";
 import {Subscription} from "rxjs";
-import {FilterInterface} from "../../logic/filter-interface";
 import {ApiService} from "../../logic/api.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {FilterTaskInterface} from "../../logic/filter-task-interface";
 import {TaskDurationInterface} from "../../logic/task-duration-interface";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import * as moment from 'moment';
+import {FullCalendarComponent} from "@fullcalendar/angular";
 
 
 @Component({
@@ -26,20 +25,34 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
   calendarDifferentEvents: any;
   @Input()
   usersList: any;
+  sumTime:string = '';
+
+  @ViewChild('calendar') calendarComponent: FullCalendarComponent; // the #calendar in the template
+
+  calendarApi: Calendar;
 
   form: FormGroup;
 
   filterData: TaskDurationInterface = {
     adminId: 0,
-    startAt : '',
-    stopAt : ''
+    dateStart : '',
+    dateStop : ''
   };
 
   constructor(private api: ApiService){
 
   }
 
+  gotoPast() {
+    let calendarApi = this.calendarComponent.getApi();
+    calendarApi.gotoDate('2000-01-01'); // call a method on the Calendar object
+  }
   ngOnInit(): void {
+
+    // setTimeout(()=> {
+    //   this.calendarApi = this.calendarComponent.getApi();
+    //
+    // },3000)
 
     this.form = new FormGroup({
       adminId: new FormControl(0),
@@ -58,11 +71,15 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
 
     const formValue: TaskDurationInterface = Object.assign({}, this.form.value);
 
+
+
+
     this._subscription.add(
         this.api.boradsCalendarDurationTask(formValue).subscribe((resp: any) => {
           if (resp.result === 1) {
             let calendarEvent = [];
-            resp.content.map(time => {
+            let sum = 0;
+            resp.content[0].map(time => {
               const taskEvent = {
                 title: time.timediff,
                 start: new Date(time.startDate),
@@ -72,9 +89,13 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
               calendarEvent.push(taskEvent);
             });
 
-            this.calendarDifferentEvents = calendarEvent;
+            this.sumTime = resp.content[1][0].timeSum;
 
-            //console.log(resp);
+            this.calendarDifferentEvents = calendarEvent;
+            let calendarApi = this.calendarComponent.getApi();
+            if(formValue.dateStart)
+              calendarApi.gotoDate(formValue.dateStart); // call a method on the Calendar object
+
 
 
           } else {
