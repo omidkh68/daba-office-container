@@ -4,6 +4,7 @@ import {WindowInterface} from '../../dashboard/logic/window.interface';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
+import {SoftPhoneService} from '../service/soft-phone.service';
 
 @Component({
   selector: 'app-soft-phone-window',
@@ -17,6 +18,7 @@ export class SoftPhoneWindowComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private windowManagerService: WindowManagerService,
+              private softPhoneService: SoftPhoneService,
               private viewDirection: ViewDirectionService) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
@@ -48,6 +50,10 @@ export class SoftPhoneWindowComponent implements OnInit, OnDestroy {
   }
 
   close() {
+    this.softPhoneService.sipHangUp();
+
+    this.softPhoneService.sipUnRegister();
+
     this.windowManagerService.closeWindow(this.data);
   }
 

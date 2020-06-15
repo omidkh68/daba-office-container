@@ -46,7 +46,8 @@
       "call_logs": "گزارش تماس"
     },
     "call_pop_up": {
-      "hang_up": "قطع تماس"
+      "hang_up": "قطع تماس",
+      "unknown_number": "شماره ناشناس"
     },
     "call_to_action": {
       "local_time": "وقت محلی",
@@ -57,6 +58,10 @@
     "soft_phone_contacts": {
       "new_contact": "مخاطب جدید",
       "add_new_contact": "افزودن مخاطب جدید"
+    },
+    "incoming_call": {
+      "accept": "قبول تماس",
+      "decline": "رد تماس"
     }
   },
   "tasks": {

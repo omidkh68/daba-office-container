@@ -1,4 +1,6 @@
 <div class="dashboard-container full-width full-height">
+  <app-soft-phone-incoming-call [rtlDirection]="rtlDirection"></app-soft-phone-incoming-call>
+
   <div class="dashboard-app-boundary height-full-minus-70 padding-full">
     <button mat-raised-button (click)="changeDarkMode()">dark mode: {{loggedInUser.darkMode ? 'true' : 'false'}}</button>
     <button mat-raised-button (click)="changeDirection()">direction mode: {{rtlDirection}}</button>

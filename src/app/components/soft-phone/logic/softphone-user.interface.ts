@@ -5,4 +5,5 @@ export interface SoftphoneUserInterface extends UserInterface {
   date: string;
   time: string;
   extension: string;
+  data?: any;
 }

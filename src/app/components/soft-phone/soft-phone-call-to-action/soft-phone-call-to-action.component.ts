@@ -5,6 +5,8 @@ import {UserInfoService} from '../../users/services/user-info.service';
 import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
+import {SoftPhoneService} from '../service/soft-phone.service';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 
 @Component({
   selector: 'app-soft-phone-call-to-action',
@@ -20,6 +22,7 @@ export class SoftPhoneCallToActionComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
+              private softPhoneService: SoftPhoneService,
               private notificationService: NotificationService,
               private userInfoService: UserInfoService) {
     this._subscription.add(
@@ -35,15 +38,17 @@ export class SoftPhoneCallToActionComponent implements OnInit, OnDestroy {
     this.data = this.bottomSheetData.data;
   }
 
-  call(user: UserInterface) {
-    const notification: Notification = new Notification(`${this.loggedInUser.name} ${this.loggedInUser.family}`, {
+  call(data: SoftphoneUserInterface) {
+    /*const notification: Notification = new Notification(`${this.loggedInUser.name} ${this.loggedInUser.family}`, {
       body: `${user.name} ${user.family}`,
       icon: 'assets/profileImg/' + user.adminId + '.jpg',
       dir: 'auto',
       data: user
     });
+    this.notificationService.changeCurrentNotification(user);*/
 
-    this.notificationService.changeCurrentNotification(user);
+    this.softPhoneService.changeOnCallUser(data);
+    this.softPhoneService.sipHangUp();
   }
 
   closeBottomSheet() {

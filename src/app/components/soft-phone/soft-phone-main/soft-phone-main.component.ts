@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
@@ -19,6 +19,7 @@ import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/so
 })
 export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: SoftPhoneBottomSheetComponent;
+  @ViewChild('audioRemote', {static: false}) audioRemote: ElementRef;
 
   loggedInUser: UserInterface;
   rtlDirection: boolean;
@@ -54,7 +55,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       name: 'مریم',
       family: 'بهادری',
       email: 'm.bahadori@dabacenter.ir',
-      status: '0',
+      status: '1',
       permission: '111111000000000000001111111111110000000011100000000000000000111111000000000000000',
       darkMode: 0,
       creationDate: '2020-05-27 16:57:13',
@@ -63,7 +64,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         roleNameEn: 'Manager',
         roleNameFa: 'مدیر ارشد'
       },
-      extension: '202',
+      extension: '6007',
       type: 'outgoing',
       date: '2020-05-20',
       time: '13:21'
@@ -126,7 +127,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         roleNameEn: 'UI Designer',
         roleNameFa: 'طراح بخش کاربری'
       },
-      extension: '09191166401',
+      extension: '6009',
       type: 'incoming',
       date: '2020-05-31',
       time: '12:19'
@@ -166,9 +167,34 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         }
       })
     );
+
+    this._subscription.add(
+      this.softPhoneService.currentOnCallUser.subscribe(onCallUser => {
+        if (onCallUser) {
+          const bottomSheetConfig: SoftPhoneBottomSheetInterface = {
+            component: SoftPhoneCallPopUpComponent,
+            height: '100%',
+            width: '100%',
+            data: onCallUser
+          };
+
+          /*notification.onclick = () => {
+            console.log('in subscribe :D', notification.data);
+          };*/
+
+          this.openButtonSheet(bottomSheetConfig);
+        } else {
+          if (this.bottomSheet) {
+            this.bottomSheet.close();
+          }
+        }
+      })
+    );
   }
 
   ngAfterViewInit(): void {
+    this.softPhoneService.sipRegister(this.audioRemote);
+
     this.softPhoneService.changeSoftPhoneUsers(this.softPhoneUsers);
 
     setTimeout(() => {
