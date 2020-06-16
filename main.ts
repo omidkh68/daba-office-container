@@ -43,7 +43,7 @@ function createWindow(): BrowserWindow {
 
   } else {
     win.webContents.on('devtools-opened', () => {
-      win.webContents.closeDevTools();
+      // win.webContents.closeDevTools();
     });
 
     win.loadURL(url.format({

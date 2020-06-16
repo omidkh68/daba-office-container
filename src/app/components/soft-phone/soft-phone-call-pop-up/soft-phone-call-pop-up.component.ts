@@ -6,7 +6,7 @@ import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneService} from '../service/soft-phone.service';
-import {timer} from 'rxjs/internal/Observable/timer';
+import {timer} from 'rxjs';
 
 export interface KeysInterface {
   num: string;

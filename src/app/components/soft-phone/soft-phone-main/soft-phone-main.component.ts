@@ -193,7 +193,9 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.softPhoneService.sipRegister(this.audioRemote);
+    this.softPhoneService.changeAudioRemoteTag(this.audioRemote);
+
+    this.softPhoneService.sipRegister();
 
     this.softPhoneService.changeSoftPhoneUsers(this.softPhoneUsers);
 
