@@ -142,7 +142,7 @@ export class SoftPhoneService {
     }
   };
 
-  sipCall = (s_type, number = null) => {
+  sipCall = (s_type, number = 0) => {
     if (this.oSipStack && !this.oSipSessionCall) {
       if (s_type == 'call-screenshare') {
         if (!SIPml.isScreenShareSupported()) {
@@ -381,12 +381,8 @@ export class SoftPhoneService {
       case 'terminated': {
         this.changeOnCallUser(null);
         this.changeIncomingCallStatus({status: false});
-
-        console.log('-----------------------------------------');
-        console.log('-----------------------------------------');
-        console.log('-----------  oooooooooooooooo -----------');
-        console.log('-----------------------------------------');
-        console.log('-----------------------------------------');
+        this.stopRingbackTone();
+        this.stopRingTone();
 
         if (e.session == this.oSipSessionRegister) {
           //uiOnConnectionEvent(false, false);
