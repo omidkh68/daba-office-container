@@ -10,13 +10,14 @@ import {SoftPhoneKeypadComponent} from './soft-phone-keypad/soft-phone-keypad.co
 import {SoftPhoneSettingsComponent} from './soft-phone-settings/soft-phone-settings.component';
 import {SoftPhoneContactsComponent} from './soft-phone-contacts/soft-phone-contacts.component';
 import {SoftPhoneCallPopUpComponent} from './soft-phone-call-pop-up/soft-phone-call-pop-up.component';
-import {SoftPhoneInformationComponent} from './soft-phone-information/soft-phone-information.component';
 import {SoftPhoneBottomSheetComponent} from './soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneCallToActionComponent} from './soft-phone-call-to-action/soft-phone-call-to-action.component';
 import {SoftPhoneContactDetailComponent} from './soft-phone-contacts/soft-phone-contact-detail/soft-phone-contact-detail.component';
+import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-information/soft-phone-information.component';
 
 @NgModule({
   declarations: [
+    MyFilterPipe,
     digitalOnlyDirective,
     SoftPhoneMainComponent,
     SoftPhoneLogsComponent,

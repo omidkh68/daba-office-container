@@ -30,7 +30,6 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
           this.incomingStatus = incomingCall.status;
 
           if (incomingCall.data) {
-            debugger;
             this.incomingData = incomingCall.data;
             this.currentPhoneNumber = this.incomingData.o_event.o_message.o_hdr_From.s_display_name;
 

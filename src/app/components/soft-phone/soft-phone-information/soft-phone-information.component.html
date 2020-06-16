@@ -17,7 +17,7 @@
   <div class="height-full-minus-50 overflow-x-hide overflow-y-auto padding-t-b">
     <mat-list class="full-width">
       <mat-list-item (click)="openSheet(user)"
-                     *ngFor="let user of softPhoneUsers"
+                     *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
                      class="highlight cursor-pointer padding-r-l full-height margin-b-full">
         <img [alt]="user.name + ' ' + user.family" [src]="'assets/profileImg/'+ user.adminId +'.jpg'"
              class="mat-elevation-z2 width-35 height-35" matListAvatar>
