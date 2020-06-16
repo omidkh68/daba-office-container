@@ -4,6 +4,13 @@ import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import SIPml from 'ecmascript-webrtc-sipml';
 import {IncomingInterface} from '../logic/incoming.interface';
 
+export interface EssentialTagsInterface {
+  audioRemote: ElementRef;
+  ringtone: ElementRef;
+  ringbacktone: ElementRef;
+  dtmfTone: ElementRef;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,7 +27,7 @@ export class SoftPhoneService {
   private onCallUser = new BehaviorSubject(this._onCallUser);
   public currentOnCallUser = this.onCallUser.asObservable();
 
-  private audioRemoteTag: BehaviorSubject<ElementRef> = new BehaviorSubject(null);
+  private audioRemoteTag: BehaviorSubject<EssentialTagsInterface> = new BehaviorSubject(null);
 
   audioRemote;
   oSipStack;
@@ -56,16 +63,22 @@ export class SoftPhoneService {
     this.onCallUser.next(onCallUser);
   }
 
-  changeAudioRemoteTag(audioRemoteTag) {
-    this.audioRemoteTag.next(audioRemoteTag);
+  changeAudioRemoteTag(essentialTags) {
+    this.audioRemoteTag.next(essentialTags);
 
-    this.audioRemote = this.audioRemoteTagValue;
+    this.ringtone = this.audioRemoteTagValue.ringtone;
+    this.ringbacktone = this.audioRemoteTagValue.ringbacktone;
 
     SIPml.init(this.postInit);
   }
 
   public get audioRemoteTagValue() {
-    return this.audioRemoteTag.value.nativeElement;
+    return {
+      audioRemote: this.audioRemoteTag.value.audioRemote.nativeElement,
+      ringtone: this.audioRemoteTag.value.ringtone.nativeElement,
+      ringbacktone: this.audioRemoteTag.value.ringbacktone.nativeElement,
+      dtmfTone: this.audioRemoteTag.value.dtmfTone.nativeElement
+    };
   }
 
   sipRegister = () => {
@@ -151,7 +164,6 @@ export class SoftPhoneService {
       // oConfigCall.bandwidth = tsk_string_to_object(localStorage.getItem('org.doubango.expert.bandwidth')); // already defined at stack-level but redifined to use latest values
       // oConfigCall.video_size = tsk_string_to_object(localStorage.getItem('org.doubango.expert.video_size')); // already defined at stack-level but redifined to use latest values
       // }
-      // debugger;
 
       // create call session
       this.oSipSessionCall = this.oSipStack.newSession(s_type, this.oConfigCall);
@@ -569,7 +581,7 @@ export class SoftPhoneService {
 
   postInit = () => {
     this.oConfigCall = {
-      audio_remote: this.audioRemoteTagValue,
+      audio_remote: this.audioRemoteTagValue.audioRemote,
       video_local: null,
       video_remote: null,
       screencast_window_id: 0x00000000, // entire desktop

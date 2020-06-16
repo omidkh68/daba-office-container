@@ -20,6 +20,9 @@ import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/so
 export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: SoftPhoneBottomSheetComponent;
   @ViewChild('audioRemote', {static: false}) audioRemote: ElementRef;
+  @ViewChild('ringtone', {static: false}) ringtone: ElementRef;
+  @ViewChild('ringbacktone', {static: false}) ringbacktone: ElementRef;
+  @ViewChild('dtmfTone', {static: false}) dtmfTone: ElementRef;
 
   loggedInUser: UserInterface;
   rtlDirection: boolean;
@@ -27,6 +30,27 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   tabs = [];
 
   softPhoneUsers: Array<SoftphoneUserInterface> = [
+    {
+      adminId: 1,
+      username: 'o.khosrojerdi',
+      password: '06df60287a737ebf3a177bd3b2c47e01',
+      name: 'امید',
+      family: 'خسروجردی',
+      email: 'khosrojerdi@dabacenter.ir',
+      status: '1',
+      permission: '111111000000000000001111111111100000000011100000000000000000111111000000000000000',
+      darkMode: 1,
+      creationDate: '0000-00-00 00:00:00',
+      role: {
+        roleId: 9,
+        roleNameEn: 'UI Manager',
+        roleNameFa: 'مدیر بخش کاربری'
+      },
+      extension: '200',
+      type: 'incoming',
+      date: '2020-05-23',
+      time: '10:53'
+    },
     {
       adminId: 9,
       username: 'seanBassiri',
@@ -43,7 +67,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         roleNameEn: 'Manager',
         roleNameFa: 'مدیر ارشد'
       },
-      extension: '200',
+      extension: '6004',
       type: 'incoming',
       date: '2020-05-23',
       time: '10:53'
@@ -193,7 +217,12 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.softPhoneService.changeAudioRemoteTag(this.audioRemote);
+    this.softPhoneService.changeAudioRemoteTag({
+      audioRemote: this.audioRemote,
+      ringtone: this.ringtone,
+      ringbacktone: this.ringbacktone,
+      dtmfTone: this.dtmfTone
+    });
 
     this.softPhoneService.sipRegister();
 
