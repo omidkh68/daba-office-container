@@ -20,7 +20,9 @@ export class SoftPhoneService {
   private onCallUser = new BehaviorSubject(this._onCallUser);
   public currentOnCallUser = this.onCallUser.asObservable();
 
-  audioRemote: ElementRef;
+  private audioRemoteTag: BehaviorSubject<ElementRef> = new BehaviorSubject(null);
+
+  audioRemote;
   oSipStack;
   oSipSessionRegister;
   oSipSessionCall;
@@ -42,10 +44,6 @@ export class SoftPhoneService {
   oReadyStateTimer;
   viewLocalScreencast; // <video> (webrtc) or <div> (webrtc4all)*/
 
-  constructor() {
-    SIPml.init(this.postInit());
-  }
-
   changeSoftPhoneUsers(softPhoneUsers: Array<SoftphoneUserInterface> | null) {
     this.users.next(softPhoneUsers);
   }
@@ -58,8 +56,19 @@ export class SoftPhoneService {
     this.onCallUser.next(onCallUser);
   }
 
-  sipRegister = (audioRemote) => {
-    this.audioRemote = audioRemote.nativeElement;
+  changeAudioRemoteTag(audioRemoteTag) {
+    this.audioRemoteTag.next(audioRemoteTag);
+
+    this.audioRemote = this.audioRemoteTagValue;
+
+    SIPml.init(this.postInit);
+  }
+
+  public get audioRemoteTagValue() {
+    return this.audioRemoteTag.value.nativeElement;
+  }
+
+  sipRegister = () => {
     try {
       // enable notifications if not already done
       // if (webkitNotifications && webkitNotifications.checkPermission() != 0) {
@@ -121,21 +130,6 @@ export class SoftPhoneService {
   };
 
   sipCall = (s_type, number = null) => {
-    // let audioRemote = document.getElementById('audio_remote');
-    /*this.oConfigCall = {
-      audio_remote: this.audioRemote,
-      video_local: null,
-      video_remote: null,
-      screencast_window_id: 0x00000000, // entire desktop
-      bandwidth: {audio: undefined, video: undefined},
-      video_size: {minWidth: undefined, minHeight: undefined, maxWidth: undefined, maxHeight: undefined},
-      events_listener: {events: '*', listener: this.onSipEventSession},
-      sip_caps: [
-        {name: '+g.oma.sip-im'},
-        {name: 'language', value: '\"en,fr\"'}
-      ]
-    };*/
-
     if (this.oSipStack && !this.oSipSessionCall) {
       if (s_type == 'call-screenshare') {
         if (!SIPml.isScreenShareSupported()) {
@@ -227,14 +221,14 @@ export class SoftPhoneService {
     }
   };
 
-  startRingbackTone() {
+  startRingbackTone = () => {
     try {
       this.ringbacktone.play();
     } catch (e) {
     }
-  }
+  };
 
-  stopRingbackTone() {
+  stopRingbackTone = () => {
     try {
       this.ringbacktone.pause();
     } catch (e) {
@@ -573,11 +567,11 @@ export class SoftPhoneService {
     }
   };
 
-  postInit() {
+  postInit = () => {
     this.oConfigCall = {
-      audio_remote: this.audioRemote,
-      // video_local: this.viewVideoLocal,
-      // video_remote: this.viewVideoRemote,
+      audio_remote: this.audioRemoteTagValue,
+      video_local: null,
+      video_remote: null,
       screencast_window_id: 0x00000000, // entire desktop
       bandwidth: {audio: undefined, video: undefined},
       video_size: {minWidth: undefined, minHeight: undefined, maxWidth: undefined, maxHeight: undefined},
@@ -587,7 +581,7 @@ export class SoftPhoneService {
         {name: 'language', value: '\"en,fr\"'}
       ]
     };
-  }
+  };
 
   uiBtnCallSetText = (s_text) => {
     switch (s_text) {
