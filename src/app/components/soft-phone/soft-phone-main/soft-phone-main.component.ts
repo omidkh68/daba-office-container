@@ -46,7 +46,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         roleNameEn: 'UI Manager',
         roleNameFa: 'مدیر بخش کاربری'
       },
-      extension: '200',
+      extension: '6004',
       type: 'incoming',
       date: '2020-05-23',
       time: '10:53'
@@ -67,7 +67,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         roleNameEn: 'Manager',
         roleNameFa: 'مدیر ارشد'
       },
-      extension: '6004',
+      extension: '6005',
       type: 'incoming',
       date: '2020-05-23',
       time: '10:53'
