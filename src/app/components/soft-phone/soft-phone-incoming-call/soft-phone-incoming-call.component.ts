@@ -26,6 +26,11 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
     this._subscription.add(
       this.softPhoneService.currentIncomingCallStatus.subscribe(incomingCall => {
+        console.log('-----------------------------------------');
+        console.log('-----------------------------------------');
+        console.log('o-o-o-o-o: ', incomingCall ,':o-o-o-o-o');
+        console.log('-----------------------------------------');
+        console.log('-----------------------------------------');
         if (incomingCall) {
           this.incomingStatus = incomingCall.status;
 
@@ -33,14 +38,14 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
             this.incomingData = incomingCall.data;
             this.currentPhoneNumber = this.incomingData.o_event.o_message.o_hdr_From.s_display_name;
 
-            //if (this.softPhoneUsers && this.softPhoneUsers.length) {
+            if (this.softPhoneUsers) {
               const currentUser = this.softPhoneUsers.filter(user => user.extension === this.currentPhoneNumber).pop();
 
               if (currentUser) {
                 this.onCallUser = currentUser;
                 this.onCallUser.extension = this.currentPhoneNumber;
               }
-            //}
+            }
           }
         }
       })
@@ -49,7 +54,6 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
   decline_call() {
     this.softPhoneService.sipHangUp();
-
     this.softPhoneService.changeIncomingCallStatus({status: false});
   }
 

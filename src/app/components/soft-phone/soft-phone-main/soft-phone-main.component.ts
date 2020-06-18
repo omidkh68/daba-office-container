@@ -109,7 +109,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         roleNameEn: 'Responsible Developer',
         roleNameFa: 'مسئول توسعه دهنده ها'
       },
-      extension: '231',
+      extension: '6008',
       type: 'incoming',
       date: '2020-05-18',
       time: '09:19'

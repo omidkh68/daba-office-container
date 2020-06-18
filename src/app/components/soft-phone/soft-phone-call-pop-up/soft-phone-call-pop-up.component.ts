@@ -53,12 +53,15 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
+  }
+
+  ngOnInit(): void {
+    this.data = this.bottomSheetData.data;
 
     this._subscription.add(
       this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
         this.connectedStatus = connectedCall;
 
-        console.log(this.connectedStatus);
         if (this.connectedStatus) {
           this.counter = timer(0, 1000);
 
@@ -81,10 +84,6 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
         }
       })
     );
-  }
-
-  ngOnInit(): void {
-    this.data = this.bottomSheetData.data;
 
     this.softPhoneService.sipCall('call-audio', this.data.extension);
   }
@@ -105,8 +104,6 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   }
 
   hangUp() {
-    // this.bottomSheetData.bottomSheetRef.close('hang up');
-
     this.softPhoneService.sipHangUp();
 
     this.timeCounter.unsubscribe();
