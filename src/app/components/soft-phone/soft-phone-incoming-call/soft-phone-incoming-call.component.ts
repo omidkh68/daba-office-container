@@ -33,12 +33,14 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
             this.incomingData = incomingCall.data;
             this.currentPhoneNumber = this.incomingData.o_event.o_message.o_hdr_From.s_display_name;
 
-            const currentUser = this.softPhoneUsers.filter(user => user.extension === this.currentPhoneNumber).pop();
+            //if (this.softPhoneUsers && this.softPhoneUsers.length) {
+              const currentUser = this.softPhoneUsers.filter(user => user.extension === this.currentPhoneNumber).pop();
 
-            if (currentUser) {
-              this.onCallUser = currentUser;
-              this.onCallUser.extension = this.currentPhoneNumber;
-            }
+              if (currentUser) {
+                this.onCallUser = currentUser;
+                this.onCallUser.extension = this.currentPhoneNumber;
+              }
+            //}
           }
         }
       })

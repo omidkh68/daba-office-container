@@ -27,6 +27,10 @@ export class SoftPhoneService {
   private onCallUser = new BehaviorSubject(this._onCallUser);
   public currentOnCallUser = this.onCallUser.asObservable();
 
+  private _connectedCall: boolean = false;
+  private connectedCall = new BehaviorSubject(this._connectedCall);
+  public currentConnectedCall = this.connectedCall.asObservable();
+
   private audioRemoteTag: BehaviorSubject<EssentialTagsInterface> = new BehaviorSubject(null);
 
   audioRemote;
@@ -63,6 +67,10 @@ export class SoftPhoneService {
     this.onCallUser.next(onCallUser);
   }
 
+  changeConnectedCall(status: boolean) {
+    this.connectedCall.next(status);
+  }
+
   changeAudioRemoteTag(essentialTags) {
     this.audioRemoteTag.next(essentialTags);
 
@@ -79,6 +87,10 @@ export class SoftPhoneService {
       ringbacktone: this.audioRemoteTag.value.ringbacktone.nativeElement,
       dtmfTone: this.audioRemoteTag.value.dtmfTone.nativeElement
     };
+  }
+
+  public get getMuteStatus() {
+    return this.oSipSessionCall;
   }
 
   sipRegister = () => {
@@ -215,6 +227,8 @@ export class SoftPhoneService {
       }
 
       this.oSipSessionCall.bMute = bMute;
+
+      return bMute;
       //btnMute.value = bMute ? "Unmute" : "Mute";
     }
   };
@@ -341,7 +355,19 @@ export class SoftPhoneService {
   };
 
   onSipEventSession = (e) => {
+    console.log('-----------oooooooo-----------');
+    console.log('------------------------------');
     console.log('==session event = ', e.type, e);
+    console.log('------------------------------');
+    console.log('-----------oooooooo-----------');
+
+    if (e.type === 'connecting') {
+      this.changeConnectedCall(false);
+    }
+
+    if (e.type === 'connected' && e.description.toLowerCase() !== 'connected') {
+      this.changeConnectedCall(true);
+    }
 
     switch (e.type) {
       case 'connecting':
@@ -349,7 +375,7 @@ export class SoftPhoneService {
         const bConnected = (e.type == 'connected');
         if (e.session == this.oSipSessionRegister) {
           //uiOnConnectionEvent(bConnected, !bConnected);
-          console.log('<i>' + e.description + '</i>');
+          console.log(e, '<i>' + e.description + '</i>');
         } else if (e.session == this.oSipSessionCall) {
           //btnHangUp.value = 'HangUp';
           //btnCall.disabled = true;
@@ -367,7 +393,7 @@ export class SoftPhoneService {
             }
           }
 
-          console.log('<i>' + e.description + '</i>');
+          console.log(e, '<i>' + e.description + '</i>');
           //divCallOptions.style.opacity = bConnected ? 1 : 0;
 
           if (SIPml.isWebRtc4AllSupported()) { // IE don't provide stream callback

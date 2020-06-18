@@ -18,14 +18,16 @@
   </div>
 
   <div class="height-100 text-center width-250 center-block">
-    <mat-grid-list class="full-height" cols="3" gutterSize="40" rowHeight="fit">
+    <mat-grid-list class="full-height" cols="2" gutterSize="40" rowHeight="fit">
       <mat-grid-tile
         *ngFor="let key of keys"
         [colspan]="1"
         [rowspan]="1">
-        <button class="key cursor-pointer text-white mat-elevation-z3 no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 text-center round-corner-all"
+        <button (click)="callEvent(key)"
+                [disabled]="!connectedStatus"
+                class="key cursor-pointer text-white mat-elevation-z3 no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 text-center round-corner-all"
                 mat-raised-button>
-          <mat-icon>{{key.num}}</mat-icon>
+          <mat-icon>{{!muteStatus ? key.num : key.changeIcon}}</mat-icon>
         </button>
       </mat-grid-tile>
     </mat-grid-list>

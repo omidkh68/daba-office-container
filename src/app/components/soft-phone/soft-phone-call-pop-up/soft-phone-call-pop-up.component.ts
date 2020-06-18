@@ -9,7 +9,9 @@ import {SoftPhoneService} from '../service/soft-phone.service';
 import {timer} from 'rxjs';
 
 export interface KeysInterface {
+  type: string;
   num: string;
+  changeIcon: string;
 }
 
 @Component({
@@ -23,14 +25,19 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   data: any;
   loggedInUser: UserInterface;
   callTimer = '00:00';
-  counter = timer(0, 1000);
+  counter = null;
   timeCounter;
   hour: number = 0;
   minute: number = 0;
   second: number = 0;
+  muteStatus: boolean = false;
+  connectedStatus: boolean = false;
 
   keys: Array<KeysInterface> = [
-    {num: 'volume_up'}, {num: 'keyboard_voice'}, {num: 'person_add'}
+    {type: 'mute_unmute', num: 'volume_up', changeIcon: 'volume_mute'},
+    {type: 'forward', num: 'phone_forwarded', changeIcon: 'phone_forwarded'}
+    // {type: '', num: 'person_add'}
+    // {type: '', num: 'person_add'}
   ];
 
   private _subscription: Subscription = new Subscription();
@@ -46,29 +53,55 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
+
+    this._subscription.add(
+      this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
+        this.connectedStatus = connectedCall;
+
+        console.log(this.connectedStatus);
+        if (this.connectedStatus) {
+          this.counter = timer(0, 1000);
+
+          this.timeCounter = this.counter.subscribe(() => {
+            if (this.second < 59) {
+              this.second++;
+            } else {
+              this.second = 0;
+
+              if (this.minute < 59) {
+                this.minute++;
+              } else {
+                this.minute = 0;
+                this.hour++;
+              }
+            }
+
+            this.callTimer = (this.hour < 10 ? '0' + this.hour : this.hour) + ':' + (this.minute < 10 ? '0' + this.minute : this.minute) + ':' + (this.second < 10 ? '0' + this.second : this.second);
+          });
+        }
+      })
+    );
   }
 
   ngOnInit(): void {
     this.data = this.bottomSheetData.data;
 
     this.softPhoneService.sipCall('call-audio', this.data.extension);
+  }
 
-    this.timeCounter = this.counter.subscribe(() => {
-      if (this.second < 59) {
-        this.second++;
-      } else {
-        this.second = 0;
+  callEvent(key: KeysInterface) {
+    switch (key.type) {
+      case 'mute_unmute': {
+        this.muteStatus = this.softPhoneService.sipToggleMute();
 
-        if (this.minute < 59) {
-          this.minute++;
-        } else {
-          this.minute = 0;
-          this.hour++;
-        }
+        break;
       }
+      case 'forward': {
 
-      this.callTimer = (this.hour < 10 ? '0' + this.hour : this.hour) + ':' + (this.minute < 10 ? '0' + this.minute : this.minute) + ':' + (this.second < 10 ? '0' + this.second : this.second);
-    });
+
+        break;
+      }
+    }
   }
 
   hangUp() {
