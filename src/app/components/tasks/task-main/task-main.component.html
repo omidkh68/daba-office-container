@@ -1,65 +1,66 @@
-<div class="component-content full-width full-height pos-abs left-0 right-0 top-0" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <div class="title-container pos-rel height-60 overflow-hide full-width display-flex align-items-end">
-    <mat-tab-group (selectedTabChange)="tabChange($event)"
-                   class="padding-r-l z-index-0 height-30" color="accent" disableRipple>
+<div class="component-content full-width full-height pos-abs left-0 right-0 top-0" dir="rtl">
+  <div class="title-container pos-rel height-60 overflow-hide full-width float-left">
+    <mat-tab-group (selectedTabChange)="tabChange($event)" class="pos-rel top-tab-container padding-r-l z-index-0" color="accent" disableRipple>
       <mat-tab *ngFor="let tab of tabs;">
-        <ng-template mat-tab-label class="display-flex">
-          <mat-icon class="tab-icon font-full-em width-15 height-15">
-            {{tab.icon}}
-          </mat-icon>
-          <span class="padding-mini-r-l">{{tab.name}}</span>
+        <ng-template mat-tab-label>
+          <!--<mat-icon class="tab-icon pos-rel top-one-tenth font-full-plus-half-em text-right">{{tab.icon}}</mat-icon>-->
+          {{tab.name}}
         </ng-template>
       </mat-tab>
     </mat-tab-group>
 
-    <div class="pos-abs top-full display-flex flex-space-between align-items-center"
-         [ngClass]="rtlDirection ? 'left-full' : 'right-full'">
-      <button *ngIf="doResetFilter" (click)="resetFilter()"
-              class="no-bg no-border height-35 margin-l-full cursor-pointer">
-        <mat-icon class="font-8-rem line-height-25 width-18 height-18">close</mat-icon>
-        <span class="font-8-rem line-height-25">{{'global.reset_filter' | translate}}</span>
-      </button>
-
-      <button mat-raised-button [disabled]="!taskEssentialInfo" (click)="showFilter()"
-              class="white-gradient padding-mini-r-l margin-r-l text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">
+    <div class="pos-abs left-full top-full">
+      <button mat-raised-button
+              (click)="showFilter()"
+              class="white-gradient margin-l-full text-black line-height-30 font-8-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">filter_list</mat-icon>
-        <span class="padding-mini-r-l">{{'global.filter' | translate}}</span>
+        <span class="padding-mini-r-l">فیلتر</span>
       </button>
 
-      <button mat-raised-button [disabled]="!taskEssentialInfo" (click)="addNewTask()"
-              class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+      <button mat-raised-button
+              (click)="addNewTask()"
+              class="green-gradient text-white line-height-30 font-8-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
-        <span class="padding-mini-r-l">{{'tasks.main.add_new_task' | translate}}</span>
+        <span class="padding-mini-r-l">افزودن تسک</span>
       </button>
     </div>
   </div>
 
-  <div class="content-container padding-full full-width">
+  <div class="content-container padding-full full-width float-left">
     <ng-container [ngSwitch]="activeTab">
       <!-- boards container -->
       <div class="full-height" *ngSwitchCase="0">
-        <app-task-board [rtlDirection]="rtlDirection"
-                        [filterBoards]="filteredBoardsData"
-                        [refreshData]="refreshBoardData"
-                        [pushTaskToBoard]="pushTaskToBoard"
-                        (triggerBottomSheet)="openButtonSheet($event)"
-                        (pushTaskEssentialInfo)="getTaskEssentialInfo($event)"></app-task-board>
+        <app-task-board [filterBoards]="filteredBoardsData" [refreshData]="refreshBoardData" (pushTaskEssentialInfo)="getTaskEssentialInfo($event)"></app-task-board>
       </div>
       <!--/ end of boards container -->
 
       <!-- calendar container -->
-      <div class="full-height padding-b-full" *ngSwitchCase="1">
-        <app-task-calendar [rtlDirection]="rtlDirection"></app-task-calendar>
+      <div class="full-height" *ngSwitchCase="1">
+        <app-task-calendar [filterBoards]="filteredBoardsData" [refreshData]="refreshBoardData" (pushTaskEssentialInfo)="getTaskEssentialInfo($event)"></app-task-calendar>
       </div>
       <!--/ end of calendar container -->
+
+      <!-- notes container -->
+      <!--<div class="full-height" *ngSwitchCase="1">
+        <app-task-notes></app-task-notes>
+      </div>-->
+      <!--/ end of notes container -->
+
+      <!-- messages container -->
+      <!--<div class="full-height" *ngSwitchCase="2">
+        <app-task-messages></app-task-messages>
+      </div>-->
+      <!--/ end of messages container -->
+
+      <!-- files container -->
+      <!--<div class="full-height" *ngSwitchCase="4">
+        <app-task-files></app-task-files>
+      </div>-->
+      <!--/ end of files container -->
     </ng-container>
   </div>
 
-  <div class="current-task-container bg-white height-50 full-width padding-r-l line-height-50">
-    <app-task-current [taskEssentialInfo]="taskEssentialInfo"
-                      (pushTaskToBoard)="getTaskToBoardData($event)"
-                      (triggerBottomSheet)="openButtonSheet($event)"></app-task-current>
+  <div class="current-task-container bg-white height-50 full-width float-left padding-r-l line-height-50">
+    <app-task-current></app-task-current>
   </div>
-
-  <app-task-bottom-sheet #bottomSheet></app-task-bottom-sheet>
 </div>

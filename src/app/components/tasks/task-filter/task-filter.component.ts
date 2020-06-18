@@ -32,7 +32,8 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
     projectId: 0,
     taskName: '',
     type: '',
-    typeId: 0
+    typeId: 0,
+    percentageStatus: false
   };
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
@@ -110,7 +111,8 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         dateStart: this.filterData.dateStart ? this.filterData.dateStart : '',
         dateStop: this.filterData.dateStop ? this.filterData.dateStop : '',
         adminId: this.filterData.adminId ? this.filterData.adminId : 0,
-        type: this.filterData.type ? this.filterData.type : ''
+        type: this.filterData.type ? this.filterData.type : '',
+        percentageStatus: this.filterData.percentageStatus ? this.filterData.percentageStatus : false
       });
 
       this.form.markAllAsTouched();
@@ -153,7 +155,8 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         dateStop: new FormControl(''),
         type: new FormControl('byCreateDate', Validators.required),
         adminId: new FormControl(0),
-        page: new FormControl('-1')
+        page: new FormControl('-1'),
+        percentageStatus: new FormControl(false),
       });
 
       resolve(true);
@@ -280,6 +283,10 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
 
     if (formValue.dateStop === '') {
       delete (formValue.dateStop);
+    }
+
+    if (formValue.percentageStatus === false) {
+      delete (formValue.percentageStatus);
     }
 
     this._subscription.add(

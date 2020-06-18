@@ -1,0 +1,59 @@
+/* fullcalendar*/
+.fc{
+  font-family: 'IranSans';
+}
+.fc-toolbar{
+  direction: rtl !important;
+}
+.fc-view {
+  .fc-event, .fc-event-dot{
+    background-image: linear-gradient(-20deg, #3949ab 0%, #4fc3f7 100%) !important;
+    border: none !important;
+    margin: 10px !important;
+    border-radius: 5px !important;
+    color: #fff !important;
+    padding: 3px 9px !important;
+    font-size: 13px !important;
+    box-shadow: 0 0 6px #3366ff4d;
+  }
+}
+.fc {
+
+  th {
+    text-align: center;
+    padding: 5px !important;
+  }
+}
+.fc-button{
+  background: none;
+  color: #333333;
+  border: none;
+  margin: 0 10px !important;
+}
+.fc-button-primary:not(:disabled):active, .fc-button-primary:not(:disabled).fc-button-active{
+  border-radius: 4px !important;
+  background-image: linear-gradient(-20deg, #3949ab 0%, #4fc3f7 100%) !important;
+}
+.fc-button-primary:hover {
+  color: #3949ab;
+  background: none;
+  border: none;
+}
+.fc-button-primary:disabled{
+  color: #fff !important;
+  background: #ccc;
+}
+.fc-button-group{
+  direction: rtl;
+}
+
+.fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus {
+  box-shadow: none !important;
+  background: none !important;
+  color: #3949ab !important;
+}
+.fc-day-grid-event{
+  .fc-content{
+    white-space: normal !important;
+  }
+}
