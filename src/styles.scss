@@ -186,10 +186,6 @@ a {
   background-color: #616161 !important;
 }
 
-/* todo: active sidebar link */
-.active-sidebar-link {
-}
-
 .current-task-container {
   border-top: solid 1px #DDD;
 }
@@ -205,6 +201,14 @@ a {
 
 .mat-snack-bar-container {
   min-width: inherit !important;
+
+  &.error {
+    background-color: #d32f2f !important;
+  }
+
+  &.success {
+    background-color: #388e3c !important;
+  }
 }
 
 .mat-input-element {

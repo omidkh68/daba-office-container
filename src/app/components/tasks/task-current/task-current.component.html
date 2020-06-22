@@ -1,10 +1,10 @@
-<div class="display-flex flex-space-between">
-  <div>Version: {{version}}</div>
-  <div *ngIf="currentTasks">
+<div class="display-flex flex-space-between align-items-center full-height">
+  <!--<div>Version: {{version}}</div>-->
+  <div *ngIf="currentTasks" class="display-flex flex-space-between height-30 align-items-center">
     <button *ngFor="let task of currentTasks" mat-raised-button
             [disabled]="!taskEssentialInfo"
             (click)="showTask(task)"
-            class="blink-effect white-gradient margin-l-full text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">
+            class="blink-effect white-gradient text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem rotate-180">play_arrow</mat-icon>
       <span class="padding-mini-r-l">{{task.taskName}}</span>
     </button>

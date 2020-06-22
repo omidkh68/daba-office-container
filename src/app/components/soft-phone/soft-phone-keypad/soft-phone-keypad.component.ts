@@ -7,8 +7,6 @@ import {SoftPhoneService} from '../service/soft-phone.service';
 
 export interface KeysInterface {
   num: string;
-  f1: number;
-  f2: number;
 }
 
 @Component({
@@ -20,25 +18,32 @@ export class SoftPhoneKeypadComponent implements OnInit {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
+  @Output()
+  triggerCloseBottomSheet = new EventEmitter();
+
   @Input()
   rtlDirection: boolean;
+
+  @Input()
+  fromPopUp: boolean = false;
 
   @Input()
   softPhoneUsers: Array<SoftphoneUserInterface>;
 
   numeric: string | any = '';
   oldNumeric: string | any = '';
+  disableKeypad: boolean = false;
 
   keys: Array<KeysInterface> = [
-    {num: '1', f1: 697, f2: 1209}, {num: '2', f1: 697, f2: 1336}, {num: '3', f1: 697, f2: 1477},
-    {num: '4', f1: 770, f2: 1209}, {num: '5', f1: 770, f2: 1336}, {num: '6', f1: 770, f2: 1477},
-    {num: '7', f1: 852, f2: 1209}, {num: '8', f1: 852, f2: 1336}, {num: '9', f1: 852, f2: 1477},
-    {num: '*', f1: 941, f2: 1209}, {num: '0', f1: 941, f2: 1336}, {num: '#', f1: 941, f2: 1477}
+    {num: '1'}, {num: '2'}, {num: '3'},
+    {num: '4'}, {num: '5'}, {num: '6'},
+    {num: '7'}, {num: '8'}, {num: '9'},
+    {num: '*'}, {num: '0'}, {num: '#'}
   ];
 
   private _subscription: Subscription = new Subscription();
 
-  constructor() {
+  constructor(private softPhoneService: SoftPhoneService) {
   }
 
   ngOnInit(): void {
@@ -49,6 +54,8 @@ export class SoftPhoneKeypadComponent implements OnInit {
     this.numeric += key.num;
 
     const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric.includes(item.extension)).pop();
+
+    this.softPhoneService.sipSendDTMF(key.num);
 
     if (contact) {
       this.oldNumeric = this.numeric;
@@ -100,6 +107,30 @@ export class SoftPhoneKeypadComponent implements OnInit {
       width: '100%',
       data: contactInfo
     });
+  }
+
+  transferCall() {
+    this.disableKeypad = true;
+
+    let contactInfo: any;
+
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.oldNumeric.includes(item.extension)).pop();
+
+    if (contact) {
+      contactInfo = contact.extension;
+    } else {
+      contactInfo = this.numeric;
+    }
+
+    this.softPhoneService.sipTransfer(contactInfo);
+
+    setTimeout(() => {
+      this.triggerCloseBottomSheet.emit();
+    }, 1000);
+  }
+
+  dismissTransferCall() {
+    this.triggerCloseBottomSheet.emit();
   }
 
   ngOnDestroy(): void {

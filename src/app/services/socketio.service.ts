@@ -21,7 +21,7 @@ export class SocketioService {
   }
 
   setupSocketConnection(componentName) {
-    this.socket = io(AppConfig.socketUrl, {
+    this.socket = io(AppConfig.SOCKET_URL, {
       query: {
         token: 'cde',
         userId: this.loggedInUser.adminId,

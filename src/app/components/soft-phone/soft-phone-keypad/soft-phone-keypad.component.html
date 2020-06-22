@@ -22,7 +22,7 @@
     </mat-grid-list>
   </div>
 
-  <div class="dialer text-center padding-mini-t-b pos-rel">
+  <div *ngIf="!fromPopUp; else inPopUp;" class="dialer text-center padding-mini-t-b pos-rel">
     <button
       (click)="openButtonSheet()"
       class="key cursor-pointer no-padding no-box-shadow no-border font-full-plus-three-tenth-em width-45 height-45 line-height-45 text-center round-corner-all"
@@ -36,4 +36,23 @@
       <mat-icon>backspace</mat-icon>
     </button>
   </div>
+
+  <ng-template #inPopUp>
+    <div
+      class="height-60 full-width pos-abs bottom-0 padding-full display-flex flex-direction-row-reverse flex-space-around">
+      <button mat-raised-button (click)="transferCall()"
+              [disabled]="disableKeypad"
+              type="button"
+              class="green-gradient text-white line-height-30 font-9-em text-weight-normal">
+        <span class="padding-mini-r-l">{{'soft_phone.transfer_call' | translate}}</span>
+      </button>
+
+      <button mat-raised-button (click)="dismissTransferCall()"
+              [disabled]="disableKeypad"
+              type="button"
+              class="red-gradient text-white line-height-30 font-9-em text-weight-normal">
+        <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
+      </button>
+    </div>
+  </ng-template>
 </div>

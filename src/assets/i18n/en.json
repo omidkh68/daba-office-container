@@ -62,7 +62,8 @@
     "incoming_call": {
       "accept": "Accept",
       "decline": "Decline"
-    }
+    },
+    "transfer_call": "Transfer Call"
   },
   "tasks": {
     "main": {
@@ -139,7 +140,17 @@
       "by_user_start_date":"Based on user started date",
       "by_user_stop_date": "Based on user completed date",
       "by_started_task":"Based on started tasks",
-      "by_postponed": "Based on postponed tasks"
+      "by_postponed": "Based on postponed tasks",
+      "in_progress_tasks": "In Progress Tasks"
     }
+  },
+  "login_info": {
+    "username": "username",
+    "username_error": "Please enter username",
+    "password": "password",
+    "password_error": "Please enter password",
+    "login": "Login",
+    "login_successfully": "Login Successfully",
+    "login_failed": "Authentication failed, please try again"
   }
 }

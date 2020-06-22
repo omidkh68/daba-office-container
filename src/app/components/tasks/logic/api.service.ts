@@ -11,7 +11,7 @@ import {TaskDurationInterface} from "./task-duration-interface";
   providedIn: 'root'
 })
 export class ApiService {
-  private API_URL = AppConfig.apiUrl;
+  private API_URL = AppConfig.API_URL;
 
   /**
    * @type {HttpHeaders}
@@ -29,11 +29,12 @@ export class ApiService {
   boards(userId: number): Observable<BoardInterface[]> {
     return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/?userId=${userId}&page=-1`);
   }
-  boradsCalendar(userId: number): Observable<BoardInterface[]> {
+
+  boardsCalendar(userId: number): Observable<BoardInterface[]> {
     return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/calendar/?userId=${userId}&page=-1`);
   }
 
-  boradsCalendarDurationTask(task: TaskDurationInterface) {
+  boardsCalendarDurationTask(task: TaskDurationInterface) {
     return this._http.post<TaskDurationInterface>(`${this.API_URL}/boards/calendar/durationTask`, task, this.headers);
   }
 
@@ -56,7 +57,6 @@ export class ApiService {
   filterTask(filters: FilterInterface): Observable<FilterInterface> {
     return this._http.post<FilterInterface>(`${this.API_URL}/boards/filter`, filters, this.headers);
   }
-
 
   taskStop(taskInfo: any): Observable<TaskInterface> {
     return this._http.post<TaskInterface>(`${this.API_URL}/boards/stopTask`, taskInfo, this.headers);

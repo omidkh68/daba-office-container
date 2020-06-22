@@ -1,12 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {timer} from 'rxjs';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {SoftPhoneService} from '../service/soft-phone.service';
 import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
-import {SoftPhoneService} from '../service/soft-phone.service';
-import {timer} from 'rxjs';
+import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
+import {SoftPhoneTransferCallComponent} from '../soft-phone-transfer-call/soft-phone-transfer-call.component';
 
 export interface KeysInterface {
   type: string;
@@ -20,6 +22,8 @@ export interface KeysInterface {
   styleUrls: ['./soft-phone-call-pop-up.component.scss']
 })
 export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
+  @ViewChild('bottomSheet', {static: false}) bottomSheet: SoftPhoneBottomSheetComponent;
+
   rtlDirection;
   bottomSheetData: SoftPhoneBottomSheetInterface;
   data: any;
@@ -96,7 +100,20 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
         break;
       }
       case 'forward': {
+        const bottomSheetConfig: SoftPhoneBottomSheetInterface = {
+          component: SoftPhoneTransferCallComponent,
+          height: '100%',
+          width: '100%',
+          data: ''
+        };
 
+        /*notification.onclick = () => {
+          console.log('in subscribe :D', notification.data);
+        };*/
+
+        bottomSheetConfig.bottomSheetRef = this.bottomSheet;
+
+        this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
 
         break;
       }

@@ -1,15 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ElectronService} from '../../core/services';
-import {ServiceItemsInterface} from './logic/service-items.interface';
-import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDialog} from '@angular/material/dialog';
-import {systemPreferences} from 'electron';
+import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../users/logic/user-interface';
 import {MessageService} from '../../services/message.service';
-import {WindowManagerService} from '../../services/window-manager.service';
 import {WindowInterface} from './logic/window.interface';
-import {ViewDirectionService} from '../../services/view-direction.service';
 import {UserInfoService} from '../users/services/user-info.service';
+import {ElectronService} from '../../services/electron.service';
+import {WindowManagerService} from '../../services/window-manager.service';
+import {ViewDirectionService} from '../../services/view-direction.service';
+import {ServiceItemsInterface} from './logic/service-items.interface';
 
 @Component({
   selector: 'app-dashboard',

@@ -2,6 +2,7 @@ import {Component, Input, OnDestroy} from '@angular/core';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {ElectronService} from '../../../services/electron.service';
 
 @Component({
   selector: 'app-soft-phone-incoming-call',
@@ -19,18 +20,14 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private softPhoneService: SoftPhoneService) {
+  constructor(private softPhoneService: SoftPhoneService,
+              private electronService: ElectronService) {
     this._subscription.add(
       this.softPhoneService.currentSoftPhoneUsers.subscribe(softPhoneUsers => this.softPhoneUsers = softPhoneUsers)
     );
 
     this._subscription.add(
       this.softPhoneService.currentIncomingCallStatus.subscribe(incomingCall => {
-        console.log('-----------------------------------------');
-        console.log('-----------------------------------------');
-        console.log('o-o-o-o-o: ', incomingCall ,':o-o-o-o-o');
-        console.log('-----------------------------------------');
-        console.log('-----------------------------------------');
         if (incomingCall) {
           this.incomingStatus = incomingCall.status;
 

@@ -11,7 +11,7 @@
   <div mat-menu-item class="font-7-rem padding-mini-r-l text-dark-mode-color">
     {{loggedInUser.role.roleNameFa}}
   </div>
-  <button mat-menu-item class="font-7-rem padding-mini-r-l">
+  <button mat-menu-item (click)="logout()" class="font-7-rem padding-mini-r-l">
     <mat-icon class="text-dark-mode-color">power_settings_new</mat-icon>
     <span class="text-dark-mode-color">{{'dashboard.dashboard_toolbar.exist_app' | translate}}</span>
   </button>

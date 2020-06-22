@@ -5,7 +5,7 @@
       <span class="text-gray-700">#{{task.taskId}}</span> {{task.taskName}}
     </h1>
 
-    <div class="task-detail-view-switcher pos-abs right-0 left-0 margin-auto width-150 height-45">
+    <div class="pos-abs right-0 left-0 margin-auto width-150 height-45">
       <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                                (change)="changeViewMode(viewMode.value)"
                                [ngClass]="{'view-mode': viewMode}"
@@ -20,7 +20,7 @@
       </mat-button-toggle-group>
     </div>
 
-    <div class="task-detail-actions display-flex flex-direction-row-reverse">
+    <div class="display-flex flex-direction-row-reverse">
       <button (click)="cancelBtn(true)"
               type="button"
               class="no-border cursor-pointer no-bg text-center width-45 height-45 text-gray-600 no-padding">

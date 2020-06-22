@@ -5,7 +5,7 @@ import {FilePickerAdapter, FilePreviewModel} from 'ngx-awesome-uploader';
 import {AppConfig} from '../../../../../environments/environment';
 
 export class ApiService extends FilePickerAdapter {
-  private API_URL = AppConfig.apiUrl;
+  private API_URL = AppConfig.API_URL;
 
   /**
    * @type {HttpHeaders}

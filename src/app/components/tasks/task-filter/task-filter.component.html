@@ -118,21 +118,21 @@
             </mat-error>
           </mat-form-field>
         </div>
+      </div>
 
-
-        <div class="col-md-12 margin-t-b">
+      <div class="display-flex margin-r-l-reverse margin-t-half">
+        <div class="full-width padding-r-l">
           <mat-slide-toggle
                   formControlName="percentageStatus"
                   class="example-margin"
                   [color]="'primary'">
-            تسک های درحال انجام
+            <span class="font-9-em">{{'tasks.task_filter.in_progress_tasks' | translate}}</span>
           </mat-slide-toggle>
         </div>
-
       </div>
     </div>
 
-    <div class="dialog-buttons height-30 full-width display-flex flex-direction-row-reverse">
+    <div class="height-30 full-width display-flex flex-direction-row-reverse">
       <button mat-raised-button
               [disabled]="!form.valid && form.touched"
               type="submit"

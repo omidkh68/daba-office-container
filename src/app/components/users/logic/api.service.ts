@@ -8,7 +8,8 @@ import {AppConfig} from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  private API_URL = AppConfig.apiUrl;
+  private API_URL = AppConfig.API_URL;
+  private CONTAINER_URL = AppConfig.CONTAINER_URL;
 
   /**
    * @type {HttpHeaders}
@@ -28,6 +29,6 @@ export class ApiService {
   }
 
   login(loginInfo): Observable<any> {
-    return this._http.post(`${this.API_URL}/users/login`, loginInfo, this.headers);
+    return this._http.post(`${this.CONTAINER_URL}/login`, loginInfo, this.headers);
   }
 }
