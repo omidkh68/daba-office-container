@@ -3,7 +3,6 @@ import {ElectronService} from '../../core/services';
 import {ServiceItemsInterface} from './logic/service-items.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDialog} from '@angular/material/dialog';
-import {systemPreferences} from 'electron';
 import {UserInterface} from '../users/logic/user-interface';
 import {MessageService} from '../../services/message.service';
 import {WindowManagerService} from '../../services/window-manager.service';

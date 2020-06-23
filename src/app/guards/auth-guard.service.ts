@@ -31,8 +31,8 @@ export class AuthGuardService implements CanActivate, OnDestroy {
 
   canActivate(): Observable<boolean> {
     const loginInfo = {
-      username: 'o.khosrojerdi',
-      password: 'OMid@#8315229950'
+      username: 'h.sajjadi',
+      password: '123456'
     };
 
     return this.apiService.login(loginInfo).pipe(

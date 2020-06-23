@@ -110,10 +110,10 @@ export class SoftPhoneService {
       // create SIP stack
       this.oSipStack = new SIPml.Stack({
         realm: '213.202.217.19',
-        impi: '6004',
-        impu: 'sip:6004@213.202.217.19',
-        password: '6004',
-        display_name: '6004',
+        impi: '6009',
+        impu: 'sip:6009@213.202.217.19',
+        password: '6009',
+        display_name: '6009',
         websocket_proxy_url: 'wss://213.202.217.19:8089/ws',
         outbound_proxy_url: (localStorage ? localStorage.getItem('org.doubango.expert.sip_outboundproxy_url') : null),
         ice_servers: (localStorage ? localStorage.getItem('org.doubango.expert.ice_servers') : null),
