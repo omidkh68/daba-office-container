@@ -236,7 +236,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
 
-    this._subscription.add(
+    /*this._subscription.add(
       this.notificationService.currentNotification.subscribe(notification => {
         if (notification) {
           const bottomSheetConfig: SoftPhoneBottomSheetInterface = {
@@ -246,14 +246,14 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
             data: notification.data ? notification.data : notification
           };
 
-          /*notification.onclick = () => {
+          /!*notification.onclick = () => {
             console.log('in subscribe :D', notification.data);
-          };*/
+          };*!/
 
           this.openButtonSheet(bottomSheetConfig);
         }
       })
-    );
+    );*/
 
     this._subscription.add(
       this.softPhoneService.currentOnCallUser.subscribe(onCallUser => {

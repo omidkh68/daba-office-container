@@ -1,3 +1,11 @@
 <div class="full-width full-height bg-white">
-  <webview partition="persist:webviewsession" #webFrame class="full-width full-height"></webview>
+  <div class="content-container full-width full-height display-flex flex-center">
+    <button *ngIf="!showConference" mat-raised-button (click)="addNewVideoConf()"
+            class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
+      <span class="padding-mini-r-l">{{'conference.add' | translate}}</span>
+    </button>
+
+    <webview [ngClass]="{'showFrame': !showConference}" partition="persist:webviewsession" #webFrame class="webView-frame full-width full-height"></webview>
+  </div>
 </div>

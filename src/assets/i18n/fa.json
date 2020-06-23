@@ -61,7 +61,10 @@
     },
     "incoming_call": {
       "accept": "قبول تماس",
-      "decline": "رد تماس"
+      "decline": "رد تماس",
+      "unknown_caller": "شماره ناشناس",
+      "want_to_call_with_you": "در حال تماس با شماست،",
+      "do_you_accept": "آیا قبول می کنید؟"
     },
     "transfer_call": "انتقال تماس"
   },
@@ -152,5 +155,10 @@
     "login": "ورود",
     "login_successfully": "با موفقیت وارد شدید",
     "login_failed": "تأیید هویت انجام نشد، لطفا مجدد تلاش نمایید"
+  },
+  "conference": {
+    "add": "برای ساخت اتاق کنفرانس کلیک کنید",
+    "conf_name": "نام اتاق کنفرانس",
+    "conf_name_error": "لطفا نام اتاق کنفرانس را وارد نمایید"
   }
 }

@@ -1,8 +1,10 @@
 import {Component, Input, OnDestroy} from '@angular/core';
-import {SoftPhoneService} from '../service/soft-phone.service';
-import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {ElectronService} from '../../../services/electron.service';
+import {SoftPhoneService} from '../service/soft-phone.service';
+import {TranslateService} from '@ngx-translate/core';
+import {NotificationService} from '../../../services/notification.service';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 
 @Component({
   selector: 'app-soft-phone-incoming-call',
@@ -21,6 +23,8 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private softPhoneService: SoftPhoneService,
+              private notificationService: NotificationService,
+              private translateService: TranslateService,
               private electronService: ElectronService) {
     this._subscription.add(
       this.softPhoneService.currentSoftPhoneUsers.subscribe(softPhoneUsers => this.softPhoneUsers = softPhoneUsers)
@@ -34,6 +38,8 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
           if (incomingCall.data) {
             this.incomingData = incomingCall.data;
             this.currentPhoneNumber = this.incomingData.o_event.o_message.o_hdr_From.s_display_name;
+            let callerID = '';
+            const translateIncomingCall = this.getTranslate('soft_phone.incoming_call.want_to_call_with_you');
 
             if (this.softPhoneUsers) {
               const currentUser = this.softPhoneUsers.filter(user => user.extension === this.currentPhoneNumber).pop();
@@ -41,9 +47,38 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
               if (currentUser) {
                 this.onCallUser = currentUser;
                 this.onCallUser.extension = this.currentPhoneNumber;
+
+                callerID = currentUser.name + ' ' + currentUser.family;
+              } else {
+                callerID = this.getTranslate('soft_phone.incoming_call.unknown_caller');
+              }
+
+              if (!this.electronService.window.isFocused()) {
+                const notification: Notification = new Notification(`${callerID} ${translateIncomingCall}`, {
+                  body: this.getTranslate('soft_phone.incoming_call.do_you_accept'),
+                  icon: 'assets/profileImg/' + currentUser.adminId + '.jpg',
+                  dir: 'auto',
+                  data: currentUser
+                });
+
+                this.notificationService.changeCurrentNotification(notification);
               }
             }
           }
+        }
+      })
+    );
+
+    this._subscription.add(
+      this.notificationService.currentNotification.subscribe(notification => {
+        if (notification) {
+          notification.onclick = () => {
+            this.electronService.window.show();
+          };
+
+          notification.onclose = () => {
+            this.decline_call();
+          };
         }
       })
     );
@@ -59,6 +94,10 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
     this.softPhoneService.changeOnCallUser(this.onCallUser);
     this.softPhoneService.changeIncomingCallStatus({status: false});
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
   }
 
   ngOnDestroy(): void {

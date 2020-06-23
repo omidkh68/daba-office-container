@@ -19,7 +19,7 @@ export class ElectronService {
   path: typeof path;
   notification: typeof Notification;
   systemPreferences: typeof systemPreferences;
-  browserWindow: typeof BrowserWindow;
+  window: BrowserWindow;
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
@@ -39,10 +39,9 @@ export class ElectronService {
       this.path = path;
       this.notification = Notification;
       this.systemPreferences = window.require('electron').remote.systemPreferences;
-      this.browserWindow = window.require('electron').remote.BrowserWindow;
+      this.window = window.require('electron').remote.getCurrentWindow();
 
-      const win = remote.getCurrentWindow();
-      win.center();
+      this.window.center();
     }
   }
 }

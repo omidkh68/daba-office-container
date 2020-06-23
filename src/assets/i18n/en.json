@@ -61,7 +61,10 @@
     },
     "incoming_call": {
       "accept": "Accept",
-      "decline": "Decline"
+      "decline": "Decline",
+      "unknown_caller": "Unknown caller",
+      "want_to_call_with_you": "is calling you,",
+      "do_you_accept": "Do you accept?"
     },
     "transfer_call": "Transfer Call"
   },
@@ -152,5 +155,10 @@
     "login": "Login",
     "login_successfully": "Login Successfully",
     "login_failed": "Authentication failed, please try again"
+  },
+  "conference": {
+    "add": "Click to create a conference room",
+    "conf_name": "Conference room name",
+    "conf_name_error": "Please enter conference room name"
   }
 }

@@ -55,9 +55,12 @@ export class AuthGuardService implements CanActivate, OnDestroy {
             roleNameFa: 'مدیر طراحی'
           }
         });
+
         this.changeStatusService.changeUserStatus('');
 
         return true;
+
+        // return true;
         /*if (resp.result === 1) {
 
           return true;
