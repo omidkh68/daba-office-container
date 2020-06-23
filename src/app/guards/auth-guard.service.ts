@@ -53,7 +53,8 @@ export class AuthGuardService implements CanActivate, OnDestroy {
             roleId: 9,
             roleNameEn: 'UIManager',
             roleNameFa: 'مدیر طراحی'
-          }
+          },
+          extension: '6004'
         });
 
         this.changeStatusService.changeUserStatus('');

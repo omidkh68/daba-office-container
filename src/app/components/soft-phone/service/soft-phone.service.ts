@@ -3,6 +3,8 @@ import SIPml from 'ecmascript-webrtc-sipml';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {IncomingInterface} from '../logic/incoming.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {UserInterface} from '../../users/logic/user-interface';
 
 export interface EssentialTagsInterface {
   audioRemote: ElementRef;
@@ -15,6 +17,8 @@ export interface EssentialTagsInterface {
   providedIn: 'root'
 })
 export class SoftPhoneService {
+  loggedInUser: UserInterface;
+
   private _users: Array<SoftphoneUserInterface> | null;
   private users = new BehaviorSubject(this._users);
   public currentSoftPhoneUsers = this.users.asObservable();
@@ -53,6 +57,10 @@ export class SoftPhoneService {
   viewVideoRemote;
   oReadyStateTimer;
   viewLocalScreencast; // <video> (webrtc) or <div> (webrtc4all)*/
+
+  constructor(private userInfoService: UserInfoService) {
+    this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user);
+  }
 
   changeSoftPhoneUsers(softPhoneUsers: Array<SoftphoneUserInterface> | null) {
     this.users.next(softPhoneUsers);
@@ -109,10 +117,10 @@ export class SoftPhoneService {
       // create SIP stack
       this.oSipStack = new SIPml.Stack({
         realm: '213.202.217.19',
-        impi: '6004',
-        impu: 'sip:6004@213.202.217.19',
-        password: '6004',
-        display_name: '6004',
+        impi: this.loggedInUser.extension,
+        impu: `sip:${this.loggedInUser.extension}@213.202.217.19`,
+        password: this.loggedInUser.extension,
+        display_name: this.loggedInUser.extension,
         websocket_proxy_url: 'wss://213.202.217.19:8089/ws',
         outbound_proxy_url: (localStorage ? localStorage.getItem('org.doubango.expert.sip_outboundproxy_url') : null),
         ice_servers: (localStorage ? localStorage.getItem('org.doubango.expert.ice_servers') : null),
