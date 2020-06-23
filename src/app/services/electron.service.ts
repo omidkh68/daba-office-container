@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ipcRenderer, webFrame, remote, screen, desktopCapturer, shell, Notification, systemPreferences} from 'electron';
-import * as childProcess from 'child_process';
+import {BrowserWindow, ipcRenderer, webFrame, remote, screen, desktopCapturer, shell, Notification, systemPreferences} from 'electron';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
@@ -15,12 +14,12 @@ export class ElectronService {
   shell: typeof shell;
   screen;
   desktopCapturer: typeof desktopCapturer;
-  childProcess: typeof childProcess;
   fs: typeof fs;
   os: typeof os;
   path: typeof path;
   notification: typeof Notification;
   systemPreferences: typeof systemPreferences;
+  window: BrowserWindow;
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
@@ -32,7 +31,6 @@ export class ElectronService {
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
       this.remote = window.require('electron').remote;
-      this.childProcess = window.require('electron');
       this.fs = window.require('fs');
       this.desktopCapturer = window.require('electron').desktopCapturer;
       this.shell = window.require('electron').shell;
@@ -41,9 +39,9 @@ export class ElectronService {
       this.path = path;
       this.notification = Notification;
       this.systemPreferences = window.require('electron').remote.systemPreferences;
+      this.window = window.require('electron').remote.getCurrentWindow();
 
-      const win = remote.getCurrentWindow();
-      win.center();
+      this.window.center();
     }
   }
 }

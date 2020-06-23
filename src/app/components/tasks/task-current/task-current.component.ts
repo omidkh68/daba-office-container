@@ -2,8 +2,6 @@ import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Si
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
-import {MatBottomSheet} from '@angular/material/bottom-sheet';
-import {ElectronService} from '../../../core/services';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskEssentialInfo} from '../task-main/task-main.component';
@@ -34,14 +32,12 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
   version;
   message: string = '';
   notification: boolean = false;
-  restartBtn: boolean = false;
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private electronService: ElectronService,
+  constructor(// private electronService: ElectronService,
               private currentTaskService: CurrentTaskService,
-              private userInfoService: UserInfoService,
-              private _bottomSheet: MatBottomSheet) {
+              private userInfoService: UserInfoService) {
     this._subscription.add(
       this.currentTaskService.currentTask.subscribe(currentTasks => this.currentTasks = currentTasks)
     );
@@ -52,7 +48,7 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.electronService.ipcRenderer.send('app_version');
+    /*this.electronService.ipcRenderer.send('app_version');
 
     this.electronService.ipcRenderer.on('app_version', (event, arg) => {
       this.electronService.ipcRenderer.removeAllListeners('app_version');
@@ -71,7 +67,7 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
       this.message = 'Update Downloaded. It will be installed on restart. Restart Now?';
       this.restartBtn = true;
       this.notification = true;
-    });
+    });*/
   }
 
   showTask(task: TaskInterface) {
@@ -117,13 +113,13 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  closeNotification() {
+  /*closeNotification() {
     this.notification = false;
-  }
+  }*/
 
-  restartApp() {
+  /*restartApp() {
     this.electronService.ipcRenderer.send('restart_app');
-  }
+  }*/
 
   ngOnDestroy(): void {
     if (this._subscription) {

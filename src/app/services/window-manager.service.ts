@@ -26,6 +26,10 @@ export class WindowManagerService {
               @Inject('windowObject') private window: Window) {
   }
 
+  get windowListArray(): Array<WindowInterface> {
+    return this.windows.getValue();
+  }
+
   openWindowState(service: ServiceItemsInterface) {
     let component: any = null;
     let hasFrame: boolean = false;
@@ -187,6 +191,18 @@ export class WindowManagerService {
     this._defaultWindows.splice(findIndex, 1);
 
     windowInstance.windowRef.close();
+  }
+
+  closeAllServices() {
+    return new Promise(async (resolve, reject) => {
+      await this.windowListArray.map((item: WindowInterface) => {
+        setTimeout(() => {
+          this.closeWindow(item.windowService);
+        });
+      });
+
+      resolve(true);
+    });
   }
 
   centerWindow(service: ServiceItemsInterface) {

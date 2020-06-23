@@ -62,8 +62,12 @@
     },
     "incoming_call": {
       "accept": "قبول تماس",
-      "decline": "رد تماس"
-    }
+      "decline": "رد تماس",
+      "unknown_caller": "شماره ناشناس",
+      "want_to_call_with_you": "در حال تماس با شماست،",
+      "do_you_accept": "آیا قبول می کنید؟"
+    },
+    "transfer_call": "انتقال تماس"
   },
   "tasks": {
     "main": {
@@ -140,7 +144,22 @@
       "by_user_start_date":"بر اساس تاریخ شروع کاربر",
       "by_user_stop_date": "بر اساس تاریخ اتمام کاربر",
       "by_started_task":"بر اساس تسک های شروع شده",
-      "by_postponed": "بر اساس تسک های به تعویق افتاده"
+      "by_postponed": "بر اساس تسک های به تعویق افتاده",
+      "in_progress_tasks": "تسک های در حال انجام"
     }
+  },
+  "login_info": {
+    "username": "نام کاربری",
+    "username_error": "نام کاربری را وارد نمایید",
+    "password": "گذرواژه",
+    "password_error": "گذرواژه را وارد نمایید",
+    "login": "ورود",
+    "login_successfully": "با موفقیت وارد شدید",
+    "login_failed": "تأیید هویت انجام نشد، لطفا مجدد تلاش نمایید"
+  },
+  "conference": {
+    "add": "برای ساخت اتاق کنفرانس کلیک کنید",
+    "conf_name": "نام اتاق کنفرانس",
+    "conf_name_error": "لطفا نام اتاق کنفرانس را وارد نمایید"
   }
 }

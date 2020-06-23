@@ -1,0 +1,32 @@
+.company-sign {
+  text-shadow: 0 3px 5px #000;
+}
+
+.animator {
+  background: linear-gradient(232deg, #a18cd1, #fbc2eb, #f6d365, #fda085, #a1c4fd, #c2e9fb, #84fab0, #8fd3f4, #30cfd0, #330867, #f43b47, #453a94, #243949, #517fa4);
+  background-size: 2800% 2800%;
+
+  -webkit-animation: SaaSBY 100s ease infinite;
+  -moz-animation: SaaSBY 100s ease infinite;
+  animation: SaaSBY 100s ease infinite;
+}
+
+@-webkit-keyframes SaaSBY {
+  0%{background-position:0 18%}
+  50%{background-position:100% 83%}
+  100%{background-position:0 18%}
+}
+@-moz-keyframes SaaSBY {
+  0%{background-position:0 18%}
+  50%{background-position:100% 83%}
+  100%{background-position:0 18%}
+}
+@keyframes SaaSBY {
+  0%{background-position:0 18%}
+  50%{background-position:100% 83%}
+  100%{background-position:0 18%}
+}
+
+.logo-saasby {
+  top: 4em;
+}

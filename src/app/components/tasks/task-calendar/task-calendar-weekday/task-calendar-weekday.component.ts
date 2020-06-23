@@ -42,9 +42,6 @@ export class TaskCalendarWeekdayComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
-    console.log(this.calendarEvents);
-
     //
     // this.options = {
     //   columnHeaderHtml: () => {

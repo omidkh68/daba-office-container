@@ -1,17 +1,17 @@
 import {Component, OnDestroy} from '@angular/core';
 import {timer} from 'rxjs';
+import * as moment from 'moment';
+import * as lodash from 'lodash';
 import {ApiService} from './logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../users/logic/user-interface';
 import {TaskInterface} from '../tasks/logic/task-interface';
-import {ElectronService} from '../../core/services';
+import {UserInfoService} from '../users/services/user-info.service';
+import {ElectronService} from '../../services/electron.service';
+import {CurrentTaskService} from '../tasks/services/current-task.service';
 import {UserStatusInterface} from '../users/logic/user-status-interface';
 import {ScreenshotInterface} from './logic/screenshot-interface';
-import * as moment from 'moment';
-import * as lodash from 'lodash';
 import {ChangeStatusService} from '../status/services/change-status.service';
-import {CurrentTaskService} from '../tasks/services/current-task.service';
-import {UserInfoService} from '../users/services/user-info.service';
 
 export interface AvailableHoursInterface {
   time: string;

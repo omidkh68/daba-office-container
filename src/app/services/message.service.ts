@@ -15,12 +15,13 @@ export class MessageService {
     this._durationInSeconds = value;
   }
 
-  showMessage(title: string) {
+  showMessage(title: string, type: string = '', duration: number | null = null) {
     this._snackBar.openFromComponent(MessageComponent, {
       data: title,
-      duration: this._durationInSeconds * 1000,
+      duration: duration ? duration : this._durationInSeconds * 1000,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
+      verticalPosition: 'top',
+      panelClass: type ? type : ''
     });
   }
 }

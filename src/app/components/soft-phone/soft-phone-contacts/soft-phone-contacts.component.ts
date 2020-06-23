@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Pipe, PipeTransform, ViewChild} from '@angular/core';
 import {UserInterface} from '../../users/logic/user-interface';
-import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 import {SoftPhoneContactDetailComponent} from './soft-phone-contact-detail/soft-phone-contact-detail.component';
+import {SoftPhoneService} from '../service/soft-phone.service';
 
 @Component({
   selector: 'app-soft-phone-contacts',
@@ -17,21 +18,34 @@ export class SoftPhoneContactsComponent implements OnInit {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
+  @Output()
+  triggerCloseBottomSheet = new EventEmitter();
+
   @Input()
   rtlDirection: boolean;
 
   @Input()
+  fromPopUp: boolean = false;
+
+  @Input()
   softPhoneUsers: Array<SoftphoneUserInterface>;
-  filteredUsers: Array<SoftphoneUserInterface>;
 
   @Input()
   loggedInUser: UserInterface;
 
-  constructor() {
+  filteredUsers: Array<SoftphoneUserInterface>;
+  bottomSheetData: SoftPhoneBottomSheetInterface;
+  data: any;
+  disableContacts: boolean = false;
+  filterArgs = null;
+
+  constructor(private softPhoneService: SoftPhoneService) {
   }
 
   ngOnInit(): void {
     this.assignCopy();
+
+    this.filterArgs = {adminId: this.loggedInUser.adminId};
   }
 
   filterContacts(value) {
@@ -48,7 +62,7 @@ export class SoftPhoneContactsComponent implements OnInit {
     this.filteredUsers = Object.assign([], this.softPhoneUsers);
   }
 
-  openSheet(contact) {
+  openSheet(contact: SoftphoneUserInterface) {
     this.triggerBottomSheet.emit({
       component: SoftPhoneCallToActionComponent,
       height: '200px',
@@ -72,5 +86,34 @@ export class SoftPhoneContactsComponent implements OnInit {
       width: '98%',
       data: {...contact, action: 'edit'}
     });
+  }
+
+  transferCall(contact: SoftphoneUserInterface) {
+    this.disableContacts = true;
+
+    this.softPhoneService.sipTransfer(contact.extension);
+
+    setTimeout(() => {
+      this.triggerCloseBottomSheet.emit();
+    }, 1000);
+  }
+
+  dismissTransferCall() {
+    this.triggerCloseBottomSheet.emit();
+  }
+}
+
+@Pipe({
+  name: 'myFilter',
+  pure: false
+})
+export class MyFilterPipe implements PipeTransform {
+  transform(items: any[], filter: any): any {
+    if (!items || !filter) {
+      return items;
+    }
+    // filter items array, items which match and return true will be
+    // kept, false will be filtered out
+    return items.filter((item: SoftphoneUserInterface) => item.adminId !== filter.adminId);
   }
 }

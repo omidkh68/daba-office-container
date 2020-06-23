@@ -135,7 +135,7 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
         })
       );
     } else {
-      this.messageService.showMessage( this.getTranslate('status.status_description_error'));
+      this.messageService.showMessage(this.getTranslate('status.status_description_error'));
     }
   }
 

@@ -31,6 +31,27 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
 
   softPhoneUsers: Array<SoftphoneUserInterface> = [
     {
+      adminId: 9,
+      username: 'seanBassiri',
+      password: 'e10adc3949ba59abbe56e057f20f883e',
+      name: 'آقای',
+      family: 'بصیری',
+      email: 'seanbassiri@gmail.com',
+      status: '1',
+      permission: '111111000000000000001111111111100000000011100000000000000000111111000000000000000',
+      darkMode: 0,
+      creationDate: '2020-05-26 04:27:13',
+      role: {
+        roleId: 1,
+        roleNameEn: 'Manager',
+        roleNameFa: 'مدیر ارشد'
+      },
+      extension: '6008',
+      type: 'incoming',
+      date: '2020-05-23',
+      time: '10:53'
+    },
+    {
       adminId: 1,
       username: 'o.khosrojerdi',
       password: '06df60287a737ebf3a177bd3b2c47e01',
@@ -52,27 +73,6 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       time: '10:53'
     },
     {
-      adminId: 9,
-      username: 'seanBassiri',
-      password: 'e10adc3949ba59abbe56e057f20f883e',
-      name: 'آقای',
-      family: 'بصیری',
-      email: 'seanbassiri@gmail.com',
-      status: '1',
-      permission: '111111000000000000001111111111100000000011100000000000000000111111000000000000000',
-      darkMode: 0,
-      creationDate: '2020-05-26 04:27:13',
-      role: {
-        roleId: 1,
-        roleNameEn: 'Manager',
-        roleNameFa: 'مدیر ارشد'
-      },
-      extension: '6005',
-      type: 'incoming',
-      date: '2020-05-23',
-      time: '10:53'
-    },
-    {
       adminId: 16,
       username: 'mbahadori',
       password: '1403301a5cce4b5c802bd23cda0d09ed',
@@ -88,7 +88,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         roleNameEn: 'Manager',
         roleNameFa: 'مدیر ارشد'
       },
-      extension: '6007',
+      extension: '6005',
       type: 'outgoing',
       date: '2020-05-20',
       time: '13:21'
@@ -109,8 +109,50 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         roleNameEn: 'Responsible Developer',
         roleNameFa: 'مسئول توسعه دهنده ها'
       },
-      extension: '6008',
+      extension: '6006',
       type: 'incoming',
+      date: '2020-05-18',
+      time: '09:19'
+    },
+    {
+      adminId: 39,
+      username: 'j.movahedi',
+      password: 'e10adc3949ba59abbe56e057f20f883e',
+      name: 'جواد',
+      family: 'موحدی',
+      email: 'j.movahedi@dabacenter.ir',
+      status: '1',
+      permission: '10000100000000000000111100001000000000001100000000000000000000000000000000000000110000000000000000000',
+      darkMode: 1,
+      creationDate: '2020-06-20 13:48:18',
+      role: {
+        roleId: 12,
+        roleNameEn: 'NOCManager',
+        roleNameFa: 'مدیر NOC'
+      },
+      extension: '6001',
+      type: 'outgoing',
+      date: '2020-05-18',
+      time: '09:19'
+    },
+    {
+      adminId: 200,
+      username: 'a.asghari',
+      password: '0fd5a87016df2a0b92be06ecb2d43b9e',
+      name: 'امیر',
+      family: 'اصغری',
+      email: 'a.asghari@dabacenter.ir',
+      status: '1',
+      permission: '00000100000000000000111100010000000000001100000000000000000000000000000000000000110000000000000000000',
+      darkMode: 0,
+      creationDate: '2020-06-20 13:48:18',
+      role: {
+        roleId: 14,
+        roleNameEn: 'VoIP manager',
+        roleNameFa: 'مدیر  VOIP'
+      },
+      extension: '6003',
+      type: 'outgoing',
       date: '2020-05-18',
       time: '09:19'
     },
@@ -130,8 +172,29 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
         roleNameEn: 'Manager',
         roleNameFa: 'مدیر ارشد'
       },
-      extension: '209',
+      extension: '6002',
       type: 'missed',
+      date: '2020-05-13',
+      time: '14:44'
+    },
+    {
+      adminId: 36,
+      username: 'm.malekloo',
+      password: 'e10adc3949ba59abbe56e057f20f883e',
+      name: 'محمود',
+      family: 'ملک لو',
+      email: 'm.malekloo@dabacenter.ir',
+      status: '1',
+      permission: '100001000000000000001111111111110000000011100000000000000000100001000000000000000',
+      darkMode: 0,
+      creationDate: '2020-06-20 13:48:18',
+      role: {
+        roleId: 20,
+        roleNameEn: 'responsibleDeveloper',
+        roleNameFa: 'مسئول نرم افزار'
+      },
+      extension: '6007',
+      type: 'incoming',
       date: '2020-05-13',
       time: '14:44'
     },
@@ -145,7 +208,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       status: '1',
       permission: '00000100000000000000111100010000000000001100000000000000000000000000000000000000100000000000000000000',
       darkMode: 0,
-      creationDate: '0000-00-00 00:00:00',
+      creationDate: '2020-06-20 13:48:18',
       role: {
         roleId: 11,
         roleNameEn: 'UI Designer',
@@ -173,7 +236,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
 
-    this._subscription.add(
+    /*this._subscription.add(
       this.notificationService.currentNotification.subscribe(notification => {
         if (notification) {
           const bottomSheetConfig: SoftPhoneBottomSheetInterface = {
@@ -183,14 +246,14 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
             data: notification.data ? notification.data : notification
           };
 
-          /*notification.onclick = () => {
+          /!*notification.onclick = () => {
             console.log('in subscribe :D', notification.data);
-          };*/
+          };*!/
 
           this.openButtonSheet(bottomSheetConfig);
         }
       })
-    );
+    );*/
 
     this._subscription.add(
       this.softPhoneService.currentOnCallUser.subscribe(onCallUser => {

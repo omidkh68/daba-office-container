@@ -75,7 +75,7 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
 
 
     this._subscription.add(
-        this.api.boradsCalendarDurationTask(formValue).subscribe((resp: any) => {
+        this.api.boardsCalendarDurationTask(formValue).subscribe((resp: any) => {
           if (resp.result === 1) {
             let calendarEvent = [];
             let sum = 0;

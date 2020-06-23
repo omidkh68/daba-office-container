@@ -8,7 +8,7 @@ import {AppConfig} from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  private API_URL = AppConfig.apiUrl;
+  private API_URL = AppConfig.API_URL;
 
   /**
    * @type {HttpHeaders}

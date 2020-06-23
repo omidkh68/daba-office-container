@@ -1,11 +1,11 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {CanActivate} from '@angular/router';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {Observable} from 'rxjs/internal/Observable';
-import {catchError, map} from 'rxjs/operators';
-import {throwError} from 'rxjs';
-import {UserInterface} from '../components/users/logic/user-interface';
+import {CanActivate, Router} from '@angular/router';
 import {ApiService} from '../components/users/logic/api.service';
+import {Observable} from 'rxjs/internal/Observable';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {catchError, map} from 'rxjs/operators';
+import {of} from 'rxjs';
+import {UserInterface} from '../components/users/logic/user-interface';
 import {UserInfoService} from '../components/users/services/user-info.service';
 import {ChangeStatusService} from '../components/status/services/change-status.service';
 
@@ -22,30 +22,58 @@ export interface Result {
   providedIn: 'root'
 })
 export class AuthGuardService implements CanActivate, OnDestroy {
-  private _subscription = new Subscription();
+  private _subscription: Subscription = new Subscription();
 
   constructor(private apiService: ApiService,
+              private _router: Router,
               private userInfoService: UserInfoService,
               private changeStatusService: ChangeStatusService) {
   }
 
   canActivate(): Observable<boolean> {
     const loginInfo = {
-      username: 'h.sajjadi',
-      password: '123456'
+      username: 'admin@admin.com',
+      password: '123456789'
     };
 
     return this.apiService.login(loginInfo).pipe(
       map((resp: Result) => {
-        if (resp.result === 1) {
-          this.userInfoService.changeUserInfo(resp.content.user);
-          this.changeStatusService.changeUserStatus(resp.content.user.userCurrentStatus);
+        this.userInfoService.changeUserInfo({
+          adminId: 1,
+          username: 'o.khosrojerdi',
+          password: '06df60287a737ebf3a177bd3b2c47e01',
+          name: 'امید',
+          family: 'خسروجردی',
+          email: 'khosrojerdi@dabacenter.ir',
+          status: '1',
+          permission: '11111100000000000000111111111111000000001110000000000000000011111100000000000000110000000000000000000',
+          darkMode: 0,
+          creationDate: '2020-06-20 13:48:18',
+          role: {
+            roleId: 9,
+            roleNameEn: 'UIManager',
+            roleNameFa: 'مدیر طراحی'
+          },
+          extension: '6004'
+        });
+
+        this.changeStatusService.changeUserStatus('');
+
+        return true;
+
+        // return true;
+        /*if (resp.result === 1) {
+
           return true;
         } else if (resp.result === 1) {
           return true;
-        }
+        }*/
       }),
-      catchError(e => throwError('No Connection Please Try Again!!!'))
+      catchError(e => {
+        this._router.navigateByUrl(`/login`);
+
+        return of(false);
+      })
     );
   }
 

@@ -1,7 +1,8 @@
 <div class="full-width full-height">
-  <mat-list class="soft-phone-user full-width height-50">
+  <mat-list *ngIf="!fromPopUp" class="soft-phone-user full-width height-50">
     <mat-list-item class="padding-mini-r-l full-height">
-      <img [alt]="loggedInUser.name + ' ' + loggedInUser.family" [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'"
+      <img [alt]="loggedInUser.name + ' ' + loggedInUser.family"
+           [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'"
            class="mat-elevation-z2"
            matListAvatar>
       <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name + ' ' + loggedInUser.family}} </h3>
@@ -25,9 +26,9 @@
   </div>
 
   <div class="height-full-minus-95 padding-r-l overflow-x-hide overflow-y-auto">
-    <mat-list>
-      <mat-list-item (click)="openSheet(contact)"
-                     *ngFor="let contact of filteredUsers"
+    <mat-list [disabled]="disableContacts">
+      <mat-list-item (click)="!fromPopUp ? openSheet(contact) : transferCall(contact)"
+                     *ngFor="let contact of filteredUsers | myFilter:filterArgs"
                      class="cursor-pointer full-width height-45 font-8-rem">
         <mat-icon mat-list-icon>person</mat-icon>
 
@@ -35,7 +36,7 @@
 
         <div class="text-gray-700 margin-r-l">{{contact.extension}}</div>
 
-        <button (click)="editContact(contact); $event.stopPropagation();"
+        <button *ngIf="!fromPopUp" (click)="editContact(contact); $event.stopPropagation();"
                 class="cursor-pointer no-bg no-border width-30 height-30 text-center text-green-500">
           <mat-icon class="full-width full-height text-center line-height-30 font-full-plus-two-tenth-rem">edit
           </mat-icon>
@@ -44,5 +45,15 @@
         <mat-divider></mat-divider>
       </mat-list-item>
     </mat-list>
+  </div>
+
+  <div *ngIf="fromPopUp"
+       class="height-45 padding-mini-t-b padding-r-l full-width display-flex flex-direction-row-reverse flex-space-between">
+    <button mat-raised-button (click)="dismissTransferCall()"
+            [disabled]="disableContacts"
+            type="button"
+            class="full-width red-gradient text-white line-height-30 font-9-em text-weight-normal">
+      <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
+    </button>
   </div>
 </div>
