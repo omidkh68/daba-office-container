@@ -17,7 +17,7 @@ export class ConferenceAddComponent implements OnInit {
   constructor(private viewDirection: ViewDirectionService,
               private _fb: FormBuilder,
               public dialogRef: MatDialogRef<ConferenceAddComponent>,
-              @Inject(MAT_DIALOG_DATA) public data) {
+              @Inject(MAT_DIALOG_DATA) public data: any) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
@@ -28,10 +28,16 @@ export class ConferenceAddComponent implements OnInit {
   }
 
   createForm() {
-    this.form = this._fb.group({
-      username: new FormControl(''),
-      confname: new FormControl('')
-    });
+    if (this.data.action === 'add') {
+      this.form = this._fb.group({
+        username: new FormControl(''),
+        confname: new FormControl('')
+      });
+    } else if (this.data.action === 'join') {
+      this.form = this._fb.group({
+        confAddress: new FormControl('')
+      });
+    }
   }
 
   createRoom() {

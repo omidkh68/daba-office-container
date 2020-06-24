@@ -1,4 +1,5 @@
 export interface ConferenceInterface {
-  username: string;
-  confname: string;
+  username?: string;
+  confname?: string;
+  confAddress?: string;
 }

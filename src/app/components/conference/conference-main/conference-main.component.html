@@ -1,11 +1,36 @@
-<div class="full-width full-height bg-white">
+<div class="full-width full-height bg-white pos-rel">
   <div class="content-container full-width full-height display-flex flex-center">
-    <button *ngIf="!showConference" mat-raised-button (click)="addNewVideoConf()"
-            class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
-      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
-      <span class="padding-mini-r-l">{{'conference.add' | translate}}</span>
+    <div *ngIf="!showConference" class="width-250">
+      <button mat-raised-button (click)="addNewVideoConf()"
+              [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
+              class="blue-gradient margin-b-full full-width padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
+        <span class="padding-mini-r-l">{{'conference.add' | translate}}</span>
+      </button>
+
+      <button mat-raised-button (click)="joinToExistConf()"
+              [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
+              class="purple-gradient full-width padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">group_add</mat-icon>
+        <span class="padding-mini-r-l">{{'conference.join' | translate}}</span>
+      </button>
+    </div>
+
+    <webview [ngClass]="{'showFrame': !showConference}" partition="persist:webviewsession" #webFrame
+             class="webView-frame full-width full-height"></webview>
+  </div>
+
+  <div *ngIf="showConference" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="copy-clipboard-container pos-abs bottom-half">
+    <button mat-raised-button (click)="exitOfConference()" [cdkCopyToClipboard]="confAddress"
+            class="red-gradient mat-elevation-z1 padding-mini-r-l margin-mini-r-l text-white line-height-20 font-7-em overflow-hide text-weight-normal">
+      <mat-icon class="width-18 height-18 line-height-18 font-8-rem">close</mat-icon>
+      <span class="padding-mini-r-l">{{'conference.exist_from_conf' | translate}}</span>
     </button>
 
-    <webview [ngClass]="{'showFrame': !showConference}" partition="persist:webviewsession" #webFrame class="webView-frame full-width full-height"></webview>
+    <button mat-raised-button (click)="copyInClipBoard()" [cdkCopyToClipboard]="confAddress"
+            class="white-gradient mat-elevation-z1 padding-mini-r-l text-gray-700 line-height-20 font-7-em overflow-hide text-weight-normal">
+      <mat-icon class="text-green-600 width-18 height-18 line-height-18 font-8-rem">content_copy</mat-icon>
+      <span class="padding-mini-r-l">{{'conference.copy_address' | translate}}</span>
+    </button>
   </div>
 </div>

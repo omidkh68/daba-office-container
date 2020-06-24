@@ -17,8 +17,8 @@ function createWindow(): BrowserWindow {
     transparent: false,
     /*width: 1600,
     height: 900,*/
-    width: screen.getPrimaryDisplay().bounds.width - 50,
-    height: screen.getPrimaryDisplay().bounds.height - 50,
+    width: screen.getPrimaryDisplay().bounds.width,
+    height: screen.getPrimaryDisplay().bounds.height,
     frame: true,
     movable: true,
     resizable: false,

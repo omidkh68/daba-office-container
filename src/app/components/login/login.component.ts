@@ -48,6 +48,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login() {
+    /*this._router.navigateByUrl(`/`);
+    return;*/
+
     this.form.disable();
 
     this._subscription.add(

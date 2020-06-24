@@ -158,7 +158,13 @@
   },
   "conference": {
     "add": "Click to create a conference room",
+    "join": "Click to join existing conference room",
     "conf_name": "Conference room name",
-    "conf_name_error": "Please enter conference room name"
+    "conf_name_error": "Please enter conference room name",
+    "copy_address": "Copy conference name",
+    "added_to_clipboard": "Added to clipboard",
+    "conf_address": "Conference address",
+    "conf_address_error": "Please enter address",
+    "exist_from_conf": "Exit from conference"
   }
 }

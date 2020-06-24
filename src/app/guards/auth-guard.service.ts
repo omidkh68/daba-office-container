@@ -36,6 +36,29 @@ export class AuthGuardService implements CanActivate, OnDestroy {
       password: '123456789'
     };
 
+    /*this.userInfoService.changeUserInfo({
+      adminId: 1,
+      username: 'o.khosrojerdi',
+      password: '06df60287a737ebf3a177bd3b2c47e01',
+      name: 'امید',
+      family: 'خسروجردی',
+      email: 'khosrojerdi@dabacenter.ir',
+      status: '1',
+      permission: '11111100000000000000111111111111000000001110000000000000000011111100000000000000110000000000000000000',
+      darkMode: 0,
+      creationDate: '2020-06-20 13:48:18',
+      role: {
+        roleId: 9,
+        roleNameEn: 'UIManager',
+        roleNameFa: 'مدیر طراحی'
+      },
+      extension: '6004'
+    });
+
+    this.changeStatusService.changeUserStatus('');
+
+    return of(true);*/
+
     return this.apiService.login(loginInfo).pipe(
       map((resp: Result) => {
         this.userInfoService.changeUserInfo({
@@ -70,6 +93,7 @@ export class AuthGuardService implements CanActivate, OnDestroy {
         }*/
       }),
       catchError(e => {
+        console.log(e);
         this._router.navigateByUrl(`/login`);
 
         return of(false);

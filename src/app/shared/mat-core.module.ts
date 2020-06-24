@@ -33,6 +33,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from './jalali_moment_formats';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from './jalali-moment-date-adapter';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 @NgModule({
   imports: [MatTableModule],
@@ -68,6 +69,7 @@ import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from './jalali
     MatTableModule,
     MatPaginatorModule,
     MatRadioModule,
+    ClipboardModule
   ],
   providers: [
     {
