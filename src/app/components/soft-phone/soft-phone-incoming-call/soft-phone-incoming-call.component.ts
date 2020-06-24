@@ -91,7 +91,6 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
   accept_call() {
     this.softPhoneService.sipCall('call-audio');
-
     this.softPhoneService.changeOnCallUser(this.onCallUser);
     this.softPhoneService.changeIncomingCallStatus({status: false});
   }

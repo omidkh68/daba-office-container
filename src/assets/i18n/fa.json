@@ -29,6 +29,7 @@
   "dashboard": {
     "dashboard_toolbar": {
       "service_list": "سرویس ها",
+      "active_clocks": "ساعت های فعال",
       "exist_app": "خروج از برنامه"
     }
   },

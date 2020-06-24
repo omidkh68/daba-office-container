@@ -1,85 +1,102 @@
-import {AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit,SimpleChanges,OnChanges,OnInit, Component, ElementRef, Input, Renderer2, ViewChild} from '@angular/core';
 import {UserInterface} from '../../../users/logic/user-interface';
+import {DatetimeService} from "./service/datetime.service";
+import {DatetimeInterface} from "./logic/datetime.interface";
+import {FormControl } from "@angular/forms";
+import {Observable} from 'rxjs';
+
+import {map, startWith} from 'rxjs/operators';
+import {Timezones} from "./timezones.interface";
+
+
 
 @Component({
   selector: 'app-time-area',
   templateUrl: './time-area.component.html',
   styleUrls: ['./time-area.component.scss']
 })
-export class TimeAreaComponent implements AfterViewInit {
+export class TimeAreaComponent implements OnInit{
   @Input()
   loggedInUser: UserInterface;
 
   @Input()
   rtlDirection: boolean;
 
+  datetime: DatetimeInterface;
   graduations: Array<number> = new Array(60);
 
-  @ViewChild('hourHand') hourHand: ElementRef;
-  @ViewChild('minuteHand') minuteHand: ElementRef;
-  @ViewChild('secondHand') secondHand: ElementRef;
+  checkMoreClock: boolean;
+  checkMoreClockContent: boolean;
+  cityClocksList: Timezones[];
+  item: number;
 
-  constructor(private render: Renderer2) {
+  myControl = new FormControl();
+  options: Timezones[];
+  filteredOptions: Observable<Timezones[]>;
+
+
+  displayFn(timezone: Timezones): string {
+    return timezone && timezone.city ? timezone.city : '';
   }
 
-  ngAfterViewInit(): void {
-    this.timer();
+  private _filter(name: string): Timezones[] {
+    const filterValue = name.toLowerCase();
 
-    setInterval(() => this.timer(), 1000);
+    return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  timer() {
-    this.sethandRotation('hour');
-    this.sethandRotation('minute');
-    this.sethandRotation('second');
+
+
+
+  constructor(private render: Renderer2 , private datetimeService: DatetimeService) {
+    this.checkMoreClock = false;
+    this.options = datetimeService.aryIannaTimeZones;
+    this.cityClocksList = [{city: 'Tehran' , timezone : 'Asia/Tehran'}]
   }
 
-  /**
-   * Changes the rotation of the hands of the clock
-   * @param  {HTMLElement} hand   One of the hand of the clock
-   */
-  sethandRotation(hand) {
-    let date = new Date(), hours, minutes, seconds, percentage, degree;
-
-    switch (hand) {
-      case 'hour':
-        hours = date.getHours();
-        hand = this.hourHand.nativeElement;
-        percentage = this.numberToPercentage(hours, 12);
-        break;
-      case 'minute':
-        minutes = date.getMinutes();
-        hand = this.minuteHand.nativeElement;
-        percentage = this.numberToPercentage(minutes, 60);
-        break;
-      case 'second':
-        seconds = date.getSeconds();
-        hand = this.secondHand.nativeElement;
-        percentage = this.numberToPercentage(seconds, 60);
-        break;
-    }
-
-    degree = this.percentageToDegree(percentage);
-
-    this.render.setStyle(hand, 'transform', `rotate(${degree}deg) translate(-50%, -50%)`);
+  addMoreClock(event){
+    event.stopPropagation();
+    this.checkMoreClock = this.checkMoreClock ? false : true;
+    console.log(event);
   }
 
-  /**
-   * Converting a number to a percentage
-   * @param  {number} number Number
-   * @param  {number} max    Maximum value of the number
-   * @return {number}        Return a percentage
-   */
-  numberToPercentage(number = 0, max = 60) {
-    return (number / max) * 100;
+  showMoreClockContent(event){
+    event.stopPropagation();
+    this.checkMoreClockContent = true;
   }
 
-  /**
-   * Converting a percentage to a degree
-   * @param  {number} percentage Percentage
-   * @return {number}            Return a degree
-   */
-  percentageToDegree(percentage = 0) {
-    return (percentage * 360) / 100;
+  setClockCity(option){
+    console.log(option);
+    this.checkMoreClock = false;
+    this.checkMoreClockContent = false;
+    this.cityClocksList.push(option)
   }
+
+  ngOnChanges(changes: SimpleChanges): void{
+    this.getDateTime();
+  }
+
+  // ngAfterViewInit(): void {
+  //   //this.timer();
+  //   this.init();
+  //   //console.log("Husin",this.datetime);
+  //   //setInterval(() => this.timer(), 1000);
+  // }
+
+  getDateTime(): void {
+    this.datetime = this.datetimeService.changeDatetimeLabel(this.rtlDirection);
+  }
+
+  ngOnInit(): void {
+
+    //console.log("CITY",this.cityClocksList);
+
+    this.filteredOptions = this.myControl.valueChanges
+        .pipe(
+            startWith(''),
+            map(value => typeof value === 'string' ? value : value.name),
+            map(name => name ? this._filter(name) : this.options.slice())
+        );
+  }
+
 }

@@ -1,0 +1,7 @@
+<div #clock class="clock">
+  <mat-icon *ngIf="checkMoreClock && item_index != 0" (click)="removeClock($event)" class="close-button">close</mat-icon>
+  <div #hours class="hands hours"></div>
+  <div #minutes class="hands minutes"></div>
+  <div #seconds class="hands seconds"></div>
+</div>
+<h6 class="text-center padding-t-half">{{item.city}}</h6>
