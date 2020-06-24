@@ -69,10 +69,6 @@ export class TaskCalendarWeekdayComponent implements OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-
-    //console.log(changes.filterBoards , "MamadChange");
-
-
     if (changes.calendarEvents && !changes.calendarEvents.firstChange) {
       this.calendarEvents = changes.calendarEvents.currentValue;
 

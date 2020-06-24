@@ -65,9 +65,7 @@ export class WindowManagerService {
       try {
         // const widthEmptyState = (this.window.innerWidth - windowWidth) / 2;
         const widthEmptyState = (Math.random() * (this.window.innerWidth - windowWidth)).toFixed();
-        const heightEmptyState = (Math.random() * (this.window.innerWidth - windowWidth)).toFixed();
-
-
+        const heightEmptyState = (Math.random() * (this.window.innerHeight - windowHeight)).toFixed();
         const rndNumForWidth = this.randint(50, widthEmptyState);
         const rndNumForHeight = this.randint(50, heightEmptyState);
 
@@ -84,7 +82,7 @@ export class WindowManagerService {
           // position: {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`}
         });
 
-        const window: WindowInterface = {
+        const mwindow: WindowInterface = {
           windowRef: dialogRef,
           minimizable: true,
           maximizable: maximizable,
@@ -98,9 +96,11 @@ export class WindowManagerService {
           windowService: service
         };
 
-        this._defaultWindows.push(window);
-
+        this._defaultWindows.push(mwindow);
         this.windows.next(this._defaultWindows);
+
+        this.updateWindowPosition(mwindow , false);
+
       } catch (e) {
       }
     } else {
@@ -120,7 +120,7 @@ export class WindowManagerService {
     windowInstance.isDraggable = false;
     windowInstance.windowRef.removePanelClass('maximized');
     windowInstance.windowRef.addPanelClass('minimized');
-    windowInstance.windowRef.updatePosition({bottom: '0'});
+    //windowInstance.windowRef.updatePosition({bottom: '0'});
   }
 
   maximizeWindow(service: ServiceItemsInterface) {
@@ -213,8 +213,24 @@ export class WindowManagerService {
 
     const updatePosition: DialogPositionInterface = {top: `${centerHeight}px`, left: `${centerWidth}px`};
 
-    windowInstance.windowRef.updatePosition(updatePosition);
+    //windowInstance.windowRef.updatePosition(updatePosition);
+    this.updateWindowPosition(windowInstance , true);
 
     this.activeWindow(service);
+  }
+
+  updateWindowPosition(windowInstance:any , center:boolean){
+
+    const widthEmptyState = (Math.random() * (this.window.innerWidth - windowInstance.windowService.width)).toFixed();
+    const heightEmptyState = (Math.random() * (this.window.innerHeight - windowInstance.windowService.height)).toFixed();
+    const rndNumForWidth = this.randint(50, widthEmptyState);
+    const rndNumForHeight = this.randint(50, heightEmptyState);
+
+    const melement = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;//document.getElementById(window.windowRef.id) as HTMLElement;
+    if(center)
+      melement.style.transform = "none";
+    else
+      melement.style.transform = "translate3d("+rndNumForWidth+"px, "+rndNumForHeight+"px, 0px)";
+
   }
 }

@@ -34,8 +34,6 @@ export class DatetimeService {
 
     changeDatetimeLabel(rtlDirection : boolean) {
 
-        console.log("MAMAD" , this.todayGregorianDayName);
-
         if(rtlDirection){
 
             this.datetime = {
