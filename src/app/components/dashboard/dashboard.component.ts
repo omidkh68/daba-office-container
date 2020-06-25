@@ -94,5 +94,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
+
   }
 }
