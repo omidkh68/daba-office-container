@@ -1,7 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
-import {UserInterface} from '../../../users/logic/user-interface';
+// import {UserInterface} from '../../../users/logic/user-interface';
 import {WindowManagerService} from '../../../../services/window-manager.service';
+import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 
 @Component({
   selector: 'app-profile-menu',
@@ -10,7 +11,7 @@ import {WindowManagerService} from '../../../../services/window-manager.service'
 })
 export class ProfileMenuComponent {
   @Input()
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
 
   @Input()
   rtlDirection: boolean;

@@ -8,6 +8,7 @@ import {TaskEssentialInfo} from '../task-main/task-main.component';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {CurrentTaskService} from '../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 @Component({
@@ -27,7 +28,7 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
 
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
-  user: UserInterface;
+  user: UserContainerInterface;
   currentTasks: Array<TaskInterface> | null = null;
   version;
   message: string = '';

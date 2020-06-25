@@ -60,7 +60,8 @@ export class SoftPhoneKeypadComponent implements OnInit {
     if (contact) {
       this.oldNumeric = this.numeric;
 
-      this.numeric = contact.name + ' ' + contact.family;
+      // this.numeric = contact.name + ' ' + contact.family;
+      this.numeric = contact.name;
     }
   }
 
@@ -82,7 +83,8 @@ export class SoftPhoneKeypadComponent implements OnInit {
     if (contact) {
       this.oldNumeric = this.numeric;
 
-      this.numeric = contact.name + ' ' + contact.family;
+      // this.numeric = contact.name + ' ' + contact.family;
+      this.numeric = contact.name;
     }
   }
 

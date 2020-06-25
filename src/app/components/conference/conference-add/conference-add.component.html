@@ -1,5 +1,17 @@
 <div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99"
      [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <h1 class="margin-b-full font-full-em text-weight-500">
+    {{(data.action === 'add' ? 'conference.create_conference' : 'conference.join_conference') | translate}}
+  </h1>
+
+  <a (click)="closeDialog()" [ngClass]="rtlDirection ? 'left-full' : 'right-full'"
+     class="pos-abs top-full cursor-pointer text-gray-600">
+    <mat-icon class="text-grey-500">close</mat-icon>
+  </a>
+
+  <p class="no-margin font-9-em text-gray-700">
+    {{(data.action === 'add' ? 'conference.for_create_conf_fill_inputs' : 'conference.for_join_conf_paste_conf_address') | translate}}
+  </p>
 
   <form [formGroup]="form" class="full-height">
     <ng-container *ngIf="data.action === 'add'; else joinForm">

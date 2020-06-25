@@ -1,16 +1,17 @@
 import * as io from 'socket.io-client';
 import {AppConfig} from '../../environments/environment';
-import {UserInterface} from '../components/users/logic/user-interface';
-import {Subscription} from 'rxjs/internal/Subscription';
 import {Injectable} from '@angular/core';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {UserInterface} from '../components/users/logic/user-interface';
 import {UserInfoService} from '../components/users/services/user-info.service';
+import {UserContainerInterface} from '../components/users/logic/user-container.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketioService {
   socket;
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
 
   private _subscription: Subscription = new Subscription();
 
@@ -24,7 +25,7 @@ export class SocketioService {
     this.socket = io(AppConfig.SOCKET_URL, {
       query: {
         token: 'cde',
-        userId: this.loggedInUser.adminId,
+        userEmail: this.loggedInUser.email,
         componentName: componentName
       }
     });

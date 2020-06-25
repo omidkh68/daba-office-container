@@ -33,8 +33,8 @@ export class ConferenceMainComponent implements OnDestroy {
   addNewVideoConf() {
     const dialogRef = this.dialog.open(ConferenceAddComponent, {
       autoFocus: false,
-      width: '300px',
-      height: '210px',
+      width: '350px',
+      height: '280px',
       data: {action: 'add'}
     });
 
@@ -46,11 +46,11 @@ export class ConferenceMainComponent implements OnDestroy {
           this.webFrame.nativeElement.setAttribute('src', this.confAddress);
 
           this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-            console.log('did-start-loading');
+            // console.log('did-start-loading');
           });
 
           this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
-            console.log('did-stop-loading');
+            // console.log('did-stop-loading');
           });
 
           setTimeout(() => {
@@ -64,8 +64,8 @@ export class ConferenceMainComponent implements OnDestroy {
   joinToExistConf() {
     const dialogRef = this.dialog.open(ConferenceAddComponent, {
       autoFocus: false,
-      width: '300px',
-      height: '140px',
+      width: '350px',
+      height: '205px',
       data: {action: 'join'}
     });
 
@@ -77,11 +77,11 @@ export class ConferenceMainComponent implements OnDestroy {
           this.webFrame.nativeElement.setAttribute('src', this.confAddress);
 
           this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-            console.log('did-start-loading');
+            // console.log('did-start-loading');
           });
 
           this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
-            console.log('did-stop-loading');
+            // console.log('did-stop-loading');
           });
 
           setTimeout(() => {

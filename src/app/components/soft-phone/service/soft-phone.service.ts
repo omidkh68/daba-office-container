@@ -1,10 +1,11 @@
 import {ElementRef, Injectable} from '@angular/core';
 import SIPml from 'ecmascript-webrtc-sipml';
+// import {UserInterface} from '../../users/logic/user-interface';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {UserInfoService} from '../../users/services/user-info.service';
 import {IncomingInterface} from '../logic/incoming.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
-import {UserInfoService} from '../../users/services/user-info.service';
-import {UserInterface} from '../../users/logic/user-interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 export interface EssentialTagsInterface {
   audioRemote: ElementRef;
@@ -17,7 +18,7 @@ export interface EssentialTagsInterface {
   providedIn: 'root'
 })
 export class SoftPhoneService {
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
 
   private _users: Array<SoftphoneUserInterface> | null;
   private users = new BehaviorSubject(this._users);

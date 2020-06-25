@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import * as lodash from 'lodash';
 import {ApiService} from './logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInterface} from '../users/logic/user-interface';
+// import {UserInterface} from '../users/logic/user-interface';
 import {TaskInterface} from '../tasks/logic/task-interface';
 import {UserInfoService} from '../users/services/user-info.service';
 import {ElectronService} from '../../services/electron.service';
@@ -12,6 +12,7 @@ import {CurrentTaskService} from '../tasks/services/current-task.service';
 import {UserStatusInterface} from '../users/logic/user-status-interface';
 import {ScreenshotInterface} from './logic/screenshot-interface';
 import {ChangeStatusService} from '../status/services/change-status.service';
+import {UserContainerInterface} from '../users/logic/user-container.interface';
 
 export interface AvailableHoursInterface {
   time: string;
@@ -25,7 +26,7 @@ export interface AvailableHoursInterface {
 export class ScreenshotComponent implements OnDestroy {
   timerDueTime: number = 30000;
   timerPeriod: number = 30000;
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
   userCurrentStatus: UserStatusInterface | string = '';
   currentTasks: Array<TaskInterface> | null = null;
   availableHours: Array<AvailableHoursInterface> = [

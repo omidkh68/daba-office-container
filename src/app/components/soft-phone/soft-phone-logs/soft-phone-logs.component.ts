@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {UserInterface} from '../../users/logic/user-interface';
-import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
+// import {UserInterface} from '../../users/logic/user-interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 
 @Component({
@@ -20,7 +21,7 @@ export class SoftPhoneLogsComponent {
   softPhoneUsers: Array<SoftphoneUserInterface>;
 
   @Input()
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
 
   constructor() {
   }

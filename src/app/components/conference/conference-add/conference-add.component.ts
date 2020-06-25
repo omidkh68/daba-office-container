@@ -45,4 +45,8 @@ export class ConferenceAddComponent implements OnInit {
       this.dialogRef.close(this.form.value);
     }
   }
+
+  closeDialog() {
+    this.dialogRef.close(null);
+  }
 }

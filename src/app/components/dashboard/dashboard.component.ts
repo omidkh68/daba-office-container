@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInterface} from '../users/logic/user-interface';
+// import {UserInterface} from '../users/logic/user-interface';
 import {MessageService} from '../../services/message.service';
 import {WindowInterface} from './logic/window.interface';
 import {UserInfoService} from '../users/services/user-info.service';
@@ -9,6 +9,7 @@ import {ElectronService} from '../../services/electron.service';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ServiceItemsInterface} from './logic/service-items.interface';
+import {UserContainerInterface} from '../users/logic/user-container.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,7 @@ import {ServiceItemsInterface} from './logic/service-items.interface';
 export class DashboardComponent implements OnInit, OnDestroy {
   rtlDirection: boolean;
   windowManager: Array<WindowInterface>;
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
   serviceList: ServiceItemsInterface[] = [
     {
       serviceId: 1,
@@ -76,12 +77,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     setTimeout(() => {
       this.messageService.durationInSeconds = 10;
-      this.messageService.showMessage(`${this.loggedInUser.name} ${this.loggedInUser.family} خوش آمدید `);
+      this.messageService.showMessage(`${this.loggedInUser.name} خوش آمدید `);
     }, 2000);
   }
 
   changeDarkMode() {
-    this.userInfoService.changeDarkMode(this.loggedInUser);
+    // this.userInfoService.changeDarkMode(this.loggedInUser);
   }
 
   changeDirection() {

@@ -1,7 +1,8 @@
 import {Component, Input, ViewEncapsulation} from '@angular/core';
 import {WindowInterface} from '../logic/window.interface';
-import {UserInterface} from '../../users/logic/user-interface';
+// import {UserInterface} from '../../users/logic/user-interface';
 import {ServiceItemsInterface} from '../logic/service-items.interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 @Component({
   selector: 'app-dashboard-toolbar',
@@ -17,7 +18,7 @@ export class DashboardToolbarComponent {
   windowManager: Array<WindowInterface>;
 
   @Input()
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
 
   @Input()
   serviceList: Array<ServiceItemsInterface>;

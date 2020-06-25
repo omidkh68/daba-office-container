@@ -1,10 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInterface} from '../../users/logic/user-interface';
+// import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 
 @Component({
@@ -16,7 +17,7 @@ export class SoftPhoneTransferCallComponent implements OnInit, OnDestroy {
   rtlDirection: boolean = false;
   bottomSheetData: SoftPhoneBottomSheetInterface;
   viewModeTypes = 'contact';
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
   softPhoneUsers: Array<SoftphoneUserInterface>;
 
   private _subscription: Subscription = new Subscription();

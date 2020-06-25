@@ -48,7 +48,8 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
                 this.onCallUser = currentUser;
                 this.onCallUser.extension = this.currentPhoneNumber;
 
-                callerID = currentUser.name + ' ' + currentUser.family;
+                // callerID = currentUser.name + ' ' + currentUser.family;
+                callerID = currentUser.name;
               } else {
                 callerID = this.getTranslate('soft_phone.incoming_call.unknown_caller');
               }
@@ -56,7 +57,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
               if (!this.electronService.window.isFocused()) {
                 const notification: Notification = new Notification(`${callerID} ${translateIncomingCall}`, {
                   body: this.getTranslate('soft_phone.incoming_call.do_you_accept'),
-                  icon: 'assets/profileImg/' + currentUser.adminId + '.jpg',
+                  icon: 'assets/profileImg/' + currentUser.id + '.jpg',
                   dir: 'auto',
                   data: currentUser
                 });

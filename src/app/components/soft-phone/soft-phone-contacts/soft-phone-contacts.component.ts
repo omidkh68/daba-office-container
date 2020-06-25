@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output, Pipe, PipeTransform, ViewChild} from '@angular/core';
-import {UserInterface} from '../../users/logic/user-interface';
+// import {UserInterface} from '../../users/logic/user-interface';
+import {SoftPhoneService} from '../service/soft-phone.service';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 import {SoftPhoneContactDetailComponent} from './soft-phone-contact-detail/soft-phone-contact-detail.component';
-import {SoftPhoneService} from '../service/soft-phone.service';
 
 @Component({
   selector: 'app-soft-phone-contacts',
@@ -31,7 +32,7 @@ export class SoftPhoneContactsComponent implements OnInit {
   softPhoneUsers: Array<SoftphoneUserInterface>;
 
   @Input()
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
 
   filteredUsers: Array<SoftphoneUserInterface>;
   bottomSheetData: SoftPhoneBottomSheetInterface;
@@ -45,7 +46,7 @@ export class SoftPhoneContactsComponent implements OnInit {
   ngOnInit(): void {
     this.assignCopy();
 
-    this.filterArgs = {adminId: this.loggedInUser.adminId};
+    this.filterArgs = {email: this.loggedInUser.email};
   }
 
   filterContacts(value) {
@@ -54,7 +55,8 @@ export class SoftPhoneContactsComponent implements OnInit {
     }
 
     this.filteredUsers = Object.assign([], this.softPhoneUsers).filter(
-      (item: SoftphoneUserInterface) => (item.name + '' + item.family).toLowerCase().indexOf(value.toLowerCase()) > -1
+      // (item: SoftphoneUserInterface) => (item.name + '' + item.family).toLowerCase().indexOf(value.toLowerCase()) > -1
+      (item: SoftphoneUserInterface) => (item.name).toLowerCase().indexOf(value.toLowerCase()) > -1
     );
   }
 
@@ -114,6 +116,6 @@ export class MyFilterPipe implements PipeTransform {
     }
     // filter items array, items which match and return true will be
     // kept, false will be filtered out
-    return items.filter((item: SoftphoneUserInterface) => item.adminId !== filter.adminId);
+    return items.filter((item: SoftphoneUserInterface) => item.email !== filter.email);
   }
 }

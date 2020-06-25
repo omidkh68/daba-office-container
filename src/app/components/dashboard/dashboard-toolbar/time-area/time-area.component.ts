@@ -1,23 +1,22 @@
-import {AfterViewInit,SimpleChanges,OnChanges,OnInit, Component, ElementRef, Input, Renderer2, ViewChild} from '@angular/core';
-import {UserInterface} from '../../../users/logic/user-interface';
-import {DatetimeService} from "./service/datetime.service";
-import {DatetimeInterface} from "./logic/datetime.interface";
-import {FormControl } from "@angular/forms";
+import {Component, Input, OnInit, Renderer2, SimpleChanges} from '@angular/core';
+// import {UserInterface} from '../../../users/logic/user-interface';
+import {DatetimeService} from './service/datetime.service';
+import {DatetimeInterface} from './logic/datetime.interface';
+import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 
 import {map, startWith} from 'rxjs/operators';
-import {Timezones} from "./timezones.interface";
-
-
+import {Timezones} from './timezones.interface';
+import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 
 @Component({
   selector: 'app-time-area',
   templateUrl: './time-area.component.html',
   styleUrls: ['./time-area.component.scss']
 })
-export class TimeAreaComponent implements OnInit{
+export class TimeAreaComponent implements OnInit {
   @Input()
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
 
   @Input()
   rtlDirection: boolean;
@@ -45,34 +44,31 @@ export class TimeAreaComponent implements OnInit{
     return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
   }
 
-
-
-
-  constructor(private render: Renderer2 , private datetimeService: DatetimeService) {
+  constructor(private render: Renderer2, private datetimeService: DatetimeService) {
     this.checkMoreClock = false;
     this.options = datetimeService.aryIannaTimeZones;
-    this.cityClocksList = [{city: 'Tehran' , timezone : 'Asia/Tehran'}]
+    this.cityClocksList = [{city: 'Tehran', timezone: 'Asia/Tehran'}]
   }
 
-  addMoreClock(event){
+  addMoreClock(event) {
     event.stopPropagation();
     this.checkMoreClock = this.checkMoreClock ? false : true;
     console.log(event);
   }
 
-  showMoreClockContent(event){
+  showMoreClockContent(event) {
     event.stopPropagation();
     this.checkMoreClockContent = true;
   }
 
-  setClockCity(option){
+  setClockCity(option) {
     console.log(option);
     this.checkMoreClock = false;
     this.checkMoreClockContent = false;
     this.cityClocksList.push(option)
   }
 
-  ngOnChanges(changes: SimpleChanges): void{
+  ngOnChanges(changes: SimpleChanges): void {
     this.getDateTime();
   }
 
@@ -92,11 +88,11 @@ export class TimeAreaComponent implements OnInit{
     //console.log("CITY",this.cityClocksList);
 
     this.filteredOptions = this.myControl.valueChanges
-        .pipe(
-            startWith(''),
-            map(value => typeof value === 'string' ? value : value.name),
-            map(name => name ? this._filter(name) : this.options.slice())
-        );
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this._filter(name) : this.options.slice())
+      );
   }
 
 }

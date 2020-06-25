@@ -1,13 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {UserInterface} from '../../../users/logic/user-interface';
-import {UserStatusInterface} from '../../../users/logic/user-status-interface';
-import {ChangeStatusComponent} from '../../../status/change-status/change-status.component';
-import {ChangeUserStatusInterface} from '../../../status/logic/change-user-status.interface';
+// import {UserInterface} from '../../../users/logic/user-interface';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../../services/message.service';
-import {ApiService as UserApiService} from '../../../users/logic/api.service';
+import {UserStatusInterface} from '../../../users/logic/user-status-interface';
 import {ChangeStatusService} from '../../../status/services/change-status.service';
+import {ChangeStatusComponent} from '../../../status/change-status/change-status.component';
+import {UserContainerInterface} from '../../../users/logic/user-container.interface';
+import {ChangeUserStatusInterface} from '../../../status/logic/change-user-status.interface';
+import {ApiService as UserApiService} from '../../../users/logic/api.service';
 
 @Component({
   selector: 'app-user-status',
@@ -16,7 +17,7 @@ import {ChangeStatusService} from '../../../status/services/change-status.servic
 })
 export class UserStatusComponent implements OnInit {
   @Input()
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
 
   @Input()
   rtlDirection: boolean;

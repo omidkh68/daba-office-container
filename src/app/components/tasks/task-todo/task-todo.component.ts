@@ -1,10 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {TodoInterface} from './logic/todo-interface';
-import {Subscription} from 'rxjs/internal/Subscription';
 import {ApiService} from './logic/api.service';
-import {UserInterface} from '../../users/logic/user-interface';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {TodoInterface} from './logic/todo-interface';
+// import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 @Component({
   selector: 'app-task-todo',
@@ -20,7 +21,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   edit: boolean = false;
-  user: UserInterface;
+  user: UserContainerInterface;
 
   todoList: TodoInterface[] = [];
 
@@ -126,7 +127,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
       const data = {
         taskId: this.taskId,
-        adminId: this.user.adminId,
+        email: this.user.email,
         text: this.form.get('todo').value.text
       };
 
@@ -153,7 +154,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       const data = {
         todoId: this.form.get('todo').value.todoId,
         taskId: this.taskId,
-        adminId: this.user.adminId,
+        email: this.user.email,
         text: this.form.get('todo').value.text
       };
 

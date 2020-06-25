@@ -3,10 +3,11 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
-import {ProjectInterface} from '../../projects/logic/project-interface';
-import {TaskDataInterface} from '../logic/task-data-interface';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {ProjectInterface} from '../../projects/logic/project-interface';
+import {TaskDataInterface} from '../logic/task-data-interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 @Component({
   templateUrl: './task-add.component.html'
@@ -16,7 +17,7 @@ export class TaskAddComponent implements OnInit, OnDestroy {
   form: FormGroup;
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
-  user: UserInterface;
+  user: UserContainerInterface;
 
   private _subscription: Subscription = new Subscription();
 

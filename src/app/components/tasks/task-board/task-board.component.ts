@@ -15,6 +15,7 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskStopComponent} from '../task-stop/task-stop.component';
 import {CurrentTaskService} from '../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 @Component({
@@ -42,7 +43,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   filterBoards: any;
 
   socket;
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
   myTasks: Array<TaskInterface> = [];
   rowHeight: string = '0';
   connectedTo = [];
@@ -129,7 +130,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
             task = Object.assign(task, newTask);
           }
 
-          if (task.assignTo.adminId === this.loggedInUser.adminId && task.boardStatus === 'inProgress') {
+          if (task.assignTo.email === this.loggedInUser.email && task.boardStatus === 'inProgress') {
             this.myTasks.push(task);
           }
 
@@ -203,9 +204,9 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getBoards() {
-    if (this.loggedInUser && this.loggedInUser.adminId) {
+    if (this.loggedInUser && this.loggedInUser.email) {
       this._subscription.add(
-        this.api.boards(this.loggedInUser.adminId).subscribe((resp: any) => {
+        this.api.boards(this.loggedInUser.email).subscribe((resp: any) => {
           if (resp.result === 1) {
             this.putTasksToAllBoards(resp);
           }
@@ -231,7 +232,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
     info.content.boards.list.map((task: TaskInterface) => {
       // collect all logged in user`s task into myTasks
-      if (task.assignTo.adminId === this.loggedInUser.adminId && task.boardStatus === 'inProgress') {
+      if (task.assignTo.email === this.loggedInUser.email && task.boardStatus === 'inProgress') {
         this.myTasks.push(task);
       }
 

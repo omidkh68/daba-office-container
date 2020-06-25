@@ -5,26 +5,15 @@ import {Observable} from 'rxjs/internal/Observable';
 import {ApiService} from '../components/users/logic/api.service';
 import {CanActivate, Router} from '@angular/router';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInterface} from '../components/users/logic/user-interface';
+// import {UserInterface} from '../components/users/logic/user-interface';
 import {LoginInterface} from '../components/users/logic/login.interface';
 import {UserInfoService} from '../components/users/services/user-info.service';
-import {ChangeStatusService} from '../components/status/services/change-status.service';
-import {CheckLoginInterface} from '../components/users/logic/check-login.interface';
 import {UserContainerInterface} from '../components/users/logic/user-container.interface';
-
-export interface Result {
-  result: number;
-  message: string;
-  content: {
-    user: UserInterface,
-    token: string;
-  };
-}
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuardService implements CanActivate, OnDestroy {
+export class CanShowLogin implements CanActivate, OnDestroy {
   loggedInUser: UserContainerInterface;
   loginData: LoginInterface;
 
@@ -32,8 +21,7 @@ export class AuthGuardService implements CanActivate, OnDestroy {
 
   constructor(private apiService: ApiService,
               private _router: Router,
-              private userInfoService: UserInfoService,
-              private changeStatusService: ChangeStatusService) {
+              private userInfoService: UserInfoService) {
     this._subscription.add(
       this.userInfoService.currentLoginData.subscribe(loginData => this.loginData = loginData)
     );
@@ -44,14 +32,8 @@ export class AuthGuardService implements CanActivate, OnDestroy {
 
     if (this.loginData) {
       return this.apiService.checkLogin(this.loginData.token_type + ' ' + this.loginData.access_token).pipe(
-        map((resp: CheckLoginInterface) => {
-          if (resp.success === true) {
-            this.userInfoService.changeUserInfo(resp.data);
-
-            this.changeStatusService.changeUserStatus('');
-
-            return true;
-          }
+        map((resp: any) => {
+          return !(resp.success === true);
         }),
         catchError(e => {
           console.log(e);
@@ -60,13 +42,11 @@ export class AuthGuardService implements CanActivate, OnDestroy {
         })
       );
     } else {
-      this._router.navigateByUrl(`/login`);
-
-      return of(false);
+      return of(true);
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }

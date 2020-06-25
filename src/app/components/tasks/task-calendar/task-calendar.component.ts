@@ -10,8 +10,9 @@ import {ProjectInterface} from '../../projects/logic/project-interface';
 import {ApiService} from '../logic/api.service';
 import {FullCalendarComponent} from '@fullcalendar/angular';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-
 import {AppConfig} from '../../../../environments/environment';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 @Component({
   selector: 'app-task-calendar',
@@ -19,7 +20,6 @@ import {AppConfig} from '../../../../environments/environment';
   styleUrls: ['./task-calendar.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
 
 export class TaskCalendarComponent implements OnInit, OnDestroy {
   @ViewChild('calendar') calendarComponent: FullCalendarComponent;
@@ -34,13 +34,12 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   @Input()
   rtlDirection: boolean;
 
-  calendarPlugins = [dayGridPlugin, timeGridPlugin];
   tasks: TaskInterface[] = [];
   usersList: UserInterface[] = [];
+  loggedInUser: UserContainerInterface;
   projectsList: ProjectInterface[] = [];
   socket = io(AppConfig.SOCKET_URL);
   calendarEvents = [];
-  sumTimes = 0;
   monthView = false;
   events = [
     {title: 'event 1', start: '2020-05-10 12:00', end: '2020-05-10 13:00'},
@@ -67,7 +66,11 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private userInfoService: UserInfoService,
               public dialog: MatDialog) {
+    this._subscription.add(
+      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
+    );
   }
 
   changeViewMode(mode) {
@@ -128,30 +131,32 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
       }
       //);
     } else {
-      this._subscription.add(
-        this.api.boardsCalendar(1).subscribe((resp: any) => {
-          if (resp.result === 1) {
-            this.usersList = resp.content.users.list;
-            this.projectsList = resp.content.projects.list;
-            this.tasks = resp.content.boards.list;
+      if (this.loggedInUser && this.loggedInUser.email) {
+        this._subscription.add(
+          this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
+            if (resp.result === 1) {
+              this.usersList = resp.content.users.list;
+              this.projectsList = resp.content.projects.list;
+              this.tasks = resp.content.boards.list;
 
-            const calendarEvent = [];
+              const calendarEvent = [];
 
-            this.tasks.map(task => {
-              const taskEvent = {
-                title: task.taskName,
-                start: new Date(task.startAt),
-                end: new Date(task.stopAt)
-              };
+              this.tasks.map(task => {
+                const taskEvent = {
+                  title: task.taskName,
+                  start: new Date(task.startAt),
+                  end: new Date(task.stopAt)
+                };
 
-              calendarEvent.push(taskEvent);
-            });
+                calendarEvent.push(taskEvent);
+              });
 
-            this.calendarEvents = calendarEvent;
-            //this.calendarEvents = this.events;
-          }
-        })
-      );
+              this.calendarEvents = calendarEvent;
+              //this.calendarEvents = this.events;
+            }
+          })
+        );
+      }
     }
 
   }

@@ -1,15 +1,13 @@
 <div class="full-width full-height bg-white pos-rel">
   <div class="content-container full-width full-height display-flex flex-center">
-    <div *ngIf="!showConference" class="width-250">
+    <div *ngIf="!showConference" class="width-200">
       <button mat-raised-button (click)="addNewVideoConf()"
-              [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
               class="blue-gradient margin-b-full full-width padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
         <span class="padding-mini-r-l">{{'conference.add' | translate}}</span>
       </button>
 
       <button mat-raised-button (click)="joinToExistConf()"
-              [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
               class="purple-gradient full-width padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">group_add</mat-icon>
         <span class="padding-mini-r-l">{{'conference.join' | translate}}</span>

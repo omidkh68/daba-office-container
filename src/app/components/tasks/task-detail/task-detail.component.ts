@@ -3,13 +3,14 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskInterface} from '../logic/task-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
-import {UserInterface} from '../../users/logic/user-interface';
+// import {UserInterface} from '../../users/logic/user-interface';
 import {ApiService} from '../logic/api.service';
-import {TaskDataInterface} from '../logic/task-data-interface';
-import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+// import {TaskDataInterface} from '../logic/task-data-interface';
+// import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -17,11 +18,11 @@ import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomShe
 })
 export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   rtlDirection: boolean;
-  user: UserInterface = null;
+  user: UserContainerInterface = null;
   editable: boolean = false;
   task: TaskInterface = null;
   projectsList: ProjectInterface[] = [];
-  usersList: UserInterface[] = [];
+  usersList: UserContainerInterface[] = [];
   form: FormGroup;
   viewModeTypes = 'info';
   bottomSheetData: TaskBottomSheetInterface;
@@ -139,8 +140,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     const stopTime = stopTimeTmp[0] + ':' + stopTimeTmp[1];
 
     const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
-    const selectedAssignTo = this.usersList.filter(user => user.adminId === this.task.assignTo.adminId).pop();
-    const selectedAssigner = this.usersList.filter(user => user.adminId === this.user.adminId).pop();
+    const selectedAssignTo = this.usersList.filter(user => user.email === this.task.assignTo.email).pop();
+    const selectedAssigner = this.usersList.filter(user => user.email === this.user.email).pop();
 
     this.form.patchValue({
       taskId: this.task.taskId,
@@ -181,7 +182,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
     formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
-    formValue.assigner = this.usersList.filter(user => user.adminId === this.user.adminId).pop();
+    formValue.assigner = this.usersList.filter(user => user.email === this.user.email).pop();
 
     this._subscription.add(
       this.api.updateTask(formValue).subscribe((resp: any) => {

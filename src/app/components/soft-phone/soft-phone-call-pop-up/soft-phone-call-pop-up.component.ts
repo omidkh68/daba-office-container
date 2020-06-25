@@ -1,11 +1,12 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {timer} from 'rxjs';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInterface} from '../../users/logic/user-interface';
+// import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneTransferCallComponent} from '../soft-phone-transfer-call/soft-phone-transfer-call.component';
@@ -27,7 +28,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   rtlDirection;
   bottomSheetData: SoftPhoneBottomSheetInterface;
   data: any;
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
   callTimer = '00:00';
   counter = null;
   timeCounter;

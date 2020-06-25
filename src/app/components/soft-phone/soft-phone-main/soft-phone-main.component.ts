@@ -1,13 +1,14 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInterface} from '../../users/logic/user-interface';
+// import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
+import {SoftPhoneService} from '../service/soft-phone.service';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {SoftPhoneService} from '../service/soft-phone.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
@@ -24,200 +25,110 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   @ViewChild('ringbacktone', {static: false}) ringbacktone: ElementRef;
   @ViewChild('dtmfTone', {static: false}) dtmfTone: ElementRef;
 
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
   rtlDirection: boolean;
   activeTab: number = 1;
   tabs = [];
 
   softPhoneUsers: Array<SoftphoneUserInterface> = [
     {
-      adminId: 9,
-      username: 'seanBassiri',
-      password: 'e10adc3949ba59abbe56e057f20f883e',
-      name: 'آقای',
-      family: 'بصیری',
+      id: 9,
+      name: 'آقای بصیری',
       email: 'seanbassiri@gmail.com',
-      status: '1',
-      permission: '111111000000000000001111111111100000000011100000000000000000111111000000000000000',
-      darkMode: 0,
-      creationDate: '2020-05-26 04:27:13',
-      role: {
-        roleId: 1,
-        roleNameEn: 'Manager',
-        roleNameFa: 'مدیر ارشد'
-      },
+      email_verified_at: '',
+      created_at: '2020-06-23T08:53:17.000000Z',
+      updated_at: '2020-06-23T08:53:17.000000Z',
+      role_id: null,
+      timezone: null,
       extension: '6008',
-      type: 'incoming',
-      date: '2020-05-23',
-      time: '10:53'
     },
     {
-      adminId: 1,
-      username: 'o.khosrojerdi',
-      password: '06df60287a737ebf3a177bd3b2c47e01',
-      name: 'امید',
-      family: 'خسروجردی',
+      id: 46,
+      name: 'omid',
       email: 'khosrojerdi@dabacenter.ir',
-      status: '1',
-      permission: '111111000000000000001111111111100000000011100000000000000000111111000000000000000',
-      darkMode: 1,
-      creationDate: '0000-00-00 00:00:00',
-      role: {
-        roleId: 9,
-        roleNameEn: 'UI Manager',
-        roleNameFa: 'مدیر بخش کاربری'
-      },
-      extension: '6004',
-      type: 'incoming',
-      date: '2020-05-23',
-      time: '10:53'
+      email_verified_at: null,
+      created_at: '2020-06-23T08:53:17.000000Z',
+      updated_at: '2020-06-23T08:53:17.000000Z',
+      role_id: null,
+      timezone: null,
+      extension: '6004'
     },
     {
-      adminId: 16,
-      username: 'mbahadori',
-      password: '1403301a5cce4b5c802bd23cda0d09ed',
-      name: 'مریم',
-      family: 'بهادری',
+      id: 16,
+      name: 'مریم بهادری',
       email: 'm.bahadori@dabacenter.ir',
-      status: '1',
-      permission: '111111000000000000001111111111110000000011100000000000000000111111000000000000000',
-      darkMode: 0,
-      creationDate: '2020-05-27 16:57:13',
-      role: {
-        roleId: 1,
-        roleNameEn: 'Manager',
-        roleNameFa: 'مدیر ارشد'
-      },
-      extension: '6005',
-      type: 'outgoing',
-      date: '2020-05-20',
-      time: '13:21'
+      email_verified_at: null,
+      created_at: '2020-06-23T08:53:17.000000Z',
+      updated_at: '2020-06-23T08:53:17.000000Z',
+      role_id: null,
+      timezone: null,
+      extension: '6005'
     },
     {
-      adminId: 4,
-      username: 'mmarjani',
-      password: 'e10adc3949ba59abbe56e057f20f883e',
-      name: 'مهدی',
-      family: 'مرجانی',
+      id: 47,
+      name: 'مهدی مرجانی',
       email: 'marjani@dabacenter.ir',
-      status: '1',
-      permission: '100011000000000000001111110101000000000011100000000000000000100001000000000000000',
-      darkMode: 1,
-      creationDate: '2020-05-27 16:57:13',
-      role: {
-        roleId: 20,
-        roleNameEn: 'Responsible Developer',
-        roleNameFa: 'مسئول توسعه دهنده ها'
-      },
-      extension: '6006',
-      type: 'incoming',
-      date: '2020-05-18',
-      time: '09:19'
+      email_verified_at: null,
+      created_at: '2020-06-23T08:53:17.000000Z',
+      updated_at: '2020-06-23T08:53:17.000000Z',
+      role_id: null,
+      timezone: null,
+      extension: '6006'
     },
     {
-      adminId: 39,
-      username: 'j.movahedi',
-      password: 'e10adc3949ba59abbe56e057f20f883e',
-      name: 'جواد',
-      family: 'موحدی',
+      id: 39,
+      name: 'جواد موحدی',
       email: 'j.movahedi@dabacenter.ir',
-      status: '1',
-      permission: '10000100000000000000111100001000000000001100000000000000000000000000000000000000110000000000000000000',
-      darkMode: 1,
-      creationDate: '2020-06-20 13:48:18',
-      role: {
-        roleId: 12,
-        roleNameEn: 'NOCManager',
-        roleNameFa: 'مدیر NOC'
-      },
-      extension: '6001',
-      type: 'outgoing',
-      date: '2020-05-18',
-      time: '09:19'
+      email_verified_at: null,
+      created_at: '2020-06-23T08:53:17.000000Z',
+      updated_at: '2020-06-23T08:53:17.000000Z',
+      role_id: null,
+      timezone: null,
+      extension: '6001'
     },
     {
-      adminId: 200,
-      username: 'a.asghari',
-      password: '0fd5a87016df2a0b92be06ecb2d43b9e',
-      name: 'امیر',
-      family: 'اصغری',
+      id: 200,
+      name: 'امیر اصغری',
       email: 'a.asghari@dabacenter.ir',
-      status: '1',
-      permission: '00000100000000000000111100010000000000001100000000000000000000000000000000000000110000000000000000000',
-      darkMode: 0,
-      creationDate: '2020-06-20 13:48:18',
-      role: {
-        roleId: 14,
-        roleNameEn: 'VoIP manager',
-        roleNameFa: 'مدیر  VOIP'
-      },
-      extension: '6003',
-      type: 'outgoing',
-      date: '2020-05-18',
-      time: '09:19'
+      email_verified_at: null,
+      created_at: '2020-06-23T08:53:17.000000Z',
+      updated_at: '2020-06-23T08:53:17.000000Z',
+      role_id: null,
+      timezone: null,
+      extension: '6003'
     },
     {
-      adminId: 41,
-      username: 'm.radan',
-      password: 'd35f65d24bef8031480a1c8f7a70e69c',
-      name: 'محمدرضا',
-      family: 'رادان',
+      id: 41,
+      name: 'محمدرضا رادان',
       email: 'm.radan@dabacenter.ir',
-      status: '0',
-      permission: '100001000000000000001111111111110000000011100000000000000000100001000000000000000',
-      darkMode: 0,
-      creationDate: '2020-05-27 16:57:13',
-      role: {
-        roleId: 1,
-        roleNameEn: 'Manager',
-        roleNameFa: 'مدیر ارشد'
-      },
-      extension: '6002',
-      type: 'missed',
-      date: '2020-05-13',
-      time: '14:44'
+      email_verified_at: null,
+      created_at: '2020-06-23T08:53:17.000000Z',
+      updated_at: '2020-06-23T08:53:17.000000Z',
+      role_id: null,
+      timezone: null,
+      extension: '6002'
     },
     {
-      adminId: 36,
-      username: 'm.malekloo',
-      password: 'e10adc3949ba59abbe56e057f20f883e',
-      name: 'محمود',
-      family: 'ملک لو',
+      id: 36,
+      name: 'محمود ملک لو',
       email: 'm.malekloo@dabacenter.ir',
-      status: '1',
-      permission: '100001000000000000001111111111110000000011100000000000000000100001000000000000000',
-      darkMode: 0,
-      creationDate: '2020-06-20 13:48:18',
-      role: {
-        roleId: 20,
-        roleNameEn: 'responsibleDeveloper',
-        roleNameFa: 'مسئول نرم افزار'
-      },
-      extension: '6007',
-      type: 'incoming',
-      date: '2020-05-13',
-      time: '14:44'
+      email_verified_at: null,
+      created_at: '2020-06-23T08:53:17.000000Z',
+      updated_at: '2020-06-23T08:53:17.000000Z',
+      role_id: null,
+      timezone: null,
+      extension: '6007'
     },
     {
-      adminId: 193,
-      username: 'h.sajjadi',
-      password: 'e10adc3949ba59abbe56e057f20f883e',
-      name: 'سید  محمد حسین',
-      family: 'سجادی',
+      id: 36,
+      name: 'سید  محمد حسین سجادی',
       email: 'h.sajjadi@dabacenter.ir',
-      status: '1',
-      permission: '00000100000000000000111100010000000000001100000000000000000000000000000000000000100000000000000000000',
-      darkMode: 0,
-      creationDate: '2020-06-20 13:48:18',
-      role: {
-        roleId: 11,
-        roleNameEn: 'UI Designer',
-        roleNameFa: 'طراح بخش کاربری'
-      },
-      extension: '6009',
-      type: 'incoming',
-      date: '2020-05-31',
-      time: '12:19'
+      email_verified_at: null,
+      created_at: '2020-06-23T08:53:17.000000Z',
+      updated_at: '2020-06-23T08:53:17.000000Z',
+      role_id: null,
+      timezone: null,
+      extension: '6009'
     }
   ];
 

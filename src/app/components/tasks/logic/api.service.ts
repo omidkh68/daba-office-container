@@ -26,12 +26,12 @@ export class ApiService {
   constructor(private _http: HttpClient) {
   }
 
-  boards(userId: number): Observable<BoardInterface[]> {
-    return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/?userId=${userId}&page=-1`);
+  boards(email: string): Observable<BoardInterface[]> {
+    return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/?email=${email}&page=-1`);
   }
 
-  boardsCalendar(userId: number): Observable<BoardInterface[]> {
-    return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/calendar/?userId=${userId}&page=-1`);
+  boardsCalendar(email: string): Observable<BoardInterface[]> {
+    return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/calendar/?email=${email}&page=-1`);
   }
 
   boardsCalendarDurationTask(task: TaskDurationInterface) {

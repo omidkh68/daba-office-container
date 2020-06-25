@@ -2,16 +2,17 @@ import 'reflect-metadata';
 import '../polyfills';
 
 import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {AppRoutingModule} from './app-routing.module';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {BrowserModule} from '@angular/platform-browser';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {AppRoutingModule} from './app-routing.module';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import {HomeModule} from './home/home.module';
 import {SharedModule} from './shared/shared.module';
 
 import {AppComponent} from './app.component';
+import {CommonModule} from '@angular/common';
 import {LoginComponent} from './components/login/login.component';
 import {MessageComponent} from './components/message/message.component';
 
@@ -28,6 +29,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   ],
   imports: [
     HomeModule,
+    CommonModule,
     SharedModule,
     BrowserModule,
     HttpClientModule,
@@ -43,7 +45,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   providers: [
     {provide: 'windowObject', useValue: window},
   ],
-  exports: [SharedModule],
   bootstrap: [AppComponent]
 })
 export class AppModule {

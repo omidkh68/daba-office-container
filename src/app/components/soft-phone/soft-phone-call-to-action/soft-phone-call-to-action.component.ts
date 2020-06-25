@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInterface} from '../../users/logic/user-interface';
+// import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {SoftPhoneService} from '../service/soft-phone.service';
 import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
-import {SoftPhoneService} from '../service/soft-phone.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 
 @Component({
   selector: 'app-soft-phone-call-to-action',
@@ -17,7 +18,7 @@ export class SoftPhoneCallToActionComponent implements OnInit, OnDestroy {
   rtlDirection;
   bottomSheetData: SoftPhoneBottomSheetInterface;
   data: any;
-  loggedInUser: UserInterface;
+  loggedInUser: UserContainerInterface;
 
   private _subscription: Subscription = new Subscription();
 

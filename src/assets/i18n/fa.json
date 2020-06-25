@@ -89,7 +89,7 @@
       "task_durationMinutes": "مدت زمان کل(دقیقه)",
       "start_at": "تاریخ شروع",
       "start_at_error": "لطفا تاریخ شروع را انتخاب نمایید",
-      "stop_at": "تاریخ شروع",
+      "stop_at": "تاریخ اتمام",
       "stop_at_error": "لطفا تاریخ اتمام را انتخاب نمایید",
       "start_time": "ساعت شروع تسک",
       "start_time_error": "لطفا ساعت شروع را انتخاب نمایید",
@@ -158,14 +158,18 @@
     "login_failed": "تأیید هویت انجام نشد، لطفا مجدد تلاش نمایید"
   },
   "conference": {
-    "add": "برای ساخت اتاق کنفرانس کلیک کنید",
-    "join": "برای پوستن به کنفرانس موجود کلیک کنید",
+    "add": "ایجاد اتاق کنفرانس جدید",
+    "join": "پیوستن به کنفرانس موجود",
     "conf_name": "نام اتاق کنفرانس",
     "conf_name_error": "لطفا نام اتاق کنفرانس را وارد نمایید",
     "copy_address": "کپی از آدرس کنفرانس",
     "added_to_clipboard": "به clipboard اضافه شد",
     "conf_address": "آدرس کنفرانس",
     "conf_address_error": "لطفا آدرس را وارد نمایید",
-    "exist_from_conf": "خروج از کنفرانس"
+    "join_conference": "پیوستن به کنفرانس",
+    "create_conference": "ایجاد کنفرانس",
+    "exist_from_conf": "خروج از کنفرانس",
+    "for_create_conf_fill_inputs": "برای ایجاد کنفرانس اطلاعات را پر نمایید",
+    "for_join_conf_paste_conf_address": "برای پیوستن به کنفرانس آدرس را در اینجا paste کنید"
   }
 }
