@@ -28,8 +28,6 @@ export class CanShowLogin implements CanActivate, OnDestroy {
   }
 
   canActivate(): Observable<boolean> {
-    debugger;
-
     if (this.loginData) {
       return this.apiService.checkLogin(this.loginData.token_type + ' ' + this.loginData.access_token).pipe(
         map((resp: any) => {
