@@ -12,7 +12,7 @@ import {TaskInterface} from '../../logic/task-interface';
   styleUrls: ['./task-calendar-weekday.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskCalendarWeekdayComponent implements OnDestroy {
+  export class TaskCalendarWeekdayComponent implements OnDestroy {
   @Input()
   calendarEvents: any;
 

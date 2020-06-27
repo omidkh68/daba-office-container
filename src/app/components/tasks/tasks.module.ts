@@ -20,6 +20,8 @@ import {TaskCurrentComponent} from './task-current/task-current.component';
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
 import {TaskActivityComponent} from './task-activity/task-activity.component';
 import {TaskBottomSheetComponent} from './task-bottom-sheet/task-bottom-sheet.component';
+import {TaskCalendarRateComponent} from './task-calendar/task-calendar-rate/task-calendar-rate.component';
+import {TaskCalendarWeekdayComponent} from './task-calendar/task-calendar-weekday/task-calendar-weekday.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import {TaskBottomSheetComponent} from './task-bottom-sheet/task-bottom-sheet.co
     TaskCurrentComponent,
     TaskCalendarComponent,
     TaskActivityComponent,
-    TaskBottomSheetComponent
+    TaskBottomSheetComponent,
+    TaskCalendarRateComponent,
+    TaskCalendarWeekdayComponent
   ],
   imports: [
     CommonModule,
