@@ -1,7 +1,5 @@
 import * as io from 'socket.io-client';
-import {Component, Input, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewEncapsulation} from '@angular/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
+import {Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
@@ -9,7 +7,6 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {ApiService} from '../logic/api.service';
 import {FullCalendarComponent} from '@fullcalendar/angular';
-import {MatTabChangeEvent} from '@angular/material/tabs';
 import {AppConfig} from '../../../../environments/environment';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
@@ -20,7 +17,6 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
   styleUrls: ['./task-calendar.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
 export class TaskCalendarComponent implements OnInit, OnDestroy {
   @ViewChild('calendar') calendarComponent: FullCalendarComponent;
   calendarApi: any;
@@ -40,27 +36,11 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   projectsList: ProjectInterface[] = [];
   socket = io(AppConfig.SOCKET_URL);
   calendarEvents = [];
-  monthView = false;
   events = [
     {title: 'event 1', start: '2020-05-10 12:00', end: '2020-05-10 13:00'},
     {title: 'event 2', start: '2020-05-10 23:00', end: '2020-05-10 00:00'}
   ];
   options: any;
-
-  tabs = [
-    {
-      name: 'تقویم کارکرد',
-      icon: 'view_week',
-      id: 'calendar_task_rate'
-    },
-    {
-      name: 'تقویم تسک ها',
-      icon: 'event_available',
-      id: 'calendar_task'
-    }
-  ];
-
-  activeTab: number = 0;
   viewModeTypes = 'calendar_task';
 
   private _subscription: Subscription = new Subscription();
@@ -75,10 +55,6 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
 
   changeViewMode(mode) {
     this.viewModeTypes = mode;
-  }
-
-  tabChange(event: MatTabChangeEvent) {
-    this.activeTab = event.index;
   }
 
   ngOnInit(): void {
@@ -96,22 +72,14 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  eventClick(event) {
-    console.log(event);
-    event.target.className.includes('fc-dayGridMonthCustom-button') ? this.monthView = true : this.monthView = false;
-  }
-
   getBoards(resp = null) {
     if (resp) {
-      //this._subscription.add(
       if (resp.result === 1) {
         this.usersList = resp.content.users.list;
         this.projectsList = resp.content.projects.list;
         this.tasks = resp.content.boards.list;
 
         const calendarEvent = [];
-
-        //console.log(this.tasks , "Husin");
 
         this.tasks.map(task => {
           const taskEvent = {
@@ -127,9 +95,7 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.calendarApi.gotoDate(new Date(Date.UTC(2018, 8, 1)))
         }, 3000)
-        //this.calendarEvents = this.events;
       }
-      //);
     } else {
       if (this.loggedInUser && this.loggedInUser.email) {
         this._subscription.add(
@@ -152,24 +118,10 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
               });
 
               this.calendarEvents = calendarEvent;
-              //this.calendarEvents = this.events;
             }
           })
         );
       }
-    }
-
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.refreshData) {
-      this.socket.emit('updatedata');
-    }
-
-    if (changes.filterBoards && !changes.filterBoards.firstChange) {
-      this.filterBoards = changes.filterBoards.currentValue;
-
-      this.getBoards(this.filterBoards.resp);
     }
   }
 
