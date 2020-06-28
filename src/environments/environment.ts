@@ -7,3 +7,4 @@ export const AppConfig = {
   SOCKET_URL: 'http://192.168.110.179:4000'
   // SOCKET_URL: 'http://localhost:4000'
 };
+
