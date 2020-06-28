@@ -302,6 +302,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.refreshData) {
       // this.socket.emit('updatedata');
+      this.getBoards();
     }
 
     if (changes.filterBoards && !changes.filterBoards.firstChange) {

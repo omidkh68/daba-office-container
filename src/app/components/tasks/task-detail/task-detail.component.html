@@ -43,7 +43,7 @@
 
   <div class="full-width height-full-minus-45" *ngIf="viewModeTypes === 'info'; else reportView">
     <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-         class="task-form-container height-full-minus-155 padding-full overflow-hide pos-rel">
+         class="task-form-container full-height padding-full overflow-hide pos-rel">
       <app-task-form
         (cancel)="cancelBtn($event)"
         (formOutput)="updateForm($event)"
@@ -53,13 +53,13 @@
     </div>
 
     <div [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
-         class="task-todo-container height-full-minus-155 padding-r-l padding-mini-t-b pos-rel">
+         class="task-todo-container full-height padding-r-l padding-mini-t-b pos-rel">
       <app-task-todo [rtlDirection]="rtlDirection" [taskId]="task.taskId"></app-task-todo>
     </div>
 
-    <div class="task-file-container padding-r-l padding-mini-t-b clear-both full-width pos-rel">
+    <!--<div class="task-file-container padding-r-l padding-mini-t-b clear-both full-width pos-rel">
       <app-task-files [rtlDirection]="rtlDirection"></app-task-files>
-    </div>
+    </div>-->
   </div>
 
   <ng-template #reportView>

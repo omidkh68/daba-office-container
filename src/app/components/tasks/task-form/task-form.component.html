@@ -71,7 +71,7 @@
         <mat-form-field class="full-width font-9-em">
           <img matPrefix
                [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-               [srcset]="'assets/profileImg/'+form.get('assignTo').value.adminId +'.jpg'"
+               [srcset]="'assets/profileImg/'+form.get('email').value +'.jpg'"
                class="width-20 height-20 round-corner-all pos-rel top-three-tenth">
           <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
           <mat-select formControlName="assignTo" tabIndex="5">
@@ -79,7 +79,7 @@
               <img matPrefix
                    [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                    class="width-20 height-20 round-corner-all pos-rel top-six-tenth"
-                   [srcset]="'assets/profileImg/'+ user.adminId +'.jpg'">
+                   [srcset]="'assets/profileImg/'+ user.email +'.jpg'">
               {{user.name + ' ' + user.family}}
             </mat-option>
           </mat-select>

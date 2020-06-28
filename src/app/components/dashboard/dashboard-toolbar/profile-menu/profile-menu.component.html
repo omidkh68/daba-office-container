@@ -1,16 +1,13 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'"
      class="box mat-elevation-z1 pos-rel text-center round-corner width-40 height-40 overflow-hide">
   <img [matMenuTriggerFor]="profileMenu" class="full-width full-height cursor-pointer"
-       [src]="'assets/profileImg/'+ loggedInUser.id +'.jpg'"
+       [src]="'assets/profileImg/'+ loggedInUser.email +'.jpg'"
        [alt]="loggedInUser.name">
 </div>
 <mat-menu class="toolbar-menu box-menu-profile padding-r-l" #profileMenu="matMenu" xPosition="before" yPosition="above">
   <h6 mat-subheader class="padding-half text-weight-normal font-9-rem text-dark-mode-color">
     {{loggedInUser.name}}
   </h6>
-  <div mat-menu-item class="font-7-rem padding-mini-r-l text-dark-mode-color">
-    {{loggedInUser.role ? loggedInUser.role.roleNameFa : ''}}
-  </div>
   <button mat-menu-item (click)="logout()" class="font-7-rem padding-mini-r-l">
     <mat-icon class="text-dark-mode-color">power_settings_new</mat-icon>
     <span class="text-dark-mode-color">{{'dashboard.dashboard_toolbar.exist_app' | translate}}</span>

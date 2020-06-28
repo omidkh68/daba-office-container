@@ -11,6 +11,8 @@ import {ApiService} from '../logic/api.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {TranslateService} from '@ngx-translate/core';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 export interface filterType {
   index: number;
@@ -36,6 +38,7 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
     percentageStatus: false
   };
   projectsList: ProjectInterface[] = [];
+  loggedInUser: UserContainerInterface;
   usersList: UserInterface[] = [];
   form: FormGroup;
   filterTypes: filterType[] = [
@@ -93,9 +96,14 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
               private _fb: FormBuilder,
               private translate: TranslateService,
               public dialogRef: MatDialogRef<TaskFilterComponent>,
+              private userInfoService: UserInfoService,
               @Inject(MAT_DIALOG_DATA) public data: FilterTaskInterface) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
+
+    this._subscription.add(
+      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
 
     this.usersList = this.data.usersList;
@@ -149,6 +157,7 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
       this.form = this._fb.group({
         userId: new FormControl(1, Validators.required),
         typeId: new FormControl(9, Validators.required),
+        email: new FormControl(this.loggedInUser.email),
         taskName: new FormControl(''),
         projectId: new FormControl(0),
         dateStart: new FormControl(''),

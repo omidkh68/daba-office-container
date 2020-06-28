@@ -72,6 +72,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         taskName: new FormControl('', Validators.required),
         percentage: new FormControl(0, Validators.required),
         assignTo: new FormControl({adminId: 0}, Validators.required),
+        email: new FormControl('0', Validators.required),
         taskDurationHours: new FormControl(0, [Validators.required, Validators.pattern('^[0-9]+')]),
         taskDurationMinutes: new FormControl(0, Validators.required),
         startAt: new FormControl('', Validators.required),
@@ -141,6 +142,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
     const selectedAssignTo = this.usersList.filter(user => user.email === this.task.assignTo.email).pop();
+
     const selectedAssigner = this.usersList.filter(user => user.email === this.user.email).pop();
 
     this.form.patchValue({
@@ -156,6 +158,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       stopTime: stopTime,
       project: selectedProject,
       taskDesc: this.task.taskDesc,
+      email: selectedAssignTo.email,
       // boardStatus: this.data.boardStatus,
       boardStatus: this.data.boardStatus,
       taskDateStart: this.task.taskDateStart,

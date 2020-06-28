@@ -52,7 +52,7 @@
           <mat-form-field class="full-width font-9-em">
             <img matPrefix
                  *ngIf="form.get('adminId').valid"
-                 [src]="'assets/profileImg/'+form.get('adminId').value+'.jpg'"
+                 [src]="'assets/profileImg/'+form.get('email').value+'.jpg'"
                  [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                  class="width-20 height-20 round-corner-all pos-rel top-three-tenth">
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
@@ -60,7 +60,7 @@
               <mat-option *ngFor="let user of usersList" [value]="user.adminId">
                 <img matPrefix
                      class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
-                     [src]="'assets/profileImg/'+user.adminId+'.jpg'">
+                     [src]="'assets/profileImg/'+user.email+'.jpg'">
                 {{user.name + ' ' + user.family}}
               </mat-option>
             </mat-select>

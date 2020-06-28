@@ -65,7 +65,7 @@
         </mat-card-content>
 
         <mat-card-footer class="padding-mini-t-b padding-r-l height-45 display-flex justify-content-start">
-          <img [src]="'assets/profileImg/'+task.assignTo.adminId+'.jpg'"
+          <img [src]="'assets/profileImg/'+task.assignTo.email+'.jpg'"
                class="width-25 height-25 round-corner-all mat-elevation-z1"
                [matTooltip]="task.assignTo.name + ' ' + task.assignTo.family"
                [matTooltipPosition]="rtlDirection ? 'left' : 'right'">

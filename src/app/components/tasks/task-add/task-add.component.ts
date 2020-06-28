@@ -57,6 +57,7 @@ export class TaskAddComponent implements OnInit, OnDestroy {
         stopTime: new FormControl('', Validators.required),
         project: new FormControl({}, Validators.required),
         taskDesc: new FormControl(''),
+        email: new FormControl('0'),
         boardStatus: new FormControl('', Validators.required),
         taskDateStart: '0000-00-00 00:00:00',
         taskDateStop: '0000-00-00 00:00:00',
