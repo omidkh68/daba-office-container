@@ -228,7 +228,7 @@ export class WindowManagerService {
 
     const melement = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;//document.getElementById(window.windowRef.id) as HTMLElement;
     if(center)
-      melement.style.transform = "none";
+      melement.style.transform = null;
     else
       melement.style.transform = "translate3d("+rndNumForWidth+"px, "+rndNumForHeight+"px, 0px)";
 
