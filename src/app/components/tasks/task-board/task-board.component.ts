@@ -115,7 +115,6 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   async assignNewTaskToBoard(newTask: TaskInterface, prevContainer, newContainer) {
     const project: ProjectInterface = await this.projectsList.filter(project => project.projectId === newTask.project.projectId).pop();
     const assignTo: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assignTo.adminId).pop();
-    const assigner: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assigner.adminId).pop();
 
     this.myTasks = [];
 
@@ -124,7 +123,6 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
         board.tasks.map((task: TaskInterface) => {
           if (task.taskId === newTask.taskId) {
             newTask.assignTo = assignTo;
-            newTask.assigner = assigner;
             newTask.project = project;
 
             task = Object.assign(task, newTask);

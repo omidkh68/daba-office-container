@@ -38,20 +38,20 @@ export class WindowManagerService {
     let windowHeight = service.height;
 
     switch (service.serviceTitle) {
-      case 'service-task': {
+      case 'project_microservice': {
         component = TasksComponent;
 
         break;
       }
 
-      case 'service-pbx': {
+      case 'pbx_microservice': {
         component = SoftPhoneComponent;
         maximizable = false;
 
         break;
       }
 
-      case 'service-video-conference': {
+      case 'video_conference': {
         component = ConferenceComponent;
         hasFrame = true;
 

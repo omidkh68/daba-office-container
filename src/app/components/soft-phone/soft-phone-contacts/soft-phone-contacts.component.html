@@ -1,11 +1,11 @@
 <div class="full-width full-height">
   <mat-list *ngIf="!fromPopUp" class="soft-phone-user full-width height-50">
     <mat-list-item class="padding-mini-r-l full-height">
-      <img [alt]="loggedInUser.name + ' ' + loggedInUser.family"
-           [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'"
+      <img [alt]="loggedInUser.name"
+           [src]="'assets/profileImg/'+ loggedInUser.email +'.jpg'"
            class="mat-elevation-z2"
            matListAvatar>
-      <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name + ' ' + loggedInUser.family}} </h3>
+      <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name}} </h3>
 
       <div class="font-8-rem">
         <button (click)="addNewContact()"
@@ -32,7 +32,7 @@
                      class="cursor-pointer full-width height-45 font-8-rem">
         <mat-icon mat-list-icon>person</mat-icon>
 
-        <div mat-line>{{contact.name + ' ' + contact.family}}</div>
+        <div mat-line>{{contact.name}}</div>
 
         <div class="text-gray-700 margin-r-l">{{contact.extension}}</div>
 

@@ -6,31 +6,7 @@
     <button mat-raised-button (click)="changeDirection()">direction mode: {{rtlDirection}}</button>
   </div>
 
-  <!--<div class="padding-full-3">
-    <mat-grid-list class="half-width" *ngIf="serviceList.length" cols="4" gutterSize="30" rowHeight="150px">
-      <mat-grid-tile
-        class="board-container"
-        *ngFor="let service of serviceList"
-        [colspan]="1"
-        [rowspan]="1">
-        <mat-card (click)="openTaskWindow(service)"
-                  class="full-width full-height round-corner mat-elevation-z1 card-bg overflow-hide cursor-pointer"
-                  [ngClass]="service.serviceTitle">
-          <mat-card-header class="pos-rel z-index-99">
-            <mat-card-title class="font-full-plus-two-tenth-em">
-              {{service.serviceNameFa}}
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="pos-rel z-index-99">
-            <mat-icon class="full-width full-height font-full-em-3-plus-half text-center line-height-65">
-              {{service.icon}}
-            </mat-icon>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </div>-->
-
+  <!-- todo: remove this comment in production -->
   <app-screenshot></app-screenshot>
 
   <app-dashboard-toolbar [serviceList]="serviceList"

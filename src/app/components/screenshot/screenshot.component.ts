@@ -24,8 +24,8 @@ export interface AvailableHoursInterface {
   template: ``
 })
 export class ScreenshotComponent implements OnDestroy {
-  timerDueTime: number = 30000;
-  timerPeriod: number = 30000;
+  timerDueTime: number = 3000;
+  timerPeriod: number = 3000;
   loggedInUser: UserContainerInterface;
   userCurrentStatus: UserStatusInterface | string = '';
   currentTasks: Array<TaskInterface> | null = null;
@@ -98,7 +98,8 @@ export class ScreenshotComponent implements OnDestroy {
 
           const findTime: AvailableHoursInterface = lodash.find(this.randomHours, item => item.time === checkTime);
 
-          if (findTime && findTime.status === false) {
+          // if (findTime && findTime.status === false) {
+          if (true) {
             findTime.status = true;
 
             this.takeAScreenShot();

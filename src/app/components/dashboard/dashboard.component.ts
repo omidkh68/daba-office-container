@@ -10,6 +10,7 @@ import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ServiceItemsInterface} from './logic/service-items.interface';
 import {UserContainerInterface} from '../users/logic/user-container.interface';
+import {ServiceInterface} from '../services/logic/service-interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +21,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   rtlDirection: boolean;
   windowManager: Array<WindowInterface>;
   loggedInUser: UserContainerInterface;
-  serviceList: ServiceItemsInterface[] = [
+  serviceList: ServiceItemsInterface[] = [];/*
     {
       serviceId: 1,
       serviceNameFa: 'سیستم مدیریت تسک',
@@ -51,7 +52,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       width: 1200,
       height: 700
     }
-  ];
+  ]*/
 
   private _subscription: Subscription = new Subscription();
 
@@ -62,7 +63,51 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private messageService: MessageService,
               private userInfoService: UserInfoService) {
     this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
+      this.userInfoService.currentUserInfo.subscribe(user => {
+        this.loggedInUser = user;
+
+        this.loggedInUser.list_permission.map((item: ServiceInterface) => {
+          let icon: string = '';
+          let width = 0;
+          let height = 0;
+          let serviceTitle = item.name.split(' ').join('_').toLowerCase();
+
+          switch (serviceTitle) {
+            case 'project_microservice':
+              icon = 'playlist_add_check';
+              width = 1200;
+              height = 700;
+
+              break;
+
+            case 'pbx_microservice':
+              icon = 'perm_phone_msg';
+              width = 350;
+              height = 500;
+
+              break;
+
+            case 'video_conference':
+              icon = 'picture_in_picture';
+              width = 1200;
+              height = 700;
+
+              break;
+          }
+
+          const service: ServiceItemsInterface = {
+            ...item,
+            serviceTitle: serviceTitle,
+            icon: icon,
+            width: width,
+            height: height
+          };
+
+          if (serviceTitle !== 'hr_microservice') {
+            this.serviceList.push(service);
+          }
+        });
+      })
     );
 
     this._subscription.add(

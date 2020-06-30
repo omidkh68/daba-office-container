@@ -1,16 +1,14 @@
-import {AfterViewInit, Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskInterface} from '../logic/task-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
-// import {UserInterface} from '../../users/logic/user-interface';
 import {ApiService} from '../logic/api.service';
-// import {TaskDataInterface} from '../logic/task-data-interface';
-// import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {UserInterface} from '../../users/logic/user-interface';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -18,11 +16,11 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
 })
 export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   rtlDirection: boolean;
-  user: UserContainerInterface = null;
+  loggedInUser: UserContainerInterface = null;
   editable: boolean = false;
   task: TaskInterface = null;
   projectsList: ProjectInterface[] = [];
-  usersList: UserContainerInterface[] = [];
+  usersList: UserInterface[] = [];
   form: FormGroup;
   viewModeTypes = 'info';
   bottomSheetData: TaskBottomSheetInterface;
@@ -32,12 +30,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private api: ApiService,
               private _fb: FormBuilder,
-              // public bottomSheetRef: MatBottomSheetRef<TaskDetailComponent>,
               private userInfoService: UserInfoService,
-              private viewDirection: ViewDirectionService
-              /* @Inject(MAT_BOTTOM_SHEET_DATA) public data: TaskDataInterface*/) {
+              private viewDirection: ViewDirectionService) {
     this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
+      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
 
     this._subscription.add(
@@ -47,18 +43,13 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.data = this.bottomSheetData.data;
-
-    // this.usersList = this.data.usersList;
     this.usersList = this.data.usersList;
-    // this.projectsList = this.data.projectsList;
     this.projectsList = this.data.projectsList;
-    // this.task = this.data.task;
     this.task = this.data.task;
   }
 
   ngAfterViewInit(): void {
     this.createForm().then(() => {
-      // if (this.data.action === 'detail') {
       if (this.data.action === 'detail') {
         this.formPatchValue();
       }
@@ -72,7 +63,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         taskName: new FormControl('', Validators.required),
         percentage: new FormControl(0, Validators.required),
         assignTo: new FormControl({adminId: 0}, Validators.required),
-        email: new FormControl('0', Validators.required),
+        email: new FormControl('0'),
         taskDurationHours: new FormControl(0, [Validators.required, Validators.pattern('^[0-9]+')]),
         taskDurationMinutes: new FormControl(0, Validators.required),
         startAt: new FormControl('', Validators.required),
@@ -84,7 +75,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         boardStatus: new FormControl('', Validators.required),
         taskDateStart: '0000-00-00 00:00:00',
         taskDateStop: '0000-00-00 00:00:00',
-        assigner: new FormControl(this.user, Validators.required),
+        assigner: new FormControl(this.loggedInUser.email, Validators.required),
         trackable: new FormControl(0)
       });
 
@@ -102,28 +93,15 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form.disable();
 
     if (event) {
-      // if (this.data.action === 'detail') {
       if (this.data.action === 'detail') {
         if (this.editable) {
           this.formPatchValue();
         } else {
-          // this.bottomSheetRef.dismiss(false);
           this.bottomSheetData.bottomSheetRef.close();
         }
       } else {
-        // this.bottomSheetRef.dismiss(false);
         this.bottomSheetData.bottomSheetRef.close();
       }
-    }
-  }
-
-  editableForm() {
-    this.editable = !this.editable;
-
-    if (this.editable) {
-      this.form.enable();
-    } else {
-      this.form.disable();
     }
   }
 
@@ -143,7 +121,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
     const selectedAssignTo = this.usersList.filter(user => user.email === this.task.assignTo.email).pop();
 
-    const selectedAssigner = this.usersList.filter(user => user.email === this.user.email).pop();
 
     this.form.patchValue({
       taskId: this.task.taskId,
@@ -159,19 +136,27 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       project: selectedProject,
       taskDesc: this.task.taskDesc,
       email: selectedAssignTo.email,
-      // boardStatus: this.data.boardStatus,
       boardStatus: this.data.boardStatus,
       taskDateStart: this.task.taskDateStart,
       taskDateStop: this.task.taskDateStop,
-      assigner: selectedAssigner,
+      assigner: this.task.assigner,
       trackable: this.task.trackable
     });
+  }
+
+  editableForm() {
+    this.editable = !this.editable;
+
+    if (this.editable) {
+      this.form.enable();
+    } else {
+      this.form.disable();
+    }
   }
 
   deleteTask() {
     this._subscription.add(
       this.api.deleteTask(this.task).subscribe((resp: any) => {
-        // this.bottomSheetRef.dismiss(true);
         this.bottomSheetData.bottomSheetRef.close();
       })
     );
@@ -185,7 +170,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
     formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
-    formValue.assigner = this.usersList.filter(user => user.email === this.user.email).pop();
+    console.log(formValue);
+
+    // formValue.assigner = this.usersList.filter(user => user.email === this.user.email).pop();
 
     this._subscription.add(
       this.api.updateTask(formValue).subscribe((resp: any) => {
@@ -196,7 +183,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         };
 
         if (resp.result === 1) {
-          // this.bottomSheetRef.dismiss(data);
           this.bottomSheetData.bottomSheetRef.close();
         } else {
           this.form.enable();

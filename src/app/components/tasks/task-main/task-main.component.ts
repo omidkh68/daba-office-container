@@ -41,6 +41,7 @@ export class TaskMainComponent implements AfterViewInit, OnDestroy {
     projectId: 0,
     taskName: '',
     type: '',
+    email: '0',
     typeId: 0
   };
   filteredBoardsData: any;

@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-// import {UserInterface} from '../../users/logic/user-interface';
+import {LoginInterface} from '../../users/logic/login.interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {SoftPhoneService} from '../service/soft-phone.service';
@@ -18,7 +19,7 @@ import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/so
   templateUrl: './soft-phone-main.component.html',
   styleUrls: ['./soft-phone-main.component.scss']
 })
-export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
+export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: SoftPhoneBottomSheetComponent;
   @ViewChild('audioRemote', {static: false}) audioRemote: ElementRef;
   @ViewChild('ringtone', {static: false}) ringtone: ElementRef;
@@ -26,6 +27,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   @ViewChild('dtmfTone', {static: false}) dtmfTone: ElementRef;
 
   loggedInUser: UserContainerInterface;
+  loginData: LoginInterface;
   rtlDirection: boolean;
   activeTab: number = 1;
   tabs = [];
@@ -35,10 +37,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       id: 9,
       name: 'آقای بصیری',
       email: 'seanbassiri@gmail.com',
-      email_verified_at: '',
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
-      role_id: null,
       timezone: null,
       extension: '6008',
     },
@@ -46,10 +46,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       id: 46,
       name: 'omid',
       email: 'khosrojerdi@dabacenter.ir',
-      email_verified_at: null,
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
-      role_id: null,
       timezone: null,
       extension: '6004'
     },
@@ -57,10 +55,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       id: 16,
       name: 'مریم بهادری',
       email: 'm.bahadori@dabacenter.ir',
-      email_verified_at: null,
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
-      role_id: null,
       timezone: null,
       extension: '6005'
     },
@@ -68,10 +64,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       id: 47,
       name: 'مهدی مرجانی',
       email: 'marjani@dabacenter.ir',
-      email_verified_at: null,
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
-      role_id: null,
       timezone: null,
       extension: '6006'
     },
@@ -79,10 +73,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       id: 39,
       name: 'جواد موحدی',
       email: 'j.movahedi@dabacenter.ir',
-      email_verified_at: null,
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
-      role_id: null,
       timezone: null,
       extension: '6001'
     },
@@ -90,10 +82,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       id: 200,
       name: 'امیر اصغری',
       email: 'a.asghari@dabacenter.ir',
-      email_verified_at: null,
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
-      role_id: null,
       timezone: null,
       extension: '6003'
     },
@@ -101,10 +91,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       id: 41,
       name: 'محمدرضا رادان',
       email: 'm.radan@dabacenter.ir',
-      email_verified_at: null,
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
-      role_id: null,
       timezone: null,
       extension: '6002'
     },
@@ -112,10 +100,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       id: 36,
       name: 'محمود ملک لو',
       email: 'm.malekloo@dabacenter.ir',
-      email_verified_at: null,
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
-      role_id: null,
       timezone: null,
       extension: '6007'
     },
@@ -123,10 +109,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
       id: 36,
       name: 'سید  محمد حسین سجادی',
       email: 'h.sajjadi@dabacenter.ir',
-      email_verified_at: null,
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
-      role_id: null,
       timezone: null,
       extension: '6009'
     }
@@ -135,6 +119,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
+              private apiService: ApiService,
               private softPhoneService: SoftPhoneService,
               private notificationService: NotificationService,
               private translate: TranslateService,
@@ -145,6 +130,10 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
 
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
+    );
+
+    this._subscription.add(
+      this.userInfoService.currentLoginData.subscribe(loginData => this.loginData = loginData)
     );
 
     /*this._subscription.add(
@@ -186,6 +175,16 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnDestroy {
             this.bottomSheet.close();
           }
         }
+      })
+    );
+  }
+
+  ngOnInit(): void {
+    const accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+    this._subscription.add(
+      this.apiService.getExtensionList(accessToken).subscribe((resp: any) => {
+        console.log(resp);
       })
     );
   }

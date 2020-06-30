@@ -9,7 +9,7 @@
           class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex">
         <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                   class="text-dark-mode-color pos-rel top-one-tenth">{{data.icon}}</mat-icon>
-        {{rtlDirection ? data.serviceNameFa : data.serviceNameEn}}
+        {{data.name}}
       </h3>
     </ng-template>
 
@@ -17,7 +17,7 @@
       <h3 class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex">
         <mat-icon class="text-dark-mode-color pos-rel top-one-tenth"
                   [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">{{data.icon}}</mat-icon>
-        {{rtlDirection ? data.serviceNameFa : data.serviceNameEn}}
+        {{data.name}}
       </h3>
     </ng-template>
 

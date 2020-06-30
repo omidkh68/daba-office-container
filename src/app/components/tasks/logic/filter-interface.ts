@@ -8,4 +8,5 @@ export interface FilterInterface {
   type?: string;
   adminId?: number;
   percentageStatus?: boolean
+  email: string;
 }

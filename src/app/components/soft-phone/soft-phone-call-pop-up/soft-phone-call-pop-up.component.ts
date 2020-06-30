@@ -124,9 +124,11 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   hangUp() {
     this.softPhoneService.sipHangUp();
 
-    this.timeCounter.unsubscribe();
+    if (this.timeCounter) {
+      this.timeCounter.unsubscribe();
 
-    this.callTimer = '00:00';
+      this.callTimer = '00:00';
+    }
   }
 
   ngOnDestroy(): void {

@@ -33,6 +33,7 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
     dateStop: '',
     projectId: 0,
     taskName: '',
+    email: '0',
     type: '',
     typeId: 0,
     percentageStatus: false
@@ -119,6 +120,7 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         dateStart: this.filterData.dateStart ? this.filterData.dateStart : '',
         dateStop: this.filterData.dateStop ? this.filterData.dateStop : '',
         adminId: this.filterData.adminId ? this.filterData.adminId : 0,
+        email: this.filterData.email ? this.filterData.email : '0',
         type: this.filterData.type ? this.filterData.type : '',
         percentageStatus: this.filterData.percentageStatus ? this.filterData.percentageStatus : false
       });
@@ -128,6 +130,16 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
       setTimeout(_ => {
         this.checkFormValidation();
       }, 1000);
+
+      this._subscription.add(
+        this.form.get('adminId').valueChanges.subscribe(selectedValue => {
+          const user = this.usersList.filter(user => user.adminId === selectedValue).pop();
+
+          if (user) {
+            this.form.get('email').setValue(user.email);
+          }
+        })
+      );
     });
 
     setTimeout(() => {
@@ -137,7 +149,8 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         this.usersList.splice(0, 0, {
           adminId: 0,
           name: this.getTranslate('tasks.task_filter.all'),
-          family: ''
+          family: '',
+          email: '0'
         });
       }
 
@@ -157,7 +170,7 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
       this.form = this._fb.group({
         userId: new FormControl(1, Validators.required),
         typeId: new FormControl(9, Validators.required),
-        email: new FormControl(this.loggedInUser.email),
+        email: new FormControl('0'),
         taskName: new FormControl(''),
         projectId: new FormControl(0),
         dateStart: new FormControl(''),

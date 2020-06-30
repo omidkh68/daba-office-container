@@ -15,7 +15,7 @@ export interface TaskInterface {
   userStartDate?: string;
   userEndDate?: string;
   percentage: number;
-  assigner: UserInterface;
+  assigner: string;
   taskDateStart: string;
   taskDateStop: string;
   boardStatus: string;

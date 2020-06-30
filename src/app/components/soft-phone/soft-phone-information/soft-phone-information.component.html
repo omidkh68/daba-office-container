@@ -1,10 +1,10 @@
 <div class="full-width full-height">
   <mat-list class="soft-phone-user full-width height-50">
     <mat-list-item class="padding-mini-r-l full-height">
-      <img [alt]="loggedInUser.name + ' ' + loggedInUser.family" [src]="'assets/profileImg/'+ loggedInUser.adminId +'.jpg'"
+      <img [alt]="loggedInUser.name" [src]="'assets/profileImg/'+ loggedInUser.email +'.jpg'"
            class="mat-elevation-z2"
            matListAvatar>
-      <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name + ' ' + loggedInUser.family}} </h3>
+      <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name}} </h3>
 
       <div class="font-8-rem">
         <mat-slide-toggle #slideToggle dir="ltr">
@@ -19,10 +19,10 @@
       <mat-list-item (click)="openSheet(user)"
                      *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
                      class="highlight cursor-pointer padding-r-l full-height margin-b-full">
-        <img [alt]="user.name + ' ' + user.family" [src]="'assets/profileImg/'+ user.adminId +'.jpg'"
+        <img [alt]="user.name + ' ' + user.family" [src]="'assets/profileImg/'+ user.email +'.jpg'"
              class="mat-elevation-z2 width-35 height-35" matListAvatar>
 
-        <h3 class="font-7-rem text-weight-bold" matLine> {{user.name + ' ' + user.family}} </h3>
+        <h3 class="font-7-rem text-weight-bold" matLine> {{user.name}} </h3>
         <p class="font-6-em text-gray-600" matLine>{{user.creationDate | jalali}}</p>
 
         <div [ngClass]="user.status === '1' ? 'online' : 'offline'"

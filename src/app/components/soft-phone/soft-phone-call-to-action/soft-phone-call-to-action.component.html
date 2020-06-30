@@ -10,10 +10,10 @@
 
   <mat-list class="margin-t-full">
     <mat-list-item>
-      <img [alt]="data.name + ' ' + data.family" [src]="'assets/profileImg/'+ data.adminId +'.jpg'"
+      <img [alt]="data.name" [src]="'assets/profileImg/'+ data.email +'.jpg'"
            class="mat-elevation-z2 width-50 height-50 round-corner-all margin-auto"
            matListAvatar>
-      <h3 class="text-weight-bold" matLine> {{data.name + ' ' + data.family}} </h3>
+      <h3 class="text-weight-bold" matLine> {{data.name}} </h3>
 
       <p class="font-8-rem" matLine>
           <span> <b>{{'soft_phone.call_to_action.local_time' | translate}}</b> <span class="ltr padding-mini-r-l">{{data.date | jalali}}</span> </span>

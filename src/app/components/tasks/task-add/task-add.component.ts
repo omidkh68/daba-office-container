@@ -17,7 +17,7 @@ export class TaskAddComponent implements OnInit, OnDestroy {
   form: FormGroup;
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
-  user: UserContainerInterface;
+  loggedInUser: UserContainerInterface;
 
   private _subscription: Subscription = new Subscription();
 
@@ -30,7 +30,7 @@ export class TaskAddComponent implements OnInit, OnDestroy {
     this.projectsList = this.data.projectsList;
 
     this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
+      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
   }
 
@@ -48,7 +48,7 @@ export class TaskAddComponent implements OnInit, OnDestroy {
         taskId: new FormControl(0),
         taskName: new FormControl('', Validators.required),
         percentage: new FormControl(0, Validators.required),
-        assignTo: new FormControl({adminId: 0}, Validators.required),
+        assignTo: new FormControl('', Validators.required),
         taskDurationHours: new FormControl(0, [Validators.required, Validators.pattern('^[0-9]+')]),
         taskDurationMinutes: new FormControl(0, Validators.required),
         startAt: new FormControl('', Validators.required),
@@ -61,7 +61,7 @@ export class TaskAddComponent implements OnInit, OnDestroy {
         boardStatus: new FormControl('', Validators.required),
         taskDateStart: '0000-00-00 00:00:00',
         taskDateStop: '0000-00-00 00:00:00',
-        assigner: new FormControl(this.user, Validators.required),
+        assigner: new FormControl(this.loggedInUser.email, Validators.required),
         trackable: new FormControl(0)
       });
 
@@ -69,10 +69,12 @@ export class TaskAddComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateForm(event) {
+  updateForm(event: FormGroup) {
     this.form = event;
 
-    this.submit();
+    setTimeout(() => {
+      this.submit();
+    }, 500);
   }
 
   cancelBtn(event) {
@@ -82,14 +84,23 @@ export class TaskAddComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    this.form.disable();
+    // this.form.disable();
 
-    const formValue = Object.assign({}, this.form.value);
+    const formInstance = Object.assign(this.form.value);
 
-    formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
-    formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
+    console.log(formInstance);
+
+    // this.form.disable();
+
+    const formValue = {
+      ...formInstance,
+      startAt: formInstance.startAt + ' ' + formInstance.startTime + ':00',
+      stopAt: formInstance.stopAt + ' ' + formInstance.stopTime + ':00'
+    };
 
     delete (formValue.taskId);
+
+    console.log(formValue);
 
     this._subscription.add(
       this.api.createTask(formValue).subscribe((resp: any) => {

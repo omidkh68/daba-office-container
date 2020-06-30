@@ -5,6 +5,6 @@ export interface SoftphoneUserInterface extends UserContainerInterface {
   type?: string;
   date?: string;
   time?: string;
-  // extension?: string;
+  extension?: string;
   data?: any;
 }

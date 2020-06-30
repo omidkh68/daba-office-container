@@ -1,7 +1,7 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "author": {
     "email": "omidkh68@gmail.com",
     "name": "Omid Khosrojerdi",

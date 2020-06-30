@@ -57,7 +57,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
               if (!this.electronService.window.isFocused()) {
                 const notification: Notification = new Notification(`${callerID} ${translateIncomingCall}`, {
                   body: this.getTranslate('soft_phone.incoming_call.do_you_accept'),
-                  icon: 'assets/profileImg/' + currentUser.id + '.jpg',
+                  icon: 'assets/profileImg/' + currentUser.email + '.jpg',
                   dir: 'auto',
                   data: currentUser
                 });

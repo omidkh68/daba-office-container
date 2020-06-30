@@ -19,8 +19,8 @@
                         <mat-option *ngFor="let user of usersList" [value]="user.adminId">
                             <img matPrefix
                                  class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
-                                 [src]="'/assets/profileImg/'+user.adminId+'.jpg'">
-                            {{user.name + ' ' + user.family}}
+                                 [src]="'/assets/profileImg/'+user.email+'.jpg'">
+                            {{user.name}}
                         </mat-option>
                     </mat-select>
 
