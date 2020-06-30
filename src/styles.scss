@@ -595,11 +595,9 @@ file-preview-container {
     background-color: #1a71eb !important;
   }
 }
-
-
-
-
-
+.mat-slider-horizontal .mat-slider-thumb-label{
+  top: -33px !important;
+}
 .clock-plus{
   width: 70px;
   height: 70px;

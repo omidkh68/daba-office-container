@@ -231,6 +231,5 @@ export class WindowManagerService {
       melement.style.transform = null;
     else
       melement.style.transform = "translate3d("+rndNumForWidth+"px, "+rndNumForHeight+"px, 0px)";
-
   }
 }
