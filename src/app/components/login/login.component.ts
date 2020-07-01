@@ -43,8 +43,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      username: new FormControl('khosrojerdi@dabacenter.ir'),
-      password: new FormControl('123456'),
+      username: new FormControl(''),
+      password: new FormControl(''),
       lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
     });
 
