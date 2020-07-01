@@ -23,7 +23,7 @@ export class TimeAreaDigitalClockComponent implements AfterViewInit {
 
     init = () => {
         setInterval(() => {
-            this.time = new Date().toLocaleTimeString("en-US", {timeZone: this.timezone, hour12: false});
+            this.time = new Date().toLocaleTimeString("en-US", {timeZone: this.timezone, hour12: false , hour: '2-digit', minute:'2-digit'});
         }, 1000);
     }
 
