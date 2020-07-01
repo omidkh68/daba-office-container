@@ -24,7 +24,12 @@
     },
     "from_date": "From Date",
     "to_date": "To Date",
-    "date_error": "Please choose date"
+    "date_error": "Please choose date",
+    "confirm": "Confirm",
+    "loading": "Loading ...",
+    "reconnecting": "Reconnecting ...",
+    "online": "You are online now",
+    "offline": "Connection lost! You are not connected to the internet"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -44,7 +49,8 @@
       "status": "Status",
       "address_book": "Address Book",
       "dial_pad": "Dialpad",
-      "call_logs": "Call Logs"
+      "call_logs": "Call Logs",
+      "public_room": "Conferences"
     },
     "call_pop_up": {
       "hang_up": "Hang Up",
@@ -67,7 +73,10 @@
       "want_to_call_with_you": "is calling you,",
       "do_you_accept": "Do you accept?"
     },
-    "transfer_call": "Transfer Call"
+    "transfer_call": "Transfer Call",
+    "public_conference": {
+      "conference_list": "Public Conferences"
+    }
   },
   "tasks": {
     "main": {
@@ -137,15 +146,22 @@
       "tasks_filter": "Task Filter",
       "filter_types": "Filter types",
       "by_create_date": "Based on task creation date",
-      "by_project":"Based on project name",
+      "by_project": "Based on project name",
       "by_user": "Based on task assigned to",
-      "by_start_date":"Based on task start date",
+      "by_start_date": "Based on task start date",
       "by_stop_date": "Based on task due date",
-      "by_user_start_date":"Based on user started date",
+      "by_user_start_date": "Based on user started date",
       "by_user_stop_date": "Based on user completed date",
-      "by_started_task":"Based on started tasks",
+      "by_started_task": "Based on started tasks",
       "by_postponed": "Based on postponed tasks",
       "in_progress_tasks": "In Progress Tasks"
+    },
+    "calendar": {
+      "month": "Month",
+      "today": "Today",
+      "week": "Week",
+      "day": "Day",
+      "list": "List"
     }
   },
   "login_info": {

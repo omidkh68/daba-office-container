@@ -5,10 +5,11 @@ export interface UserContainerInterface {
   id: number;
   name: string;
   email: string;
-  created_at: string;
-  updated_at: string;
-  timezone: string | null;
+  created_at?: string;
+  updated_at?: string;
+  timezone?: string | null;
   status?: number;
-  list_permission?: ServiceInterface[],
+  extension?: string;
+  services?: ServiceInterface[],
   role?: RoleInterface;
 }

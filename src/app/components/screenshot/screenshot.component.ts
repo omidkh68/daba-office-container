@@ -1,11 +1,11 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, Injector, OnDestroy} from '@angular/core';
 import {timer} from 'rxjs';
 import * as moment from 'moment';
 import * as lodash from 'lodash';
 import {ApiService} from './logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-// import {UserInterface} from '../users/logic/user-interface';
 import {TaskInterface} from '../tasks/logic/task-interface';
+import {LoginDataClass} from '../../services/loginData.class';
 import {UserInfoService} from '../users/services/user-info.service';
 import {ElectronService} from '../../services/electron.service';
 import {CurrentTaskService} from '../tasks/services/current-task.service';
@@ -23,9 +23,9 @@ export interface AvailableHoursInterface {
   selector: 'app-screenshot',
   template: ``
 })
-export class ScreenshotComponent implements OnDestroy {
-  timerDueTime: number = 3000;
-  timerPeriod: number = 3000;
+export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
+  timerDueTime: number = 30000;
+  timerPeriod: number = 30000;
   loggedInUser: UserContainerInterface;
   userCurrentStatus: UserStatusInterface | string = '';
   currentTasks: Array<TaskInterface> | null = null;
@@ -35,7 +35,7 @@ export class ScreenshotComponent implements OnDestroy {
     {time: '08', status: false}, {time: '09', status: false}, {time: '10', status: false}, {time: '11', status: false},
     {time: '12', status: false}, {time: '13', status: false}, {time: '14', status: false}, {time: '15', status: false},
     {time: '16', status: false}, {time: '17', status: false}, {time: '18', status: false}, {time: '19', status: false},
-    // {time: '20', status: false}, {time: '21', status: false}, {time: '22', status: false}, {time: '23', status: false}
+    {time: '20', status: false}, {time: '21', status: false}, {time: '22', status: false}, {time: '23', status: false}
   ];
   randomHours: Array<AvailableHoursInterface> = [];
   globalTimer = null;
@@ -44,13 +44,12 @@ export class ScreenshotComponent implements OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private injector: Injector,
               private electron: ElectronService,
               private changeStatusService: ChangeStatusService,
               private currentTaskService: CurrentTaskService,
               private userInfoService: UserInfoService) {
-    this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
-    );
+    super(injector, userInfoService);
 
     this._subscription.add(
       this.changeStatusService.currentUserStatus.subscribe(status => {
@@ -87,6 +86,8 @@ export class ScreenshotComponent implements OnDestroy {
 
     this.globalTimerSubscription = this.globalTimer.subscribe(
       t => {
+        this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
         this.api.getTickTok().subscribe((resp: any) => {
           const serverDate = resp.time;
           const localDate = new Date();
@@ -98,8 +99,7 @@ export class ScreenshotComponent implements OnDestroy {
 
           const findTime: AvailableHoursInterface = lodash.find(this.randomHours, item => item.time === checkTime);
 
-          // if (findTime && findTime.status === false) {
-          if (true) {
+          if (findTime && findTime.status === false) {
             findTime.status = true;
 
             this.takeAScreenShot();
@@ -133,6 +133,8 @@ export class ScreenshotComponent implements OnDestroy {
         userId: this.loggedInUser,
         files: screenshots
       };
+
+      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
         this.api.createScreenshot(data).subscribe((resp: any) => {

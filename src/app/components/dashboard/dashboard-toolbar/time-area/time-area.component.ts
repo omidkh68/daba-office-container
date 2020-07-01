@@ -53,7 +53,6 @@ export class TimeAreaComponent implements OnInit {
   addMoreClock(event) {
     event.stopPropagation();
     this.checkMoreClock = this.checkMoreClock ? false : true;
-    console.log(event);
   }
 
   showMoreClockContent(event) {
@@ -62,7 +61,6 @@ export class TimeAreaComponent implements OnInit {
   }
 
   setClockCity(option) {
-    console.log(option);
     this.checkMoreClock = false;
     this.checkMoreClockContent = false;
     this.cityClocksList.push(option)
@@ -72,21 +70,11 @@ export class TimeAreaComponent implements OnInit {
     this.getDateTime();
   }
 
-  // ngAfterViewInit(): void {
-  //   //this.timer();
-  //   this.init();
-  //   //console.log("Husin",this.datetime);
-  //   //setInterval(() => this.timer(), 1000);
-  // }
-
   getDateTime(): void {
     this.datetime = this.datetimeService.changeDatetimeLabel(this.rtlDirection);
   }
 
   ngOnInit(): void {
-
-    //console.log("CITY",this.cityClocksList);
-
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
         startWith(''),

@@ -15,11 +15,10 @@ export class MainMenuComponent {
   serviceList: Array<ServiceItemsInterface>;
 
   constructor(private windowManagerService: WindowManagerService) {
-    // todo: remove this in production
-    setTimeout(() => {
+    /*setTimeout(() => {
       const service = this.serviceList[0];
       this.openService(service);
-    }, 1000);
+    }, 1000);*/
   }
 
   openService(service: ServiceItemsInterface) {

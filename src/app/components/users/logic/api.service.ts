@@ -3,14 +3,14 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {ChangeUserStatusInterface} from '../../status/logic/change-user-status.interface';
 import {AppConfig} from '../../../../environments/environment';
-import {UserInfoService} from '../services/user-info.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private API_URL = AppConfig.API_URL;
-  private CONTAINER_URL = AppConfig.CONTAINER_URL;
+  public accessToken: string = '';
+  // private API_URL = AppConfig.API_URL;
+  private API_URL = AppConfig.CONTAINER_URL;
 
   /**
    * @type {HttpHeaders}
@@ -26,16 +26,24 @@ export class ApiService {
   }
 
   applyStatusToUser(userStatus: ChangeUserStatusInterface): Observable<ChangeUserStatusInterface> {
-    return this._http.post<ChangeUserStatusInterface>(`${this.API_URL}/users/applyStatusToUser`, userStatus, this.headers);
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.post<ChangeUserStatusInterface>(`${this.API_URL}/project/users/applyStatusToUser`, userStatus, this.headers);
   }
 
   login(loginInfo): Observable<any> {
-    return this._http.post(`${this.CONTAINER_URL}/login`, loginInfo, this.headers);
+    return this._http.post(`${this.API_URL}/login`, loginInfo);
   }
 
-  checkLogin(accessToken: string): Observable<any> {
-    this.headers.headers = this.headers.headers.append('Authorization', accessToken);
+  checkLogin(): Observable<any> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get(`${this.CONTAINER_URL}/checkLogin`, this.headers);
+    return this._http.get(`${this.API_URL}/checkLogin`, this.headers);
+  }
+
+  logout(): Observable<any> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.post(`${this.API_URL}/logout`, null,this.headers);
   }
 }

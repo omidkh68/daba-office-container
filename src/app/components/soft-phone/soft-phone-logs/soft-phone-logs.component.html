@@ -1,5 +1,5 @@
-<div class="padding-full">
-  <mat-list class="full-height overflow-y-auto overflow-x-hide">
+<div class="padding-full full-height flex-center">
+  <!--<mat-list class="full-height overflow-y-auto overflow-x-hide">
     <mat-list-item (click)="openSheet(info)" *ngFor="let info of softPhoneUsers"
                    class="height-full-minus-45 margin-b-half overflow-y-auto overflow-x-hide cursor-pointer"
                    disableRipple>
@@ -21,7 +21,7 @@
           </mat-icon>
         </ng-container>
         <div [ngClass]="info.type === 'missed' ? 'text-red-500' : ''" class="padding-mini-r-l"
-             mat-line>{{info.name + ' ' + info.family}}</div>
+             mat-line>{{info.name}}</div>
         <div class="padding-mini-r-l" mat-line>{{info.extension}}</div>
       </div>
       <div [ngClass]="rtlDirection ? 'text-left' : 'text-right'" class="thirty-width">
@@ -29,5 +29,7 @@
         <div class="text-gray-600 font-7-rem" mat-line>{{info.time}}</div>
       </div>
     </mat-list-item>
-  </mat-list>
+  </mat-list>-->
+
+  {{'global.no_result' | translate}}
 </div>

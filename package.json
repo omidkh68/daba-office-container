@@ -1,7 +1,7 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.8.4",
+  "version": "0.9.2",
   "author": {
     "email": "omidkh68@gmail.com",
     "name": "Omid Khosrojerdi",
@@ -76,6 +76,7 @@
     "electron": "8.2.5",
     "electron-builder": "22.6.0",
     "electron-reload": "1.5.0",
+    "electron-store": "5.2.0",
     "electron-updater": "^4.2.5",
     "eslint": "6.8.0",
     "eslint-plugin-import": "2.20.2",

@@ -1,36 +1,40 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Injector, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {LoginInterface} from '../../users/logic/login.interface';
+import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ResultApiInterface} from '../logic/result-api.interface';
 import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {ExtensionListInterface} from '../logic/extension-list.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
+
+export interface TabInterface {
+  icon: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-soft-phone-main',
   templateUrl: './soft-phone-main.component.html',
   styleUrls: ['./soft-phone-main.component.scss']
 })
-export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy {
+export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: SoftPhoneBottomSheetComponent;
   @ViewChild('audioRemote', {static: false}) audioRemote: ElementRef;
   @ViewChild('ringtone', {static: false}) ringtone: ElementRef;
   @ViewChild('ringbacktone', {static: false}) ringbacktone: ElementRef;
   @ViewChild('dtmfTone', {static: false}) dtmfTone: ElementRef;
 
-  loggedInUser: UserContainerInterface;
-  loginData: LoginInterface;
   rtlDirection: boolean;
   activeTab: number = 1;
-  tabs = [];
+  tabs: Array<TabInterface> = [];
 
   softPhoneUsers: Array<SoftphoneUserInterface> = [
     {
@@ -40,7 +44,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
       timezone: null,
-      extension: '6008',
+      extension: '',
     },
     {
       id: 46,
@@ -49,7 +53,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
       timezone: null,
-      extension: '6004'
+      extension: ''
     },
     {
       id: 16,
@@ -58,7 +62,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
       timezone: null,
-      extension: '6005'
+      extension: ''
     },
     {
       id: 47,
@@ -67,7 +71,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
       timezone: null,
-      extension: '6006'
+      extension: ''
     },
     {
       id: 39,
@@ -76,7 +80,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
       timezone: null,
-      extension: '6001'
+      extension: ''
     },
     {
       id: 200,
@@ -85,7 +89,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
       timezone: null,
-      extension: '6003'
+      extension: ''
     },
     {
       id: 41,
@@ -94,7 +98,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
       timezone: null,
-      extension: '6002'
+      extension: ''
     },
     {
       id: 36,
@@ -103,7 +107,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
       timezone: null,
-      extension: '6007'
+      extension: ''
     },
     {
       id: 36,
@@ -112,28 +116,23 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       created_at: '2020-06-23T08:53:17.000000Z',
       updated_at: '2020-06-23T08:53:17.000000Z',
       timezone: null,
-      extension: '6009'
+      extension: ''
     }
   ];
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
-              private apiService: ApiService,
+              private api: ApiService,
+              private injector: Injector,
               private softPhoneService: SoftPhoneService,
               private notificationService: NotificationService,
               private translate: TranslateService,
               private userInfoService: UserInfoService) {
+    super(injector, userInfoService);
+
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
-    );
-
-    this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
-    );
-
-    this._subscription.add(
-      this.userInfoService.currentLoginData.subscribe(loginData => this.loginData = loginData)
     );
 
     /*this._subscription.add(
@@ -180,11 +179,21 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    const accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
-      this.apiService.getExtensionList(accessToken).subscribe((resp: any) => {
-        console.log(resp);
+      this.api.getExtensionList().subscribe((resp: ResultApiInterface) => {
+        if (resp.success.toLowerCase() === 'true') {
+          this.softPhoneUsers = this.softPhoneUsers.map(user => {
+            const findExtension: ExtensionListInterface = resp.list.filter((item: ExtensionListInterface) => item.username === user.email).pop();
+
+            if (findExtension) {
+              user.extension = findExtension.extension_no;
+            }
+
+            return user;
+          });
+        }
       })
     );
   }
@@ -204,29 +213,28 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
     setTimeout(() => {
       this.tabs = [
         {
-          nameFa: this.getTranslate('soft_phone.main.status'),
-          nameEn: 'Status',
+          name: this.getTranslate('soft_phone.main.status'),
           icon: 'home'
         },
         {
-          nameFa: this.getTranslate('soft_phone.main.address_book'),
-          nameEn: 'Contacts',
+          name: this.getTranslate('soft_phone.main.address_book'),
           icon: 'contacts'
         },
         {
-          nameFa: this.getTranslate('soft_phone.main.dial_pad'),
-          nameEn: 'Keypad',
+          name: this.getTranslate('soft_phone.main.dial_pad'),
           icon: 'dialpad'
         },
         {
-          nameFa: this.getTranslate('soft_phone.main.call_logs'),
-          nameEn: 'Logs',
+          name: this.getTranslate('soft_phone.main.call_logs'),
           icon: 'settings_phone'
-        },
+        },/*
         {
-          nameFa: this.getTranslate('global.settings'),
-          nameEn: 'Settings',
+          name: this.getTranslate('global.settings'),
           icon: 'settings'
+        },*/
+        {
+          name: this.getTranslate('soft_phone.main.public_room'),
+          icon: 'group'
         }
       ];
     }, 200);

@@ -11,16 +11,13 @@ import {DialogPositionInterface, WindowInterface} from '../components/dashboard/
   providedIn: 'root'
 })
 export class WindowManagerService {
-  private _defaultWindows: Array<WindowInterface> = [];
-
-  // set observable behavior to property
-  private windows = new BehaviorSubject(this._defaultWindows);
-
-  // observable property
-  public windowsList = this.windows.asObservable();
-
   element: HTMLElement;
   cdkOverlayContainer: HTMLElement;
+  private _defaultWindows: Array<WindowInterface> = [];
+  // set observable behavior to property
+  private windows = new BehaviorSubject(this._defaultWindows);
+  // observable property
+  public windowsList = this.windows.asObservable();
 
   constructor(public dialog: MatDialog,
               @Inject('windowObject') private window: Window) {
@@ -97,9 +94,10 @@ export class WindowManagerService {
         };
 
         this._defaultWindows.push(mwindow);
+
         this.windows.next(this._defaultWindows);
 
-        this.updateWindowPosition(mwindow , false);
+        // this.updateWindowPosition(mwindow, false);
 
       } catch (e) {
       }
@@ -214,22 +212,22 @@ export class WindowManagerService {
     const updatePosition: DialogPositionInterface = {top: `${centerHeight}px`, left: `${centerWidth}px`};
 
     //windowInstance.windowRef.updatePosition(updatePosition);
-    this.updateWindowPosition(windowInstance , true);
+    this.updateWindowPosition(windowInstance, true);
 
     this.activeWindow(service);
   }
 
-  updateWindowPosition(windowInstance:any , center:boolean){
-
+  updateWindowPosition(windowInstance: any, center: boolean) {
     const widthEmptyState = (Math.random() * (this.window.innerWidth - windowInstance.windowService.width)).toFixed();
     const heightEmptyState = (Math.random() * (this.window.innerHeight - windowInstance.windowService.height)).toFixed();
     const rndNumForWidth = this.randint(50, widthEmptyState);
     const rndNumForHeight = this.randint(50, heightEmptyState);
-
     const melement = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;//document.getElementById(window.windowRef.id) as HTMLElement;
-    if(center)
+
+    if (center) {
       melement.style.transform = null;
-    else
-      melement.style.transform = "translate3d("+rndNumForWidth+"px, "+rndNumForHeight+"px, 0px)";
+    } else {
+      melement.style.transform = 'translate3d(' + rndNumForWidth + 'px, ' + rndNumForHeight + 'px, 0px)';
+    }
   }
 }

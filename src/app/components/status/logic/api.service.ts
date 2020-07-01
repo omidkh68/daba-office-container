@@ -8,7 +8,9 @@ import {AppConfig} from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  private API_URL = AppConfig.API_URL;
+  public accessToken = '';
+  // private API_URL = AppConfig.API_URL;
+  private API_URL = AppConfig.CONTAINER_URL + '/project';
 
   /**
    * @type {HttpHeaders}
@@ -24,6 +26,8 @@ export class ApiService {
   }
 
   getStatuses(): Observable<StatusInterface[]> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
     return this._http.get<StatusInterface[]>(`${this.API_URL}/status/?page=-1`, this.headers);
   }
 }

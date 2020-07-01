@@ -1,3 +1,9 @@
-.label {
-  opacity: .4;
+@import '../../../../assets/mixin';
+
+.highlight {
+  @include transition(background .4s);
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
 }

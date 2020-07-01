@@ -1,22 +1,25 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {TaskInterface} from '../logic/task-interface';
-import {ProjectInterface} from '../../projects/logic/project-interface';
+import {AfterViewInit, Component, Injector, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
-import {UserInfoService} from '../../users/services/user-info.service';
-import {ViewDirectionService} from '../../../services/view-direction.service';
-import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
+import {LoginDataClass} from '../../../services/loginData.class';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {ApproveComponent} from '../../approve/approve.component';
+import {ProjectInterface} from '../../projects/logic/project-interface';
+import {RefreshBoardService} from '../services/refresh-board.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 @Component({
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
-export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TaskDetailComponent extends LoginDataClass implements OnInit, AfterViewInit, OnDestroy {
   rtlDirection: boolean;
-  loggedInUser: UserContainerInterface = null;
   editable: boolean = false;
   task: TaskInterface = null;
   projectsList: ProjectInterface[] = [];
@@ -30,11 +33,13 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private api: ApiService,
               private _fb: FormBuilder,
+              public dialog: MatDialog,
+              private injector: Injector,
+              private refreshBoardService: RefreshBoardService,
+              private loadingIndicatorService: LoadingIndicatorService,
               private userInfoService: UserInfoService,
               private viewDirection: ViewDirectionService) {
-    this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
-    );
+    super(injector, userInfoService);
 
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
@@ -155,40 +160,76 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deleteTask() {
+    const dialogRef = this.dialog.open(ApproveComponent, {
+      data: {title: 'حذف تسک', message: 'آیا از حذف این تسک اطمینان دارید؟'},
+      autoFocus: false,
+      width: '70vh',
+      maxWidth: '350px',
+      panelClass: 'approve-detail-dialog',
+      height: '160px'
+    });
+
     this._subscription.add(
-      this.api.deleteTask(this.task).subscribe((resp: any) => {
-        this.bottomSheetData.bottomSheetRef.close();
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.loadingIndicatorService.changeLoadingStatus(true);
+
+          this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+          this._subscription.add(
+            this.api.deleteTask(this.task).subscribe((resp: any) => {
+              this.loadingIndicatorService.changeLoadingStatus(false);
+
+              if (resp.result) {
+                this.bottomSheetData.bottomSheetRef.close();
+
+                this.refreshBoardService.changeCurrentDoRefresh(true);
+              } else {
+                // show message
+              }
+            }, error => {
+              this.loadingIndicatorService.changeLoadingStatus(false);
+            })
+          );
+        }
       })
     );
   }
 
   submit() {
-    this.form.disable();
+    this.loadingIndicatorService.changeLoadingStatus(true);
+    // this.form.disable();
 
     const formValue = Object.assign({}, this.form.value);
 
     formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
     formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
-    console.log(formValue);
-
     // formValue.assigner = this.usersList.filter(user => user.email === this.user.email).pop();
+
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
       this.api.updateTask(formValue).subscribe((resp: any) => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
+
         const data = {
           prevContainer: this.task.boardStatus,
           newContainer: this.form.get('boardStatus').value,
           task: resp.content.task
         };
 
-        if (resp.result === 1) {
+        if (resp.result) {
           this.bottomSheetData.bottomSheetRef.close();
+
+          this.refreshBoardService.changeCurrentDoRefresh(true);
         } else {
           this.form.enable();
         }
-      }, () => {
+      }, error => {
         this.form.enable();
+
+        this.loadingIndicatorService.changeLoadingStatus(false);
       })
     );
   }

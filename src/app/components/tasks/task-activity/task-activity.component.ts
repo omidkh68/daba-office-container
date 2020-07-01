@@ -1,9 +1,11 @@
 import {AfterViewInit, Component, Input, OnDestroy} from '@angular/core';
-import {ActivityInterface} from './logic/activity-interface';
-import {ApiService} from './logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
+import {LoginInterface} from '../../users/logic/login.interface';
 import {TranslateService} from '@ngx-translate/core';
+import {ActivityInterface} from './logic/activity-interface';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {ApiService} from '../logic/api.service';
 
 @Component({
   selector: 'app-task-activity',
@@ -16,6 +18,9 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
 
   @Input()
   rtlDirection: boolean;
+
+  @Input()
+  loginData: LoginInterface;
 
   activityList: Array<ActivityInterface> = [];
 
@@ -32,7 +37,8 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private apiService: ApiService,
+  constructor(private api: ApiService,
+              private loadingIndicatorService: LoadingIndicatorService,
               private translate: TranslateService) {
   }
 
@@ -57,11 +63,19 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
 
   getActivities() {
     return new Promise((resolve) => {
+      this.loadingIndicatorService.changeLoadingStatus(true);
+
+      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
       this._subscription.add(
-        this.apiService.getActivities(this.task.taskId).subscribe((resp: any) => {
+        this.api.getActivities(this.task.taskId).subscribe((resp: any) => {
+          this.loadingIndicatorService.changeLoadingStatus(false);
+
           if (resp.result === 1) {
             resolve(resp.contents);
           }
+        }, error => {
+          this.loadingIndicatorService.changeLoadingStatus(false);
         })
       );
     });

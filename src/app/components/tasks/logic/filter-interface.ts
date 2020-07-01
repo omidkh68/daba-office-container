@@ -1,5 +1,6 @@
 export interface FilterInterface {
   userId: number;
+  userImg: string;
   typeId: number;
   taskName?: string;
   projectId?: number;

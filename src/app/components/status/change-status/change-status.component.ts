@@ -1,23 +1,25 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ChangeUserStatusInterface} from '../logic/change-user-status.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {ApiService as UserApiService} from '../../users/logic/api.service';
-import {UserStatusInterface} from '../../users/logic/user-status-interface';
-import {StatusInterface} from '../logic/status-interface';
-import {ApiService as StatusApiService} from '../logic/api.service';
 import {MessageService} from '../../../services/message.service';
-import {ChangeStatusService} from '../services/change-status.service';
+import {LoginDataClass} from '../../../services/loginData.class';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {StatusInterface} from '../logic/status-interface';
+import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
+import {UserStatusInterface} from '../../users/logic/user-status-interface';
+import {ChangeStatusService} from '../services/change-status.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {ChangeUserStatusInterface} from '../logic/change-user-status.interface';
+import {ApiService as UserApiService} from '../../users/logic/api.service';
+import {ApiService as StatusApiService} from '../logic/api.service';
 
 @Component({
   selector: 'app-change-status',
   templateUrl: './change-status.component.html',
   styleUrls: ['./change-status.component.scss']
 })
-export class ChangeStatusComponent implements OnInit, OnDestroy {
+export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnDestroy {
   rtlDirection: boolean;
   form: FormGroup;
   currentUserStatus: UserStatusInterface | string;
@@ -26,14 +28,17 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private userStatusService: ChangeStatusService,
+              private injector: Injector,
               private viewDirection: ViewDirectionService,
               private userApiService: UserApiService,
               private messageService: MessageService,
               private statusApiService: StatusApiService,
+              private userInfoService: UserInfoService,
               private fb: FormBuilder,
               private translate: TranslateService,
               public dialogRef: MatDialogRef<ChangeStatusComponent>,
               @Inject(MAT_DIALOG_DATA) public data) {
+    super(injector, userInfoService);
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
@@ -55,7 +60,9 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
   }
 
   getStatuses() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
+      this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
       this._subscription.add(
         this.statusApiService.getStatuses().subscribe((resp: any) => {
           if (resp.result === 1) {
@@ -123,6 +130,8 @@ export class ChangeStatusComponent implements OnInit, OnDestroy {
       const formValue = Object.assign({}, this.form.value);
 
       formValue.status = formValue.status.statusId;
+
+      this.userApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
         this.userApiService.applyStatusToUser(formValue).subscribe((resp: any) => {

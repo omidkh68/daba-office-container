@@ -1,3 +1,7 @@
 @import '~@fullcalendar/core/main.css';
 @import '~@fullcalendar/daygrid/main.min.css';
 @import '~@fullcalendar/timegrid/main.min.css';
+
+.calendar-switcher {
+  width: fit-content;
+}

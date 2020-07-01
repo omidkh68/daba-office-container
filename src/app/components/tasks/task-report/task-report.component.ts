@@ -1,10 +1,12 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../logic/api.service';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
+import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {TranslateService} from '@ngx-translate/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {LoginInterface} from '../../users/logic/login.interface';
 
 export interface TaskReportInterface {
   taskSheetId: number;
@@ -28,6 +30,9 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   rtlDirection: boolean;
 
   @Input()
+  loginData: LoginInterface;
+
+  @Input()
   taskId: number = 0;
 
   @Input()
@@ -42,8 +47,9 @@ export class TaskReportComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private apiService: ApiService,
+  constructor(private api: ApiService,
               private translate: TranslateService,
+              private loadingIndicatorService: LoadingIndicatorService,
               private matPaginatorIntl: MatPaginatorIntl) {
   }
 
@@ -61,26 +67,44 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   }
 
   getTaskReport() {
+    this.loadingIndicatorService.changeLoadingStatus(true);
+
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
     this._subscription.add(
-      this.apiService.getTaskReport(this.taskId).subscribe((resp: any) => {
+      this.api.getTaskReport(this.taskId).subscribe((resp: any) => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
+
         if (resp.result === 1) {
           this.taskReports = resp.contents;
 
           this.taskReports.map(report => {
             if (report.adminIdStartTask) {
               const findUserStarted: UserInterface = this.usersList.filter(user => user.adminId === report.adminIdStartTask).pop();
-              report.adminIdStartTask = `${findUserStarted.name} ${findUserStarted.family}`;
+
+              if (findUserStarted) {
+                report.adminIdStartTask = `${findUserStarted.name} ${findUserStarted.family}`;
+              } else {
+                report.adminIdStartTask = `-`;
+              }
             }
 
             if (report.adminIdStopTask) {
               const findUserStopped: UserInterface = this.usersList.filter(user => user.adminId === report.adminIdStopTask).pop();
-              report.adminIdStopTask = `${findUserStopped.name} ${findUserStopped.family}`;
+
+              if (findUserStopped) {
+                report.adminIdStopTask = `${findUserStopped.name} ${findUserStopped.family}`;
+              } else {
+                report.adminIdStopTask = `-`;
+              }
             }
           });
 
           this.dataSource = new MatTableDataSource(this.taskReports);
           this.dataSource.paginator = this.paginator;
         }
+      }, error => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
       })
     );
   }

@@ -3,6 +3,8 @@ import {BrowserWindow, ipcRenderer, webFrame, remote, screen, desktopCapturer, s
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
+import * as Store from 'electron-store';
+import {UserInfoService} from '../components/users/services/user-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +27,7 @@ export class ElectronService {
     return !!(window && window.process && window.process.type);
   }
 
-  constructor() {
+  constructor(private userInfoService: UserInfoService) {
     // Conditional imports
     if (this.isElectron) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
@@ -42,6 +44,19 @@ export class ElectronService {
       this.window = window.require('electron').remote.getCurrentWindow();
 
       this.window.center();
+
+      this.userInfoService.currentUserInfo.subscribe(user => {
+        this.userInfoService.currentLoginData.subscribe(loginData => {
+          const data: any = {
+            userInfo: user,
+            loginData: loginData
+          };
+
+          const store = new Store();
+
+          store.set(data);
+        })
+      });
     }
   }
 }

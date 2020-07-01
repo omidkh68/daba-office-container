@@ -9,7 +9,8 @@ import {TaskDurationInterface} from '../../logic/task-duration-interface';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
 import {FullCalendarComponent} from '@fullcalendar/angular';
-
+import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
+import {LoginInterface} from '../../../users/logic/login.interface';
 
 @Component({
   selector: 'app-task-calendar-rate',
@@ -17,13 +18,14 @@ import {FullCalendarComponent} from '@fullcalendar/angular';
   styleUrls: ['./task-calendar-rate.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
-
 export class TaskCalendarRateComponent implements OnInit, OnDestroy {
   @ViewChild('calendar') calendarComponent: FullCalendarComponent; // the #calendar in the template
 
   @Input()
   usersList: any;
+
+  @Input()
+  loginData: LoginInterface;
 
   sumTime: string = '';
   calendarDifferentEvents: any;
@@ -38,7 +40,8 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService) {
+  constructor(private api: ApiService,
+              private loadingIndicatorService: LoadingIndicatorService,) {
 
   }
 
@@ -60,10 +63,16 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    this.loadingIndicatorService.changeLoadingStatus(true);
+
     const formValue: TaskDurationInterface = Object.assign({}, this.form.value);
+
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
       this.api.boardsCalendarDurationTask(formValue).subscribe((resp: any) => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
+
         if (resp.result === 1) {
           let calendarEvent = [];
           let sum = 0;
@@ -89,6 +98,8 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
         } else {
           this.form.enable();
         }
+      }, error => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
       })
     );
   }

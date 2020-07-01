@@ -7,6 +7,8 @@ import {Observable} from 'rxjs/internal/Observable';
   providedIn: 'root'
 })
 export class ApiService {
+  public accessToken = '';
+  // private API_URL = AppConfig.API_URL;
   private API_URL = AppConfig.CONTAINER_URL;
 
   /**
@@ -22,8 +24,8 @@ export class ApiService {
   constructor(private _http: HttpClient) {
   }
 
-  getExtensionList(accessToken: string): Observable<any> {
-    this.headers.headers = this.headers.headers.append('Authorization', accessToken);
+  getExtensionList(): Observable<any> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     return this._http.get(`${this.API_URL}/pbx/extention.php?action=extention`, this.headers);
   }
