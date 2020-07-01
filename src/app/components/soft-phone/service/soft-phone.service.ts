@@ -113,7 +113,7 @@ export class SoftPhoneService extends LoginDataClass {
     this.ringtone = this.audioRemoteTagValue.ringtone;
     this.ringbacktone = this.audioRemoteTagValue.ringbacktone;
 
-    SIPml.init(this.postInit, false);
+    SIPml.init(this.postInit, true);
   }
 
   combineUsersSoftPhoneInformation() {
@@ -121,6 +121,8 @@ export class SoftPhoneService extends LoginDataClass {
       const loggedInUserExtension = this.extensionList.getValue().filter((ext: ExtensionInterface) => this.loggedInUser.email === ext.username).pop();
 
       this.loggedInUserSoftphone = {...this.loggedInUser, ...loggedInUserExtension};
+
+      this.allUsersSoftphone = [];
 
       this.allUsers.map((user: UserContainerInterface) => {
         const findExtension = this.extensionList.getValue().filter(ext => ext.username === user.email).pop();
@@ -154,13 +156,15 @@ export class SoftPhoneService extends LoginDataClass {
         // update debug level to be sure new values will be used if the user haven't updated the page
         SIPml.setDebugLevel((localStorage && localStorage.getItem('org.doubango.expert.disable_debug') == 'true') ? 'error' : 'info');
 
+        console.log('in register: ', this.loggedInUserSoftphone);
+
         // create SIP stack
         this.oSipStack = new SIPml.Stack({
           realm: '213.202.217.19',
-          impi: `${this.loggedInUserSoftphone.extension_no}-dabapbx`,
-          impu: `sip:${this.loggedInUserSoftphone.extension_no}-dabapbx@213.202.217.19`,
-          password: `${this.loggedInUserSoftphone.extension_no}`,
-          display_name: `${this.loggedInUserSoftphone.extension_no}-dabapbx`,
+          impi: `${this.loggedInUserSoftphone.extension_no}-wrtc`,
+          impu: `sip:${this.loggedInUserSoftphone.extension_no}-wrtc@213.202.217.19`,
+          password: this.loggedInUserSoftphone.extension_no,
+          display_name: `${this.loggedInUserSoftphone.extension_no}-wrtc`,
           websocket_proxy_url: 'wss://213.202.217.19:8089/ws',
           outbound_proxy_url: (localStorage ? localStorage.getItem('org.doubango.expert.sip_outboundproxy_url') : null),
           ice_servers: (localStorage ? localStorage.getItem('org.doubango.expert.ice_servers') : null),
