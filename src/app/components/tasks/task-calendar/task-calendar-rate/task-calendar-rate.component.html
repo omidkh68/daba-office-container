@@ -12,7 +12,7 @@
                 <mat-form-field class="full-width font-8-em">
                     <img matPrefix
                          *ngIf="form.get('adminId').valid"
-                         [src]="'/assets/profileImg/'+form.get('adminId').value+'.jpg'"
+                         [src]="'/assets/profileImg/'+form.get('userImg').value+'.jpg'"
                          class="width-20 height-20 margin-l-half round-corner-all pos-rel top-three-tenth">
                     <mat-label>مسئول انجام</mat-label>
                     <mat-select formControlName="adminId" tabIndex="4">
@@ -20,7 +20,7 @@
                             <img matPrefix
                                  class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
                                  [src]="'/assets/profileImg/'+user.email+'.jpg'">
-                            {{user.name}}
+                            {{user.name + ' ' + user.family}}
                         </mat-option>
                     </mat-select>
 

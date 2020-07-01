@@ -2,11 +2,9 @@ import {Component, Injector, Input, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {ApiService} from '../../../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {LoginInterface} from '../../../users/logic/login.interface';
+import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
-import {UserContainerInterface} from '../../../users/logic/user-container.interface';
-import {LoginDataClass} from '../../../../services/loginData.class';
 
 @Component({
   selector: 'app-profile-menu',

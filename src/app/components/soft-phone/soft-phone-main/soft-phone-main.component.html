@@ -27,6 +27,7 @@
       <!-- Show soft phone logs -->
       <app-soft-phone-logs (triggerBottomSheet)="openButtonSheet($event)"
                            *ngSwitchCase="3"
+                           [loggedInUser]="loggedInUser"
                            [rtlDirection]="rtlDirection"
                            [softPhoneUsers]="softPhoneUsers"></app-soft-phone-logs>
       <!-- /Show soft phone logs -->

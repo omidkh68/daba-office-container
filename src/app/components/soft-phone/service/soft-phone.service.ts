@@ -113,7 +113,7 @@ export class SoftPhoneService extends LoginDataClass {
     this.ringtone = this.audioRemoteTagValue.ringtone;
     this.ringbacktone = this.audioRemoteTagValue.ringbacktone;
 
-    SIPml.init(this.postInit, true);
+    SIPml.init(this.postInit, false);
   }
 
   combineUsersSoftPhoneInformation() {
@@ -135,7 +135,8 @@ export class SoftPhoneService extends LoginDataClass {
         }
       });
 
-      this.changeSoftPhoneUsers(this.allUsersSoftphone);
+      // this.changeSoftPhoneUsers(this.allUsersSoftphone);
+      this.changeSoftPhoneUsers(this.extensionList.getValue());
 
       resolve(true);
     });
@@ -155,8 +156,6 @@ export class SoftPhoneService extends LoginDataClass {
 
         // update debug level to be sure new values will be used if the user haven't updated the page
         SIPml.setDebugLevel((localStorage && localStorage.getItem('org.doubango.expert.disable_debug') == 'true') ? 'error' : 'info');
-
-        console.log('in register: ', this.loggedInUserSoftphone);
 
         // create SIP stack
         this.oSipStack = new SIPml.Stack({

@@ -25,9 +25,9 @@ export class SoftPhoneSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.publicConference.push({
-      id: -1,
-      name: 'Daba Employees',
-      email: '',
+      // id: -1,
+      extension_name: 'Daba Employees',
+      username: 'daba',
       extension_no: '9999',
     });
   }

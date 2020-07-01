@@ -4,6 +4,7 @@ import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
+import {ExtensionInterface} from '../logic/extension.interface';
 
 @Component({
   selector: 'app-soft-phone-information',
@@ -53,6 +54,6 @@ export class MyFilterPipe implements PipeTransform {
     }
     // filter items array, items which match and return true will be
     // kept, false will be filtered out
-    return items.filter((item: SoftphoneUserInterface) => item.email !== filter.email);
+    return items.filter((item: SoftphoneUserInterface) => item.username !== filter.email);
   }
 }

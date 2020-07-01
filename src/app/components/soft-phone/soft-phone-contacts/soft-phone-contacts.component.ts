@@ -56,7 +56,7 @@ export class SoftPhoneContactsComponent implements OnInit {
 
     this.filteredUsers = Object.assign([], this.softPhoneUsers).filter(
       // (item: SoftphoneUserInterface) => (item.name + '' + item.family).toLowerCase().indexOf(value.toLowerCase()) > -1
-      (item: SoftphoneUserInterface) => (item.name).toLowerCase().indexOf(value.toLowerCase()) > -1
+      (item: SoftphoneUserInterface) => (item.extension_name).toLowerCase().indexOf(value.toLowerCase()) > -1
     );
   }
 
@@ -116,6 +116,6 @@ export class MyFilterPipe implements PipeTransform {
     }
     // filter items array, items which match and return true will be
     // kept, false will be filtered out
-    return items.filter((item: SoftphoneUserInterface) => item.email !== filter.email);
+    return items.filter((item: SoftphoneUserInterface) => item.username !== filter.email);
   }
 }

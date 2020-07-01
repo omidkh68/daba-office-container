@@ -9,7 +9,7 @@ import {Observable} from 'rxjs/internal/Observable';
 export class ApiService {
   public accessToken = '';
   // private API_URL = AppConfig.API_URL;
-  private API_URL = AppConfig.CONTAINER_URL;
+  private API_URL = AppConfig.CONTAINER_URL + '/pbx';
 
   /**
    * @type {HttpHeaders}
@@ -27,6 +27,12 @@ export class ApiService {
   getExtensionList(): Observable<any> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get(`${this.API_URL}/pbx/extention.php?action=extention`, this.headers);
+    return this._http.get(`${this.API_URL}/extention.php?action=extention`, this.headers);
+  }
+
+  getCdr(extension_no: string): Observable<any> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.get(`${this.API_URL}/cdr.php?action=cdr&extensionNo=${extension_no}`, this.headers);
   }
 }

@@ -46,10 +46,29 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      adminId: new FormControl(0),
-      dateStart: new FormControl(''),
-      dateStop: new FormControl('')
+    this.createForm().then(() => {
+      this._subscription.add(
+        this.form.get('adminId').valueChanges.subscribe(selectedValue => {
+          const user = this.usersList.filter(user => user.adminId === selectedValue).pop();
+
+          if (user) {
+            this.form.get('userImg').setValue(user.email);
+          }
+        })
+      );
+    })
+  }
+
+  createForm() {
+    return new Promise((resolve) => {
+      this.form = new FormGroup({
+        adminId: new FormControl(0),
+        userImg: new FormControl('0'),
+        dateStart: new FormControl(''),
+        dateStop: new FormControl('')
+      });
+
+      resolve(true);
     });
   }
 
