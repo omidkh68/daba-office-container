@@ -20,6 +20,7 @@ export class DatetimeService {
   private todayJalaliDayName = this.weekDaysFa[new Date().getDay() + 1];
   private todayGregorianDayName = this.weekDaysEn[new Date().getDay()];
   public aryIannaTimeZones: Timezones[] = [
+    {city: 'Tehran', timezone: 'Asia/Tehran'},
     {city: 'Andorra', timezone: 'Europe/Andorra'},
     {city: 'Dubai', timezone: 'Asia/Dubai'},
     {city: 'Kabul', timezone: 'Asia/Kabul'},
@@ -372,13 +373,13 @@ export class DatetimeService {
   changeDatetimeLabel(rtlDirection: boolean) {
     if (rtlDirection) {
       this.datetime = {
-        time: '15:30',
+        time: '',
         date: this.todayJalali,
         weekday: this.todayJalaliDayName
       }
     } else {
       this.datetime = {
-        time: '15:30',
+        time: '',
         date: this.todayGregorian,
         weekday: this.todayGregorianDayName
       }

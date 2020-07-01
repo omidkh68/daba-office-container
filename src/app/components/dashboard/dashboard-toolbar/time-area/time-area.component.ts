@@ -3,11 +3,12 @@ import {Component, Input, OnInit, Renderer2, SimpleChanges} from '@angular/core'
 import {DatetimeService} from './service/datetime.service';
 import {DatetimeInterface} from './logic/datetime.interface';
 import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 
 import {map, startWith} from 'rxjs/operators';
 import {Timezones} from './timezones.interface';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
+import {UserInfoService} from "../../../users/services/user-info.service";
 
 @Component({
   selector: 'app-time-area',
@@ -44,10 +45,25 @@ export class TimeAreaComponent implements OnInit {
     return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  constructor(private render: Renderer2, private datetimeService: DatetimeService) {
+  private _subscription: Subscription = new Subscription();
+
+  constructor(private render: Renderer2,
+              private datetimeService: DatetimeService,
+              private userInfoService: UserInfoService) {
     this.checkMoreClock = false;
     this.options = datetimeService.aryIannaTimeZones;
-    this.cityClocksList = [{city: 'Tehran', timezone: 'Asia/Tehran'}]
+
+    this._subscription.add(
+        this.userInfoService.currentUserInfo.subscribe(user => {
+          this.loggedInUser = user;
+          if(!this.loggedInUser.timezone)
+            this.loggedInUser.timezone = "Asia/Tehran";
+          this.cityClocksList = [{city: this.loggedInUser.timezone.split("/")[1], timezone: this.loggedInUser.timezone}]
+          this.init();
+        })
+    )
+
+
   }
 
   addMoreClock(event) {
@@ -81,8 +97,6 @@ export class TimeAreaComponent implements OnInit {
         map(value => typeof value === 'string' ? value : value.name),
         map(name => name ? this._filter(name) : this.options.slice())
       );
-
-    this.init();
   }
 
   init = () => {
