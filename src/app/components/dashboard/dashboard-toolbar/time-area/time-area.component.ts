@@ -33,25 +33,30 @@ export class TimeAreaComponent implements OnInit {
   options: Timezones[];
   filteredOptions: Observable<Timezones[]>;
 
+
+  displayFn(timezone: Timezones): string {
+    return timezone && timezone.city ? timezone.city : '';
+  }
+
+  private _filter(name: string): Timezones[] {
+    const filterValue = name.toLowerCase();
+
+    return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
+  }
+
   constructor(private render: Renderer2, private datetimeService: DatetimeService) {
     this.checkMoreClock = false;
     this.options = datetimeService.aryIannaTimeZones;
     this.cityClocksList = [{city: 'Tehran', timezone: 'Asia/Tehran'}]
   }
 
-  displayFn(timezone: Timezones): string {
-    return timezone && timezone.city ? timezone.city : '';
-  }
-
   addMoreClock(event) {
     event.stopPropagation();
-
     this.checkMoreClock = this.checkMoreClock ? false : true;
   }
 
   showMoreClockContent(event) {
     event.stopPropagation();
-
     this.checkMoreClockContent = true;
   }
 
@@ -76,12 +81,15 @@ export class TimeAreaComponent implements OnInit {
         map(value => typeof value === 'string' ? value : value.name),
         map(name => name ? this._filter(name) : this.options.slice())
       );
+
+    this.init();
   }
 
-  private _filter(name: string): Timezones[] {
-    const filterValue = name.toLowerCase();
-
-    return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
+  init = () => {
+    setInterval(()=>{
+      const _time = new Date().toLocaleTimeString("en-US", {timeZone: this.cityClocksList[0].timezone , hour12: false});
+      this.datetime.time = _time;
+    },1000);
   }
 
 }
