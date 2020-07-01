@@ -130,8 +130,9 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
+    // 3 in service id means PBX
     this._subscription.add(
-      this.api.getHRUsers().subscribe((resp: any) => {
+      this.api.getServiceUsers(3).subscribe((resp: any) => {
         if (resp.success) {
           this.userInfoService.changeAllUsers(resp.data);
         }

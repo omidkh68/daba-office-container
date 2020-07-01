@@ -52,4 +52,10 @@ export class ApiService {
 
     return this._http.get(`${this.API_URL}/hr/users`, this.headers);
   }
+
+  getServiceUsers(serviceId: number): Observable<any> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.get(`${this.API_URL}/users/${serviceId}`, this.headers);
+  }
 }
