@@ -95,4 +95,11 @@ export class TimeAreaComponent implements OnInit {
       );
   }
 
+  init = () => {
+    setInterval(()=>{
+      const _time = new Date().toLocaleTimeString("en-US", {timeZone: this.cityClocksList[0].timezone , hour12: false});
+      this.datetime.time = _time;
+    },1000);
+  }
+
 }
