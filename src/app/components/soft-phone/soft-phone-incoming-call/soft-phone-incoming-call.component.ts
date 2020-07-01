@@ -42,11 +42,11 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
             const translateIncomingCall = this.getTranslate('soft_phone.incoming_call.want_to_call_with_you');
 
             if (this.softPhoneUsers) {
-              const currentUser = this.softPhoneUsers.filter(user => user.extension === this.currentPhoneNumber).pop();
+              const currentUser = this.softPhoneUsers.filter(user => user.extension_no === this.currentPhoneNumber).pop();
 
               if (currentUser) {
                 this.onCallUser = currentUser;
-                this.onCallUser.extension = this.currentPhoneNumber;
+                this.onCallUser.extension_no = this.currentPhoneNumber;
 
                 // callerID = currentUser.name + ' ' + currentUser.family;
                 callerID = currentUser.name;

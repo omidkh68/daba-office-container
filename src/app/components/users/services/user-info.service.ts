@@ -17,6 +17,10 @@ export class UserInfoService {
   private loginData = new BehaviorSubject(this._loginData);
   public currentLoginData = this.loginData.asObservable();
 
+  private _allUsers: Array<UserContainerInterface> | null = null;
+  private allUsers = new BehaviorSubject(this._allUsers);
+  public currentAllUsers = this.allUsers.asObservable();
+
   // body = document.querySelector('html');
 
   changeUserInfo(user: UserContainerInterface) {
@@ -29,8 +33,8 @@ export class UserInfoService {
     this.userInfo.next(user);
   }
 
-  get loginDataValue() {
-    return this.loginData.getValue();
+  changeAllUsers(users: Array<UserContainerInterface> | null) {
+    this.allUsers.next(users);
   }
 
   /*changeDarkMode(user: UserInterface) {

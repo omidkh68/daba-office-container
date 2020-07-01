@@ -18,7 +18,7 @@ export class MainMenuComponent {
     /*setTimeout(() => {
       const service = this.serviceList[0];
       this.openService(service);
-    }, 1000);*/
+    }, 500);*/
   }
 
   openService(service: ServiceItemsInterface) {

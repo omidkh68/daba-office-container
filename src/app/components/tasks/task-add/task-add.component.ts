@@ -94,7 +94,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
   }
 
   submit() {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
     // this.form.disable();
 
     const formInstance = Object.assign(this.form.value);
@@ -113,7 +113,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
 
     this._subscription.add(
       this.api.createTask(formValue).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
           this.dialogRef.close(true);
@@ -121,7 +121,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
           this.form.enable();
         }
       }, error => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         this.form.enable();
       })

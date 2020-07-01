@@ -93,7 +93,7 @@ export class SoftPhoneContactsComponent implements OnInit {
   transferCall(contact: SoftphoneUserInterface) {
     this.disableContacts = true;
 
-    this.softPhoneService.sipTransfer(contact.extension);
+    this.softPhoneService.sipTransfer(contact.extension_no);
 
     setTimeout(() => {
       this.triggerCloseBottomSheet.emit();

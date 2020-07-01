@@ -109,7 +109,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   }*/
 
   drop(event: CdkDragDrop<string[]>) {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -125,7 +125,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
       this._subscription.add(
         this.api.taskChangeStatus(taskData, event.container.id).subscribe(async (resp: any) => {
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result) {
             const newTask = resp.content.task;
@@ -133,7 +133,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
             this.assignNewTaskToBoard(newTask, event.previousContainer.id, event.container.id);
           }
         }, error => {
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
         })
       );
     }
@@ -214,20 +214,20 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   getBoards() {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     if (this.loggedInUser && this.loggedInUser.email) {
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
         this.api.boards(this.loggedInUser.email).subscribe((resp: any) => {
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result === 1) {
             this.putTasksToAllBoards(resp);
           }
         }, error => {
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
         })
       );
     }

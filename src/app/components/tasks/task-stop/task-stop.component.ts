@@ -60,7 +60,7 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
   }
 
   submit() {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     this.form.disable();
 
@@ -68,7 +68,7 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
 
     this._subscription.add(
       this.api.taskStop(this.form.value).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
           this.dialogRef.close(true);
@@ -76,7 +76,7 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
           this.form.enable();
         }
       }, error => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         this.form.enable();
       })

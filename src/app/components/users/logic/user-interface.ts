@@ -14,5 +14,4 @@ export interface UserInterface {
   role?: RoleInterface;
   userCurrentStatus?: UserStatusInterface | string;
   creationDate?: string;
-  extension?: string;
 }

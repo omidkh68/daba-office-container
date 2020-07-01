@@ -172,13 +172,13 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.loadingIndicatorService.changeLoadingStatus(true);
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
           this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
           this._subscription.add(
             this.api.deleteTask(this.task).subscribe((resp: any) => {
-              this.loadingIndicatorService.changeLoadingStatus(false);
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
               if (resp.result) {
                 this.bottomSheetData.bottomSheetRef.close();
@@ -188,7 +188,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
                 // show message
               }
             }, error => {
-              this.loadingIndicatorService.changeLoadingStatus(false);
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
             })
           );
         }
@@ -197,7 +197,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
   }
 
   submit() {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
     // this.form.disable();
 
     const formValue = Object.assign({}, this.form.value);
@@ -211,7 +211,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
     this._subscription.add(
       this.api.updateTask(formValue).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         const data = {
           prevContainer: this.task.boardStatus,
@@ -229,7 +229,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
       }, error => {
         this.form.enable();
 
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
       })
     );
   }

@@ -44,6 +44,12 @@ export class ApiService {
   logout(): Observable<any> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.post(`${this.API_URL}/logout`, null,this.headers);
+    return this._http.post(`${this.API_URL}/logout`, null, this.headers);
+  }
+
+  getHRUsers(): Observable<any> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.get(`${this.API_URL}/hr/users`, this.headers);
   }
 }

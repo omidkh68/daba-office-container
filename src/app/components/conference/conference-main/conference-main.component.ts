@@ -6,7 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ConferenceInterface} from '../logic/conference.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ConferenceAddComponent} from '../conference-add/conference-add.component';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-conference-main',
@@ -17,7 +17,7 @@ export class ConferenceMainComponent implements OnDestroy {
   @ViewChild('webFrame', {static: false}) webFrame: ElementRef;
 
   rtlDirection: boolean;
-  loadingIndicator: boolean = false;
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'videoConference'};
   showConference: boolean = false;
   confAddress: string = '';
 
@@ -28,6 +28,10 @@ export class ConferenceMainComponent implements OnDestroy {
               private viewDirection: ViewDirectionService,
               private loadingIndicatorService: LoadingIndicatorService,
               private messageService: MessageService) {
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
+
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
@@ -44,7 +48,7 @@ export class ConferenceMainComponent implements OnDestroy {
     this._subscription.add(
       dialogRef.afterClosed().subscribe((resp: ConferenceInterface) => {
         if (resp) {
-          this.loadingIndicatorService.changeLoadingStatus(true);
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
           this.confAddress = `https://conference.dabacenter.ir/main.php?username=${resp.username}&confname=${resp.confname}`;
 
@@ -55,7 +59,7 @@ export class ConferenceMainComponent implements OnDestroy {
           });
 
           this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
-            this.loadingIndicatorService.changeLoadingStatus(false);
+            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
           });
 
           setTimeout(() => {
@@ -77,7 +81,7 @@ export class ConferenceMainComponent implements OnDestroy {
     this._subscription.add(
       dialogRef.afterClosed().subscribe((resp: ConferenceInterface) => {
         if (resp) {
-          this.loadingIndicatorService.changeLoadingStatus(true);
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
           this.confAddress = resp.confAddress;
 
@@ -89,7 +93,7 @@ export class ConferenceMainComponent implements OnDestroy {
 
           this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
             // console.log('did-stop-loading');
-            this.loadingIndicatorService.changeLoadingStatus(false);
+            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
           });
 
           setTimeout(() => {

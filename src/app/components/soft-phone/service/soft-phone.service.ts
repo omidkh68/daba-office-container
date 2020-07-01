@@ -1,11 +1,12 @@
-import {ElementRef, Injectable} from '@angular/core';
+import {ElementRef, Injectable, Injector} from '@angular/core';
 import SIPml from 'ecmascript-webrtc-sipml';
-// import {UserInterface} from '../../users/logic/user-interface';
+import {LoginDataClass} from '../../../services/loginData.class';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {IncomingInterface} from '../logic/incoming.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {ExtensionInterface} from '../logic/extension.interface';
 
 export interface EssentialTagsInterface {
   audioRemote: ElementRef;
@@ -17,12 +18,26 @@ export interface EssentialTagsInterface {
 @Injectable({
   providedIn: 'root'
 })
-export class SoftPhoneService {
-  loggedInUser: UserContainerInterface;
+export class SoftPhoneService extends LoginDataClass {
+  allUsersSoftphone: Array<SoftphoneUserInterface> = [];
+  loggedInUserSoftphone: SoftphoneUserInterface;
+
+  oSipStack;
+  oSipSessionRegister;
+  oSipSessionCall;
+  oSipSessionTransferCall;
+  oNotifICall;
+  oConfigCall;
+  ringtone;
+  ringbacktone;
 
   private _users: Array<SoftphoneUserInterface> | null;
   private users = new BehaviorSubject(this._users);
   public currentSoftPhoneUsers = this.users.asObservable();
+
+  private _extensionList: Array<ExtensionInterface> | null;
+  private extensionList = new BehaviorSubject(this._extensionList);
+  public currentExtensionList = this.extensionList.asObservable();
 
   private _incomingCall: IncomingInterface | null;
   private incomingCallStatus = new BehaviorSubject(this._incomingCall);
@@ -38,15 +53,6 @@ export class SoftPhoneService {
 
   private audioRemoteTag: BehaviorSubject<EssentialTagsInterface> = new BehaviorSubject(null);
 
-  oSipStack;
-  oSipSessionRegister;
-  oSipSessionCall;
-  oSipSessionTransferCall;
-  oNotifICall;
-  oConfigCall;
-  ringtone;
-  ringbacktone;
-
   /*videoRemote;
   videoLocal;
   sTransferNumber;
@@ -59,12 +65,34 @@ export class SoftPhoneService {
   oReadyStateTimer;
   viewLocalScreencast; // <video> (webrtc) or <div> (webrtc4all)*/
 
-  constructor(private userInfoService: UserInfoService) {
-    this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user);
+  constructor(private userInfoService: UserInfoService,
+              private injector: Injector) {
+    super(injector, userInfoService);
+  }
+
+  public get audioRemoteTagValue() {
+    return {
+      audioRemote: this.audioRemoteTag.value.audioRemote.nativeElement,
+      ringtone: this.audioRemoteTag.value.ringtone.nativeElement,
+      ringbacktone: this.audioRemoteTag.value.ringbacktone.nativeElement,
+      dtmfTone: this.audioRemoteTag.value.dtmfTone.nativeElement
+    };
+  }
+
+  public get getMuteStatus() {
+    return this.oSipSessionCall;
   }
 
   changeSoftPhoneUsers(softPhoneUsers: Array<SoftphoneUserInterface> | null) {
     this.users.next(softPhoneUsers);
+  }
+
+  changeExtensionList(list: Array<ExtensionInterface> | null) {
+    return new Promise((resolve) => {
+      this.extensionList.next(list);
+
+      resolve(true);
+    });
   }
 
   changeIncomingCallStatus(status: IncomingInterface) {
@@ -88,63 +116,74 @@ export class SoftPhoneService {
     SIPml.init(this.postInit, false);
   }
 
-  public get audioRemoteTagValue() {
-    return {
-      audioRemote: this.audioRemoteTag.value.audioRemote.nativeElement,
-      ringtone: this.audioRemoteTag.value.ringtone.nativeElement,
-      ringbacktone: this.audioRemoteTag.value.ringbacktone.nativeElement,
-      dtmfTone: this.audioRemoteTag.value.dtmfTone.nativeElement
-    };
-  }
+  combineUsersSoftPhoneInformation() {
+    return new Promise((resolve) => {
+      const loggedInUserExtension = this.extensionList.getValue().filter((ext: ExtensionInterface) => this.loggedInUser.email === ext.username).pop();
 
-  public get getMuteStatus() {
-    return this.oSipSessionCall;
+      this.loggedInUserSoftphone = {...this.loggedInUser, ...loggedInUserExtension};
+
+      this.allUsers.map((user: UserContainerInterface) => {
+        const findExtension = this.extensionList.getValue().filter(ext => ext.username === user.email).pop();
+
+        if (findExtension) {
+          this.allUsersSoftphone.push({
+            ...user,
+            ...findExtension
+          })
+        }
+      });
+
+      this.changeSoftPhoneUsers(this.allUsersSoftphone);
+
+      resolve(true);
+    });
   }
 
   sipRegister = () => {
-    try {
-      // enable notifications if not already done
-      // if (webkitNotifications && webkitNotifications.checkPermission() != 0) {
-      //     webkitNotifications.requestPermission();
-      // }
+    this.combineUsersSoftPhoneInformation().then(() => {
+      try {
+        // enable notifications if not already done
+        // if (webkitNotifications && webkitNotifications.checkPermission() != 0) {
+        //     webkitNotifications.requestPermission();
+        // }
 
-      Notification.requestPermission();
-      // save credentials
-      //saveCredentials();
+        Notification.requestPermission();
+        // save credentials
+        //saveCredentials();
 
-      // update debug level to be sure new values will be used if the user haven't updated the page
-      SIPml.setDebugLevel((localStorage && localStorage.getItem('org.doubango.expert.disable_debug') == 'true') ? 'error' : 'info');
+        // update debug level to be sure new values will be used if the user haven't updated the page
+        SIPml.setDebugLevel((localStorage && localStorage.getItem('org.doubango.expert.disable_debug') == 'true') ? 'error' : 'info');
 
-      // create SIP stack
-      this.oSipStack = new SIPml.Stack({
-        realm: '213.202.217.19',
-        impi: this.loggedInUser.extension,
-        impu: `sip:${this.loggedInUser.extension}@213.202.217.19`,
-        password: this.loggedInUser.extension,
-        display_name: this.loggedInUser.extension,
-        websocket_proxy_url: 'wss://213.202.217.19:8089/ws',
-        outbound_proxy_url: (localStorage ? localStorage.getItem('org.doubango.expert.sip_outboundproxy_url') : null),
-        ice_servers: (localStorage ? localStorage.getItem('org.doubango.expert.ice_servers') : null),
-        enable_rtcweb_breaker: (localStorage ? localStorage.getItem('org.doubango.expert.enable_rtcweb_breaker') == 'true' : false),
-        events_listener: {events: '*', listener: this.onSipEventStack},
-        enable_early_ims: (localStorage ? localStorage.getItem('org.doubango.expert.disable_early_ims') != 'true' : true), // Must be true unless you're using a real IMS network
-        enable_media_stream_cache: (localStorage ? localStorage.getItem('org.doubango.expert.enable_media_caching') == 'true' : false),
-        // bandwidth: (localStorage ? tsk_string_to_object(localStorage.getItem('org.doubango.expert.bandwidth')) : null), // could be redefined a session-level
-        // video_size: (localStorage ? tsk_string_to_object(localStorage.getItem('org.doubango.expert.video_size')) : null), // could be redefined a session-level
-        sip_headers: [
-          {name: 'User-Agent', value: 'IM-client/OMA1.0 sipML5-v1.2016.03.04'},
-          {name: 'Organization', value: 'Doubango Telecom'}
-        ]
-      });
+        // create SIP stack
+        this.oSipStack = new SIPml.Stack({
+          realm: '213.202.217.19',
+          impi: `${this.loggedInUserSoftphone.extension_no}-dabapbx`,
+          impu: `sip:${this.loggedInUserSoftphone.extension_no}-dabapbx@213.202.217.19`,
+          password: `${this.loggedInUserSoftphone.extension_no}`,
+          display_name: `${this.loggedInUserSoftphone.extension_no}-dabapbx`,
+          websocket_proxy_url: 'wss://213.202.217.19:8089/ws',
+          outbound_proxy_url: (localStorage ? localStorage.getItem('org.doubango.expert.sip_outboundproxy_url') : null),
+          ice_servers: (localStorage ? localStorage.getItem('org.doubango.expert.ice_servers') : null),
+          enable_rtcweb_breaker: (localStorage ? localStorage.getItem('org.doubango.expert.enable_rtcweb_breaker') == 'true' : false),
+          events_listener: {events: '*', listener: this.onSipEventStack},
+          enable_early_ims: (localStorage ? localStorage.getItem('org.doubango.expert.disable_early_ims') != 'true' : true), // Must be true unless you're using a real IMS network
+          enable_media_stream_cache: (localStorage ? localStorage.getItem('org.doubango.expert.enable_media_caching') == 'true' : false),
+          // bandwidth: (localStorage ? tsk_string_to_object(localStorage.getItem('org.doubango.expert.bandwidth')) : null), // could be redefined a session-level
+          // video_size: (localStorage ? tsk_string_to_object(localStorage.getItem('org.doubango.expert.video_size')) : null), // could be redefined a session-level
+          sip_headers: [
+            {name: 'User-Agent', value: 'IM-client/OMA1.0 sipML5-v1.2016.03.04'},
+            {name: 'Organization', value: 'Doubango Telecom'}
+          ]
+        });
 
-      if (this.oSipStack.start() != 0) {
-        // console.log('<b>Failed to start the SIP stack</b>');
-      } else return;
-    } catch (e) {
-      // console.log('<b>2:' + e + '</b>');
-    }
-    //btnRegister.disabled = false;
-
+        if (this.oSipStack.start() != 0) {
+          // console.log('<b>Failed to start the SIP stack</b>');
+        } else return;
+      } catch (e) {
+        // console.log('<b>2:' + e + '</b>');
+      }
+      //btnRegister.disabled = false;
+    });
   };
 
   sipTransfer = (number) => {
