@@ -13,8 +13,8 @@ import {SoftPhoneCallPopUpComponent} from './soft-phone-call-pop-up/soft-phone-c
 import {SoftPhoneBottomSheetComponent} from './soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneCallToActionComponent} from './soft-phone-call-to-action/soft-phone-call-to-action.component';
 import {SoftPhoneContactDetailComponent} from './soft-phone-contacts/soft-phone-contact-detail/soft-phone-contact-detail.component';
-import {SoftPhoneTransferCallComponent} from './soft-phone-transfer-call/soft-phone-transfer-call.component';
 import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-information/soft-phone-information.component';
+import {TimeAreaDigitalClockComponent} from "../dashboard/dashboard-toolbar/time-area/time-area-digital-clock/time-area-digital-clock.component";
 
 @NgModule({
   declarations: [
@@ -30,7 +30,7 @@ import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-informat
     SoftPhoneBottomSheetComponent,
     SoftPhoneInformationComponent,
     SoftPhoneCallToActionComponent,
-    SoftPhoneTransferCallComponent,
+    SoftPhoneCallToActionComponent,
     SoftPhoneContactDetailComponent
   ],
   imports: [

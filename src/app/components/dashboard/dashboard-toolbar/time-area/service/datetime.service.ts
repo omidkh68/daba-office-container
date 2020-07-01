@@ -12,7 +12,7 @@ import {Timezones} from '../timezones.interface';
 })
 export class DatetimeService {
   private weekDaysFa = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
-  private monthFa = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+  private monthFa = ['','فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
   private weekDaysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   private datetime: DatetimeInterface;
   private todayJalali = moment().locale('fa').format('D') + ' ' + this.monthFa[moment().locale('fa').format('M')] + ' ' + moment().locale('fa').format('YYYY');

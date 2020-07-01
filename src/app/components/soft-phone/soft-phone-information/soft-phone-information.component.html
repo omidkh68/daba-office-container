@@ -23,7 +23,9 @@
              class="mat-elevation-z2 width-35 height-35" matListAvatar>
 
         <h3 class="font-7-rem text-weight-bold" matLine> {{user.name}} </h3>
-        <p class="font-6-em text-gray-600" matLine>{{user.timezone | jalali}}</p>
+        <app-time-area-digital-clock [timezone]="user.timezone" class="font-6-em text-gray-600" matLine>
+        </app-time-area-digital-clock>
+<!--        <p class="font-6-em text-gray-600" matLine>{{user.timezone | jalali}}</p>-->
 
         <div [ngClass]="user.status === '1' ? 'online' : 'offline'"
              class="user-soft-phone-status pos-rel text-gray-500 width-30 height-30 round-corner-all"></div>

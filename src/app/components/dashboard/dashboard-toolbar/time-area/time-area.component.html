@@ -14,7 +14,8 @@
 
     <mat-list [ngClass]="rtlDirection ? 'text-left' : 'text-right'">
       <mat-list-item class="text-dark-mode-color font-8-rem">
-        <div mat-line>{{datetime ? datetime.time : ''}}</div>
+        <app-time-area-digital-clock [timezone]="loggedInUser.timezone" matLine>
+        </app-time-area-digital-clock>
         <div mat-line dir="ltr" class="font-8-rem"><span>{{loggedInUser.timezone}}</span></div>
       </mat-list-item>
     </mat-list>

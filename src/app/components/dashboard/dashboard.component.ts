@@ -134,6 +134,7 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
     this._subscription.add(
       this.api.getServiceUsers(3).subscribe((resp: any) => {
         if (resp.success) {
+          console.log(resp.data);
           this.userInfoService.changeAllUsers(resp.data);
         }
       })
