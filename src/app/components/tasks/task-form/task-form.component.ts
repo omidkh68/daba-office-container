@@ -15,7 +15,7 @@ import {TranslateService} from '@ngx-translate/core';
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss']
 })
-export class TaskFormComponent implements OnInit, OnDestroy {
+export class TaskFormComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   form: FormGroup;
 
@@ -99,16 +99,22 @@ export class TaskFormComponent implements OnInit, OnDestroy {
         }
       ]
     }, 200);
+  }
 
-    this._subscription.add(
-      this.form.get('assignTo').valueChanges.subscribe(selectedValue => {
-        const user = this.usersList.filter(user => user.adminId === selectedValue.adminId).pop();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.form && !changes.form.firstChange) {
+      this.form = changes.form.currentValue;
 
-        if (user) {
-          this.form.get('email').setValue(user.email);
-        }
-      })
-    );
+      this._subscription.add(
+        this.form.get('assignTo').valueChanges.subscribe(selectedValue => {
+          const user = this.usersList.filter(user => user.adminId === selectedValue.adminId).pop();
+
+          if (user) {
+            this.form.get('email').setValue(user.email);
+          }
+        })
+      );
+    }
   }
 
   cancelBtn() {

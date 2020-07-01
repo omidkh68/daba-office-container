@@ -40,12 +40,14 @@
     </button>
 
     <button class="aqua-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
+            [disabled]="true"
             mat-raised-button type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">chat</mat-icon>
       <span class="padding-mini-r-l">{{'soft_phone.call_to_action.message' | translate}}</span>
     </button>
 
     <button class="blue-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
+            [disabled]="true"
             mat-raised-button type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">record_voice_over</mat-icon>
       <span class="padding-mini-r-l">{{'soft_phone.call_to_action.voice' | translate}}</span>

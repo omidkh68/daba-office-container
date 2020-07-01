@@ -1,11 +1,14 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from './logic/api.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TodoInterface} from './logic/todo-interface';
-// import {UserInterface} from '../../users/logic/user-interface';
+import {LoginInterface} from '../../users/logic/login.interface';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {ApproveComponent} from '../../approve/approve.component';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-task-todo',
@@ -19,6 +22,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   @Input()
   rtlDirection: boolean;
 
+  @Input()
+  loginData: LoginInterface;
+
   form: FormGroup;
   edit: boolean = false;
   user: UserContainerInterface;
@@ -27,7 +33,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private apiService: ApiService,
+  constructor(private api: ApiService,
+              public dialog: MatDialog,
+              private loadingIndicatorService: LoadingIndicatorService,
               private fb: FormBuilder,
               private userInfoService: UserInfoService) {
     this._subscription.add(
@@ -55,20 +63,30 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   getTodoList() {
+    this.loadingIndicatorService.changeLoadingStatus(true);
+
     this.form.disable();
 
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
     this._subscription.add(
-      this.apiService.getTodoList(this.taskId).subscribe((resp: any) => {
+      this.api.getTodoList(this.taskId).subscribe((resp: any) => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
+
         if (resp.result === 1) {
           this.todoList = resp.contents;
 
           this.form.enable();
         }
+      }, error => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
       })
     );
   }
 
   checkTodo(todoItem: TodoInterface) {
+    this.loadingIndicatorService.changeLoadingStatus(true);
+
     this.form.disable();
 
     const data = {
@@ -77,8 +95,12 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       toggle: todoItem.isChecked ? 0 : 1
     };
 
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
     this._subscription.add(
-      this.apiService.toggleTodo(data).subscribe((resp: any) => {
+      this.api.toggleTodo(data).subscribe((resp: any) => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
+
         if (resp.result === 1) {
           const newTodo: TodoInterface = resp.content.todo;
 
@@ -92,6 +114,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
           this.form.enable();
         }
+      }, error => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
       })
     );
   }
@@ -110,12 +134,35 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       taskId: this.taskId
     };
 
-    this._subscription.add(
-      this.apiService.deleteTodo(data).subscribe((resp: any) => {
-        if (resp.result === 1) {
-          this.todoList = this.todoList.filter((todoItem: TodoInterface) => todoItem.todoId !== todo.todoId);
+    const dialogRef = this.dialog.open(ApproveComponent, {
+      data: {title: 'حذف آیتم', message: 'آیا از حذف این آیتم اطمینان دارید؟'},
+      autoFocus: false,
+      width: '70vh',
+      maxWidth: '350px',
+      panelClass: 'approve-detail-dialog',
+      height: '160px'
+    });
 
-          this.form.enable();
+    this._subscription.add(
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.loadingIndicatorService.changeLoadingStatus(true);
+
+          this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+          this._subscription.add(
+            this.api.deleteTodo(data).subscribe((resp: any) => {
+              this.loadingIndicatorService.changeLoadingStatus(false);
+
+              if (resp.result === 1) {
+                this.todoList = this.todoList.filter((todoItem: TodoInterface) => todoItem.todoId !== todo.todoId);
+
+                this.form.enable();
+              }
+            }, error => {
+              this.loadingIndicatorService.changeLoadingStatus(false);
+            })
+          );
         }
       })
     );
@@ -123,6 +170,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   addTodo() {
     if (this.form.get('todo').value.text !== '') {
+
+      this.loadingIndicatorService.changeLoadingStatus(true);
+
       this.form.disable();
 
       const data = {
@@ -131,8 +181,13 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
         text: this.form.get('todo').value.text
       };
 
+      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
       this._subscription.add(
-        this.apiService.createTodo(data).subscribe((resp: any) => {
+        this.api.createTodo(data).subscribe((resp: any) => {
+
+          this.loadingIndicatorService.changeLoadingStatus(false);
+
           if (resp.result === 1) {
             this.todoList.push(resp.content.todo);
 
@@ -142,6 +197,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
             this.form.enable();
           }
+        }, error => {
+
+          this.loadingIndicatorService.changeLoadingStatus(false);
         })
       );
     }
@@ -149,6 +207,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   saveTodo() {
     if (this.form.get('todo').value.text !== '') {
+
+      this.loadingIndicatorService.changeLoadingStatus(true);
+
       this.form.disable();
 
       const data = {
@@ -158,8 +219,13 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
         text: this.form.get('todo').value.text
       };
 
+      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
       this._subscription.add(
-        this.apiService.updateTodo(data).subscribe((resp: any) => {
+        this.api.updateTodo(data).subscribe((resp: any) => {
+
+          this.loadingIndicatorService.changeLoadingStatus(false);
+
           if (resp.result === 1) {
             const newTodo: TodoInterface = resp.content.todo;
 
@@ -179,6 +245,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
             this.form.enable();
           }
+        }, error => {
+          this.loadingIndicatorService.changeLoadingStatus(false);
         })
       );
     }

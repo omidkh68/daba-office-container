@@ -29,27 +29,24 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private _fb: FormBuilder,
-              private _router: Router,
+  constructor(private fb: FormBuilder,
+              private router: Router,
               private translate: TranslateService,
               private viewDirection: ViewDirectionService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
-              private apiService: ApiService) {
+              private api: ApiService) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
   }
 
   ngOnInit(): void {
-    this.form = this._fb.group({
+    this.form = this.fb.group({
       username: new FormControl('khosrojerdi@dabacenter.ir'),
       password: new FormControl('123456'),
       lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
     });
-
-    // todo: remove this line in production
-    setTimeout(() => this.login(), 500);
   }
 
   login() {
@@ -60,13 +57,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     delete(formValue.lang);
 
     this._subscription.add(
-      this.apiService.login(formValue).subscribe((resp: any) => {
+      this.api.login(formValue).subscribe((resp: any) => {
         const successfullMessage = this.getTranslate('login_info.login_successfully');
+
         this.messageService.showMessage(successfullMessage, 'success');
 
         this.userInfoService.changeLoginData(resp.data);
 
-        this._router.navigateByUrl(`/`);
+        this.router.navigateByUrl(`/`);
       }, error => {
         this.form.enable();
 

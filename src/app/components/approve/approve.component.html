@@ -1,0 +1,22 @@
+<div class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <div class="pos-rel height-full-minus-30">
+    <h1 class="margin-b-full text-red-600 font-full-em text-weight-500 margin-b-half">
+      {{dialogData.title ? dialogData.title : ''}}
+    </h1>
+
+    <div class="text-grey-600 no-margin">{{(dialogData.message ? dialogData.message : '') | translate}}</div>
+  </div>
+
+  <div class="height-30 full-width display-flex flex-direction-row-reverse">
+    <button mat-raised-button [mat-dialog-close]="true" type="submit" tabindex="13"
+            class="red-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+      <span class="padding-mini-r-l">{{'global.confirm' | translate}}</span>
+    </button>
+
+    <button [mat-dialog-close]="false" type="button"
+            class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
+      <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
+    </button>
+  </div>
+</div>

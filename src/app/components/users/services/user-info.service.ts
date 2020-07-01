@@ -3,6 +3,7 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 // import {UserInterface} from '../logic/user-interface';
 import {LoginInterface} from '../logic/login.interface';
 import {UserContainerInterface} from '../logic/user-container.interface';
+import {ElectronService} from '../../../services/electron.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class UserInfoService {
   private loginData = new BehaviorSubject(this._loginData);
   public currentLoginData = this.loginData.asObservable();
 
-  body = document.querySelector('html');
+  // body = document.querySelector('html');
 
   changeUserInfo(user: UserContainerInterface) {
     /*if (user.darkMode) {
@@ -44,7 +45,7 @@ export class UserInfoService {
     }
   }*/
 
-  changeLoginData(loginData: LoginInterface) {
+  changeLoginData(loginData: LoginInterface | null) {
     this.loginData.next(loginData);
   }
 }

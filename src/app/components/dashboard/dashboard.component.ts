@@ -1,72 +1,42 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
-// import {UserInterface} from '../users/logic/user-interface';
 import {MessageService} from '../../services/message.service';
+import {LoginDataClass} from '../../services/loginData.class';
 import {WindowInterface} from './logic/window.interface';
 import {UserInfoService} from '../users/services/user-info.service';
 import {ElectronService} from '../../services/electron.service';
+import {ServiceInterface} from '../services/logic/service-interface';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ServiceItemsInterface} from './logic/service-items.interface';
-import {UserContainerInterface} from '../users/logic/user-container.interface';
-import {ServiceInterface} from '../services/logic/service-interface';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent extends LoginDataClass implements OnInit, OnDestroy {
   rtlDirection: boolean;
   windowManager: Array<WindowInterface>;
-  loggedInUser: UserContainerInterface;
-  serviceList: ServiceItemsInterface[] = [];/*
-    {
-      serviceId: 1,
-      serviceNameFa: 'سیستم مدیریت تسک',
-      serviceNameEn: 'Task Management System',
-      serviceTitle: 'service-task',
-      icon: 'playlist_add_check',
-      status: 1,
-      width: 1200,
-      height: 700
-    },
-    {
-      serviceId: 2,
-      serviceNameFa: 'سیستم تلفنی',
-      serviceNameEn: 'PBX System',
-      serviceTitle: 'service-pbx',
-      icon: 'perm_phone_msg',
-      status: 1,
-      width: 350,
-      height: 500
-    },
-    {
-      serviceId: 3,
-      serviceNameFa: 'سیستم کنفرانس ویدیویی',
-      serviceNameEn: 'Video Conference System',
-      serviceTitle: 'service-video-conference',
-      icon: 'picture_in_picture',
-      status: 1,
-      width: 1200,
-      height: 700
-    }
-  ]*/
+  serviceList: ServiceItemsInterface[] = [];
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private electronService: ElectronService,
+              private injector: Injector,
               private viewDirection: ViewDirectionService,
               private windowManagerService: WindowManagerService,
               public dialog: MatDialog,
               private messageService: MessageService,
               private userInfoService: UserInfoService) {
+    super(injector, userInfoService);
+
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => {
         this.loggedInUser = user;
 
-        this.loggedInUser.list_permission.map((item: ServiceInterface) => {
+        this.loggedInUser.services.map((item: ServiceInterface) => {
           let icon: string = '';
           let width = 0;
           let height = 0;

@@ -3,7 +3,7 @@
     <div class="dialog-content-container height-full-minus-30 full-width">
       <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
         {{'tasks.task_filter.tasks_filter' | translate}}
-       </h1>
+      </h1>
 
       <div class="display-flex margin-r-l-reverse">
         <div class="half-width padding-r-l">
@@ -52,7 +52,7 @@
           <mat-form-field class="full-width font-9-em">
             <img matPrefix
                  *ngIf="form.get('adminId').valid"
-                 [src]="'assets/profileImg/'+form.get('email').value+'.jpg'"
+                 [src]="'assets/profileImg/'+form.get('userImg').value+'.jpg'"
                  [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                  class="width-20 height-20 round-corner-all pos-rel top-three-tenth">
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>

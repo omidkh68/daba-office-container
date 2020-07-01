@@ -22,7 +22,7 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, .93);
+  background-color: rgba(255, 255, 255, .95);
   filter: blur(8px);
   transform: scale(1.5);
   z-index: -1;
@@ -679,4 +679,18 @@ file-preview-container {
 
 .no-transition {
   transition-duration: 0s;
+}
+
+.loading-container {
+  background-color: rgba(255, 255, 255, .8);
+
+  svg path,
+  svg rect{
+    fill: #f57c00;
+  }
+}
+
+/* Fullcalendar stylesheets */
+.fc-view-container {
+  background-color: #fff;
 }

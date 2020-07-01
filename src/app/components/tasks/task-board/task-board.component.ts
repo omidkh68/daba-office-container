@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Injector,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
@@ -6,7 +16,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {TaskInterface} from '../logic/task-interface';
 import {BoardInterface} from '../logic/board-interface';
-import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {LoginDataClass} from '../../../services/loginData.class';
 import {SocketioService} from '../../../services/socketio.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
@@ -15,7 +25,8 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskStopComponent} from '../task-stop/task-stop.component';
 import {CurrentTaskService} from '../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {RefreshBoardService} from '../services/refresh-board.service';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 @Component({
@@ -23,7 +34,7 @@ import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomShe
   templateUrl: './task-board.component.html',
   styleUrls: ['./task-board.component.scss']
 })
-export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
+export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDestroy, OnChanges {
   @Output()
   triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
 
@@ -42,8 +53,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   @Input()
   filterBoards: any;
 
-  socket;
-  loggedInUser: UserContainerInterface;
+  // socket;
   myTasks: Array<TaskInterface> = [];
   rowHeight: string = '0';
   connectedTo = [];
@@ -57,16 +67,24 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private api: ApiService,
               private userInfoService: UserInfoService,
               private socketService: SocketioService,
+              private injector: Injector,
               private currentTaskService: CurrentTaskService,
+              private loadingIndicatorService: LoadingIndicatorService,
               public dialog: MatDialog,
               private translate: TranslateService,
-              public bottomSheet: MatBottomSheet) {
-    this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
-    );
+              private refreshBoardService: RefreshBoardService) {
+    super(injector, userInfoService);
 
     this._subscription.add(
       this.currentTaskService.currentTask.subscribe(currentTasks => this.currentTasks = currentTasks)
+    );
+
+    this._subscription.add(
+      this.refreshBoardService.currentDoRefresh.subscribe(doRefresh => {
+        if (doRefresh) {
+          this.getBoards();
+        }
+      })
     );
   }
 
@@ -82,16 +100,17 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
     // this.setupSocket();
   }
 
-  setupSocket() {
+  /*setupSocket() {
     this.socket = this.socketService.setupSocketConnection('boards');
-
     this.socket.emit('getBoards');
     this.socket.on('getBoards', data => {
       console.log(data);
     });
-  }
+  }*/
 
   drop(event: CdkDragDrop<string[]>) {
+    this.loadingIndicatorService.changeLoadingStatus(true);
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -102,11 +121,19 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
 
       let taskData = event.item.data;
 
+      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
       this._subscription.add(
         this.api.taskChangeStatus(taskData, event.container.id).subscribe(async (resp: any) => {
-          const newTask = resp.content.task;
+          this.loadingIndicatorService.changeLoadingStatus(false);
 
-          this.assignNewTaskToBoard(newTask, event.previousContainer.id, event.container.id);
+          if (resp.result) {
+            const newTask = resp.content.task;
+
+            this.assignNewTaskToBoard(newTask, event.previousContainer.id, event.container.id);
+          }
+        }, error => {
+          this.loadingIndicatorService.changeLoadingStatus(false);
         })
       );
     }
@@ -178,21 +205,6 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
       boardStatus: boardStatus
     };
 
-    /*const bottomSheetRef = this.bottomSheet.open(TaskDetailComponent, {
-      data: data,
-      autoFocus: false
-    });
-
-    this._subscription.add(
-      bottomSheetRef.afterDismissed().subscribe(result => {
-        if (result !== undefined && result !== false) {
-          this.assignNewTaskToBoard(result.task, result.prevContainer, result.newContainer);
-
-          // this.socket.emit('updatedata');
-        }
-      })
-    );*/
-
     this.triggerBottomSheet.emit({
       component: TaskDetailComponent,
       height: '98%',
@@ -202,12 +214,20 @@ export class TaskBoardComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getBoards() {
+    this.loadingIndicatorService.changeLoadingStatus(true);
+
     if (this.loggedInUser && this.loggedInUser.email) {
+      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
       this._subscription.add(
         this.api.boards(this.loggedInUser.email).subscribe((resp: any) => {
+          this.loadingIndicatorService.changeLoadingStatus(false);
+
           if (resp.result === 1) {
             this.putTasksToAllBoards(resp);
           }
+        }, error => {
+          this.loadingIndicatorService.changeLoadingStatus(false);
         })
       );
     }

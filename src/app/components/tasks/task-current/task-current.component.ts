@@ -26,6 +26,9 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   taskEssentialInfo: TaskEssentialInfo;
 
+  @Input()
+  rtlDirection: boolean;
+
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
   user: UserContainerInterface;

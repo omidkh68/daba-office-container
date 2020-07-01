@@ -1,15 +1,15 @@
-import * as io from 'socket.io-client';
-import {Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+// import * as io from 'socket.io-client';
+import {Component, Injector, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
-import {ProjectInterface} from '../../projects/logic/project-interface';
-import {ApiService} from '../logic/api.service';
-import {FullCalendarComponent} from '@fullcalendar/angular';
-import {AppConfig} from '../../../../environments/environment';
+import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {ProjectInterface} from '../../projects/logic/project-interface';
+import {FullCalendarComponent} from '@fullcalendar/angular';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-task-calendar',
@@ -17,7 +17,7 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
   styleUrls: ['./task-calendar.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskCalendarComponent implements OnInit, OnDestroy {
+export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnDestroy {
   @ViewChild('calendar') calendarComponent: FullCalendarComponent;
   calendarApi: any;
 
@@ -32,9 +32,8 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
 
   tasks: TaskInterface[] = [];
   usersList: UserInterface[] = [];
-  loggedInUser: UserContainerInterface;
   projectsList: ProjectInterface[] = [];
-  socket = io(AppConfig.SOCKET_URL);
+  // socket = io(AppConfig.SOCKET_URL);
   calendarEvents = [];
   events = [
     {title: 'event 1', start: '2020-05-10 12:00', end: '2020-05-10 13:00'},
@@ -46,11 +45,11 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private injector: Injector,
+              private loadingIndicatorService: LoadingIndicatorService,
               private userInfoService: UserInfoService,
               public dialog: MatDialog) {
-    this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
-    );
+    super(injector, userInfoService);
   }
 
   changeViewMode(mode) {
@@ -67,9 +66,9 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
 
     this.getBoards();
 
-    this.socket.on('update-data', (data: any) => {
+    /*this.socket.on('update-data', (data: any) => {
       this.getBoards();
-    });
+    });*/
   }
 
   getBoards(resp = null) {
@@ -92,14 +91,21 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
         });
 
         this.calendarEvents = calendarEvent;
+
         setTimeout(() => {
           this.calendarApi.gotoDate(new Date(Date.UTC(2018, 8, 1)))
         }, 3000)
       }
     } else {
       if (this.loggedInUser && this.loggedInUser.email) {
+        this.loadingIndicatorService.changeLoadingStatus(true);
+
+        this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
         this._subscription.add(
           this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
+            this.loadingIndicatorService.changeLoadingStatus(false);
+
             if (resp.result === 1) {
               this.usersList = resp.content.users.list;
               this.projectsList = resp.content.projects.list;
@@ -119,6 +125,8 @@ export class TaskCalendarComponent implements OnInit, OnDestroy {
 
               this.calendarEvents = calendarEvent;
             }
+          }, error => {
+            this.loadingIndicatorService.changeLoadingStatus(false);
           })
         );
       }

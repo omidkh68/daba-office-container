@@ -6,3 +6,18 @@
   </span>
 </div>
 -->
+
+<div class="full-width full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <div mat-subheader>{{'soft_phone.public_conference.conference_list' | translate}}</div>
+
+  <mat-list class="full-width">
+    <mat-list-item (click)="openSheet(room)"
+                   *ngFor="let room of publicConference"
+                   class="highlight cursor-pointer padding-r-l height-50 margin-b-full">
+      <img [alt]="room.name" [src]="'assets/profileImg/'+ room.email +'.jpg'"
+           class="mat-elevation-z2 width-35 height-35" matListAvatar>
+
+      <h3 class="font-7-rem text-weight-bold" matLine> {{room.name}} </h3>
+    </mat-list-item>
+  </mat-list>
+</div>

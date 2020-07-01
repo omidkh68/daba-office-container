@@ -1,6 +1,9 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
-// import {UserInterface} from '../../../users/logic/user-interface';
+import {ApiService} from '../../../users/logic/api.service';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {LoginInterface} from '../../../users/logic/login.interface';
+import {UserInfoService} from '../../../users/services/user-info.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 
@@ -9,22 +12,42 @@ import {UserContainerInterface} from '../../../users/logic/user-container.interf
   templateUrl: './profile-menu.component.html',
   styleUrls: ['./profile-menu.component.scss']
 })
-export class ProfileMenuComponent {
+export class ProfileMenuComponent implements OnDestroy {
   @Input()
   loggedInUser: UserContainerInterface;
 
   @Input()
   rtlDirection: boolean;
 
-  constructor(private _router: Router,
+  loginData: LoginInterface;
+
+  private _subscription: Subscription = new Subscription();
+
+  constructor(private router: Router,
+              private api: ApiService,
+              private userInfoService: UserInfoService,
               private windowManagerService: WindowManagerService) {
   }
 
   logout() {
-    this.windowManagerService.closeAllServices().then(() => {
-      setTimeout(() => {
-        this._router.navigateByUrl(`/login`);
-      }, 500);
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+    this.api.logout().subscribe((resp: any) => {
+      if (resp.success) {
+        this.userInfoService.changeLoginData(null);
+
+        this.windowManagerService.closeAllServices().then(() => {
+          setTimeout(() => {
+            this.router.navigateByUrl(`/login`);
+          }, 500);
+        });
+      }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

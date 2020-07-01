@@ -24,7 +24,12 @@
     },
     "from_date": "از تاریخ",
     "to_date": "تا تاریخ",
-    "date_error": "لطغا تاریخ را انتخاب نمایید"
+    "date_error": "لطغا تاریخ را انتخاب نمایید",
+    "confirm": "تأیید",
+    "loading": "در حال بارگزاری ...",
+    "reconnecting": "در حال اتصال ...",
+    "online": "شما متصل به شبکه هستید",
+    "offline": "اتصال قطع می باشد! شما متصل به شبکه نمی باشید"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -44,7 +49,8 @@
       "status": "وضعیت",
       "address_book": "دفتر تلفن",
       "dial_pad": "شماره گیر",
-      "call_logs": "گزارش تماس"
+      "call_logs": "گزارش تماس",
+      "public_room": "کنفرانس ها"
     },
     "call_pop_up": {
       "hang_up": "قطع تماس",
@@ -67,7 +73,10 @@
       "want_to_call_with_you": "در حال تماس با شماست،",
       "do_you_accept": "آیا قبول می کنید؟"
     },
-    "transfer_call": "انتقال تماس"
+    "transfer_call": "انتقال تماس",
+    "public_conference": {
+      "conference_list": "کنفرانس های عمومی"
+    }
   },
   "tasks": {
     "main": {
@@ -137,15 +146,22 @@
       "tasks_filter": "فیلتر تسک ها",
       "filter_types": "نوع فیلتر",
       "by_create_date": "بر اساس تاریخ ایجاد تسک",
-      "by_project":"بر اساس نام پروژه",
+      "by_project": "بر اساس نام پروژه",
       "by_user": "بر اساس کاربر مورد نظر",
-      "by_start_date":"بر اساس تاریخ شروع تسک",
+      "by_start_date": "بر اساس تاریخ شروع تسک",
       "by_stop_date": "بر اساس تاریخ اتمام تسک",
-      "by_user_start_date":"بر اساس تاریخ شروع کاربر",
+      "by_user_start_date": "بر اساس تاریخ شروع کاربر",
       "by_user_stop_date": "بر اساس تاریخ اتمام کاربر",
-      "by_started_task":"بر اساس تسک های شروع شده",
+      "by_started_task": "بر اساس تسک های شروع شده",
       "by_postponed": "بر اساس تسک های به تعویق افتاده",
       "in_progress_tasks": "تسک های در حال انجام"
+    },
+    "calendar": {
+      "month": "ماه",
+      "today": "امروز",
+      "week":"هفته",
+      "day": "روز",
+      "list":"لیست"
     }
   },
   "login_info": {

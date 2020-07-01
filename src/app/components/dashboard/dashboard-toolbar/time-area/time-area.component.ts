@@ -33,36 +33,29 @@ export class TimeAreaComponent implements OnInit {
   options: Timezones[];
   filteredOptions: Observable<Timezones[]>;
 
-
-  displayFn(timezone: Timezones): string {
-    return timezone && timezone.city ? timezone.city : '';
-  }
-
-  private _filter(name: string): Timezones[] {
-    const filterValue = name.toLowerCase();
-
-    return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
-  }
-
   constructor(private render: Renderer2, private datetimeService: DatetimeService) {
     this.checkMoreClock = false;
     this.options = datetimeService.aryIannaTimeZones;
     this.cityClocksList = [{city: 'Tehran', timezone: 'Asia/Tehran'}]
   }
 
+  displayFn(timezone: Timezones): string {
+    return timezone && timezone.city ? timezone.city : '';
+  }
+
   addMoreClock(event) {
     event.stopPropagation();
+
     this.checkMoreClock = this.checkMoreClock ? false : true;
-    console.log(event);
   }
 
   showMoreClockContent(event) {
     event.stopPropagation();
+
     this.checkMoreClockContent = true;
   }
 
   setClockCity(option) {
-    console.log(option);
     this.checkMoreClock = false;
     this.checkMoreClockContent = false;
     this.cityClocksList.push(option)
@@ -72,27 +65,23 @@ export class TimeAreaComponent implements OnInit {
     this.getDateTime();
   }
 
-  // ngAfterViewInit(): void {
-  //   //this.timer();
-  //   this.init();
-  //   //console.log("Husin",this.datetime);
-  //   //setInterval(() => this.timer(), 1000);
-  // }
-
   getDateTime(): void {
     this.datetime = this.datetimeService.changeDatetimeLabel(this.rtlDirection);
   }
 
   ngOnInit(): void {
-
-    //console.log("CITY",this.cityClocksList);
-
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
         startWith(''),
         map(value => typeof value === 'string' ? value : value.name),
         map(name => name ? this._filter(name) : this.options.slice())
       );
+  }
+
+  private _filter(name: string): Timezones[] {
+    const filterValue = name.toLowerCase();
+
+    return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
   }
 
 }

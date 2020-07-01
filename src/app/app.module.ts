@@ -15,6 +15,7 @@ import {AppComponent} from './app.component';
 import {CommonModule} from '@angular/common';
 import {LoginComponent} from './components/login/login.component';
 import {MessageComponent} from './components/message/message.component';
+import {ApproveComponent} from './components/approve/approve.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -25,7 +26,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   declarations: [
     AppComponent,
     LoginComponent,
-    MessageComponent
+    MessageComponent,
+    ApproveComponent
   ],
   imports: [
     HomeModule,

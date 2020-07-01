@@ -41,8 +41,6 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   keys: Array<KeysInterface> = [
     {type: 'mute_unmute', num: 'volume_up', changeIcon: 'volume_mute'},
     {type: 'forward', num: 'phone_forwarded', changeIcon: 'phone_forwarded'}
-    // {type: '', num: 'person_add'}
-    // {type: '', num: 'person_add'}
   ];
 
   private _subscription: Subscription = new Subscription();
@@ -62,6 +60,14 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.data = this.bottomSheetData.data;
+
+    if (this.timeCounter) {
+      this.timeCounter.unsubscribe();
+
+      this.counter = null;
+
+      this.callTimer = '00:00';
+    }
 
     this._subscription.add(
       this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
@@ -126,6 +132,8 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
 
     if (this.timeCounter) {
       this.timeCounter.unsubscribe();
+
+      this.counter = null;
 
       this.callTimer = '00:00';
     }

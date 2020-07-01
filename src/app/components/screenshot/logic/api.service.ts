@@ -8,7 +8,9 @@ import {AppConfig} from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  private API_URL = AppConfig.API_URL;
+  public accessToken = '';
+  // private API_URL = AppConfig.API_URL;
+  private API_URL = AppConfig.CONTAINER_URL + '/project';
 
   /**
    * @type {HttpHeaders}
@@ -24,10 +26,14 @@ export class ApiService {
   }
 
   createScreenshot(screenshotData: ScreenshotInterface): Observable<ScreenshotInterface> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
     return this._http.post<ScreenshotInterface>(`${this.API_URL}/screenshots/add`, screenshotData, this.headers);
   }
 
   getTickTok() {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
     return this._http.get(`${this.API_URL}/screenshots/serverTickTok`, this.headers);
   }
 }

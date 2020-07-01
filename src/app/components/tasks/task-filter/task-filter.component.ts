@@ -1,18 +1,19 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import * as moment from 'moment';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {FilterInterface} from '../logic/filter-interface';
-import {ProjectInterface} from '../../projects/logic/project-interface';
-import {UserInterface} from '../../users/logic/user-interface';
 import {ApiService} from '../logic/api.service';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {UserInterface} from '../../users/logic/user-interface';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FilterInterface} from '../logic/filter-interface';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {ProjectInterface} from '../../projects/logic/project-interface';
+import {TranslateService} from '@ngx-translate/core';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {TranslateService} from '@ngx-translate/core';
-import {UserInfoService} from '../../users/services/user-info.service';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {LoginDataClass} from '../../../services/loginData.class';
 
 export interface filterType {
   index: number;
@@ -24,7 +25,7 @@ export interface filterType {
   selector: 'app-task-filter',
   templateUrl: './task-filter.component.html'
 })
-export class TaskFilterComponent implements OnInit, OnDestroy {
+export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDestroy {
   rtlDirection: boolean;
   filterData: FilterInterface = {
     userId: 0,
@@ -34,12 +35,12 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
     projectId: 0,
     taskName: '',
     email: '0',
+    userImg: '0',
     type: '',
     typeId: 0,
     percentageStatus: false
   };
   projectsList: ProjectInterface[] = [];
-  loggedInUser: UserContainerInterface;
   usersList: UserInterface[] = [];
   form: FormGroup;
   filterTypes: filterType[] = [
@@ -95,16 +96,16 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService,
               private viewDirection: ViewDirectionService,
               private _fb: FormBuilder,
+              private injector: Injector,
               private translate: TranslateService,
+              private loadingIndicatorService: LoadingIndicatorService,
               public dialogRef: MatDialogRef<TaskFilterComponent>,
               private userInfoService: UserInfoService,
               @Inject(MAT_DIALOG_DATA) public data: FilterTaskInterface) {
-    this._subscription.add(
-      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
-    );
+    super(injector, userInfoService);
 
     this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
 
     this.usersList = this.data.usersList;
@@ -120,7 +121,8 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         dateStart: this.filterData.dateStart ? this.filterData.dateStart : '',
         dateStop: this.filterData.dateStop ? this.filterData.dateStop : '',
         adminId: this.filterData.adminId ? this.filterData.adminId : 0,
-        email: this.filterData.email ? this.filterData.email : '0',
+        email: this.filterData.email ? this.filterData.email : this.loggedInUser.email,
+        userImg: this.filterData.userImg ? this.filterData.userImg : '0',
         type: this.filterData.type ? this.filterData.type : '',
         percentageStatus: this.filterData.percentageStatus ? this.filterData.percentageStatus : false
       });
@@ -136,7 +138,7 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
           const user = this.usersList.filter(user => user.adminId === selectedValue).pop();
 
           if (user) {
-            this.form.get('email').setValue(user.email);
+            this.form.get('userImg').setValue(user.email);
           }
         })
       );
@@ -169,8 +171,9 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
     return new Promise((resolve) => {
       this.form = this._fb.group({
         userId: new FormControl(1, Validators.required),
+        userImg: new FormControl('0'),
         typeId: new FormControl(9, Validators.required),
-        email: new FormControl('0'),
+        email: new FormControl(this.loggedInUser.email),
         taskName: new FormControl(''),
         projectId: new FormControl(0),
         dateStart: new FormControl(''),
@@ -281,7 +284,8 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    this.form.disable();
+    this.loadingIndicatorService.changeLoadingStatus(true);
+    // this.form.disable();
 
     const formValue: FilterInterface = Object.assign({}, this.form.value);
 
@@ -311,8 +315,12 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
       delete (formValue.percentageStatus);
     }
 
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
     this._subscription.add(
       this.api.filterTask(formValue).subscribe((resp: any) => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
+
         if (resp.result === 1) {
           this.dialogRef.close(
             {
@@ -324,6 +332,8 @@ export class TaskFilterComponent implements OnInit, OnDestroy {
         } else {
           this.form.enable();
         }
+      }, error => {
+        this.loadingIndicatorService.changeLoadingStatus(false);
       })
     );
   }

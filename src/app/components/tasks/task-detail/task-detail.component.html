@@ -54,7 +54,9 @@
 
     <div [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
          class="task-todo-container full-height padding-r-l padding-mini-t-b pos-rel">
-      <app-task-todo [rtlDirection]="rtlDirection" [taskId]="task.taskId"></app-task-todo>
+      <app-task-todo [rtlDirection]="rtlDirection"
+                     [taskId]="task.taskId"
+                     [loginData]="loginData"></app-task-todo>
     </div>
 
     <!--<div class="task-file-container padding-r-l padding-mini-t-b clear-both full-width pos-rel">
@@ -65,11 +67,17 @@
   <ng-template #reportView>
     <div *ngIf="task" class="full-width full-height">
       <div class="task-report-container padding-r-l padding-mini-t-b full-height float-right pos-rel">
-        <app-task-report [rtlDirection]="rtlDirection" [taskId]="task.taskId" [usersList]="usersList"></app-task-report>
+        <app-task-report [rtlDirection]="rtlDirection"
+                         [loginData]="loginData"
+                         [taskId]="task.taskId"
+                         [usersList]="usersList"></app-task-report>
       </div>
 
       <div class="task-activity-container full-height padding-r-l padding-mini-t-b float-left pos-rel">
-        <app-task-activity [rtlDirection]="rtlDirection" [task]="task"></app-task-activity>
+        <app-task-activity
+          [rtlDirection]="rtlDirection"
+          [loginData]="loginData"
+          [task]="task"></app-task-activity>
       </div>
     </div>
   </ng-template>

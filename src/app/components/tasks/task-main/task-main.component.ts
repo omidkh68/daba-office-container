@@ -3,6 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {FilterInterface} from '../logic/filter-interface';
+import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {TaskAddComponent} from '../task-add/task-add.component';
@@ -11,6 +12,8 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
@@ -28,32 +31,34 @@ export class TaskMainComponent implements AfterViewInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: TaskBottomSheetComponent;
 
   rtlDirection: boolean;
+  loadingIndicator: boolean = false;
+  loggedInUser: UserContainerInterface;
   taskEssentialInfo: TaskEssentialInfo;
   pushTaskToBoard;
   doResetFilter: boolean = false;
   activeTab: number = 0;
   refreshBoardData: boolean = false;
-  filterData: FilterInterface = {
-    userId: 0,
-    adminId: 0,
-    dateStart: '',
-    dateStop: '',
-    projectId: 0,
-    taskName: '',
-    type: '',
-    email: '0',
-    typeId: 0
-  };
+  filterData: FilterInterface = null;
   filteredBoardsData: any;
   tabs = [];
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
+              private loadingIndicatorService: LoadingIndicatorService,
               private translate: TranslateService,
+              private userInfoService: UserInfoService,
               public dialog: MatDialog) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
+
+    this._subscription.add(
+      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
+    );
+
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );
   }
 
@@ -72,6 +77,19 @@ export class TaskMainComponent implements AfterViewInit, OnDestroy {
         }
       ];
     }, 200);
+
+    this.filterData = {
+      userId: 0,
+      userImg: '0',
+      adminId: 0,
+      dateStart: '',
+      dateStop: '',
+      projectId: 0,
+      taskName: '',
+      type: '',
+      email: this.loggedInUser.email,
+      typeId: 0
+    };
   }
 
   addNewTask() {
