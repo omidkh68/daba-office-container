@@ -53,7 +53,7 @@ export class SoftPhoneKeypadComponent implements OnInit {
   keyPress(event, key: KeysInterface) {
     this.numeric += key.num;
 
-    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric.includes(item.extension)).pop();
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric.includes(item.extension_no)).pop();
 
     this.softPhoneService.sipSendDTMF(key.num);
 
@@ -78,7 +78,7 @@ export class SoftPhoneKeypadComponent implements OnInit {
   changeNumber(event) {
     this.numeric = event;
 
-    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric.includes(item.extension)).pop();
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric.includes(item.extension_no)).pop();
 
     if (contact) {
       this.oldNumeric = this.numeric;
@@ -95,7 +95,7 @@ export class SoftPhoneKeypadComponent implements OnInit {
 
     let contactInfo: any;
 
-    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.oldNumeric.includes(item.extension)).pop();
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.oldNumeric.includes(item.extension_no)).pop();
 
     if (contact) {
       contactInfo = contact;
@@ -116,10 +116,10 @@ export class SoftPhoneKeypadComponent implements OnInit {
 
     let contactInfo: any;
 
-    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.oldNumeric.includes(item.extension)).pop();
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.oldNumeric.includes(item.extension_no)).pop();
 
     if (contact) {
-      contactInfo = contact.extension;
+      contactInfo = contact.extension_no;
     } else {
       contactInfo = this.numeric;
     }

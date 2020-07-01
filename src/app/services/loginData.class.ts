@@ -5,11 +5,14 @@ import {UserContainerInterface} from '../components/users/logic/user-container.i
 export class LoginDataClass {
   loginData: LoginInterface;
   loggedInUser: UserContainerInterface;
+  allUsers: Array<UserContainerInterface> = [];
 
   constructor(private injectorObj: Injector,
               private userInfoServiceBase) {
     this.userInfoServiceBase.currentLoginData.subscribe(loginData => this.loginData = loginData);
 
     this.userInfoServiceBase.currentUserInfo.subscribe(user => this.loggedInUser = user);
+
+    this.userInfoServiceBase.currentAllUsers.subscribe(users => this.allUsers = users)
   }
 }

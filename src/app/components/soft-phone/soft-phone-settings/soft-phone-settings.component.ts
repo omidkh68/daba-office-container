@@ -27,8 +27,8 @@ export class SoftPhoneSettingsComponent implements OnInit {
     this.publicConference.push({
       id: -1,
       name: 'Daba Employees',
-      email: 'daba',
-      extension: '9999'
+      email: '',
+      extension_no: '9999',
     });
   }
 

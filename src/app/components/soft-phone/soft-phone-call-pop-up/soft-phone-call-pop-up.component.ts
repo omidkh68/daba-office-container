@@ -96,7 +96,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.softPhoneService.sipCall('call-audio', this.data.extension);
+    this.softPhoneService.sipCall('call-audio', this.data.extension_no);
   }
 
   callEvent(key: KeysInterface) {

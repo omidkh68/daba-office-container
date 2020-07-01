@@ -63,7 +63,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   getTodoList() {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     this.form.disable();
 
@@ -71,7 +71,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.api.getTodoList(this.taskId).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
           this.todoList = resp.contents;
@@ -79,13 +79,13 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           this.form.enable();
         }
       }, error => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
       })
     );
   }
 
   checkTodo(todoItem: TodoInterface) {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     this.form.disable();
 
@@ -99,7 +99,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.api.toggleTodo(data).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
           const newTodo: TodoInterface = resp.content.todo;
@@ -115,7 +115,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           this.form.enable();
         }
       }, error => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
       })
     );
   }
@@ -146,13 +146,13 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.loadingIndicatorService.changeLoadingStatus(true);
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
           this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
           this._subscription.add(
             this.api.deleteTodo(data).subscribe((resp: any) => {
-              this.loadingIndicatorService.changeLoadingStatus(false);
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
               if (resp.result === 1) {
                 this.todoList = this.todoList.filter((todoItem: TodoInterface) => todoItem.todoId !== todo.todoId);
@@ -160,7 +160,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
                 this.form.enable();
               }
             }, error => {
-              this.loadingIndicatorService.changeLoadingStatus(false);
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
             })
           );
         }
@@ -171,7 +171,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   addTodo() {
     if (this.form.get('todo').value.text !== '') {
 
-      this.loadingIndicatorService.changeLoadingStatus(true);
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
       this.form.disable();
 
@@ -186,7 +186,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       this._subscription.add(
         this.api.createTodo(data).subscribe((resp: any) => {
 
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result === 1) {
             this.todoList.push(resp.content.todo);
@@ -199,7 +199,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           }
         }, error => {
 
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
         })
       );
     }
@@ -208,7 +208,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   saveTodo() {
     if (this.form.get('todo').value.text !== '') {
 
-      this.loadingIndicatorService.changeLoadingStatus(true);
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
       this.form.disable();
 
@@ -224,7 +224,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       this._subscription.add(
         this.api.updateTodo(data).subscribe((resp: any) => {
 
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result === 1) {
             const newTodo: TodoInterface = resp.content.todo;
@@ -246,7 +246,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
             this.form.enable();
           }
         }, error => {
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
         })
       );
     }

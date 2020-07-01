@@ -9,8 +9,9 @@ import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ResultApiInterface} from '../logic/result-api.interface';
 import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {ExtensionListInterface} from '../logic/extension-list.interface';
+import {ExtensionInterface} from '../logic/extension.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
@@ -33,10 +34,11 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
   @ViewChild('dtmfTone', {static: false}) dtmfTone: ElementRef;
 
   rtlDirection: boolean;
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'pbx'};
   activeTab: number = 1;
   tabs: Array<TabInterface> = [];
 
-  softPhoneUsers: Array<SoftphoneUserInterface> = [
+  softPhoneUsers: Array<SoftphoneUserInterface> = [];/*[
     {
       id: 9,
       name: 'آقای بصیری',
@@ -118,7 +120,7 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
       timezone: null,
       extension: ''
     }
-  ];
+  ]*/
 
   private _subscription: Subscription = new Subscription();
 
@@ -127,12 +129,21 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
               private injector: Injector,
               private softPhoneService: SoftPhoneService,
               private notificationService: NotificationService,
+              private loadingIndicatorService: LoadingIndicatorService,
               private translate: TranslateService,
               private userInfoService: UserInfoService) {
     super(injector, userInfoService);
 
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
+
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
+
+    this._subscription.add(
+      this.softPhoneService.currentSoftPhoneUsers.subscribe(users => this.softPhoneUsers = users)
     );
 
     /*this._subscription.add(
@@ -179,21 +190,21 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
   }
 
   ngOnInit(): void {
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
+
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
       this.api.getExtensionList().subscribe((resp: ResultApiInterface) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
         if (resp.success.toLowerCase() === 'true') {
-          this.softPhoneUsers = this.softPhoneUsers.map(user => {
-            const findExtension: ExtensionListInterface = resp.list.filter((item: ExtensionListInterface) => item.username === user.email).pop();
-
-            if (findExtension) {
-              user.extension = findExtension.extension_no;
-            }
-
-            return user;
+          this.softPhoneService.changeExtensionList(resp.list).then(() => {
+            this.softPhoneService.sipRegister();
           });
         }
+      }, error => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
       })
     );
   }
@@ -205,10 +216,6 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
       ringbacktone: this.ringbacktone,
       dtmfTone: this.dtmfTone
     });
-
-    this.softPhoneService.sipRegister();
-
-    this.softPhoneService.changeSoftPhoneUsers(this.softPhoneUsers);
 
     setTimeout(() => {
       this.tabs = [

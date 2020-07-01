@@ -32,7 +32,7 @@ export class SoftPhoneContactDetailComponent implements OnInit, OnDestroy {
         this.form.patchValue({
           name: this.data.name,
           family: this.data.family,
-          extension: this.data.extension
+          extension_no: this.data.extension_no
         });
       });
     } else {
@@ -45,7 +45,7 @@ export class SoftPhoneContactDetailComponent implements OnInit, OnDestroy {
       this.form = this.fb.group({
         name: new FormControl('', Validators.required),
         family: new FormControl('', Validators.required),
-        extension: new FormControl(0, Validators.required)
+        extension_no: new FormControl(0, Validators.required)
       });
 
       resolve();

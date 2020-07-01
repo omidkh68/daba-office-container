@@ -1,7 +1,7 @@
-import {ExtensionListInterface} from './extension-list.interface';
+import {ExtensionInterface} from './extension.interface';
 
 export interface ResultApiInterface {
   recordsCount: number;
-  list: ExtensionListInterface[];
+  list: Array<ExtensionInterface>;
   success: string;
 }

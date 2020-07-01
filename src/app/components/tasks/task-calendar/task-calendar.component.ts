@@ -98,13 +98,13 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
       }
     } else {
       if (this.loggedInUser && this.loggedInUser.email) {
-        this.loadingIndicatorService.changeLoadingStatus(true);
+        this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
         this._subscription.add(
           this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
-            this.loadingIndicatorService.changeLoadingStatus(false);
+            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
             if (resp.result === 1) {
               this.usersList = resp.content.users.list;
@@ -126,7 +126,7 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
               this.calendarEvents = calendarEvent;
             }
           }, error => {
-            this.loadingIndicatorService.changeLoadingStatus(false);
+            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
           })
         );
       }

@@ -13,7 +13,7 @@ import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
@@ -31,7 +31,7 @@ export class TaskMainComponent implements AfterViewInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: TaskBottomSheetComponent;
 
   rtlDirection: boolean;
-  loadingIndicator: boolean = false;
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'project'};
   loggedInUser: UserContainerInterface;
   taskEssentialInfo: TaskEssentialInfo;
   pushTaskToBoard;

@@ -284,7 +284,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
   }
 
   submit() {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
     // this.form.disable();
 
     const formValue: FilterInterface = Object.assign({}, this.form.value);
@@ -319,7 +319,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
 
     this._subscription.add(
       this.api.filterTask(formValue).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
           this.dialogRef.close(
@@ -333,7 +333,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
           this.form.enable();
         }
       }, error => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
       })
     );
   }

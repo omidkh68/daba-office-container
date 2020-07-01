@@ -67,13 +67,13 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   }
 
   getTaskReport() {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
       this.api.getTaskReport(this.taskId).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
           this.taskReports = resp.contents;
@@ -104,7 +104,7 @@ export class TaskReportComponent implements OnInit, OnDestroy {
           this.dataSource.paginator = this.paginator;
         }
       }, error => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
       })
     );
   }

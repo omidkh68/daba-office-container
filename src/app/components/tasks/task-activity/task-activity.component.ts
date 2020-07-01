@@ -63,19 +63,19 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
 
   getActivities() {
     return new Promise((resolve) => {
-      this.loadingIndicatorService.changeLoadingStatus(true);
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
         this.api.getActivities(this.task.taskId).subscribe((resp: any) => {
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result === 1) {
             resolve(resp.contents);
           }
         }, error => {
-          this.loadingIndicatorService.changeLoadingStatus(false);
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
         })
       );
     });

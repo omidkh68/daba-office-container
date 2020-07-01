@@ -63,7 +63,7 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    this.loadingIndicatorService.changeLoadingStatus(true);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     const formValue: TaskDurationInterface = Object.assign({}, this.form.value);
 
@@ -71,7 +71,7 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.api.boardsCalendarDurationTask(formValue).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
           let calendarEvent = [];
@@ -99,7 +99,7 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
           this.form.enable();
         }
       }, error => {
-        this.loadingIndicatorService.changeLoadingStatus(false);
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
       })
     );
   }

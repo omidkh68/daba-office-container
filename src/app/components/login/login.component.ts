@@ -47,6 +47,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: new FormControl('123456'),
       lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
     });
+
+    /*// todo: remove this line in production
+    setTimeout(() => this.login(), 500);*/
   }
 
   login() {

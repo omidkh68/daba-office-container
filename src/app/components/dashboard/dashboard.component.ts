@@ -10,6 +10,7 @@ import {ServiceInterface} from '../services/logic/service-interface';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ServiceItemsInterface} from './logic/service-items.interface';
+import {ApiService} from '../users/logic/api.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,15 +20,47 @@ import {ServiceItemsInterface} from './logic/service-items.interface';
 export class DashboardComponent extends LoginDataClass implements OnInit, OnDestroy {
   rtlDirection: boolean;
   windowManager: Array<WindowInterface>;
-  serviceList: ServiceItemsInterface[] = [];
+  serviceList: ServiceItemsInterface[] = [];/*
+    {
+      serviceId: 1,
+      serviceNameFa: 'سیستم مدیریت تسک',
+      serviceNameEn: 'Task Management System',
+      serviceTitle: 'service-task',
+      icon: 'playlist_add_check',
+      status: 1,
+      width: 1200,
+      height: 700
+    },
+    {
+      serviceId: 2,
+      serviceNameFa: 'سیستم تلفنی',
+      serviceNameEn: 'PBX System',
+      serviceTitle: 'service-pbx',
+      icon: 'perm_phone_msg',
+      status: 1,
+      width: 350,
+      height: 500
+    },
+    {
+      serviceId: 3,
+      serviceNameFa: 'سیستم کنفرانس ویدیویی',
+      serviceNameEn: 'Video Conference System',
+      serviceTitle: 'service-video-conference',
+      icon: 'picture_in_picture',
+      status: 1,
+      width: 1200,
+      height: 700
+    }
+  ]*/
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private electronService: ElectronService,
-              private injector: Injector,
               private viewDirection: ViewDirectionService,
               private windowManagerService: WindowManagerService,
+              private injector: Injector,
               public dialog: MatDialog,
+              private api: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService) {
     super(injector, userInfoService);
@@ -94,6 +127,16 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
       this.messageService.durationInSeconds = 10;
       this.messageService.showMessage(`${this.loggedInUser.name} خوش آمدید `);
     }, 2000);
+
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+    this._subscription.add(
+      this.api.getHRUsers().subscribe((resp: any) => {
+        if (resp.success) {
+          this.userInfoService.changeAllUsers(resp.data);
+        }
+      })
+    );
   }
 
   changeDarkMode() {
