@@ -4,9 +4,11 @@ import {ApiService} from './logic/api.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TodoInterface} from './logic/todo-interface';
-import {LoginInterface} from '../../users/logic/login.interface';
+import {LoginInterface} from '../../login/logic/login.interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
+import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
@@ -35,8 +37,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService,
               public dialog: MatDialog,
-              private loadingIndicatorService: LoadingIndicatorService,
               private fb: FormBuilder,
+              private refreshLoginService: RefreshLoginService,
+              private loadingIndicatorService: LoadingIndicatorService,
               private userInfoService: UserInfoService) {
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
@@ -78,8 +81,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
           this.form.enable();
         }
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }
@@ -114,8 +119,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
           this.form.enable();
         }
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }
@@ -159,8 +166,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
                 this.form.enable();
               }
-            }, error => {
+            }, (error: HttpErrorResponse) => {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+              this.refreshLoginService.openLoginDialog(error);
             })
           );
         }
@@ -197,9 +206,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
             this.form.enable();
           }
-        }, error => {
-
+        }, (error: HttpErrorResponse) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.refreshLoginService.openLoginDialog(error);
         })
       );
     }
@@ -245,8 +255,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
             this.form.enable();
           }
-        }, error => {
+        }, (error: HttpErrorResponse) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.refreshLoginService.openLoginDialog(error);
         })
       );
     }

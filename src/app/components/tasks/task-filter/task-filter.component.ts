@@ -4,16 +4,18 @@ import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
+import {LoginDataClass} from '../../../services/loginData.class';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FilterInterface} from '../logic/filter-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {LoginDataClass} from '../../../services/loginData.class';
 
 export interface filterType {
   index: number;
@@ -98,6 +100,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
               private _fb: FormBuilder,
               private injector: Injector,
               private translate: TranslateService,
+              private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               public dialogRef: MatDialogRef<TaskFilterComponent>,
               private userInfoService: UserInfoService,
@@ -332,8 +335,10 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
         } else {
           this.form.enable();
         }
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }

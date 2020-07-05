@@ -8,6 +8,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskDataInterface} from '../logic/task-data-interface';
+import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
@@ -25,6 +27,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
               private _fb: FormBuilder,
               private injector: Injector,
               private userInfoService: UserInfoService,
+              private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               public dialogRef: MatDialogRef<TaskAddComponent>,
               @Inject(MAT_DIALOG_DATA) public data: TaskDataInterface) {
@@ -120,8 +123,10 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
         } else {
           this.form.enable();
         }
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+        this.refreshLoginService.openLoginDialog(error);
 
         this.form.enable();
       })

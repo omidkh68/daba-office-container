@@ -1,5 +1,15 @@
 import {Injectable} from '@angular/core';
-import {BrowserWindow, ipcRenderer, webFrame, remote, screen, desktopCapturer, shell, Notification, systemPreferences} from 'electron';
+import {
+  BrowserWindow,
+  desktopCapturer,
+  ipcRenderer,
+  Notification,
+  remote,
+  screen,
+  shell,
+  systemPreferences,
+  webFrame
+} from 'electron';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
@@ -22,10 +32,6 @@ export class ElectronService {
   notification: typeof Notification;
   systemPreferences: typeof systemPreferences;
   window: BrowserWindow;
-
-  get isElectron(): boolean {
-    return !!(window && window.process && window.process.type);
-  }
 
   constructor(private userInfoService: UserInfoService) {
     // Conditional imports
@@ -58,5 +64,9 @@ export class ElectronService {
         })
       });
     }
+  }
+
+  get isElectron(): boolean {
+    return !!(window && window.process && window.process.type);
   }
 }

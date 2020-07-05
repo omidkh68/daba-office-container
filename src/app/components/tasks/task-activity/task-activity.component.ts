@@ -1,11 +1,13 @@
 import {AfterViewInit, Component, Input, OnDestroy} from '@angular/core';
+import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
-import {LoginInterface} from '../../users/logic/login.interface';
+import {LoginInterface} from '../../login/logic/login.interface';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivityInterface} from './logic/activity-interface';
+import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {ApiService} from '../logic/api.service';
 
 @Component({
   selector: 'app-task-activity',
@@ -38,6 +40,7 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               private translate: TranslateService) {
   }
@@ -74,8 +77,10 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
           if (resp.result === 1) {
             resolve(resp.contents);
           }
-        }, error => {
+        }, (error: HttpErrorResponse) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.refreshLoginService.openLoginDialog(error);
         })
       );
     });

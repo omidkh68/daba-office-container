@@ -10,7 +10,7 @@ import {LoginDataClass} from '../services/loginData.class';
 import {UserInfoService} from '../components/users/services/user-info.service';
 import {ElectronService} from '../services/electron.service';
 import {ChangeStatusService} from '../components/status/services/change-status.service';
-import {CheckLoginInterface} from '../components/users/logic/check-login.interface';
+import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
 
 @Injectable({
   providedIn: 'root'

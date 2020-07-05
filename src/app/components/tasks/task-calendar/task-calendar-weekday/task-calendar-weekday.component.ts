@@ -4,9 +4,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import {Subscription} from 'rxjs/internal/Subscription';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import {TaskInterface} from '../../logic/task-interface';
+import {LoginInterface} from '../../../login/logic/login.interface';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
-import {LoginInterface} from '../../../users/logic/login.interface';
 
 @Component({
   selector: 'app-task-calendar-weekday',

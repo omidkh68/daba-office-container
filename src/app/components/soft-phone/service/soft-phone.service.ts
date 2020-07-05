@@ -124,7 +124,7 @@ export class SoftPhoneService extends LoginDataClass {
 
       this.allUsersSoftphone = [];
 
-      this.allUsers.map((user: UserContainerInterface) => {
+      /*this.allUsers.map((user: UserContainerInterface) => {
         const findExtension = this.extensionList.getValue().filter(ext => ext.username === user.email).pop();
 
         if (findExtension) {
@@ -133,7 +133,7 @@ export class SoftPhoneService extends LoginDataClass {
             ...findExtension
           })
         }
-      });
+      });*/
 
       // this.changeSoftPhoneUsers(this.allUsersSoftphone);
       this.changeSoftPhoneUsers(this.extensionList.getValue());

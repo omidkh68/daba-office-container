@@ -1,6 +1,8 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 top-0 bottom-0">
   <div class="switch-container height-45 padding-mini-t-b padding-r-l">
-    <mat-button-toggle-group #viewMode="matButtonToggleGroup"
+    <mat-button-toggle-group #viewMode="matButtonToggleGroup">
+    </mat-button-toggle-group>
+    <!--<mat-button-toggle-group #viewMode="matButtonToggleGroup"
                              (change)="changeViewMode(viewMode.value)"
                              [ngClass]="{'view-mode': viewMode}"
                              class="full-width mat-button-custom height-30 line-height-15 round-corner-all"
@@ -11,11 +13,11 @@
       <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'keypad'">
         <span>{{'soft_phone.main.dial_pad' | translate}}</span>
       </mat-button-toggle>
-    </mat-button-toggle-group>
+    </mat-button-toggle-group>-->
   </div>
 
   <div class="component-container height-full-minus-45 pos-rel">
-    <ng-container [ngSwitch]="viewModeTypes">
+    <!--<ng-container [ngSwitch]="viewModeTypes">
       <app-soft-phone-contacts *ngSwitchCase="'contact'"
                                (triggerCloseBottomSheet)="closeTransferBottomSheet()"
                                [fromPopUp]="true"
@@ -28,6 +30,6 @@
                              [fromPopUp]="true"
                              [rtlDirection]="rtlDirection"
                              [softPhoneUsers]="softPhoneUsers"></app-soft-phone-keypad>
-    </ng-container>
+    </ng-container>-->
   </div>
 </div>

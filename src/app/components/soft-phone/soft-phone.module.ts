@@ -14,7 +14,6 @@ import {SoftPhoneBottomSheetComponent} from './soft-phone-bottom-sheet/soft-phon
 import {SoftPhoneCallToActionComponent} from './soft-phone-call-to-action/soft-phone-call-to-action.component';
 import {SoftPhoneContactDetailComponent} from './soft-phone-contacts/soft-phone-contact-detail/soft-phone-contact-detail.component';
 import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-information/soft-phone-information.component';
-import {TimeAreaDigitalClockComponent} from "../dashboard/dashboard-toolbar/time-area/time-area-digital-clock/time-area-digital-clock.component";
 
 @NgModule({
   declarations: [
@@ -36,7 +35,7 @@ import {TimeAreaDigitalClockComponent} from "../dashboard/dashboard-toolbar/time
   imports: [
     CommonModule,
     SharedModule,
-    TranslateModule.forChild({}),
+    TranslateModule.forChild(),
   ]
 })
 export class SoftPhoneModule {

@@ -3,6 +3,9 @@ import {app, BrowserWindow, ipcMain, screen, webFrame} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
+const debug = require('electron-debug');
+debug();
+
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
@@ -15,21 +18,27 @@ function createWindow(): BrowserWindow {
     x: 0,
     y: 0,
     transparent: false,
-    /*width: 1600,
-    height: 900,*/
-    width: screen.getPrimaryDisplay().bounds.width,
-    height: screen.getPrimaryDisplay().bounds.height,
+    minWidth: screen.getPrimaryDisplay().workAreaSize.width,
+    minHeight: screen.getPrimaryDisplay().workAreaSize.height,
     frame: true,
     movable: true,
-    resizable: false,
+    resizable: true,
+    maximizable: true,
     center: true,
     icon: `file://${__dirname}/dist/favicon.png`,
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,
-      allowRunningInsecureContent: (serve) ? true : false,
+      // allowRunningInsecureContent: (serve) ? true : false,
+      // allowRunningInsecureContent: true
     },
   });
+
+  win.webContents.on('devtools-opened', function () {
+    // win.devToolsWebContents.executeJavaScript('DevToolsAPI.enterInspectElementMode()')
+  });
+
+  win.maximize();
 
   if (serve) {
     require('devtron').install();
@@ -43,10 +52,6 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
 
   } else {
-    win.webContents.on('devtools-opened', () => {
-      // win.webContents.closeDevTools();
-    });
-
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',

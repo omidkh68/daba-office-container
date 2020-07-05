@@ -1,16 +1,18 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Calendar} from '@fullcalendar/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import * as moment from 'moment';
+import {ApiService} from '../../logic/api.service';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import {FormControl, FormGroup} from '@angular/forms';
-import {Calendar} from '@fullcalendar/core';
-import {Subscription} from 'rxjs';
-import {ApiService} from '../../logic/api.service';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {LoginInterface} from '../../../login/logic/login.interface';
+import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshLoginService} from '../../../login/services/refresh-login.service';
 import {TaskDurationInterface} from '../../logic/task-duration-interface';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import * as moment from 'moment';
 import {FullCalendarComponent} from '@fullcalendar/angular';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
-import {LoginInterface} from '../../../users/logic/login.interface';
 
 @Component({
   selector: 'app-task-calendar-rate',
@@ -30,19 +32,13 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
   sumTime: string = '';
   calendarDifferentEvents: any;
   calendarPlugins = [dayGridPlugin, timeGridPlugin];
-  calendarApi: Calendar;
   form: FormGroup;
-  filterData: TaskDurationInterface = {
-    adminId: 0,
-    dateStart: '',
-    dateStop: ''
-  };
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
-              private loadingIndicatorService: LoadingIndicatorService,) {
-
+              private refreshLoginService: RefreshLoginService,
+              private loadingIndicatorService: LoadingIndicatorService) {
   }
 
   ngOnInit(): void {
@@ -72,11 +68,6 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
     });
   }
 
-  gotoPast() {
-    let calendarApi = this.calendarComponent.getApi();
-    calendarApi.gotoDate('2000-01-01'); // call a method on the Calendar object
-  }
-
   dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
     this.form.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
   }
@@ -94,7 +85,6 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
 
         if (resp.result === 1) {
           let calendarEvent = [];
-          let sum = 0;
 
           resp.content[0].map(time => {
             const taskEvent = {
@@ -117,8 +107,10 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
         } else {
           this.form.enable();
         }
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }

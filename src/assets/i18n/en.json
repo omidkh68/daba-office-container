@@ -171,7 +171,8 @@
     "password_error": "Please enter password",
     "login": "Login",
     "login_successfully": "Login Successfully",
-    "login_failed": "Authentication failed, please try again"
+    "login_failed": "Authentication failed, please try again",
+    "refresh_login": "Your authorize token maybe expired, please login again."
   },
   "conference": {
     "add": "Create new conference",

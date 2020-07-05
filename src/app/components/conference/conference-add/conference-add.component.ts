@@ -1,23 +1,29 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, Injector, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {LoginDataClass} from '../../../services/loginData.class';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {UserInfoService} from '../../users/services/user-info.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 
 @Component({
   selector: 'app-conference-add',
   templateUrl: './conference-add.component.html'
 })
-export class ConferenceAddComponent implements OnInit {
+export class ConferenceAddComponent extends LoginDataClass implements OnInit {
   rtlDirection: boolean;
   form: FormGroup;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
+              private injector: Injector,
               private _fb: FormBuilder,
+              private userInfoService: UserInfoService,
               public dialogRef: MatDialogRef<ConferenceAddComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
+    super(injector, userInfoService);
+
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
@@ -30,7 +36,7 @@ export class ConferenceAddComponent implements OnInit {
   createForm() {
     if (this.data.action === 'add') {
       this.form = this._fb.group({
-        username: new FormControl(''),
+        username: new FormControl(this.loggedInUser.email.replace('@dabacenter.ir', '')),
         confname: new FormControl('')
       });
     } else if (this.data.action === 'join') {

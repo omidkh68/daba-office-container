@@ -21,11 +21,13 @@ import {SocketioService} from '../../../services/socketio.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskStopComponent} from '../task-stop/task-stop.component';
 import {CurrentTaskService} from '../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {RefreshBoardService} from '../services/refresh-board.service';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
@@ -67,6 +69,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   constructor(private api: ApiService,
               private userInfoService: UserInfoService,
               private socketService: SocketioService,
+              private refreshLoginService: RefreshLoginService,
               private injector: Injector,
               private currentTaskService: CurrentTaskService,
               private loadingIndicatorService: LoadingIndicatorService,
@@ -86,12 +89,16 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
         }
       })
     );
+
+    this._subscription.add(
+      this.userInfoService.currentLoginData.subscribe(() => {
+        this.getBoards();
+      })
+    );
   }
 
   ngOnInit(): void {
     this.rowHeight = '100%';
-
-    this.getBoards();
 
     /*this.socket.on('update-data', (data: any) => {
       this.getBoards();
@@ -109,11 +116,11 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   }*/
 
   drop(event: CdkDragDrop<string[]>) {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
-
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
@@ -132,8 +139,10 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
             this.assignNewTaskToBoard(newTask, event.previousContainer.id, event.container.id);
           }
-        }, error => {
+        }, (error: HttpErrorResponse) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.refreshLoginService.openLoginDialog(error);
         })
       );
     }
@@ -226,8 +235,10 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
           if (resp.result === 1) {
             this.putTasksToAllBoards(resp);
           }
-        }, error => {
+        }, (error: HttpErrorResponse) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.refreshLoginService.openLoginDialog(error);
         })
       );
     }
@@ -318,6 +329,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+
     if (this.refreshData) {
       // this.socket.emit('updatedata');
       this.getBoards();

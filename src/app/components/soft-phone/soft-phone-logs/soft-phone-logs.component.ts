@@ -1,15 +1,17 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, Output} from '@angular/core';
 import {ApiService} from '../logic/api.service';
-import {Subscription} from 'rxjs';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {CdrInterface} from '../logic/cdr.interface';
 import {SoftPhoneService} from '../service/soft-phone.service';
-import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
-import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
-import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
+import {HttpErrorResponse} from '@angular/common/http';
 import {ExtensionInterface} from '../logic/extension.interface';
 import {CdrResultInterface} from '../logic/cdr-result.interface';
-import {CdrInterface} from '../logic/cdr.interface';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
+import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 
 @Component({
   selector: 'app-soft-phone-logs',
@@ -37,6 +39,7 @@ export class SoftPhoneLogsComponent implements AfterViewInit {
 
   constructor(private api: ApiService,
               private softPhoneService: SoftPhoneService,
+              private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService) {
   }
 
@@ -64,8 +67,10 @@ export class SoftPhoneLogsComponent implements AfterViewInit {
             if (resp.recordsCount) {
               this.cdrList = resp.list;
             }
-          }, error => {
+          }, (error: HttpErrorResponse) => {
             this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
+            this.refreshLoginService.openLoginDialog(error);
           })
         );
       })

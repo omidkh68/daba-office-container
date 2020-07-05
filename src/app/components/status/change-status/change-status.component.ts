@@ -39,6 +39,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
               public dialogRef: MatDialogRef<ChangeStatusComponent>,
               @Inject(MAT_DIALOG_DATA) public data) {
     super(injector, userInfoService);
+
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );

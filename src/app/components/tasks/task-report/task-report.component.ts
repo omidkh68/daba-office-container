@@ -3,10 +3,12 @@ import {ApiService} from '../logic/api.service';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
+import {LoginInterface} from '../../login/logic/login.interface';
 import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
 import {MatTableDataSource} from '@angular/material/table';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {LoginInterface} from '../../users/logic/login.interface';
 
 export interface TaskReportInterface {
   taskSheetId: number;
@@ -49,6 +51,7 @@ export class TaskReportComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService,
               private translate: TranslateService,
+              private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               private matPaginatorIntl: MatPaginatorIntl) {
   }
@@ -103,8 +106,10 @@ export class TaskReportComponent implements OnInit, OnDestroy {
           this.dataSource = new MatTableDataSource(this.taskReports);
           this.dataSource.paginator = this.paginator;
         }
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }

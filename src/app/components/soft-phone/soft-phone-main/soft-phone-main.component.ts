@@ -6,10 +6,11 @@ import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {MatTabChangeEvent} from '@angular/material/tabs';
+import {HttpErrorResponse} from '@angular/common/http';
 import {ResultApiInterface} from '../logic/result-api.interface';
 import {NotificationService} from '../../../services/notification.service';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {ExtensionInterface} from '../logic/extension.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
@@ -127,6 +128,7 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
   constructor(private viewDirection: ViewDirectionService,
               private api: ApiService,
               private injector: Injector,
+              private refreshLoginService: RefreshLoginService,
               private softPhoneService: SoftPhoneService,
               private notificationService: NotificationService,
               private loadingIndicatorService: LoadingIndicatorService,
@@ -210,8 +212,10 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
             this.softPhoneService.sipRegister();
           });
         }
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }

@@ -14,7 +14,7 @@
       </button>
     </div>
 
-    <webview [ngClass]="{'showFrame': !showConference}" partition="persist:webviewsession" #webFrame
+    <webview enableremotemodule="false" [ngClass]="{'showFrame': !showConference}" partition="persist:localstorage" #webFrame
              class="webView-frame full-width full-height"></webview>
   </div>
 
