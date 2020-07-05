@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, screen, webFrame} from 'electron';
+import {app, BrowserWindow, ipcMain, screen, Menu, webFrame} from 'electron';
 // import {autoUpdater} from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
@@ -25,6 +25,7 @@ function createWindow(): BrowserWindow {
     resizable: true,
     maximizable: true,
     center: true,
+    autoHideMenuBar: true,
     icon: `file://${__dirname}/dist/favicon.png`,
     webPreferences: {
       nodeIntegration: true,
@@ -33,6 +34,11 @@ function createWindow(): BrowserWindow {
       // allowRunningInsecureContent: true
     },
   });
+
+  win.setMenu(null);
+  Menu.setApplicationMenu(null);
+  // Menu.autoHideMenuBar(null);
+  // Menu.setApplicationMenu(null);
 
   win.webContents.on('devtools-opened', function () {
     // win.devToolsWebContents.executeJavaScript('DevToolsAPI.enterInspectElementMode()')
