@@ -40,7 +40,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
 
   keys: Array<KeysInterface> = [
     {type: 'mute_unmute', num: 'volume_up', changeIcon: 'volume_mute'},
-    {type: 'forward', num: 'phone_forwarded', changeIcon: 'phone_forwarded'}
+    // {type: 'forward', num: 'phone_forwarded', changeIcon: 'phone_forwarded'}
   ];
 
   private _subscription: Subscription = new Subscription();
