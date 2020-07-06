@@ -16,6 +16,7 @@ import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {MessageService} from '../../../services/message.service';
 
 export interface filterType {
   index: number;
@@ -100,6 +101,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
               private _fb: FormBuilder,
               private injector: Injector,
               private translate: TranslateService,
+              private messageService: MessageService,
               private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               public dialogRef: MatDialogRef<TaskFilterComponent>,
@@ -332,6 +334,8 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
               content: resp.content
             }
           );
+
+          this.messageService.showMessage(resp.message);
         } else {
           this.form.enable();
         }

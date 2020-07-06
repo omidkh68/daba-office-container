@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TodoInterface} from './logic/todo-interface';
 import {LoginInterface} from '../../login/logic/login.interface';
+import {MessageService} from '../../../services/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -38,6 +39,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService,
               public dialog: MatDialog,
               private fb: FormBuilder,
+              private messageService: MessageService,
               private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               private userInfoService: UserInfoService) {
@@ -119,6 +121,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
           this.form.enable();
         }
+
+        this.messageService.showMessage(resp.message);
       }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
@@ -166,6 +170,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
                 this.form.enable();
               }
+
+              this.messageService.showMessage(resp.message);
             }, (error: HttpErrorResponse) => {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
@@ -206,6 +212,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
             this.form.enable();
           }
+
+          this.messageService.showMessage(resp.message);
         }, (error: HttpErrorResponse) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
@@ -255,6 +263,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
             this.form.enable();
           }
+
+          this.messageService.showMessage(resp.message);
         }, (error: HttpErrorResponse) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 

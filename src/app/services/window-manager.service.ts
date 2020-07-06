@@ -31,35 +31,35 @@ export class WindowManagerService {
     let component: any = null;
     let hasFrame: boolean = false;
     let maximizable: boolean = true;
-    let windowWidth = service.width;
-    let windowHeight = service.height;
+    let windowWidth = service && service.width ? service.width : 0;
+    let windowHeight = service && service.height ? service.height : 0;
 
-    switch (service.serviceTitle) {
-      case 'project_microservice': {
-        component = TasksComponent;
+    try {
+      switch (service.serviceTitle) {
+        case 'project_microservice': {
+          component = TasksComponent;
 
-        break;
+          break;
+        }
+
+        case 'pbx_microservice': {
+          component = SoftPhoneComponent;
+          maximizable = false;
+
+          break;
+        }
+
+        case 'video_conference': {
+          component = ConferenceComponent;
+          hasFrame = true;
+
+          break;
+        }
       }
 
-      case 'pbx_microservice': {
-        component = SoftPhoneComponent;
-        maximizable = false;
+      const findIndex = this._defaultWindows.findIndex(windowItem => windowItem.windowService.serviceTitle === service.serviceTitle);
 
-        break;
-      }
-
-      case 'video_conference': {
-        component = ConferenceComponent;
-        hasFrame = true;
-
-        break;
-      }
-    }
-
-    const findIndex = this._defaultWindows.findIndex(windowItem => windowItem.windowService.serviceTitle === service.serviceTitle);
-
-    if (findIndex === -1) {
-      try {
+      if (findIndex === -1) {
         // const widthEmptyState = (this.window.innerWidth - windowWidth) / 2;
         const widthEmptyState = (Math.random() * (this.window.innerWidth - windowWidth)).toFixed();
         const heightEmptyState = (Math.random() * (this.window.innerHeight - windowHeight)).toFixed();
@@ -98,11 +98,11 @@ export class WindowManagerService {
         this.windows.next(this._defaultWindows);
 
         // this.updateWindowPosition(mwindow, false);
-
-      } catch (e) {
+      } else {
+        this.restoreWindow(service);
       }
-    } else {
-      this.restoreWindow(service);
+    } catch (e) {
+      // e
     }
   }
 

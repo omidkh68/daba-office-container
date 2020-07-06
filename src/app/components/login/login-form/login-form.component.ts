@@ -59,8 +59,8 @@ export class LoginFormComponent implements OnInit {
   createForm() {
     return new Promise((resolve) => {
       this.form = this.fb.group({
-        username: new FormControl('khosrojerdi@dabacenter.ir'),
-        password: new FormControl('123456'),
+        username: new FormControl(''),
+        password: new FormControl(''),
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
 
@@ -84,7 +84,7 @@ export class LoginFormComponent implements OnInit {
         this.userInfoService.changeLoginData(resp.data);
 
         if (this.dialogData) {
-          this.dialogRef.close('ali123');
+          this.dialogRef.close();
         } else {
           this.router.navigateByUrl(`/`);
         }

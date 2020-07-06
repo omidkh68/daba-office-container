@@ -28,7 +28,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
   }
 
   canActivate(): Observable<boolean> {
-    const store = new Store();
+    /*const store = new Store();
 
     if (store.get('userInfo')) {
       this.userInfoService.changeUserInfo(store.get('userInfo'));
@@ -36,7 +36,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
     if (store.get('loginData')) {
       this.userInfoService.changeLoginData(store.get('loginData'));
-    }
+    }*/
 
     if (this.loginData) {
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;

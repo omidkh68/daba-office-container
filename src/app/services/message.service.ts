@@ -6,7 +6,7 @@ import {MessageComponent} from '../components/message/message.component';
   providedIn: 'root'
 })
 export class MessageService {
-  _durationInSeconds = 5;
+  _durationInSeconds = 3;
 
   constructor(private _snackBar: MatSnackBar) {
   }

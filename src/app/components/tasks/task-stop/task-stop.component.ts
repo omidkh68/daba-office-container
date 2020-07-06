@@ -4,6 +4,7 @@ import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../../services/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -28,6 +29,7 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
               private injector: Injector,
               private viewDirection: ViewDirectionService,
               private refreshLoginService: RefreshLoginService,
+              private messageService: MessageService,
               private loadingIndicatorService: LoadingIndicatorService,
               private userInfoService: UserInfoService,
               public dialogRef: MatDialogRef<TaskStopComponent>,
@@ -74,6 +76,8 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
+          this.messageService.showMessage(resp.message);
+
           this.dialogRef.close(true);
         } else {
           this.form.enable();

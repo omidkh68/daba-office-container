@@ -50,7 +50,8 @@
       "address_book": "Address Book",
       "dial_pad": "Dialpad",
       "call_logs": "Call Logs",
-      "public_room": "Conferences"
+      "public_room": "Conferences",
+      "no_permission": "Your permission is not correct, please system manager"
     },
     "call_pop_up": {
       "hang_up": "Hang Up",

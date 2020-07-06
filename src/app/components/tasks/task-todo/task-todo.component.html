@@ -1,25 +1,25 @@
-<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height padding-full"
+<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height"
      [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 no-margin height-45">
+  <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 no-margin height-45 padding-full">
     {{'tasks.task_todo.todo_list' | translate}}
     <span [ngClass]="rtlDirection ? 'margin-r-half' : 'margin-l-half'"
           class="text-gray-500 font-7-em text-italic">
       {{todoList.length ? todoList.length : ''}} {{(todoList.length ? 'tasks.task_todo.items' : '') | translate}}
     </span>
   </h1>
-  <div class="todo-content-container">
+  <div class="todo-content-container overflow-y-auto overflow-x-hide padding-full">
     <form [formGroup]="form">
-      <div *ngIf="todoList.length" class="todo-list-container overflow-y-auto overflow-x-hide padding-b-full">
+      <div *ngIf="todoList.length" class="todo-list-container padding-b-full">
         <mat-list class="no-padding">
           <mat-list-item *ngFor="let todoItem of todoList"
                          (click)="checkTodo(todoItem)"
                          [ngClass]="todoItem.isChecked ? 'text-green-200' : 'text-gray-700'"
-                         class="height-45 no-padding cursor-pointer">
+                         class="height-auto cursor-pointer border-bottom">
             <mat-icon mat-list-icon class="no-padding">
               {{todoItem.isChecked ? 'check_circle_outline' : 'radio_button_unchecked'}}
             </mat-icon>
 
-            <div mat-line class="no-text-eclipse"
+            <div mat-line class="no-text-eclipse font-8-em height-auto padding-mini-t-b"
                  [ngClass]="{'text-line-through': todoItem.isChecked}">{{todoItem.text}}</div>
 
             <div mat-line class="text-italic font-7-em">{{todoItem.creationDate | jalali}}</div>

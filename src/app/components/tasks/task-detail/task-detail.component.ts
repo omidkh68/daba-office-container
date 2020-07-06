@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../../services/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {ProjectInterface} from '../../projects/logic/project-interface';
@@ -37,6 +38,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
               private _fb: FormBuilder,
               public dialog: MatDialog,
               private injector: Injector,
+              private messageService: MessageService,
               private refreshLoginService: RefreshLoginService,
               private refreshBoardService: RefreshBoardService,
               private loadingIndicatorService: LoadingIndicatorService,
@@ -186,9 +188,12 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
               if (resp.result) {
                 this.bottomSheetData.bottomSheetRef.close();
 
+                this.messageService.showMessage(resp.message);
+
                 this.refreshBoardService.changeCurrentDoRefresh(true);
               } else {
                 // show message
+                this.messageService.showMessage(resp.message);
               }
             }, (error: HttpErrorResponse) => {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
@@ -226,6 +231,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
         if (resp.result) {
           this.bottomSheetData.bottomSheetRef.close();
+
+          this.messageService.showMessage(resp.message);
 
           this.refreshBoardService.changeCurrentDoRefresh(true);
         } else {

@@ -123,15 +123,15 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
+    /*setTimeout(() => {
       this.messageService.durationInSeconds = 10;
       this.messageService.showMessage(`${this.loggedInUser.name} خوش آمدید `);
-    }, 2000);
+    }, 2000);*/
 
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    /*this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     // 3 in service id means PBX
-    /*this._subscription.add(
+    this._subscription.add(
       this.api.getServiceUsers(3).subscribe((resp: any) => {
         if (resp.success) {
           this.userInfoService.changeAllUsers(resp.data);

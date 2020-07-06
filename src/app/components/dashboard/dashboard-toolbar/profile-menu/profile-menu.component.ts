@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
+import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 
 @Component({
   selector: 'app-profile-menu',
@@ -14,6 +15,9 @@ import {WindowManagerService} from '../../../../services/window-manager.service'
 export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
   @Input()
   rtlDirection: boolean;
+
+  @Input()
+  loggedInUser: UserContainerInterface;
 
   private _subscription: Subscription = new Subscription();
 

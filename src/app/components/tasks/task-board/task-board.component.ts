@@ -1,13 +1,5 @@
 import {
-  Component,
-  EventEmitter,
-  Injector,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges
+  Component, EventEmitter, Injector, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
@@ -17,6 +9,7 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {TaskInterface} from '../logic/task-interface';
 import {BoardInterface} from '../logic/board-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../../services/message.service';
 import {SocketioService} from '../../../services/socketio.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
@@ -72,6 +65,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
               private refreshLoginService: RefreshLoginService,
               private injector: Injector,
               private currentTaskService: CurrentTaskService,
+              private messageService: MessageService,
               private loadingIndicatorService: LoadingIndicatorService,
               public dialog: MatDialog,
               private translate: TranslateService,
@@ -136,6 +130,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
           if (resp.result) {
             const newTask = resp.content.task;
+
+            this.messageService.showMessage(resp.message);
 
             this.assignNewTaskToBoard(newTask, event.previousContainer.id, event.container.id);
           }
@@ -225,7 +221,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   getBoards() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-    if (this.loggedInUser && this.loggedInUser.email) {
+    if (this.loginData && this.loginData.token_type) {
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
@@ -329,8 +325,6 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-
     if (this.refreshData) {
       // this.socket.emit('updatedata');
       this.getBoards();

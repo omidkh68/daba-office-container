@@ -2,6 +2,7 @@
   <!-- Main Menu -->
   <app-main-menu class="box-holder"
                  [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
+                 [loggedInUser]="loggedInUser"
                  [serviceList]="serviceList"
                  [rtlDirection]="rtlDirection"></app-main-menu>
   <!-- /Main Menu -->

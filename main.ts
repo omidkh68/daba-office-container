@@ -1,4 +1,5 @@
 import {app, BrowserWindow, ipcMain, screen, Menu, webFrame} from 'electron';
+import {join} from 'path';
 // import {autoUpdater} from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
@@ -26,7 +27,7 @@ function createWindow(): BrowserWindow {
     maximizable: true,
     center: true,
     autoHideMenuBar: true,
-    icon: `file://${__dirname}/dist/favicon.png`,
+    icon: join(__dirname, 'assets/icons/favicon.256x256.png'),
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,
@@ -41,7 +42,9 @@ function createWindow(): BrowserWindow {
   // Menu.setApplicationMenu(null);
 
   win.webContents.on('devtools-opened', function () {
-    // win.devToolsWebContents.executeJavaScript('DevToolsAPI.enterInspectElementMode()')
+    if (!serve) {
+      win.webContents.closeDevTools();
+    }
   });
 
   win.maximize();
