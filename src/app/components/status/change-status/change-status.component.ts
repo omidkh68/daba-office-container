@@ -137,7 +137,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
       this._subscription.add(
         this.userApiService.applyStatusToUser(formValue).subscribe((resp: any) => {
           if (resp.result === 1) {
-            this.userStatusService.changeUserStatus(resp.content.user.userCurrentStatus);
+            this.userStatusService.changeUserStatus(resp.content.userCurrentStatus);
             this.dialogRef.close(resp);
           } else {
             this.form.enable();

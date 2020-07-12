@@ -29,8 +29,8 @@
          [cdkDropListConnectedTo]="connectedTo">
       <div *ngIf="!board.tasks.length"
            class="flex-center full-width full-height pos-abs left-0 right-0 top-0 bottom-0 z-index-0">
-        <img [src]="'assets/board-empty-state/'+board.id+'.png'" [alt]="board.id" class="width-250">
-
+        <img [src]="'assets/board-empty-state/'+board.id+'.png'" [alt]="board.id" class="width-250"
+             onerror="this.src='assets/profileImg/0.jpg'">
         <span
           class="pos-abs left-0 right-0 bottom-0 top-0 z-index-0 margin-auto text-gray-400 font-8-rem full-width height-45 line-height-150 text-center">
           {{'global.no_result' | translate}}
@@ -66,6 +66,7 @@
 
         <mat-card-footer class="padding-mini-t-b padding-r-l height-45 display-flex justify-content-start">
           <img [src]="'assets/profileImg/'+task.assignTo.email+'.jpg'"
+               onerror="this.src='assets/profileImg/0.jpg'"
                class="width-25 height-25 round-corner-all mat-elevation-z1"
                [matTooltip]="task.assignTo.name + ' ' + task.assignTo.family"
                [matTooltipPosition]="rtlDirection ? 'left' : 'right'">

@@ -4,9 +4,6 @@ import {join} from 'path';
 import * as path from 'path';
 import * as url from 'url';
 
-const debug = require('electron-debug');
-debug();
-
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
@@ -51,6 +48,10 @@ function createWindow(): BrowserWindow {
 
   if (serve) {
     require('devtron').install();
+
+    const debug = require('electron-debug');
+
+    debug();
 
     // win.webContents.openDevTools();
 

@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {MessageService} from '../../../services/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';

@@ -12,7 +12,8 @@
   </div>
 
   <div class="text-center">
-    <img [alt]="data.name" [src]="'assets/profileImg/'+ (data.username ? data.username : '0') +'.jpg'"
+    <img [src]="'assets/profileImg/'+ (data.username ? data.username : '0') +'.jpg'" [alt]="data.name"
+         onerror="this.src='assets/profileImg/0.jpg'"
          class="mat-elevation-z3 width-150 height-150 round-corner-all"
          matListAvatar>
   </div>

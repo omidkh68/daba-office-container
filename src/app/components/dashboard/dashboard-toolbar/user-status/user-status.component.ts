@@ -66,7 +66,7 @@ export class UserStatusComponent implements OnInit {
           if (resp.result === 1) {
             this.messageService.showMessage(`${resp.message}`);
 
-            this.changeStatusService.changeUserStatus(resp.content.user.userCurrentStatus);
+            this.changeStatusService.changeUserStatus(resp.content.userCurrentStatus);
           }
         })
       );

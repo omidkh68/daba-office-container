@@ -109,7 +109,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
-          const newTodo: TodoInterface = resp.content.todo;
+          const newTodo: TodoInterface = resp.content;
 
           this.todoList = this.todoList.map(item => {
             if (item.todoId === newTodo.todoId) {
@@ -204,7 +204,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result === 1) {
-            this.todoList.push(resp.content.todo);
+            this.todoList.push(resp.content);
 
             const todoValue = this.form.get('todo').value;
 
@@ -245,7 +245,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result === 1) {
-            const newTodo: TodoInterface = resp.content.todo;
+            const newTodo: TodoInterface = resp.content;
 
             this.todoList = this.todoList.map(item => {
               if (item.todoId === newTodo.todoId) {

@@ -24,7 +24,7 @@ export class SoftPhoneService extends LoginDataClass {
   allUsersSoftphone: Array<SoftphoneUserInterface> = [];
   loggedInUserSoftphone: SoftphoneUserInterface;
 
-  debugMode: boolean = false;
+  debugMode: boolean = true;
   oSipStack;
   oSipSessionRegister;
   oSipSessionCall;
@@ -463,13 +463,14 @@ export class SoftPhoneService extends LoginDataClass {
   onSipEventSession = (e) => {
     const type = e.type.toLowerCase();
     const description = e.description.toLowerCase();
-    let incomingExtensionNumber: string = '';
+    let extensionNumberFrom: string = '';
+    let extensionNumberTo: string = '';
+    let incomingExtensionTo: ExtensionInterface;
+    let incomingExtensionFrom: ExtensionInterface;
 
-    if (e.o_event && e.o_event.o_session) {
-      incomingExtensionNumber = e.o_event.o_session.o_stack.identity.s_display_name.replace('-wrtc', '');
-    }
+    console.log(e);
 
-    const incomingExtension: ExtensionInterface = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === incomingExtensionNumber).pop();
+    console.log(incomingExtensionTo, incomingExtensionFrom);
 
     if (this.debugMode) {
       console.log('-----------oooooooo-----------');
@@ -498,7 +499,15 @@ export class SoftPhoneService extends LoginDataClass {
               console.log(e);
             }
 
-            this.messageService.showMessage(`You are in call with ${incomingExtension.extension_name}`);
+            if (e.o_event && e.o_event.o_session) {
+              extensionNumberFrom = e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '');
+              extensionNumberTo = e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '');
+
+              incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
+              incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
+            }
+
+            this.messageService.showMessage(`You are in call with ${incomingExtensionTo.extension_name}`);
 
             break;
           }
@@ -560,17 +569,25 @@ export class SoftPhoneService extends LoginDataClass {
 
         switch (description) {
           case 'forbidden': {
-            this.messageService.showMessage('Reject by user');
+            if (e.o_event && e.o_event.o_session) {
+              extensionNumberFrom = e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '');
+              extensionNumberTo = e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '');
+
+              incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
+              incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
+            }
+
+            this.messageService.showMessage(`Rejected by ${incomingExtensionFrom.extension_name}`);
             break;
           }
 
           case 'declined': {
-            this.messageService.showMessage('Not answered by user');
+            this.messageService.showMessage(`Not answered by ${incomingExtensionFrom.extension_name}`);
             break;
           }
 
           case 'temporarily unavailable': {
-            this.messageService.showMessage('User soft phone isn`t available now');
+            this.messageService.showMessage(`${incomingExtensionFrom && incomingExtensionFrom.extension_name ? incomingExtensionFrom.extension_name : 'User'} soft phone is not available now`);
             break;
           }
 
@@ -588,10 +605,18 @@ export class SoftPhoneService extends LoginDataClass {
             if (this.debugMode) {
               console.log(e);
 
-              console.log(incomingExtension);
+              console.log(incomingExtensionTo);
             }
 
-            this.messageService.showMessage(`You rejected incoming call from ${incomingExtension.extension_name}`);
+            if (e.o_event && e.o_event.o_session) {
+              extensionNumberFrom = e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '');
+              extensionNumberTo = e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '');
+
+              incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
+              incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
+            }
+
+            this.messageService.showMessage(`You rejected incoming call from ${incomingExtensionTo.extension_name}`);
             break;
           }
         }

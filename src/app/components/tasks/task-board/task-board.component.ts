@@ -129,7 +129,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result) {
-            const newTask = resp.content.task;
+            const newTask = resp.content;
 
             this.messageService.showMessage(resp.message);
 

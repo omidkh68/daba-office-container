@@ -10,7 +10,8 @@
 
   <mat-list class="margin-t-full">
     <mat-list-item>
-      <img [alt]="data.name" [src]="'assets/profileImg/'+ data.username +'.jpg'"
+      <img [src]="'assets/profileImg/'+ data.username +'.jpg'" [alt]="data.name"
+           onerror="this.src='assets/profileImg/0.jpg'"
            class="mat-elevation-z2 width-50 height-50 round-corner-all margin-auto"
            matListAvatar>
       <h3 class="text-weight-bold" matLine> {{data.name}} </h3>

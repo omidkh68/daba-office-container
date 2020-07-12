@@ -226,7 +226,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         const data = {
           prevContainer: this.task.boardStatus,
           newContainer: this.form.get('boardStatus').value,
-          task: resp.content.task
+          task: resp.content
         };
 
         if (resp.result) {
