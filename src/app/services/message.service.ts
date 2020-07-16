@@ -16,7 +16,7 @@ export class MessageService {
   }
 
   showMessage(title: string, type: string = '', duration: number | null = null) {
-    this._snackBar.openFromComponent(MessageComponent, {
+    const snackBar = this._snackBar.openFromComponent(MessageComponent, {
       data: title,
       duration: duration ? duration : this._durationInSeconds,
       horizontalPosition: 'center',
@@ -24,5 +24,9 @@ export class MessageService {
       politeness: 'polite',
       panelClass: type ? type : ''
     });
+
+    setTimeout(() => {
+      snackBar.dismiss();
+    }, duration ? duration : this._durationInSeconds)
   }
 }
