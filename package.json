@@ -1,12 +1,8 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.9.7",
-  "author": {
-    "email": "omidkh68@gmail.com",
-    "name": "Omid Khosrojerdi",
-    "url": ""
-  },
+  "version": "0.9.8",
+  "author": "Omid Khosrojerdi, Husin Sajjadi",
   "repository": {
     "type": "github",
     "url": "https://github.com/omidkh68/daba-office-container.git"
@@ -17,9 +13,9 @@
     "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
     "start": "npm-run-all -p electron:serve ng:serve",
-    "build": "npm run electron:serve-tsc && ng build",
+    "build": "npm run electron:serve-tsc && ng build --prod --aot --build-optimizer --namedChunks=true",
     "build:dev": "npm run build -- -c dev",
-    "build:prod": "npm run build -- -c production",
+    "build:prod": "npm run build -- -c production --prod --aot --build-optimizer --namedChunks=true",
     "ng:serve": "ng serve",
     "ng:serve:web": "ng serve -c web -o",
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",

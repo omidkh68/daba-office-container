@@ -8,6 +8,8 @@ let win: BrowserWindow = null;
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
 
+const gotTheLock = app.requestSingleInstanceLock();
+
 function createWindow(): BrowserWindow {
   let bound = screen.getPrimaryDisplay().bounds;
 
@@ -114,6 +116,18 @@ try {
       app.quit();
     }
   });
+
+  if (!gotTheLock) {
+    app.quit();
+  } else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+      if (win) {
+        if (win.isMinimized()) win.restore();
+
+        win.focus();
+      }
+    });
+  }
 
   app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the

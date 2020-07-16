@@ -42,7 +42,8 @@
     "stop_status": "Stop Current Status",
     "apply_status": "Apply Status",
     "status_description": "Status Description",
-    "status_description_error": "Please explain about status"
+    "status_description_error": "Please explain about status",
+    "status_success": "Status applied successfully"
   },
   "soft_phone": {
     "main": {
@@ -118,6 +119,7 @@
     },
     "boards": {
       "task_percentage": "Task Percentage",
+      "todo_count": "Count of Todo items",
       "todo": "Todo",
       "in_progress": "In Progress",
       "done": "Done"

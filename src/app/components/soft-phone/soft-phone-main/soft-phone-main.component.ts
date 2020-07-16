@@ -263,9 +263,13 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
   }
 
   openButtonSheet(bottomSheetConfig: SoftPhoneBottomSheetInterface) {
-    bottomSheetConfig.bottomSheetRef = this.bottomSheet;
+    try {
+      bottomSheetConfig.bottomSheetRef = this.bottomSheet;
 
-    this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
+      this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   call(data: any) {

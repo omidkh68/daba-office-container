@@ -42,7 +42,8 @@
     "stop_status": "متوقف کردن این وضعیت",
     "apply_status": "اعمال وضعیت",
     "status_description": "توضیح وضعیت",
-    "status_description_error": "توضیح وضعیت را وارد نمایید"
+    "status_description_error": "توضیح وضعیت را وارد نمایید",
+    "status_success": "وضعیت مربوطه با موفقیت اعمال گردید"
   },
   "soft_phone": {
     "main": {
@@ -118,6 +119,7 @@
     },
     "boards": {
       "task_percentage": "درصد پیشبرد",
+      "todo_count": "تعداد لیست انجام کار",
       "todo": "آماده انجام",
       "in_progress": "در حال انجام",
       "done": "به اتمام رسیده"

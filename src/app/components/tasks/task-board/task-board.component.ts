@@ -160,7 +160,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
             task = Object.assign(task, newTask);
           }
 
-          if (task.assignTo.email === this.loggedInUser.email && task.boardStatus === 'inProgress') {
+          if (task.assignTo.email === this.loggedInUser.email && newContainer === 'inProgress') {
             this.myTasks.push(task);
           }
 

@@ -6,7 +6,7 @@ import {MessageComponent} from '../components/message/message.component';
   providedIn: 'root'
 })
 export class MessageService {
-  _durationInSeconds = 3;
+  _durationInSeconds = 3000;
 
   constructor(private _snackBar: MatSnackBar) {
   }
@@ -18,9 +18,10 @@ export class MessageService {
   showMessage(title: string, type: string = '', duration: number | null = null) {
     this._snackBar.openFromComponent(MessageComponent, {
       data: title,
-      duration: duration ? duration : this._durationInSeconds * 1000,
+      duration: duration ? duration : this._durationInSeconds,
       horizontalPosition: 'center',
       verticalPosition: 'top',
+      politeness: 'polite',
       panelClass: type ? type : ''
     });
   }

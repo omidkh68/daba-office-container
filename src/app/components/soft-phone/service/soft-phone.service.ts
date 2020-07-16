@@ -503,8 +503,10 @@ export class SoftPhoneService extends LoginDataClass {
               extensionNumberFrom = e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '');
               extensionNumberTo = e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '');
 
-              incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
-              incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
+              incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
+              incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
+
+              console.log(incomingExtensionFrom, incomingExtensionTo);
             }
 
             this.messageService.showMessage(`You are in call with ${incomingExtensionTo.extension_name}`);
@@ -519,7 +521,7 @@ export class SoftPhoneService extends LoginDataClass {
           }
 
           case 'connected': {
-            this.messageService.showMessage(`You're soft phone is now connected`);
+            this.messageService.showMessage(`Your soft phone is now connected`);
 
             break;
           }
