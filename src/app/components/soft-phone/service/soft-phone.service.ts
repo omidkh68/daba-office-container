@@ -54,6 +54,10 @@ export class SoftPhoneService extends LoginDataClass {
   private connectedCall = new BehaviorSubject(this._connectedCall);
   public currentConnectedCall = this.connectedCall.asObservable();
 
+  private _minimizeCallPopUp: boolean = false;
+  private minimizeCallPopUp = new BehaviorSubject(this._minimizeCallPopUp);
+  public currentMinimizeCallPopUp = this.minimizeCallPopUp.asObservable();
+
   private audioRemoteTag: BehaviorSubject<EssentialTagsInterface> = new BehaviorSubject(null);
 
   /*videoRemote;
@@ -85,10 +89,6 @@ export class SoftPhoneService extends LoginDataClass {
     };
   }
 
-  public get getMuteStatus() {
-    return this.oSipSessionCall;
-  }
-
   changeSoftPhoneUsers(softPhoneUsers: Array<SoftphoneUserInterface> | null) {
     this.users.next(softPhoneUsers);
   }
@@ -111,6 +111,10 @@ export class SoftPhoneService extends LoginDataClass {
 
   changeConnectedCall(status: boolean) {
     this.connectedCall.next(status);
+  }
+
+  changeMinimizeCallPopUp(minimize: boolean) {
+    this.minimizeCallPopUp.next(minimize);
   }
 
   changeAudioRemoteTag(essentialTags) {
@@ -293,6 +297,10 @@ export class SoftPhoneService extends LoginDataClass {
       this.oSipSessionCall = null;
 
       this.changeOnCallUser(null);
+
+      this.changeConnectedCall(false);
+
+      this.changeMinimizeCallPopUp(false);
     }
   };
 
@@ -469,11 +477,15 @@ export class SoftPhoneService extends LoginDataClass {
     let incomingExtensionFrom: ExtensionInterface;
 
     if (e.o_event && e.o_event.o_session) {
-      extensionNumberFrom = e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '');
-      extensionNumberTo = e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '');
+      try {
+        extensionNumberFrom = e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '');
+        extensionNumberTo = e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '');
 
-      incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
-      incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
+        incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
+        incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     let callerUserName = '...';
@@ -572,22 +584,23 @@ export class SoftPhoneService extends LoginDataClass {
       case 'terminated': {
         this.changeOnCallUser(null);
         this.changeIncomingCallStatus({status: false});
+        this.changeMinimizeCallPopUp(false);
         this.stopRingbackTone();
         this.stopRingTone();
 
         switch (description) {
           case 'forbidden': {
-            this.messageService.showMessage(`Rejected by ${incomingExtensionFrom.extension_name}`);
+            this.messageService.showMessage(`Rejected by ${incomingExtensionTo.extension_name}`);
             break;
           }
 
           case 'declined': {
-            this.messageService.showMessage(`Not answered by ${incomingExtensionFrom.extension_name}`);
+            this.messageService.showMessage(`Not answered by ${incomingExtensionTo.extension_name}`);
             break;
           }
 
           case 'temporarily unavailable': {
-            this.messageService.showMessage(`${callerUserName ? callerUserName : 'User'} soft phone is not available now`);
+            this.messageService.showMessage(`${callerUserName ? callerUserName : 'User'} is not available now`);
             break;
           }
 
@@ -604,11 +617,9 @@ export class SoftPhoneService extends LoginDataClass {
           case 'call rejected': {
             if (this.debugMode) {
               console.log(e);
-
-              console.log(incomingExtensionTo);
             }
 
-            this.messageService.showMessage(`You rejected incoming call from ${incomingExtensionTo.extension_name}`);
+            this.messageService.showMessage(`You rejected incoming call from ${incomingExtensionFrom.extension_name}`);
             break;
           }
         }
@@ -620,8 +631,6 @@ export class SoftPhoneService extends LoginDataClass {
           this.oSipSessionRegister = null;
 
           if (this.debugMode) {
-            console.log('omoooooo');
-
             console.log('<i>' + description + '</i>');
           }
         } else if (e.session == this.oSipSessionCall) {

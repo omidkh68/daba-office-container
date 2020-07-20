@@ -34,16 +34,10 @@ export class ConferenceAddComponent extends LoginDataClass implements OnInit {
   }
 
   createForm() {
-    if (this.data.action === 'add') {
-      this.form = this._fb.group({
-        username: new FormControl(this.loggedInUser.email.replace('@dabacenter.ir', '')),
-        confname: new FormControl('')
-      });
-    } else if (this.data.action === 'join') {
-      this.form = this._fb.group({
-        confAddress: new FormControl('')
-      });
-    }
+    this.form = this._fb.group({
+      username: new FormControl(this.loggedInUser.email.replace('@dabacenter.ir', '')),
+      confname: new FormControl('')
+    });
   }
 
   createRoom() {

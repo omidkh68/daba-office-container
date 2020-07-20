@@ -32,8 +32,8 @@ export class SoftPhoneLogsComponent implements AfterViewInit {
   loggedInUser: UserContainerInterface;
 
   loggedInUserExtension: string = '';
-
   cdrList: Array<CdrInterface> = [];
+  callPopUpMinimizeStatus: boolean = false;
 
   private _subscription: Subscription = new Subscription();
 
@@ -41,6 +41,9 @@ export class SoftPhoneLogsComponent implements AfterViewInit {
               private softPhoneService: SoftPhoneService,
               private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService) {
+    this._subscription.add(
+      this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
+    );
   }
 
   openSheet(user: SoftphoneUserInterface) {

@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {timer} from 'rxjs';
 import {Subscription} from 'rxjs/internal/Subscription';
-// import {UserInterface} from '../../users/logic/user-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {NotificationService} from '../../../services/notification.service';
@@ -125,6 +124,10 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
         break;
       }
     }
+  }
+
+  minimizePopUp() {
+    this.softPhoneService.changeMinimizeCallPopUp(true);
   }
 
   hangUp() {

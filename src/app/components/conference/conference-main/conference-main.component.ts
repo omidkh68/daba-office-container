@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {AppConfig} from '../../../../environments/environment';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../services/message.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -50,55 +51,25 @@ export class ConferenceMainComponent implements OnDestroy {
         if (resp) {
           this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-          this.confAddress = `https://conference.dabacenter.ir/main.php?username=${resp.username}&confname=${resp.confname}`;
+          this.confAddress = resp.confname;
 
-          this.webFrame.nativeElement.setAttribute('src', this.confAddress);
+          const address = `${AppConfig.CONF_URL}?username=${resp.username}&confname=${resp.confname}`;
 
-          this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-            // console.log('did-start-loading');
-          });
+          if (this.webFrame) {
+            this.webFrame.nativeElement.setAttribute('src', address);
 
-          this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-          });
+            this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
+              // console.log('did-start-loading');
+            });
 
-          setTimeout(() => {
-            this.showConference = true;
-          });
-        }
-      })
-    );
-  }
+            this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+            });
 
-  joinToExistConf() {
-    const dialogRef = this.dialog.open(ConferenceAddComponent, {
-      autoFocus: false,
-      width: '350px',
-      height: '205px',
-      data: {action: 'join'}
-    });
-
-    this._subscription.add(
-      dialogRef.afterClosed().subscribe((resp: ConferenceInterface) => {
-        if (resp) {
-          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
-
-          this.confAddress = resp.confAddress;
-
-          this.webFrame.nativeElement.setAttribute('src', this.confAddress);
-
-          this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-            // console.log('did-start-loading');
-          });
-
-          this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
-            // console.log('did-stop-loading');
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-          });
-
-          setTimeout(() => {
-            this.showConference = true;
-          });
+            setTimeout(() => {
+              this.showConference = true;
+            });
+          }
         }
       })
     );
@@ -111,6 +82,7 @@ export class ConferenceMainComponent implements OnDestroy {
 
   exitOfConference() {
     this.webFrame.nativeElement.setAttribute('src', '');
+    this.webFrame.nativeElement.stop();
 
     this.showConference = false;
   }

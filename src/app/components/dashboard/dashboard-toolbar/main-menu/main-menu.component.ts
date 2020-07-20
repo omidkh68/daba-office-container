@@ -20,12 +20,6 @@ export class MainMenuComponent {
 
   constructor(private windowManagerService: WindowManagerService) {
     setTimeout(() => {
-      /*const pbx = this.serviceList[0];
-      this.openService(pbx);
-
-      const project = this.serviceList[1];
-      this.openService(project);*/
-
       this.loggedInUser.services.map(userService => {
         const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
@@ -41,10 +35,6 @@ export class MainMenuComponent {
   }
 
   openService(service: ServiceItemsInterface) {
-    /*if (!service.status) {
-      return;
-    }*/
-
     this.windowManagerService.openWindowState(service);
   }
 }

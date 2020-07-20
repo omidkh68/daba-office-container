@@ -1,9 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {MessageService} from '../../../services/message.service';
+import {SoftPhoneService} from '../service/soft-phone.service';
+import {TranslateService} from '@ngx-translate/core';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
-import {SoftPhoneService} from '../service/soft-phone.service';
 
 export interface KeysInterface {
   num: string;
@@ -33,6 +35,7 @@ export class SoftPhoneKeypadComponent implements OnInit {
   numeric: string | any = '';
   oldNumeric: string | any = '';
   disableKeypad: boolean = false;
+  callPopUpMinimizeStatus: boolean = false;
 
   keys: Array<KeysInterface> = [
     {num: '1'}, {num: '2'}, {num: '3'},
@@ -43,7 +46,12 @@ export class SoftPhoneKeypadComponent implements OnInit {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private softPhoneService: SoftPhoneService) {
+  constructor(private softPhoneService: SoftPhoneService,
+              private translateService: TranslateService,
+              private messageService: MessageService) {
+    this._subscription.add(
+      this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
+    );
   }
 
   ngOnInit(): void {
@@ -89,6 +97,12 @@ export class SoftPhoneKeypadComponent implements OnInit {
   }
 
   openButtonSheet() {
+    if (this.callPopUpMinimizeStatus) {
+      this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
+
+      return;
+    }
+
     if (!this.numeric.length) {
       return;
     }
@@ -133,6 +147,10 @@ export class SoftPhoneKeypadComponent implements OnInit {
 
   dismissTransferCall() {
     this.triggerCloseBottomSheet.emit();
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
   }
 
   ngOnDestroy(): void {

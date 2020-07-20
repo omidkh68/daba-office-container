@@ -8,6 +8,10 @@
   width: 100%;
   height: 100%;
   z-index: -1;
+  -webkit-transition: all .2s;
+  -moz-transition: all .2s;
+  -o-transition: all .2s;
+  transition: all .2s;
 
   .o-bottom-sheet-backdrop {
     @include transition(background .2s);
@@ -19,6 +23,10 @@
     .o-bottom-sheet-backdrop {
       background: rgba(0, 0, 0, .7);
     }
+  }
+
+  &.minimizePopUp {
+    bottom: -100%;
   }
 
   .o-bottom-sheet-content {

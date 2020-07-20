@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output, Pipe, PipeTransform, ViewChild} from '@angular/core';
-// import {UserInterface} from '../../users/logic/user-interface';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {MessageService} from '../../../services/message.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
+import {TranslateService} from '@ngx-translate/core';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
@@ -38,9 +40,17 @@ export class SoftPhoneContactsComponent implements OnInit {
   bottomSheetData: SoftPhoneBottomSheetInterface;
   data: any;
   disableContacts: boolean = false;
+  callPopUpMinimizeStatus: boolean = false;
   filterArgs = null;
 
-  constructor(private softPhoneService: SoftPhoneService) {
+  private _subscription: Subscription = new Subscription();
+
+  constructor(private softPhoneService: SoftPhoneService,
+              private translateService: TranslateService,
+              private messageService: MessageService) {
+    this._subscription.add(
+      this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
+    );
   }
 
   ngOnInit(): void {
@@ -65,6 +75,12 @@ export class SoftPhoneContactsComponent implements OnInit {
   }
 
   openSheet(contact: SoftphoneUserInterface) {
+    if (this.callPopUpMinimizeStatus) {
+      this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
+
+      return;
+    }
+
     this.triggerBottomSheet.emit({
       component: SoftPhoneCallToActionComponent,
       height: '200px',
@@ -74,6 +90,12 @@ export class SoftPhoneContactsComponent implements OnInit {
   }
 
   addNewContact() {
+    if (this.callPopUpMinimizeStatus) {
+      this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
+
+      return;
+    }
+
     this.triggerBottomSheet.emit({
       component: SoftPhoneContactDetailComponent,
       height: '270px',
@@ -82,6 +104,12 @@ export class SoftPhoneContactsComponent implements OnInit {
   }
 
   editContact(contact) {
+    if (this.callPopUpMinimizeStatus) {
+      this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
+
+      return;
+    }
+
     this.triggerBottomSheet.emit({
       component: SoftPhoneContactDetailComponent,
       height: '270px',
@@ -102,6 +130,10 @@ export class SoftPhoneContactsComponent implements OnInit {
 
   dismissTransferCall() {
     this.triggerCloseBottomSheet.emit();
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
   }
 }
 

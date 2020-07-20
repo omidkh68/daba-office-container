@@ -11,6 +11,13 @@
     {{callTimer}}
   </div>
 
+  <button (click)="minimizePopUp()"
+          *ngIf="connectedStatus"
+          class="minimizeBtn pos-abs top-full width-40 height-40 text-white no-bg no-border cursor-pointer"
+          [ngClass]="rtlDirection ? 'left-full' : 'right-full'">
+    <mat-icon>{{rtlDirection ? 'keyboard_arrow_left' : 'keyboard_arrow_right'}}</mat-icon>
+  </button>
+
   <div class="text-center">
     <img [src]="'assets/profileImg/'+ (data.username ? data.username : '0') +'.jpg'" [alt]="data.name"
          onerror="this.src='assets/profileImg/0.jpg'"

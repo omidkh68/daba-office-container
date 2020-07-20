@@ -38,90 +38,8 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'pbx'};
   activeTab: number = 1;
   tabs: Array<TabInterface> = [];
-
-  softPhoneUsers: Array<SoftphoneUserInterface> = [];/*[
-    {
-      id: 9,
-      name: 'آقای بصیری',
-      email: 'seanbassiri@gmail.com',
-      created_at: '2020-06-23T08:53:17.000000Z',
-      updated_at: '2020-06-23T08:53:17.000000Z',
-      timezone: null,
-      extension: '',
-    },
-    {
-      id: 46,
-      name: 'omid',
-      email: 'khosrojerdi@dabacenter.ir',
-      created_at: '2020-06-23T08:53:17.000000Z',
-      updated_at: '2020-06-23T08:53:17.000000Z',
-      timezone: null,
-      extension: ''
-    },
-    {
-      id: 16,
-      name: 'مریم بهادری',
-      email: 'm.bahadori@dabacenter.ir',
-      created_at: '2020-06-23T08:53:17.000000Z',
-      updated_at: '2020-06-23T08:53:17.000000Z',
-      timezone: null,
-      extension: ''
-    },
-    {
-      id: 47,
-      name: 'مهدی مرجانی',
-      email: 'marjani@dabacenter.ir',
-      created_at: '2020-06-23T08:53:17.000000Z',
-      updated_at: '2020-06-23T08:53:17.000000Z',
-      timezone: null,
-      extension: ''
-    },
-    {
-      id: 39,
-      name: 'جواد موحدی',
-      email: 'j.movahedi@dabacenter.ir',
-      created_at: '2020-06-23T08:53:17.000000Z',
-      updated_at: '2020-06-23T08:53:17.000000Z',
-      timezone: null,
-      extension: ''
-    },
-    {
-      id: 200,
-      name: 'امیر اصغری',
-      email: 'a.asghari@dabacenter.ir',
-      created_at: '2020-06-23T08:53:17.000000Z',
-      updated_at: '2020-06-23T08:53:17.000000Z',
-      timezone: null,
-      extension: ''
-    },
-    {
-      id: 41,
-      name: 'محمدرضا رادان',
-      email: 'm.radan@dabacenter.ir',
-      created_at: '2020-06-23T08:53:17.000000Z',
-      updated_at: '2020-06-23T08:53:17.000000Z',
-      timezone: null,
-      extension: ''
-    },
-    {
-      id: 36,
-      name: 'محمود ملک لو',
-      email: 'm.malekloo@dabacenter.ir',
-      created_at: '2020-06-23T08:53:17.000000Z',
-      updated_at: '2020-06-23T08:53:17.000000Z',
-      timezone: null,
-      extension: ''
-    },
-    {
-      id: 36,
-      name: 'سید  محمد حسین سجادی',
-      email: 'h.sajjadi@dabacenter.ir',
-      created_at: '2020-06-23T08:53:17.000000Z',
-      updated_at: '2020-06-23T08:53:17.000000Z',
-      timezone: null,
-      extension: ''
-    }
-  ]*/
+  callPopUpMinimizeStatus: boolean = false;
+  softPhoneUsers: Array<SoftphoneUserInterface> = [];
 
   private _subscription: Subscription = new Subscription();
 
@@ -146,6 +64,10 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
 
     this._subscription.add(
       this.softPhoneService.currentSoftPhoneUsers.subscribe(users => this.softPhoneUsers = users)
+    );
+
+    this._subscription.add(
+      this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
 
     /*this._subscription.add(
@@ -274,6 +196,10 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
 
   call(data: any) {
     this.openButtonSheet(data);
+  }
+
+  maximizeCallPopUp() {
+    this.softPhoneService.changeMinimizeCallPopUp(false);
   }
 
   getTranslate(word) {

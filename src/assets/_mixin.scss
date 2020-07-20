@@ -59,7 +59,6 @@
 @mixin transition($args...) {
   -webkit-transition: $args !important;
   -moz-transition: $args !important;
-  -ms-transition: $args !important;
   -o-transition: $args !important;
   transition: $args !important;
 }

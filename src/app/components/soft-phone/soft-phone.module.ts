@@ -12,6 +12,7 @@ import {SoftPhoneContactsComponent} from './soft-phone-contacts/soft-phone-conta
 import {SoftPhoneCallPopUpComponent} from './soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from './soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneCallToActionComponent} from './soft-phone-call-to-action/soft-phone-call-to-action.component';
+import {SoftPhoneTransferCallComponent} from './soft-phone-transfer-call/soft-phone-transfer-call.component';
 import {SoftPhoneContactDetailComponent} from './soft-phone-contacts/soft-phone-contact-detail/soft-phone-contact-detail.component';
 import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-information/soft-phone-information.component';
 
@@ -29,6 +30,7 @@ import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-informat
     SoftPhoneBottomSheetComponent,
     SoftPhoneInformationComponent,
     SoftPhoneCallToActionComponent,
+    SoftPhoneTransferCallComponent,
     SoftPhoneCallToActionComponent,
     SoftPhoneContactDetailComponent
   ],
