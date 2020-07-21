@@ -18,13 +18,20 @@
         <!-- boards container -->
         <div class="full-height" *ngIf="viewModeTypes == 'calendar_task'">
             <app-task-calendar-weekday [loginData]="loginData"
+                                       (triggerBottomSheet)="openButtonSheet($event)"
                                        [calendarEvents]="calendarEvents"></app-task-calendar-weekday>
+            <app-task-bottom-sheet #bottomSheet></app-task-bottom-sheet>
         </div>
         <!--/ end of boards container -->
 
         <!-- calendar container -->
         <div class="full-height" *ngIf="viewModeTypes == 'calendar_task_rate'">
-            <app-task-calendar-rate [loginData]="loginData"
+            <app-task-calendar-rate
+                    [userSelected]="calendarParameters.userSelected"
+                    [dateStart]="calendarParameters.dateStart"
+                    [sumTime]="calendarParameters.sumTime"
+                    [calendarDifferentEvents]="calendarParameters.calendarEvent"
+                    [loginData]="loginData"
                                     [usersList]="usersList"></app-task-calendar-rate>
         </div>
     </ng-container>

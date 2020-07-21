@@ -144,6 +144,8 @@
     "task_filter": {
       "all": "All",
       "tasks_filter": "Task Filter",
+      "tasks_filter_calendar": "Calendar Task Filter",
+      "tasks_filter_calendar_hours": "Hours",
       "filter_types": "Filter types",
       "by_create_date": "Based on task creation date",
       "by_project": "Based on project name",

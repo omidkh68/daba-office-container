@@ -22,6 +22,9 @@ import {TaskActivityComponent} from './task-activity/task-activity.component';
 import {TaskBottomSheetComponent} from './task-bottom-sheet/task-bottom-sheet.component';
 import {TaskCalendarRateComponent} from './task-calendar/task-calendar-rate/task-calendar-rate.component';
 import {TaskCalendarWeekdayComponent} from './task-calendar/task-calendar-weekday/task-calendar-weekday.component';
+import {TaskCalendarFilterComponent} from './task-calendar/task-calendar-filter/task-calendar-filter.component';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import {A11yModule} from "@angular/cdk/a11y";
 
 @NgModule({
   declarations: [
@@ -41,15 +44,22 @@ import {TaskCalendarWeekdayComponent} from './task-calendar/task-calendar-weekda
     TaskActivityComponent,
     TaskBottomSheetComponent,
     TaskCalendarRateComponent,
+    TaskCalendarFilterComponent,
     TaskCalendarWeekdayComponent
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    NgxChartsModule,
-    FilePickerModule,
-    FullCalendarModule,
-    TranslateModule.forChild({}),
+    imports: [
+        CommonModule,
+        SharedModule,
+        NgxChartsModule,
+        FilePickerModule,
+        FullCalendarModule,
+        MatDialogModule,
+        TranslateModule.forChild({}),
+        A11yModule,
+    ],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
   ]
 })
 export class TasksModule {

@@ -1,4 +1,13 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -9,8 +18,9 @@ import {TaskDurationInterface} from '../../logic/task-duration-interface';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
 import {FullCalendarComponent} from '@fullcalendar/angular';
-import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
 import {LoginInterface} from '../../../users/logic/login.interface';
+import {UtilsService} from "../../../../services/utils.service";
+import {UserInterface} from "../../../users/logic/user-interface";
 
 @Component({
   selector: 'app-task-calendar-rate',
@@ -18,8 +28,9 @@ import {LoginInterface} from '../../../users/logic/login.interface';
   styleUrls: ['./task-calendar-rate.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskCalendarRateComponent implements OnInit, OnDestroy {
+export class TaskCalendarRateComponent implements OnInit, OnChanges ,OnDestroy {
   @ViewChild('calendar') calendarComponent: FullCalendarComponent; // the #calendar in the template
+  @ViewChild('drawer') drawer: any; // the #calendar in the template
 
   @Input()
   usersList: any;
@@ -27,8 +38,19 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
   @Input()
   loginData: LoginInterface;
 
-  sumTime: string = '';
+  @Input()
   calendarDifferentEvents: any;
+
+  @Input()
+  sumTime: any;
+
+  @Input()
+  dateStart: any;
+
+  @Input()
+  userSelected: UserInterface;
+
+  //calendarDifferentEvents: any;
   calendarPlugins = [dayGridPlugin, timeGridPlugin];
   calendarApi: Calendar;
   form: FormGroup;
@@ -37,11 +59,46 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
     dateStart: '',
     dateStop: ''
   };
-
+  private isVisible: boolean = false;
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
-              private loadingIndicatorService: LoadingIndicatorService,) {
+  count: number;
+
+  constructor(private api: ApiService , private utilService: UtilsService) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+
+      if(this.calendarComponent){
+        let calendarApi = this.calendarComponent.getApi();
+        if (this.dateStart) {
+          let month = this.dateStart._d.getMonth() + 1;
+          month = this.utilService.pad(month,2,null);
+          calendarApi.gotoDate(this.dateStart._d.getFullYear() + "-" + month + "-" + this.dateStart._d.getDate()); // call a method on the Calendar object
+          this.drawer.open();
+
+        }
+        this.isVisible = true;
+      }
+  }
+
+  ngAfterContentChecked(): void{
+
+    // if(this.isVisible == false && this.sumTime){
+    //   if(this.calendarComponent){
+    //     let calendarApi = this.calendarComponent.getApi();
+    //     if (this.dateStart) {
+    //       let month = this.dateStart._d.getMonth() + 1;
+    //       month = this.utilService.pad(month,2,null);
+    //       calendarApi.gotoDate(this.dateStart._d.getFullYear() + "-" + month + "-" + this.dateStart._d.getDate()); // call a method on the Calendar object
+    //     }
+    //     this.isVisible = true;
+    //   }
+    //
+    // }else{
+    //   this.isVisible = false;
+    // }
+    //console.log("HUSIN SALAM" ,this.sumTime , this.dateStart)
 
   }
 
@@ -62,47 +119,7 @@ export class TaskCalendarRateComponent implements OnInit, OnDestroy {
     this.form.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
   }
 
-  submit() {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-    const formValue: TaskDurationInterface = Object.assign({}, this.form.value);
-
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-    this._subscription.add(
-      this.api.boardsCalendarDurationTask(formValue).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-        if (resp.result === 1) {
-          let calendarEvent = [];
-          let sum = 0;
-
-          resp.content[0].map(time => {
-            const taskEvent = {
-              title: time.timediff,
-              start: new Date(time.startDate),
-              end: new Date(time.startDate)
-            };
-
-            calendarEvent.push(taskEvent);
-          });
-
-          this.sumTime = resp.content[1][0].timeSum;
-
-          this.calendarDifferentEvents = calendarEvent;
-
-          let calendarApi = this.calendarComponent.getApi();
-
-          if (formValue.dateStart)
-            calendarApi.gotoDate(formValue.dateStart); // call a method on the Calendar object
-        } else {
-          this.form.enable();
-        }
-      }, error => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-      })
-    );
-  }
 
   ngOnDestroy(): void {
     if (this._subscription) {

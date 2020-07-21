@@ -10,7 +10,8 @@
                [allDaySlot]="false"
                [displayEventTime]="true"
                [eventLimit]="2"
+               (eventClick)="eventClick($event)"
+               (eventRender)="eventRender($event)"
                [events]="calendarEvents"
-               [plugins]="calendarPlugins"
-               (click)="eventClick($event)">
+               [plugins]="calendarPlugins">
 </full-calendar>

@@ -144,6 +144,8 @@
     "task_filter": {
       "all": "همه",
       "tasks_filter": "فیلتر تسک ها",
+      "tasks_filter_calendar": "فیلتر ساعات کاری",
+      "tasks_filter_calendar_hours": "ساعات کاری",
       "filter_types": "نوع فیلتر",
       "by_create_date": "بر اساس تاریخ ایجاد تسک",
       "by_project": "بر اساس نام پروژه",

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Injector, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
@@ -16,6 +16,9 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {TaskCalendarFilterComponent} from "../task-calendar/task-calendar-filter/task-calendar-filter.component";
+import {LoginDataClass} from "../../../services/loginData.class";
+import {UtilsService} from "../../../services/utils.service";
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];
@@ -27,7 +30,7 @@ export interface TaskEssentialInfo {
   templateUrl: './task-main.component.html',
   styleUrls: ['./task-main.component.scss']
 })
-export class TaskMainComponent implements AfterViewInit, OnDestroy {
+export class TaskMainComponent extends LoginDataClass implements AfterViewInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: TaskBottomSheetComponent;
 
   rtlDirection: boolean;
@@ -41,14 +44,19 @@ export class TaskMainComponent implements AfterViewInit, OnDestroy {
   filterData: FilterInterface = null;
   filteredBoardsData: any;
   tabs = [];
+  checksTab: string;
+  calendarParameters = {};
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
+              private injector: Injector,
               private loadingIndicatorService: LoadingIndicatorService,
               private translate: TranslateService,
               private userInfoService: UserInfoService,
+              private utilService: UtilsService,
               public dialog: MatDialog) {
+    super(injector, userInfoService);
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
@@ -131,6 +139,31 @@ export class TaskMainComponent implements AfterViewInit, OnDestroy {
     this.pushTaskToBoard = event;
   }
 
+  showCalendarFilter() {
+    const data: FilterTaskInterface = {
+      filterData: this.filterData,
+      usersList: this.taskEssentialInfo.usersList,
+      projectsList: this.taskEssentialInfo.projectsList,
+      loginData: this.loginData,
+      rtlDirection : this.rtlDirection
+    };
+
+    const dialogRef = this.dialog.open(TaskCalendarFilterComponent, {
+      data: data,
+      autoFocus: false,
+      width: '500px',
+      height: '300px'
+    });
+
+    this._subscription.add(
+        dialogRef.afterClosed().subscribe(resp => {
+          if (resp) {
+            this.calendarParameters = resp;
+          }
+        })
+    );
+  }
+
   showFilter() {
     const data: FilterTaskInterface = {
       filterData: this.filterData,
@@ -177,6 +210,11 @@ export class TaskMainComponent implements AfterViewInit, OnDestroy {
 
   getTranslate(word) {
     return this.translate.instant(word);
+  }
+
+  doSomething(data: any):void {
+    this.checksTab = data;
+    console.log('Picked date: ', data);
   }
 
   ngOnDestroy(): void {

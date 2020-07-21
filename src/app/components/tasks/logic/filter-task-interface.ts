@@ -6,4 +6,6 @@ export interface FilterTaskInterface {
   filterData: FilterInterface;
   usersList: UserInterface[];
   projectsList: ProjectInterface[];
+  loginData?: any;
+  rtlDirection?: boolean
 }

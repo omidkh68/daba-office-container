@@ -1,0 +1,89 @@
+<div class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+    <form [formGroup]="form" (submit)="submit()" class="full-height">
+        <div class="dialog-content-container height-full-minus-30 full-width">
+            <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
+                {{'tasks.task_filter.tasks_filter_calendar' | translate}}
+            </h1>
+
+            <div class="display-flex margin-r-l-reverse">
+                <div class="full-width padding-r-l">
+                    <mat-form-field class="full-width font-8-em">
+                        <img matPrefix
+                             *ngIf="userSelected && userSelected.email"
+                             [src]="'/assets/profileImg/'+userSelected.email+'.jpg'"
+                             class="width-20 height-20 margin-l-half round-corner-all pos-rel top-three-tenth">
+                            {{'tasks.form.assign_to' | translate}}
+                        <mat-select formControlName="adminId" tabIndex="4">
+                            <mat-option (onSelectionChange)="selected(user)" *ngFor="let user of usersList" [value]="user.adminId">
+                                <img matPrefix
+                                     class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
+                                     [src]="'/assets/profileImg/'+user.email+'.jpg'">
+                                {{user.name}} {{user.family}}
+                            </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!form.get('adminId').valid && form.get('adminId').touched">
+                            {{'tasks.form.assign_to_error' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+            <div class="display-flex margin-r-l-reverse">
+                <div class="half-width padding-r-l">
+                    <mat-form-field class="full-width font-8-em">
+                        <mat-label>{{'global.from_date' | translate}}</mat-label>
+                        <input matInput [matDatepicker]="picker1" readonly
+                               (focus)="picker1.open()" (click)="picker1.open()"
+                               formControlName="dateStart" tabindex="5">
+                        <mat-datepicker #picker1></mat-datepicker>
+
+                        <button class="close-icon pos-rel top-half float-left" type="button"
+                                *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
+                                mat-button matSuffix mat-icon-button aria-label="Clear"
+                                (click)="form.get('dateStart').setValue('')">
+                            <mat-icon>close</mat-icon>
+                        </button>
+
+                        <mat-error *ngIf="!form.get('dateStart').valid && form.get('dateStart').touched">
+                            {{'global.date_error' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="half-width padding-r-l">
+                    <mat-form-field class="full-width font-8-em">
+                        <mat-label>{{'global.to_date' | translate}}</mat-label>
+                        <input matInput [matDatepicker]="picker2" readonly
+                               (focus)="picker2.open()" (click)="picker2.open()"
+                               formControlName="dateStop" tabindex="6">
+                        <mat-datepicker #picker2></mat-datepicker>
+
+                        <button class="close-icon pos-rel top-half float-left" type="button"
+                                *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
+                                mat-button matSuffix mat-icon-button aria-label="Clear"
+                                (click)="form.get('dateStop').setValue('')">
+                            <mat-icon>close</mat-icon>
+                        </button>
+
+                        <mat-error *ngIf="!form.get('dateStop').valid && form.get('dateStop').touched">
+                            {{'global.date_error' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="display-flex margin-r-l-reverse">
+                <div class="full-width padding-r-l">
+                    <button mat-raised-button
+                            type="submit"
+                            tabindex="13"
+                            class="margin-t-b green-gradient float-left text-white line-height-30 font-7-em overflow-hide text-weight-normal">
+                        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+                        <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
