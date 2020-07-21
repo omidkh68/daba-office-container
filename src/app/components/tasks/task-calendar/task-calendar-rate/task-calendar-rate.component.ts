@@ -18,9 +18,9 @@ import {TaskDurationInterface} from '../../logic/task-duration-interface';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
 import {FullCalendarComponent} from '@fullcalendar/angular';
-import {LoginInterface} from '../../../users/logic/login.interface';
 import {UtilsService} from "../../../../services/utils.service";
 import {UserInterface} from "../../../users/logic/user-interface";
+import {LoginInterface} from "../../../login/logic/login.interface";
 
 @Component({
   selector: 'app-task-calendar-rate',

@@ -6,7 +6,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import {TaskInterface} from '../../logic/task-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
-import {LoginInterface} from '../../../users/logic/login.interface';
 import {TaskDataInterface} from "../../logic/task-data-interface";
 import {TaskDetailComponent} from "../../task-detail/task-detail.component";
 import {TaskBottomSheetInterface} from "../../task-bottom-sheet/logic/TaskBottomSheet.interface";

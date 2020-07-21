@@ -2,14 +2,13 @@ import {Component, Inject, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {TaskDurationInterface} from "../../logic/task-duration-interface";
 import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
-import {LoginInterface} from "../../../users/logic/login.interface";
 import {ApiService} from "../../logic/api.service";
 import {Subscription} from "rxjs";
 import {UserInterface} from "../../../users/logic/user-interface";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {FilterTaskInterface} from "../../logic/filter-task-interface";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import * as moment from 'moment';
+import {LoginInterface} from "../../../login/logic/login.interface";
 
 @Component({
   selector: 'app-task-calendar-filter',
