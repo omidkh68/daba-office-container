@@ -1,12 +1,8 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.9.3",
-  "author": {
-    "email": "omidkh68@gmail.com",
-    "name": "Omid Khosrojerdi",
-    "url": ""
-  },
+  "version": "0.9.10",
+  "author": "Omid Khosrojerdi, Husin Sajjadi",
   "repository": {
     "type": "github",
     "url": "https://github.com/omidkh68/daba-office-container.git"
@@ -17,9 +13,9 @@
     "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
     "start": "npm-run-all -p electron:serve ng:serve",
-    "build": "npm run electron:serve-tsc && ng build",
+    "build": "npm run electron:serve-tsc && ng build --prod --aot --build-optimizer --namedChunks=true",
     "build:dev": "npm run build -- -c dev",
-    "build:prod": "npm run build -- -c production",
+    "build:prod": "npm run build -- -c production --prod --aot --build-optimizer --namedChunks=true",
     "ng:serve": "ng serve",
     "ng:serve:web": "ng serve -c web -o",
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",
@@ -75,9 +71,12 @@
     "ecmascript-webrtc-sipml": "1.0.11",
     "electron": "8.2.5",
     "electron-builder": "22.6.0",
+    "electron-debug": "3.1.0",
+    "electron-packager": "15.0.0",
     "electron-reload": "1.5.0",
     "electron-store": "5.2.0",
     "electron-updater": "^4.2.5",
+    "electron-util": "0.14.2",
     "eslint": "6.8.0",
     "eslint-plugin-import": "2.20.2",
     "hammerjs": "2.0.8",
@@ -89,7 +88,7 @@
     "karma-electron": "6.3.0",
     "karma-jasmine": "3.1.1",
     "karma-jasmine-html-reporter": "1.5.3",
-    "lodash": "4.17.15",
+    "lodash": ">=4.17.19",
     "material-design-icons": "3.0.1",
     "mocha": "7.1.2",
     "moment": "^2.24.0",

@@ -1,4 +1,5 @@
-import {app, BrowserWindow, ipcMain, screen, webFrame} from 'electron';
+import {app, BrowserWindow, ipcMain, screen, Menu, webFrame} from 'electron';
+import {join} from 'path';
 // import {autoUpdater} from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
@@ -6,6 +7,8 @@ import * as url from 'url';
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
+
+const gotTheLock = app.requestSingleInstanceLock();
 
 function createWindow(): BrowserWindow {
   let bound = screen.getPrimaryDisplay().bounds;
@@ -15,24 +18,42 @@ function createWindow(): BrowserWindow {
     x: 0,
     y: 0,
     transparent: false,
-    /*width: 1600,
-    height: 900,*/
-    width: screen.getPrimaryDisplay().bounds.width,
-    height: screen.getPrimaryDisplay().bounds.height,
+    minWidth: screen.getPrimaryDisplay().workAreaSize.width,
+    minHeight: screen.getPrimaryDisplay().workAreaSize.height,
     frame: true,
     movable: true,
-    resizable: false,
+    resizable: true,
+    maximizable: true,
     center: true,
-    icon: `file://${__dirname}/dist/favicon.png`,
+    autoHideMenuBar: true,
+    icon: join(__dirname, 'assets/icons/favicon.256x256.png'),
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,
-      allowRunningInsecureContent: (serve) ? true : false,
+      // allowRunningInsecureContent: (serve) ? true : false,
+      // allowRunningInsecureContent: true
     },
   });
 
+  win.setMenu(null);
+  Menu.setApplicationMenu(null);
+  // Menu.autoHideMenuBar(null);
+  // Menu.setApplicationMenu(null);
+
+  win.webContents.on('devtools-opened', function () {
+    if (!serve) {
+      win.webContents.closeDevTools();
+    }
+  });
+
+  win.maximize();
+
   if (serve) {
     require('devtron').install();
+
+    const debug = require('electron-debug');
+
+    debug();
 
     // win.webContents.openDevTools();
 
@@ -43,10 +64,6 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
 
   } else {
-    win.webContents.on('devtools-opened', () => {
-      // win.webContents.closeDevTools();
-    });
-
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',
@@ -99,6 +116,18 @@ try {
       app.quit();
     }
   });
+
+  if (!gotTheLock) {
+    app.quit();
+  } else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+      if (win) {
+        if (win.isMinimized()) win.restore();
+
+        win.focus();
+      }
+    });
+  }
 
   app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the

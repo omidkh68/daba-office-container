@@ -1,18 +1,26 @@
 <div class="popup-container pos-rel full-height full-width padding-full">
   <h2 class="full-width height-40 line-height-40 text-center text-white text-weight-normal">
-    {{data.id ? data.name : 'soft_phone.call_pop_up.unknown_number' | translate}}
+    {{data.extension_no ? data.extension_name : 'soft_phone.call_pop_up.unknown_number' | translate}}
   </h2>
 
   <h3 class="full-width height-30 line-height-30 text-center text-gray-500 text-weight-normal">
-    {{data.id ? data.extension_no : data}}
+    {{data.extension_no ? data.extension_no : data}}
   </h3>
 
   <div class="full-width height-40 line-height-40 text-center text-white text-weight-normal">
     {{callTimer}}
   </div>
 
+  <button (click)="minimizePopUp()"
+          *ngIf="connectedStatus"
+          class="minimizeBtn pos-abs top-full width-40 height-40 text-white no-bg no-border cursor-pointer"
+          [ngClass]="rtlDirection ? 'left-full' : 'right-full'">
+    <mat-icon>{{rtlDirection ? 'keyboard_arrow_left' : 'keyboard_arrow_right'}}</mat-icon>
+  </button>
+
   <div class="text-center">
-    <img [alt]="data.name" [src]="'assets/profileImg/'+ (data.email ? data.email : '0') +'.jpg'"
+    <img [src]="'assets/profileImg/'+ (data.username ? data.username : '0') +'.jpg'" [alt]="data.name"
+         onerror="this.src='assets/profileImg/0.jpg'"
          class="mat-elevation-z3 width-150 height-150 round-corner-all"
          matListAvatar>
   </div>

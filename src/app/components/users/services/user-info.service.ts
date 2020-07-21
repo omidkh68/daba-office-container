@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
+import {LoginInterface} from '../../login/logic/login.interface';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-// import {UserInterface} from '../logic/user-interface';
-import {LoginInterface} from '../logic/login.interface';
 import {UserContainerInterface} from '../logic/user-container.interface';
-import {ElectronService} from '../../../services/electron.service';
 
 @Injectable({
   providedIn: 'root'

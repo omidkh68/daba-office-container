@@ -1,5 +1,5 @@
 import {Injector} from '@angular/core';
-import {LoginInterface} from '../components/users/logic/login.interface';
+import {LoginInterface} from '../components/login/logic/login.interface';
 import {UserContainerInterface} from '../components/users/logic/user-container.interface';
 
 export class LoginDataClass {

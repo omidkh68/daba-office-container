@@ -1,4 +1,4 @@
-import {UserContainerInterface} from './user-container.interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 export interface CheckLoginInterface {
   success: boolean;

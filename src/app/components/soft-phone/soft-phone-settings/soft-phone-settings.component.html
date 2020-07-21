@@ -14,10 +14,11 @@
     <mat-list-item (click)="openSheet(room)"
                    *ngFor="let room of publicConference"
                    class="highlight cursor-pointer padding-r-l height-50 margin-b-full">
-      <img [alt]="room.name" [src]="'assets/profileImg/'+ room.email +'.jpg'"
+      <img [src]="'assets/profileImg/'+ room.username +'.jpg'" [alt]="room.extension_name"
+           onerror="this.src='assets/profileImg/0.jpg'"
            class="mat-elevation-z2 width-35 height-35" matListAvatar>
 
-      <h3 class="font-7-rem text-weight-bold" matLine> {{room.name}} </h3>
+      <h3 class="font-7-rem text-weight-bold" matLine> {{room.extension_name}} </h3>
     </mat-list-item>
   </mat-list>
 </div>

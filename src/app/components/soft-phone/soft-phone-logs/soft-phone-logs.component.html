@@ -1,16 +1,15 @@
-<div class="padding-full full-height flex-center">
-  <!--<mat-list class="full-height overflow-y-auto overflow-x-hide">
-    <mat-list-item (click)="openSheet(info)" *ngFor="let info of softPhoneUsers"
-                   class="height-full-minus-45 margin-b-half overflow-y-auto overflow-x-hide cursor-pointer"
-                   disableRipple>
-      <div class="seventy-width">
-        <ng-container [ngSwitch]="info.type">
-          <mat-icon *ngSwitchCase="'missed'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-height flex-center">
+  <mat-list *ngIf="cdrList.length; else noItem;" class="full-width full-height overflow-x-hide overflow-y-auto">
+    <mat-list-item *ngFor="let cdr of cdrList"
+                   class="highlight cursor-pointer height-45 padding-r-l margin-b-full">
+      <div class="width-35 height-35" matListAvatar>
+        <ng-container [ngSwitch]="cdr.disposition">
+          <mat-icon *ngSwitchCase="'NO ANSWER'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
                     class="text-red-500" mat-list-icon>
             phone_missed
           </mat-icon>
 
-          <mat-icon *ngSwitchCase="'incoming'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+          <mat-icon *ngSwitchCase="'ANSWERED'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
                     class="text-blue-500" mat-list-icon>
             phone_callback
           </mat-icon>
@@ -20,16 +19,15 @@
             phone_forwarded
           </mat-icon>
         </ng-container>
-        <div [ngClass]="info.type === 'missed' ? 'text-red-500' : ''" class="padding-mini-r-l"
-             mat-line>{{info.name}}</div>
-        <div class="padding-mini-r-l" mat-line>{{info.extension}}</div>
       </div>
-      <div [ngClass]="rtlDirection ? 'text-left' : 'text-right'" class="thirty-width">
-        <div class="text-gray-600 font-7-rem" mat-line>{{info.date | jalali}}</div>
-        <div class="text-gray-600 font-7-rem" mat-line>{{info.time}}</div>
-      </div>
-    </mat-list-item>
-  </mat-list>-->
 
-  {{'global.no_result' | translate}}
+      <h3 class="font-7-rem text-weight-bold" matLine> {{cdr.src}} </h3>
+
+      <p class="font-6-em text-gray-600" matLine>{{cdr.calldate | jalali}}</p>
+    </mat-list-item>
+  </mat-list>
+
+  <ng-template #noItem>
+    {{'global.no_result' | translate}}
+  </ng-template>
 </div>

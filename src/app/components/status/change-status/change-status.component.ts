@@ -9,7 +9,9 @@ import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {UserStatusInterface} from '../../users/logic/user-status-interface';
 import {ChangeStatusService} from '../services/change-status.service';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {ChangeUserStatusInterface} from '../logic/change-user-status.interface';
 import {ApiService as UserApiService} from '../../users/logic/api.service';
 import {ApiService as StatusApiService} from '../logic/api.service';
@@ -24,6 +26,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
   form: FormGroup;
   currentUserStatus: UserStatusInterface | string;
   statusList: StatusInterface[];
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'userStatus'};
 
   private _subscription: Subscription = new Subscription();
 
@@ -36,11 +39,18 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
               private userInfoService: UserInfoService,
               private fb: FormBuilder,
               private translate: TranslateService,
+              private refreshLoginService: RefreshLoginService,
+              private loadingIndicatorService: LoadingIndicatorService,
               public dialogRef: MatDialogRef<ChangeStatusComponent>,
               @Inject(MAT_DIALOG_DATA) public data) {
     super(injector, userInfoService);
+
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
+
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );
   }
 
@@ -60,16 +70,24 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
   }
 
   getStatuses() {
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'userStatus'});
+
     return new Promise((resolve) => {
       this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
         this.statusApiService.getStatuses().subscribe((resp: any) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
+
           if (resp.result === 1) {
             this.statusList = resp.contents;
           }
 
           resolve(true);
+        }, error => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
+
+          this.refreshLoginService.openLoginDialog(error);
         })
       );
     });
@@ -78,9 +96,9 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
   createForm() {
     return new Promise((resolve) => {
       this.form = this.fb.group({
-        userId: new FormControl(1, Validators.required),
+        userId: new FormControl(1, Validators.required), // todo: replace this id with container user id
         status: new FormControl('', Validators.required),
-        assigner: new FormControl(1),
+        assigner: new FormControl(1), // todo: replace this id with container user id
         statusTime: new FormControl('start'),
         description: new FormControl('')
       });
@@ -125,6 +143,8 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
   submit() {
     if (this.form.valid) {
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'userStatus'});
+
       this.form.disable();
 
       const formValue = Object.assign({}, this.form.value);
@@ -135,12 +155,23 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
       this._subscription.add(
         this.userApiService.applyStatusToUser(formValue).subscribe((resp: any) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
+
           if (resp.result === 1) {
-            this.userStatusService.changeUserStatus(resp.content.user.userCurrentStatus);
+            this.userStatusService.changeUserStatus(resp.content.userCurrentStatus);
+
+            this.messageService.showMessage(this.getTranslate('status.status_success'));
+
             this.dialogRef.close(resp);
           } else {
+            this.messageService.showMessage(this.getTranslate('status.status_description_error'));
+
             this.form.enable();
           }
+        }, error => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
+
+          this.refreshLoginService.openLoginDialog(error);
         })
       );
     } else {
@@ -154,6 +185,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
   ngOnDestroy(): void {
     if (this._subscription) {
+      console.log(this._subscription);
       this._subscription.unsubscribe();
     }
   }

@@ -86,7 +86,6 @@ a {
   position: relative;
   -webkit-transition: width, height .05s;
   -moz-transition: width, height .05s;
-  -ms-transition: width, height .05s;
   -o-transition: width, height .05s;
   transition: width, height .05s;
   max-width: inherit !important;
@@ -98,7 +97,6 @@ a {
   -webkit-transform: none !important;
   -moz-transform: none !important;
   -ms-transform: none !important;
-  -o-transform: none !important;
   transform: none !important;
 }
 
@@ -669,7 +667,7 @@ file-preview-container {
   height: 50%;
   background-color: transparent;
   transform-origin: bottom;
-  border-top: 0px solid #333;
+  border-top: 0 solid #333;
   box-sizing: border-box;
 
   &--fifth {
@@ -690,7 +688,7 @@ file-preview-container {
   }
 }
 
-/* Fullcalendar stylesheets */
+// Fullcalendar stylesheets
 .fc-view-container {
   background-color: #fff;
 }

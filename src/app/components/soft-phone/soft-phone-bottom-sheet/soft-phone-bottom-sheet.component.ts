@@ -1,4 +1,6 @@
 import {Component, ComponentFactoryResolver, ElementRef, Renderer2, ViewChild, ViewContainerRef} from '@angular/core';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {SoftPhoneService} from '../service/soft-phone.service';
 import {SoftPhoneBottomSheetInterface} from './logic/soft-phone-bottom-sheet.interface';
 
 @Component({
@@ -10,8 +12,31 @@ export class SoftPhoneBottomSheetComponent {
   @ViewChild('oBottomSheet') oBottomSheet: ElementRef;
   @ViewChild('container', {read: ViewContainerRef}) container;
 
+  minimizeStatus: boolean = false;
+
+  private _subscription: Subscription = new Subscription();
+
   constructor(private renderer: Renderer2,
+              private softPhoneService: SoftPhoneService,
               private cfr: ComponentFactoryResolver) {
+    this._subscription.add(
+      this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => {
+        this.minimizeStatus = status;
+
+        try {
+          const parentNode = this.oBottomSheet.nativeElement.parentNode.parentNode;
+          // const el = this.oBottomSheet.nativeElement;
+
+          if (this.minimizeStatus) {
+            this.renderer.addClass(parentNode, 'minimizePopUp');
+          } else {
+            this.renderer.removeClass(parentNode, 'minimizePopUp');
+          }
+        } catch (e) {
+
+        }
+      })
+    );
   }
 
   toggleBottomSheet(bottomSheetConfig: SoftPhoneBottomSheetInterface, toggle: boolean = true) {
@@ -42,7 +67,7 @@ export class SoftPhoneBottomSheetComponent {
     }
   }
 
-  close(data?: any) {
+  close() {
     this.toggleBottomSheet(null, false);
   }
 }

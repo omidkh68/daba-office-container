@@ -42,7 +42,8 @@
     "stop_status": "Stop Current Status",
     "apply_status": "Apply Status",
     "status_description": "Status Description",
-    "status_description_error": "Please explain about status"
+    "status_description_error": "Please explain about status",
+    "status_success": "Status applied successfully"
   },
   "soft_phone": {
     "main": {
@@ -50,7 +51,10 @@
       "address_book": "Address Book",
       "dial_pad": "Dialpad",
       "call_logs": "Call Logs",
-      "public_room": "Conferences"
+      "public_room": "Conferences",
+      "no_permission": "Your permission is not correct, please system manager",
+      "back_to_call": "Back to call",
+      "you_are_in_call": "Action not permitted, You are in call"
     },
     "call_pop_up": {
       "hang_up": "Hang Up",
@@ -117,6 +121,7 @@
     },
     "boards": {
       "task_percentage": "Task Percentage",
+      "todo_count": "Count of Todo items",
       "todo": "Todo",
       "in_progress": "In Progress",
       "done": "Done"
@@ -173,21 +178,19 @@
     "password_error": "Please enter password",
     "login": "Login",
     "login_successfully": "Login Successfully",
-    "login_failed": "Authentication failed, please try again"
+    "login_failed": "Authentication failed, please try again",
+    "refresh_login": "Your authorize token maybe expired, please login again."
   },
   "conference": {
-    "add": "Create new conference",
-    "join": "Join the existing conference",
+    "add": "Create or join conference",
     "conf_name": "Conference room name",
     "conf_name_error": "Please enter conference room name",
     "copy_address": "Copy conference name",
     "added_to_clipboard": "Added to clipboard",
     "conf_address": "Conference address",
     "conf_address_error": "Please enter address",
-    "join_conference": "Join Conference",
-    "create_conference": "Create Conference",
+    "create_or_join_conference": "Create Conference",
     "exist_from_conf": "Exit from conference",
-    "for_create_conf_fill_inputs": "For create a conference room, fill items below",
-    "for_join_conf_paste_conf_address": "For join an exist conference paste address below"
+    "for_create_conf_fill_inputs": "For create a conference room, fill items below"
   }
 }

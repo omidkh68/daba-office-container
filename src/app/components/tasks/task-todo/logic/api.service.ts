@@ -9,8 +9,8 @@ import {AppConfig} from '../../../../../environments/environment';
 })
 export class ApiService {
   public accessToken = '';
-  // private API_URL = AppConfig.API_URL;
   private API_URL = AppConfig.CONTAINER_URL + '/project';
+  // private API_URL = AppConfig.API_URL;
 
   /**
    * @type {HttpHeaders}

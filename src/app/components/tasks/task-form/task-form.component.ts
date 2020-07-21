@@ -157,6 +157,17 @@ export class TaskFormComponent implements OnChanges, OnInit, OnDestroy {
     this.form.get('stopTime').setValue(totalCurrentTime);
   }
 
+  public findInvalidControls() {
+    const invalid = [];
+    const controls = this.form.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid.join(', ');
+  }
+
   submit() {
     this.formOutput.emit(this.form);
   }

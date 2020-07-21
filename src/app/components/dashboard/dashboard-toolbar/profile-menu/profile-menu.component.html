@@ -2,6 +2,7 @@
      class="box mat-elevation-z1 pos-rel text-center round-corner width-40 height-40 overflow-hide">
   <img [matMenuTriggerFor]="profileMenu" class="full-width full-height cursor-pointer"
        [src]="'assets/profileImg/'+ loggedInUser.email +'.jpg'"
+       onerror="this.src='assets/profileImg/0.jpg'"
        [alt]="loggedInUser.name">
 </div>
 <mat-menu class="toolbar-menu box-menu-profile padding-r-l" #profileMenu="matMenu" xPosition="before" yPosition="above">

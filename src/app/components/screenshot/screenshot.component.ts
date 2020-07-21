@@ -86,29 +86,31 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
 
     this.globalTimerSubscription = this.globalTimer.subscribe(
       t => {
-        this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+        if (this.loginData && this.loginData.token_type) {
+          this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-        this.api.getTickTok().subscribe((resp: any) => {
-          const serverDate = resp.time;
-          const localDate = new Date();
+          this.api.getTickTok().subscribe((resp: any) => {
+            const serverDate = resp.time;
+            const localDate = new Date();
 
-          const serverDateTmp = moment(serverDate).format('YYYY-MM-DD HH');
-          const localDateTmp = moment(localDate).format('YYYY-MM-DD HH');
+            const serverDateTmp = moment(serverDate).format('YYYY-MM-DD HH');
+            const localDateTmp = moment(localDate).format('YYYY-MM-DD HH');
 
-          const checkTime = moment(serverDate).format('HH');
+            const checkTime = moment(serverDate).format('HH');
 
-          const findTime: AvailableHoursInterface = lodash.find(this.randomHours, item => item.time === checkTime);
+            const findTime: AvailableHoursInterface = lodash.find(this.randomHours, item => item.time === checkTime);
 
-          if (findTime && findTime.status === false) {
-            findTime.status = true;
+            if (findTime && findTime.status === false) {
+              findTime.status = true;
 
-            this.takeAScreenShot();
-          }
+              this.takeAScreenShot();
+            }
 
-          if (serverDateTmp !== localDateTmp) {
-            alert('Different server and local time');
-          }
-        });
+            if (serverDateTmp !== localDateTmp) {
+              alert('Different server and local time');
+            }
+          });
+        }
       }
     );
   }

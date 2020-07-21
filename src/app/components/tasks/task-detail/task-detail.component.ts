@@ -6,10 +6,13 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../../services/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {ProjectInterface} from '../../projects/logic/project-interface';
+import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshBoardService} from '../services/refresh-board.service';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
@@ -35,6 +38,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
               private _fb: FormBuilder,
               public dialog: MatDialog,
               private injector: Injector,
+              private messageService: MessageService,
+              private refreshLoginService: RefreshLoginService,
               private refreshBoardService: RefreshBoardService,
               private loadingIndicatorService: LoadingIndicatorService,
               private userInfoService: UserInfoService,
@@ -183,12 +188,17 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
               if (resp.result) {
                 this.bottomSheetData.bottomSheetRef.close();
 
+                this.messageService.showMessage(resp.message);
+
                 this.refreshBoardService.changeCurrentDoRefresh(true);
               } else {
                 // show message
+                this.messageService.showMessage(resp.message);
               }
-            }, error => {
+            }, (error: HttpErrorResponse) => {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+              this.refreshLoginService.openLoginDialog(error);
             })
           );
         }
@@ -216,20 +226,24 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         const data = {
           prevContainer: this.task.boardStatus,
           newContainer: this.form.get('boardStatus').value,
-          task: resp.content.task
+          task: resp.content
         };
 
         if (resp.result) {
           this.bottomSheetData.bottomSheetRef.close();
 
+          this.messageService.showMessage(resp.message);
+
           this.refreshBoardService.changeCurrentDoRefresh(true);
         } else {
           this.form.enable();
         }
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.form.enable();
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }

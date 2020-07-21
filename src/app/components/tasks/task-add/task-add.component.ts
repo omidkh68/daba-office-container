@@ -4,10 +4,13 @@ import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../../services/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskDataInterface} from '../logic/task-data-interface';
+import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
@@ -24,7 +27,9 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
   constructor(private api: ApiService,
               private _fb: FormBuilder,
               private injector: Injector,
+              private messageService: MessageService,
               private userInfoService: UserInfoService,
+              private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               public dialogRef: MatDialogRef<TaskAddComponent>,
               @Inject(MAT_DIALOG_DATA) public data: TaskDataInterface) {
@@ -116,12 +121,16 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
+          this.messageService.showMessage(resp.message);
+
           this.dialogRef.close(true);
         } else {
           this.form.enable();
         }
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+        this.refreshLoginService.openLoginDialog(error);
 
         this.form.enable();
       })

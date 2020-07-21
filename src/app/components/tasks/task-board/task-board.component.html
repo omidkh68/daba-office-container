@@ -29,8 +29,8 @@
          [cdkDropListConnectedTo]="connectedTo">
       <div *ngIf="!board.tasks.length"
            class="flex-center full-width full-height pos-abs left-0 right-0 top-0 bottom-0 z-index-0">
-        <img [src]="'assets/board-empty-state/'+board.id+'.png'" [alt]="board.id" class="width-250">
-
+        <img [src]="'assets/board-empty-state/'+board.id+'.png'" [alt]="board.id" class="width-250"
+             onerror="this.src='assets/profileImg/0.jpg'">
         <span
           class="pos-abs left-0 right-0 bottom-0 top-0 z-index-0 margin-auto text-gray-400 font-8-rem full-width height-45 line-height-150 text-center">
           {{'global.no_result' | translate}}
@@ -60,17 +60,19 @@
 
         <mat-card-content class="text-gray-600 margin-b-half display-flex">
           <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                    class="width-18 height-18 font-full-plus-three-tenth-em">work</mat-icon>
+                    class="width-18 height-18 font-full-plus-three-tenth-em">work
+          </mat-icon>
           {{task.project.projectName}}
         </mat-card-content>
 
-        <mat-card-footer class="padding-mini-t-b padding-r-l height-45 display-flex justify-content-start">
+        <mat-card-footer class="padding-mini-t-b padding-r-l height-45 display-flex flex-space-between">
           <img [src]="'assets/profileImg/'+task.assignTo.email+'.jpg'"
+               onerror="this.src='assets/profileImg/0.jpg'"
                class="width-25 height-25 round-corner-all mat-elevation-z1"
                [matTooltip]="task.assignTo.name + ' ' + task.assignTo.family"
                [matTooltipPosition]="rtlDirection ? 'left' : 'right'">
 
-          <span [ngClass]="rtlDirection ? 'margin-r-l' : 'margin-r-l'"
+          <span [ngClass]="rtlDirection ? 'margin-r-full margin-l-auto' : 'margin-l-full margin-r-auto'"
                 class="width-25 height-25 round-corner-all mat-elevation-z1 pos-rel"
                 matTooltip="{{'tasks.boards.task_percentage' | translate}}"
                 [matTooltipPosition]="rtlDirection ? 'left' : 'right'">
@@ -85,6 +87,14 @@
               [value]="task.percentage"
               color="accent">
             </mat-progress-spinner>
+          </span>
+
+          <span class="display-flex padding-tiny-t-b" matTooltip="{{'tasks.boards.todo_count' | translate}}"
+                [matTooltipPosition]="rtlDirection ? 'right' : 'left'">
+            <mat-icon class="width-18 height-18 font-full-plus-three-tenth-em line-height-20 margin-mini-r-l">
+              rule
+            </mat-icon>
+            {{task.todoCount}}
           </span>
         </mat-card-footer>
       </mat-card>

@@ -18,6 +18,8 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
+import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {FullCalendarComponent} from '@fullcalendar/angular';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from "../task-bottom-sheet/logic/TaskBottomSheet.interface";
@@ -88,6 +90,7 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
 
   constructor(private api: ApiService,
               private injector: Injector,
+              private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               private userInfoService: UserInfoService,
               public dialog: MatDialog) {
@@ -171,8 +174,10 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
               });
               this.calendarEvents = this.tasks;
             }
-          }, error => {
+          }, (error: HttpErrorResponse) => {
             this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+            this.refreshLoginService.openLoginDialog(error);
           })
         );
       }

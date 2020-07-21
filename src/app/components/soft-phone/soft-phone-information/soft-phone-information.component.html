@@ -1,8 +1,9 @@
 <div class="full-width full-height">
   <mat-list class="soft-phone-user full-width height-50">
     <mat-list-item class="padding-mini-r-l full-height">
-      <img [alt]="loggedInUser.name" [src]="'assets/profileImg/'+ loggedInUser.email +'.jpg'"
+      <img [src]="'assets/profileImg/'+ loggedInUser.email +'.jpg'" [alt]="loggedInUser.name"
            class="mat-elevation-z2"
+           onerror="this.src='assets/profileImg/0.jpg'"
            matListAvatar>
       <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name}} </h3>
 
@@ -19,16 +20,18 @@
       <mat-list-item (click)="openSheet(user)"
                      *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
                      class="highlight cursor-pointer padding-r-l full-height margin-b-full">
-        <img [alt]="user.name" [src]="'assets/profileImg/'+ user.email +'.jpg'"
+        <img [src]="'assets/profileImg/'+ user.username +'.jpg'" [alt]="user.name"
+             onerror="this.src='assets/profileImg/0.jpg'"
              class="mat-elevation-z2 width-35 height-35" matListAvatar>
 
-        <h3 class="font-7-rem text-weight-bold" matLine> {{user.name}} </h3>
+        <h3 class="font-7-rem text-weight-bold" matLine> {{user.extension_name}} </h3>
         <app-time-area-digital-clock [timezone]="user.timezone" class="font-6-em text-gray-600" matLine>
         </app-time-area-digital-clock>
 <!--        <p class="font-6-em text-gray-600" matLine>{{user.timezone | jalali}}</p>-->
-
+<!--
         <div [ngClass]="user.status === '1' ? 'online' : 'offline'"
-             class="user-soft-phone-status pos-rel text-gray-500 width-30 height-30 round-corner-all"></div>
+             class="user-soft-phone-status pos-rel text-gray-500 width-30 height-30 round-corner-all"></div>-->
+        <div class="pos-rel text-red-700 height-30 round-corner-all font-8-em">{{user.extension_no}}</div>
       </mat-list-item>
     </mat-list>
   </div>

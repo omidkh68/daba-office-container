@@ -38,18 +38,22 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
           if (incomingCall.data) {
             this.incomingData = incomingCall.data;
             this.currentPhoneNumber = this.incomingData.o_event.o_message.o_hdr_From.s_display_name;
+
+
+            this.currentPhoneNumber = this.currentPhoneNumber.replace('-wrtc', '');
+
             let callerID = '';
             const translateIncomingCall = this.getTranslate('soft_phone.incoming_call.want_to_call_with_you');
 
             if (this.softPhoneUsers) {
-              const currentUser = this.softPhoneUsers.filter(user => user.extension_no === this.currentPhoneNumber).pop();
+              let currentUser = this.softPhoneUsers.filter(user => user.extension_no === this.currentPhoneNumber).pop();
 
               if (currentUser) {
                 this.onCallUser = currentUser;
                 this.onCallUser.extension_no = this.currentPhoneNumber;
 
                 // callerID = currentUser.name + ' ' + currentUser.family;
-                callerID = currentUser.name;
+                callerID = currentUser.extension_name;
               } else {
                 callerID = this.getTranslate('soft_phone.incoming_call.unknown_caller');
               }
@@ -57,7 +61,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
               if (!this.electronService.window.isFocused()) {
                 const notification: Notification = new Notification(`${callerID} ${translateIncomingCall}`, {
                   body: this.getTranslate('soft_phone.incoming_call.do_you_accept'),
-                  icon: 'assets/profileImg/' + currentUser.email + '.jpg',
+                  icon: 'assets/profileImg/' + currentUser.username + '.jpg',
                   dir: 'auto',
                   data: currentUser
                 });

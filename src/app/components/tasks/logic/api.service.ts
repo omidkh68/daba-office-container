@@ -13,8 +13,8 @@ import {ActivityInterface} from '../task-activity/logic/activity-interface';
 })
 export class ApiService {
   public accessToken = '';
-  // private API_URL = AppConfig.API_URL;
   private API_URL = AppConfig.CONTAINER_URL + '/project';
+  // private API_URL = AppConfig.API_URL;
   /**
    * @type {HttpHeaders}
    */
@@ -30,6 +30,7 @@ export class ApiService {
 
   boards(email: string): Observable<BoardInterface[]> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+    this.headers.headers = this.headers.headers.set('From', 'app_application');
 
     return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/?email=${email}&page=-1`, this.headers);
   }

@@ -1,7 +1,7 @@
 <div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99"
      [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <h1 class="margin-b-full font-full-em text-weight-500">
-    {{(data.action === 'add' ? 'conference.create_conference' : 'conference.join_conference') | translate}}
+    {{'conference.create_or_join_conference' | translate}}
   </h1>
 
   <a (click)="closeDialog()" [ngClass]="rtlDirection ? 'left-full' : 'right-full'"
@@ -10,64 +10,44 @@
   </a>
 
   <p class="no-margin font-9-em text-gray-700">
-    {{(data.action === 'add' ? 'conference.for_create_conf_fill_inputs' : 'conference.for_join_conf_paste_conf_address') | translate}}
+    {{'conference.for_create_conf_fill_inputs' | translate}}
   </p>
 
   <form [formGroup]="form" class="full-height">
-    <ng-container *ngIf="data.action === 'add'; else joinForm">
-      <mat-form-field class="full-width font-full-em margin-b-full">
-        <mat-icon class="text-gray-500" matPrefix>person</mat-icon>
-        <input type="text"
-               matInput
-               class="text-left padding-mini-r-l"
-               placeholder="{{'login_info.username' | translate}}"
-               autocomplete="off" required
-               tabindex="1"
-               autoFocus
-               dir="ltr"
-               formControlName="username">
-        <mat-error
-          *ngIf="!form.get('username').valid && form.get('username').touched">
-          {{'login_info.username_error' | translate}}
-        </mat-error>
-      </mat-form-field>
+    <mat-form-field class="full-width font-full-em margin-b-full">
+      <mat-icon class="text-gray-500" matPrefix>person</mat-icon>
+      <input type="text"
+             matInput
+             class="text-left padding-mini-r-l"
+             placeholder="{{'login_info.username' | translate}}"
+             autocomplete="off" required
+             tabindex="1"
+             autoFocus
+             readonly
+             dir="ltr"
+             formControlName="username">
+      <mat-error
+        *ngIf="!form.get('username').valid && form.get('username').touched">
+        {{'login_info.username_error' | translate}}
+      </mat-error>
+    </mat-form-field>
 
-      <mat-form-field class="full-width font-full-em margin-b-full">
-        <mat-icon class="text-gray-500" matPrefix>meeting_room</mat-icon>
-        <input type="text"
-               matInput
-               class="text-left padding-mini-r-l"
-               placeholder="{{'conference.conf_name' | translate}}"
-               autocomplete="off" required
-               tabindex="1"
-               autoFocus
-               dir="ltr"
-               formControlName="confname">
-        <mat-error
-          *ngIf="!form.get('confname').valid && form.get('confname').touched">
-          {{'conference.conf_name_error' | translate}}
-        </mat-error>
-      </mat-form-field>
-    </ng-container>
-
-    <ng-template #joinForm>
-      <mat-form-field class="full-width font-full-em margin-b-full">
-        <mat-icon class="text-gray-500" matPrefix>content_paste</mat-icon>
-        <input type="text"
-               matInput
-               class="text-left padding-mini-r-l"
-               placeholder="{{'conference.conf_address' | translate}}"
-               autocomplete="off" required
-               tabindex="1"
-               autoFocus
-               dir="ltr"
-               formControlName="confAddress">
-        <mat-error
-          *ngIf="!form.get('confAddress').valid && form.get('confAddress').touched">
-          {{'conference.conf_address_error' | translate}}
-        </mat-error>
-      </mat-form-field>
-    </ng-template>
+    <mat-form-field class="full-width font-full-em margin-b-full">
+      <mat-icon class="text-gray-500" matPrefix>meeting_room</mat-icon>
+      <input type="text"
+             matInput
+             class="text-left padding-mini-r-l"
+             placeholder="{{'conference.conf_name' | translate}}"
+             autocomplete="off" required
+             tabindex="1"
+             autoFocus
+             dir="ltr"
+             formControlName="confname">
+      <mat-error
+        *ngIf="!form.get('confname').valid && form.get('confname').touched">
+        {{'conference.conf_name_error' | translate}}
+      </mat-error>
+    </mat-form-field>
 
     <button mat-raised-button
             [disabled]="!form.valid"

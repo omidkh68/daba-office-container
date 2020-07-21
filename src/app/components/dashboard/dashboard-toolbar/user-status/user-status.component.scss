@@ -82,6 +82,14 @@
   }
 }
 
+.transform-scale-7 {
+  -webkit-transform: scale(.7);
+  -moz-transform: scale(.7);
+  -ms-transform: scale(.7);
+  -o-transform: scale(.7);
+  transform: scale(.7);
+}
+
 @keyframes blink-status-lunch_time {
   0% {
     color: #888;

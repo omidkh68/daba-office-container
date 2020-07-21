@@ -1,12 +1,8 @@
-// The file contents for the current environment will overwrite these during build.
-// The build system defaults to the dev environment which uses `index.ts`, but if you do
-// `ng build --env=prod` then `index.prod.ts` will be used instead.
-// The list of which env maps to which file can be found in `.angular-cli.json`.
-
 export const AppConfig = {
   production: false,
   environment: 'DEV',
   API_URL: 'http://192.168.110.179:3000/api',
   CONTAINER_URL: 'http://officecontainer.dabacenter.ir:3001',
-  SOCKET_URL: 'http://192.168.110.179:4000'
+  SOCKET_URL: 'http://192.168.110.179:4000',
+  CONF_URL: 'https://conference.dabacenter.ir/main.php'
 };

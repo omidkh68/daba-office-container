@@ -1,5 +1,10 @@
-<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="soft-phone-wrapper full-height bg-white display-flex">
-  <div class="soft-phone-container height-full-minus-45 full-width pos-rel">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="soft-phone-wrapper full-height bg-white display-flex overflow-hide">
+  <a *ngIf="callPopUpMinimizeStatus" (click)="maximizeCallPopUp()"
+     class="display-block full-width height-35 line-height-35 font-8-em back-to-call text-white cursor-pointer text-center pos-rel z-index-99">
+    {{'soft_phone.main.back_to_call' | translate}}
+  </a>
+  <div class="soft-phone-container full-width pos-rel"
+       [ngClass]="callPopUpMinimizeStatus ? 'height-full-minus-80' : 'height-full-minus-45'">
     <ng-container [ngSwitch]="activeTab">
       <!-- Show soft phone information -->
       <app-soft-phone-information (triggerBottomSheet)="openButtonSheet($event)"
@@ -27,6 +32,7 @@
       <!-- Show soft phone logs -->
       <app-soft-phone-logs (triggerBottomSheet)="openButtonSheet($event)"
                            *ngSwitchCase="3"
+                           [loggedInUser]="loggedInUser"
                            [rtlDirection]="rtlDirection"
                            [softPhoneUsers]="softPhoneUsers"></app-soft-phone-logs>
       <!-- /Show soft phone logs -->
@@ -63,21 +69,21 @@
            width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
         <rect x="0" y="13" width="4" height="5" fill="#333">
           <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"/>
+                   repeatCount="indefinite"></animate>
           <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"/>
+                   repeatCount="indefinite"></animate>
         </rect>
         <rect x="10" y="13" width="4" height="5" fill="#333">
           <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.15s" dur="0.6s"
-                   repeatCount="indefinite"/>
+                   repeatCount="indefinite"></animate>
           <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.15s" dur="0.6s"
-                   repeatCount="indefinite"/>
+                   repeatCount="indefinite"></animate>
         </rect>
         <rect x="20" y="13" width="4" height="5" fill="#333">
           <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.3s" dur="0.6s"
-                   repeatCount="indefinite"/>
+                   repeatCount="indefinite"></animate>
           <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.3s" dur="0.6s"
-                   repeatCount="indefinite"/>
+                   repeatCount="indefinite"></animate>
         </rect>
       </svg>
 

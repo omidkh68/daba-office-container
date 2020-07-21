@@ -5,68 +5,14 @@
     <div class="half-width display-flex flex-center pos-rel">
       <img [src]="'assets/images/logo_saasby.png'" class="logo-saasby pos-abs width-100">
 
-      <form [formGroup]="form" class="half-width">
-        <mat-form-field class="full-width font-full-em margin-b-full">
-          <mat-icon class="text-gray-500" matPrefix>person</mat-icon>
-          <input type="text"
-                 matInput
-                 class="text-left padding-mini-r-l"
-                 placeholder="{{'login_info.username' | translate}}"
-                 autocomplete="off" required
-                 tabindex="1"
-                 autoFocus
-                 dir="ltr"
-                 formControlName="username">
-          <mat-error
-            *ngIf="!form.get('username').valid && form.get('username').touched">
-            {{'login_info.username_error' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width font-full-em margin-b-full">
-          <mat-icon class="text-gray-500" matPrefix>lock</mat-icon>
-          <input matInput
-                 class="text-left padding-mini-r-l"
-                 placeholder="{{'login_info.password' | translate}}"
-                 [type]="hide ? 'password' : 'text'"
-                 required
-                 dir="ltr"
-                 tabindex="2"
-                 autocomplete="off"
-                 formControlName="password">
-          <mat-icon class="login-icon cursor-pointer text-red-800 font-full-plus-three-tenth-em"
-                    matSuffix *ngIf="form.get('password').valid" (mousedown)="hide = !hide"
-                    (mouseup)="hide = true"> {{hide ? 'visibility' : 'visibility_off'}}
-          </mat-icon>
-          <mat-error
-            *ngIf="!form.get('password').valid && form.get('password').touched">
-            {{'login_info.password_error' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="thirty-width font-full-em margin-b-full">
-          <mat-label class="text-weight-bold">
-            <mat-icon>translate</mat-icon>
-          </mat-label>
-          <mat-select formControlName="lang" (selectionChange)="changeLang($event)">
-            <mat-option *ngFor="let lang of languages" [value]="lang.id">
-              {{lang.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <button mat-raised-button
-                [disabled]="!form.valid"
-                (click)="login()"
-                tabindex="3"
-                class="purple-gradient full-width text-white line-height-30 font-9-em text-weight-normal">
-          {{'login_info.login' | translate}}
-        </button>
-      </form>
+      <div class="sixty-width">
+        <app-login-form></app-login-form>
+      </div>
     </div>
 
     <div class="half-width bg-grey display-flex flex-center">
-      <img [src]="'assets/images/login2.png'" class="eighty-width" [ngStyle]="{'transform' : !rtlDirection ? '' : 'scaleX(-1)'}">
+      <img [src]="'assets/images/login2.png'" class="eighty-width"
+           [ngStyle]="{'transform' : !rtlDirection ? '' : 'scaleX(-1)'}">
     </div>
   </div>
 

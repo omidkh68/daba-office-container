@@ -1,12 +1,14 @@
 import {ElementRef, Injectable, Injector} from '@angular/core';
 import SIPml from 'ecmascript-webrtc-sipml';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../../services/message.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {TranslateService} from '@ngx-translate/core';
 import {IncomingInterface} from '../logic/incoming.interface';
-import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {ExtensionInterface} from '../logic/extension.interface';
+import {WindowManagerService} from '../../../services/window-manager.service';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 
 export interface EssentialTagsInterface {
   audioRemote: ElementRef;
@@ -22,6 +24,7 @@ export class SoftPhoneService extends LoginDataClass {
   allUsersSoftphone: Array<SoftphoneUserInterface> = [];
   loggedInUserSoftphone: SoftphoneUserInterface;
 
+  debugMode: boolean = true;
   oSipStack;
   oSipSessionRegister;
   oSipSessionCall;
@@ -51,6 +54,10 @@ export class SoftPhoneService extends LoginDataClass {
   private connectedCall = new BehaviorSubject(this._connectedCall);
   public currentConnectedCall = this.connectedCall.asObservable();
 
+  private _minimizeCallPopUp: boolean = false;
+  private minimizeCallPopUp = new BehaviorSubject(this._minimizeCallPopUp);
+  public currentMinimizeCallPopUp = this.minimizeCallPopUp.asObservable();
+
   private audioRemoteTag: BehaviorSubject<EssentialTagsInterface> = new BehaviorSubject(null);
 
   /*videoRemote;
@@ -66,6 +73,9 @@ export class SoftPhoneService extends LoginDataClass {
   viewLocalScreencast; // <video> (webrtc) or <div> (webrtc4all)*/
 
   constructor(private userInfoService: UserInfoService,
+              private messageService: MessageService,
+              private windowManagerService: WindowManagerService,
+              private translateService: TranslateService,
               private injector: Injector) {
     super(injector, userInfoService);
   }
@@ -77,10 +87,6 @@ export class SoftPhoneService extends LoginDataClass {
       ringbacktone: this.audioRemoteTag.value.ringbacktone.nativeElement,
       dtmfTone: this.audioRemoteTag.value.dtmfTone.nativeElement
     };
-  }
-
-  public get getMuteStatus() {
-    return this.oSipSessionCall;
   }
 
   changeSoftPhoneUsers(softPhoneUsers: Array<SoftphoneUserInterface> | null) {
@@ -107,37 +113,46 @@ export class SoftPhoneService extends LoginDataClass {
     this.connectedCall.next(status);
   }
 
+  changeMinimizeCallPopUp(minimize: boolean) {
+    this.minimizeCallPopUp.next(minimize);
+  }
+
   changeAudioRemoteTag(essentialTags) {
     this.audioRemoteTag.next(essentialTags);
 
     this.ringtone = this.audioRemoteTagValue.ringtone;
     this.ringbacktone = this.audioRemoteTagValue.ringbacktone;
 
-    SIPml.init(this.postInit, true);
+    SIPml.init(this.postInit, false);
   }
 
   combineUsersSoftPhoneInformation() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const loggedInUserExtension = this.extensionList.getValue().filter((ext: ExtensionInterface) => this.loggedInUser.email === ext.username).pop();
 
-      this.loggedInUserSoftphone = {...this.loggedInUser, ...loggedInUserExtension};
+      if (loggedInUserExtension) {
+        this.loggedInUserSoftphone = {...this.loggedInUser, ...loggedInUserExtension};
 
-      this.allUsersSoftphone = [];
+        this.allUsersSoftphone = [];
 
-      this.allUsers.map((user: UserContainerInterface) => {
-        const findExtension = this.extensionList.getValue().filter(ext => ext.username === user.email).pop();
+        /*this.allUsers.map((user: UserContainerInterface) => {
+          const findExtension = this.extensionList.getValue().filter(ext => ext.username === user.email).pop();
 
-        if (findExtension) {
-          this.allUsersSoftphone.push({
-            ...user,
-            ...findExtension
-          })
-        }
-      });
+          if (findExtension) {
+            this.allUsersSoftphone.push({
+              ...user,
+              ...findExtension
+            })
+          }
+        });*/
 
-      this.changeSoftPhoneUsers(this.allUsersSoftphone);
+        // this.changeSoftPhoneUsers(this.allUsersSoftphone);
+        this.changeSoftPhoneUsers(this.extensionList.getValue());
 
-      resolve(true);
+        resolve(true);
+      } else {
+        reject(false);
+      }
     });
   }
 
@@ -155,8 +170,6 @@ export class SoftPhoneService extends LoginDataClass {
 
         // update debug level to be sure new values will be used if the user haven't updated the page
         SIPml.setDebugLevel((localStorage && localStorage.getItem('org.doubango.expert.disable_debug') == 'true') ? 'error' : 'info');
-
-        console.log('in register: ', this.loggedInUserSoftphone);
 
         // create SIP stack
         this.oSipStack = new SIPml.Stack({
@@ -181,27 +194,44 @@ export class SoftPhoneService extends LoginDataClass {
         });
 
         if (this.oSipStack.start() != 0) {
-          // console.log('<b>Failed to start the SIP stack</b>');
+          if (this.debugMode) {
+            console.log('<b>Failed to start the SIP stack</b>');
+          }
         } else return;
       } catch (e) {
-        // console.log('<b>2:' + e + '</b>');
+        if (this.debugMode) {
+          console.log('<b>2:' + e + '</b>');
+        }
       }
       //btnRegister.disabled = false;
+    }).catch(() => {
+      const currentWindowInstance = this.windowManagerService.windowListArray.filter(item => item.windowService.serviceTitle === 'pbx_microservice').pop();
+
+      this.windowManagerService.closeWindow(currentWindowInstance.windowService);
+
+      this.messageService.showMessage(this.getTranslate('soft_phone.main.no_permission'));
     });
   };
 
   sipTransfer = (number) => {
     if (this.oSipSessionCall) {
-      console.log('in console');
+      if (this.debugMode) {
+        console.log('in console');
+      }
       //if (!tsk_string_is_null_or_empty(s_destination)) {
       //btnTransfer.disabled = true;
       if (this.oSipSessionCall.transfer(number) != '0') {
-        console.log('in transfer');
-        // console.log('<i>Call transfer failed</i>');
+        if (this.debugMode) {
+          console.log('in transfer');
+          console.log('<i>Call transfer failed</i>');
+        }
         //btnTransfer.disabled = false;
         return;
       }
-      // console.log('<i>Transferring the call...</i>');
+
+      if (this.debugMode) {
+        console.log('<i>Transferring the call...</i>');
+      }
       //}
     }
   };
@@ -233,16 +263,20 @@ export class SoftPhoneService extends LoginDataClass {
       this.oSipSessionCall = this.oSipStack.newSession(s_type, this.oConfigCall);
       // make call
       if (this.oSipSessionCall.call(number) != 0) {
-        // console.log('outgoing number : ', number);
-        this.oSipSessionCall = null;
-        // console.log('Failed to make call');
+        if (this.debugMode) {
+          console.log('outgoing number : ', number);
+          this.oSipSessionCall = null;
+          console.log('Failed to make call');
+        }
         //btnCall.disabled = false;
         //btnHangUp.disabled = true;
         return;
       }
       //saveCallOptions();
     } else if (this.oSipSessionCall) {
-      // console.log('<i>Connecting...</i>');
+      if (this.debugMode) {
+        console.log('<i>Connecting...</i>');
+      }
       this.oSipSessionCall.accept(this.oConfigCall);
     }
   };
@@ -255,12 +289,18 @@ export class SoftPhoneService extends LoginDataClass {
 
   sipHangUp = () => {
     if (this.oSipSessionCall) {
-      // console.log('<i>Terminating the call...</i>');
+      if (this.debugMode) {
+        console.log('<i>Terminating the call...</i>');
+      }
       this.oSipSessionCall.hangup({events_listener: {events: '*', listener: this.onSipEventSession}});
 
       this.oSipSessionCall = null;
 
       this.changeOnCallUser(null);
+
+      this.changeConnectedCall(false);
+
+      this.changeMinimizeCallPopUp(false);
     }
   };
 
@@ -314,7 +354,17 @@ export class SoftPhoneService extends LoginDataClass {
   };
 
   onSipEventStack = (e) => {
-    // console.log('==stack event = ' + e.type);
+    const type = e.type.toLowerCase();
+    const description = e.description.toLowerCase();
+
+    if (this.debugMode) {
+      console.log('-----------mmmmmmmm-----------');
+      console.log('------------------------------');
+      console.log('==session event = ', `[${type}]`, ' --- ', `[${description}]`);
+      console.log('------------------------------');
+      console.log('-----------mmmmmmmm-----------');
+    }
+
     switch (e.type) {
       case 'started': {
         // catch exception for IE (DOM not ready)
@@ -332,7 +382,9 @@ export class SoftPhoneService extends LoginDataClass {
           });
           this.oSipSessionRegister.register();
         } catch (e) {
-          // console.log('<b>1:' + e + '</b>');
+          if (this.debugMode) {
+            console.log('<b>1:' + e + '</b>');
+          }
           //btnRegister.disabled = false;
         }
         break;
@@ -355,7 +407,12 @@ export class SoftPhoneService extends LoginDataClass {
         //divCallOptions.style.opacity = 0;
 
         //txtCallStatus.innerHTML = '';
-        // console.log(bFailure ? '<i>Disconnected: <b>' + e.description + '</b></i>' : '<i>Disconnected</i>');
+        if (bFailure) {
+
+        }
+        if (this.debugMode) {
+          console.log(bFailure ? '<i>Disconnected: <b>' + description + '</b></i>' : '<i>Disconnected</i>');
+        }
 
         break;
       }
@@ -370,8 +427,10 @@ export class SoftPhoneService extends LoginDataClass {
           // start listening for events
           this.oSipSessionCall.setConfiguration(this.oConfigCall);
 
-          // alert('Answer / Reject');
-          // console.log('Answer / Reject', e.o_event.o_message.o_hdr_From.s_display_name);
+          if (this.debugMode) {
+            // alert('Answer / Reject');
+            console.log('Answer / Reject', e.o_event.o_message.o_hdr_From.s_display_name);
+          }
           //uiBtnCallSetText('Answer');
           //btnHangUp.value = 'Reject';
           //btnCall.disabled = false;
@@ -381,7 +440,9 @@ export class SoftPhoneService extends LoginDataClass {
 
           const sRemoteNumber = (this.oSipSessionCall.getRemoteFriendlyName() || 'unknown');
 
-          // console.log('<i>Incoming call from [<b>' + sRemoteNumber + '</b>]</i>');
+          if (this.debugMode) {
+            console.log('<i>Incoming call from [<b>' + sRemoteNumber + '</b>]</i>');
+          }
           //showNotifICall(sRemoteNumber);
         }
         break;
@@ -408,27 +469,88 @@ export class SoftPhoneService extends LoginDataClass {
   };
 
   onSipEventSession = (e) => {
-    // console.log('-----------oooooooo-----------');
-    // console.log('------------------------------');
-    // console.log('==session event = ', e.type, e);
-    // console.log('------------------------------');
-    // console.log('-----------oooooooo-----------');
+    const type = e.type.toLowerCase();
+    const description = e.description.toLowerCase();
+    let extensionNumberFrom: string = '';
+    let extensionNumberTo: string = '';
+    let incomingExtensionTo: ExtensionInterface;
+    let incomingExtensionFrom: ExtensionInterface;
 
-    if (e.type === 'connecting') {
+    if (e.o_event && e.o_event.o_session) {
+      try {
+        extensionNumberFrom = e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '');
+        extensionNumberTo = e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '');
+
+        incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
+        incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    let callerUserName = '...';
+
+    if (incomingExtensionFrom && incomingExtensionFrom.extension_no === this.loggedInUserSoftphone.extension_no) {
+      callerUserName = incomingExtensionTo.extension_name;
+    } else if (incomingExtensionTo && incomingExtensionTo.extension_no === this.loggedInUserSoftphone.extension_no) {
+      callerUserName = incomingExtensionFrom.extension_name;
+    }
+
+    console.log(e);
+
+    console.log(incomingExtensionTo, incomingExtensionFrom);
+
+    if (this.debugMode) {
+      console.log('-----------oooooooo-----------');
+      console.log('------------------------------');
+      console.log('==session event = ', `[${type}]`, ' --- ', `[${description}]`);
+      console.log('------------------------------');
+      console.log('-----------oooooooo-----------');
+    }
+
+    if (type === 'connecting') {
       this.changeConnectedCall(false);
     }
 
-    if (e.type === 'connected' && e.description.toLowerCase() !== 'connected') {
+    if (type === 'connected' && description !== 'connected') {
       this.changeConnectedCall(true);
     }
 
-    switch (e.type) {
+    switch (type) {
       case 'connecting':
       case 'connected': {
-        const bConnected = (e.type == 'connected');
+        this.messageService.showMessage(description);
+
+        switch (description) {
+          case 'in call': {
+            if (this.debugMode) {
+              console.log(e);
+            }
+
+            this.messageService.showMessage(`You are in call with ${callerUserName}`);
+
+            break;
+          }
+
+          case 'connecting...': {
+            this.messageService.showMessage(`Connecting...`);
+
+            break;
+          }
+
+          case 'connected': {
+            this.messageService.showMessage(`Your soft phone is now connected`);
+
+            break;
+          }
+        }
+
+        const bConnected = (type == 'connected');
         if (e.session == this.oSipSessionRegister) {
           //uiOnConnectionEvent(bConnected, !bConnected);
-          // console.log(e, '<i>' + e.description + '</i>');
+          if (this.debugMode) {
+            console.log(e, '<i>' + description + '</i>');
+          }
         } else if (e.session == this.oSipSessionCall) {
           //btnHangUp.value = 'HangUp';
           //btnCall.disabled = true;
@@ -446,7 +568,9 @@ export class SoftPhoneService extends LoginDataClass {
             }
           }
 
-          // console.log(e, '<i>' + e.description + '</i>');
+          if (this.debugMode) {
+            console.log('<i>' + description + '</i>');
+          }
           //divCallOptions.style.opacity = bConnected ? 1 : 0;
 
           if (SIPml.isWebRtc4AllSupported()) { // IE don't provide stream callback
@@ -460,8 +584,45 @@ export class SoftPhoneService extends LoginDataClass {
       case 'terminated': {
         this.changeOnCallUser(null);
         this.changeIncomingCallStatus({status: false});
+        this.changeMinimizeCallPopUp(false);
         this.stopRingbackTone();
         this.stopRingTone();
+
+        switch (description) {
+          case 'forbidden': {
+            this.messageService.showMessage(`Rejected by ${incomingExtensionTo.extension_name}`);
+            break;
+          }
+
+          case 'declined': {
+            this.messageService.showMessage(`Not answered by ${incomingExtensionTo.extension_name}`);
+            break;
+          }
+
+          case 'temporarily unavailable': {
+            this.messageService.showMessage(`${callerUserName ? callerUserName : 'User'} is not available now`);
+            break;
+          }
+
+          case 'ok': {
+            this.messageService.showMessage('Soft phone was disconnected');
+            break;
+          }
+
+          case 'call terminated': {
+            this.messageService.showMessage('Call terminated');
+            break;
+          }
+
+          case 'call rejected': {
+            if (this.debugMode) {
+              console.log(e);
+            }
+
+            this.messageService.showMessage(`You rejected incoming call from ${incomingExtensionFrom.extension_name}`);
+            break;
+          }
+        }
 
         if (e.session == this.oSipSessionRegister) {
           //uiOnConnectionEvent(false, false);
@@ -469,9 +630,9 @@ export class SoftPhoneService extends LoginDataClass {
           this.oSipSessionCall = null;
           this.oSipSessionRegister = null;
 
-          // console.log('omoooooo');
-
-          // console.log('<i>' + e.description + '</i>');
+          if (this.debugMode) {
+            console.log('<i>' + description + '</i>');
+          }
         } else if (e.session == this.oSipSessionCall) {
           this.oSipSessionCall = null;
           //uiCallTerminated(e.description);
@@ -518,7 +679,10 @@ export class SoftPhoneService extends LoginDataClass {
           const iSipResponseCode = e.getSipResponseCode();
           if (iSipResponseCode == 180 || iSipResponseCode == 183) {
             this.startRingbackTone();
-            // console.log('<i>Remote ringing...</i>');
+
+            if (this.debugMode) {
+              console.log('<i>Remote ringing...</i>');
+            }
           }
         }
         break;
@@ -527,7 +691,10 @@ export class SoftPhoneService extends LoginDataClass {
         if (e.session == this.oSipSessionCall) {
           this.stopRingbackTone();
           this.stopRingTone();
-          // console.log('<i>Early media started</i>');
+
+          if (this.debugMode) {
+            console.log('<i>Early media started</i>');
+          }
         }
         break;
       }
@@ -549,7 +716,10 @@ export class SoftPhoneService extends LoginDataClass {
           this.oSipSessionCall.bTransfering = false;
           //btnHoldResume.value = 'Hold';
           //btnHoldResume.disabled = false;
-          // console.log('<i>Failed to place remote party on hold</i>');
+
+          if (this.debugMode) {
+            console.log('<i>Failed to place remote party on hold</i>');
+          }
         }
         break;
       }
@@ -572,44 +742,58 @@ export class SoftPhoneService extends LoginDataClass {
         if (e.session == this.oSipSessionCall) {
           this.oSipSessionCall.bTransfering = false;
           //btnHoldResume.disabled = false;
-          // console.log('<i>Failed to unhold call</i>')
+          if (this.debugMode) {
+            console.log('<i>Failed to unhold call</i>')
+          }
         }
         break;
       }
       case 'm_remote_hold': {
         if (e.session == this.oSipSessionCall) {
-          // console.log('<i>Placed on hold by remote party</i>');
+          if (this.debugMode) {
+            console.log('<i>Placed on hold by remote party</i>');
+          }
         }
         break;
       }
       case 'm_remote_resume': {
         if (e.session == this.oSipSessionCall) {
-          // console.log('<i>Taken off hold by remote party</i>');
+          if (this.debugMode) {
+            console.log('<i>Taken off hold by remote party</i>');
+          }
         }
         break;
       }
       case 'm_bfcp_info': {
         if (e.session == this.oSipSessionCall) {
-          // console.log('BFCP Info: <i>' + e.description + '</i)>');
+          if (this.debugMode) {
+            console.log('BFCP Info: <i>' + description + '</i)>');
+          }
         }
         break;
       }
       case 'o_ect_trying': {
         if (e.session == this.oSipSessionCall) {
-          // console.log('<i>Call transfer in progress...</i>');
+          if (this.debugMode) {
+            console.log('<i>Call transfer in progress...</i>');
+          }
         }
         break;
       }
       case 'o_ect_accepted': {
         if (e.session == this.oSipSessionCall) {
-          // console.log('<i>Call transfer accepted</i>');
+          if (this.debugMode) {
+            console.log('<i>Call transfer accepted</i>');
+          }
         }
         break;
       }
       case 'o_ect_completed':
       case 'i_ect_completed': {
         if (e.session == this.oSipSessionCall) {
-          // console.log('<i>Call transfer completed</i>');
+          if (this.debugMode) {
+            console.log('<i>Call transfer completed</i>');
+          }
           //btnTransfer.disabled = false;
           if (this.oSipSessionTransferCall) {
             this.oSipSessionCall = this.oSipSessionTransferCall;
@@ -621,7 +805,9 @@ export class SoftPhoneService extends LoginDataClass {
       case 'o_ect_failed':
       case 'i_ect_failed': {
         if (e.session == this.oSipSessionCall) {
-          // console.log('<i>Call transfer failed</i>');
+          if (this.debugMode) {
+            console.log('<i>Call transfer failed</i>');
+          }
           //btnTransfer.disabled = false;
         }
         break;
@@ -629,7 +815,10 @@ export class SoftPhoneService extends LoginDataClass {
       case 'o_ect_notify':
       case 'i_ect_notify': {
         if (e.session == this.oSipSessionCall) {
-          // console.log('<i>Call Transfer: <b>' + e.getSipRespo + ' ' + e.description + '</b></i>');
+          if (this.debugMode) {
+            console.log('<i>Call Transfer: <b>' + e.getSipRespo + ' ' + description + '</b></i>');
+          }
+
           if (e.getSipResponseCode() >= 300) {
             if (this.oSipSessionCall.bHeld) {
               this.oSipSessionCall.resume();
@@ -644,7 +833,9 @@ export class SoftPhoneService extends LoginDataClass {
           const s_message = 'Do you accept call transfer to [' + e.getTransferDestinationFriendlyName() + ']?'; // FIXME
 
           if (confirm(s_message)) {
-            // console.log('<i>Call transfer in progress...</i>');
+            if (this.debugMode) {
+              console.log('<i>Call transfer in progress...</i>');
+            }
             this.oSipSessionCall.acceptTransfer();
             break;
           }
@@ -712,5 +903,9 @@ export class SoftPhoneService extends LoginDataClass {
         }
       }
     }*/
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
   }
 }
