@@ -1,9 +1,9 @@
-<mat-drawer-container autosize>
-    <mat-drawer #drawer mode="side">
+<mat-drawer-container autosize class="mat-elevation-z1">
+    <mat-drawer #drawer mode="side" class="round-corner">
 
         <div *ngIf="userSelected && userSelected.email" class="padding-full text-white">
 
-            <mat-icon class="cursor-pointer" (click)="drawer.toggle()" aria-hidden="false">close</mat-icon>
+<!--            <mat-icon class="cursor-pointer" (click)="drawer.toggle()" aria-hidden="false">close</mat-icon>-->
 
             <div class="text-center">
                 <img

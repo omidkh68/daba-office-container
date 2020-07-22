@@ -72,8 +72,8 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
 
     if (this.rtlDirection) {
       this.header = {
-        left: 'timeGridWeek,timeGridDay',
-        center: 'title',
+        left: 'title',
+        center: '',
         right: 'prev,next today'
       };
     } else {

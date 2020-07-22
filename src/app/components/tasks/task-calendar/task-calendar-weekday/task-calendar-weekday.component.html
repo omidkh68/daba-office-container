@@ -11,9 +11,10 @@
                [allDaySlot]="true"
                [firstDay]="1"
                [displayEventTime]="true"
-               [eventLimit]="2"
+               [eventLimit]="3"
                (eventClick)="eventClick($event)"
                (eventRender)="eventRender($event)"
+               [eventLimitText]="''"
                [events]="calendarEvents"
                [plugins]="calendarPlugins">
 </full-calendar>

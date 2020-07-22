@@ -1,5 +1,5 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {TaskDurationInterface} from "../../logic/task-duration-interface";
 import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
 import {ApiService} from "../../logic/api.service";
@@ -50,9 +50,9 @@ export class TaskCalendarFilterComponent implements OnInit{
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      adminId: new FormControl(0),
-      dateStart: new FormControl(''),
-      dateStop: new FormControl('')
+      adminId: new FormControl(0 , Validators.required),
+      dateStart: new FormControl('' , Validators.required),
+      dateStop: new FormControl('' , Validators.required)
     });
   }
 

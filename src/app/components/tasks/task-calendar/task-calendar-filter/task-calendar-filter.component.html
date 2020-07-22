@@ -11,7 +11,7 @@
                         <img matPrefix
                              *ngIf="userSelected && userSelected.email"
                              [src]="'/assets/profileImg/'+userSelected.email+'.jpg'"
-                             class="width-20 height-20 margin-l-half round-corner-all pos-rel top-three-tenth">
+                             class="width-20 height-20 margin-l-half round-corner-all pos-rel top-full">
                             {{'tasks.form.assign_to' | translate}}
                         <mat-select formControlName="adminId" tabIndex="4">
                             <mat-option (onSelectionChange)="selected(user)" *ngFor="let user of usersList" [value]="user.adminId">
@@ -77,6 +77,7 @@
                 <div class="full-width padding-r-l">
                     <button mat-raised-button
                             type="submit"
+                            [disabled]="!form.valid && form.touched"
                             tabindex="13"
                             class="margin-t-b green-gradient float-left text-white line-height-30 font-7-em overflow-hide text-weight-normal">
                         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>

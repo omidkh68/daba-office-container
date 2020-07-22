@@ -1,6 +1,7 @@
 /* fullcalendar*/
 .fc{
   font-family: 'IranSans';
+  direction: unset;
 }
 .fc-toolbar{
   direction: rtl !important;
@@ -11,7 +12,7 @@
     background-image: linear-gradient(-20deg, #3949ab 0%, #4fc3f7 100%) !important;
     */
     border: none !important;
-    margin: 10px !important;
+    margin: 3px 10px !important;
     border-radius: 5px !important;
     color: #fff !important;
     padding: 3px 9px !important;
@@ -69,9 +70,26 @@
       text-align: left;
       line-height: 20px;
       padding-left: 5px !important;
+      padding-right: 5px !important;
     }
     .fc-time{
       display: none;
     }
   }
+}
+a.fc-more {
+  margin: 1px 3px;
+  font-size: 0.85em;
+  cursor: pointer;
+  text-decoration: none;
+  background: #eee;
+  border-radius: 100%;
+  width: 25px;
+  line-height: 25px;
+  display: block;
+  text-align: center;
+  border: solid 1px #e6e6e6;
+  font-weight: bold;
+  direction: ltr;
+  color: #656565;
 }

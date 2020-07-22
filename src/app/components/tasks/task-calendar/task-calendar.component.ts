@@ -95,8 +95,6 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
               private userInfoService: UserInfoService,
               public dialog: MatDialog) {
     super(injector, userInfoService);
-    console.log("HUSIN",this.filterBoards);
-
   }
 
   changeViewMode(mode) {
@@ -163,7 +161,6 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
               this.projectsList = resp.content.projects.list;
               this.tasks = resp.content.boards.list;
 
-              debugger;
               let myArray = [];
               console.log(this.tasks);
               this.tasks.map((task:any) => {
@@ -218,6 +215,10 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
   }
 
   ngOnDestroy(): void {
+
+    this.viewModeTypes = null;
+    this.onTabLoaded.emit(this.viewModeTypes);
+
     if (this._subscription) {
       this._subscription.unsubscribe();
     }

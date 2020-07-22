@@ -164,7 +164,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     );
   }
 
-  showFilter() {
+  showTaskFilter(){
     const data: FilterTaskInterface = {
       filterData: this.filterData,
       usersList: this.taskEssentialInfo.usersList,
@@ -179,18 +179,31 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     });
 
     this._subscription.add(
-      dialogRef.afterClosed().subscribe(resp => {
-        if (resp && resp.result === 1) {
-          this.filterData = Object.assign({}, resp.filterData);
+        dialogRef.afterClosed().subscribe(resp => {
+          if (resp && resp.result === 1) {
+            this.filterData = Object.assign({}, resp.filterData);
 
-          this.filteredBoardsData = {
-            resp: resp
-          };
+            this.filteredBoardsData = {
+              resp: resp
+            };
 
-          this.doResetFilter = true;
-        }
-      })
+            this.doResetFilter = true;
+          }
+        })
     );
+  }
+  showFilter() {
+
+    if(this.checksTab === undefined || this.checksTab == 'calendar_task' || !this.activeTab){
+      this.showTaskFilter();
+    }
+
+    else if(this.checksTab == 'calendar_task_rate' && this.activeTab){
+      this.showCalendarFilter();
+    }
+    else{
+      this.showTaskFilter();
+    }
   }
 
   resetFilter() {
@@ -214,7 +227,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
   doSomething(data: any):void {
     this.checksTab = data;
-    console.log('Picked date: ', data);
+    console.log('Picked date: ', this.activeTab);
   }
 
   ngOnDestroy(): void {
