@@ -38,7 +38,7 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
 
   views = {};
 
-  calendarPlugins = [dayGridPlugin, timeGridPlugin];
+  calendarPlugins = [dayGridPlugin];
   tasks: TaskInterface[] = [];
   options: any;
 
@@ -97,14 +97,14 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
 
   eventRender(event:any){
 
-    console.log(event);
     if (event.event.extendedProps.imageurl) {
       var tag = event.el.getElementsByClassName('fc-title');
 
       tag[0].insertAdjacentHTML("beforeBegin" ,
-          "<img class='round-corner-all' src='" + event.event.extendedProps.imageurl +"' width='50px' height='50px'>");
+          "<img class='round-corner-all float-right' src='" + event.event.extendedProps.imageurl +"' width='20px' height='20px'>");
 
     }
+
   }
 
   eventClick(event:any) {
@@ -121,8 +121,8 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
 
     this.triggerBottomSheet.emit({
       component: TaskDetailComponent,
-      height: '100%',
-      width: '100%',
+      height: '98%',
+      width: '98%',
       data: data
     });
   }

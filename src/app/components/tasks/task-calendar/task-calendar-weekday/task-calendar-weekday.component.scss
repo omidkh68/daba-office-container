@@ -60,5 +60,18 @@
 .fc-day-grid-event{
   .fc-content{
     white-space: normal !important;
+    display: flex;
+    .fc-title{
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+      line-height: 20px;
+      padding-left: 5px !important;
+    }
+    .fc-time{
+      display: none;
+    }
   }
 }

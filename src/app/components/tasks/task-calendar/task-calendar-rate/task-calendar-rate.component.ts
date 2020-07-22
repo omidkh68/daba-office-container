@@ -50,6 +50,9 @@ export class TaskCalendarRateComponent implements OnInit, OnChanges ,OnDestroy {
   @Input()
   userSelected: UserInterface;
 
+  @Input()
+  rtlDirection: boolean;
+
   //calendarDifferentEvents: any;
   calendarPlugins = [dayGridPlugin, timeGridPlugin];
   calendarApi: Calendar;

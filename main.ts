@@ -51,11 +51,11 @@ function createWindow(): BrowserWindow {
   if (serve) {
     require('devtron').install();
 
-    const debug = require('electron-debug');
+    // const debug = require('electron-debug');
+    //
+    // debug();
 
-    debug();
-
-    // win.webContents.openDevTools();
+    win.webContents.openDevTools();
 
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)

@@ -7,11 +7,12 @@
 
             <div class="text-center">
                 <img
-                     class="width-70 height-70 text-center round-corner-all margin-auto pos-rel top-six-tenth"
-                     [src]="'/assets/profileImg/'+userSelected.email+'.jpg'">
+                        class="width-70 height-70 text-center round-corner-all margin-auto pos-rel top-six-tenth"
+                        [src]="'/assets/profileImg/'+userSelected.email+'.jpg'">
                 <div class="text-white padding-t">{{userSelected.name}} {{userSelected.family}}</div>
                 <div class="text-white padding-b">{{userSelected.email}}</div>
-                <div class="text-white padding-t-b">{{'tasks.task_filter.tasks_filter_calendar_hours' | translate}}: {{sumTime}}</div>
+                <div class="text-white padding-t-b">{{'tasks.task_filter.tasks_filter_calendar_hours' | translate}}
+                    : {{sumTime}}</div>
             </div>
 
         </div>
@@ -21,8 +22,8 @@
     <div>
         <full-calendar class="float-right w-100" defaultView="dayGridMonth"
                        #calendar
-                       [locale]="'fa'"
-                       [dir]="'rtl'"
+                       [locale]="rtlDirection ? 'fa' : 'en'"
+                       [dir]="rtlDirection ? 'rtl' : 'ltr'"
                        [editable]="false"
                        [handleWindowResize]="true"
                        [buttonText]="{
@@ -51,6 +52,7 @@
                        [plugins]="calendarPlugins"
                        [allDaySlot]="false"
                        [displayEventTime]="false"
+                       (eventRender)="eventRender($event)"
                        [eventLimit]="2">
         </full-calendar>
     </div>

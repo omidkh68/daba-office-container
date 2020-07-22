@@ -73,7 +73,7 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
     "#4caf50",
     "#8bc34a",
     "#cddc39",
-    "#ffeb3b",
+    "#dbc00d",
     "#ffc107",
     "#ff9800",
     "#ff5722",
@@ -134,12 +134,12 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
 
         this.tasks.map((task:any) => {
           task.title = task.taskName;
-          task.start = new Date(task.startAt),
-              task.end = new Date(task.stopAt),
-              task.color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)],
-              task.usersList = this.usersList,
-              task.projectsList = this.projectsList,
-              task.imageurl = 'img/edit.png'
+          task.start = new Date(task.startAt);
+          task.end = new Date(task.stopAt);
+          task.color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)];
+          task.usersList = this.usersList;
+          task.projectsList = this.projectsList;
+          task.imageurl = 'img/edit.png';
         });
         this.calendarEvents = this.tasks;
 
@@ -163,16 +163,41 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
               this.projectsList = resp.content.projects.list;
               this.tasks = resp.content.boards.list;
 
+              debugger;
+              let myArray = [];
+              console.log(this.tasks);
               this.tasks.map((task:any) => {
-                task.title = task.taskName;
-                task.start = new Date(task.startAt),
-                task.end = new Date(task.stopAt),
-                task.color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)],
-                task.usersList = this.usersList,
-                task.projectsList = this.projectsList,
-                task.imageurl = 'assets/profileImg/'+task.assignTo.email+'.jpg'
+                let arr = [];
+                arr = this.getDaysArray(new Date(task.startAt) , new Date(task.stopAt));
+                let color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)];
+                arr.map((item) => {
+                  let obj = {
+                    title : task.taskName,
+                    color : color,
+                    imageurl : 'assets/profileImg/'+task.assignTo.email+'.jpg',
+                    start : item,
+                    end : item,
+                    usersList : this.usersList,
+                    projectsList : this.projectsList
+                  }
+                  let newObj = Object.assign(obj, task);
+                  myArray.push(newObj)
+                })
               });
-              this.calendarEvents = this.tasks;
+
+
+              // this.tasks.map((task:any) => {
+              //   task.title = task.taskName;
+              //   task.color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)];
+              //   task.usersList = this.usersList;
+              //   task.projectsList = this.projectsList;
+              //   task.imageurl = 'assets/profileImg/'+task.assignTo.email+'.jpg';
+              //   task.start = new Date(task.startAt);
+              //   task.end = new Date(task.stopAt);
+              // });
+              this.calendarEvents = myArray;
+              console.log("ARRAY" , this.calendarEvents);
+
             }
           }, (error: HttpErrorResponse) => {
             this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
@@ -182,6 +207,14 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
         );
       }
     }
+  }
+
+  getDaysArray (start, end) {
+
+    for(var arr=[],dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+      arr.push(new Date(dt));
+    }
+    return arr;
   }
 
   ngOnDestroy(): void {
