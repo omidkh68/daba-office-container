@@ -1,5 +1,5 @@
-<mat-drawer-container autosize class="mat-elevation-z1">
-    <mat-drawer #drawer mode="side" class="round-corner">
+<mat-drawer-container id="rate-container" autosize class="rate-calendar">
+    <mat-drawer #drawer mode="side" class="round-corner mat-elevation-z4">
 
         <div *ngIf="userSelected && userSelected.email" class="padding-full text-white">
 
@@ -20,7 +20,7 @@
     </mat-drawer>
 
     <div>
-        <full-calendar class="float-right w-100" defaultView="dayGridMonth"
+        <full-calendar id="full_calendar" class="float-right w-100" defaultView="dayGridMonth"
                        #calendar
                        [locale]="rtlDirection ? 'fa' : 'en'"
                        [dir]="rtlDirection ? 'rtl' : 'ltr'"
@@ -48,11 +48,11 @@
                 }
                }"
                        [firstDay]="1"
+                       [height]="containerHeight"
                        [events]="calendarDifferentEvents"
                        [plugins]="calendarPlugins"
                        [allDaySlot]="false"
                        [displayEventTime]="false"
-                       (eventRender)="eventRender($event)"
                        [eventLimit]="2">
         </full-calendar>
     </div>

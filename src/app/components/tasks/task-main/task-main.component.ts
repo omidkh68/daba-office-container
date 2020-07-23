@@ -152,7 +152,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       data: data,
       autoFocus: false,
       width: '500px',
-      height: '300px'
+      height: '250px'
     });
 
     this._subscription.add(
@@ -227,7 +227,6 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
   doSomething(data: any):void {
     this.checksTab = data;
-    console.log('Picked date: ', this.activeTab);
   }
 
   ngOnDestroy(): void {

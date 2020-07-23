@@ -14,7 +14,7 @@
 
     <div class="pos-abs top-full display-flex flex-space-between align-items-center"
          [ngClass]="rtlDirection ? 'left-full' : 'right-full'">
-      <button *ngIf="doResetFilter" (click)="resetFilter()"
+      <button *ngIf="doResetFilter && !activeTab" (click)="resetFilter()"
               class="no-bg no-border height-35 margin-l-full cursor-pointer">
         <mat-icon class="font-8-rem line-height-25 width-18 height-18">close</mat-icon>
         <span class="font-8-rem line-height-25">{{'global.reset_filter' | translate}}</span>
@@ -25,13 +25,6 @@
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">filter_list</mat-icon>
         <span class="padding-mini-r-l">{{'global.filter' | translate}}</span>
       </button>
-
-<!--      <button *ngIf="checksTab == 'calendar_task_rate' && activeTab" mat-raised-button [disabled]="!taskEssentialInfo" (click)="showCalendarFilter()"-->
-<!--              class="white-gradient padding-mini-r-l margin-r-l text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">-->
-<!--        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">filter_list</mat-icon>-->
-<!--        <span class="padding-mini-r-l">{{'global.filter' | translate}}</span>-->
-<!--        <span class="padding-mini-r-l">فیلتر ساعات کاری</span>-->
-<!--      </button>-->
 
       <button *ngIf="!activeTab" mat-raised-button [disabled]="!taskEssentialInfo" (click)="addNewTask()"
               class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">

@@ -42,7 +42,6 @@ export class TaskCalendarFilterComponent implements OnInit{
               private loadingIndicatorService: LoadingIndicatorService,
               private dialogRef: MatDialogRef<TaskCalendarFilterComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-    console.log(this.data);
     this.usersList = this.data.usersList;
     this.loginData = this.data.loginData;
     this.rtlDirection = this.data.rtlDirection;
@@ -50,26 +49,16 @@ export class TaskCalendarFilterComponent implements OnInit{
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      adminId: new FormControl(0 , Validators.required),
+      adminId: new FormControl(null , Validators.required),
       dateStart: new FormControl('' , Validators.required),
       dateStop: new FormControl('' , Validators.required)
     });
   }
 
-  selected(user) {
-    if(this.userSelectedCheck){
-      console.log(user);
+  updateImage(event: any, user: any) {
+    if (event.isUserInput) {
       this.userSelected = user;
-      this.userSelectedCheck = false;
-    }else{
-      if(typeof this.userSelectedCheck === 'undefined'){
-        this.userSelectedCheck = true;
-        this.userSelected = user;
-      }else{
-        this.userSelectedCheck = true;
-      }
     }
-
   }
 
   dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
