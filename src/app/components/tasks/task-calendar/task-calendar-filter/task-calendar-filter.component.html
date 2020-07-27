@@ -4,7 +4,6 @@
             <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
                 {{'tasks.task_filter.tasks_filter_calendar' | translate}}
             </h1>
-
             <div class="display-flex margin-r-l-reverse">
                 <div class="full-width padding-r-l">
                     <mat-form-field class="full-width font-8-em">
@@ -14,7 +13,7 @@
                              class="width-20 height-20 margin-l-half round-corner-all pos-rel top-full">
                             {{'tasks.form.assign_to' | translate}}
                         <mat-select formControlName="adminId" tabIndex="4">
-                            <mat-option (onSelectionChange)="selected(user)" *ngFor="let user of usersList" [value]="user.adminId">
+                            <mat-option (onSelectionChange)="updateImage($event , user)" *ngFor="let user of usersList" [value]="user.adminId">
                                 <img matPrefix
                                      class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
                                      [src]="'/assets/profileImg/'+user.email+'.jpg'">
@@ -28,8 +27,6 @@
                     </mat-form-field>
                 </div>
             </div>
-
-
             <div class="display-flex margin-r-l-reverse">
                 <div class="half-width padding-r-l">
                     <mat-form-field class="full-width font-8-em">
@@ -49,6 +46,11 @@
                         <mat-error *ngIf="!form.get('dateStart').valid && form.get('dateStart').touched">
                             {{'global.date_error' | translate}}
                         </mat-error>
+
+                        <mat-error *ngIf="form.get('dateStart').value > form.get('dateStop').value">
+                            {{'tasks.form.assign_to_error' | translate}}
+                        </mat-error>
+
                     </mat-form-field>
                 </div>
                 <div class="half-width padding-r-l">
@@ -72,19 +74,24 @@
                     </mat-form-field>
                 </div>
             </div>
-
-            <div class="display-flex margin-r-l-reverse">
-                <div class="full-width padding-r-l">
-                    <button mat-raised-button
-                            type="submit"
-                            [disabled]="!form.valid && form.touched"
-                            tabindex="13"
-                            class="margin-t-b green-gradient float-left text-white line-height-30 font-7-em overflow-hide text-weight-normal">
-                        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
-                        <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
-                    </button>
-                </div>
-            </div>
         </div>
+        <div class="height-30 full-width display-flex flex-direction-row-reverse">
+            <button mat-raised-button
+                    disabled
+                    [disabled]="!form.valid"
+                    type="submit"
+                    tabindex="13"
+                    class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+                <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+                <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
+            </button>
+
+            <button (click)="dialogRef.close(false)"
+                    type="button"
+                    class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
+                <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
+            </button>
+        </div>
+
     </form>
 </div>

@@ -162,7 +162,6 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
               this.tasks = resp.content.boards.list;
 
               let myArray = [];
-              console.log(this.tasks);
               this.tasks.map((task:any) => {
                 let arr = [];
                 arr = this.getDaysArray(new Date(task.startAt) , new Date(task.stopAt));
@@ -193,7 +192,6 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
               //   task.end = new Date(task.stopAt);
               // });
               this.calendarEvents = myArray;
-              console.log("ARRAY" , this.calendarEvents);
 
             }
           }, (error: HttpErrorResponse) => {

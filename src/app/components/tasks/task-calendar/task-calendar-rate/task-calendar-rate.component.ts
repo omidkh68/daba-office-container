@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, DoCheck,
   Input,
   OnChanges,
   OnDestroy,
@@ -24,7 +24,7 @@ import {LoginInterface} from "../../../login/logic/login.interface";
   styleUrls: ['./task-calendar-rate.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskCalendarRateComponent implements OnChanges ,OnDestroy {
+export class TaskCalendarRateComponent implements OnChanges ,OnDestroy,OnInit, DoCheck {
   @ViewChild('calendar') calendarComponent: FullCalendarComponent; // the #calendar in the template
   @ViewChild('drawer') drawer: any; // the #calendar in the template
 
@@ -49,6 +49,8 @@ export class TaskCalendarRateComponent implements OnChanges ,OnDestroy {
   @Input()
   rtlDirection: boolean;
 
+  containerHeight = 300;
+
   calendarPlugins = [dayGridPlugin, timeGridPlugin];
   form: FormGroup;
   private isVisible: boolean = false;
@@ -60,22 +62,30 @@ export class TaskCalendarRateComponent implements OnChanges ,OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
 
-      if(this.calendarComponent){
-        let calendarApi = this.calendarComponent.getApi();
-        if (this.dateStart) {
-          let month = this.dateStart._d.getMonth() + 1;
-          month = this.utilService.pad(month,2,null);
-          calendarApi.gotoDate(this.dateStart._d.getFullYear() + "-" + month + "-" + this.dateStart._d.getDate()); // call a method on the Calendar object
-          this.drawer.open();
-
-        }
-        this.isVisible = true;
+    if(this.calendarComponent){
+      let calendarApi = this.calendarComponent.getApi();
+      if (this.dateStart) {
+        let month = this.dateStart._d.getMonth() + 1;
+        month = this.utilService.pad(month,2,null);
+        calendarApi.gotoDate(this.dateStart._d.getFullYear() + "-" + month + "-" + this.dateStart._d.getDate()); // call a method on the Calendar object
+        this.drawer.open();
+        document.getElementById("full_calendar").classList.add("margin-r-full");
       }
+      this.isVisible = true;
+    }
   }
 
   ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
+  }
+
+  ngOnInit(): void {
+    this.containerHeight = document.getElementById("rate-container").offsetHeight;
+  }
+
+  ngDoCheck(): void {
+    this.containerHeight = document.getElementById("rate-container").offsetHeight;
   }
 }

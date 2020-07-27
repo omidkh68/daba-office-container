@@ -1,4 +1,13 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, ViewEncapsulation} from '@angular/core';
+import {
+  AfterViewInit,
+  Component, DoCheck,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation
+} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -126,4 +135,5 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       data: data
     });
   }
+
 }
