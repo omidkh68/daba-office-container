@@ -118,7 +118,9 @@ try {
   });
 
   if (!gotTheLock) {
-    app.quit();
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
   } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
       if (win) {

@@ -1,10 +1,10 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "author": "Omid Khosrojerdi, Husin Sajjadi",
   "repository": {
-    "type": "github",
+    "type": "git",
     "url": "https://github.com/omidkh68/daba-office-container.git"
   },
   "main": "main.js",

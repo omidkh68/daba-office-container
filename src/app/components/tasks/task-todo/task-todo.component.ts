@@ -6,7 +6,6 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {TodoInterface} from './logic/todo-interface';
 import {LoginInterface} from '../../login/logic/login.interface';
 import {MessageService} from '../../../services/message.service';
-import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
@@ -28,6 +27,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   @Input()
   loginData: LoginInterface;
 
+  @Input()
+  loggedInUser: UserContainerInterface;
+
   form: FormGroup;
   edit: boolean = false;
   user: UserContainerInterface;
@@ -41,11 +43,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
               private fb: FormBuilder,
               private messageService: MessageService,
               private refreshLoginService: RefreshLoginService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private userInfoService: UserInfoService) {
-    this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
-    );
+              private loadingIndicatorService: LoadingIndicatorService) {
   }
 
   ngOnInit(): void {
@@ -58,8 +56,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       todo: this.fb.group({
         todoId: [0],
-        componentId: [0],
-        adminId: [0],
+        taskId: [0],
+        email: [''],
         isChecked: [0],
         text: [''],
         creationDate: ['']
@@ -97,15 +95,14 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     this.form.disable();
 
     const data = {
-      taskId: this.taskId,
-      todoId: todoItem.todoId,
-      toggle: todoItem.isChecked ? 0 : 1
+      ...todoItem,
+      isChecked: todoItem.isChecked ? 0 : 1
     };
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
-      this.api.toggleTodo(data).subscribe((resp: any) => {
+      this.api.updateTodo(data).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {
@@ -192,7 +189,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
       const data = {
         taskId: this.taskId,
-        email: this.user.email,
+        email: this.loggedInUser.email,
+        isChecked: 0,
         text: this.form.get('todo').value.text
       };
 
@@ -233,7 +231,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       const data = {
         todoId: this.form.get('todo').value.todoId,
         taskId: this.taskId,
-        email: this.user.email,
+        email: this.loggedInUser.email,
         text: this.form.get('todo').value.text
       };
 
