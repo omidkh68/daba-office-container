@@ -1,39 +1,48 @@
 /* fullcalendar*/
-.fc{
-  font-family: 'IranSans';
-  direction: unset;
-}
-.fc-toolbar{
-  direction: rtl !important;
-}
 .fc {
+  font-family: inherit !important;
+}
 
+.ca-rtl {
+  .fc-toolbar, .fc-content, .fc-button-group {
+    direction: rtl !important;
+  }
+}
+
+.ca-ltr {
+  .fc-toolbar, .fc-content, .fc-button-group {
+    direction: ltr !important;
+  }
+}
+
+.fc {
   th {
     text-align: center;
     padding: 5px !important;
   }
 }
-.fc-button{
+
+.fc-button {
   background: none;
   color: #333333;
   border: none;
-  margin: 0 10px !important;
+  margin: 0 !important;
 }
-.fc-button-primary:not(:disabled):active, .fc-button-primary:not(:disabled).fc-button-active{
+
+.fc-button-primary:not(:disabled):active, .fc-button-primary:not(:disabled).fc-button-active {
   border-radius: 4px !important;
   background-image: linear-gradient(-20deg, #3949ab 0%, #4fc3f7 100%) !important;
 }
+
 .fc-button-primary:hover {
   color: #3949ab;
   background: none;
   border: none;
 }
-.fc-button-primary:disabled{
+
+.fc-button-primary:disabled {
   color: #fff !important;
   background: #ccc;
-}
-.fc-button-group{
-  direction: rtl;
 }
 
 .fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus {
@@ -41,11 +50,13 @@
   background: none !important;
   color: #3949ab !important;
 }
-.fc-day-grid-event{
-  .fc-content{
+
+.fc-day-grid-event {
+  .fc-content {
     white-space: normal !important;
     display: flex;
-    .fc-title{
+
+    .fc-title {
       font-size: 11px;
       white-space: nowrap;
       overflow: hidden;
@@ -55,11 +66,13 @@
       padding-left: 5px !important;
       padding-right: 5px !important;
     }
-    .fc-time{
+
+    .fc-time {
       display: none;
     }
   }
 }
+
 a.fc-more {
   margin: 3px 9px;
   font-size: 0.85em;

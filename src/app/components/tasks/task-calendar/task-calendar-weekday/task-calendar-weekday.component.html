@@ -1,22 +1,22 @@
-<mat-drawer-container id="rate-container" autosize class="rate-calendar">
-    <full-calendar *ngIf="calendarEvents.length" defaultView="dayGridMonth"
-                   [locale]="rtlDirection ? 'fa' : 'en'"
-                   [dir]="rtlDirection ? 'rtl' : 'ltr'"
-                   [editable]="false"
-                   [handleWindowResize]="true"
-                   [header]="header"
-                   [buttonText]="buttonLabels"
-                   [slotLabelFormat]="slotLabelFormat"
-                   [selectOverlap]="false"
-                   [views]="views"
-                   [allDaySlot]="true"
-                   [firstDay]="1"
-                   [displayEventTime]="true"
-                   [eventLimit]="3"
-                   (eventClick)="eventClick($event)"
-                   (eventRender)="eventRender($event)"
-                   [eventLimitText]="''"
-                   [events]="calendarEvents"
-                   [plugins]="calendarPlugins">
-    </full-calendar>
+<mat-drawer-container autosize class="rate-calendar" id="rate-container" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
+  <full-calendar (eventClick)="eventClick($event)" (eventRender)="eventRender($event)"
+                 *ngIf="calendarEvents.length"
+                 [allDaySlot]="true"
+                 [buttonText]="buttonLabels"
+                 [dir]="rtlDirection ? 'rtl' : 'ltr'"
+                 [displayEventTime]="true"
+                 [editable]="false"
+                 [eventLimitText]="''"
+                 [eventLimit]="3"
+                 [events]="calendarEvents"
+                 [firstDay]="1"
+                 [handleWindowResize]="true"
+                 [header]="header"
+                 [locale]="rtlDirection ? 'fa' : 'en'"
+                 [plugins]="calendarPlugins"
+                 [selectOverlap]="false"
+                 [slotLabelFormat]="slotLabelFormat"
+                 [views]="views"
+                 defaultView="dayGridMonth">
+  </full-calendar>
 </mat-drawer-container>

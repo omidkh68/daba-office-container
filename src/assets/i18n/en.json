@@ -135,12 +135,16 @@
     },
     "task_detail": {
       "overview": "Overview",
-      "reports": "Reports"
+      "reports": "Reports",
+      "delete_title": "Delete Task",
+      "delete_text": "Are you sure want to delete this task?"
     },
     "task_todo": {
       "todo_list": "Todo List",
       "items": "Items",
-      "add_an_item": "Add an item"
+      "add_an_item": "Add an item",
+      "delete_item": "Delete todo",
+      "delete_text": "Are you sure want to delete this item?"
     },
     "task_files": {
       "file_manager": "File Manager",
@@ -163,7 +167,8 @@
       "by_user_stop_date": "Based on user completed date",
       "by_started_task": "Based on started tasks",
       "by_postponed": "Based on postponed tasks",
-      "in_progress_tasks": "In Progress Tasks"
+      "in_progress_tasks": "In Progress tasks",
+      "show_disabled_task": "Only Disabled tasks"
     },
     "calendar": {
       "month": "Month",

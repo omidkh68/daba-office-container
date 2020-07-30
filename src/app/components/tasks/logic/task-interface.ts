@@ -21,4 +21,5 @@ export interface TaskInterface {
   boardStatus: string;
   trackable: number;
   todoCount: number;
+  creationDate?: string;
 }

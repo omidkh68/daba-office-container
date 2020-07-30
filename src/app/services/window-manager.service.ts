@@ -13,10 +13,9 @@ import {DialogPositionInterface, WindowInterface} from '../components/dashboard/
 export class WindowManagerService {
   element: HTMLElement;
   cdkOverlayContainer: HTMLElement;
+
   private _defaultWindows: Array<WindowInterface> = [];
-  // set observable behavior to property
   private windows = new BehaviorSubject(this._defaultWindows);
-  // observable property
   public windowsList = this.windows.asObservable();
 
   constructor(public dialog: MatDialog,

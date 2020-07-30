@@ -24,7 +24,7 @@
     <div class="task-container full-height full-width padding-full overflow-x-hide overflow-y-auto"
          id="{{board.id}}"
          cdkDropList
-         (cdkDropListDropped)="drop($event)"
+         (cdkDropListDropped)="changeStatus($event)"
          [cdkDropListData]="board.tasks"
          [cdkDropListConnectedTo]="connectedTo">
       <div *ngIf="!board.tasks.length"

@@ -1,40 +1,41 @@
 <div class="content-container padding-r-l full-width full-height">
-    <div class="calendar-switcher pos-abs left-0 right-0 top-full text-center margin-auto">
-        <mat-button-toggle-group #viewMode="matButtonToggleGroup"
-                                 (change)="changeViewMode(viewMode.value)"
-                                 [ngClass]="{'view-mode': viewMode}"
-                                 value="calendar_task"
-                                 class="mat-button-custom line-height-20 center-block round-corner-all">
-            <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'calendar_task'">
-                <span>{{'tasks.form.task_calendar' | translate}}</span>
-            </mat-button-toggle>
-            <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'calendar_task_rate'">
-                <span>{{'tasks.form.task_calendar_hours' | translate}}</span>
-            </mat-button-toggle>
-        </mat-button-toggle-group>
+  <div class="calendar-switcher pos-abs left-0 right-0 top-full text-center margin-auto">
+    <mat-button-toggle-group #viewMode="matButtonToggleGroup"
+                             (change)="changeViewMode(viewMode.value)"
+                             [ngClass]="{'view-mode': viewMode}"
+                             class="mat-button-custom line-height-20 center-block round-corner-all"
+                             value="calendar_task">
+      <mat-button-toggle [value]="'calendar_task'" class="overflow-hide half-width font-7-rem line-height-20 height-30">
+        <span>{{'tasks.form.task_calendar' | translate}}</span>
+      </mat-button-toggle>
+      <mat-button-toggle [value]="'calendar_task_rate'"
+                         class="overflow-hide half-width font-7-rem line-height-20 height-30">
+        <span>{{'tasks.form.task_calendar_hours' | translate}}</span>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <ng-container class="full-height">
+    <!-- boards container -->
+    <div *ngIf="viewModeTypes == 'calendar_task'" class="full-height">
+      <app-task-calendar-weekday
+        (triggerBottomSheet)="openButtonSheet($event)"
+        [calendarEvents]="calendarEvents"
+        [loginData]="loginData"></app-task-calendar-weekday>
+      <app-task-bottom-sheet #bottomSheet></app-task-bottom-sheet>
     </div>
+    <!--/ end of boards container -->
 
-    <ng-container class="full-height">
-        <!-- boards container -->
-        <div class="full-height" *ngIf="viewModeTypes == 'calendar_task'">
-            <app-task-calendar-weekday
-                                        [loginData]="loginData"
-                                       (triggerBottomSheet)="openButtonSheet($event)"
-                                       [calendarEvents]="calendarEvents"></app-task-calendar-weekday>
-            <app-task-bottom-sheet #bottomSheet></app-task-bottom-sheet>
-        </div>
-        <!--/ end of boards container -->
-
-        <!-- calendar container -->
-        <div class="full-height" *ngIf="viewModeTypes == 'calendar_task_rate'">
-            <app-task-calendar-rate
-                    [rtlDirection]="rtlDirection"
-                    [userSelected]="calendarParameters.userSelected"
-                    [dateStart]="calendarParameters.dateStart"
-                    [sumTime]="calendarParameters.sumTime"
-                    [calendarDifferentEvents]="calendarParameters.calendarEvent"
-                    [loginData]="loginData"
-                    [usersList]="usersList"></app-task-calendar-rate>
-        </div>
-    </ng-container>
+    <!-- calendar container -->
+    <div *ngIf="viewModeTypes == 'calendar_task_rate'" class="full-height">
+      <app-task-calendar-rate
+        [calendarDifferentEvents]="calendarParameters.calendarEvent"
+        [dateStart]="calendarParameters.dateStart"
+        [loginData]="loginData"
+        [rtlDirection]="rtlDirection"
+        [sumTime]="calendarParameters.sumTime"
+        [userSelected]="calendarParameters.userSelected"
+        [usersList]="usersList"></app-task-calendar-rate>
+    </div>
+  </ng-container>
 </div>

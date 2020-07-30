@@ -7,11 +7,7 @@ import {UserStatusInterface} from '../../users/logic/user-status-interface';
 })
 export class ChangeStatusService {
   private _defaultUserStatus: UserStatusInterface | string;
-
-  // set observable behavior to property
   private userStatus = new BehaviorSubject(this._defaultUserStatus);
-
-  // observable property
   public currentUserStatus = this.userStatus.asObservable();
 
   changeUserStatus(newUserStatus: UserStatusInterface | string) {

@@ -35,11 +35,6 @@ function createWindow(): BrowserWindow {
     },
   });
 
-  win.setMenu(null);
-  Menu.setApplicationMenu(null);
-  // Menu.autoHideMenuBar(null);
-  // Menu.setApplicationMenu(null);
-
   win.webContents.on('devtools-opened', function () {
     if (!serve) {
       win.webContents.closeDevTools();
@@ -51,9 +46,9 @@ function createWindow(): BrowserWindow {
   if (serve) {
     require('devtron').install();
 
-    // const debug = require('electron-debug');
-    //
-    // debug();
+    const debug = require('electron-debug');
+
+    debug();
 
     win.webContents.openDevTools();
 
@@ -64,6 +59,10 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
 
   } else {
+    win.setMenu(null);
+
+    Menu.setApplicationMenu(null);
+
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',

@@ -135,12 +135,16 @@
     },
     "task_detail": {
       "overview": "اطلاعات کلی",
-      "reports": "گزارشات"
+      "reports": "گزارشات",
+      "delete_title": "حذف تسک",
+      "delete_text": "آیا از حذف این تسک اطمینان دارید؟"
     },
     "task_todo": {
       "todo_list": "لیست انجام کار",
       "items": "مورد",
-      "add_an_item": "یک مورد اضافه کن"
+      "add_an_item": "یک مورد اضافه کن",
+      "delete_item": "حذف آیتم",
+      "delete_text": "آیا از حذف این آیتم اطمینان دارید؟"
     },
     "task_files": {
       "file_manager": "مدیریت فایل",
@@ -163,7 +167,8 @@
       "by_user_stop_date": "بر اساس تاریخ اتمام کاربر",
       "by_started_task": "بر اساس تسک های شروع شده",
       "by_postponed": "بر اساس تسک های به تعویق افتاده",
-      "in_progress_tasks": "تسک های در حال انجام"
+      "in_progress_tasks": "تسک های در حال انجام",
+      "show_disabled_task": "فقط تسک های غیر فعال"
     },
     "calendar": {
       "month": "ماه",

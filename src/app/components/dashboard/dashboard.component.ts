@@ -1,5 +1,6 @@
 import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {ApiService} from '../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../services/message.service';
 import {LoginDataClass} from '../../services/loginData.class';
@@ -10,7 +11,6 @@ import {ServiceInterface} from '../services/logic/service-interface';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ServiceItemsInterface} from './logic/service-items.interface';
-import {ApiService} from '../users/logic/api.service';
 
 @Component({
   selector: 'app-dashboard',

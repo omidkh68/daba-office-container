@@ -1,22 +1,23 @@
-.fc{
-  font-family: 'IranSans';
-  direction: unset;
+.fc {
+  font-family: inherit !important;
 }
-.mat-drawer-container{
-  .mat-drawer-content{
+
+.ca-rtl {
+  .fc-toolbar {
+    direction: rtl !important;
+  }
+
+  .fc-button-group {
+    direction: rtl;
   }
 }
-/*
-.rate-calendar{
-  .fc-day-grid-container{
-    height: auto !important;
+
+.ca-ltr {
+  .fc-toolbar {
+    direction: ltr !important;
   }
-  .fc-dayGrid-view {
-    .fc-body{
-      .fc-row{
-        height: 4.93em !important;
-      }
-    }
+
+  .fc-button-group {
+    direction: ltr;
   }
 }
-*/

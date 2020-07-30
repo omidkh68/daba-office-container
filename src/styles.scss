@@ -166,7 +166,6 @@ a {
 }
 
 .content-container {
-  height: calc(100% - 110px);
   overflow: auto;
   background-color: #f1f1f1;
 }
@@ -691,4 +690,12 @@ file-preview-container {
 // Fullcalendar stylesheets
 .fc-view-container {
   background-color: #fff;
+}
+
+.fc-toolbar.fc-header-toolbar {
+  margin-bottom: .5em !important;
+}
+
+.fc-toolbar h2 {
+  font-size: 1.2em !important;
 }

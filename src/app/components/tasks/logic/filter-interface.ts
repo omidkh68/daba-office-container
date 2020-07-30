@@ -1,7 +1,6 @@
 export interface FilterInterface {
   userId: number;
   userImg: string;
-  typeId: number;
   taskName?: string;
   projectId?: number;
   dateStart?: string;
@@ -10,4 +9,5 @@ export interface FilterInterface {
   adminId?: number;
   percentageStatus?: boolean
   email: string;
+  status?: number;
 }

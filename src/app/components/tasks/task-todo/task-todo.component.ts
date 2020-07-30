@@ -7,7 +7,9 @@ import {TodoInterface} from './logic/todo-interface';
 import {LoginInterface} from '../../login/logic/login.interface';
 import {MessageService} from '../../../services/message.service';
 import {ApproveComponent} from '../../approve/approve.component';
+import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
@@ -43,6 +45,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
               private fb: FormBuilder,
               private messageService: MessageService,
               private refreshLoginService: RefreshLoginService,
+              private translateService: TranslateService,
+              private refreshBoardService: RefreshBoardService,
               private loadingIndicatorService: LoadingIndicatorService) {
   }
 
@@ -80,6 +84,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           this.todoList = resp.contents;
 
           this.form.enable();
+
+          this.sortTodo();
         }
       }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
@@ -117,6 +123,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           });
 
           this.form.enable();
+
+          this.sortTodo();
         }
 
         this.messageService.showMessage(resp.message);
@@ -143,7 +151,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(ApproveComponent, {
-      data: {title: 'حذف آیتم', message: 'آیا از حذف این آیتم اطمینان دارید؟'},
+      data: {
+        title: this.getTranslate('tasks.task_detail.delete_title'),
+        message: this.getTranslate('tasks.task_detail.delete_text')
+      },
       autoFocus: false,
       width: '70vh',
       maxWidth: '350px',
@@ -166,6 +177,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
                 this.todoList = this.todoList.filter((todoItem: TodoInterface) => todoItem.todoId !== todo.todoId);
 
                 this.form.enable();
+
+                this.refreshBoardService.changeCurrentDoRefresh(true);
               }
 
               this.messageService.showMessage(resp.message);
@@ -209,6 +222,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
             this.form.get('todo').setValue({...todoValue, text: ''});
 
             this.form.enable();
+
+            this.refreshBoardService.changeCurrentDoRefresh(true);
+
+            this.sortTodo();
           }
 
           this.messageService.showMessage(resp.message);
@@ -260,6 +277,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
             this.edit = false;
 
             this.form.enable();
+
+            this.sortTodo();
           }
 
           this.messageService.showMessage(resp.message);
@@ -270,6 +289,25 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
         })
       );
     }
+  }
+
+  sortTodo() {
+    this.todoList.sort((first, second) => {
+      const a = first.isChecked;
+      const b = second.isChecked;
+
+      let comparison = 0;
+      if (a > b) {
+        comparison = 1;
+      } else if (a < b) {
+        comparison = -1;
+      }
+      return comparison;
+    });
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
   }
 
   ngOnDestroy(): void {

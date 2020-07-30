@@ -143,16 +143,17 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .width-auto{width: auto !important}
 .height-auto{height: auto !important}
 
-%height-full-minus-30,.height-full-minus-30{height: calc(100% - 30px)}
-%height-full-minus-35,.height-full-minus-35{height: calc(100% - 35px)}
-%height-full-minus-40,.height-full-minus-40{height: calc(100% - 40px)}
+.height-full-minus-30{height: calc(100% - 30px)}
+.height-full-minus-35{height: calc(100% - 35px)}
+.height-full-minus-40{height: calc(100% - 40px)}
 %height-full-minus-45,.height-full-minus-45{height: calc(100% - 45px)}
-%height-full-minus-50,.height-full-minus-50{height: calc(100% - 50px)}
-%height-full-minus-56,.height-full-minus-56{height: calc(100% - 56px)}
-%height-full-minus-60,.height-full-minus-60{height: calc(100% - 60px)}
-%height-full-minus-80,.height-full-minus-80{height: calc(100% - 80px)}
-%height-full-minus-95,.height-full-minus-95{height: calc(100% - 95px)}
-%height-full-minus-155,.height-full-minus-155{height: calc(100% - 155px)}
+.height-full-minus-50{height: calc(100% - 50px)}
+.height-full-minus-56{height: calc(100% - 56px)}
+.height-full-minus-60{height: calc(100% - 60px)}
+.height-full-minus-80{height: calc(100% - 80px)}
+.height-full-minus-95{height: calc(100% - 95px)}
+.height-full-minus-110{height: calc(100% - 110px)}
+.height-full-minus-155{height: calc(100% - 155px)}
 
 .ltr{direction: ltr}
 .rtl{direction: rtl}

@@ -109,7 +109,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     });
   }*/
 
-  drop(event: CdkDragDrop<string[]>) {
+  changeStatus(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -173,7 +173,17 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       this.currentTaskService.changeCurrentTask(this.myTasks);
       this.myTasks = [];
     } else {
-      this.currentTaskService.changeCurrentTask(null);
+      if (!this.currentTasks.length) {
+        this.currentTaskService.changeCurrentTask(null);
+      } else {
+        if (newTask.boardStatus !== 'inProgress') {
+          const findIndex = this.currentTasks.findIndex(task => task.taskId === newTask.taskId);
+
+          this.currentTasks.splice(findIndex, 1);
+
+          this.currentTaskService.changeCurrentTask(this.currentTasks);
+        }
+      }
     }
 
     if (prevContainer === 'inProgress' && (newContainer === 'todo' || newContainer === 'done')) {

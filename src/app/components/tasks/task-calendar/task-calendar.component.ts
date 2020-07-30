@@ -1,4 +1,3 @@
-// import * as io from 'socket.io-client';
 import {
   Component,
   EventEmitter,
@@ -22,8 +21,8 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {FullCalendarComponent} from '@fullcalendar/angular';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {TaskBottomSheetInterface} from "../task-bottom-sheet/logic/TaskBottomSheet.interface";
-import {TaskBottomSheetComponent} from "../task-bottom-sheet/task-bottom-sheet.component";
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 
 @Component({
   selector: 'app-task-calendar',
@@ -61,27 +60,27 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
     {title: 'event 2', start: '2020-05-10 23:00', end: '2020-05-10 00:00'}
   ];
   colorArray = [
-    "#f44336",
-    "#e91e63",
-    "#9c27b0",
-    "#673ab7",
-    "#3f51b5",
-    "#2196f3",
-    "#03a9f4",
-    "#00bcd4",
-    "#009688",
-    "#4caf50",
-    "#8bc34a",
-    "#cddc39",
-    "#dbc00d",
-    "#ffc107",
-    "#ff9800",
-    "#ff5722",
-    "#795548",
-    "#9e9e9e",
-    "#ff9800",
-    "#607d8b",
-    "#444444",
+    '#f44336',
+    '#e91e63',
+    '#9c27b0',
+    '#673ab7',
+    '#3f51b5',
+    '#2196f3',
+    '#03a9f4',
+    '#00bcd4',
+    '#009688',
+    '#4caf50',
+    '#8bc34a',
+    '#cddc39',
+    '#dbc00d',
+    '#ffc107',
+    '#ff9800',
+    '#ff5722',
+    '#795548',
+    '#9e9e9e',
+    '#ff9800',
+    '#607d8b',
+    '#444444',
   ];
   options: any;
   viewModeTypes = 'calendar_task';
@@ -130,11 +129,11 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
         this.projectsList = resp.content.projects.list;
         this.tasks = resp.content.boards.list;
 
-        this.tasks.map((task:any) => {
+        this.tasks.map((task: any) => {
           task.title = task.taskName;
           task.start = new Date(task.startAt);
           task.end = new Date(task.stopAt);
-          task.color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)];
+          task.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
           task.usersList = this.usersList;
           task.projectsList = this.projectsList;
           task.imageurl = 'img/edit.png';
@@ -162,20 +161,21 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
               this.tasks = resp.content.boards.list;
 
               let myArray = [];
-              this.tasks.map((task:any) => {
+              this.tasks.map((task: any) => {
                 let arr = [];
-                arr = this.getDaysArray(new Date(task.startAt) , new Date(task.stopAt));
-                let color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)];
+                arr = this.getDaysArray(new Date(task.startAt), new Date(task.stopAt));
+                let color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
                 arr.map((item) => {
                   let obj = {
-                    title : task.taskName,
-                    color : color,
-                    imageurl : 'assets/profileImg/'+task.assignTo.email+'.jpg',
-                    start : item,
-                    end : item,
-                    usersList : this.usersList,
-                    projectsList : this.projectsList
-                  }
+                    title: task.taskName,
+                    color: color,
+                    imageurl: 'assets/profileImg/' + task.assignTo.email + '.jpg',
+                    start: item,
+                    end: item,
+                    usersList: this.usersList,
+                    projectsList: this.projectsList
+                  };
+
                   let newObj = Object.assign(obj, task);
                   myArray.push(newObj)
                 })
@@ -204,16 +204,15 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
     }
   }
 
-  getDaysArray (start, end) {
-
-    for(var arr=[],dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+  getDaysArray(start, end) {
+    for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
       arr.push(new Date(dt));
     }
+
     return arr;
   }
 
   ngOnDestroy(): void {
-
     this.viewModeTypes = null;
     this.onTabLoaded.emit(this.viewModeTypes);
 

@@ -1,7 +1,7 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "author": "Omid Khosrojerdi, Husin Sajjadi",
   "repository": {
     "type": "git",

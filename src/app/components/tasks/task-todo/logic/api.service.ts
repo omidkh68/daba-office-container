@@ -27,6 +27,7 @@ export class ApiService {
 
   getTodoList(taskId: number): Observable<TodoInterface[]> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+    this.headers.headers = this.headers.headers.set('From', 'app_application');
 
     return this._http.get<TodoInterface[]>(`${this.API_URL}/todo/?taskId=${taskId}`, this.headers);
   }
