@@ -106,5 +106,7 @@
   "engines": {
     "node": ">=10.13.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ngx-image-cropper": "3.2.1"
+  }
 }

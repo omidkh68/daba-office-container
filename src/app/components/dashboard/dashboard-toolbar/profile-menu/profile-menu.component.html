@@ -9,6 +9,10 @@
   <h6 mat-subheader class="padding-half text-weight-normal font-9-rem text-dark-mode-color">
     {{loggedInUser.name}}
   </h6>
+  <button mat-menu-item (click)="settingProfile()" class="font-7-rem padding-mini-r-l">
+    <mat-icon class="text-dark-mode-color">settings</mat-icon>
+    <span class="text-dark-mode-color">{{'global.settings' | translate}}</span>
+  </button>
   <button mat-menu-item (click)="logout()" class="font-7-rem padding-mini-r-l">
     <mat-icon class="text-dark-mode-color">power_settings_new</mat-icon>
     <span class="text-dark-mode-color">{{'dashboard.dashboard_toolbar.exist_app' | translate}}</span>

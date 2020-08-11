@@ -194,5 +194,18 @@
     "create_or_join_conference": "Create Conference",
     "exist_from_conf": "Exit from conference",
     "for_create_conf_fill_inputs": "For create a conference room, fill items below"
+  },
+  "profileSettings": {
+    "profile_information": "Profile Information",
+    "profile_wallpaper": "Profile Wallpaper",
+    "edit_user_photo": "Edit User Photo",
+    "insert_picture": "Click To Add Photo",
+    "background_image": "Background Image",
+    "pictures": "Pictures",
+    "gradients": "Gradients",
+    "solid_colors": "Solid Colors",
+    "drag_drop_text1": "drag it here",
+    "drag_drop_text2": "and or",
+    "drag_drop_text3": "Browse for file"
   }
 }

@@ -1,0 +1,80 @@
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 bottom-0 top-0 full-width">
+  <div class="window-heading full-width height-45 padding-half display-flex">
+    <h3 class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex">
+      <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                class="text-dark-mode-color pos-rel top-one-tenth">settings
+      </mat-icon>
+      {{'global.settings' | translate}}
+    </h3>
+  </div>
+
+  <div class="window-content pos-rel">
+    <div class="component-content full-width full-height pos-abs left-0 right-0 top-0">
+      <div class="title-container pos-rel height-40 overflow-hide full-width display-flex align-items-end">
+        <mat-tab-group (selectedTabChange)="tabChange($event)"
+                       class="padding-r-l z-index-0 height-30" color="accent" disableRipple>
+          <mat-tab *ngFor="let tab of tabs;">
+            <ng-template mat-tab-label class="display-flex">
+              <mat-icon class="tab-icon font-full-em width-15 height-15">
+                {{tab.icon}}
+              </mat-icon>
+              <span class="padding-mini-r-l">{{tab.name}}</span>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
+      <div class="content-container padding-full full-width">
+
+        <ng-container [ngSwitch]="activeTab">
+          <!-- boards container -->
+          <div class="full-height" *ngSwitchCase="0">
+
+
+            <div class="container-image-profile display-inline-block">
+              <div class="image-profile" [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
+                <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="box mat-elevation-z1 pos-rel text-center round-corner width-200 height-215 overflow-hide">
+                  <img class="full-width full-height cursor-pointer" src="assets/profileImg/ab.ebrahimi@dabacenter.ir.jpg"
+                       onerror="this.src='assets/profileImg/ab.ebrahimi@dabacenter.ir.jpg'" alt="">
+
+                  <div  (click)="showCropperImage()" class="overlay-image cursor-pointer pos-abs full-width full-height purple-gradient">
+                    <mat-icon class="no-padding full-width full-height line-height-200 font-full-rem-2 text-white">camera_alt
+                    </mat-icon>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+
+            <mat-list dense class="wallpaper-item" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+              <mat-list-item>
+                <a mat-menu-item
+                   (click)="showWallpaperButtonSheet()"
+                   class="no-padding font-8-rem"
+                   matTooltip="{{'DASHBOARD.WALLPAPER.WALLPAPER_BUTTON' | translate}}"
+                   [matTooltipPosition]="rtlDirection ? 'left' : 'right'">
+                  <mat-icon>photo_size_select_actual</mat-icon>
+                  <span>{{'profileSettings.background_image' | translate}}</span>
+                </a>
+              </mat-list-item>
+            </mat-list>
+
+
+
+          </div>
+          <!--/ end of boards container -->
+
+          <!-- calendar container -->
+          <div class="full-height overflow-hide" *ngSwitchCase="1">
+            <app-wallpaper></app-wallpaper>
+            <!--<app-task-calendar></app-task-calendar>-->
+          </div>
+          <!--/ end of calendar container -->
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</div>

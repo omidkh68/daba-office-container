@@ -1,4 +1,7 @@
-<div class="dashboard-container full-width full-height">
+<div class="dashboard-container full-width full-height wallpaper"
+     [style.background]="wallpaper"
+     [attr.data-bg]="wallpaper">
+
   <app-soft-phone-incoming-call [rtlDirection]="rtlDirection"></app-soft-phone-incoming-call>
 
   <div class="dashboard-app-boundary height-full-minus-70 padding-full">
@@ -12,5 +15,6 @@
                          [rtlDirection]="rtlDirection"
                          [loggedInUser]="loggedInUser"
                          [windowManager]="windowManager"
-                         class="dashboard-toolbar pos-fix bottom-full right-full left-full height-40"></app-dashboard-toolbar>
+                         class="dashboard-toolbar pos-fix bottom-full right-full left-full height-40">
+  </app-dashboard-toolbar>
 </div>
