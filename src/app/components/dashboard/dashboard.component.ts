@@ -7,6 +7,7 @@ import {LoginDataClass} from '../../services/loginData.class';
 import {WindowInterface} from './logic/window.interface';
 import {UserInfoService} from '../users/services/user-info.service';
 import {ElectronService} from '../../services/electron.service';
+import {SoftPhoneService} from '../soft-phone/service/soft-phone.service';
 import {ServiceInterface} from '../services/logic/service-interface';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
@@ -62,12 +63,17 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
               public dialog: MatDialog,
               private api: ApiService,
               private messageService: MessageService,
-              private userInfoService: UserInfoService) {
+              private userInfoService: UserInfoService,
+              private softPhoneService: SoftPhoneService) {
     super(injector, userInfoService);
 
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => {
         this.loggedInUser = user;
+
+        this.loggedInUser.services.push({
+          service_id: 6, type: 3, name: "Web Browser"
+        });
 
         this.loggedInUser.services.map((item: ServiceInterface) => {
           let icon: string = '';
@@ -79,21 +85,28 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
             case 'project_microservice':
               icon = 'playlist_add_check';
               width = 1200;
-              height = 700;
+              height = 710;
 
               break;
 
             case 'pbx_microservice':
               icon = 'perm_phone_msg';
               width = 350;
-              height = 500;
+              height = 550;
 
               break;
 
             case 'video_conference':
               icon = 'picture_in_picture';
               width = 1200;
-              height = 700;
+              height = 710;
+
+              break;
+
+            case 'web_browser':
+              icon = 'explore';
+              width = 1200;
+              height = 710;
 
               break;
           }
@@ -123,6 +136,10 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit(): void {
+    this.electronService.window.on('close', () => {
+      this.softPhoneService.sipHangUp();
+    });
+
     /*setTimeout(() => {
       this.messageService.durationInSeconds = 10;
       this.messageService.showMessage(`${this.loggedInUser.name} خوش آمدید `);
@@ -153,6 +170,5 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
-
   }
 }

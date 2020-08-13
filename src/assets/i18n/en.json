@@ -35,7 +35,7 @@
     "dashboard_toolbar": {
       "service_list": "Services",
       "active_clocks": "Active Clocks",
-      "exist_app": "Quit App"
+      "exist_app": "Log Out"
     }
   },
   "status": {
@@ -58,7 +58,9 @@
     },
     "call_pop_up": {
       "hang_up": "Hang Up",
-      "unknown_number": "Unknown Caller"
+      "unknown_number": "Unknown Caller",
+      "calling": "Calling ...",
+      "available_users": "Available Users"
     },
     "call_to_action": {
       "local_time": "Local Time",

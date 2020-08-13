@@ -1,5 +1,5 @@
 <form *ngIf="form" [formGroup]="form" (submit)="submit()" class="full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <div class="dialog-content-container height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
+  <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
     <h1 *ngIf="data.action !== 'detail'"
         class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
       {{'tasks.main.add_new_task' | translate}}

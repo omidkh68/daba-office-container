@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Injector, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostListener, Injector, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -116,6 +116,10 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         this.bottomSheetData.bottomSheetRef.close();
       }
     }
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    this.bottomSheetData.bottomSheetRef.close();
   }
 
   formPatchValue() {

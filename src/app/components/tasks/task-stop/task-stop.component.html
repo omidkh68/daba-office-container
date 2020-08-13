@@ -1,7 +1,7 @@
 <div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99 overflow-hide"
      [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <form [formGroup]="form" (submit)="submit()" class="full-height">
-    <div class="dialog-content-container full-width">
+    <div class="full-width">
       <h1 class="margin-b-full font-full-em text-weight-500">
         {{'tasks.task_stop.stop_description' | translate}}
       </h1>

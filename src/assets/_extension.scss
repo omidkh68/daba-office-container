@@ -54,8 +54,6 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .text-justify{text-align: justify !important}
 .text-left{text-align: left !important}
 .text-right{text-align: right !important}
-.text-eclipse{overflow: hidden;-ms-text-overflow: ellipsis;text-overflow: ellipsis;white-space: nowrap}
-.no-text-eclipse{overflow: hidden !important;-ms-text-overflow: inherit !important;text-overflow: inherit !important;white-space: normal !important}
 .text-danger{color: #c30 !important}
 .text-warning{color: #e65100 !important}
 .text-eclipse{overflow: hidden;-ms-text-overflow: ellipsis;text-overflow: ellipsis;white-space: nowrap}
@@ -100,7 +98,9 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .font-full-em{font-size: 1em !important}
 .font-full-rem{font-size: 1rem !important}
 .font-full-em-2{font-size: 1em * 2 !important}
+.font-full-em-3{font-size: 1em * 3 !important}
 .font-full-rem-2{font-size: 1rem * 2 !important}
+.font-full-rem-3{font-size: 1rem * 3 !important}
 .font-full-em-2-plus-half{font-size: calc(#{1em * 2 + .5em}) !important}
 .font-full-rem-2-plus-half{font-size: calc(#{1rem * 2 + .5rem}) !important}
 .font-full-em-3-plus-half{font-size: calc(#{1em * 3 + .5em}) !important}
@@ -141,6 +141,7 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .half-height{height: 50% !important}
 
 .width-auto{width: auto !important}
+.min-width-inherit{min-width: inherit !important}
 .height-auto{height: auto !important}
 
 .height-full-minus-30{height: calc(100% - 30px)}
@@ -281,7 +282,9 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 
 .bottom-0{bottom: 0 !important}
 .bottom-full{bottom: 1em !important}
+.bottom-full-2{bottom: 2em !important}
 .bottom-full-reverse{bottom: -1em !important}
+.bottom-full-reverse-percent{bottom: -100% !important}
 .bottom-half{bottom: .5em !important}
 .bottom-half-reverse{bottom: -.5em !important}
 

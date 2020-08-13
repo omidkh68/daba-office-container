@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AppConfig} from '../../../../environments/environment';
 import {Observable} from 'rxjs/internal/Observable';
+import {ResultApiInterface, ResultConfApiInterface} from './result-api.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ import {Observable} from 'rxjs/internal/Observable';
 export class ApiService {
   public accessToken = '';
   private API_URL = AppConfig.CONTAINER_URL + '/pbx';
+  private WRTC_URL = AppConfig.WRTC_URL;
 
   /**
    * @type {HttpHeaders}
@@ -23,15 +25,27 @@ export class ApiService {
   constructor(private _http: HttpClient) {
   }
 
-  getExtensionList(): Observable<any> {
+  getExtensionList(): Observable<ResultApiInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get(`${this.API_URL}/extention.php?action=extention`, this.headers);
+    return this._http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensions`, this.headers);
+  }
+
+  getExtensionStatus(): Observable<ResultApiInterface> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensionStatus`, this.headers);
   }
 
   getCdr(extension_no: string): Observable<any> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     return this._http.get(`${this.API_URL}/cdr.php?action=cdr&extensionNo=${extension_no}`, this.headers);
+  }
+
+  getConferenceList(): Observable<ResultConfApiInterface> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.get<ResultConfApiInterface>(`${this.WRTC_URL}/extension.php?action=conferenceList`, this.headers);
   }
 }

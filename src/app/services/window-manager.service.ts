@@ -4,6 +4,7 @@ import {TasksComponent} from '../components/tasks/tasks.component';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {SoftPhoneComponent} from '../components/soft-phone/soft-phone.component';
 import {ConferenceComponent} from '../components/conference/conference.component';
+import {WebBrowserComponent} from '../components/web-browser/web-browser.component';
 import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
 import {DialogPositionInterface, WindowInterface} from '../components/dashboard/logic/window.interface';
 
@@ -50,6 +51,13 @@ export class WindowManagerService {
 
         case 'video_conference': {
           component = ConferenceComponent;
+          hasFrame = true;
+
+          break;
+        }
+
+        case 'web_browser': {
+          component = WebBrowserComponent;
           hasFrame = true;
 
           break;

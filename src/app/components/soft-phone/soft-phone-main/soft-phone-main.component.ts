@@ -122,8 +122,8 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
       this.api.getExtensionList().subscribe((resp: ResultApiInterface) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
-        if (resp.success.toLowerCase() === 'true') {
-          const extensionList = resp.list.filter(item => item.extension_type === '2' && item.username.length > 10);
+        if (resp.success) {
+          const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
 
           this.softPhoneService.changeSoftPhoneUsers(extensionList);
 
@@ -210,5 +210,7 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
+
+    this.softPhoneService.sipHangUp();
   }
 }

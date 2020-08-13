@@ -1,15 +1,16 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs/internal/Observable';
-import {StatusInterface} from './status-interface';
 import {AppConfig} from '../../../../environments/environment';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/internal/Observable';
+import {StatusInfoInterface} from './status-interface';
+import {StatusChangeResultInterface, StatusListResultInterface} from './result-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   public accessToken = '';
-  private API_URL = AppConfig.CONTAINER_URL + '/project';
+  private API_URL = AppConfig.ATTENDANCE_URL;
 
   /**
    * @type {HttpHeaders}
@@ -24,9 +25,15 @@ export class ApiService {
   constructor(private _http: HttpClient) {
   }
 
-  getStatuses(): Observable<StatusInterface[]> {
+  getStatuses(): Observable<StatusListResultInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<StatusInterface[]>(`${this.API_URL}/status/?page=-1`, this.headers);
+    return this._http.get<StatusListResultInterface>(`${this.API_URL}/statusList`, this.headers);
+  }
+
+  userChangeStatus(statusInfo: StatusInfoInterface): Observable<StatusChangeResultInterface> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.patch<StatusChangeResultInterface>(`${this.API_URL}/userChangeStatus`, statusInfo, this.headers);
   }
 }

@@ -7,7 +7,7 @@ import {SoftPhoneMainComponent} from './soft-phone-main/soft-phone-main.componen
 import {SoftPhoneLogsComponent} from './soft-phone-logs/soft-phone-logs.component';
 import {SoftPhoneWindowComponent} from './soft-phone-window/soft-phone-window.component';
 import {SoftPhoneKeypadComponent} from './soft-phone-keypad/soft-phone-keypad.component';
-import {SoftPhoneSettingsComponent} from './soft-phone-settings/soft-phone-settings.component';
+import {SoftPhoneConferenceComponent} from './soft-phone-conference/soft-phone-conference.component';
 import {SoftPhoneContactsComponent} from './soft-phone-contacts/soft-phone-contacts.component';
 import {SoftPhoneCallPopUpComponent} from './soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from './soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
@@ -24,9 +24,9 @@ import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-informat
     SoftPhoneLogsComponent,
     SoftPhoneKeypadComponent,
     SoftPhoneWindowComponent,
-    SoftPhoneSettingsComponent,
     SoftPhoneContactsComponent,
     SoftPhoneCallPopUpComponent,
+    SoftPhoneConferenceComponent,
     SoftPhoneBottomSheetComponent,
     SoftPhoneInformationComponent,
     SoftPhoneCallToActionComponent,

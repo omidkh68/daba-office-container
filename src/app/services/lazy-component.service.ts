@@ -7,7 +7,8 @@ export class LazyComponentService {
   private componentRefs = {
     tasksModuleId: import('../components/tasks/tasks.module'),
     conferenceModuleId: import('../components/conference/conference.module'),
-    softPhoneModuleId: import('../components/soft-phone/soft-phone.module')
+    softPhoneModuleId: import('../components/soft-phone/soft-phone.module'),
+    webBrowserModuleId: import('../components/web-browser/web-browser.module')
   };
 
   constructor(private compiler: Compiler,

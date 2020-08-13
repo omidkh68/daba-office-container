@@ -1,5 +1,4 @@
 import {Injectable, Injector, OnDestroy} from '@angular/core';
-import * as Store from 'electron-store';
 import {of} from 'rxjs/internal/observable/of';
 import {catchError, map} from 'rxjs/operators';
 import {Observable} from 'rxjs/internal/Observable';
