@@ -38,6 +38,8 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 const defaultLangStorage = localStorage.getItem('defaultLang');
 const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
+console.log(defaultLang);
+
 @NgModule({
   imports: [MatTableModule],
   exports: [
@@ -80,7 +82,7 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
       useClass: defaultLang === 'fa' ? JalaliMomentDateAdapter : MomentDateAdapter,
       deps: [MAT_DATE_LOCALE]
     },
-    {provide: MAT_DATE_LOCALE, useValue: defaultLang}, // en-GB  fr
+    {provide: MAT_DATE_LOCALE, useValue: defaultLang === 'fa' ? defaultLang : 'en-GB'}, // en-GB  fr
     {
       provide: MAT_DATE_FORMATS,
       useFactory: locale => {
