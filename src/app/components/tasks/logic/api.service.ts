@@ -41,6 +41,12 @@ export class ApiService {
     return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/calendar/?email=${email}&page=-1`, this.headers);
   }
 
+  getAllHolidays(): Observable<any[]> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.get<any[]>(`${this.API_URL}/boards/getAllHolidays`, this.headers);
+  }
+
   getTaskReport(taskId: number): Observable<any> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
