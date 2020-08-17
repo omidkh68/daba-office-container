@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {timer} from 'rxjs';
+import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
@@ -9,6 +10,8 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneTransferCallComponent} from '../soft-phone-transfer-call/soft-phone-transfer-call.component';
+import {ConferenceOnlineExtensionInterface} from '../logic/extension.interface';
+import {ResultConfOnlineExtensionApiInterface} from '../logic/result-api.interface';
 
 export interface KeysInterface {
   type: string;
@@ -36,15 +39,18 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   second: number = 0;
   muteStatus: boolean = false;
   connectedStatus: boolean = false;
-
-  keys: Array<KeysInterface> = [
-    {type: 'mute_unmute', num: 'mic', changeIcon: 'mic_off'},
-    {type: 'forward', num: 'phone_forwarded', changeIcon: 'phone_forwarded'}
-  ];
+  extensionList: Array<ConferenceOnlineExtensionInterface> | null = null;
+  keys: Array<KeysInterface> = [];
+  activeExtensionList: boolean = false;
+  timerDueTime: number = 0;
+  timerPeriod: number = 5000;
+  globalTimer = null;
+  globalTimerSubscription: Subscription;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
+              private apiService: ApiService,
               private notificationService: NotificationService,
               private softPhoneService: SoftPhoneService,
               private userInfoService: UserInfoService) {
@@ -59,6 +65,16 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.data = this.bottomSheetData.data;
+
+    this.keys = [
+      {type: 'mute_unmute', num: 'mic', changeIcon: 'mic_off'},
+    ];
+
+    if (this.data.type !== 'conference') {
+      this.keys.push(
+        {type: 'forward', num: 'phone_forwarded', changeIcon: 'phone_forwarded'}
+      );
+    }
 
     if (this.timeCounter) {
       this.timeCounter.unsubscribe();
@@ -91,6 +107,21 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
 
             this.callTimer = (this.hour < 10 ? '0' + this.hour : this.hour) + ':' + (this.minute < 10 ? '0' + this.minute : this.minute) + ':' + (this.second < 10 ? '0' + this.second : this.second);
           });
+
+          this.globalTimer = timer(
+            this.timerDueTime, this.timerPeriod
+          );
+
+          this.globalTimerSubscription = this.globalTimer.subscribe(
+            t => {
+              this.getConferenceOnlineUser();
+            }
+          );
+        } else {
+          if (this.globalTimerSubscription) {
+            this.globalTimerSubscription.unsubscribe();
+            this.globalTimer = null;
+          }
         }
       })
     );
@@ -130,6 +161,16 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     this.softPhoneService.changeMinimizeCallPopUp(true);
   }
 
+  getConferenceOnlineUser() {
+    this._subscription.add(
+      this.apiService.getConferenceOnlineUser(this.data.extension_no).subscribe((resp: ResultConfOnlineExtensionApiInterface) => {
+        if (resp.success) {
+          this.extensionList = resp.data;
+        }
+      })
+    );
+  }
+
   hangUp() {
     this.softPhoneService.sipHangUp();
 
@@ -140,6 +181,11 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
 
       this.callTimer = '00:00';
     }
+
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+      this.globalTimer = null;
+    }
   }
 
   ngOnDestroy(): void {
@@ -149,6 +195,11 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
 
     if (this.timeCounter) {
       this.timeCounter.unsubscribe();
+    }
+
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+      this.globalTimer = null;
     }
   }
 }

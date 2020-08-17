@@ -35,7 +35,7 @@
     "dashboard_toolbar": {
       "service_list": "Services",
       "active_clocks": "Active Clocks",
-      "exist_app": "Quit App"
+      "exist_app": "Log Out"
     }
   },
   "status": {
@@ -43,7 +43,9 @@
     "apply_status": "Apply Status",
     "status_description": "Status Description",
     "status_description_error": "Please explain about status",
-    "status_success": "Status applied successfully"
+    "status_success": "Status applied successfully",
+    "start_working": "Start Working?",
+    "start_working_time": "Do you want to start your working?"
   },
   "soft_phone": {
     "main": {
@@ -58,7 +60,9 @@
     },
     "call_pop_up": {
       "hang_up": "Hang Up",
-      "unknown_number": "Unknown Caller"
+      "unknown_number": "Unknown Caller",
+      "calling": "Calling ...",
+      "available_users": "Available Users"
     },
     "call_to_action": {
       "local_time": "Local Time",

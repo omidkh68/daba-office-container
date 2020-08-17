@@ -35,7 +35,7 @@
     "dashboard_toolbar": {
       "service_list": "سرویس ها",
       "active_clocks": "ساعت های فعال",
-      "exist_app": "خروج از برنامه"
+      "exist_app": "خروج از حساب کاربری"
     }
   },
   "status": {
@@ -43,7 +43,9 @@
     "apply_status": "اعمال وضعیت",
     "status_description": "توضیح وضعیت",
     "status_description_error": "توضیح وضعیت را وارد نمایید",
-    "status_success": "وضعیت مربوطه با موفقیت اعمال گردید"
+    "status_success": "وضعیت مربوطه با موفقیت اعمال گردید",
+    "start_working": "شروع کار",
+    "start_working_time": "آیا میخواهید ساعت کاری خود را شروع کنید؟"
   },
   "soft_phone": {
     "main": {
@@ -58,7 +60,9 @@
     },
     "call_pop_up": {
       "hang_up": "قطع تماس",
-      "unknown_number": "شماره ناشناس"
+      "unknown_number": "شماره ناشناس",
+      "calling": "در حال تماس ...",
+      "available_users": "افراد حاضر"
     },
     "call_to_action": {
       "local_time": "وقت محلی",

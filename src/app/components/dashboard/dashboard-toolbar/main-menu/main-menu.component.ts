@@ -23,10 +23,12 @@ export class MainMenuComponent {
       this.loggedInUser.services.map(userService => {
         const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
-        if (serviceName === 'pbx_microservice') {
+        if (serviceName === 'pbx_service') {
           this.serviceList.map(service => {
-            if (service.serviceTitle === 'pbx_microservice') {
+            if (service.serviceTitle === 'pbx_service') {
               this.openService(service);
+
+              setTimeout(() => this.windowManagerService.minimizeWindow(service), 1000);
             }
           })
         }

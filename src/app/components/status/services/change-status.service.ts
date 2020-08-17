@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {UserStatusInterface} from '../../users/logic/user-status-interface';
+import {UserStatusInterface} from '../logic/status-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChangeStatusService {
-  private _defaultUserStatus: UserStatusInterface | string;
+  private _defaultUserStatus: UserStatusInterface | null = null;
   private userStatus = new BehaviorSubject(this._defaultUserStatus);
   public currentUserStatus = this.userStatus.asObservable();
 
-  changeUserStatus(newUserStatus: UserStatusInterface | string) {
+  changeUserStatus(newUserStatus: UserStatusInterface | null) {
     this.userStatus.next(newUserStatus);
   }
 }

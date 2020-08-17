@@ -206,9 +206,9 @@ a {
   }
 }
 
-.mat-input-element {
+/*.mat-input-element {
   height: 100% !important;
-}
+} todo */
 
 .mat-select-value {
   height: 20px !important;
@@ -698,4 +698,24 @@ file-preview-container {
 
 .fc-toolbar h2 {
   font-size: 1.2em !important;
+}
+
+.fc-toolbar h2 {
+  font-size: 1em !important;
+}
+
+.fc-widget-header {
+  font-size: .9em !important;
+}
+
+.soft-phone-status.mat-checked .mat-slide-toggle-thumb {
+  background-color: #40b252;
+}
+
+.soft-phone-status.mat-checked .mat-slide-toggle-bar {
+  background-color: rgba(78, 192, 96, 0.47);
+}
+
+.soft-phone-status.mat-checked .mat-ripple-element {
+  background-color: #4CAF50;
 }

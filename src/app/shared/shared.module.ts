@@ -5,11 +5,20 @@ import {TranslateModule} from '@ngx-translate/core';
 import {PageNotFoundComponent} from './components/';
 import {JalaliPipe} from '../pipes/jalali.pipe';
 import {TimeAreaDigitalClockComponent} from '../components/dashboard/dashboard-toolbar/time-area/time-area-digital-clock/time-area-digital-clock.component';
+import {WebviewDirective} from './directives';
 
 @NgModule({
-  declarations: [PageNotFoundComponent, JalaliPipe, TimeAreaDigitalClockComponent],
+  declarations: [PageNotFoundComponent, JalaliPipe, TimeAreaDigitalClockComponent, WebviewDirective],
   imports: [TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule],
-  exports: [TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule, JalaliPipe, TimeAreaDigitalClockComponent]
+  exports: [
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatCoreModule,
+    JalaliPipe,
+    WebviewDirective,
+    TimeAreaDigitalClockComponent
+  ]
 })
 export class SharedModule {
 }

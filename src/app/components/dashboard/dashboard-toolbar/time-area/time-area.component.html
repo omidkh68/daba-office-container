@@ -2,18 +2,18 @@
      [matMenuTriggerFor]="timeAreaMenu"
      [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
      class="box pos-rel mat-elevation-z1 padding-r-l text-center round-corner height-40 overflow-hide cursor-pointer">
-  <mat-icon class="text-dark-mode-color">access_time</mat-icon>
+  <mat-icon class="text-dark-mode-color text-gray-800">access_time</mat-icon>
 
   <div class="display-flex">
     <mat-list [ngClass]="rtlDirection ? 'text-right' : 'text-left'">
-      <mat-list-item class="text-dark-mode-color">
+      <mat-list-item class="text-dark-mode-color text-gray-800">
         <div mat-line class="font-8-rem">{{datetime ? datetime.date : ''}}</div>
         <div mat-line class="font-8-rem">{{datetime ? datetime.weekday : ''}}</div>
       </mat-list-item>
     </mat-list>
 
     <mat-list [ngClass]="rtlDirection ? 'text-left' : 'text-right'">
-      <mat-list-item class="text-dark-mode-color font-8-rem">
+      <mat-list-item class="text-dark-mode-color font-8-rem text-gray-800">
         <app-time-area-digital-clock [timezone]="loggedInUser.timezone" matLine>
         </app-time-area-digital-clock>
         <div mat-line dir="ltr" class="font-8-rem"><span>{{loggedInUser.timezone}}</span></div>

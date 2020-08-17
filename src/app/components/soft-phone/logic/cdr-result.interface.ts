@@ -9,8 +9,9 @@ export interface CdrMetaInterface {
 }
 
 export interface CdrResultInterface {
-  meta: CdrMetaInterface,
-  recordsCount: number,
-  list: CdrInterface[],
-  success: string;
+  meta: CdrMetaInterface;
+  recordsCount: number;
+  data: Array<CdrInterface>;
+  result: number;
+  success: number;
 }

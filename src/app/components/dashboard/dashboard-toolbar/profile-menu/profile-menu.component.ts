@@ -9,8 +9,7 @@ import {UserContainerInterface} from '../../../users/logic/user-container.interf
 
 @Component({
   selector: 'app-profile-menu',
-  templateUrl: './profile-menu.component.html',
-  styleUrls: ['./profile-menu.component.scss']
+  templateUrl: './profile-menu.component.html'
 })
 export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
   @Input()

@@ -323,11 +323,11 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   getColor(percentage: number) {
     if (percentage < 10 && percentage >= 0) {
       return 'spinner-color-red';
-    } else if (percentage < 30 && percentage > 10) {
+    } else if (percentage <= 30 && percentage > 10) {
       return 'spinner-color-redorange';
-    } else if (percentage < 50 && percentage > 30) {
+    } else if (percentage <= 50 && percentage > 30) {
       return 'spinner-color-orange';
-    } else if (percentage < 80 && percentage > 50) {
+    } else if (percentage <= 80 && percentage > 50) {
       return 'spinner-color-lightgreen';
     } else if (percentage > 80) {
       return 'spinner-color-green';

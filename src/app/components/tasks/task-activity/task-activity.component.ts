@@ -7,7 +7,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivityInterface} from './logic/activity-interface';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-task-activity',
@@ -25,14 +25,12 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
   loginData: LoginInterface;
 
   activityList: Array<ActivityInterface> = [];
-
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'project-activity'};
   single = [];
-
   gradient: boolean = false;
   showLegend: boolean = false;
   showLabels: boolean = true;
   isDoughnut: boolean = false;
-
   colorScheme = {
     domain: ['#4caf50', '#b71c1c']
   };
@@ -43,6 +41,9 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
               private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               private translate: TranslateService) {
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
   }
 
   ngAfterViewInit(): void {
@@ -66,19 +67,19 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
 
   getActivities() {
     return new Promise((resolve) => {
-      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project-activity'});
 
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
         this.api.getActivities(this.task.taskId).subscribe((resp: any) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-activity'});
 
           if (resp.result === 1) {
             resolve(resp.contents);
           }
         }, (error: HttpErrorResponse) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-activity'});
 
           this.refreshLoginService.openLoginDialog(error);
         })

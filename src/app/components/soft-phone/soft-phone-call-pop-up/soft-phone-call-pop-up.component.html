@@ -1,16 +1,4 @@
 <div class="popup-container pos-rel full-height full-width padding-full">
-  <h2 class="full-width height-40 line-height-40 text-center text-white text-weight-normal">
-    {{data.extension_no ? data.extension_name : 'soft_phone.call_pop_up.unknown_number' | translate}}
-  </h2>
-
-  <h3 class="full-width height-30 line-height-30 text-center text-gray-500 text-weight-normal">
-    {{data.extension_no ? data.extension_no : data}}
-  </h3>
-
-  <div class="full-width height-40 line-height-40 text-center text-white text-weight-normal">
-    {{callTimer}}
-  </div>
-
   <button (click)="minimizePopUp()"
           *ngIf="connectedStatus"
           class="minimizeBtn pos-abs top-full width-40 height-40 text-white no-bg no-border cursor-pointer"
@@ -18,36 +6,89 @@
     <mat-icon>{{rtlDirection ? 'keyboard_arrow_left' : 'keyboard_arrow_right'}}</mat-icon>
   </button>
 
-  <div class="text-center">
+  <div *ngIf="data.type === 'conference' && connectedStatus"
+       [ngClass]="rtlDirection ? 'right-full' : 'left-full'"
+       class="extension-list pos-abs top-full width-50 height-30">
+    <ul (click)="activeExtensionList = !activeExtensionList"
+        class="list-style-none no-padding no-margin cursor-pointer">
+      <ng-container *ngFor="let ext of extensionList; let i = index">
+        <li *ngIf="i < 3" class="pos-abs"
+            [ngStyle]="{'right.px': rtlDirection ? i + '2' : 'inherit', 'left.px' : rtlDirection ? 'inherit' : i + '2'}">
+          <img [src]="'assets/profileImg/'+ (ext.username ? ext.username : '0') +'.jpg'" [alt]="ext.extension_name"
+               onerror="this.src='assets/profileImg/0.jpg'"
+               class="mat-elevation-z3 width-30 height-30 round-corner-all"
+               matListAvatar>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+
+  <div
+    class="avatar-holder text-center width-100 height-100 round-corner-all padding-half margin-auto margin-t-full-3 margin-b-full">
     <img [src]="'assets/profileImg/'+ (data.username ? data.username : '0') +'.jpg'" [alt]="data.name"
          onerror="this.src='assets/profileImg/0.jpg'"
-         class="mat-elevation-z3 width-150 height-150 round-corner-all"
+         class="full-width round-corner-all"
          matListAvatar>
   </div>
 
-  <div class="height-100 text-center width-250 center-block">
-    <mat-grid-list class="full-height" cols="2" gutterSize="40" rowHeight="fit">
-      <mat-grid-tile
-        *ngFor="let key of keys"
-        [colspan]="1"
-        [rowspan]="1">
-        <button (click)="callEvent(key)"
-                [disabled]="!connectedStatus"
-                class="key cursor-pointer text-white mat-elevation-z3 no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 text-center round-corner-all"
-                mat-raised-button>
-          <mat-icon>{{!muteStatus ? key.num : key.changeIcon}}</mat-icon>
-        </button>
-      </mat-grid-tile>
-    </mat-grid-list>
+  <h2
+    class="width-200 margin-auto height-40 line-height-40 text-center text-white text-eclipse text-weight-normal font-full-plus-two-tenth-em">
+    {{data.extension_no ? data.extension_name : 'soft_phone.call_pop_up.unknown_number' | translate}}
+  </h2>
+
+  <h3 class="full-width height-30 line-height-30 text-center text-gray-500 text-weight-normal">
+    {{data.extension_no ? data.extension_no : data}}
+  </h3>
+
+  <div [ngClass]="callTimer !== '00:00' ? '' : 'blink-effect'"
+       class="full-width height-40 line-height-40 text-center text-white text-weight-normal">
+    {{callTimer !== '00:00' ? callTimer : 'soft_phone.call_pop_up.calling' | translate}}
   </div>
 
-  <div class="full-width text-center">
+  <div
+    [ngClass]="connectedStatus ? 'flex-space-between' : 'flex-space-around'"
+    class="full-width transition text-center display-flex padding-r-l-2 pos-abs right-0 left-0 bottom-full-2">
+    <ng-container *ngIf="connectedStatus">
+      <button *ngFor="let key of keys" (click)="callEvent(key)"
+              class="key transition min-width-inherit cursor-pointer text-white mat-elevation-z3 no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 margin-mini-r-l text-center round-corner-all"
+              mat-raised-button>
+        <mat-icon>{{!muteStatus ? key.num : key.changeIcon}}</mat-icon>
+      </button>
+    </ng-container>
+
     <button (click)="hangUp()"
-            class="red-gradient text-white font-8-rem margin-auto width-250 height-35 padding-mini-r-l"
-            mat-raised-button type="submit">
-      {{'soft_phone.call_pop_up.hang_up' | translate}}
+            class="red-gradient min-width-inherit cursor-pointer text-white mat-elevation-z3 no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 margin-mini-r-l text-center round-corner-all"
+            mat-raised-button>
+      <mat-icon>call_end</mat-icon>
     </button>
   </div>
 </div>
 
 <app-soft-phone-bottom-sheet #bottomSheet></app-soft-phone-bottom-sheet>
+
+<div [ngClass]="activeExtensionList ? 'bottom-0' : 'bottom-full-reverse-percent'"
+     [dir]="rtlDirection ? 'rtl' : 'ltr'"
+     class="show-extension-list pos-abs height-300 left-0 right-0 margin-auto round-corner-top bg-white transition overflow-hide">
+  <h3 class="full-width height-45 line-height-45 padding-r-l">
+    {{'soft_phone.call_pop_up.available_users' | translate}}
+  </h3>
+
+  <button (click)="activeExtensionList = false"
+          [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
+          class="pos-abs top-half cursor-pointer no-bg no-border no-box-shadow width-30 height-30">
+    <mat-icon class="text-grey-500 line-height-30">close</mat-icon>
+  </button>
+
+  <mat-list class="full-width height-full-minus-45 overflow-x-hide overflow-y-auto">
+    <mat-list-item *ngFor="let user of extensionList"
+                   class="highlight cursor-pointer padding-r-l">
+      <img [src]="'assets/profileImg/'+ user.username +'.jpg'" [alt]="user.name"
+           onerror="this.src='assets/profileImg/0.jpg'"
+           class="mat-elevation-z2 width-35 height-35 online-user" matListAvatar>
+
+      <h3 class="font-7-rem text-weight-bold" matLine> {{user.extension_name}} </h3>
+
+      <div class="pos-rel text-red-700 height-30 round-corner-all font-8-em">{{user.extension_no}}</div>
+    </mat-list-item>
+  </mat-list>
+</div>

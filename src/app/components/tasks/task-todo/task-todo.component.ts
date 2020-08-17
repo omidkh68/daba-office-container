@@ -12,7 +12,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-task-todo',
@@ -35,6 +35,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   form: FormGroup;
   edit: boolean = false;
   user: UserContainerInterface;
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'todo'};
 
   todoList: TodoInterface[] = [];
 
@@ -48,6 +49,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
               private translateService: TranslateService,
               private refreshBoardService: RefreshBoardService,
               private loadingIndicatorService: LoadingIndicatorService) {
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
   }
 
   ngOnInit(): void {
@@ -70,7 +74,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   getTodoList() {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
     this.form.disable();
 
@@ -78,7 +82,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.api.getTodoList(this.taskId).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         if (resp.result === 1) {
           this.todoList = resp.contents;
@@ -88,7 +92,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           this.sortTodo();
         }
       }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         this.refreshLoginService.openLoginDialog(error);
       })
@@ -96,7 +100,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   checkTodo(todoItem: TodoInterface) {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
     this.form.disable();
 
@@ -109,7 +113,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.api.updateTodo(data).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         if (resp.result === 1) {
           const newTodo: TodoInterface = resp.content;
@@ -129,7 +133,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
         this.messageService.showMessage(resp.message);
       }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         this.refreshLoginService.openLoginDialog(error);
       })
@@ -165,13 +169,13 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
           this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
           this._subscription.add(
             this.api.deleteTodo(data).subscribe((resp: any) => {
-              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
               if (resp.result === 1) {
                 this.todoList = this.todoList.filter((todoItem: TodoInterface) => todoItem.todoId !== todo.todoId);
@@ -183,7 +187,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
               this.messageService.showMessage(resp.message);
             }, (error: HttpErrorResponse) => {
-              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
               this.refreshLoginService.openLoginDialog(error);
             })
@@ -196,7 +200,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   addTodo() {
     if (this.form.get('todo').value.text !== '') {
 
-      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
       this.form.disable();
 
@@ -212,7 +216,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       this._subscription.add(
         this.api.createTodo(data).subscribe((resp: any) => {
 
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           if (resp.result === 1) {
             this.todoList.push(resp.content);
@@ -230,7 +234,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
           this.messageService.showMessage(resp.message);
         }, (error: HttpErrorResponse) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           this.refreshLoginService.openLoginDialog(error);
         })
@@ -241,7 +245,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   saveTodo() {
     if (this.form.get('todo').value.text !== '') {
 
-      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
       this.form.disable();
 
@@ -249,6 +253,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
         todoId: this.form.get('todo').value.todoId,
         taskId: this.taskId,
         email: this.loggedInUser.email,
+        isChecked: this.form.get('todo').value.isChecked,
         text: this.form.get('todo').value.text
       };
 
@@ -257,7 +262,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       this._subscription.add(
         this.api.updateTodo(data).subscribe((resp: any) => {
 
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           if (resp.result === 1) {
             const newTodo: TodoInterface = resp.content;
@@ -283,7 +288,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
           this.messageService.showMessage(resp.message);
         }, (error: HttpErrorResponse) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           this.refreshLoginService.openLoginDialog(error);
         })
