@@ -10,7 +10,7 @@ import {StatusChangeResultInterface, StatusListResultInterface} from './result-i
 })
 export class ApiService {
   public accessToken = '';
-  private API_URL = AppConfig.ATTENDANCE_URL;
+  private API_URL = AppConfig.CONTAINER_URL + '/attendance';
 
   /**
    * @type {HttpHeaders}

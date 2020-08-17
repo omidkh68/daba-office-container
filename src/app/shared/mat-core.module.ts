@@ -22,7 +22,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatSnackBarModule, MAT_SNACK_BAR_DATA} from '@angular/material/snack-bar';
+import {MAT_SNACK_BAR_DATA, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -34,6 +34,9 @@ import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from './jalali_moment_formats';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from './jalali-moment-date-adapter';
 import {ClipboardModule} from '@angular/cdk/clipboard';
+
+const defaultLangStorage = localStorage.getItem('defaultLang');
+const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
 @NgModule({
   imports: [MatTableModule],
@@ -74,24 +77,24 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
   providers: [
     {
       provide: DateAdapter,
-      useClass: JalaliMomentDateAdapter,
+      useClass: defaultLang === 'fa' ? JalaliMomentDateAdapter : MomentDateAdapter,
       deps: [MAT_DATE_LOCALE]
     },
-    { provide: MAT_DATE_LOCALE, useValue: 'fa' }, // en-GB  fr
+    {provide: MAT_DATE_LOCALE, useValue: defaultLang}, // en-GB  fr
     {
       provide: MAT_DATE_FORMATS,
       useFactory: locale => {
-        if (locale === 'fa') {
+        if (locale === (defaultLang === 'fa')) {
           return JALALI_MOMENT_FORMATS;
         } else {
           return MOMENT_FORMATS;
         }
       },
-      deps: [MAT_DATE_LOCALE]
+      deps: [MAT_DATE_LOCALE],
       // useValue: JALALI_MOMENT_FORMATS
     },
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
-    { provide: MAT_SNACK_BAR_DATA, useValue: [] }
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}},
+    {provide: MAT_SNACK_BAR_DATA, useValue: []}
   ]
 })
 export class MatCoreModule {

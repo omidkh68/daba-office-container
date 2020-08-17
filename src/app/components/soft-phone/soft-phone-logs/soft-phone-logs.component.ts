@@ -67,8 +67,8 @@ export class SoftPhoneLogsComponent implements AfterViewInit {
 
             this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
-            if (resp.recordsCount) {
-              this.cdrList = resp.list;
+            if (resp.success && resp.data.length) {
+              this.cdrList = resp.data;
             }
           }, (error: HttpErrorResponse) => {
             this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});

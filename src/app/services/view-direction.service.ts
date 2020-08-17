@@ -8,7 +8,7 @@ const DEFAULT_LANG = localStorage.getItem('defaultLang');
   providedIn: 'root'
 })
 export class ViewDirectionService {
-  private _defaultDirection: boolean = true;
+  private _defaultDirection: boolean = DEFAULT_LANG !== null ? (DEFAULT_LANG === 'en') : false;
   private _rtlDirection = new BehaviorSubject(this._defaultDirection);
   currentDirection = this._rtlDirection.asObservable();
   body = document.querySelector('html');
@@ -21,10 +21,16 @@ export class ViewDirectionService {
     this._translate.use(this._defaultDirection ? 'fa' : 'en');
 
     this._rtlDirection.next(this._defaultDirection);
+
+    console.log(DEFAULT_LANG);
+
+    localStorage.setItem('defaultLang', DEFAULT_LANG !== null ? DEFAULT_LANG : 'en');
   }
 
   changeDirection(direction: boolean) {
     this._rtlDirection.next(direction);
+
+    localStorage.setItem('defaultLang', direction === true ? 'fa' : 'en');
 
     if (direction) {
       this.body.classList.remove('direction-en');

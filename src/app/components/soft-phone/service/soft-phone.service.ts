@@ -159,6 +159,8 @@ export class SoftPhoneService extends LoginDataClass {
   sipRegister = () => {
     this.combineUsersSoftPhoneInformation().then(() => {
       try {
+        this.sipUnRegister();
+
         // enable notifications if not already done
         // if (webkitNotifications && webkitNotifications.checkPermission() != 0) {
         //     webkitNotifications.requestPermission();
@@ -205,7 +207,7 @@ export class SoftPhoneService extends LoginDataClass {
       }
       //btnRegister.disabled = false;
     }).catch(() => {
-      const currentWindowInstance = this.windowManagerService.windowListArray.filter(item => item.windowService.serviceTitle === 'pbx_microservice').pop();
+      const currentWindowInstance = this.windowManagerService.windowListArray.filter(item => item.windowService.serviceTitle === 'pbx_service').pop();
 
       this.windowManagerService.closeWindow(currentWindowInstance.windowService);
 

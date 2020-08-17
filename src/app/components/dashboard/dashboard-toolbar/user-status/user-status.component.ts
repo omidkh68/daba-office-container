@@ -1,21 +1,32 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../../services/message.service';
+import {ApproveComponent} from '../../../approve/approve.component';
+import {TranslateService} from '@ngx-translate/core';
 import {RefreshLoginService} from '../../../login/services/refresh-login.service';
 import {ChangeStatusService} from '../../../status/services/change-status.service';
 import {UserStatusInterface} from '../../../status/logic/status-interface';
 import {ChangeStatusComponent} from '../../../status/change-status/change-status.component';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../../services/loading-indicator.service';
-import {ApiService as UserApiService} from '../../../users/logic/api.service';
+import {ApiService} from '../../../status/logic/api.service';
+import {StatusChangeResultInterface} from '../../../status/logic/result-interface';
+import {Subject, interval} from 'rxjs';
+
+export interface TimeSpan {
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
 
 @Component({
   selector: 'app-user-status',
   templateUrl: './user-status.component.html',
-  styleUrls: ['./user-status.component.scss']
+  styleUrls: ['./user-status.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserStatusComponent implements OnInit {
+export class UserStatusComponent implements OnInit, OnDestroy {
   @Input()
   loggedInUser: UserContainerInterface;
 
@@ -24,14 +35,18 @@ export class UserStatusComponent implements OnInit {
 
   userCurrentStatus: UserStatusInterface | null = null;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'userStatusDashboard'};
+  currentTimer: TimeSpan = null;
 
+  private destroyed$ = new Subject();
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
-              private userApiService: UserApiService,
+              private apiService: ApiService,
               private changeStatusService: ChangeStatusService,
               private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
+              private translateService: TranslateService,
+              private changeDetector: ChangeDetectorRef,
               private messageService: MessageService) {
   }
 
@@ -39,6 +54,51 @@ export class UserStatusComponent implements OnInit {
     this._subscription.add(
       this.changeStatusService.currentUserStatus.subscribe(status => this.userCurrentStatus = status)
     );
+
+    setTimeout(() => {
+      if (this.userCurrentStatus.status_detail.id === 2) { // if finished working time
+        const dialogRef = this.dialog.open(ApproveComponent, {
+          data: {
+            title: this.getTranslate('status.start_working'),
+            message: this.getTranslate('status.start_working_time'),
+            action: 'success'
+          },
+          autoFocus: false,
+          width: '70vh',
+          maxWidth: '350px',
+          panelClass: 'approve-detail-dialog',
+          height: '160px'
+        });
+
+        this._subscription.add(
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              this._subscription.add(
+                this.apiService.userChangeStatus({
+                  user_id: this.loggedInUser.id,
+                  status: 1,
+                  description: ''
+                }).subscribe((resp: StatusChangeResultInterface) => {
+                  if (resp.success) {
+                    this.changeStatusService.changeUserStatus(resp.data);
+                  }
+                })
+              );
+            }
+          })
+        );
+      }
+    }, 2000);
+
+    interval(1000).subscribe(() => {
+      if (!this.changeDetector['destroyed']) {
+        this.changeDetector.detectChanges();
+      }
+
+      this.getElapsedTime(this.userCurrentStatus.start_time);
+    });
+
+    this.changeDetector.detectChanges();
   }
 
   changeStatus() {
@@ -56,5 +116,46 @@ export class UserStatusComponent implements OnInit {
         }
       })
     );
+  }
+
+  getElapsedTime(entry): void {
+    const curDate = new Date(new Date(entry).getTime());
+
+    let totalSeconds = Math.floor((new Date().getTime() - curDate.getTime()) / 1000);
+
+    let hours = 0;
+    let minutes = 0;
+    let seconds = 0;
+
+    if (totalSeconds >= 3600) {
+      hours = Math.floor(totalSeconds / 3600);
+      totalSeconds -= 3600 * hours;
+    }
+
+    if (totalSeconds >= 60) {
+      minutes = Math.floor(totalSeconds / 60);
+      totalSeconds -= 60 * minutes;
+    }
+
+    seconds = totalSeconds;
+
+    this.currentTimer = {
+      hours: hours,
+      minutes: minutes,
+      seconds: seconds
+    };
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
+
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

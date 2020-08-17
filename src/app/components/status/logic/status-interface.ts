@@ -1,5 +1,5 @@
 export interface StatusDetailInterface {
-  id: string;
+  id: number;
   label: string;
   label_fa: string;
   is_active: number;

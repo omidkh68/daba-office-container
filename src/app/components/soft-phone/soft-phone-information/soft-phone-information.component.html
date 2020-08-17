@@ -7,8 +7,10 @@
            matListAvatar>
       <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name}} </h3>
 
-      <div class="font-8-rem">
-        <mat-slide-toggle #slideToggle dir="ltr" [checked]="loggedInUserExtension && loggedInUserExtension.extension.is_online">
+      <div class="font-8-rem" [dir]="rtlDirection ? 'ltr' : 'rtl'">
+        <mat-slide-toggle #slideToggle
+                          (change)="changeSoftphoneStatus($event)" class="soft-phone-status"
+                          [checked]="loggedInUserExtension && loggedInUserExtension.extension.is_online">
           <span class="padding-mini-r-l">
             {{(slideToggle.checked ? 'global.active' : 'global.deactivate') | translate}}
           </span>
@@ -21,10 +23,12 @@
     <mat-list class="full-width">
       <mat-list-item (click)="openSheet(user)"
                      *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
-                     class="highlight cursor-pointer padding-r-l full-height margin-b-half">
+                     [ngClass]="rtlDirection ? 'padding-r-full padding-l-tiny' : 'padding-l-full padding-r-tiny'"
+                     class="highlight cursor-pointer full-height margin-b-half">
         <img [src]="'assets/profileImg/'+ user.username +'.jpg'" [alt]="user.name"
              onerror="this.src='assets/profileImg/0.jpg'"
-             class="mat-elevation-z2 width-35 height-35" matListAvatar>
+             [ngClass]="user.is_online ? 'active' : ''"
+             class="online-user mat-elevation-z2 width-35 height-35 transition" matListAvatar>
 
         <h3 class="font-7-rem text-weight-bold" matLine> {{user.extension_name}} </h3>
 
@@ -35,12 +39,12 @@
           </app-time-area-digital-clock>
         </div>
 
-        <div class="pos-rel text-red-700 height-30 line-height-35 round-corner-all font-8-em padding-r-l">
+        <div class="pos-rel text-red-700 height-30 line-height-35 round-corner-all font-8-em">
           {{user.extension_no}}
         </div>
 
         <div [ngClass]="user.is_online ? 'online' : 'offline'"
-             class="user-soft-phone-status pos-rel text-gray-500 width-30 height-30 round-corner-all"></div>
+             class="user-soft-phone-status pos-rel text-gray-500 width-30 height-30 round-corner-all transition"></div>
       </mat-list-item>
     </mat-list>
   </div>

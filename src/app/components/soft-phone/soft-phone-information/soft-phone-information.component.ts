@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, Pipe, PipeTransform} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  Pipe,
+  PipeTransform
+} from '@angular/core';
 import * as lodash from 'lodash';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -14,6 +24,8 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {timer} from 'rxjs';
 
 export interface LoggedInUserExtensionInterface {
   user: UserContainerInterface,
@@ -25,7 +37,7 @@ export interface LoggedInUserExtensionInterface {
   templateUrl: './soft-phone-information.component.html',
   styleUrls: ['./soft-phone-information.component.scss']
 })
-export class SoftPhoneInformationComponent implements OnInit, AfterViewInit {
+export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
@@ -38,6 +50,10 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit {
   @Input()
   loggedInUser: UserContainerInterface;
 
+  timerDueTime: number = 1000;
+  timerPeriod: number = 5000;
+  globalTimer = null;
+  globalTimerSubscription: Subscription;
   loggedInUserExtension: LoggedInUserExtensionInterface = null;
   filterArgs = null;
   callPopUpMinimizeStatus: boolean = false;
@@ -60,11 +76,23 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
+    this.globalTimer = timer(
+      this.timerDueTime, this.timerPeriod
+    );
+
+    this.globalTimerSubscription = this.globalTimer.subscribe(
+      t => {
+        this.getExtensionStatus();
+      }
+    );
+  }
+
+  getExtensionStatus() {
+    // this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
 
     this._subscription.add(
       this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+        // this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
         if (resp.success) {
           if (this.softPhoneUsers && this.softPhoneUsers.length) {
@@ -79,17 +107,13 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit {
                   extension: item
                 }
               }
-
-              if (item.is_online) {
-                console.log(item);
-              }
             });
           }
         } else {
 
         }
       }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+        // this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
         this.refreshLoginService.openLoginDialog(error);
       })
@@ -113,6 +137,25 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit {
 
   getTranslate(word) {
     return this.translateService.instant(word);
+  }
+
+  changeSoftphoneStatus(event: MatSlideToggleChange) {
+    if (event.checked) {
+      this.softPhoneService.sipRegister();
+    } else {
+      this.softPhoneService.sipUnRegister();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
+
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+      this.globalTimer = null;
+    }
   }
 }
 

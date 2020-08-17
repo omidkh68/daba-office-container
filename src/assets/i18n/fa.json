@@ -43,7 +43,9 @@
     "apply_status": "اعمال وضعیت",
     "status_description": "توضیح وضعیت",
     "status_description_error": "توضیح وضعیت را وارد نمایید",
-    "status_success": "وضعیت مربوطه با موفقیت اعمال گردید"
+    "status_success": "وضعیت مربوطه با موفقیت اعمال گردید",
+    "start_working": "شروع کار",
+    "start_working_time": "آیا میخواهید ساعت کاری خود را شروع کنید؟"
   },
   "soft_phone": {
     "main": {

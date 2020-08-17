@@ -63,6 +63,8 @@ export class LoginFormComponent implements OnInit {
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
 
+      this.viewDirection.changeDirection(this.form.get('lang').value === 'fa');
+
       resolve(true);
     });
   }
@@ -72,7 +74,7 @@ export class LoginFormComponent implements OnInit {
 
     const formValue = this.form.value;
 
-    delete(formValue.lang);
+    delete (formValue.lang);
 
     this._subscription.add(
       this.api.login(formValue).subscribe((resp: any) => {

@@ -2,7 +2,11 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AppConfig} from '../../../../environments/environment';
 import {Observable} from 'rxjs/internal/Observable';
-import {ResultApiInterface, ResultConfApiInterface} from './result-api.interface';
+import {
+  ResultApiInterface,
+  ResultConfApiInterface,
+  ResultConfOnlineExtensionApiInterface
+} from './result-api.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +14,6 @@ import {ResultApiInterface, ResultConfApiInterface} from './result-api.interface
 export class ApiService {
   public accessToken = '';
   private API_URL = AppConfig.CONTAINER_URL + '/pbx';
-  private WRTC_URL = AppConfig.WRTC_URL;
 
   /**
    * @type {HttpHeaders}
@@ -46,6 +49,12 @@ export class ApiService {
   getConferenceList(): Observable<ResultConfApiInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<ResultConfApiInterface>(`${this.WRTC_URL}/extension.php?action=conferenceList`, this.headers);
+    return this._http.get<ResultConfApiInterface>(`${this.API_URL}/extension.php?action=conferenceList`, this.headers);
+  }
+
+  getConferenceOnlineUser(confNumber: string): Observable<ResultConfOnlineExtensionApiInterface> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this._http.get<ResultConfOnlineExtensionApiInterface>(`${this.API_URL}/extension.php?action=conferenceOnlineUser&phoneNumber=${confNumber}`, this.headers);
   }
 }

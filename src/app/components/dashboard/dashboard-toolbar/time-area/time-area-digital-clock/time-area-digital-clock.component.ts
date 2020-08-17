@@ -16,7 +16,7 @@ export class TimeAreaDigitalClockComponent implements OnInit {
 
   ngOnInit(): void {
     this.time = new Date().toLocaleTimeString('en-US', {
-      timeZone: this.timezone,
+      timeZone: this.timezone.length ? this.timezone : 'UTC',
       hour12: false,
       hour: '2-digit',
       minute: '2-digit'

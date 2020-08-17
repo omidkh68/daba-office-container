@@ -147,7 +147,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
 
       this._subscription.add(
         this.api.userScreenshot(data).subscribe((resp: any) => {
-          console.log(resp);
+          // console.log(resp);
         }, err => {
           console.log(err);
         })

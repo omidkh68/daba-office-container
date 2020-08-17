@@ -7,3 +7,9 @@ export interface ExtensionInterface {
   extension_type?: string;
   is_online?: number;
 }
+
+export interface ConferenceOnlineExtensionInterface extends ExtensionInterface {
+  extension_id: string;
+  chanel: string;
+  is_webrtc: number;
+}

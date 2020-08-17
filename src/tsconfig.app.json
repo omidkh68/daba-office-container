@@ -5,7 +5,9 @@
     "target": "es5",
     "module": "esnext",
     "baseUrl": "",
-    "types": []
+    "types": [],
+    "experimentalDecorators": true,
+    "allowJs": true
   },
   "exclude": [
     "**/*.spec.ts"

@@ -1,15 +1,26 @@
-import {ExtensionInterface} from './extension.interface';
+import {ConferenceOnlineExtensionInterface, ExtensionInterface} from './extension.interface';
 import {SoftphoneConferenceInterface} from './softphone-conference.interface';
 
 export interface ResultApiInterface {
-  recordsCount: number;
   data: Array<ExtensionInterface>;
+  recordsCount: number;
   success: string;
   result: number;
   meta: any;
 }
 
 export interface ResultConfApiInterface {
+  data: Array<SoftphoneConferenceInterface>;
   recordsCount: number;
-  data: Array<SoftphoneConferenceInterface>
+  success: string;
+  result: number;
+  meta: any;
+}
+
+export interface ResultConfOnlineExtensionApiInterface {
+  data: Array<ConferenceOnlineExtensionInterface>;
+  recordsCount: number;
+  success: string;
+  result: number;
+  meta: any;
 }

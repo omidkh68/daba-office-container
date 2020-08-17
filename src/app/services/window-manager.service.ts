@@ -36,20 +36,20 @@ export class WindowManagerService {
 
     try {
       switch (service.serviceTitle) {
-        case 'project_microservice': {
+        case 'project_service': {
           component = TasksComponent;
 
           break;
         }
 
-        case 'pbx_microservice': {
+        case 'pbx_service': {
           component = SoftPhoneComponent;
           maximizable = false;
 
           break;
         }
 
-        case 'video_conference': {
+        case 'conference_service': {
           component = ConferenceComponent;
           hasFrame = true;
 
@@ -229,12 +229,12 @@ export class WindowManagerService {
     const heightEmptyState = (Math.random() * (this.window.innerHeight - windowInstance.windowService.height)).toFixed();
     const rndNumForWidth = this.randint(50, widthEmptyState);
     const rndNumForHeight = this.randint(50, heightEmptyState);
-    const melement = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;//document.getElementById(window.windowRef.id) as HTMLElement;
+    const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;//document.getElementById(window.windowRef.id) as HTMLElement;
 
     if (center) {
-      melement.style.transform = null;
+      element.style.transform = null;
     } else {
-      melement.style.transform = 'translate3d(' + rndNumForWidth + 'px, ' + rndNumForHeight + 'px, 0px)';
+      element.style.transform = 'translate3d(' + rndNumForWidth + 'px, ' + rndNumForHeight + 'px, 0px)';
     }
   }
 }

@@ -71,55 +71,15 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
       this.userInfoService.currentUserInfo.subscribe(user => {
         this.loggedInUser = user;
 
-        this.loggedInUser.services.push({
-          service_id: 6, type: 3, name: "Web Browser"
-        });
-
         this.loggedInUser.services.map((item: ServiceInterface) => {
-          let icon: string = '';
-          let width = 0;
-          let height = 0;
           let serviceTitle = item.name.split(' ').join('_').toLowerCase();
-
-          switch (serviceTitle) {
-            case 'project_microservice':
-              icon = 'playlist_add_check';
-              width = 1200;
-              height = 710;
-
-              break;
-
-            case 'pbx_microservice':
-              icon = 'perm_phone_msg';
-              width = 350;
-              height = 550;
-
-              break;
-
-            case 'video_conference':
-              icon = 'picture_in_picture';
-              width = 1200;
-              height = 710;
-
-              break;
-
-            case 'web_browser':
-              icon = 'explore';
-              width = 1200;
-              height = 710;
-
-              break;
-          }
 
           const service: ServiceItemsInterface = {
             ...item,
             serviceTitle: serviceTitle,
-            icon: icon,
-            width: width,
-            height: height
           };
 
-          if (serviceTitle !== 'hr_microservice') {
+          if (item.show_in_container) {
             this.serviceList.push(service);
           }
         });

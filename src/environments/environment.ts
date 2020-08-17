@@ -5,6 +5,5 @@ export const AppConfig = {
   CONTAINER_URL: 'http://officecontainer.dabacenter.ir:3001',
   SOCKET_URL: 'http://localhost:4000',
   CONF_URL: 'https://conference.dabacenter.ir/main.php',
-  ATTENDANCE_URL: 'http://loginofficecontainer.dabacenter.ir/api',
   WRTC_URL: 'http://wrtc.dabacenter.ir/api'
 };

@@ -1,4 +1,6 @@
-export interface SoftphoneConferenceInterface {
+import {SoftphoneUserInterface} from './softphone-user.interface';
+
+export interface SoftphoneConferenceInterface extends SoftphoneUserInterface{
   conf_id: string;
   conf_number: string;
   conf_name: string;

@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import '../polyfills';
 
-import {NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
@@ -49,7 +49,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   providers: [
     {provide: 'windowObject', useValue: window},
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
 }

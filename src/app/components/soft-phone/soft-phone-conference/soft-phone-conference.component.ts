@@ -32,7 +32,6 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
 
   conferenceList: Array<SoftphoneConferenceInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
-  publicConference: Array<SoftphoneUserInterface> = [];
 
   private _subscription: Subscription = new Subscription();
 
@@ -52,12 +51,6 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
   }
 
   ngOnInit(): void {
-    this.publicConference.push({
-      extension_name: 'Daba Employees',
-      username: 'daba',
-      extension_no: '9999',
-    });
-
     this.getConferenceList();
   }
 
@@ -70,7 +63,21 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
       this.apiService.getConferenceList().subscribe((resp: ResultConfApiInterface) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
-        console.log(resp);
+        if (resp.success) {
+          resp.data.map(item => {
+            let confTransferItem: SoftphoneConferenceInterface = {
+              username: '0',
+              is_online: 0,
+              extension_name: item.conf_name,
+              caller_id_number: item.conf_number,
+              extension_no: item.conf_number,
+              extension_type: '2',
+              ...item
+            };
+
+            this.conferenceList.push(confTransferItem);
+          })
+        }
       }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
@@ -79,7 +86,7 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
     );
   }
 
-  openSheet(user) {
+  openSheet(user: SoftphoneConferenceInterface) {
     if (this.callPopUpMinimizeStatus) {
       this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
 

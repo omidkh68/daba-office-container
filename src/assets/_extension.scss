@@ -187,10 +187,12 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .padding-r-full{padding-right: 1em !important}
 .padding-r-full-2{padding-right: 1em * 2 !important}
 .padding-r-half{padding-right: .5em !important}
+.padding-r-tiny{padding-right: .25em !important}
 .padding-r-full-plus-half{padding-right: 1em + .5em !important}
 .padding-l-full{padding-left: 1em !important}
 .padding-l-full-2{padding-left: 1em * 2 !important}
 .padding-l-half{padding-left: .5em !important}
+.padding-l-tiny{padding-left: .25em !important}
 .padding-l-full-plus-half{padding-left: 1em + .5em !important}
 .padding-for-title{padding-top: 56px !important}
 .no-padding{padding: 0 !important}
@@ -262,6 +264,7 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .top-two-tenth{top: .2em !important}
 .top-three-tenth{top: .3em !important}
 .top-six-tenth{top: .6em !important}
+.top-six-tenth-reverse{top: -.6em !important}
 .top-seven-tenth{top: .7em !important}
 .top-eight-tenth{top: .8em !important}
 .top-nine-tenth{top: .9em !important}
