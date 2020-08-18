@@ -24,7 +24,7 @@ export class SoftPhoneService extends LoginDataClass {
   allUsersSoftphone: Array<SoftphoneUserInterface> = [];
   loggedInUserSoftphone: SoftphoneUserInterface;
 
-  debugMode: boolean = true;
+  debugMode: boolean = false;
   oSipStack;
   oSipSessionRegister;
   oSipSessionCall;
@@ -159,6 +159,8 @@ export class SoftPhoneService extends LoginDataClass {
   sipRegister = () => {
     this.combineUsersSoftPhoneInformation().then(() => {
       try {
+        this.sipUnRegister();
+
         // enable notifications if not already done
         // if (webkitNotifications && webkitNotifications.checkPermission() != 0) {
         //     webkitNotifications.requestPermission();
@@ -205,7 +207,7 @@ export class SoftPhoneService extends LoginDataClass {
       }
       //btnRegister.disabled = false;
     }).catch(() => {
-      const currentWindowInstance = this.windowManagerService.windowListArray.filter(item => item.windowService.serviceTitle === 'pbx_microservice').pop();
+      const currentWindowInstance = this.windowManagerService.windowListArray.filter(item => item.windowService.serviceTitle === 'pbx_service').pop();
 
       this.windowManagerService.closeWindow(currentWindowInstance.windowService);
 
@@ -292,6 +294,7 @@ export class SoftPhoneService extends LoginDataClass {
       if (this.debugMode) {
         console.log('<i>Terminating the call...</i>');
       }
+
       this.oSipSessionCall.hangup({events_listener: {events: '*', listener: this.onSipEventSession}});
 
       this.oSipSessionCall = null;
@@ -484,21 +487,19 @@ export class SoftPhoneService extends LoginDataClass {
         incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
         incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
       } catch (e) {
-        console.log(e);
+        if (this.debugMode) {
+          console.log(e);
+        }
       }
     }
 
     let callerUserName = '...';
 
     if (incomingExtensionFrom && incomingExtensionFrom.extension_no === this.loggedInUserSoftphone.extension_no) {
-      callerUserName = incomingExtensionTo.extension_name;
+      callerUserName = incomingExtensionTo && incomingExtensionTo.extension_name ? incomingExtensionTo.extension_name : '';
     } else if (incomingExtensionTo && incomingExtensionTo.extension_no === this.loggedInUserSoftphone.extension_no) {
-      callerUserName = incomingExtensionFrom.extension_name;
+      callerUserName = incomingExtensionFrom && incomingExtensionFrom.extension_name ? incomingExtensionFrom.extension_name : '';
     }
-
-    console.log(e);
-
-    console.log(incomingExtensionTo, incomingExtensionFrom);
 
     if (this.debugMode) {
       console.log('-----------oooooooo-----------');

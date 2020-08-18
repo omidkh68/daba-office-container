@@ -2,6 +2,8 @@ import {AfterViewInit, Component, Injector, OnDestroy, ViewChild} from '@angular
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
+import {TaskInterface} from '../logic/task-interface';
+import {LoginDataClass} from '../../../services/loginData.class';
 import {FilterInterface} from '../logic/filter-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
@@ -9,6 +11,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {TaskAddComponent} from '../task-add/task-add.component';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {TaskDataInterface} from '../logic/task-data-interface';
+import {CurrentTaskService} from '../services/current-task.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
 import {ViewDirectionService} from '../../../services/view-direction.service';
@@ -16,9 +19,7 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import {TaskCalendarFilterComponent} from "../task-calendar/task-calendar-filter/task-calendar-filter.component";
-import {LoginDataClass} from "../../../services/loginData.class";
-import {UtilsService} from "../../../services/utils.service";
+import {TaskCalendarFilterComponent} from '../task-calendar/task-calendar-filter/task-calendar-filter.component';
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];
@@ -27,8 +28,7 @@ export interface TaskEssentialInfo {
 
 @Component({
   selector: 'app-task-main',
-  templateUrl: './task-main.component.html',
-  styleUrls: ['./task-main.component.scss']
+  templateUrl: './task-main.component.html'
 })
 export class TaskMainComponent extends LoginDataClass implements AfterViewInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: TaskBottomSheetComponent;
@@ -46,6 +46,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   tabs = [];
   checksTab: string;
   calendarParameters = {};
+  currentTasks: Array<TaskInterface> | null = null;
 
   private _subscription: Subscription = new Subscription();
 
@@ -54,7 +55,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
               private loadingIndicatorService: LoadingIndicatorService,
               private translate: TranslateService,
               private userInfoService: UserInfoService,
-              private utilService: UtilsService,
+              private currentTaskService: CurrentTaskService,
               public dialog: MatDialog) {
     super(injector, userInfoService);
     this._subscription.add(
@@ -67,6 +68,10 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
+
+    this._subscription.add(
+      this.currentTaskService.currentTask.subscribe(currentTasks => this.currentTasks = currentTasks)
     );
   }
 
@@ -96,7 +101,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       taskName: '',
       type: '',
       email: this.loggedInUser.email,
-      typeId: 0
+      status: 0
     };
   }
 
@@ -129,6 +134,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
   tabChange(event: MatTabChangeEvent) {
     this.activeTab = event.index;
+
+    this.doResetFilter = false;
   }
 
   getTaskEssentialInfo(event) {
@@ -145,7 +152,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       usersList: this.taskEssentialInfo.usersList,
       projectsList: this.taskEssentialInfo.projectsList,
       loginData: this.loginData,
-      rtlDirection : this.rtlDirection
+      rtlDirection: this.rtlDirection
     };
 
     const dialogRef = this.dialog.open(TaskCalendarFilterComponent, {
@@ -156,15 +163,15 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     });
 
     this._subscription.add(
-        dialogRef.afterClosed().subscribe(resp => {
-          if (resp) {
-            this.calendarParameters = resp;
-          }
-        })
+      dialogRef.afterClosed().subscribe(resp => {
+        if (resp) {
+          this.calendarParameters = resp;
+        }
+      })
     );
   }
 
-  showTaskFilter(){
+  showTaskFilter() {
     const data: FilterTaskInterface = {
       filterData: this.filterData,
       usersList: this.taskEssentialInfo.usersList,
@@ -175,33 +182,30 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       data: data,
       autoFocus: false,
       width: '500px',
-      height: '300px'
+      height: '350px'
     });
 
     this._subscription.add(
-        dialogRef.afterClosed().subscribe(resp => {
-          if (resp && resp.result === 1) {
-            this.filterData = Object.assign({}, resp.filterData);
+      dialogRef.afterClosed().subscribe(resp => {
+        if (resp && resp.result === 1) {
+          this.filterData = Object.assign({}, resp.filterData);
 
-            this.filteredBoardsData = {
-              resp: resp
-            };
+          this.filteredBoardsData = {
+            resp: resp
+          };
 
-            this.doResetFilter = true;
-          }
-        })
+          this.doResetFilter = true;
+        }
+      })
     );
   }
+
   showFilter() {
-
-    if(this.checksTab === undefined || this.checksTab == 'calendar_task' || !this.activeTab){
+    if (this.checksTab === undefined || this.checksTab == 'calendar_task' || !this.activeTab) {
       this.showTaskFilter();
-    }
-
-    else if(this.checksTab == 'calendar_task_rate' && this.activeTab){
+    } else if (this.checksTab == 'calendar_task_rate' && this.activeTab) {
       this.showCalendarFilter();
-    }
-    else{
+    } else {
       this.showTaskFilter();
     }
   }
@@ -225,7 +229,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     return this.translate.instant(word);
   }
 
-  doSomething(data: any):void {
+  doSomething(data: any): void {
     this.checksTab = data;
   }
 

@@ -5,11 +5,13 @@
 .calendar-switcher {
   width: fit-content;
 }
-.fc-day-number{
+
+.fc-day-number {
   padding: 5px !important;
 }
+
 .fc-view {
-  .fc-event, .fc-event-dot{
+  .fc-event, .fc-event-dot {
     border: none !important;
     margin: 3px 10px !important;
     border-radius: 5px !important;

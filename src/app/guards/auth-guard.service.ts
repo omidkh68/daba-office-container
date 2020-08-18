@@ -1,5 +1,4 @@
 import {Injectable, Injector, OnDestroy} from '@angular/core';
-import * as Store from 'electron-store';
 import {of} from 'rxjs/internal/observable/of';
 import {catchError, map} from 'rxjs/operators';
 import {Observable} from 'rxjs/internal/Observable';
@@ -46,7 +45,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
           if (resp.success === true) {
             this.userInfoService.changeUserInfo(resp.data);
 
-            this.changeStatusService.changeUserStatus('');
+            this.changeStatusService.changeUserStatus(resp.data.user_status);
 
             return true;
           }

@@ -36,7 +36,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this._subscription.add(
       this.onlineEvent.subscribe(e => {
         this.showConnectionOverlay = false;
-        this.messageService.showMessage(this.getTranslate('global.online'),'', 5);
+        this.messageService.showMessage(this.getTranslate('global.online'), '', 5);
       })
     );
 

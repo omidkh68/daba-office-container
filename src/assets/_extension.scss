@@ -54,8 +54,6 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .text-justify{text-align: justify !important}
 .text-left{text-align: left !important}
 .text-right{text-align: right !important}
-.text-eclipse{overflow: hidden;-ms-text-overflow: ellipsis;text-overflow: ellipsis;white-space: nowrap}
-.no-text-eclipse{overflow: hidden !important;-ms-text-overflow: inherit !important;text-overflow: inherit !important;white-space: normal !important}
 .text-danger{color: #c30 !important}
 .text-warning{color: #e65100 !important}
 .text-eclipse{overflow: hidden;-ms-text-overflow: ellipsis;text-overflow: ellipsis;white-space: nowrap}
@@ -100,7 +98,9 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .font-full-em{font-size: 1em !important}
 .font-full-rem{font-size: 1rem !important}
 .font-full-em-2{font-size: 1em * 2 !important}
+.font-full-em-3{font-size: 1em * 3 !important}
 .font-full-rem-2{font-size: 1rem * 2 !important}
+.font-full-rem-3{font-size: 1rem * 3 !important}
 .font-full-em-2-plus-half{font-size: calc(#{1em * 2 + .5em}) !important}
 .font-full-rem-2-plus-half{font-size: calc(#{1rem * 2 + .5rem}) !important}
 .font-full-em-3-plus-half{font-size: calc(#{1em * 3 + .5em}) !important}
@@ -141,18 +141,20 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .half-height{height: 50% !important}
 
 .width-auto{width: auto !important}
+.min-width-inherit{min-width: inherit !important}
 .height-auto{height: auto !important}
 
-%height-full-minus-30,.height-full-minus-30{height: calc(100% - 30px)}
-%height-full-minus-35,.height-full-minus-35{height: calc(100% - 35px)}
-%height-full-minus-40,.height-full-minus-40{height: calc(100% - 40px)}
+.height-full-minus-30{height: calc(100% - 30px)}
+.height-full-minus-35{height: calc(100% - 35px)}
+.height-full-minus-40{height: calc(100% - 40px)}
 %height-full-minus-45,.height-full-minus-45{height: calc(100% - 45px)}
-%height-full-minus-50,.height-full-minus-50{height: calc(100% - 50px)}
-%height-full-minus-56,.height-full-minus-56{height: calc(100% - 56px)}
-%height-full-minus-60,.height-full-minus-60{height: calc(100% - 60px)}
-%height-full-minus-80,.height-full-minus-80{height: calc(100% - 80px)}
-%height-full-minus-95,.height-full-minus-95{height: calc(100% - 95px)}
-%height-full-minus-155,.height-full-minus-155{height: calc(100% - 155px)}
+.height-full-minus-50{height: calc(100% - 50px)}
+.height-full-minus-56{height: calc(100% - 56px)}
+.height-full-minus-60{height: calc(100% - 60px)}
+.height-full-minus-80{height: calc(100% - 80px)}
+.height-full-minus-95{height: calc(100% - 95px)}
+.height-full-minus-110{height: calc(100% - 110px)}
+.height-full-minus-155{height: calc(100% - 155px)}
 
 .ltr{direction: ltr}
 .rtl{direction: rtl}
@@ -185,10 +187,12 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .padding-r-full{padding-right: 1em !important}
 .padding-r-full-2{padding-right: 1em * 2 !important}
 .padding-r-half{padding-right: .5em !important}
+.padding-r-tiny{padding-right: .25em !important}
 .padding-r-full-plus-half{padding-right: 1em + .5em !important}
 .padding-l-full{padding-left: 1em !important}
 .padding-l-full-2{padding-left: 1em * 2 !important}
 .padding-l-half{padding-left: .5em !important}
+.padding-l-tiny{padding-left: .25em !important}
 .padding-l-full-plus-half{padding-left: 1em + .5em !important}
 .padding-for-title{padding-top: 56px !important}
 .no-padding{padding: 0 !important}
@@ -260,6 +264,7 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .top-two-tenth{top: .2em !important}
 .top-three-tenth{top: .3em !important}
 .top-six-tenth{top: .6em !important}
+.top-six-tenth-reverse{top: -.6em !important}
 .top-seven-tenth{top: .7em !important}
 .top-eight-tenth{top: .8em !important}
 .top-nine-tenth{top: .9em !important}
@@ -280,7 +285,9 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 
 .bottom-0{bottom: 0 !important}
 .bottom-full{bottom: 1em !important}
+.bottom-full-2{bottom: 2em !important}
 .bottom-full-reverse{bottom: -1em !important}
+.bottom-full-reverse-percent{bottom: -100% !important}
 .bottom-half{bottom: .5em !important}
 .bottom-half-reverse{bottom: -.5em !important}
 

@@ -8,6 +8,32 @@
   color: #304352;
 }
 
+.status-start_working {
+  @include transition(all .4s);
+
+  &:hover, &.active-status {
+    color: #92ca68;
+
+    box-shadow:
+      0 2px 4px -1px #77ca5d,
+      0px 10px 25px -7px #dbffac,
+      0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.status-finish_working {
+  @include transition(all .4s);
+
+  &:hover, &.active-status {
+    color: #b85f39;
+
+    box-shadow:
+      0 2px 4px -1px #ca703a,
+      0px 10px 25px -7px #caba89,
+      0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+}
+
 .status-lunch_time {
   @include transition(all .4s);
 
@@ -91,4 +117,8 @@
     0px 10px 25px -7px #fbfcdb,
     0px 1px 10px 0px rgba(0, 0, 0, 0.12);
   }
+}
+
+.cursor-ignore {
+  cursor: not-allowed;
 }

@@ -1,10 +1,10 @@
 <form *ngIf="form" [formGroup]="form" (submit)="submit()" class="full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <div class="dialog-content-container height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
+  <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
     <h1 *ngIf="data.action !== 'detail'"
         class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
       {{'tasks.main.add_new_task' | translate}}
     </h1>
-    <div class="display-flex ">
+    <div class="display-flex">
       <div class="full-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
           <input matInput placeholder="{{'tasks.form.task_name' | translate}}" class="full-width" type="text"
@@ -19,7 +19,7 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="display-flex ">
+    <div class="display-flex">
       <div class="half-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
           <mat-label>{{'tasks.form.task_status' | translate}}</mat-label>
@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <div class="display-flex ">
+    <div class="display-flex">
       <div class="half-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
           <mat-label>{{'tasks.form.task_project' | translate}}</mat-label>
@@ -91,7 +91,7 @@
       </div>
     </div>
 
-    <div class="display-flex margin-b-full ">
+    <div class="display-flex margin-b-full">
       <div class="half-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
           <input matInput placeholder="{{'tasks.form.task_durationHours' | translate}}" class="full-width" type="number"
@@ -117,7 +117,7 @@
       </div>
     </div>
 
-    <div class="display-flex ">
+    <div class="display-flex">
       <div class="quarter-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
           <mat-label>{{'tasks.form.start_at' | translate}}</mat-label>
@@ -178,7 +178,7 @@
       </div>
     </div>
 
-    <div class="display-flex margin-b-full ">
+    <div class="display-flex margin-b-full">
       <div class="full-width padding-r-l">
         <mat-form-field class="full-width height-80 font-9-em">
           <mat-label>{{'tasks.form.task_description' | translate}}</mat-label>
@@ -188,13 +188,22 @@
       </div>
     </div>
 
-    <div class="display-flex margin-b-full ">
+    <div class="display-flex margin-b-full">
       <div class="full-width padding-r-l">
         <mat-slide-toggle
           formControlName="trackable"
-          class="example-margin"
           [color]="'primary'">
           {{'tasks.form.trackable_by_mobile' | translate}}
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <div *ngIf="data.action === 'detail'" class="display-flex margin-b-full">
+      <div class="full-width padding-r-l">
+        <mat-slide-toggle
+          formControlName="status"
+          [color]="'primary'">
+          {{form.get('status').value ? ('global.active' | translate) : ('global.deactivate' | translate)}}
         </mat-slide-toggle>
       </div>
     </div>

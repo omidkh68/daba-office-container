@@ -109,7 +109,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     });
   }*/
 
-  drop(event: CdkDragDrop<string[]>) {
+  changeStatus(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -173,7 +173,17 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       this.currentTaskService.changeCurrentTask(this.myTasks);
       this.myTasks = [];
     } else {
-      this.currentTaskService.changeCurrentTask(null);
+      if (!this.currentTasks.length) {
+        this.currentTaskService.changeCurrentTask(null);
+      } else {
+        if (newTask.boardStatus !== 'inProgress') {
+          const findIndex = this.currentTasks.findIndex(task => task.taskId === newTask.taskId);
+
+          this.currentTasks.splice(findIndex, 1);
+
+          this.currentTaskService.changeCurrentTask(this.currentTasks);
+        }
+      }
     }
 
     if (prevContainer === 'inProgress' && (newContainer === 'todo' || newContainer === 'done')) {
@@ -313,11 +323,11 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   getColor(percentage: number) {
     if (percentage < 10 && percentage >= 0) {
       return 'spinner-color-red';
-    } else if (percentage < 30 && percentage > 10) {
+    } else if (percentage <= 30 && percentage > 10) {
       return 'spinner-color-redorange';
-    } else if (percentage < 50 && percentage > 30) {
+    } else if (percentage <= 50 && percentage > 30) {
       return 'spinner-color-orange';
-    } else if (percentage < 80 && percentage > 50) {
+    } else if (percentage <= 80 && percentage > 50) {
       return 'spinner-color-lightgreen';
     } else if (percentage > 80) {
       return 'spinner-color-green';

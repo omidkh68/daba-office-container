@@ -8,7 +8,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {HttpErrorResponse} from '@angular/common/http';
 
 export interface LangInterface {
   id: string;
@@ -64,6 +63,8 @@ export class LoginFormComponent implements OnInit {
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
 
+      this.viewDirection.changeDirection(this.form.get('lang').value === 'fa');
+
       resolve(true);
     });
   }
@@ -73,13 +74,13 @@ export class LoginFormComponent implements OnInit {
 
     const formValue = this.form.value;
 
-    delete(formValue.lang);
+    delete (formValue.lang);
 
     this._subscription.add(
       this.api.login(formValue).subscribe((resp: any) => {
-        const successfullMessage = this.getTranslate('login_info.login_successfully');
+        const successfulMessage = this.getTranslate('login_info.login_successfully');
 
-        this.messageService.showMessage(successfullMessage, 'success');
+        this.messageService.showMessage(successfulMessage, 'success');
 
         this.userInfoService.changeLoginData(resp.data);
 
@@ -88,7 +89,7 @@ export class LoginFormComponent implements OnInit {
         } else {
           this.router.navigateByUrl(`/`);
         }
-      }, (error: HttpErrorResponse) => {
+      }, () => {
         this.form.enable();
 
         const failedMessage = this.getTranslate('login_info.login_failed');

@@ -9,7 +9,7 @@ import {AppConfig} from '../../../../environments/environment';
 })
 export class ApiService {
   public accessToken = '';
-  private API_URL = AppConfig.CONTAINER_URL + '/project';
+  private API_URL = AppConfig.CONTAINER_URL + '/attendance';
 
   /**
    * @type {HttpHeaders}
@@ -24,15 +24,15 @@ export class ApiService {
   constructor(private _http: HttpClient) {
   }
 
-  createScreenshot(screenshotData: ScreenshotInterface): Observable<ScreenshotInterface> {
+  userScreenshot(screenshotData: ScreenshotInterface): Observable<ScreenshotInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.post<ScreenshotInterface>(`${this.API_URL}/screenshots/add`, screenshotData, this.headers);
+    return this._http.post<ScreenshotInterface>(`${this.API_URL}/userScreenshot`, screenshotData, this.headers);
   }
 
-  getTickTok() {
+  getTickTock(): Observable<string> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get(`${this.API_URL}/screenshots/serverTickTok`, this.headers);
+    return this._http.get<string>(`${this.API_URL}/userScreenshot/serverTickTock`, this.headers);
   }
 }

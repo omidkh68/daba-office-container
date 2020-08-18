@@ -40,7 +40,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
     email: '0',
     userImg: '0',
     type: '',
-    typeId: 0,
+    status: 0,
     percentageStatus: false
   };
   projectsList: ProjectInterface[] = [];
@@ -129,6 +129,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
         email: this.filterData.email ? this.filterData.email : this.loggedInUser.email,
         userImg: this.filterData.userImg ? this.filterData.userImg : '0',
         type: this.filterData.type ? this.filterData.type : '',
+        status: this.filterData.status ? this.filterData.status : 0,
         percentageStatus: this.filterData.percentageStatus ? this.filterData.percentageStatus : false
       });
 
@@ -175,9 +176,8 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
   createForm() {
     return new Promise((resolve) => {
       this.form = this._fb.group({
-        userId: new FormControl(1, Validators.required),
+        userId: new FormControl(0, Validators.required),
         userImg: new FormControl('0'),
-        typeId: new FormControl(9, Validators.required),
         email: new FormControl(this.loggedInUser.email),
         taskName: new FormControl(''),
         projectId: new FormControl(0),
@@ -186,6 +186,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
         type: new FormControl('byCreateDate', Validators.required),
         adminId: new FormControl(0),
         page: new FormControl('-1'),
+        status: new FormControl(0),
         percentageStatus: new FormControl(false),
       });
 
@@ -318,6 +319,10 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
 
     if (formValue.percentageStatus === false) {
       delete (formValue.percentageStatus);
+    }
+
+    if (formValue.status === 0) {
+      delete (formValue.status);
     }
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;

@@ -4,17 +4,16 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../services/message.service';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {StatusInterface} from '../logic/status-interface';
+import {StatusDetailInterface, UserStatusInterface} from '../logic/status-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
-import {UserStatusInterface} from '../../users/logic/user-status-interface';
 import {ChangeStatusService} from '../services/change-status.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {ChangeUserStatusInterface} from '../logic/change-user-status.interface';
 import {ApiService as UserApiService} from '../../users/logic/api.service';
 import {ApiService as StatusApiService} from '../logic/api.service';
+import {StatusListResultInterface, StatusChangeResultInterface} from '../logic/result-interface';
 
 @Component({
   selector: 'app-change-status',
@@ -25,7 +24,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
   rtlDirection: boolean;
   form: FormGroup;
   currentUserStatus: UserStatusInterface | string;
-  statusList: StatusInterface[];
+  statusList: Array<StatusDetailInterface> = [];
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'userStatus'};
 
   private _subscription: Subscription = new Subscription();
@@ -64,7 +63,13 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
       }, 1000);
 
       this._subscription.add(
-        this.userStatusService.currentUserStatus.subscribe(status => this.currentUserStatus = status)
+        this.userStatusService.currentUserStatus.subscribe(status => {
+          this.currentUserStatus = status;
+
+          this.form.patchValue({
+            status: this.currentUserStatus.status_detail
+          })
+        })
       );
     });
   }
@@ -72,18 +77,20 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
   getStatuses() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'userStatus'});
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.statusApiService.getStatuses().subscribe((resp: any) => {
+        this.statusApiService.getStatuses().subscribe((resp: StatusListResultInterface) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
 
-          if (resp.result === 1) {
-            this.statusList = resp.contents;
-          }
+          if (resp.success) {
+            this.statusList = resp.data;
 
-          resolve(true);
+            resolve(true);
+          } else {
+            reject(true);
+          }
         }, error => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
 
@@ -96,10 +103,9 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
   createForm() {
     return new Promise((resolve) => {
       this.form = this.fb.group({
-        userId: new FormControl(1, Validators.required), // todo: replace this id with container user id
-        status: new FormControl('', Validators.required),
-        assigner: new FormControl(1), // todo: replace this id with container user id
-        statusTime: new FormControl('start'),
+        user_id: new FormControl(this.loggedInUser.id, Validators.required),
+        status: new FormControl({}, Validators.required),
+        is_description: new FormControl(0),
         description: new FormControl('')
       });
 
@@ -109,11 +115,11 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
   checkFormValidation() {
     this._subscription.add(
-      this.form.valueChanges.subscribe((selectedValue: ChangeUserStatusInterface) => {
+      this.form.valueChanges.subscribe(selectedValue => {
 
         const descriptionControl = this.form.get('description');
 
-        if (selectedValue.status.statusId === 9) {
+        if (selectedValue.status.is_description) {
           if (this.form.get('description').value.length < 1) {
             descriptionControl.setErrors({'incorrect': true});
             descriptionControl.setValidators(Validators.required);
@@ -127,9 +133,11 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     );
   }
 
-  activeStatus(status: StatusInterface) {
-    if (status.statusId === 9) {
+  activeStatus(status: StatusDetailInterface) {
+    if (status.is_description) {
       this.dialogRef.updateSize('500px', '475px');
+
+      this.form.get('is_description').setValue(status.is_description);
     } else {
       this.dialogRef.updateSize('500px', '355px');
     }
@@ -149,16 +157,16 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
       const formValue = Object.assign({}, this.form.value);
 
-      formValue.status = formValue.status.statusId;
+      formValue.status = formValue.status.id;
 
       this.userApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.userApiService.applyStatusToUser(formValue).subscribe((resp: any) => {
+        this.statusApiService.userChangeStatus(formValue).subscribe((resp: StatusChangeResultInterface) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
 
-          if (resp.result === 1) {
-            this.userStatusService.changeUserStatus(resp.content.userCurrentStatus);
+          if (resp.success) {
+            this.userStatusService.changeUserStatus(resp.data);
 
             this.messageService.showMessage(this.getTranslate('status.status_success'));
 
@@ -185,7 +193,6 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
   ngOnDestroy(): void {
     if (this._subscription) {
-      console.log(this._subscription);
       this._subscription.unsubscribe();
     }
   }

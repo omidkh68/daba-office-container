@@ -6,11 +6,7 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 })
 export class RefreshBoardService {
   private _doRefresh: boolean = false;
-
-  // set observable behavior to property
   private doRefresh = new BehaviorSubject(this._doRefresh);
-
-  // observable property
   public currentDoRefresh = this.doRefresh.asObservable();
 
   changeCurrentDoRefresh(doRefresh: boolean) {

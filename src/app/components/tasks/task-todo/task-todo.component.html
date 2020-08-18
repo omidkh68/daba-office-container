@@ -7,9 +7,9 @@
       {{todoList.length ? todoList.length : ''}} {{(todoList.length ? 'tasks.task_todo.items' : '') | translate}}
     </span>
   </h1>
-  <div class="todo-content-container overflow-y-auto overflow-x-hide padding-full">
-    <form [formGroup]="form">
-      <div *ngIf="todoList.length" class="todo-list-container padding-b-full">
+  <div class="todo-content-container padding-full padding-b-half">
+    <form [formGroup]="form" class="full-height">
+      <div *ngIf="todoList.length" class="todo-list-container padding-b-full overflow-y-auto overflow-x-hide">
         <mat-list class="no-padding">
           <mat-list-item *ngFor="let todoItem of todoList"
                          (click)="checkTodo(todoItem)"
@@ -57,5 +57,34 @@
         </div>
       </div>
     </form>
+  </div>
+
+  <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'todo'"
+       class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
+    <div class="text-center">
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+           width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+        <rect x="0" y="13" width="4" height="5" fill="#333">
+          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+        </rect>
+        <rect x="10" y="13" width="4" height="5" fill="#333">
+          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.15s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.15s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+        </rect>
+        <rect x="20" y="13" width="4" height="5" fill="#333">
+          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.3s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.3s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+        </rect>
+      </svg>
+
+      <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
+    </div>
   </div>
 </div>

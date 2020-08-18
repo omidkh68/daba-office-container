@@ -14,14 +14,15 @@
 
     <div class="pos-abs top-full display-flex flex-space-between align-items-center"
          [ngClass]="rtlDirection ? 'left-full' : 'right-full'">
-      <button *ngIf="doResetFilter && !activeTab" (click)="resetFilter()"
+      <button *ngIf="doResetFilter && activeTab === 0" (click)="resetFilter()"
               class="no-bg no-border height-35 margin-l-full cursor-pointer">
         <mat-icon class="font-8-rem line-height-25 width-18 height-18">close</mat-icon>
         <span class="font-8-rem line-height-25">{{'global.reset_filter' | translate}}</span>
       </button>
 
       <button mat-raised-button [disabled]="!taskEssentialInfo" (click)="showFilter()"
-              class="white-gradient padding-mini-r-l margin-r-l text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">
+              [ngClass]="!activeTab ? 'margin-r-l' : ''"
+              class="white-gradient padding-mini-r-l text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">filter_list</mat-icon>
         <span class="padding-mini-r-l">{{'global.filter' | translate}}</span>
       </button>
@@ -34,7 +35,8 @@
     </div>
   </div>
 
-  <div class="content-container padding-t-b full-width">
+  <div class="content-container padding-t-b full-width"
+       [ngClass]="currentTasks && currentTasks.length ? 'height-full-minus-110' : 'height-full-minus-60'">
     <ng-container [ngSwitch]="activeTab">
       <!-- boards container -->
       <div class="full-height" *ngSwitchCase="0">
@@ -48,14 +50,14 @@
       <!--/ end of boards container -->
 
       <!-- calendar container -->
-      <div class="full-height padding-b-full" *ngSwitchCase="1">
+      <div class="full-height" *ngSwitchCase="1">
         <app-task-calendar [calendarParameters]="calendarParameters" (onTabLoaded)="doSomething($event)" [rtlDirection]="rtlDirection"></app-task-calendar>
       </div>
       <!--/ end of calendar container -->
     </ng-container>
   </div>
 
-  <div class="current-task-container bg-white height-50 full-width padding-r-l line-height-50">
+  <div *ngIf="currentTasks && currentTasks.length" class="current-task-container bg-white height-50 full-width padding-r-l line-height-50">
     <app-task-current [taskEssentialInfo]="taskEssentialInfo"
                       [rtlDirection]="rtlDirection"
                       (pushTaskToBoard)="getTaskToBoardData($event)"

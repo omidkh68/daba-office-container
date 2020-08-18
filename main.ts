@@ -46,20 +46,17 @@ function createWindow(): BrowserWindow {
   if (serve) {
     require('devtron').install();
 
-    // const debug = require('electron-debug');
-    //
-    // debug();
-
+    //const debug = require('electron-debug');
+    //debug();
     win.webContents.openDevTools();
-
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
-
     win.loadURL('http://localhost:4200');
 
   } else {
     win.setMenu(null);
+
     Menu.setApplicationMenu(null);
 
     win.loadURL(url.format({
@@ -116,7 +113,9 @@ try {
   });
 
   if (!gotTheLock) {
-    app.quit();
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
   } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
       if (win) {

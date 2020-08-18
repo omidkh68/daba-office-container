@@ -1,8 +1,8 @@
+import {AppConfig} from '../../../../../environments/environment';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
-import {TodoInterface} from './todo-interface';
-import {AppConfig} from '../../../../../environments/environment';
+import {TodoInterface, TodoTaskInterface} from './todo-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -27,29 +27,24 @@ export class ApiService {
 
   getTodoList(taskId: number): Observable<TodoInterface[]> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+    this.headers.headers = this.headers.headers.set('From', 'app_application');
 
     return this._http.get<TodoInterface[]>(`${this.API_URL}/todo/?taskId=${taskId}`, this.headers);
   }
 
-  createTodo(todo: any): Observable<TodoInterface> {
+  createTodo(todo: TodoInterface): Observable<TodoInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     return this._http.post<TodoInterface>(`${this.API_URL}/todo/add`, todo, this.headers);
   }
 
-  updateTodo(todo: any): Observable<TodoInterface> {
+  updateTodo(todo: TodoInterface): Observable<TodoInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     return this._http.patch<TodoInterface>(`${this.API_URL}/todo`, todo, this.headers);
   }
 
-  toggleTodo(todoInfo: any): Observable<TodoInterface> {
-    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
-
-    return this._http.patch<TodoInterface>(`${this.API_URL}/todo/toggleTodo`, todoInfo, this.headers);
-  }
-
-  deleteTodo(todoInfo: any) {
+  deleteTodo(todoInfo: TodoTaskInterface) {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     return this._http.delete(`${this.API_URL}/todo/?todoId=${todoInfo.todoId}&taskId=${todoInfo.taskId}`, this.headers);

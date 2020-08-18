@@ -1,16 +1,17 @@
 import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {ApiService} from '../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../services/message.service';
 import {LoginDataClass} from '../../services/loginData.class';
 import {WindowInterface} from './logic/window.interface';
 import {UserInfoService} from '../users/services/user-info.service';
 import {ElectronService} from '../../services/electron.service';
+import {SoftPhoneService} from '../soft-phone/service/soft-phone.service';
 import {ServiceInterface} from '../services/logic/service-interface';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ServiceItemsInterface} from './logic/service-items.interface';
-import {ApiService} from '../users/logic/api.service';
 import {WallpaperSelectorService} from "../../services/wallpaper-selector.service";
 import {WallpaperComponent} from "../profile-setting/wallpaper/wallpaper.component";
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
@@ -70,6 +71,7 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
               private api: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
+              private softPhoneService: SoftPhoneService,
               private _wallPaperSelector: WallpaperSelectorService) {
     super(injector, userInfoService);
 
@@ -82,43 +84,14 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
         this.loggedInUser = user;
 
         this.loggedInUser.services.map((item: ServiceInterface) => {
-          let icon: string = '';
-          let width = 0;
-          let height = 0;
           let serviceTitle = item.name.split(' ').join('_').toLowerCase();
-
-          switch (serviceTitle) {
-            case 'project_microservice':
-              icon = 'playlist_add_check';
-              width = 1200;
-              height = 700;
-
-              break;
-
-            case 'pbx_microservice':
-              icon = 'perm_phone_msg';
-              width = 350;
-              height = 500;
-
-              break;
-
-            case 'video_conference':
-              icon = 'picture_in_picture';
-              width = 1200;
-              height = 700;
-
-              break;
-          }
 
           const service: ServiceItemsInterface = {
             ...item,
             serviceTitle: serviceTitle,
-            icon: icon,
-            width: width,
-            height: height
           };
 
-          if (serviceTitle !== 'hr_microservice') {
+          if (item.show_in_container) {
             this.serviceList.push(service);
           }
         });
@@ -135,6 +108,10 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit(): void {
+    this.electronService.window.on('close', () => {
+      this.softPhoneService.sipHangUp();
+    });
+
     /*setTimeout(() => {
       this.messageService.durationInSeconds = 10;
       this.messageService.showMessage(`${this.loggedInUser.name} خوش آمدید `);
@@ -165,6 +142,5 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
-
   }
 }

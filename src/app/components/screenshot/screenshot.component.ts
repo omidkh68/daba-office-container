@@ -2,6 +2,7 @@ import {Component, Injector, OnDestroy} from '@angular/core';
 import {timer} from 'rxjs';
 import * as moment from 'moment';
 import * as lodash from 'lodash';
+import {AppConfig} from '../../../environments/environment';
 import {ApiService} from './logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../tasks/logic/task-interface';
@@ -9,9 +10,9 @@ import {LoginDataClass} from '../../services/loginData.class';
 import {UserInfoService} from '../users/services/user-info.service';
 import {ElectronService} from '../../services/electron.service';
 import {CurrentTaskService} from '../tasks/services/current-task.service';
-import {UserStatusInterface} from '../users/logic/user-status-interface';
 import {ScreenshotInterface} from './logic/screenshot-interface';
 import {ChangeStatusService} from '../status/services/change-status.service';
+import {UserStatusInterface} from '../status/logic/status-interface';
 import {UserContainerInterface} from '../users/logic/user-container.interface';
 
 export interface AvailableHoursInterface {
@@ -30,8 +31,8 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
   userCurrentStatus: UserStatusInterface | string = '';
   currentTasks: Array<TaskInterface> | null = null;
   availableHours: Array<AvailableHoursInterface> = [
-    // {time: '00', status: false}, {time: '01', status: false}, {time: '02', status: false}, {time: '03', status: false},
-    // {time: '04', status: false}, {time: '05', status: false}, {time: '06', status: false}, {time: '07', status: false},
+    {time: '00', status: false}, {time: '01', status: false}, {time: '02', status: false}, {time: '03', status: false},
+    {time: '04', status: false}, {time: '05', status: false}, {time: '06', status: false}, {time: '07', status: false},
     {time: '08', status: false}, {time: '09', status: false}, {time: '10', status: false}, {time: '11', status: false},
     {time: '12', status: false}, {time: '13', status: false}, {time: '14', status: false}, {time: '15', status: false},
     {time: '16', status: false}, {time: '17', status: false}, {time: '18', status: false}, {time: '19', status: false},
@@ -55,7 +56,11 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
       this.changeStatusService.currentUserStatus.subscribe(status => {
         this.userCurrentStatus = status;
 
-        if (this.userCurrentStatus !== '') {
+        if (this.userCurrentStatus.id === 1) { // it means only in start status take screenshot
+          if (this.globalTimer === null) {
+            this.runTimerForScreenshot();
+          }
+        } else {
           if (this.globalTimer !== null) {
             try {
               this.globalTimerSubscription.unsubscribe();
@@ -63,10 +68,6 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
             } catch (e) {
               console.log(e);
             }
-          }
-        } else {
-          if (this.globalTimer === null) {
-            this.runTimerForScreenshot();
           }
         }
       })
@@ -78,6 +79,8 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
   }
 
   runTimerForScreenshot() {
+    if (!AppConfig.production) return;
+
     this.globalTimer = timer(
       this.timerDueTime, this.timerPeriod
     );
@@ -89,25 +92,29 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
         if (this.loginData && this.loginData.token_type) {
           this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-          this.api.getTickTok().subscribe((resp: any) => {
-            const serverDate = resp.time;
-            const localDate = new Date();
+          this.api.getTickTock().subscribe((resp: any) => {
+            if (resp.success) {
+              const serverDate = resp.data.time;
+              const localDate = new Date();
 
-            const serverDateTmp = moment(serverDate).format('YYYY-MM-DD HH');
-            const localDateTmp = moment(localDate).format('YYYY-MM-DD HH');
+              const serverDateTmp = moment(serverDate).format('YYYY-MM-DD HH-mm');
+              const localDateTmp = moment(localDate).format('YYYY-MM-DD HH-mm');
 
-            const checkTime = moment(serverDate).format('HH');
+              const checkTime = moment(serverDate).format('HH');
 
-            const findTime: AvailableHoursInterface = lodash.find(this.randomHours, item => item.time === checkTime);
+              const findTime: AvailableHoursInterface = lodash.find(this.randomHours, item => item.time === checkTime);
 
-            if (findTime && findTime.status === false) {
-              findTime.status = true;
+              if (findTime && findTime.status === false) {
+                findTime.status = true;
 
-              this.takeAScreenShot();
-            }
+                this.takeAScreenShot();
+              }
 
-            if (serverDateTmp !== localDateTmp) {
-              alert('Different server and local time');
+              if (serverDateTmp !== localDateTmp) {
+                console.warn('Different server and local time');
+              }
+            } else {
+              console.warn('Server Tick Tack ');
             }
           });
         }
@@ -132,15 +139,17 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
       });
 
       const data: ScreenshotInterface = {
-        userId: this.loggedInUser,
+        user_id: this.loggedInUser.id,
         files: screenshots
       };
 
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.api.createScreenshot(data).subscribe((resp: any) => {
+        this.api.userScreenshot(data).subscribe((resp: any) => {
           // console.log(resp);
+        }, err => {
+          console.log(err);
         })
       );
 

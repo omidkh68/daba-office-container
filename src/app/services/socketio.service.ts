@@ -2,7 +2,6 @@ import * as io from 'socket.io-client';
 import {AppConfig} from '../../environments/environment';
 import {Injectable} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInterface} from '../components/users/logic/user-interface';
 import {UserInfoService} from '../components/users/services/user-info.service';
 import {UserContainerInterface} from '../components/users/logic/user-container.interface';
 

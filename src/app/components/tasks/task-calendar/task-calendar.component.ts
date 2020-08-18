@@ -1,4 +1,3 @@
-// import * as io from 'socket.io-client';
 import {
   Component,
   EventEmitter,
@@ -22,8 +21,8 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {FullCalendarComponent} from '@fullcalendar/angular';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {TaskBottomSheetInterface} from "../task-bottom-sheet/logic/TaskBottomSheet.interface";
-import {TaskBottomSheetComponent} from "../task-bottom-sheet/task-bottom-sheet.component";
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 
 @Component({
   selector: 'app-task-calendar',
@@ -56,32 +55,29 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
   projectsList: ProjectInterface[] = [];
   // socket = io(AppConfig.SOCKET_URL);
   calendarEvents = [];
-  events = [
-    {title: 'event 1', start: '2020-05-10 12:00', end: '2020-05-10 13:00'},
-    {title: 'event 2', start: '2020-05-10 23:00', end: '2020-05-10 00:00'}
-  ];
+  holidays = [];
   colorArray = [
-    "#f44336",
-    "#e91e63",
-    "#9c27b0",
-    "#673ab7",
-    "#3f51b5",
-    "#2196f3",
-    "#03a9f4",
-    "#00bcd4",
-    "#009688",
-    "#4caf50",
-    "#8bc34a",
-    "#cddc39",
-    "#dbc00d",
-    "#ffc107",
-    "#ff9800",
-    "#ff5722",
-    "#795548",
-    "#9e9e9e",
-    "#ff9800",
-    "#607d8b",
-    "#444444",
+    '#f44336',
+    '#e91e63',
+    '#9c27b0',
+    '#673ab7',
+    '#3f51b5',
+    '#2196f3',
+    '#03a9f4',
+    '#00bcd4',
+    '#009688',
+    '#4caf50',
+    '#8bc34a',
+    '#cddc39',
+    '#dbc00d',
+    '#ffc107',
+    '#ff9800',
+    '#ff5722',
+    '#795548',
+    '#9e9e9e',
+    '#ff9800',
+    '#607d8b',
+    '#444444',
   ];
   options: any;
   viewModeTypes = 'calendar_task';
@@ -130,11 +126,11 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
         this.projectsList = resp.content.projects.list;
         this.tasks = resp.content.boards.list;
 
-        this.tasks.map((task:any) => {
+        this.tasks.map((task: any) => {
           task.title = task.taskName;
           task.start = new Date(task.startAt);
           task.end = new Date(task.stopAt);
-          task.color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)];
+          task.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
           task.usersList = this.usersList;
           task.projectsList = this.projectsList;
           task.imageurl = 'img/edit.png';
@@ -142,78 +138,87 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
         this.calendarEvents = this.tasks;
 
 
-        setTimeout(() => {
-          this.calendarApi.gotoDate(new Date(Date.UTC(2018, 8, 1)))
-        }, 3000)
+        // setTimeout(() => {
+        //   this.calendarApi.gotoDate(new Date(Date.UTC(2018, 8, 1)))
+        // }, 3000)
       }
     } else {
       if (this.loggedInUser && this.loggedInUser.email) {
+
         this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
         this._subscription.add(
-          this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+            this.api.getAllHolidays().subscribe((resp: any) => {
+              resp.content.forEach((element: any) => {
+                this.holidays.push(element.date)
+              })
+              const holidayTemp = this.holidays;
+              this._subscription.add(
 
-            if (resp.result === 1) {
-              this.usersList = resp.content.users.list;
-              this.projectsList = resp.content.projects.list;
-              this.tasks = resp.content.boards.list;
+                  this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
+                    this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
-              let myArray = [];
-              this.tasks.map((task:any) => {
-                let arr = [];
-                arr = this.getDaysArray(new Date(task.startAt) , new Date(task.stopAt));
-                let color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)];
-                arr.map((item) => {
-                  let obj = {
-                    title : task.taskName,
-                    color : color,
-                    imageurl : 'assets/profileImg/'+task.assignTo.email+'.jpg',
-                    start : item,
-                    end : item,
-                    usersList : this.usersList,
-                    projectsList : this.projectsList
-                  }
-                  let newObj = Object.assign(obj, task);
-                  myArray.push(newObj)
-                })
-              });
+                    if (resp.result === 1) {
+
+                      this.usersList = resp.content.users.list;
+                      this.projectsList = resp.content.projects.list;
+                      this.tasks = resp.content.boards.list;
+
+                      let myArray = [];
+                      this.tasks.map((task: any) => {
+                        let arr = [];
+                        arr = this.getDaysArray(new Date(task.startAt), new Date(task.stopAt));
+                        let color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
+                        arr.map((item) => {
+                          let obj = {
+                            title: task.taskName,
+                            color: color,
+                            imageurl: 'assets/profileImg/' + task.assignTo.email + '.jpg',
+                            start: item,
+                            end: item,
+                            usersList: this.usersList,
+                            projectsList: this.projectsList
+                          };
+                          let newObj = Object.assign(obj, task);
+
+                          let checkDae = item.getFullYear() + "-" + ("0" + (item.getMonth() + 1)).slice(-2) + "-" + ("0" + item.getDate()).slice(-2);
+                          if(!holidayTemp.includes(checkDae))
+                            myArray.push(newObj)
+
+                        })
+                      });
+
+                      this.calendarEvents = myArray;
+
+                    }
+                  }, (error: HttpErrorResponse) => {
+                    this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+                    this.refreshLoginService.openLoginDialog(error);
+                  })
+              );
 
 
-              // this.tasks.map((task:any) => {
-              //   task.title = task.taskName;
-              //   task.color = this.colorArray[Math.floor(Math.random()*this.colorArray.length)];
-              //   task.usersList = this.usersList;
-              //   task.projectsList = this.projectsList;
-              //   task.imageurl = 'assets/profileImg/'+task.assignTo.email+'.jpg';
-              //   task.start = new Date(task.startAt);
-              //   task.end = new Date(task.stopAt);
-              // });
-              this.calendarEvents = myArray;
+            })
+        )
+        this._subscription.add(
 
-            }
-          }, (error: HttpErrorResponse) => {
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-            this.refreshLoginService.openLoginDialog(error);
-          })
         );
       }
     }
   }
 
-  getDaysArray (start, end) {
-
-    for(var arr=[],dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+  getDaysArray(start, end) {
+    for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
       arr.push(new Date(dt));
     }
+
     return arr;
   }
 
   ngOnDestroy(): void {
-
     this.viewModeTypes = null;
     this.onTabLoaded.emit(this.viewModeTypes);
 

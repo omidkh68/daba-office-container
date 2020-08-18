@@ -12,13 +12,16 @@
 
   <mat-list class="full-width">
     <mat-list-item (click)="openSheet(room)"
-                   *ngFor="let room of publicConference"
-                   class="highlight cursor-pointer padding-r-l height-50 margin-b-full">
-      <img [src]="'assets/profileImg/'+ room.username +'.jpg'" [alt]="room.extension_name"
-           onerror="this.src='assets/profileImg/0.jpg'"
-           class="mat-elevation-z2 width-35 height-35" matListAvatar>
+                   *ngFor="let room of conferenceList"
+                   class="highlight cursor-pointer padding-r-l height-50 margin-b-half">
+      <mat-icon mat-list-icon>group</mat-icon>
 
       <h3 class="font-7-rem text-weight-bold" matLine> {{room.extension_name}} </h3>
+
+      <div *ngIf="room.password.length"
+           class="pos-rel text-gray-500 height-30 line-height-35 round-corner-all text-center">
+        <mat-icon class="font-full-plus-two-tenth-em">lock</mat-icon>
+      </div>
     </mat-list-item>
   </mat-list>
 </div>

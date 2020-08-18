@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Injector, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostListener, Injector, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -10,6 +10,7 @@ import {MessageService} from '../../../services/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {ProjectInterface} from '../../projects/logic/project-interface';
+import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
@@ -43,6 +44,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
               private refreshBoardService: RefreshBoardService,
               private loadingIndicatorService: LoadingIndicatorService,
               private userInfoService: UserInfoService,
+              private translateService: TranslateService,
               private viewDirection: ViewDirectionService) {
     super(injector, userInfoService);
 
@@ -85,6 +87,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         boardStatus: new FormControl('', Validators.required),
         taskDateStart: '0000-00-00 00:00:00',
         taskDateStop: '0000-00-00 00:00:00',
+        status: new FormControl(0),
         assigner: new FormControl(this.loggedInUser.email, Validators.required),
         trackable: new FormControl(0)
       });
@@ -113,6 +116,10 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         this.bottomSheetData.bottomSheetRef.close();
       }
     }
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    this.bottomSheetData.bottomSheetRef.close();
   }
 
   formPatchValue() {
@@ -150,6 +157,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
       taskDateStart: this.task.taskDateStart,
       taskDateStop: this.task.taskDateStop,
       assigner: this.task.assigner,
+      status: this.task.status,
       trackable: this.task.trackable
     });
   }
@@ -166,7 +174,10 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
   deleteTask() {
     const dialogRef = this.dialog.open(ApproveComponent, {
-      data: {title: 'حذف تسک', message: 'آیا از حذف این تسک اطمینان دارید؟'},
+      data: {
+        title: this.getTranslate('tasks.task_detail.delete_title'),
+        message: this.getTranslate('tasks.task_detail.delete_text')
+      },
       autoFocus: false,
       width: '70vh',
       maxWidth: '350px',
@@ -215,19 +226,11 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
     formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
-    // formValue.assigner = this.usersList.filter(user => user.email === this.user.email).pop();
-
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
       this.api.updateTask(formValue).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-        const data = {
-          prevContainer: this.task.boardStatus,
-          newContainer: this.form.get('boardStatus').value,
-          task: resp.content
-        };
 
         if (resp.result) {
           this.bottomSheetData.bottomSheetRef.close();
@@ -246,6 +249,10 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         this.refreshLoginService.openLoginDialog(error);
       })
     );
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
   }
 
   changeViewMode(mode) {

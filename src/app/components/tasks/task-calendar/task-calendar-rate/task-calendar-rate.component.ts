@@ -1,22 +1,24 @@
 import {
-  Component, DoCheck,
+  AfterViewInit,
+  Component,
+  DoCheck,
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   SimpleChanges,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import {FormControl, FormGroup} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {FormGroup} from '@angular/forms';
 import {ApiService} from '../../logic/api.service';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {UtilsService} from '../../../../services/utils.service';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import {UserInterface} from '../../../users/logic/user-interface';
+import {LoginInterface} from '../../../login/logic/login.interface';
+import {TranslateService} from '@ngx-translate/core';
 import {FullCalendarComponent} from '@fullcalendar/angular';
-import {UtilsService} from "../../../../services/utils.service";
-import {UserInterface} from "../../../users/logic/user-interface";
-import {LoginInterface} from "../../../login/logic/login.interface";
 
 @Component({
   selector: 'app-task-calendar-rate',
@@ -24,7 +26,7 @@ import {LoginInterface} from "../../../login/logic/login.interface";
   styleUrls: ['./task-calendar-rate.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskCalendarRateComponent implements OnChanges ,OnDestroy,OnInit, DoCheck {
+export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDestroy, DoCheck {
   @ViewChild('calendar') calendarComponent: FullCalendarComponent; // the #calendar in the template
   @ViewChild('drawer') drawer: any; // the #calendar in the template
 
@@ -50,42 +52,89 @@ export class TaskCalendarRateComponent implements OnChanges ,OnDestroy,OnInit, D
   rtlDirection: boolean;
 
   containerHeight = 300;
-
   calendarPlugins = [dayGridPlugin, timeGridPlugin];
   form: FormGroup;
+  buttonLabels = {};
+  header = {};
+  slotLabelFormat = [{
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }];
+  views = {};
+
   private isVisible: boolean = false;
   private _subscription: Subscription = new Subscription();
 
+  constructor(private api: ApiService,
+              private utilService: UtilsService,
+              private translateService: TranslateService) {
+  }
 
-  constructor(private api: ApiService , private utilService: UtilsService) {
+  ngAfterViewInit(): void {
+    this.containerHeight = document.getElementById('rate-container').offsetHeight;
+
+    this.views = {
+      dayGridMonthCustom: {
+        type: 'dayGridMonth',
+        buttonText: this.getTranslate('tasks.calendar.month')
+      }
+    };
+
+    this.buttonLabels = {
+      today: this.getTranslate('tasks.calendar.today'),
+      month: this.getTranslate('tasks.calendar.month'),
+      week: this.getTranslate('tasks.calendar.week'),
+      day: this.getTranslate('tasks.calendar.day'),
+      list: this.getTranslate('tasks.calendar.list')
+    };
+
+    if (this.rtlDirection) {
+      this.header = {
+        left: 'title',
+        center: '',
+        right: 'prev,next today'
+      };
+    } else {
+      this.header = {
+        left: 'today next,prev',
+        center: 'title',
+        right: 'timeGridWeek,timeGridDay'
+      };
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-
-    if(this.calendarComponent){
+    if (this.calendarComponent) {
       let calendarApi = this.calendarComponent.getApi();
+
       if (this.dateStart) {
         let month = this.dateStart._d.getMonth() + 1;
-        month = this.utilService.pad(month,2,null);
-        calendarApi.gotoDate(this.dateStart._d.getFullYear() + "-" + month + "-" + this.dateStart._d.getDate()); // call a method on the Calendar object
+
+        month = this.utilService.pad(month, 2, null);
+
+        calendarApi.gotoDate(this.dateStart._d.getFullYear() + '-' + month + '-' + this.dateStart._d.getDate());
+
         this.drawer.open();
-        document.getElementById("full_calendar").classList.add("margin-r-full");
+
+        document.getElementById('full_calendar').classList.add('margin-r-full');
       }
+
       this.isVisible = true;
     }
+  }
+
+  ngDoCheck(): void {
+    this.containerHeight = document.getElementById('rate-container').offsetHeight;
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
   }
 
   ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
-  }
-
-  ngOnInit(): void {
-    this.containerHeight = document.getElementById("rate-container").offsetHeight;
-  }
-
-  ngDoCheck(): void {
-    this.containerHeight = document.getElementById("rate-container").offsetHeight;
   }
 }

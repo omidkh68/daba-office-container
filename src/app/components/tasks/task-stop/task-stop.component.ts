@@ -57,7 +57,8 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
       this.form = this._fb.group({
         taskId: new FormControl(0),
         description: new FormControl('', Validators.required),
-        percentage: new FormControl(0, Validators.required)
+        percentage: new FormControl(0, Validators.required),
+        email: new FormControl(this.loggedInUser.email, Validators.required)
       });
 
       resolve(true);

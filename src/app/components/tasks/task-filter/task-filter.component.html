@@ -1,6 +1,6 @@
 <div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99" [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <form [formGroup]="form" (submit)="submit()" class="full-height">
-    <div class="dialog-content-container height-full-minus-30 full-width">
+    <div class="height-full-minus-30 full-width">
       <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
         {{'tasks.task_filter.tasks_filter' | translate}}
       </h1>
@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <div class="display-flex margin-r-l-reverse">
+      <div class="display-flex margin-r-l-reverse margin-b-full">
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'global.from_date' | translate}}</mat-label>
@@ -122,17 +122,25 @@
         </div>
       </div>
 
-      <div class="display-flex margin-r-l-reverse margin-t-half">
-        <div class="full-width padding-r-l">
+      <div class="display-flex margin-r-l-reverse margin-t-full-2">
+        <div class="half-width padding-r-l">
           <mat-slide-toggle
                   formControlName="percentageStatus"
-                  class="example-margin"
                   [color]="'primary'">
             <span class="font-9-em">{{'tasks.task_filter.in_progress_tasks' | translate}}</span>
           </mat-slide-toggle>
         </div>
+
+        <div class="half-width padding-r-l">
+          <mat-slide-toggle
+                  formControlName="status"
+                  [color]="'primary'">
+            <span class="font-9-em">{{'tasks.task_filter.show_disabled_task' | translate}}</span>
+          </mat-slide-toggle>
+        </div>
       </div>
     </div>
+
     <div class="height-30 full-width display-flex flex-direction-row-reverse">
       <button mat-raised-button
               [disabled]="!form.valid && form.touched"

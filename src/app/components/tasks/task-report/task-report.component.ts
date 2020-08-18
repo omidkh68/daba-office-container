@@ -8,7 +8,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatTableDataSource} from '@angular/material/table';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 export interface TaskReportInterface {
   taskSheetId: number;
@@ -46,6 +46,7 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   ];
   pageLimit: number[] = [10, 25, 50, 100];
   dataSource = new MatTableDataSource<TaskReportInterface>(this.taskReports);
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'project-report-report'};
 
   private _subscription: Subscription = new Subscription();
 
@@ -54,6 +55,9 @@ export class TaskReportComponent implements OnInit, OnDestroy {
               private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               private matPaginatorIntl: MatPaginatorIntl) {
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
   }
 
   ngOnInit(): void {
@@ -70,13 +74,13 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   }
 
   getTaskReport() {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project-report'});
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
       this.api.getTaskReport(this.taskId).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-report'});
 
         if (resp.result === 1) {
           this.taskReports = resp.contents;
@@ -107,7 +111,7 @@ export class TaskReportComponent implements OnInit, OnDestroy {
           this.dataSource.paginator = this.paginator;
         }
       }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-report'});
 
         this.refreshLoginService.openLoginDialog(error);
       })

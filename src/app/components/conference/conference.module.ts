@@ -2,14 +2,12 @@ import {ComponentFactory, ComponentFactoryResolver, CUSTOM_ELEMENTS_SCHEMA, NgMo
 import {SharedModule} from '../../shared/shared.module';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {WebviewDirective} from '../../shared/directives';
 import {ConferenceAddComponent} from './conference-add/conference-add.component';
 import {ConferenceMainComponent} from './conference-main/conference-main.component';
 import {ConferenceWindowComponent} from './conference-window/conference-window.component';
 
 @NgModule({
   declarations: [
-    WebviewDirective,
     ConferenceAddComponent,
     ConferenceMainComponent,
     ConferenceWindowComponent

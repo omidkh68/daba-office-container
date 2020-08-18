@@ -6,12 +6,13 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {TodoInterface} from './logic/todo-interface';
 import {LoginInterface} from '../../login/logic/login.interface';
 import {MessageService} from '../../../services/message.service';
-import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
+import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-task-todo',
@@ -28,9 +29,13 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   @Input()
   loginData: LoginInterface;
 
+  @Input()
+  loggedInUser: UserContainerInterface;
+
   form: FormGroup;
   edit: boolean = false;
   user: UserContainerInterface;
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'todo'};
 
   todoList: TodoInterface[] = [];
 
@@ -41,10 +46,11 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
               private fb: FormBuilder,
               private messageService: MessageService,
               private refreshLoginService: RefreshLoginService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private userInfoService: UserInfoService) {
+              private translateService: TranslateService,
+              private refreshBoardService: RefreshBoardService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );
   }
 
@@ -58,8 +64,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       todo: this.fb.group({
         todoId: [0],
-        componentId: [0],
-        adminId: [0],
+        taskId: [0],
+        email: [''],
         isChecked: [0],
         text: [''],
         creationDate: ['']
@@ -68,7 +74,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   getTodoList() {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
     this.form.disable();
 
@@ -76,15 +82,17 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.api.getTodoList(this.taskId).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         if (resp.result === 1) {
           this.todoList = resp.contents;
 
           this.form.enable();
+
+          this.sortTodo();
         }
       }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         this.refreshLoginService.openLoginDialog(error);
       })
@@ -92,21 +100,20 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   checkTodo(todoItem: TodoInterface) {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
     this.form.disable();
 
     const data = {
-      taskId: this.taskId,
-      todoId: todoItem.todoId,
-      toggle: todoItem.isChecked ? 0 : 1
+      ...todoItem,
+      isChecked: todoItem.isChecked ? 0 : 1
     };
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
-      this.api.toggleTodo(data).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+      this.api.updateTodo(data).subscribe((resp: any) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         if (resp.result === 1) {
           const newTodo: TodoInterface = resp.content;
@@ -120,11 +127,13 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           });
 
           this.form.enable();
+
+          this.sortTodo();
         }
 
         this.messageService.showMessage(resp.message);
       }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         this.refreshLoginService.openLoginDialog(error);
       })
@@ -146,7 +155,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(ApproveComponent, {
-      data: {title: 'حذف آیتم', message: 'آیا از حذف این آیتم اطمینان دارید؟'},
+      data: {
+        title: this.getTranslate('tasks.task_detail.delete_title'),
+        message: this.getTranslate('tasks.task_detail.delete_text')
+      },
       autoFocus: false,
       width: '70vh',
       maxWidth: '350px',
@@ -157,23 +169,25 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
           this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
           this._subscription.add(
             this.api.deleteTodo(data).subscribe((resp: any) => {
-              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
               if (resp.result === 1) {
                 this.todoList = this.todoList.filter((todoItem: TodoInterface) => todoItem.todoId !== todo.todoId);
 
                 this.form.enable();
+
+                this.refreshBoardService.changeCurrentDoRefresh(true);
               }
 
               this.messageService.showMessage(resp.message);
             }, (error: HttpErrorResponse) => {
-              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
               this.refreshLoginService.openLoginDialog(error);
             })
@@ -186,13 +200,14 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   addTodo() {
     if (this.form.get('todo').value.text !== '') {
 
-      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
       this.form.disable();
 
       const data = {
         taskId: this.taskId,
-        email: this.user.email,
+        email: this.loggedInUser.email,
+        isChecked: 0,
         text: this.form.get('todo').value.text
       };
 
@@ -201,7 +216,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       this._subscription.add(
         this.api.createTodo(data).subscribe((resp: any) => {
 
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           if (resp.result === 1) {
             this.todoList.push(resp.content);
@@ -211,11 +226,15 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
             this.form.get('todo').setValue({...todoValue, text: ''});
 
             this.form.enable();
+
+            this.refreshBoardService.changeCurrentDoRefresh(true);
+
+            this.sortTodo();
           }
 
           this.messageService.showMessage(resp.message);
         }, (error: HttpErrorResponse) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           this.refreshLoginService.openLoginDialog(error);
         })
@@ -226,14 +245,15 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   saveTodo() {
     if (this.form.get('todo').value.text !== '') {
 
-      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
       this.form.disable();
 
       const data = {
         todoId: this.form.get('todo').value.todoId,
         taskId: this.taskId,
-        email: this.user.email,
+        email: this.loggedInUser.email,
+        isChecked: this.form.get('todo').value.isChecked,
         text: this.form.get('todo').value.text
       };
 
@@ -242,7 +262,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       this._subscription.add(
         this.api.updateTodo(data).subscribe((resp: any) => {
 
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           if (resp.result === 1) {
             const newTodo: TodoInterface = resp.content;
@@ -262,16 +282,37 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
             this.edit = false;
 
             this.form.enable();
+
+            this.sortTodo();
           }
 
           this.messageService.showMessage(resp.message);
         }, (error: HttpErrorResponse) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           this.refreshLoginService.openLoginDialog(error);
         })
       );
     }
+  }
+
+  sortTodo() {
+    this.todoList.sort((first, second) => {
+      const a = first.isChecked;
+      const b = second.isChecked;
+
+      let comparison = 0;
+      if (a > b) {
+        comparison = 1;
+      } else if (a < b) {
+        comparison = -1;
+      }
+      return comparison;
+    });
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
   }
 
   ngOnDestroy(): void {
