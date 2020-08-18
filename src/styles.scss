@@ -226,6 +226,12 @@ a {
   border: 0 !important;
 }
 
+.custom-mat-dialog-content {
+  .mat-tab-header {
+    border-bottom: 1px solid rgba(0,0,0,.12) !important;
+  }
+}
+
 .flex-center {
   display: flex;
   align-items: center;

@@ -158,8 +158,6 @@ export class WallpaperComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('salam', this.electronService.remote.screen.getPrimaryDisplay().workAreaSize);
-
     this.environment = this.electronService.remote.screen.getPrimaryDisplay().workAreaSize;
   }
 

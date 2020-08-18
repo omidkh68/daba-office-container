@@ -23,11 +23,13 @@ import {ShowImageCropperComponent} from "../profile-setting/show-image-cropper/s
 import {WallpaperComponent} from "../profile-setting/wallpaper/wallpaper.component";
 import {DndDirective} from "../profile-setting/dnd.directive";
 import {ProgressComponent} from "../profile-setting/progress/progress.component";
+import {DatetimeService} from "../profile-setting/logic/datetime.service";
 
 
 @NgModule({
   declarations: [
     DndDirective,
+    DatetimeService,
     ProgressComponent,
     MainMenuComponent,
     TimeAreaComponent,

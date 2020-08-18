@@ -29,7 +29,11 @@
     "loading": "Loading ...",
     "reconnecting": "Reconnecting ...",
     "online": "You are online now",
-    "offline": "Connection lost! You are not connected to the internet"
+    "offline": "Connection lost! You are not connected to the internet",
+    "email": "Email",
+    "email_error": "Please enter email",
+    "password": "Password",
+    "password_error": "Please enter Password"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -197,7 +201,7 @@
   },
   "profileSettings": {
     "profile_information": "Profile Information",
-    "profile_wallpaper": "Profile Wallpaper",
+    "profile_wallpaper": "Background",
     "edit_user_photo": "Edit User Photo",
     "insert_picture": "Click To Add Photo",
     "background_image": "Background Image",
@@ -206,6 +210,8 @@
     "solid_colors": "Solid Colors",
     "drag_drop_text1": "drag it here",
     "drag_drop_text2": "and or",
-    "drag_drop_text3": "Browse for file"
+    "drag_drop_text3": "Browse for file",
+    "timezone": "Timezone",
+    "timezone_error": "Select Timezone"
   }
 }

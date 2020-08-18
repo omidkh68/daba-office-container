@@ -29,7 +29,12 @@
     "loading": "در حال بارگزاری ...",
     "reconnecting": "در حال اتصال ...",
     "online": "شما متصل به شبکه هستید",
-    "offline": "اتصال قطع می باشد! شما متصل به شبکه نمی باشید"
+    "offline": "اتصال قطع می باشد! شما متصل به شبکه نمی باشید",
+    "email": "ایمیل",
+    "email_error": "لطفا ایمل را وارد نمایید",
+    "password": "پسورد",
+    "password_error": "لطفا پسورد را وارد نمایید"
+
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -197,7 +202,7 @@
   },
   "profileSettings": {
     "profile_information": "اطلاعات کاربری",
-    "profile_wallpaper": "تصویر زمینه پروفایل",
+    "profile_wallpaper": "تصویر پس زمینه",
     "edit_user_photo": "ویرایش عکس کابری",
     "insert_picture": "برای افزودن عکس کلیک کنید",
     "background_image": "تصویر پس زمینه",
@@ -206,6 +211,8 @@
     "solid_colors": "رنگ های ساده",
     "drag_drop_text1": "عکس را در اینجا رها کنید",
     "drag_drop_text2": "و یا",
-    "drag_drop_text3": "انتخاب کنید"
+    "drag_drop_text3": "انتخاب کنید",
+    "timezone": "منطقه زمانی",
+    "timezone_error": "منطقه زمانی را انتخاب کنید"
   }
 }
