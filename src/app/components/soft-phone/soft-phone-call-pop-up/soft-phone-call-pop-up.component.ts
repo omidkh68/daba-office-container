@@ -12,11 +12,16 @@ import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-pho
 import {SoftPhoneTransferCallComponent} from '../soft-phone-transfer-call/soft-phone-transfer-call.component';
 import {ConferenceOnlineExtensionInterface} from '../logic/extension.interface';
 import {ResultConfOnlineExtensionApiInterface} from '../logic/result-api.interface';
+import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 
 export interface KeysInterface {
   type: string;
   num: string;
   changeIcon: string;
+}
+
+export interface DialPadKeysInterface {
+  num: string;
 }
 
 @Component({
@@ -42,10 +47,18 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   extensionList: Array<ConferenceOnlineExtensionInterface> | null = null;
   keys: Array<KeysInterface> = [];
   activeExtensionList: boolean = false;
+  activeDialPad: boolean = false;
   timerDueTime: number = 0;
   timerPeriod: number = 5000;
   globalTimer = null;
   globalTimerSubscription: Subscription;
+
+  dialPadKeys: Array<DialPadKeysInterface> = [
+    {num: '1'}, {num: '2'}, {num: '3'},
+    {num: '4'}, {num: '5'}, {num: '6'},
+    {num: '7'}, {num: '8'}, {num: '9'},
+    {num: '*'}, {num: '0'}, {num: '#'}
+  ];
 
   private _subscription: Subscription = new Subscription();
 
@@ -73,6 +86,10 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     if (this.data.type !== 'conference') {
       this.keys.push(
         {type: 'forward', num: 'phone_forwarded', changeIcon: 'phone_forwarded'}
+      );
+    } else if (this.data.type === 'conference' && this.data.password.length) {
+      this.keys.push(
+        {type: 'key_pad', num: 'dialpad', changeIcon: 'dialpad'}
       );
     }
 
@@ -136,6 +153,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
 
         break;
       }
+
       case 'forward': {
         const bottomSheetConfig: SoftPhoneBottomSheetInterface = {
           component: SoftPhoneTransferCallComponent,
@@ -151,6 +169,12 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
         bottomSheetConfig.bottomSheetRef = this.bottomSheet;
 
         this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
+
+        break;
+      }
+
+      case 'key_pad': {
+        this.activeDialPad = true;
 
         break;
       }
@@ -185,6 +209,14 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     if (this.globalTimerSubscription) {
       this.globalTimerSubscription.unsubscribe();
       this.globalTimer = null;
+    }
+  }
+
+  dialKeyPress(event, key: DialPadKeysInterface) {
+    this.softPhoneService.sipSendDTMF(key.num);
+
+    if (key.num === '#') {
+      setTimeout(() => this.activeDialPad = false, 5000);
     }
   }
 

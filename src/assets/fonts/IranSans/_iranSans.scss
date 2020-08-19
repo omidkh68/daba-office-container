@@ -1,4 +1,4 @@
-$base-path: './assets/fonts/';
+$base-path: './assets/fonts/IranSans/';
 
 $path-bold:           $base-path + 'iransans-fa-bold.woff';
 $path-medium:         $base-path + 'iransans-fa-medium.woff';
@@ -23,14 +23,14 @@ $path-fa:             $base-path + 'iransans-fa.woff';
 @font-face {
   font-family: 'IranSans';
   font-style: normal;
-  font-weight: 300;
+  font-weight: 400;
   src: url($path-light) format('woff');
 }
 
 @font-face {
   font-family: 'IranSans';
   font-style: normal;
-  font-weight: 200;
+  font-weight: 300;
   src: url($path-ultralight) format('woff');
 }
 

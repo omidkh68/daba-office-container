@@ -58,6 +58,7 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .text-warning{color: #e65100 !important}
 .text-eclipse{overflow: hidden;-ms-text-overflow: ellipsis;text-overflow: ellipsis;white-space: nowrap}
 .no-text-eclipse{overflow: hidden !important;-ms-text-overflow: inherit !important;text-overflow: inherit !important;white-space: normal !important}
+.white-space-nowrap{white-space: nowrap !important}
 
 .clear-both{clear: both}
 
@@ -95,6 +96,7 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .overflow{overflow: auto !important}
 
 .font-fa{font-family: 'IranSans' !important}
+.font-en{font-family: Roboto !important}
 .font-full-em{font-size: 1em !important}
 .font-full-rem{font-size: 1rem !important}
 .font-full-em-2{font-size: 1em * 2 !important}
