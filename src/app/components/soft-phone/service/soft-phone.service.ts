@@ -896,16 +896,16 @@ export class SoftPhoneService extends LoginDataClass {
   };
 
   sipSendDTMF(c) {
-    this.audioRemoteTagValue.dtmfTone.play();
-
-    /*if (this.oSipSessionCall && c) {
+    if (this.oSipSessionCall && c) {
       if (this.oSipSessionCall.dtmf(c) == 0) {
         try {
           this.audioRemoteTagValue.dtmfTone.play();
         } catch (e) {
         }
       }
-    }*/
+    } else {
+      this.audioRemoteTagValue.dtmfTone.play();
+    }
   }
 
   getTranslate(word) {

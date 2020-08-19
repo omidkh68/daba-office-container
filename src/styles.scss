@@ -1,5 +1,6 @@
 @import 'assets/extension';
-@import 'assets/iranSans';
+@import 'assets/fonts/iranSans/iranSans';
+@import 'assets/fonts/roboto/roboto';
 @import 'assets/grid';
 
 :host {
@@ -38,27 +39,49 @@ html, body {
   height: 100%;
   background-color: transparent;
 
-  $font-name: 'IranSans';
+  &.direction-en {
+    $font-name: 'Roboto';
 
-  $custom-typography: mat-typography-config(
-    $font-family: $font-name
-  );
+    $custom-typography: mat-typography-config(
+      $font-family: $font-name
+    );
 
-  &,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  span {
-    margin: 0 !important;
-    padding: 0 !important;
-    font-family: $font-name !important;
+    &,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span {
+      font-family: $font-name !important;
+    }
+
+    @include angular-material-typography($custom-typography);
   }
 
-  @include angular-material-typography($custom-typography);
+  &.direction-fa {
+    $font-name: 'IranSans';
+
+    $custom-typography: mat-typography-config(
+      $font-family: $font-name
+    );
+
+    &,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span {
+      font-family: $font-name !important;
+    }
+
+    @include angular-material-typography($custom-typography);
+  }
 }
 
 * {
@@ -330,6 +353,12 @@ a {
 
 .mat-list-item-content {
   padding: 0 !important;
+}
+
+.cdr-mat-list {
+  .mat-list-item-content {
+    height: 100% !important;
+  }
 }
 
 .mat-list-text {

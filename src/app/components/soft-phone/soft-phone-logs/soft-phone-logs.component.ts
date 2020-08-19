@@ -19,6 +19,7 @@ export interface CdrExtensionListInterface {
   color: string;
   date: string;
   user?: SoftphoneUserInterface;
+  desc: string;
 }
 
 @Component({
@@ -85,23 +86,77 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
             if (this.loggedInUserExtension === item.dst) {
               findUser = this.softPhoneUsers.filter(user => user.extension_no === item.src).pop();
 
+              let desc = '';
+              let color = '';
+
+              switch (item.disposition) {
+                case 'NO ANSWER': {
+                  desc = 'soft_phone.call_logs.missed_call';
+                  color = 'text-red-500';
+
+                  break;
+                }
+
+                case 'BUSY': {
+                  desc = 'soft_phone.call_logs.rejected';
+                  color = 'text-orange-600';
+
+                  break;
+                }
+
+                case 'ANSWERED': {
+                  desc = 'soft_phone.call_logs.answered';
+                  color = 'text-green-500';
+
+                  break;
+                }
+              }
+
               cdrExtensionItem = {
                 src: item.src,
                 dst: item.dst,
                 icon: item.disposition === 'NO ANSWER' ? 'phone_missed' : 'phone_callback',
                 date: item.calldate,
-                color: item.disposition === 'NO ANSWER' ? 'text-red-500' : 'text-green-500',
+                color: color,
+                desc: desc
               };
 
             } else if (this.loggedInUserExtension === item.src) {
               findUser = this.softPhoneUsers.filter(user => user.extension_no === item.dst).pop();
+
+              let desc = '';
+              let color = '';
+
+              switch (item.disposition) {
+                case 'NO ANSWER': {
+                  desc = 'soft_phone.call_logs.not_answered';
+                  color = 'text-red-500';
+
+                  break;
+                }
+
+                case 'BUSY': {
+                  desc = 'soft_phone.call_logs.busy';
+                  color = 'text-orange-600';
+
+                  break;
+                }
+
+                case 'ANSWERED': {
+                  desc = 'soft_phone.call_logs.answered';
+                  color = 'text-green-500';
+
+                  break;
+                }
+              }
 
               cdrExtensionItem = {
                 src: item.dst,
                 dst: item.src,
                 icon: 'phone_forwarded',
                 date: item.calldate,
-                color: item.disposition === 'NO ANSWER' ? 'text-red-500' : 'text-gray-500',
+                color: color,
+                desc: desc
               };
             }
 

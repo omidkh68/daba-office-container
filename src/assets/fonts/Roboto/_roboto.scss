@@ -1,0 +1,42 @@
+$base-path: './assets/fonts/Roboto/';
+
+$path-bold:           $base-path + 'roboto-en-bold.woff';
+$path-medium:         $base-path + 'roboto-en-medium.woff';
+$path-light:          $base-path + 'roboto-en-light.woff';
+$path-ultralight:     $base-path + 'roboto-en-ultralight.woff';
+$path-fa:             $base-path + 'roboto-en.woff';
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: url($path-bold) format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: url($path-medium) format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: url($path-light) format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 100;
+  src: url($path-ultralight) format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url($path-fa) format('woff');
+}
