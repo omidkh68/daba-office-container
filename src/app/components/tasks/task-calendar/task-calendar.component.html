@@ -21,6 +21,7 @@
       <app-task-calendar-weekday
         (triggerBottomSheet)="openButtonSheet($event)"
         [calendarEvents]="calendarEvents"
+        [holidays]="holidays"
         [loginData]="loginData"></app-task-calendar-weekday>
       <app-task-bottom-sheet #bottomSheet></app-task-bottom-sheet>
     </div>
