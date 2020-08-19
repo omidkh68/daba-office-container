@@ -99,7 +99,6 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
   }
 
   ngOnInit(): void {
-
     this.options = {
       columnHeaderHtml: () => {
         return '<b>Friday!</b>';
@@ -150,61 +149,56 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
         this._subscription.add(
-            this.api.getAllHolidays().subscribe((resp: any) => {
-              resp.content.forEach((element: any) => {
-                this.holidays.push(element.date)
+          this.api.getAllHolidays().subscribe((resp: any) => {
+            resp.content.forEach((element: any) => {
+              this.holidays.push(element.date)
+            });
+
+            const holidayTemp = this.holidays;
+
+            this._subscription.add(
+              this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
+                this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+                if (resp.result === 1) {
+                  this.usersList = resp.content.users.list;
+                  this.projectsList = resp.content.projects.list;
+                  this.tasks = resp.content.boards.list;
+
+                  let myArray = [];
+
+                  this.tasks.map((task: any) => {
+                    let arr = [];
+                    arr = this.getDaysArray(new Date(task.startAt), new Date(task.stopAt));
+                    let color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
+                    arr.map((item) => {
+                      let obj = {
+                        title: task.taskName,
+                        color: color,
+                        imageurl: 'assets/profileImg/' + task.assignTo.email + '.jpg',
+                        start: item,
+                        end: item,
+                        usersList: this.usersList,
+                        projectsList: this.projectsList
+                      };
+                      let newObj = Object.assign(obj, task);
+
+                      let checkDae = item.getFullYear() + '-' + ('0' + (item.getMonth() + 1)).slice(-2) + '-' + ('0' + item.getDate()).slice(-2);
+                      if (!holidayTemp.includes(checkDae))
+                        myArray.push(newObj)
+
+                    })
+                  });
+
+                  this.calendarEvents = myArray;
+                }
+              }, (error: HttpErrorResponse) => {
+                this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+                this.refreshLoginService.openLoginDialog(error);
               })
-              const holidayTemp = this.holidays;
-              this._subscription.add(
-
-                  this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
-                    this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-                    if (resp.result === 1) {
-
-                      this.usersList = resp.content.users.list;
-                      this.projectsList = resp.content.projects.list;
-                      this.tasks = resp.content.boards.list;
-
-                      let myArray = [];
-                      this.tasks.map((task: any) => {
-                        let arr = [];
-                        arr = this.getDaysArray(new Date(task.startAt), new Date(task.stopAt));
-                        let color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
-                        arr.map((item) => {
-                          let obj = {
-                            title: task.taskName,
-                            color: color,
-                            imageurl: 'assets/profileImg/' + task.assignTo.email + '.jpg',
-                            start: item,
-                            end: item,
-                            usersList: this.usersList,
-                            projectsList: this.projectsList
-                          };
-                          let newObj = Object.assign(obj, task);
-
-                          let checkDae = item.getFullYear() + "-" + ("0" + (item.getMonth() + 1)).slice(-2) + "-" + ("0" + item.getDate()).slice(-2);
-                          if(!holidayTemp.includes(checkDae))
-                            myArray.push(newObj)
-
-                        })
-                      });
-
-                      this.calendarEvents = myArray;
-
-                    }
-                  }, (error: HttpErrorResponse) => {
-                    this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-                    this.refreshLoginService.openLoginDialog(error);
-                  })
-              );
-
-
-            })
-        )
-        this._subscription.add(
-
+            );
+          })
         );
       }
     }
