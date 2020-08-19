@@ -138,7 +138,6 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
     const selectedAssignTo = this.usersList.filter(user => user.email === this.task.assignTo.email).pop();
 
-
     this.form.patchValue({
       taskId: this.task.taskId,
       taskName: this.task.taskName,

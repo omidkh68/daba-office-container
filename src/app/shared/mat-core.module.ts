@@ -38,8 +38,6 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 const defaultLangStorage = localStorage.getItem('defaultLang');
 const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
-console.log(defaultLang);
-
 @NgModule({
   imports: [MatTableModule],
   exports: [

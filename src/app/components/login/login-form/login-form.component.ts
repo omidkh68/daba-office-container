@@ -8,6 +8,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {LoginResultInterface} from '../logic/login.interface';
 
 export interface LangInterface {
   id: string;
@@ -53,6 +54,8 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
+
+    // setTimeout(() => this.login(), 200);
   }
 
   createForm() {
@@ -77,26 +80,34 @@ export class LoginFormComponent implements OnInit {
     delete (formValue.lang);
 
     this._subscription.add(
-      this.api.login(formValue).subscribe((resp: any) => {
-        const successfulMessage = this.getTranslate('login_info.login_successfully');
+      this.api.login(formValue).subscribe((resp: LoginResultInterface) => {
+        if (resp.success) {
+          const successfulMessage = this.getTranslate('login_info.login_successfully');
 
-        this.messageService.showMessage(successfulMessage, 'success');
+          this.messageService.showMessage(successfulMessage, 'success');
 
-        this.userInfoService.changeLoginData(resp.data);
+          this.userInfoService.changeLoginData(resp.data);
 
-        if (this.dialogData) {
-          this.dialogRef.close();
+          if (this.dialogData) {
+            this.dialogRef.close();
+          } else {
+            this.router.navigateByUrl(`/`);
+          }
         } else {
-          this.router.navigateByUrl(`/`);
+          this.showErrorLogin();
         }
       }, () => {
-        this.form.enable();
-
-        const failedMessage = this.getTranslate('login_info.login_failed');
-
-        this.messageService.showMessage(failedMessage, 'error');
+        this.showErrorLogin();
       })
     );
+  }
+
+  showErrorLogin() {
+    this.form.enable();
+
+    const failedMessage = this.getTranslate('login_info.login_failed');
+
+    this.messageService.showMessage(failedMessage, 'error');
   }
 
   getTranslate(word) {

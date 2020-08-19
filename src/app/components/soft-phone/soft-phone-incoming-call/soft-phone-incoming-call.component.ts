@@ -37,7 +37,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
           if (incomingCall.data) {
             this.incomingData = incomingCall.data;
-            this.currentPhoneNumber = this.incomingData.o_event.o_message.o_hdr_From.s_display_name;
+            this.currentPhoneNumber = this.incomingData.o_event.o_session.o_uri_from.s_user_name;
 
 
             this.currentPhoneNumber = this.currentPhoneNumber.replace('-wrtc', '');

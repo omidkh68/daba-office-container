@@ -182,7 +182,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
                 this.form.enable();
 
-                this.refreshBoardService.changeCurrentDoRefresh(true);
+                // this.refreshBoardService.changeCurrentDoRefresh(true);
               }
 
               this.messageService.showMessage(resp.message);
@@ -227,7 +227,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
             this.form.enable();
 
-            this.refreshBoardService.changeCurrentDoRefresh(true);
+            // this.refreshBoardService.changeCurrentDoRefresh(true);
 
             this.sortTodo();
           }

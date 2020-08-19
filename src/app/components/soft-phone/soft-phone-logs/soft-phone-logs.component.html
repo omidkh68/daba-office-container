@@ -1,29 +1,19 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-height flex-center">
-  <mat-list *ngIf="cdrList.length; else noItem;" class="full-width full-height overflow-x-hide overflow-y-auto">
-    <mat-list-item *ngFor="let cdr of cdrList"
+  <mat-list *ngIf="cdrExtensionList.length; else noItem;"
+            class="full-width full-height overflow-x-hide overflow-y-auto">
+    <mat-list-item *ngFor="let cdr of cdrExtensionList"
                    class="highlight cursor-pointer height-45 padding-r-l margin-b-full">
       <div class="width-35 height-35" matListAvatar>
-        <ng-container [ngSwitch]="cdr.disposition">
-          <mat-icon *ngSwitchCase="'NO ANSWER'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-                    class="text-red-500" mat-list-icon>
-            phone_missed
-          </mat-icon>
-
-          <mat-icon *ngSwitchCase="'ANSWERED'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-                    class="text-blue-500" mat-list-icon>
-            phone_callback
-          </mat-icon>
-
-          <mat-icon *ngSwitchCase="'outgoing'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-                    class="text-green-500" mat-list-icon>
-            phone_forwarded
-          </mat-icon>
-        </ng-container>
+        <mat-icon [class]="cdr.color" mat-list-icon>
+          {{cdr.icon}}
+        </mat-icon>
       </div>
 
-      <h3 class="font-7-rem text-weight-bold" matLine> {{cdr.src}} </h3>
+      <h3 class="font-7-rem text-weight-bold" [class]="cdr.color" matLine>
+        {{cdr.user.extension_name}} - {{cdr.src}}
+      </h3>
 
-      <p class="font-6-em text-gray-600" matLine>{{cdr.calldate | jalali}}</p>
+      <p class="font-8-em text-gray-600" matLine>{{cdr.date | jalali}}</p>
     </mat-list-item>
   </mat-list>
 

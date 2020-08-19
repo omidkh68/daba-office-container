@@ -56,7 +56,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
       this.changeStatusService.currentUserStatus.subscribe(status => {
         this.userCurrentStatus = status;
 
-        if (this.userCurrentStatus.id === 1) { // it means only in start status take screenshot
+        if (this.userCurrentStatus && this.userCurrentStatus.id === 1) { // it means only in start status take screenshot
           if (this.globalTimer === null) {
             this.runTimerForScreenshot();
           }
