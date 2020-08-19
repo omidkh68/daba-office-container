@@ -6,43 +6,48 @@
   <div class="soft-phone-container full-width pos-rel"
        [ngClass]="callPopUpMinimizeStatus ? 'height-full-minus-80' : 'height-full-minus-45'">
     <ng-container [ngSwitch]="activeTab">
-      <!-- Show soft phone information -->
-      <app-soft-phone-information (triggerBottomSheet)="openButtonSheet($event)"
-                                  *ngSwitchCase="0"
-                                  [loggedInUser]="loggedInUser"
-                                  [rtlDirection]="rtlDirection"
-                                  [softPhoneUsers]="softPhoneUsers"></app-soft-phone-information>
-      <!-- /Show soft phone information -->
+      <ng-template [ngSwitchCase]="0">
+        <!-- Show soft phone information -->
+        <app-soft-phone-information (triggerBottomSheet)="openButtonSheet($event)"
+                                    [loggedInUser]="loggedInUser"
+                                    [rtlDirection]="rtlDirection"
+                                    [softPhoneUsers]="softPhoneUsers"></app-soft-phone-information>
+        <!-- /Show soft phone information -->
+      </ng-template>
 
-      <!-- Show Soft phone contacts -->
-      <app-soft-phone-contacts (triggerBottomSheet)="openButtonSheet($event)"
-                               *ngSwitchCase="1"
-                               [loggedInUser]="loggedInUser"
+      <!--<ng-template [ngSwitchCase]="1">
+        &lt;!&ndash; Show Soft phone contacts &ndash;&gt;
+        <app-soft-phone-contacts (triggerBottomSheet)="openButtonSheet($event)"
+                                 [loggedInUser]="loggedInUser"
+                                 [rtlDirection]="rtlDirection"
+                                 [softPhoneUsers]="softPhoneUsers"></app-soft-phone-contacts>
+        &lt;!&ndash; /Show Soft phone contacts &ndash;&gt;
+      </ng-template>-->
+
+      <ng-template [ngSwitchCase]="1">
+        <!-- Show soft phone keypad -->
+        <app-soft-phone-keypad (triggerBottomSheet)="openButtonSheet($event)"
                                [rtlDirection]="rtlDirection"
-                               [softPhoneUsers]="softPhoneUsers"></app-soft-phone-contacts>
-      <!-- /Show Soft phone contacts -->
+                               [softPhoneUsers]="softPhoneUsers"></app-soft-phone-keypad>
+        <!-- /Show soft phone keypad -->
+      </ng-template>
 
-      <!-- Show soft phone keypad -->
-      <app-soft-phone-keypad (triggerBottomSheet)="openButtonSheet($event)"
-                             *ngSwitchCase="2"
+      <ng-template [ngSwitchCase]="2">
+        <!-- Show soft phone logs -->
+        <app-soft-phone-logs (triggerBottomSheet)="openButtonSheet($event)"
+                             [loggedInUser]="loggedInUser"
                              [rtlDirection]="rtlDirection"
-                             [softPhoneUsers]="softPhoneUsers"></app-soft-phone-keypad>
-      <!-- /Show soft phone keypad -->
+                             [softPhoneUsers]="softPhoneUsers"></app-soft-phone-logs>
+        <!-- /Show soft phone logs -->
+      </ng-template>
 
-      <!-- Show soft phone logs -->
-      <app-soft-phone-logs (triggerBottomSheet)="openButtonSheet($event)"
-                           *ngSwitchCase="3"
-                           [loggedInUser]="loggedInUser"
-                           [rtlDirection]="rtlDirection"
-                           [softPhoneUsers]="softPhoneUsers"></app-soft-phone-logs>
-      <!-- /Show soft phone logs -->
-
-      <!-- Show soft phone settings -->
-      <app-soft-phone-conference (triggerBottomSheet)="openButtonSheet($event)"
-                               *ngSwitchCase="4"
-                               [rtlDirection]="rtlDirection"
-                               [softPhoneUsers]=softPhoneUsers></app-soft-phone-conference>
-      <!-- /Show soft phone settings -->
+      <ng-template [ngSwitchCase]="3">
+        <!-- Show soft phone conference -->
+        <app-soft-phone-conference (triggerBottomSheet)="openButtonSheet($event)"
+                                   [rtlDirection]="rtlDirection"
+                                   [softPhoneUsers]=softPhoneUsers></app-soft-phone-conference>
+        <!-- /Show soft phone conference -->
+      </ng-template>
     </ng-container>
   </div>
 

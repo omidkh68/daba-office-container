@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {CdrInterface} from '../logic/cdr.interface';
@@ -11,14 +11,22 @@ import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
-import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
+
+export interface CdrExtensionListInterface {
+  src: string;
+  dst: string;
+  icon: string;
+  color: string;
+  date: string;
+  user?: SoftphoneUserInterface;
+}
 
 @Component({
   selector: 'app-soft-phone-logs',
   templateUrl: './soft-phone-logs.component.html',
   styleUrls: ['./soft-phone-logs.component.scss']
 })
-export class SoftPhoneLogsComponent implements AfterViewInit {
+export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
@@ -34,6 +42,7 @@ export class SoftPhoneLogsComponent implements AfterViewInit {
   loggedInUserExtension: string = '';
   cdrList: Array<CdrInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
+  cdrExtensionList: Array<CdrExtensionListInterface> = [];
 
   private _subscription: Subscription = new Subscription();
 
@@ -44,39 +53,78 @@ export class SoftPhoneLogsComponent implements AfterViewInit {
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
-  }
-
-  openSheet(user: SoftphoneUserInterface) {
-    this.triggerBottomSheet.emit({
-      component: SoftPhoneCallToActionComponent,
-      height: '200px',
-      width: '98%',
-      data: user
-    });
-  }
-
-  ngAfterViewInit(): void {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
 
     this._subscription.add(
       this.softPhoneService.currentExtensionList.subscribe((ext: Array<ExtensionInterface>) => {
-        this.loggedInUserExtension = ext.filter(item => item.username === this.loggedInUser.email).pop().extension_no;
-
-        this._subscription.add(
-          this.api.getCdr(this.loggedInUserExtension).subscribe((resp: CdrResultInterface) => {
-
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
-
-            if (resp.success && resp.data.length) {
-              this.cdrList = resp.data;
-            }
-          }, (error: HttpErrorResponse) => {
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
-
-            this.refreshLoginService.openLoginDialog(error);
-          })
-        );
+        setTimeout(() => {
+          this.loggedInUserExtension = ext.filter(item => item.username === this.loggedInUser.email).pop().extension_no;
+        });
       })
     );
+  }
+
+  ngOnInit(): void {
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
+
+    setTimeout(() => this.getCdr());
+  }
+
+  getCdr() {
+    this._subscription.add(
+      this.api.getCdr(this.loggedInUserExtension).subscribe((resp: CdrResultInterface) => {
+
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
+        if (resp.success && resp.data.length) {
+          this.cdrList = resp.data;
+
+          this.cdrList.map(item => {
+            let cdrExtensionItem: CdrExtensionListInterface = null;
+            let findUser: SoftphoneUserInterface = null;
+
+            if (this.loggedInUserExtension === item.dst) {
+              findUser = this.softPhoneUsers.filter(user => user.extension_no === item.src).pop();
+
+              cdrExtensionItem = {
+                src: item.src,
+                dst: item.dst,
+                icon: item.disposition === 'NO ANSWER' ? 'phone_missed' : 'phone_callback',
+                date: item.calldate,
+                color: item.disposition === 'NO ANSWER' ? 'text-red-500' : 'text-green-500',
+              };
+
+            } else if (this.loggedInUserExtension === item.src) {
+              findUser = this.softPhoneUsers.filter(user => user.extension_no === item.dst).pop();
+
+              cdrExtensionItem = {
+                src: item.dst,
+                dst: item.src,
+                icon: 'phone_forwarded',
+                date: item.calldate,
+                color: item.disposition === 'NO ANSWER' ? 'text-red-500' : 'text-gray-500',
+              };
+            }
+
+            cdrExtensionItem = {...cdrExtensionItem, user: findUser};
+
+            if (findUser) {
+              this.cdrExtensionList.push(cdrExtensionItem);
+            }
+          });
+
+          console.log(this.cdrList);
+        }
+      }, (error: HttpErrorResponse) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
+        this.refreshLoginService.openLoginDialog(error);
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

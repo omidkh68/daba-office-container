@@ -27,8 +27,6 @@ export class MainMenuComponent {
           this.serviceList.map(service => {
             if (service.serviceTitle === 'pbx_service') {
               this.openService(service);
-
-              setTimeout(() => this.windowManagerService.minimizeWindow(service), 1000);
             }
           })
         }

@@ -4,3 +4,8 @@ export interface LoginInterface {
   access_token: string;
   refresh_token: string;
 }
+
+export interface LoginResultInterface {
+  success: boolean;
+  data: LoginInterface;
+}

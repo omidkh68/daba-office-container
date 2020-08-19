@@ -70,8 +70,8 @@ export class WindowManagerService {
         // const widthEmptyState = (this.window.innerWidth - windowWidth) / 2;
         const widthEmptyState = (Math.random() * (this.window.innerWidth - windowWidth)).toFixed();
         const heightEmptyState = (Math.random() * (this.window.innerHeight - windowHeight)).toFixed();
-        const rndNumForWidth = this.randint(50, widthEmptyState);
-        const rndNumForHeight = this.randint(50, heightEmptyState);
+        const rndNumForWidth = this.randInt(50, widthEmptyState);
+        const rndNumForHeight = this.randInt(50, heightEmptyState);
 
         const position: DialogPositionInterface = {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`};
 
@@ -113,7 +113,7 @@ export class WindowManagerService {
     }
   }
 
-  randint(min, max) {
+  randInt(min, max) {
     return Math.round((Math.random() * Math.abs(max - min)) + min);
   }
 
@@ -227,8 +227,8 @@ export class WindowManagerService {
   updateWindowPosition(windowInstance: any, center: boolean) {
     const widthEmptyState = (Math.random() * (this.window.innerWidth - windowInstance.windowService.width)).toFixed();
     const heightEmptyState = (Math.random() * (this.window.innerHeight - windowInstance.windowService.height)).toFixed();
-    const rndNumForWidth = this.randint(50, widthEmptyState);
-    const rndNumForHeight = this.randint(50, heightEmptyState);
+    const rndNumForWidth = this.randInt(50, widthEmptyState);
+    const rndNumForHeight = this.randInt(50, heightEmptyState);
     const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;//document.getElementById(window.windowRef.id) as HTMLElement;
 
     if (center) {

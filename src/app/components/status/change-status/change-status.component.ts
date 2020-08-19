@@ -159,7 +159,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
       formValue.status = formValue.status.id;
 
-      this.userApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+      this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
         this.statusApiService.userChangeStatus(formValue).subscribe((resp: StatusChangeResultInterface) => {
@@ -168,11 +168,15 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
           if (resp.success) {
             this.userStatusService.changeUserStatus(resp.data);
 
-            this.messageService.showMessage(this.getTranslate('status.status_success'));
+            this.getTranslate('status.status_success').then((msg: string) => {
+              this.messageService.showMessage(msg);
+            });
 
             this.dialogRef.close(resp);
           } else {
-            this.messageService.showMessage(this.getTranslate('status.status_description_error'));
+            this.getTranslate('status.status_description_error').then((msg: string) => {
+              this.messageService.showMessage(msg);
+            });
 
             this.form.enable();
           }
@@ -183,12 +187,16 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
         })
       );
     } else {
-      this.messageService.showMessage(this.getTranslate('status.status_description_error'));
+      this.getTranslate('status.status_description_error').then((msg: string) => {
+        this.messageService.showMessage(msg);
+      });
     }
   }
 
   getTranslate(word) {
-    return this.translate.instant(word);
+    return new Promise((resolve, reject) => {
+      resolve(this.translate.instant(word));
+    });
   }
 
   ngOnDestroy(): void {

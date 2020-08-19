@@ -65,7 +65,7 @@
       "available_users": "افراد حاضر"
     },
     "call_to_action": {
-      "local_time": "وقت محلی",
+      "timezone": "وقت محلی",
       "call": "تماس",
       "message": "پیام",
       "voice": "صوتی"

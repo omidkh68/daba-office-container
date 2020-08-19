@@ -4,7 +4,7 @@ import {UserContainerInterface} from '../components/users/logic/user-container.i
 
 export class LoginDataClass {
   loginData: LoginInterface;
-  loggedInUser: UserContainerInterface;
+  public loggedInUser: UserContainerInterface;
   allUsers: Array<UserContainerInterface> = [];
 
   constructor(private injectorObj: Injector,

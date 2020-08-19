@@ -65,7 +65,7 @@
       "available_users": "Available Users"
     },
     "call_to_action": {
-      "local_time": "Local Time",
+      "timezone": "Local Time",
       "call": "Call",
       "message": "Message",
       "voice": "Voice"
