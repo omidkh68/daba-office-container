@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../services/message.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
@@ -16,7 +16,7 @@ export interface KeysInterface {
   templateUrl: './soft-phone-keypad.component.html',
   styleUrls: ['./soft-phone-keypad.component.scss']
 })
-export class SoftPhoneKeypadComponent implements OnInit {
+export class SoftPhoneKeypadComponent {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
@@ -52,10 +52,6 @@ export class SoftPhoneKeypadComponent implements OnInit {
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
-  }
-
-  ngOnInit(): void {
-
   }
 
   keyPress(event, key: KeysInterface) {

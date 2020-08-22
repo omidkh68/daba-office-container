@@ -11,13 +11,33 @@
 }
 
 .status-item {
-  &.status-lunch_time {
+  &.status-start_working {
     @include transition(all .4s);
 
-    animation: blink-status-lunch_time 1s infinite linear;
+    animation: blink-status-start_working 1s infinite linear;
 
     .mat-icon {
-      animation: blink-status-lunch_time 1s infinite linear;
+      animation: blink-status-start_working 1s infinite linear;
+    }
+  }
+
+  &.status-finish_working {
+    @include transition(all .4s);
+
+    animation: blink-status-finish_working 1s infinite linear;
+
+    .mat-icon {
+      animation: blink-status-finish_working 1s infinite linear;
+    }
+  }
+
+  &.status-lunch_break {
+    @include transition(all .4s);
+
+    animation: blink-status-lunch_break 1s infinite linear;
+
+    .mat-icon {
+      animation: blink-status-lunch_break 1s infinite linear;
     }
   }
 
@@ -90,7 +110,35 @@
   transform: scale(.7);
 }
 
-@keyframes blink-status-lunch_time {
+@keyframes blink-status-start_working {
+  0% {
+    color: #888;
+    box-shadow: none;
+  }
+  33.33333% {
+    color: #92ca68;
+  }
+  100% {
+    color: #888;
+    box-shadow: none;
+  }
+}
+
+@keyframes blink-status-finish_working {
+  0% {
+    color: #888;
+    box-shadow: none;
+  }
+  33.33333% {
+    color: #b85f39;
+  }
+  100% {
+    color: #888;
+    box-shadow: none;
+  }
+}
+
+@keyframes blink-status-lunch_break {
   0% {
     color: #888;
     box-shadow: none;
@@ -103,6 +151,7 @@
     box-shadow: none;
   }
 }
+
 @keyframes blink-status-meeting {
   0% {
     color: #888;
@@ -116,6 +165,7 @@
     box-shadow: none;
   }
 }
+
 @keyframes blink-status-smoking {
   0% {
     color: #888;

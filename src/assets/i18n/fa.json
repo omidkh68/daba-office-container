@@ -10,6 +10,7 @@
     "extension_error": "لطفا شماره را وارد نمایید",
     "submit": "ثبت",
     "dismiss": "انصراف",
+    "hide": "بستن",
     "active": "فعال",
     "deactivate": "غیر فعال",
     "settings": "تنظیمات",
@@ -65,7 +66,7 @@
       "available_users": "افراد حاضر"
     },
     "call_to_action": {
-      "local_time": "وقت محلی",
+      "timezone": "وقت محلی",
       "call": "تماس",
       "message": "پیام",
       "voice": "صوتی"
@@ -82,8 +83,15 @@
       "do_you_accept": "آیا قبول می کنید؟"
     },
     "transfer_call": "انتقال تماس",
-    "public_conference": {
-      "conference_list": "کنفرانس های عمومی"
+    "conferences": {
+      "conference_list": "کنفرانس ها"
+    },
+    "call_logs": {
+      "missed_call": "جواب ندادم",
+      "rejected":"رد تماس کرد",
+      "not_answered": "جواب داده نشد",
+      "busy":"مشغول بود",
+      "answered": "برقرار شد"
     }
   },
   "tasks": {

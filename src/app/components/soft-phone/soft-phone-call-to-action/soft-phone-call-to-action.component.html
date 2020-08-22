@@ -1,4 +1,6 @@
 <div class="full-width full-height padding-full" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <h3 class="text-weight-bold font-full-plus-three-tenth-em"> {{data.extension_name}} </h3>
+
   <button (click)="closeBottomSheet();"
           [ngClass]="rtlDirection ? 'left-0' : 'right-0'"
           class="width-30 height-30 pos-abs top-0 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
@@ -8,20 +10,19 @@
     </mat-icon>
   </button>
 
-  <mat-list class="margin-t-full">
+  <mat-list class="margin-t-half">
     <mat-list-item>
       <img [src]="'assets/profileImg/'+ data.username +'.jpg'" [alt]="data.name"
+           [ngClass]="data.is_online ? 'active' : ''"
            onerror="this.src='assets/profileImg/0.jpg'"
-           class="mat-elevation-z2 width-50 height-50 round-corner-all margin-auto"
+           class="online-user mat-elevation-z2 width-50 height-50 round-corner-all margin-auto"
            matListAvatar>
-      <h3 class="text-weight-bold" matLine> {{data.extension_name}} </h3>
 
       <p class="font-8-rem" matLine>
-          <span> <b>{{'soft_phone.call_to_action.local_time' | translate}}</b>
+          <span> <b>{{'soft_phone.call_to_action.timezone' | translate}}</b>
             <span class="ltr padding-mini-r-l">
-              <app-time-area-digital-clock [timezone]="data.timezone" class="font-8-em text-gray-600">
-              </app-time-area-digital-clock>
-              </span>
+              <app-time-area-digital-clock [timezone]="data.timezone"></app-time-area-digital-clock>
+            </span>
           </span>
       </p>
 
@@ -29,7 +30,7 @@
         <span> <b>{{'global.extension' | translate}}</b> <span class="ltr padding-mini-r-l">{{data.extension_no}}</span> </span>
       </p>
 
-      <div [ngClass]="data.status === '1' ? 'online' : 'offline'"
+      <div *ngIf="data.type !== 'conference'" [ngClass]="data.is_online ? 'online' : 'offline'"
            class="user-soft-phone-status pos-rel text-gray-500 width-30 height-30 round-corner-all"></div>
     </mat-list-item>
   </mat-list>
@@ -38,14 +39,14 @@
 
   <div class="height-60 display-flex flex-space-around">
     <button (click)="call(data)"
-            [disabled]="data.status === '0'"
-            class="green-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
+            [disabled]="!data.is_online && data.type !== 'conference'"
+            class="green-gradient full-width text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
             mat-raised-button type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">call</mat-icon>
       <span class="padding-mini-r-l">{{'soft_phone.call_to_action.call' | translate}}</span>
     </button>
 
-    <button class="aqua-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
+    <!--<button class="aqua-gradient text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
             [disabled]="true"
             mat-raised-button type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">chat</mat-icon>
@@ -57,6 +58,6 @@
             mat-raised-button type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">record_voice_over</mat-icon>
       <span class="padding-mini-r-l">{{'soft_phone.call_to_action.voice' | translate}}</span>
-    </button>
+    </button>-->
   </div>
 </div>

@@ -6,7 +6,8 @@
             [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
             (click)="showTask(task)"
             class="blink-effect white-gradient text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">
-      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem rotate-180">play_arrow</mat-icon>
+      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem"
+                [ngClass]="rtlDirection ? 'rotate-180' : ''">play_arrow</mat-icon>
       <span class="padding-mini-r-l">{{task.taskName}}</span>
     </button>
   </div>

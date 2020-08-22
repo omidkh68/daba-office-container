@@ -10,6 +10,7 @@
     "extension_error": "Please enter extension",
     "submit": "Submit",
     "dismiss": "Dismiss",
+    "hide": "Hide",
     "active": "Active",
     "deactivate": "Deactivate",
     "settings": "Settings",
@@ -65,7 +66,7 @@
       "available_users": "Available Users"
     },
     "call_to_action": {
-      "local_time": "Local Time",
+      "timezone": "Local Time",
       "call": "Call",
       "message": "Message",
       "voice": "Voice"
@@ -82,8 +83,15 @@
       "do_you_accept": "Do you accept?"
     },
     "transfer_call": "Transfer Call",
-    "public_conference": {
-      "conference_list": "Public Conferences"
+    "conferences": {
+      "conference_list": "Conferences"
+    },
+    "call_logs": {
+      "missed_call": "Missed Call",
+      "rejected":"I Rejected",
+      "not_answered": "Not Answered",
+      "busy":"Was Busy",
+      "answered": "Answered"
     }
   },
   "tasks": {

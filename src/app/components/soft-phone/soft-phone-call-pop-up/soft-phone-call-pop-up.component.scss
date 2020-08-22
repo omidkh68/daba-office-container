@@ -27,6 +27,20 @@
   background-color: rgba(80, 80, 80, .9);
 }
 
+.dial-pad-key {
+  background-color: #e1e1e1;
+  min-width: inherit !important;
+}
+
+.key-container {
+  height: calc(100% - 180px);
+  padding: 1em 4em;
+}
+
+.padding-r-l-4 {
+  padding: 0 4em;
+}
+
 .minimizeBtn {
   transform: scale(1.2);
 }
@@ -36,7 +50,7 @@
   border: solid 3px #AAA;
 }
 
-.show-extension-list {
+.show-extension-list, .show-dialPad {
   width: 97% !important;
   height: 99% !important;
   background-color: rgba(255, 255, 255, .95);

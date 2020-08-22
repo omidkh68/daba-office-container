@@ -108,9 +108,6 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
 
         this.getBoards();
 
-        /*this.socket.on('update-data', (data: any) => {
-          this.getBoards();
-        });*/
     }
 
     openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {

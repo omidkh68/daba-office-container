@@ -34,6 +34,8 @@
   &.online {
     &::before {
       background-color: #4ec060;
+
+      animation: blink-online-user-light 1s infinite linear;
     }
   }
 
@@ -49,6 +51,32 @@
 
   &.active {
     box-shadow: 0 0 0 2px #4ec060;
+
+    animation: blink-online-user 1s infinite linear;
+  }
+}
+
+@keyframes blink-online-user {
+  0% {
+    box-shadow: 0 0 0 2px #4ec060;
+  }
+  33.33333% {
+    box-shadow: 0 0 0 2px #a6c09e;
+  }
+  100% {
+    box-shadow: 0 0 0 2px #4ec060;
+  }
+}
+
+@keyframes blink-online-user-light {
+  0% {
+    background-color: #4ec060;
+  }
+  33.33333% {
+    background-color: #a6c09e;
+  }
+  100% {
+    background-color: #4ec060;
   }
 }
 
@@ -57,5 +85,9 @@
 
   &:hover {
     background-color: #f1f1f1;
+  }
+
+  &:not(:last-child) {
+    border-bottom: solid 1px rgba(220, 220, 220, .5);
   }
 }

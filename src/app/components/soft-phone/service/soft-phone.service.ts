@@ -128,31 +128,33 @@ export class SoftPhoneService extends LoginDataClass {
 
   combineUsersSoftPhoneInformation() {
     return new Promise((resolve, reject) => {
-      const loggedInUserExtension = this.extensionList.getValue().filter((ext: ExtensionInterface) => this.loggedInUser.email === ext.username).pop();
+      setTimeout(() => {
+        const loggedInUserExtension = this.extensionList.getValue().filter((ext: ExtensionInterface) => this.loggedInUser.email === ext.username).pop();
 
-      if (loggedInUserExtension) {
-        this.loggedInUserSoftphone = {...this.loggedInUser, ...loggedInUserExtension};
+        if (loggedInUserExtension) {
+          this.loggedInUserSoftphone = {...this.loggedInUser, ...loggedInUserExtension};
 
-        this.allUsersSoftphone = [];
+          this.allUsersSoftphone = [];
 
-        /*this.allUsers.map((user: UserContainerInterface) => {
-          const findExtension = this.extensionList.getValue().filter(ext => ext.username === user.email).pop();
+          /*this.allUsers.map((user: UserContainerInterface) => {
+            const findExtension = this.extensionList.getValue().filter(ext => ext.username === user.email).pop();
 
-          if (findExtension) {
-            this.allUsersSoftphone.push({
-              ...user,
-              ...findExtension
-            })
-          }
-        });*/
+            if (findExtension) {
+              this.allUsersSoftphone.push({
+                ...user,
+                ...findExtension
+              })
+            }
+          });*/
 
-        // this.changeSoftPhoneUsers(this.allUsersSoftphone);
-        this.changeSoftPhoneUsers(this.extensionList.getValue());
+          // this.changeSoftPhoneUsers(this.allUsersSoftphone);
+          this.changeSoftPhoneUsers(this.extensionList.getValue());
 
-        resolve(true);
-      } else {
-        reject(false);
-      }
+          resolve(true);
+        } else {
+          reject(false);
+        }
+      })
     });
   }
 
@@ -481,8 +483,8 @@ export class SoftPhoneService extends LoginDataClass {
 
     if (e.o_event && e.o_event.o_session) {
       try {
-        extensionNumberFrom = e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '');
-        extensionNumberTo = e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '');
+        extensionNumberFrom = e.o_event.o_session.o_uri_from ? e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '') : '-';
+        extensionNumberTo = e.o_event.o_session.o_uri_to ? e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '') : '-';
 
         incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
         incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();
@@ -894,16 +896,16 @@ export class SoftPhoneService extends LoginDataClass {
   };
 
   sipSendDTMF(c) {
-    this.audioRemoteTagValue.dtmfTone.play();
-
-    /*if (this.oSipSessionCall && c) {
+    if (this.oSipSessionCall && c) {
       if (this.oSipSessionCall.dtmf(c) == 0) {
         try {
           this.audioRemoteTagValue.dtmfTone.play();
         } catch (e) {
         }
       }
-    }*/
+    } else {
+      this.audioRemoteTagValue.dtmfTone.play();
+    }
   }
 
   getTranslate(word) {

@@ -36,7 +36,7 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
 
   rtlDirection: boolean;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'pbx'};
-  activeTab: number = 1;
+  activeTab: number = 0;
   tabs: Array<TabInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
@@ -156,10 +156,10 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
           name: this.getTranslate('soft_phone.main.status'),
           icon: 'home'
         },
-        {
+        /*{ // todo : fix this in release
           name: this.getTranslate('soft_phone.main.address_book'),
           icon: 'contacts'
-        },
+        },*/
         {
           name: this.getTranslate('soft_phone.main.dial_pad'),
           icon: 'dialpad'

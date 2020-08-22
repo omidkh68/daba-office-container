@@ -1,11 +1,13 @@
 import {
     AfterViewInit,
-    Component, ElementRef,
+    Component,
     EventEmitter,
     Input,
     OnChanges,
-    OnDestroy, OnInit,
-    Output, SimpleChanges, ViewChild,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
     ViewEncapsulation
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
@@ -39,7 +41,6 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
     @Output()
     triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
 
-
     rtlDirection: boolean;
     header = {};
     buttonLabels = {};
@@ -69,7 +70,6 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-
         this.views = {
             dayGridMonthCustom: {
                 type: 'dayGridMonth',
@@ -101,18 +101,15 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
     }
 
     eventRender(event: any) {
-
         if (event.event.extendedProps.imageurl) {
-            var tag = event.el.getElementsByClassName('fc-title');
+            let tag = event.el.getElementsByClassName('fc-title');
 
             tag[0].insertAdjacentHTML('beforeBegin',
-                '<img class=\'round-corner-all float-right\' src=\'' + event.event.extendedProps.imageurl + '\' width=\'20px\' height=\'20px\'>');
-
+                '<img class="round-corner-all float-right" src="' + event.event.extendedProps.imageurl + '" width="20px" height="20px">');
         }
     }
 
     eventClick(event: any) {
-
         let boardStatus: any;
 
         const data: TaskDataInterface = {

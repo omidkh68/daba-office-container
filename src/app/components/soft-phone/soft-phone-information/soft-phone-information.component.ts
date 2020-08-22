@@ -21,7 +21,6 @@ import {ResultApiInterface} from '../logic/result-api.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
@@ -64,8 +63,7 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnD
               private translateService: TranslateService,
               private apiService: ApiService,
               private messageService: MessageService,
-              private refreshLoginService: RefreshLoginService,
-              private loadingIndicatorService: LoadingIndicatorService) {
+              private refreshLoginService: RefreshLoginService) {
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
@@ -88,12 +86,8 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnD
   }
 
   getExtensionStatus() {
-    // this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
-
     this._subscription.add(
       this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
-        // this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
-
         if (resp.success) {
           if (this.softPhoneUsers && this.softPhoneUsers.length) {
             const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, resp.data);
@@ -113,8 +107,6 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnD
 
         }
       }, (error: HttpErrorResponse) => {
-        // this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
-
         this.refreshLoginService.openLoginDialog(error);
       })
     );

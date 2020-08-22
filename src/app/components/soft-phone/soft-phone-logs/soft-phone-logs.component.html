@@ -1,29 +1,22 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-height flex-center">
-  <mat-list *ngIf="cdrList.length; else noItem;" class="full-width full-height overflow-x-hide overflow-y-auto">
-    <mat-list-item *ngFor="let cdr of cdrList"
-                   class="highlight cursor-pointer height-45 padding-r-l margin-b-full">
-      <div class="width-35 height-35" matListAvatar>
-        <ng-container [ngSwitch]="cdr.disposition">
-          <mat-icon *ngSwitchCase="'NO ANSWER'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-                    class="text-red-500" mat-list-icon>
-            phone_missed
-          </mat-icon>
+  <mat-list *ngIf="cdrExtensionList.length; else noItem;"
+            class="cdr-mat-list full-width full-height overflow-x-hide overflow-y-auto">
+    <mat-list-item *ngFor="let cdr of cdrExtensionList"
+                   class="highlight cursor-pointer height-45 padding-tiny-t-b padding-mini-r-l">
+      <mat-icon [class]="cdr.color" mat-list-icon>
+        {{cdr.icon}}
+      </mat-icon>
 
-          <mat-icon *ngSwitchCase="'ANSWERED'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-                    class="text-blue-500" mat-list-icon>
-            phone_callback
-          </mat-icon>
+      <h3 class="font-7-rem text-weight-bold line-height-20" matLine>
+        {{cdr.user.extension_name}} - {{cdr.src}}
+      </h3>
 
-          <mat-icon *ngSwitchCase="'outgoing'" [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-                    class="text-green-500" mat-list-icon>
-            phone_forwarded
-          </mat-icon>
-        </ng-container>
+      <p class="font-7-em text-gray-600 line-height-15" matLine>{{cdr.date | jalali}}</p>
+
+      <div
+        class="user-soft-phone-status white-space-nowrap pos-rel text-gray-500 round-corner-all transition font-7-em">
+        {{cdr.desc | translate}}
       </div>
-
-      <h3 class="font-7-rem text-weight-bold" matLine> {{cdr.src}} </h3>
-
-      <p class="font-6-em text-gray-600" matLine>{{cdr.calldate | jalali}}</p>
     </mat-list-item>
   </mat-list>
 
