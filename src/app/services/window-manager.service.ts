@@ -7,6 +7,7 @@ import {ConferenceComponent} from '../components/conference/conference.component
 import {WebBrowserComponent} from '../components/web-browser/web-browser.component';
 import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
 import {DialogPositionInterface, WindowInterface} from '../components/dashboard/logic/window.interface';
+import {EventsHandlerComponent} from "../components/events/events-handler.component";
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,7 @@ export class WindowManagerService {
   }
 
   openWindowState(service: ServiceItemsInterface) {
+
     let component: any = null;
     let hasFrame: boolean = false;
     let maximizable: boolean = true;
@@ -60,6 +62,12 @@ export class WindowManagerService {
           component = WebBrowserComponent;
           hasFrame = true;
 
+          break;
+        }
+
+        case 'events_calendar': {
+          component = EventsHandlerComponent;
+          hasFrame = true;
           break;
         }
       }

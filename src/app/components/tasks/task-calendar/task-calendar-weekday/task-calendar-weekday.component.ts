@@ -1,11 +1,11 @@
 import {
     AfterViewInit,
-    Component,
+    Component, ElementRef,
     EventEmitter,
     Input,
     OnChanges,
     OnDestroy, OnInit,
-    Output, SimpleChanges,
+    Output, SimpleChanges, ViewChild,
     ViewEncapsulation
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
@@ -18,6 +18,7 @@ import {TaskDataInterface} from '../../logic/task-data-interface';
 import {TaskDetailComponent} from '../../task-detail/task-detail.component';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
 import {TaskBottomSheetInterface} from '../../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {TaskCalendarService} from "../services/task-calendar.service";
 
 @Component({
     selector: 'app-task-calendar-weekday',
@@ -25,7 +26,7 @@ import {TaskBottomSheetInterface} from '../../task-bottom-sheet/logic/TaskBottom
     styleUrls: ['./task-calendar-weekday.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy, OnChanges, OnInit {
+export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
     @Input()
     calendarEvents: any;
 
@@ -37,6 +38,7 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy, O
 
     @Output()
     triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
+
 
     rtlDirection: boolean;
     header = {};
@@ -59,6 +61,7 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy, O
 
     constructor(public dialog: MatDialog,
                 private viewDirection: ViewDirectionService,
+                private taskCalendarService: TaskCalendarService,
                 private translateService: TranslateService) {
         this._subscription.add(
             this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
@@ -132,28 +135,17 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy, O
         return this.translateService.instant(word);
     }
 
+
     ngOnDestroy(): void {
         if (this._subscription) {
             this._subscription.unsubscribe();
         }
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        console.log("holidays", this.holidays);
-        const mm: Array<string> = this.holidays;
-        setTimeout(() => {
-            //debugger;
-            var activeList = Array.prototype.slice.call(document.getElementsByClassName('fc-day'));
-            activeList.forEach((entry: any) => {
-                let variable:string = entry.getAttribute("data-date");
-                if (mm.includes(variable)) {
-                    entry.style.backgroundColor = "#ffc4c4";
-                }
-            });
-        }, 500)
-    }
-
-    ngOnInit(): void {
-
+    ngAfterViewChecked() {
+        let weekdayContainer = document.getElementsByClassName("holiday-date");
+        if (!weekdayContainer.length) {
+            this.taskCalendarService.setHolidayHighlight(this.holidays);
+        }
     }
 }

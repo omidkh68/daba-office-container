@@ -20,6 +20,7 @@ export class MainMenuComponent {
 
   constructor(private windowManagerService: WindowManagerService) {
     setTimeout(() => {
+
       this.loggedInUser.services.map(userService => {
         const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
