@@ -55,7 +55,8 @@ html, body {
     h6,
     p,
     span {
-      font-family: $font-name !important;
+      margin: 0;
+      font-family: $font-name;
     }
 
     @include angular-material-typography($custom-typography);
@@ -77,7 +78,8 @@ html, body {
     h6,
     p,
     span {
-      font-family: $font-name !important;
+      margin: 0;
+      font-family: $font-name;
     }
 
     @include angular-material-typography($custom-typography);

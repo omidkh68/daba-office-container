@@ -1,5 +1,6 @@
-import {Subject, interval} from 'rxjs';
+import {interval, Subject} from 'rxjs';
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnDestroy, OnInit} from '@angular/core';
+import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../status/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -11,7 +12,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {RefreshLoginService} from '../../../login/services/refresh-login.service';
 import {ChangeStatusService} from '../../../status/services/change-status.service';
 import {UserStatusInterface} from '../../../status/logic/status-interface';
+import {WindowManagerService} from '../../../../services/window-manager.service';
 import {ChangeStatusComponent} from '../../../status/change-status/change-status.component';
+import {ServiceItemsInterface} from '../../logic/service-items.interface';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../../services/loading-indicator.service';
 import {StatusChangeResultInterface} from '../../../status/logic/result-interface';
@@ -35,6 +38,9 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
   @Input()
   rtlDirection: boolean;
 
+  @Input()
+  serviceList: Array<ServiceItemsInterface>;
+
   userCurrentStatus: UserStatusInterface | null = null;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'userStatusDashboard'};
   currentTimer: TimeSpan = null;
@@ -51,6 +57,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
               private loadingIndicatorService: LoadingIndicatorService,
               private translateService: TranslateService,
               private changeDetector: ChangeDetectorRef,
+              private windowManagerService: WindowManagerService,
               private messageService: MessageService) {
     super(injector, userInfoService);
   }
@@ -60,58 +67,62 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
       this.changeStatusService.currentUserStatus.subscribe(status => this.userCurrentStatus = status)
     );
 
-    if (this.userCurrentStatus) {
-      setTimeout(() => {
-        if (this.userCurrentStatus.end_time) { // if finished working time
-          const dialogRef = this.dialog.open(ApproveComponent, {
-            data: {
-              title: this.getTranslate('status.start_working'),
-              message: this.getTranslate('status.start_working_time'),
-              action: 'success'
-            },
-            autoFocus: false,
-            width: '70vh',
-            maxWidth: '350px',
-            panelClass: 'approve-detail-dialog',
-            height: '160px'
-          });
-
-          this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-          this._subscription.add(
-            dialogRef.afterClosed().subscribe(result => {
-              if (result) {
-                this._subscription.add(
-                  this.apiService.userChangeStatus({
-                    user_id: this.loggedInUser.id,
-                    status: 1,
-                    description: ''
-                  }).subscribe((resp: StatusChangeResultInterface) => {
-                    if (resp.success) {
-                      this.changeStatusService.changeUserStatus(resp.data);
-
-                      this.messageService.showMessage(this.getTranslate('status.status_success'));
-                    } else {
-                      this.messageService.showMessage(this.getTranslate('status.status_description_error'));
-                    }
-                  })
-                );
-              }
-            })
-          );
-        }
-      }, 2000);
-
-      interval(1000).subscribe(() => {
-        if (!this.changeDetector['destroyed']) {
-          this.changeDetector.detectChanges();
-        }
-
-        this.getElapsedTime(this.userCurrentStatus.start_time);
+    if (this.userCurrentStatus === null || (this.userCurrentStatus && this.userCurrentStatus.end_time !== null)) {
+      const dialogRef = this.dialog.open(ApproveComponent, {
+        data: {
+          title: this.getTranslate('status.start_working'),
+          message: this.getTranslate('status.start_working_time'),
+          action: 'success'
+        },
+        autoFocus: false,
+        width: '70vh',
+        maxWidth: '350px',
+        panelClass: 'approve-detail-dialog',
+        height: '160px'
       });
 
-      this.changeDetector.detectChanges();
+      this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+      this._subscription.add(
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this._subscription.add(
+              this.apiService.userChangeStatus({
+                user_id: this.loggedInUser.id,
+                status: 1,
+                description: ''
+              }).subscribe((resp: StatusChangeResultInterface) => {
+                if (resp.success) {
+                  this.changeStatusService.changeUserStatus(resp.data);
+
+                  this.messageService.showMessage(this.getTranslate('status.status_success'));
+                } else {
+                  this.messageService.showMessage(this.getTranslate('status.status_description_error'));
+                }
+              })
+            );
+          }
+
+          this.openSoftPhone();
+        })
+      );
+    } else {
+      this.openSoftPhone();
     }
+
+    interval(1000).subscribe(() => {
+      if (!this.changeDetector['destroyed']) {
+        this.changeDetector.detectChanges();
+      }
+
+      const currentTime = this.userCurrentStatus && this.userCurrentStatus.end_time === null ?
+        this.userCurrentStatus.start_time :
+        moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+
+      this.getElapsedTime(currentTime);
+    });
+
+    this.changeDetector.detectChanges();
   }
 
   changeStatus() {
@@ -158,6 +169,26 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
       minutes: minutes,
       seconds: seconds
     };
+  }
+
+  openSoftPhone() {
+    setTimeout(() => {
+      this.loggedInUser.services.map(userService => {
+        const serviceName = userService.name.replace(' ', '_').toLowerCase();
+
+        if (serviceName === 'pbx_service') {
+          this.serviceList.map(service => {
+            if (service.serviceTitle === 'pbx_service') {
+              this.openService(service);
+            }
+          })
+        }
+      });
+    }, 2000);
+  }
+
+  openService(service: ServiceItemsInterface) {
+    this.windowManagerService.openWindowState(service);
   }
 
   getTranslate(word) {
