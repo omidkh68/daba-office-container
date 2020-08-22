@@ -71,6 +71,18 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
       this.userInfoService.currentUserInfo.subscribe(user => {
         this.loggedInUser = user;
 
+        let service: ServiceItemsInterface = {
+          service_id: 999,
+          type: 3,
+          name: "Events Calendar",
+          serviceTitle : 'events_calendar',
+          name_fa: "رویدادها",
+          icon: "event",
+          show_in_container: 1,
+          width: 1200,
+          height: 710
+        };
+        this.loggedInUser.services.push(service);
         this.loggedInUser.services.map((item: ServiceInterface) => {
           let serviceTitle = item.name.split(' ').join('_').toLowerCase();
 

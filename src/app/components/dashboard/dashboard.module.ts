@@ -14,6 +14,7 @@ import {DashboardToolbarComponent} from './dashboard-toolbar/dashboard-toolbar.c
 import {WindowAppContainerComponent} from './dashboard-toolbar/window-app-container/window-app-container.component';
 import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-call/soft-phone-incoming-call.component';
 import {A11yModule} from "@angular/cdk/a11y";
+import {DashboardDatepickerComponent} from "./dashboard-datepicker/dashboard-datepicker.component";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {A11yModule} from "@angular/cdk/a11y";
     TimeAreaClockComponent,
     DashboardToolbarComponent,
     WindowAppContainerComponent,
+    DashboardDatepickerComponent,
     SoftPhoneIncomingCallComponent
   ],
     imports: [
