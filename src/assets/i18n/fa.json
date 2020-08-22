@@ -35,6 +35,7 @@
   "dashboard": {
     "dashboard_toolbar": {
       "service_list": "سرویس ها",
+      "reminder": "یادآوری ها",
       "active_clocks": "ساعت های فعال",
       "exist_app": "خروج از حساب کاربری"
     }

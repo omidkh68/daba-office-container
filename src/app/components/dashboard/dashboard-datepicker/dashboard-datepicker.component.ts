@@ -35,7 +35,10 @@ export class DashboardDatepickerComponent{
 
   dateClass() {
     return (date: any): MatCalendarCellCssClasses => {
-      return date.jDay() == 6 ? 'special-date' : '';
+      if(this.rtlDirection)
+        return date.jDay() == 6 ? 'special-date' : '';
+      else
+        return date.day() == 5 ? 'special-date' : '';
     };
   }
 

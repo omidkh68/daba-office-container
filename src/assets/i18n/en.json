@@ -34,7 +34,8 @@
   },
   "dashboard": {
     "dashboard_toolbar": {
-      "service_list": "Services",
+      "": "Services",
+      "reminder" : "Reminders",
       "active_clocks": "Active Clocks",
       "exist_app": "Log Out"
     }
