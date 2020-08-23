@@ -20,14 +20,16 @@
         <!--<button (click)="toggleContainWithinAspectRatio()">{{containWithinAspectRatio ? 'Fill Aspect Ratio' : 'Contain Within Aspect Ratio'}}</button>-->
         <!--<button (click)="resetImage()">Reset image</button>-->
 
-        <label *ngIf="!showCropper" for="fileChange" class="cursor-pointer pos-abs full-width full-height purple-gradient right-0 top-0 text-white text-center" style="line-height: 80vh">
+        <label *ngIf="!showCropper" for="fileChange" class="cursor-pointer pos-abs full-width full-height purple-gradient right-0 top-0 text-white text-center z-index-99" style="line-height: 80vh">
           {{'profileSettings.insert_picture' | translate}}
         </label>
 
         <input type="file" id="fileChange" hidden (change)="fileChangeEvent($event)"/>
 
         <div style="width: 50% !important;" [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
-          <image-cropper style="padding: 15px !important;" class=""
+          <image-cropper style="padding: 15px !important;"
+                         [imageQuality]="50"
+                         format="jpeg"
                          [imageChangedEvent]="imageChangedEvent"
                          [maintainAspectRatio]="true"
                          [containWithinAspectRatio]="containWithinAspectRatio"
@@ -40,7 +42,6 @@
                          [transform]="transform"
                          [alignImage]="'center'"
                          [style.display]="showCropper ? null : 'none'"
-                         format="png"
                          (imageCropped)="imageCropped($event)"
                          (imageLoaded)="imageLoaded()"
                          (cropperReady)="cropperReady($event)"
@@ -53,11 +54,20 @@
           </div>
 
         <div class="container-tools display-inline-block full-width height-100">
+
+          <button
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l pos-abs"
+            [ngClass]="rtlDirection ? 'right-0' : 'left-0'"
+            (click)="onSubmit()">
+            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-700">save</mat-icon>
+          </button>
+
           <button
                   class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
                   (click)="rotateLeft()">
             <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">rotate_left</mat-icon>
           </button>
+
 
           <button
                   class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"

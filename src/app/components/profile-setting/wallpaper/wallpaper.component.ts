@@ -1,10 +1,15 @@
-import {Component, OnInit, OnDestroy, Inject} from '@angular/core';
+import {Component, OnInit, OnDestroy, Inject, Injector} from '@angular/core';
 import {ViewDirectionService} from "../../../services/view-direction.service";
 import {WallpaperSelectorService} from "../../../services/wallpaper-selector.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {LoadingIndicatorInterface, LoadingIndicatorService} from "../../../services/loading-indicator.service";
 import {Subscription} from "rxjs/internal/Subscription";
 import {ElectronService} from "../../../services/electron.service";
+import {UserContainerInterface} from "../../users/logic/user-container.interface";
+import {HttpErrorResponse} from "@angular/common/http";
+import {ProfileSettingService} from "../logic/profile-setting.service";
+import {LoginDataClass} from "../../../services/loginData.class";
+import {UserInfoService} from "../../users/services/user-info.service";
 
 @Component({
   selector: 'app-wallpaper',
@@ -14,7 +19,7 @@ import {ElectronService} from "../../../services/electron.service";
 
 /*code file uploader va base64 az do code tashkil shode, ghesmat haye code aval va dovom moshakhas shode ba code1 code2*/
 
-export class WallpaperComponent implements OnInit, OnDestroy {
+export class WallpaperComponent extends LoginDataClass implements OnInit, OnDestroy {
 
   showProgress = true;
   environment;
@@ -147,7 +152,12 @@ export class WallpaperComponent implements OnInit, OnDestroy {
               public dialogRef: MatDialogRef<WallpaperComponent>,
               private loadingIndicatorService: LoadingIndicatorService,
               private electronService: ElectronService,
+              private profileSettingService: ProfileSettingService,
+              private injector: Injector,
+              private userInfoService: UserInfoService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
+    super(injector, userInfoService);
+
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );
@@ -191,7 +201,6 @@ export class WallpaperComponent implements OnInit, OnDestroy {
   }
 
   deleteFile(index: number) {
-    console.log('index', index);
     this.files.splice(index, 1);
 
     this.sellersPermitString = '';
@@ -254,17 +263,123 @@ export class WallpaperComponent implements OnInit, OnDestroy {
 
   _handleReaderLoaded(e) {
     let reader = e.target;
-    console.log('0', e);
     // let base64result = reader.result.substr(reader.result.indexOf(',') + 1);
     let base64result = reader.result;
 
     this.imageSrc = base64result;
     this.sellersPermitString = base64result;
-    console.log('1', this.sellersPermitString);
+
+    this.onSubmit(this.sellersPermitString);
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
   }
   /*code2*/
 
+  onSubmit(img) {
+    this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'sendProfile'});
+
+    const finalValue = {};
+
+    finalValue['background_image'] = img;
+
+    this._subscription.add(
+      this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: any) => {
+
+        let temp = this.loggedInUser;
+
+        temp = {...temp, background_image: resp.data.background_image};
+
+       this.userInfoService.changeUserInfo(temp);
+        // url(./assets/images/wallpapers/1.jpg)
+       this.changeWallpaper('url(' + resp.data.background_image + ')');
+
+        /*if (resp.result) {
+          this.bottomSheetData.bottomSheetRef.close();
+
+          this.messageService.showMessage(resp.message);
+
+          this.refreshBoardService.changeCurrentDoRefresh(true);
+        } else {
+          this.form.enable();
+        }*/
+
+
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+      }, (error: HttpErrorResponse) => {
+        // this.form.enable();
+
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+
+        /*this.refreshLoginService.openLoginDialog(error);*/
+      })
+    );
+    /*if (this.dialogData.action === 'addUser') {
+      const finalValue = this.form.value;
+      finalValue.c_password = this.form.get('password').value;
+      finalValue.timezone = this.form.get('timezone').value.timezone;
+      this._subscription.add(
+        this._hrManagementService.addUser(finalValue).subscribe((resp: any) => {
+            if (resp.status === 200) {
+              this.overlayLoading = false;
+              this.form.enable();
+
+              this.showMessage(0, resp.body.msg);
+              this.dialogRef.close(resp);
+            }
+          },
+          error => {
+            this.overlayLoading = false;
+            this.form.enable();
+
+            const objectKeys = Object.keys(error.error.error);
+            objectKeys.forEach(obj => {
+              error.error.error[obj].forEach(val => {
+                this.showMessage(1, val);
+              });
+            });
+
+            if (error.status === 401) {
+              this.userInfoService.changeLoginData('');
+              this._router.navigateByUrl(`/login`);
+            }
+          }
+        )
+      );
+    } else if (this.dialogData.action === 'editUser') {
+      const finalValue = this.form.value;
+      finalValue.c_password = this.form.get('password').value;
+      finalValue.timezone = this.form.get('timezone').value.timezone;
+
+      this._subscription.add(
+        this._hrManagementService.updateUser(this.form.value, this.dialogData.data.id).subscribe((resp: any) => {
+            if (resp.status === 200) {
+              this.overlayLoading = false;
+              this.form.enable();
+
+              this.showMessage(0, resp.body.msg);
+              this.dialogRef.close(resp);
+            }
+          },
+          error => {
+            this.overlayLoading = false;
+            this.form.enable();
+            this.showMessage(1, error.error.msg);
+
+            if (error.status === 401) {
+              this.userInfoService.changeLoginData('');
+              this._router.navigateByUrl(`/login`);
+            }
+          }
+        )
+      );
+    }*/
+  }
+
   changeWallpaper(value) {
+
+    console.log('value', value);
+
     this._wallPaperSelector.changeWallpaper(value);
   }
 

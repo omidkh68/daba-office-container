@@ -1,20 +1,21 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Injector, OnInit, ViewChild} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
 import {Subscription} from "rxjs/internal/Subscription";
 import {ViewDirectionService} from "../../services/view-direction.service";
 import {MatTabChangeEvent} from "@angular/material/tabs";
-
-import { Dimensions, ImageCroppedEvent, ImageTransform } from "ngx-image-cropper";
-import {base64ToFile} from "./utils/blob.utils";
 import {ShowImageCropperComponent} from "./show-image-cropper/show-image-cropper.component";
 import {MatDialog} from "@angular/material/dialog";
-import {WallpaperComponent} from "./wallpaper/wallpaper.component";
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {Observable} from "rxjs";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DatetimeService} from "./logic/datetime.service";
 import {map, startWith} from "rxjs/operators";
 import {LoadingIndicatorInterface, LoadingIndicatorService} from "../../services/loading-indicator.service";
+import {ProfileSettingService} from "./logic/profile-setting.service";
+import {LoginDataClass} from "../../services/loginData.class";
+import {UserInfoService} from "../users/services/user-info.service";
+import {HttpErrorResponse} from "@angular/common/http";
+import {UserContainerInterface} from "../users/logic/user-container.interface";
 
 export interface Timezones {
   city: string;
@@ -26,7 +27,7 @@ export interface Timezones {
   templateUrl: './profile-setting.component.html',
   styleUrls: ['./profile-setting.component.scss']
 })
-export class ProfileSettingComponent implements OnInit, AfterViewInit {
+export class ProfileSettingComponent extends LoginDataClass implements OnInit, AfterViewInit {
 
   tabs = [];
   form: FormGroup;
@@ -43,6 +44,7 @@ export class ProfileSettingComponent implements OnInit, AfterViewInit {
   checkMoreClock: boolean;
   checkMoreClockContent: boolean;
   cityClocksList: Timezones[];
+
   /*timezone*/
 
   displayFn(timezone: Timezones): string {
@@ -60,10 +62,21 @@ export class ProfileSettingComponent implements OnInit, AfterViewInit {
               public dialog: MatDialog,
               private _bottomSheet: MatBottomSheet,
               private _fb: FormBuilder,
+              private profileSettingService: ProfileSettingService,
               private loadingIndicatorService: LoadingIndicatorService,
+              private injector: Injector,
+              private userInfoService: UserInfoService,
               private datetimeService: DatetimeService) {
+    super(injector, userInfoService);
+
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
+
+    this._subscription.add(
+      this.userInfoService.currentUserInfo.subscribe(user => {
+        this.loggedInUser = user;
+      })
     );
 
     this._subscription.add(
@@ -76,6 +89,7 @@ export class ProfileSettingComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+
     this.createForm().then(() => {
       this.formPatchValue();
     });
@@ -85,9 +99,6 @@ export class ProfileSettingComponent implements OnInit, AfterViewInit {
       map(value => typeof value === 'string' ? value : value.name),
       map(name => name ? this._filter(name) : this.options.slice())
     );
-
-
-    console.log('this.filteredOptions', this.filteredOptions);
   }
 
   ngAfterViewInit(): void {
@@ -107,13 +118,20 @@ export class ProfileSettingComponent implements OnInit, AfterViewInit {
     }, 200);
   }
 
+  changeDarkMode($event) {
+    this.form.get('dark_mode').setValue($event.target.checked ? 1 : 0);
+  }
+
   createForm() {
     return new Promise((resolve) => {
       this.form = this._fb.group({
         name: new FormControl('', Validators.required),
         email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl(''),
-        timezone: new FormControl('', Validators.required)
+        c_password: new FormControl(''),
+        extension_no: new FormControl(''),
+        timezone: new FormControl('', Validators.required),
+        dark_mode: new FormControl(0),
+        lang: new FormControl(this.rtlDirection ? 'fa' : 'en'),
       });
       resolve(true);
     });
@@ -123,10 +141,20 @@ export class ProfileSettingComponent implements OnInit, AfterViewInit {
     this.form.disable();
     this.editable = false;
 
+    const newTimezone = {};
+    const requestTimezone = this.loggedInUser.timezone;
+    const tempTimezone = this.loggedInUser.timezone !== '' && this.loggedInUser.timezone !== null ? this.loggedInUser.timezone.split('/')[1] : '';
+
+    newTimezone['city'] = tempTimezone;
+    newTimezone['timezone'] = requestTimezone;
+
     this.form.patchValue({
-      name: 'ابوالفضل ابراهیمی',
-      email: 'eden_a_e@yahoo.com',
-      password: ''
+      name: this.loggedInUser.name,
+      email: this.loggedInUser.email,
+      extension_no: this.loggedInUser.extension_no,
+      timezone: newTimezone,
+      dark_mode: this.loggedInUser.dark_mode,
+      lang: this.loggedInUser.lang,
     });
   }
 
@@ -140,16 +168,118 @@ export class ProfileSettingComponent implements OnInit, AfterViewInit {
     }
   }
 
-  updateForm(event) {
-    /*this.form = event;
-
-    this.submit();*/
-  }
-
   cancelBtn() {
     this.form.disable();
 
     this.formPatchValue();
+  }
+
+  onSubmit() {
+    this.form.disable();
+    this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
+
+    const finalValue = {};
+
+    finalValue['email'] = this.form.get('email').value;
+    finalValue['name'] = this.form.get('name').value;
+    finalValue['timezone'] = this.form.get('timezone').value.timezone;
+
+    if (this.form.get('c_password').value.length) {
+      finalValue['c_password'] = this.form.get('c_password').value;
+    }
+
+    if (this.form.get('extension_no').value.length) {
+      finalValue['extension_no'] = this.form.get('extension_no').value;
+    }
+
+
+    finalValue['lang'] = this.loggedInUser.lang;
+    finalValue['dark_mode'] = this.loggedInUser.dark_mode;
+
+
+    this._subscription.add(
+      this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: UserContainerInterface) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+        this.editableForm();
+
+        /*if (resp.result) {
+          this.bottomSheetData.bottomSheetRef.close();
+
+          this.messageService.showMessage(resp.message);
+
+          this.refreshBoardService.changeCurrentDoRefresh(true);
+        } else {
+          this.form.enable();
+        }*/
+      }, (error: HttpErrorResponse) => {
+        this.form.enable();
+
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+
+        /*this.refreshLoginService.openLoginDialog(error);*/
+      })
+    );
+    /*if (this.dialogData.action === 'addUser') {
+      const finalValue = this.form.value;
+      finalValue.c_password = this.form.get('password').value;
+      finalValue.timezone = this.form.get('timezone').value.timezone;
+      this._subscription.add(
+        this._hrManagementService.addUser(finalValue).subscribe((resp: any) => {
+            if (resp.status === 200) {
+              this.overlayLoading = false;
+              this.form.enable();
+
+              this.showMessage(0, resp.body.msg);
+              this.dialogRef.close(resp);
+            }
+          },
+          error => {
+            this.overlayLoading = false;
+            this.form.enable();
+
+            const objectKeys = Object.keys(error.error.error);
+            objectKeys.forEach(obj => {
+              error.error.error[obj].forEach(val => {
+                this.showMessage(1, val);
+              });
+            });
+
+            if (error.status === 401) {
+              this.userInfoService.changeLoginData('');
+              this._router.navigateByUrl(`/login`);
+            }
+          }
+        )
+      );
+    } else if (this.dialogData.action === 'editUser') {
+      const finalValue = this.form.value;
+      finalValue.c_password = this.form.get('password').value;
+      finalValue.timezone = this.form.get('timezone').value.timezone;
+
+      this._subscription.add(
+        this._hrManagementService.updateUser(this.form.value, this.dialogData.data.id).subscribe((resp: any) => {
+            if (resp.status === 200) {
+              this.overlayLoading = false;
+              this.form.enable();
+
+              this.showMessage(0, resp.body.msg);
+              this.dialogRef.close(resp);
+            }
+          },
+          error => {
+            this.overlayLoading = false;
+            this.form.enable();
+            this.showMessage(1, error.error.msg);
+
+            if (error.status === 401) {
+              this.userInfoService.changeLoginData('');
+              this._router.navigateByUrl(`/login`);
+            }
+          }
+        )
+      );
+    }*/
   }
 
   changeLang(language) {

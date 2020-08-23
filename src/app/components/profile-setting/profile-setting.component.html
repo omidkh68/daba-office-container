@@ -43,8 +43,8 @@
             <div class="container-image-profile display-inline-block" [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
               <div class="image-profile" [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
                 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="box mat-elevation-z1 pos-rel text-center round-corner width-200 height-215 overflow-hide">
-                  <img class="full-width full-height cursor-pointer" src="assets/profileImg/ab.ebrahimi@dabacenter.ir.jpg"
-                       onerror="this.src='assets/profileImg/ab.ebrahimi@dabacenter.ir.jpg'" alt="">
+                  <img class="full-width full-height cursor-pointer" [src]="loggedInUser.profile_image"
+                       onerror="this.src='assets/profileImg/0.jpg'" alt="">
                   <div  (click)="showCropperImage()" class="overlay-image cursor-pointer pos-abs full-width full-height purple-gradient">
                     <mat-icon class="no-padding full-width full-height line-height-200 font-full-rem-2 text-white">camera_alt
                     </mat-icon>
@@ -59,8 +59,8 @@
               <!--dark mode-->
               <div class="display-flex dark-mode height-50 margin-r-half margin-l-half align-items-center">
                 <div class="container-dark-mode">
-                  <label>
-                    <input type="checkbox">
+                  <label for="darkMode">
+                    <input type="checkbox" id="darkMode" checked (change)="changeDarkMode($event)">
                     <div class="planet">
                     </div>
                     <div class="elements">
@@ -154,12 +154,26 @@
                   <div class="col-xs-12 col-sm-6 col-md-6 margin-t-full"
                        [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
                     <mat-form-field class="full-width">
-                      <mat-label>{{'global.password' | translate}}</mat-label>
+                      <mat-label>{{'login_info.password' | translate}}</mat-label>
                       <input matInput
-                             placeholder="{{'global.password' | translate}}"
+                             type="password"
+                             placeholder="{{'login_info.password' | translate}}"
                              class="full-width"
-                             formControlName="password">
-                      <mat-error>{{'global.password_error' | translate}}</mat-error>
+                             formControlName="c_password">
+                      <mat-error>{{'login_info.password_error' | translate}}</mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xs-12 col-sm-6 col-md-6 margin-t-full"
+                       [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
+                    <mat-form-field class="full-width">
+                      <mat-label>{{'global.extension_placeholder' | translate}}</mat-label>
+                      <input matInput
+                             type="number"
+                             placeholder="{{'global.extension_placeholder' | translate}}"
+                             class="full-width"
+                             formControlName="extension_no">
+                      <mat-error *ngIf="!form.get('extension_no').valid">{{'global.extension_error' | translate}}</mat-error>
                     </mat-form-field>
                   </div>
 
@@ -195,6 +209,7 @@
                   <button mat-raised-button
                           *ngIf="editable"
                           [disabled]="!form.valid"
+                          (click)="onSubmit()"
                           type="submit"
                           tabindex="13"
                           class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
@@ -246,6 +261,6 @@
         </rect>
       </svg>
 
-    <!--<span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>-->
+    <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
   </div>
 </div>
