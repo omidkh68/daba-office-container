@@ -166,8 +166,6 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
               this.cdrExtensionList.push(cdrExtensionItem);
             }
           });
-
-          console.log(this.cdrList);
         }
       }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});

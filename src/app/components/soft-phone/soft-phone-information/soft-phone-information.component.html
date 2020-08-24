@@ -24,7 +24,7 @@
       <mat-list-item (click)="openSheet(user)"
                      *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
                      [ngClass]="rtlDirection ? 'padding-r-full padding-l-tiny' : 'padding-l-full padding-r-tiny'"
-                     class="highlight cursor-pointer full-height padding-tiny-t-b">
+                     class="highlight cursor-pointer full-height">
         <img [src]="'assets/profileImg/'+ user.username +'.jpg'" [alt]="user.name"
              onerror="this.src='assets/profileImg/0.jpg'"
              [ngClass]="user.is_online ? 'active' : ''"

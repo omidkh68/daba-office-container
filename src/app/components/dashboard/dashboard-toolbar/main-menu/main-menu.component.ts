@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {ServiceItemsInterface} from '../../logic/service-items.interface';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
+import {WindowManagerService} from '../../../../services/window-manager.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -17,6 +18,10 @@ export class MainMenuComponent {
   @Input()
   serviceList: Array<ServiceItemsInterface>;
 
-  constructor() {
+  constructor(private windowManagerService: WindowManagerService) {
+  }
+
+  openService(service: ServiceItemsInterface) {
+    this.windowManagerService.openWindowState(service);
   }
 }
