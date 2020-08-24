@@ -14,21 +14,17 @@ import {DashboardToolbarComponent} from './dashboard-toolbar/dashboard-toolbar.c
 import {WindowAppContainerComponent} from './dashboard-toolbar/window-app-container/window-app-container.component';
 import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-call/soft-phone-incoming-call.component';
 import {A11yModule} from "@angular/cdk/a11y";
-import {ProfileWallpaperComponent} from "../profile-setting/profile-wallpaper/profile-wallpaper.component";
-import {ProfileInformationComponent} from "../profile-setting/profile-information/profile-information.component";
 import {ProfileSettingComponent} from "../profile-setting/profile-setting.component";
 /*import {ImageCropperModule} from "../profile-setting/image-cropper.module";*/
 import {ImageCropperModule} from "ngx-image-cropper";
 import {ShowImageCropperComponent} from "../profile-setting/show-image-cropper/show-image-cropper.component";
 import {WallpaperComponent} from "../profile-setting/wallpaper/wallpaper.component";
-import {DndDirective} from "../profile-setting/dnd.directive";
 import {ProgressComponent} from "../profile-setting/progress/progress.component";
 import {DatetimeService} from "../profile-setting/logic/datetime.service";
 
 
 @NgModule({
   declarations: [
-    DndDirective,
     DatetimeService,
     ProgressComponent,
     MainMenuComponent,
@@ -42,10 +38,8 @@ import {DatetimeService} from "../profile-setting/logic/datetime.service";
     TimeAreaClockComponent,
     ProfileSettingComponent,
     DashboardToolbarComponent,
-    ProfileWallpaperComponent,
     ShowImageCropperComponent,
     WindowAppContainerComponent,
-    ProfileInformationComponent,
     SoftPhoneIncomingCallComponent
   ],
   imports: [
