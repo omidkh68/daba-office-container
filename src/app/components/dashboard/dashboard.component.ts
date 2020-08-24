@@ -12,6 +12,9 @@ import {ServiceInterface} from '../services/logic/service-interface';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ServiceItemsInterface} from './logic/service-items.interface';
+import {WallpaperSelectorService} from "../../services/wallpaper-selector.service";
+import {WallpaperComponent} from "../profile-setting/wallpaper/wallpaper.component";
+import {MatBottomSheet} from "@angular/material/bottom-sheet";
 
 @Component({
   selector: 'app-dashboard',
@@ -19,9 +22,13 @@ import {ServiceItemsInterface} from './logic/service-items.interface';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent extends LoginDataClass implements OnInit, OnDestroy {
+
   rtlDirection: boolean;
   windowManager: Array<WindowInterface>;
-  serviceList: ServiceItemsInterface[] = [];/*
+  serviceList: ServiceItemsInterface[] = [];
+  wallpaper: string;
+
+  /*
     {
       serviceId: 1,
       serviceNameFa: 'سیستم مدیریت تسک',
@@ -64,8 +71,13 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
               private api: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
-              private softPhoneService: SoftPhoneService) {
+              private softPhoneService: SoftPhoneService,
+              private _wallPaperSelector: WallpaperSelectorService) {
     super(injector, userInfoService);
+
+    this._subscription.add(
+      this._wallPaperSelector.currentWallpaper.subscribe(wallpaper => this.wallpaper = wallpaper)
+    );
 
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => {

@@ -6,6 +6,9 @@ import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
+import {MatDialog} from "@angular/material/dialog";
+import {ProfileSettingComponent} from "../../../profile-setting/profile-setting.component";
+import {MessageService} from "../../../../services/message.service";
 
 @Component({
   selector: 'app-profile-menu',
@@ -24,7 +27,9 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
               private injector: Injector,
               private api: ApiService,
               private userInfoService: UserInfoService,
-              private windowManagerService: WindowManagerService) {
+              private windowManagerService: WindowManagerService,
+              public dialog: MatDialog,
+              private messageService: MessageService) {
     super(injector, userInfoService);
   }
 
@@ -42,6 +47,23 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
         });
       }
     });
+  }
+
+  settingProfile() {
+    const dialogRef = this.dialog.open(ProfileSettingComponent, {
+      autoFocus: false,
+      width: '700px',
+      height: '600px',
+      panelClass: 'status-dialog'
+    });
+
+    this._subscription.add(
+      dialogRef.afterClosed().subscribe((resp: any) => {
+        if (resp) {
+          // this.messageService.showMessage(`${resp.message}`);
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {
