@@ -1,0 +1,235 @@
+@import '../../../assets/mixin';
+
+.container-image-profile .overlay-image {
+  background-image: linear-gradient(-20deg, #4a148ca6 0%, #ce93d8ab 100%);
+  display: block;
+  opacity: 0;
+  transition: opacity 400ms ease-in-out;
+}
+
+.image-profile:hover .overlay-image {
+  opacity: 1;
+}
+
+/*dark mode*/
+.dark-mode {
+  transform: scale(0.8);
+
+  --bg-planet-bright: #F2C94C !important;
+  --bg-planet-shadow: #828894 !important;
+  --bg-planet-lightshadow: #D7D7D820 !important;
+  --dot-size: 0.25rem !important;
+  box-sizing: border-box !important;
+  -webkit-font-smoothing: antialiased !important;
+
+  .container-dark-mode {
+    min-height: 50px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    transition: background-color 400ms ease !important;
+
+    label {
+      cursor: pointer !important;
+      padding: 1rem !important;
+      position: relative !important;
+
+      /* To make outline on mobile invisible */
+      -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
+
+      input[type="checkbox"] {
+        height: 0 !important;
+        width: 0 !important;
+        visibility: hidden !important;
+        position: absolute !important;
+      }
+
+      .planet {
+        width: 1.8rem !important;
+        height: 1.8rem !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+        background: radial-gradient(3.75em, 99%, transparent 100%) !important;
+        background-color: var(--bg-planet-bright) !important;
+        background-repeat: no-repeat !important;
+        position: relative !important;
+        will-change: background !important;
+        transition: all 400ms ease !important;
+
+        /* Safari transition issue */
+        backface-visibility: hidden !important;
+        transform: translate3d(0, 0, 0) !important;
+
+        &::after {
+          content: "" !important;
+          background-color: var(--bg-planet-shadow) !important;
+          width: 2rem !important;
+          height: 2rem !important;
+          position: absolute !important;
+          border-radius: 50% !important;
+          will-change: opacity, transform, background-color !important;
+          opacity: 0 !important;
+          transform: translate(2em, -2em) !important;
+          transition: opacity 400ms ease, transform 400ms ease, background-color 400ms ease !important;
+        }
+      }
+
+      .elements {
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        transition: transform 400ms ease !important;
+
+        svg {
+          left: 2px;
+          top: 2px;
+          position: absolute !important;
+          width: 7px !important;
+          height: 7px !important;
+          opacity: 1 !important;
+          transition: transform 400ms ease, opacity 200ms ease, width 200ms ease, height 200ms ease !important;
+
+          circle {
+            fill: var(--bg-planet-bright) !important;
+            transition: fill 400ms ease !important;
+          }
+
+          &:first-child {
+            transform: translate(1.8em, 0.35em) !important;
+          }
+
+          &:nth-child(2) {
+            transform: translate(2.8em, 0.7em) !important;
+          }
+
+          &:nth-child(3) {
+            transform: translate(3.2em, 1.8em) !important;
+          }
+
+          &:nth-child(4) {
+            transform: translate(2.8em, 2.8em) !important;
+          }
+
+          &:nth-child(5) {
+            transform: translate(1.8em, 3.2em) !important;
+          }
+
+          &:nth-child(6) {
+            transform: translate(0.7em, 2.8em) !important;
+          }
+
+          &:nth-child(7) {
+            transform: translate(0.35em, 1.8em) !important;
+          }
+
+          &:nth-child(8) {
+            transform: translate(0.7em, 0.7em) !important;
+          }
+        }
+      }
+    }
+  }
+
+  &.bg-dark {
+    --bg-color: #2C3144 !important;
+
+    .container-dark-mode {
+      background-color: var(--bg-color) !important;
+    }
+  }
+
+  label {
+    input:checked {
+      & + .planet {
+        --bg-planet-bright: #D7D7D8 !important;
+
+        &::after {
+          opacity: 1 !important;
+          transform: translate(0.6em, -0.5em) !important;
+        }
+      }
+
+      & ~ .elements {
+        transform: rotate(180deg) !important;
+
+        svg {
+          &:first-child {
+            transform: translate(2em, 1em) !important;
+            opacity: 0 !important;
+          }
+
+          &:nth-child(2) {
+            transform: translate(3em, 1.5em) !important;
+            opacity: 0 !important;
+          }
+
+          &:nth-child(3) {
+            transform: translate(3em, 2em) !important;
+            opacity: 0 !important;
+          }
+
+          &:nth-child(4) {
+            transform: translate(3em, 2em) !important;
+            opacity: 0 !important;
+          }
+
+          &:nth-child(5) {
+            transform: translate(1.9em, 2.6em) !important;
+            width: 0.3em !important;
+            height: 0.3em !important;
+
+            circle {
+              fill: var(--bg-planet-lightshadow) !important;
+            }
+          }
+
+          &:nth-child(6) {
+            transform: translate(1.4em, 2.5em) !important;
+            width: 0.3em !important;
+            height: 0.3em !important;
+
+            circle {
+              fill: var(--bg-planet-lightshadow) !important;
+            }
+          }
+
+          &:nth-child(7) {
+            transform: translate(1.1em, 1.6em) !important;
+            width: 0.7em !important;
+            height: 0.7em !important;
+
+            circle {
+              fill: var(--bg-planet-lightshadow) !important;
+            }
+          }
+
+          &:nth-child(8) {
+            width: 0.45em !important;
+            height: 0.45em !important;
+            transform: translate(1.7em, 2.1em) !important;
+
+            circle {
+              fill: var(--bg-planet-lightshadow) !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/*ed of dark mode*/
+
+/*change lang*/
+.parsi-lang, .english-lang {
+
+  @include transition(.3s all);
+
+  &:hover, &.active {
+    border-bottom: 1px solid red;
+  }
+}
+
+/*end of change lang*/

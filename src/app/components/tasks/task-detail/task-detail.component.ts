@@ -36,7 +36,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
-              private _fb: FormBuilder,
+              private fb: FormBuilder,
               public dialog: MatDialog,
               private injector: Injector,
               private messageService: MessageService,
@@ -70,7 +70,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
   createForm() {
     return new Promise((resolve) => {
-      this.form = this._fb.group({
+      this.form = this.fb.group({
         taskId: new FormControl(0),
         taskName: new FormControl('', Validators.required),
         percentage: new FormControl(0, Validators.required),

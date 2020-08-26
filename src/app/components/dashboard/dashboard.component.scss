@@ -1,8 +1,20 @@
 @import '../../../assets/mixin';
 
+.wallpaper {
+  background-position: center center !important;
+  -moz-background-size: cover !important;
+  -webkit-background-size: cover !important;
+  background-size: cover !important;
+}
+
+.wallpaper-item {
+  bottom: 1em;
+  position: absolute;
+}
+
 .dashboard-container {
-  background: url("../../../assets/bg/bg-18.jpg");
-  background-size: cover;
+  // background: url("../../../assets/bg/bg-18.jpg");
+  // background-size: cover;
 }
 
 .dashboard-app-boundary {

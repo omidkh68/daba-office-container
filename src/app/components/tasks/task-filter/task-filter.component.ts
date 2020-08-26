@@ -98,7 +98,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
 
   constructor(private api: ApiService,
               private viewDirection: ViewDirectionService,
-              private _fb: FormBuilder,
+              private fb: FormBuilder,
               private injector: Injector,
               private translate: TranslateService,
               private messageService: MessageService,
@@ -175,7 +175,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
 
   createForm() {
     return new Promise((resolve) => {
-      this.form = this._fb.group({
+      this.form = this.fb.group({
         userId: new FormControl(0, Validators.required),
         userImg: new FormControl('0'),
         email: new FormControl(this.loggedInUser.email),

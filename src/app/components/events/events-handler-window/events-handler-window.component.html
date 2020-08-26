@@ -1,15 +1,15 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 bottom-0 top-0 full-width">
     <div (click)="activeWindow()"
          (dblclick)="!windowInstance.isMaximized ? maximize() : restore()"
-         class="window-heading full-width height-45 padding-half display-flex"
+         class="window-heading full-width height-45 padding-mini-r-l display-flex align-items-center"
          cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragBoundary=".dashboard-app-boundary"
          (cdkDragStarted)="activeWindow()">
         <ng-template [ngIf]="windowInstance.isDraggable" [ngIfElse]="notDraggableHeading">
             <h3 cdkDragHandle
-                class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex">
+                class="window-title full-width full-height font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
                 <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                           class="text-dark-mode-color pos-rel top-one-tenth">{{data.icon}}</mat-icon>
-                {{data.name}}
+                {{rtlDirection ? data.name_fa : data.name}}
             </h3>
         </ng-template>
 
@@ -17,7 +17,7 @@
             <h3 class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex">
                 <mat-icon class="text-dark-mode-color pos-rel top-one-tenth"
                           [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">{{data.icon}}</mat-icon>
-                {{data.name}}
+                {{rtlDirection ? data.name_fa : data.name}}
             </h3>
         </ng-template>
 

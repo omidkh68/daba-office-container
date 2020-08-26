@@ -88,7 +88,7 @@ export class TimeAreaComponent implements OnInit {
       .pipe(
         startWith(''),
         map(value => typeof value === 'string' ? value : value.name),
-        map(name => name ? this._filter(name) : this.options.slice())
+        map(name => name ? this.filter(name) : this.options.slice())
       );
   }
 
@@ -101,7 +101,7 @@ export class TimeAreaComponent implements OnInit {
     }, 1000);
   }
 
-  private _filter(name: string): Timezones[] {
+  private filter(name: string): Timezones[] {
     const filterValue = name.toLowerCase();
 
     return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);

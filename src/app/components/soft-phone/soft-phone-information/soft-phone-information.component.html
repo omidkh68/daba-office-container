@@ -24,7 +24,7 @@
       <mat-list-item (click)="openSheet(user)"
                      *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
                      [ngClass]="rtlDirection ? 'padding-r-full padding-l-tiny' : 'padding-l-full padding-r-tiny'"
-                     class="highlight cursor-pointer full-height padding-tiny-t-b">
+                     class="highlight cursor-pointer full-height">
         <img [src]="'assets/profileImg/'+ user.username +'.jpg'" [alt]="user.name"
              onerror="this.src='assets/profileImg/0.jpg'"
              [ngClass]="user.is_online ? 'active' : ''"
@@ -33,13 +33,14 @@
         <h3 class="font-7-rem text-weight-bold" matLine> {{user.extension_name}} </h3>
 
         <div matLine>
-          <mat-icon class="width-18 height-18 font-8-em pos-rel top-two-tenth text-center">access_time</mat-icon>
+          <mat-icon [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
+                    class="width-18 height-18 font-8-em pos-rel top-two-tenth ">access_time</mat-icon>
 
           <app-time-area-digital-clock [timezone]="user.timezone" class="font-8-em text-gray-600">
           </app-time-area-digital-clock>
         </div>
 
-        <div class="pos-rel height-30 line-height-35 round-corner-all font-8-em"
+        <div class="pos-rel height-30 line-height-30 round-corner-all font-8-em"
              [ngClass]="user.is_online ? 'text-green-700' : 'text-red-700'">
           {{user.extension_no}}
         </div>

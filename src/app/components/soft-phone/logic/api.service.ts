@@ -25,36 +25,36 @@ export class ApiService {
     })
   };
 
-  constructor(private _http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   getExtensionList(): Observable<ResultApiInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensions`, this.headers);
+    return this.http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensions`, this.headers);
   }
 
   getExtensionStatus(): Observable<ResultApiInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensionStatus`, this.headers);
+    return this.http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensionStatus`, this.headers);
   }
 
   getCdr(extension_no: string): Observable<any> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get(`${this.API_URL}/cdr.php?action=cdr&extensionNo=${extension_no}`, this.headers);
+    return this.http.get(`${this.API_URL}/cdr.php?action=cdr&extensionNo=${extension_no}`, this.headers);
   }
 
   getConferenceList(): Observable<ResultConfApiInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<ResultConfApiInterface>(`${this.API_URL}/extension.php?action=conferenceList`, this.headers);
+    return this.http.get<ResultConfApiInterface>(`${this.API_URL}/extension.php?action=conferenceList`, this.headers);
   }
 
   getConferenceOnlineUser(confNumber: string): Observable<ResultConfOnlineExtensionApiInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<ResultConfOnlineExtensionApiInterface>(`${this.API_URL}/extension.php?action=conferenceOnlineUser&phoneNumber=${confNumber}`, this.headers);
+    return this.http.get<ResultConfOnlineExtensionApiInterface>(`${this.API_URL}/extension.php?action=conferenceOnlineUser&phoneNumber=${confNumber}`, this.headers);
   }
 }

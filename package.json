@@ -1,7 +1,7 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "author": "Omid Khosrojerdi, Husin Sajjadi, Abolfazl Ebrahimik",
   "repository": {
     "type": "git",
@@ -101,7 +101,8 @@
     "typescript": "3.8.3",
     "wait-on": "4.0.2",
     "webdriver-manager": "12.1.7",
-    "zone.js": "0.10.3"
+    "zone.js": "0.10.3",
+    "ngx-image-cropper": "3.2.1"
   },
   "engines": {
     "node": ">=10.13.0"
