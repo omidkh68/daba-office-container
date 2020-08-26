@@ -129,6 +129,20 @@ export class WindowManagerService {
         return Math.round((Math.random() * Math.abs(max - min)) + min);
     }
 
+    // todo: fix by husin
+  /*@HostListener('window:resize', ['$event'])
+  onResize(event) {
+    const windowWidth = event.target.outerWidth;
+
+    if (windowWidth < 1200) {
+      this.drawer.close();
+      this.drawerMode = 'over';
+    } else {
+      this.drawer.open();
+      this.drawerMode = 'side';
+    }
+  }*/
+
     fixPositionByTransform(event) {
         event.preventDefault();
         this.windowListArray.map((windowInstance: any) => {
