@@ -33,7 +33,8 @@
         <h3 class="font-7-rem text-weight-bold" matLine> {{user.extension_name}} </h3>
 
         <div matLine>
-          <mat-icon class="width-18 height-18 font-8-em pos-rel top-two-tenth text-center">access_time</mat-icon>
+          <mat-icon [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
+                    class="width-18 height-18 font-8-em pos-rel top-two-tenth ">access_time</mat-icon>
 
           <app-time-area-digital-clock [timezone]="user.timezone" class="font-8-em text-gray-600">
           </app-time-area-digital-clock>

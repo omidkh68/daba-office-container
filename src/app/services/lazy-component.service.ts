@@ -9,7 +9,8 @@ export class LazyComponentService {
     eventsHandlerModuleId: import('../components/events/events-handler.module'),
     conferenceModuleId: import('../components/conference/conference.module'),
     softPhoneModuleId: import('../components/soft-phone/soft-phone.module'),
-    webBrowserModuleId: import('../components/web-browser/web-browser.module')
+    webBrowserModuleId: import('../components/web-browser/web-browser.module'),
+    adminPanelModuleId: import('../components/admin-panel/admin-panel.module')
   };
 
   constructor(private compiler: Compiler,

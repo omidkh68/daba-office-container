@@ -1,21 +1,20 @@
-import {AfterViewInit, Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {TranslateService} from "@ngx-translate/core";
-import {Subscription} from "rxjs/internal/Subscription";
-import {ViewDirectionService} from "../../services/view-direction.service";
-import {MatTabChangeEvent} from "@angular/material/tabs";
-import {ShowImageCropperComponent} from "./show-image-cropper/show-image-cropper.component";
-import {MatDialog} from "@angular/material/dialog";
-import {MatBottomSheet} from "@angular/material/bottom-sheet";
-import {Observable} from "rxjs";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {DatetimeService} from "./logic/datetime.service";
-import {map, startWith} from "rxjs/operators";
-import {LoadingIndicatorInterface, LoadingIndicatorService} from "../../services/loading-indicator.service";
-import {ProfileSettingService} from "./logic/profile-setting.service";
-import {LoginDataClass} from "../../services/loginData.class";
-import {UserInfoService} from "../users/services/user-info.service";
-import {HttpErrorResponse} from "@angular/common/http";
-import {UserContainerInterface} from "../users/logic/user-container.interface";
+import {AfterViewInit, Component, Injector, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Observable} from 'rxjs/internal/Observable';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {map, startWith} from 'rxjs/operators';
+import {LoginDataClass} from '../../services/loginData.class';
+import {DatetimeService} from './logic/datetime.service';
+import {UserInfoService} from '../users/services/user-info.service';
+import {TranslateService} from '@ngx-translate/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ViewDirectionService} from '../../services/view-direction.service';
+import {ProfileSettingService} from './logic/profile-setting.service';
+import {UserContainerInterface} from '../users/logic/user-container.interface';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
+import {ShowImageCropperComponent} from './show-image-cropper/show-image-cropper.component';
 
 export interface Timezones {
   city: string;
@@ -34,9 +33,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
   activeTab: number = 0;
   rtlDirection: boolean;
   editable: boolean = false;
-  private _subscription: Subscription = new Subscription();
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'changeLang'};
-
   /*timezone*/
   filteredOptions: Observable<any>;
   myControl = new FormControl();
@@ -44,24 +41,14 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
   checkMoreClock: boolean;
   checkMoreClockContent: boolean;
   cityClocksList: Timezones[];
+  private _subscription: Subscription = new Subscription();
 
   /*timezone*/
-
-  displayFn(timezone: Timezones): string {
-    return timezone && timezone.city ? timezone.city : '';
-  }
-
-  private _filter(name: string): Timezones[] {
-    const filterValue = name.toLowerCase();
-
-    return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
-  }
 
   constructor(private viewDirection: ViewDirectionService,
               private translate: TranslateService,
               public dialog: MatDialog,
-              private _bottomSheet: MatBottomSheet,
-              private _fb: FormBuilder,
+              private fb: FormBuilder,
               private profileSettingService: ProfileSettingService,
               private loadingIndicatorService: LoadingIndicatorService,
               private injector: Injector,
@@ -74,9 +61,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
     );
 
     this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => {
-        this.loggedInUser = user;
-      })
+      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
 
     this._subscription.add(
@@ -89,7 +74,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
   }
 
   ngOnInit(): void {
-
     this.createForm().then(() => {
       this.formPatchValue();
     });
@@ -97,7 +81,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
     this.filteredOptions = this.form.get('timezone').valueChanges.pipe(
       startWith(''),
       map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._filter(name) : this.options.slice())
+      map(name => name ? this.filter(name) : this.options.slice())
     );
   }
 
@@ -118,13 +102,19 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
     }, 200);
   }
 
+  displayFn(timezone: Timezones): string {
+    return timezone && timezone.city ? timezone.city : '';
+  }
+
   changeDarkMode($event) {
     this.form.get('dark_mode').setValue($event.target.checked ? 1 : 0);
+
+    this.userInfoService.changeDarkMode();
   }
 
   createForm() {
     return new Promise((resolve) => {
-      this.form = this._fb.group({
+      this.form = this.fb.group({
         name: new FormControl('', Validators.required),
         email: new FormControl('', [Validators.required, Validators.email]),
         c_password: new FormControl(''),
@@ -328,5 +318,11 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
+  }
+
+  filter(name: string): Timezones[] {
+    const filterValue = name.toLowerCase();
+
+    return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
   }
 }

@@ -1,1 +1,4 @@
-<span [dir]="rtlDirection ? 'rtl' : 'ltr'" class="text-white">{{title}}</span>
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="display-flex flex-space-between">
+  <mat-icon mat-list-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">error_outline</mat-icon>
+  <div mat-line>{{title}}</div>
+</div>

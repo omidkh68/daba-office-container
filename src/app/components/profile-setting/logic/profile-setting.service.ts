@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AppConfig} from '../../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
-import {UserContainerInterface} from "../../users/logic/user-container.interface";
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 
 @Injectable({
@@ -23,13 +23,13 @@ export class ProfileSettingService {
     })
   };
 
-  constructor(private _http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
-  updateUser(userInfo ,userId): Observable<UserContainerInterface> {
+  updateUser(userInfo, userId): Observable<UserContainerInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
     this.headers.headers = this.headers.headers.set('From', 'app_application');
 
-    return this._http.patch<UserContainerInterface>(`${this.API_URL}/users/${userId}`, userInfo, this.headers);
+    return this.http.patch<UserContainerInterface>(`${this.API_URL}/users/${userId}`, userInfo, this.headers);
   }
 }

@@ -19,14 +19,14 @@ export class UserInfoService {
   private allUsers = new BehaviorSubject(this._allUsers);
   public currentAllUsers = this.allUsers.asObservable();
 
-  // body = document.querySelector('html');
+  body = document.querySelector('html');
 
   changeUserInfo(user: UserContainerInterface) {
-    /*if (user.darkMode) {
+    if (user.dark_mode) {
       this.body.classList.add('dark-mode');
     } else {
       this.body.classList.remove('dark-mode');
-    }*/
+    }
 
     this.userInfo.next(user);
   }
@@ -35,17 +35,19 @@ export class UserInfoService {
     this.allUsers.next(users);
   }
 
-  /*changeDarkMode(user: UserInterface) {
-    user.darkMode = user.darkMode ? 0 : 1;
+  changeDarkMode() {
+    const user = this.userInfo.getValue();
+
+    user.dark_mode = user.dark_mode ? 0 : 1;
 
     this.userInfo.next(user);
 
-    if (user.darkMode) {
+    if (user.dark_mode) {
       this.body.classList.add('dark-mode');
     } else {
       this.body.classList.remove('dark-mode');
     }
-  }*/
+  }
 
   changeLoginData(loginData: LoginInterface | null) {
     this.loginData.next(loginData);

@@ -23,14 +23,14 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, .95);
+  background-color: rgba(255, 255, 255, .95) !important;
   filter: blur(8px);
   transform: scale(1.5);
   z-index: -1;
 }
 
 %before-dark-bg {
-  background-color: rgba(30, 30, 30, .8);
+  background-color: rgba(30, 30, 30, .8) !important;
 }
 
 html, body {
@@ -221,13 +221,18 @@ a {
 
 .mat-snack-bar-container {
   min-width: inherit !important;
+  margin: 70px 14px !important;
+  color: #444 !important;
+  background-color: rgba(255, 255, 255, .95) !important;
 
   &.error {
-    background-color: #d32f2f !important;
+    color: #FFF !important;
+    background-color: rgba(211, 47, 47, .85) !important;
   }
 
   &.success {
-    background-color: #388e3c !important;
+    color: #FFF !important;
+    background-color: rgba(56, 142, 60, .85) !important;
   }
 }
 
@@ -584,6 +589,12 @@ file-preview-container {
 
   .window-heading {
     border-bottom: solid 1px rgba(0, 0, 0, .8);
+  }
+
+  .mat-snack-bar-container {
+    @extend %before-dark-bg;
+
+    color: #FFF !important;
   }
 }
 

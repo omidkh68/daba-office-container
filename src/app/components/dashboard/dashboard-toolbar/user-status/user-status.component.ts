@@ -129,7 +129,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     const dialogRef = this.dialog.open(ChangeStatusComponent, {
       autoFocus: false,
       width: '500px',
-      height: '355px',
+      height: '385px',
       panelClass: 'status-dialog'
     });/*
 

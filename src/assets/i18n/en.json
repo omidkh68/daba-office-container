@@ -217,6 +217,9 @@
     "for_create_conf_fill_inputs": "For create a conference room, fill items below"
   },
   "profileSettings": {
+    "dark_mode": "Dark Mode",
+    "light_mode": "Light Mode",
+    "profile_settings": "Profile Settings",
     "profile_information": "Profile Information",
     "profile_wallpaper": "Background",
     "edit_user_photo": "Edit User Photo",

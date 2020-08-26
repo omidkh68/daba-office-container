@@ -20,95 +20,111 @@
         <!--<button (click)="toggleContainWithinAspectRatio()">{{containWithinAspectRatio ? 'Fill Aspect Ratio' : 'Contain Within Aspect Ratio'}}</button>-->
         <!--<button (click)="resetImage()">Reset image</button>-->
 
-        <label *ngIf="!showCropper" for="fileChange" class="cursor-pointer pos-abs full-width full-height purple-gradient right-0 top-0 text-white text-center z-index-99" style="line-height: 80vh">
+        <label *ngIf="!showCropper" class="cursor-pointer pos-abs full-width full-height purple-gradient right-0 top-0 text-white text-center z-index-99"
+               for="fileChange"
+               style="line-height: 80vh">
           {{'profileSettings.insert_picture' | translate}}
         </label>
 
-        <input type="file" id="fileChange" hidden (change)="fileChangeEvent($event)"/>
+        <input (change)="fileChangeEvent($event)" hidden id="fileChange" type="file"/>
 
-        <div style="width: 50% !important;" [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
-          <image-cropper style="padding: 15px !important;"
-                         [imageQuality]="50"
-                         format="jpeg"
-                         [imageChangedEvent]="imageChangedEvent"
-                         [maintainAspectRatio]="true"
-                         [containWithinAspectRatio]="containWithinAspectRatio"
-                         [aspectRatio]="1"
-                         [resizeToWidth]=""
-                         [cropperMinWidth]="200"
-                         [onlyScaleDown]="true"
-                         [roundCropper]="false"
-                         [canvasRotation]="canvasRotation"
-                         [transform]="transform"
-                         [alignImage]="'center'"
-                         [style.display]="showCropper ? null : 'none'"
+        <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" style="width: 50% !important;">
+          <image-cropper (cropperReady)="cropperReady($event)"
                          (imageCropped)="imageCropped($event)"
                          (imageLoaded)="imageLoaded()"
-                         (cropperReady)="cropperReady($event)"
-                         (loadImageFailed)="loadImageFailed()">
+                         (loadImageFailed)="loadImageFailed()"
+                         [alignImage]="'center'"
+                         [aspectRatio]="1"
+                         [canvasRotation]="canvasRotation"
+                         [containWithinAspectRatio]="containWithinAspectRatio"
+                         [cropperMinWidth]="200"
+                         [imageChangedEvent]="imageChangedEvent"
+                         [imageQuality]="50"
+                         [maintainAspectRatio]="true"
+                         [onlyScaleDown]="true"
+                         [resizeToWidth]=""
+                         [roundCropper]="false"
+                         [style.display]="showCropper ? null : 'none'"
+                         [transform]="transform"
+                         format="jpeg"
+                         style="padding: 15px !important;">
           </image-cropper>
         </div>
 
-        <div style="width: 50% !important;" [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="padding-l-half padding-r-half">
-            <img [src]="croppedImage" class="round-corner full-width"/>
-          </div>
+        <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="padding-l-half padding-r-half half-width">
+          <img [src]="croppedImage" class="round-corner full-width"/>
+        </div>
 
         <div class="container-tools display-inline-block full-width height-100">
 
-          <button
-            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l pos-abs"
+          <button (click)="onSubmit()"
             [ngClass]="rtlDirection ? 'right-0' : 'left-0'"
-            (click)="onSubmit()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-700">save</mat-icon>
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l pos-abs">
+            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-700">
+              save
+            </mat-icon>
           </button>
 
-          <button
-                  class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
-                  (click)="rotateLeft()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">rotate_left</mat-icon>
+          <button (click)="rotateLeft()"
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
+            <mat-icon
+              class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">
+              rotate_left
+            </mat-icon>
           </button>
 
-
-          <button
-                  class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
-                  (click)="rotateRight()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">rotate_right</mat-icon>
+          <button (click)="rotateRight()"
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
+            <mat-icon
+              class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">
+              rotate_right
+            </mat-icon>
           </button>
 
-          <button
-                  class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
-                  (click)="flipHorizontal()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">360</mat-icon>
+          <button (click)="flipHorizontal()"
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
+            <mat-icon
+              class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">360
+            </mat-icon>
           </button>
 
-          <button
-                  class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
-                  (click)="flipVertical()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">swap_vert</mat-icon>
+          <button (click)="flipVertical()"
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
+            <mat-icon
+              class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">
+              swap_vert
+            </mat-icon>
           </button>
 
-          <button
-                  class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
-                  (click)="zoomIn()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">zoom_in</mat-icon>
+          <button (click)="zoomIn()"
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
+            <mat-icon
+              class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">zoom_in
+            </mat-icon>
           </button>
 
-          <button
-                  class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
-                  (click)="zoomOut()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">zoom_out</mat-icon>
+          <button (click)="zoomOut()"
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
+            <mat-icon
+              class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">
+              zoom_out
+            </mat-icon>
           </button>
 
-          <button
-                  class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
-                  (click)="toggleContainWithinAspectRatio()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">zoom_out_map</mat-icon>
+          <button (click)="toggleContainWithinAspectRatio()"
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
+            <mat-icon
+              class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">
+              zoom_out_map
+            </mat-icon>
           </button>
 
-          <button
-                  class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
-                  (click)="resetImage()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">restore_page</mat-icon>
+          <button (click)="resetImage()"
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
+            <mat-icon
+              class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">
+              restore_page
+            </mat-icon>
           </button>
           <!--<input [(ngModel)]="rotation" placeholder="Rotation" type="number" (keyup)="updateRotation()"/>-->
         </div>

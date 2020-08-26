@@ -11,10 +11,10 @@ export class TaskFilesComponent implements OnInit {
   @Input()
   rtlDirection: boolean;
 
-  adapter = new ApiService(this._http);
+  adapter = new ApiService(this.http);
   fileUploaderCaption = {};
 
-  constructor(private _http: HttpClient,
+  constructor(private http: HttpClient,
               private translate: TranslateService) {
   }
 

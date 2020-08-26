@@ -8,14 +8,15 @@
     </h3>
   </div>-->
 
-  <div *ngIf="sellersPermitString !== ''" class="height-160 pos-rel margin-auto round-corner monitor-image"
-       style="background-color: blueviolet; height: 100vh; max-height: 160px"
-       [ngStyle]="{'width': 'calc(160px *' + environment.width / environment.height + ')' }">
+  <div *ngIf="sellersPermitString !== ''"
+       [ngStyle]="{'width': 'calc(160px *' + environment.width / environment.height + ')' }"
+       class="height-160 pos-rel margin-auto round-corner monitor-image"
+       style="background-color: blueviolet; height: 100vh; max-height: 160px">
 
     <img [src]="sellersPermitString" class="display-block margin-auto full-height">
 
     <div *ngIf="showProgress" class="files-list pos-abs bottom-0 full-width z-index-9999" dir="ltr">
-      <div class="single-file round-corner" *ngFor="let file of files; let i = index">
+      <div *ngFor="let file of files; let i = index" class="single-file round-corner">
         <!--<div class="file-icon" style="width: 50px">
           <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                x="0px" y="0px" viewBox="0 0 58 58" style="enable-background:new 0 0 58 58;" xml:space="preserve">
@@ -48,32 +49,35 @@
       </div>
     </div>
 
-    <div class="delete pos-abs top-0 cursor-pointer" (click)="deleteFile(0)">
-      <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-800">replay</mat-icon>
+    <div (click)="deleteFile(0)" class="delete pos-abs top-0 cursor-pointer">
+      <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-800">
+        replay
+      </mat-icon>
     </div>
 
     <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'wallpaper'"
          class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-999">
       <div class="text-center">
-        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-             width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-        <rect x="0" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+        <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"
+             width="24px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+             y="0px">
+        <rect fill="#333" height="5" width="4" x="0" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
-          <rect x="10" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.15s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-            <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.15s" dur="0.6s"
-                     repeatCount="indefinite"></animate>
+          <rect fill="#333" height="5" width="4" x="10" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+            <animate attributeName="y" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                     values="13; 5; 13"></animate>
         </rect>
-          <rect x="20" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.3s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-            <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.3s" dur="0.6s"
-                     repeatCount="indefinite"></animate>
+          <rect fill="#333" height="5" width="4" x="20" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+            <animate attributeName="y" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                     values="13; 5; 13"></animate>
         </rect>
       </svg>
 
@@ -82,20 +86,25 @@
     </div>
   </div>
 
-  <div *ngIf="sellersPermitString === ''" class="container full-width padding-half round-corner bg-white" appDnd (fileDropped)="onFileDropped($event)">
+  <div (fileDropped)="onFileDropped($event)" *ngIf="sellersPermitString === ''" appDnd
+       class="container full-width padding-half round-corner bg-white">
 
-    <input type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event)" />
+    <input #fileDropRef (change)="fileBrowseHandler($event)" id="fileDropRef" multiple type="file"/>
 
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cloud-upload" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#009688" fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <path stroke="none" d="M0 0h24v24H0z"/>
-      <path d="M7 18a4.6 4.4 0 0 1 0 -9h0a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1" />
-      <polyline points="9 15 12 12 15 15" />
-      <line x1="12" y1="12" x2="12" y2="21" />
+    <svg class="icon icon-tabler icon-tabler-cloud-upload" fill="none" height="44" stroke="#009688"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="44"
+         xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" stroke="none"/>
+      <path d="M7 18a4.6 4.4 0 0 1 0 -9h0a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"/>
+      <polyline points="9 15 12 12 15 15"/>
+      <line x1="12" x2="12" y1="12" y2="21"/>
     </svg>
 
     <h6 class="margin-t-half font-full-plus-one-tenth-em">{{'profileSettings.drag_drop_text1' | translate}}</h6>
-    <label mat-raised-button class="margin-t-full display-inline-block cursor-pointer mat-raised-button green-gradient padding-mini-r-l text-white line-height-30 font-9-em text-weight-normal"
-           for="fileDropRef">
+    <label
+      class="margin-t-full display-inline-block cursor-pointer mat-raised-button green-gradient padding-mini-r-l text-white line-height-30 font-9-em text-weight-normal"
+      for="fileDropRef"
+      mat-raised-button>
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
       <span class="padding-mini-r-l">{{'profileSettings.drag_drop_text3' | translate}}</span>
     </label>
@@ -103,16 +112,16 @@
 
   <mat-dialog-content class="display-block custom-mat-dialog-content no-margin no-padding overflow-hide">
     <mat-tab-group mat-align-tabs="center">
-      <mat-tab label="{{'profileSettings.pictures' | translate}}" class="height-48">
+      <mat-tab class="height-48" label="{{'profileSettings.pictures' | translate}}">
         <div class="pos-rel full-height">
           <div class="scrollable-content">
             <div class="row center-block font-8-rem">
               <div *ngFor="let picture of wallpapersPictures"
-                   class="col-xs-4 col-sm-3 col-md-3 margin-b-full height-100"
-                   [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
-                <mat-card class="mat-elevation-z1 full-width full-height wallpaper cursor-pointer"
-                          (click)="changeWallpaper(picture.value)"
-                          [style.background]="picture.value">
+                   [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+                   class="col-xs-4 col-sm-3 col-md-3 margin-b-full height-100">
+                <mat-card (click)="changeWallpaper(picture.value)"
+                          [style.background]="picture.value"
+                          class="mat-elevation-z1 full-width full-height wallpaper cursor-pointer">
                 </mat-card>
               </div>
             </div>
@@ -124,11 +133,11 @@
           <div class="scrollable-content">
             <div class="row center-block font-8-rem">
               <div *ngFor="let grediant of wallpapersGrediant"
-                   class="col-xs-4 col-sm-3 col-md-3 margin-b-full height-100"
-                   [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
-                <mat-card class="mat-elevation-z1 full-width full-height cursor-pointer"
-                          (click)="changeWallpaper(grediant.value)"
-                          [style.background]="grediant.value">
+                   [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+                   class="col-xs-4 col-sm-3 col-md-3 margin-b-full height-100">
+                <mat-card (click)="changeWallpaper(grediant.value)"
+                          [style.background]="grediant.value"
+                          class="mat-elevation-z1 full-width full-height cursor-pointer">
                 </mat-card>
               </div>
             </div>
@@ -140,11 +149,11 @@
           <div class="scrollable-content">
             <div class="row center-block font-8-rem">
               <div *ngFor="let color of wallpapersSolidColors"
-                   class="col-xs-4 col-sm-3 col-md-3 margin-b-full height-100"
-                   [ngClass]="rtlDirection ? 'float-right' : 'float-left'">
-                <mat-card class="mat-elevation-z1 full-width full-height cursor-pointer"
-                          (click)="changeWallpaper(color.value)"
-                          [style.background]="color.value">
+                   [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+                   class="col-xs-4 col-sm-3 col-md-3 margin-b-full height-100">
+                <mat-card (click)="changeWallpaper(color.value)"
+                          [style.background]="color.value"
+                          class="mat-elevation-z1 full-width full-height cursor-pointer">
                 </mat-card>
               </div>
             </div>

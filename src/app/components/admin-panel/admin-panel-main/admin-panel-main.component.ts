@@ -1,16 +1,18 @@
-import {Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Injector, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {LoginDataClass} from '../../../services/loginData.class';
+import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
-  selector: 'app-web-browser-main',
-  templateUrl: './web-browser-main.component.html',
-  styleUrls: ['./web-browser-main.component.scss']
+  selector: 'app-admin-panel-main',
+  templateUrl: './admin-panel-main.component.html',
+  styleUrls: ['./admin-panel-main.component.scss']
 })
-export class WebBrowserMainComponent implements OnDestroy {
+export class AdminPanelMainComponent extends LoginDataClass implements AfterViewInit, OnDestroy {
   @ViewChild('webFrame', {static: false}) webFrame: ElementRef;
 
   rtlDirection: boolean;
@@ -19,9 +21,13 @@ export class WebBrowserMainComponent implements OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
-              private viewDirection: ViewDirectionService,
+              private injector: Injector,
+              private userInfoService: UserInfoService,
               private translateService: TranslateService,
+              private viewDirection: ViewDirectionService,
               private loadingIndicatorService: LoadingIndicatorService) {
+    super(injector, userInfoService);
+
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );
@@ -29,6 +35,16 @@ export class WebBrowserMainComponent implements OnDestroy {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
+  }
+
+  ngAfterViewInit(): void {
+    if (this.webFrame) {
+      const address = `http://localhost:4201/#/home/?tokenType=${this.loginData.token_type}&accessToken=${this.loginData.access_token}`;
+
+      console.log(address);
+
+      this.webFrame.nativeElement.setAttribute('src', address);
+    }
   }
 
   getTranslate(word) {

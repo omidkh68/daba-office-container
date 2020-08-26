@@ -55,13 +55,13 @@ export class LoginFormComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
 
-    // setTimeout(() => this.login(), 200); // todo: remove this in production
+    setTimeout(() => this.login(), 200); // todo: remove this in production
   }
 
   createForm() {
     return new Promise((resolve) => {
       this.form = this.fb.group({
-        username: new FormControl('ab.ebrahimi@dabacenter.ir'),
+        username: new FormControl('khosrojerdi@dabacenter.ir'),
         password: new FormControl('123456'),
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });

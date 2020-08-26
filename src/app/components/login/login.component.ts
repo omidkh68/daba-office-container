@@ -1,7 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {ViewDirectionService} from '../../services/view-direction.service';
 import {ElectronService} from '../../services/electron.service';
+import {ViewDirectionService} from '../../services/view-direction.service';
 
 @Component({
   selector: 'app-login',

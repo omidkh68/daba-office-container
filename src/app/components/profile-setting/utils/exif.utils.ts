@@ -1,4 +1,4 @@
-import { ExifTransform } from "../logic/exif-transform.interface";
+import {ExifTransform} from '../logic/exif-transform.interface';
 
 // black 2x1 JPEG, with the following meta information set:
 // - EXIF Orientation: 6 (Rotated 90° CCW)
@@ -27,14 +27,22 @@ export function getTransformationsFromExifData(exifRotationOrBase64Image: number
     exifRotationOrBase64Image = getExifRotation(exifRotationOrBase64Image);
   }
   switch (exifRotationOrBase64Image) {
-    case 2: return {rotate: 0, flip: true};
-    case 3: return {rotate: 2, flip: false};
-    case 4: return {rotate: 2, flip: true};
-    case 5: return {rotate: 1, flip: true};
-    case 6: return {rotate: 1, flip: false};
-    case 7: return {rotate: 3, flip: true};
-    case 8: return {rotate: 3, flip: false};
-    default: return {rotate: 0, flip: false};
+    case 2:
+      return {rotate: 0, flip: true};
+    case 3:
+      return {rotate: 2, flip: false};
+    case 4:
+      return {rotate: 2, flip: true};
+    case 5:
+      return {rotate: 1, flip: true};
+    case 6:
+      return {rotate: 1, flip: false};
+    case 7:
+      return {rotate: 3, flip: true};
+    case 8:
+      return {rotate: 3, flip: false};
+    default:
+      return {rotate: 0, flip: false};
   }
 }
 

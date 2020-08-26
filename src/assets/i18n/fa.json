@@ -218,6 +218,9 @@
     "for_create_conf_fill_inputs": "برای ایجاد و یا پیوستن به کنفرانس اطلاعات را پر نمایید"
   },
   "profileSettings": {
+    "dark_mode": "حالت تیره",
+    "light_mode": "حالت روشن",
+    "profile_settings": "تنظیمات پروفایل",
     "profile_information": "اطلاعات کاربری",
     "profile_wallpaper": "تصویر پس زمینه",
     "edit_user_photo": "ویرایش عکس کابری",
@@ -229,7 +232,7 @@
     "drag_drop_text1": "عکس را در اینجا رها کنید",
     "drag_drop_text2": "و یا",
     "drag_drop_text3": "انتخاب کنید",
-    "timezone": "منطقه زمانی",
-    "timezone_error": "منطقه زمانی را انتخاب کنید"
+    "timezone": "وقت محلی",
+    "timezone_error": "لطفا وقت محلی خود را انتخاب کنید"
   }
 }

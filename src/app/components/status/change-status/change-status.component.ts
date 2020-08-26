@@ -135,11 +135,11 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
   activeStatus(status: StatusDetailInterface) {
     if (status.is_description) {
-      this.dialogRef.updateSize('500px', '475px');
+      this.dialogRef.updateSize('500px', '490px');
 
       this.form.get('is_description').setValue(status.is_description);
     } else {
-      this.dialogRef.updateSize('500px', '355px');
+      this.dialogRef.updateSize('500px', '385px');
     }
 
     this.form.get('status').setValue(status);

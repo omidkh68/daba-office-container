@@ -8,6 +8,7 @@ import {WebBrowserComponent} from '../components/web-browser/web-browser.compone
 import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
 import {DialogPositionInterface, WindowInterface} from '../components/dashboard/logic/window.interface';
 import {EventsHandlerComponent} from "../components/events/events-handler.component";
+import {AdminPanelComponent} from '../components/admin-panel/admin-panel.component';
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,12 @@ export class WindowManagerService {
 
         case 'events_calendar': {
           component = EventsHandlerComponent;
+          hasFrame = true;
+          break;
+        }
+
+        case 'admin_panel': {
+          component = AdminPanelComponent;
           hasFrame = true;
           break;
         }
