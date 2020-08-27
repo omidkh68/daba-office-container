@@ -233,6 +233,7 @@
     "drag_drop_text2": "and or",
     "drag_drop_text3": "Browse for file",
     "timezone": "Timezone",
-    "timezone_error": "Select Timezone"
+    "timezone_error": "Select Timezone",
+    "name_family": "First Name And Last Name"
   }
 }

@@ -4,7 +4,7 @@
       <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                 class="text-dark-mode-color pos-rel top-one-tenth">settings
       </mat-icon>
-      {{'global.settings' | translate}}
+      {{'profileSettings.profile_settings' | translate}}
     </h3>
   </div>
 
@@ -30,26 +30,26 @@
           <div *ngSwitchCase="0" class="full-height">
 
             <!--btn edit form-->
-            <div class="pos-abs left-0 top-0">
+            <!--<div class="pos-abs left-0 top-0">
               <button (click)="editableForm()"
                       class="no-border cursor-pointer no-bg text-center width-45 height-40 text-green-400 no-padding"
                       type="button">
                 <mat-icon class="line-height-30">edit</mat-icon>
               </button>
-            </div>
+            </div>-->
             <!--end of btn edit form-->
 
             <!--image cropper-->
-            <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-                 class="container-image-profile display-inline-block">
-              <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="image-profile">
+            <div class="container-image-profile display-flex justify-content-center">
+              <div class="image-profile">
                 <div [dir]="rtlDirection ? 'rtl' : 'ltr'"
-                     class="box mat-elevation-z1 pos-rel text-center round-corner width-200 height-215 overflow-hide">
-                  <img [src]="loggedInUser.profile_image" alt=""
-                       class="full-width full-height cursor-pointer" onerror="this.src='assets/profileImg/0.jpg'">
+                     class="box mat-elevation-z1 pos-rel text-center round-corner width-170 height-170 overflow-hide">
+                  <img class="full-width full-height cursor-pointer"
+                       [src]="loggedInUser.profile_image" alt=""
+                       onerror="this.src='assets/profileImg/0.jpg'">
                   <div (click)="showCropperImage()"
                        class="overlay-image cursor-pointer pos-abs full-width full-height purple-gradient">
-                    <mat-icon class="no-padding full-width full-height line-height-200 font-full-rem-2 text-white">
+                    <mat-icon class="no-padding full-width full-height line-height-170 font-full-rem-2 text-white">
                       camera_alt
                     </mat-icon>
                   </div>
@@ -58,81 +58,18 @@
             </div>
             <!--end of image cropper-->
 
-            <!--container dark mode & change lang-->
-            <div class="display-flex flex-direction-column">
-              <!--dark mode-->
-              <div class="display-flex dark-mode height-50 margin-r-half margin-l-half align-items-center">
-                <div class="container-dark-mode">
-                  <label for="darkMode">
-                    <input (change)="changeDarkMode($event)" checked id="darkMode" type="checkbox">
-                    <span class="planet display-block">
-                    </span>
-                    <span class="elements display-block">
-                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="250" cy="250" r="200"></circle>
-                      </svg>
-                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="250" cy="250" r="200"></circle>
-                      </svg>
-                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="250" cy="250" r="200"></circle>
-                      </svg>
-                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="250" cy="250" r="200"></circle>
-                      </svg>
-                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="250" cy="250" r="200"></circle>
-                      </svg>
-                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="250" cy="250" r="200"></circle>
-                      </svg>
-                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="250" cy="250" r="200"></circle>
-                      </svg>
-                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="250" cy="250" r="200"></circle>
-                      </svg>
-                    </span>
-                  </label>
-                </div>
-                <span>{{(loggedInUser.dark_mode ? 'profileSettings.dark_mode' : 'profileSettings.light_mode') | translate}}</span>
-              </div>
-              <!--end of dark mode-->
-
-              <!--change lang-->
-              <div class="padding-r-l margin-t-half" mat-menu-item>
-
-                <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="font-7-rem width-35">
-                  <mat-icon>translate</mat-icon>
-                </div>
-
-                <div (click)="changeLang(true)"
-                     [ngClass]="rtlDirection ? 'float-right margin-l-full active' : 'float-left margin-r-full'"
-                     class="padding-mini-r-l full-height parsi-lang">
-                  <span>پارسی</span>
-                </div>
-                <div (click)="changeLang(false)"
-                     [ngClass]="rtlDirection ? 'float-right' : 'float-left active'"
-                     class="padding-mini-r-l full-height english-lang">
-                  <span>English</span>
-                </div>
-              </div>
-              <!--end of change lang-->
-            </div>
-            <!--end of container dark mode & change lang-->
-
             <!--form-->
             <div class="full-width display-inline-block">
               <form *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="form">
                 <div class="row no-margin">
                   <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-                       class="col-xs-12 col-sm-6 col-md-6 margin-t-full">
+                       class="col-xs-12 col-sm-12 col-md-12 margin-t-full">
                     <mat-form-field class="full-width">
-                      <mat-label>{{'global.name' | translate}}</mat-label>
+                      <mat-label>{{'profileSettings.name_family' | translate}}</mat-label>
                       <input class="full-width"
                              formControlName="name"
                              matInput
-                             placeholder="{{'global.name' | translate}}"
+                             placeholder="{{'profileSettings.name_family' | translate}}"
                              required>
                       <mat-error>{{'global.name_error' | translate}}</mat-error>
                     </mat-form-field>
@@ -203,31 +140,112 @@
                     </mat-form-field>
                   </div>
                 </div>
-
-                <div
-                  class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end padding-r-half padding-l-half">
-                  <button (click)="cancelBtn()"
-                          *ngIf="editable"
-                          class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal"
-                          type="button">
-                    <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
-                  </button>
-
-                  <button (click)="onSubmit()"
-                          *ngIf="editable"
-                          [disabled]="!form.valid"
-                          class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
-                          mat-raised-button
-                          tabindex="13"
-                          type="submit">
-                    <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
-                    <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
-                  </button>
-                </div>
               </form>
             </div>
             <!--end of form-->
 
+            <!--container dark mode & change lang-->
+            <div class="row no-margin">
+              <!--dark mode-->
+              <div class="col-xs-12 col-sm-6 col-md-6 margin-t-full">
+                <div class="display-flex flex-direction-column">
+                  <div class="display-flex dark-mode height-50 margin-r-half margin-l-half align-items-center">
+                    <div class="container-dark-mode">
+                      <label for="darkMode">
+                        <input (change)="changeDarkMode($event)" id="darkMode" type="checkbox">
+                        <span class="planet display-block">
+                    </span>
+                        <span class="elements display-block">
+                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="250" cy="250" r="200"></circle>
+                      </svg>
+                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="250" cy="250" r="200"></circle>
+                      </svg>
+                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="250" cy="250" r="200"></circle>
+                      </svg>
+                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="250" cy="250" r="200"></circle>
+                      </svg>
+                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="250" cy="250" r="200"></circle>
+                      </svg>
+                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="250" cy="250" r="200"></circle>
+                      </svg>
+                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="250" cy="250" r="200"></circle>
+                      </svg>
+                      <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="250" cy="250" r="200"></circle>
+                      </svg>
+                    </span>
+                      </label>
+                    </div>
+                    <span class="width-100">{{(loggedInUser.dark_mode ? 'profileSettings.dark_mode' : 'profileSettings.light_mode') | translate}}</span>
+                  </div>
+                </div>
+              </div>
+              <!--end of dark mode-->
+
+              <!--change lang-->
+              <div class="col-xs-12 col-sm-6 col-md-6 margin-t-full">
+                <mat-form-field class="full-width">
+                  <mat-label class="text-weight-bold"><mat-icon>translate</mat-icon></mat-label>
+                  <mat-select (selectionChange)="changeLang($event)" [(value)]="defaultLang">
+                    <mat-option *ngFor="let lang of langs" [value]="lang.id">
+                      {{lang.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <!--end of change lang-->
+            </div>
+            <!--change lang-->
+            <!--<div class="padding-r-l margin-t-half" mat-menu-item>
+
+              <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="font-7-rem width-35">
+                <mat-icon>translate</mat-icon>
+              </div>
+
+              <div (click)="changeLang(true)"
+                   [ngClass]="rtlDirection ? 'float-right margin-l-full active' : 'float-left margin-r-full'"
+                   class="padding-mini-r-l full-height parsi-lang">
+                <span>پارسی</span>
+              </div>
+              <div (click)="changeLang(false)"
+                   [ngClass]="rtlDirection ? 'float-right' : 'float-left active'"
+                   class="padding-mini-r-l full-height english-lang">
+                <span>English</span>
+              </div>
+            </div>-->
+            <!--end of change lang-->
+            <!--end of container dark mode & change lang-->
+
+            <div class="row no-margin">
+              <!--dark mode-->
+              <div class="col-xs-12 col-sm-12 col-md-12 margin-t-full">
+                <div
+                  class="height-45 full-width">
+                  <!--<button (click)="cancelBtn()"
+
+                          class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal"
+                          type="button">
+                    <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
+                  </button>-->
+
+                  <button (click)="onSubmit()"
+                          [disabled]="!form.valid"
+                          class="full-width green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+                          mat-raised-button
+                          tabindex="13"
+                          type="submit">
+                    <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <!--/ end of profile container -->
 
@@ -241,6 +259,7 @@
     </div>
   </div>
 </div>
+
 
 <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'changeLang'"
      class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-999">

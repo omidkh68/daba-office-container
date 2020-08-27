@@ -2,7 +2,6 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
-import {DndDirective} from "../profile-setting/dnd.directive";
 import {DatetimeService} from "../profile-setting/logic/datetime.service";
 import {ProgressComponent} from "../profile-setting/progress/progress.component";
 import {TimeAreaComponent} from './dashboard-toolbar/time-area/time-area.component';
@@ -16,18 +15,15 @@ import {ProfileMenuComponent} from './dashboard-toolbar/profile-menu/profile-men
 import {ChangeStatusComponent} from '../status/change-status/change-status.component';
 import {TimeAreaClockComponent} from './dashboard-toolbar/time-area/time-area-clock/time-area-clock.component';
 import {ProfileSettingComponent} from "../profile-setting/profile-setting.component";
-import {ProfileWallpaperComponent} from "../profile-setting/profile-wallpaper/profile-wallpaper.component";
 import {DashboardToolbarComponent} from './dashboard-toolbar/dashboard-toolbar.component';
 import {ShowImageCropperComponent} from "../profile-setting/show-image-cropper/show-image-cropper.component";
 import {WindowAppContainerComponent} from './dashboard-toolbar/window-app-container/window-app-container.component';
-import {ProfileInformationComponent} from "../profile-setting/profile-information/profile-information.component";
 import {DashboardDatepickerComponent} from "./dashboard-datepicker/dashboard-datepicker.component";
 import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-call/soft-phone-incoming-call.component';
 
 
 @NgModule({
   declarations: [
-    DndDirective,
     DatetimeService,
     ProgressComponent,
     MainMenuComponent,
@@ -41,10 +37,8 @@ import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-
     TimeAreaClockComponent,
     ProfileSettingComponent,
     DashboardToolbarComponent,
-    ProfileWallpaperComponent,
     ShowImageCropperComponent,
     WindowAppContainerComponent,
-    ProfileInformationComponent,
     DashboardDatepickerComponent,
     SoftPhoneIncomingCallComponent
   ],
