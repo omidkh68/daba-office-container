@@ -183,7 +183,8 @@
                     </span>
                       </label>
                     </div>
-                    <span class="width-100">{{(loggedInUser.dark_mode ? 'profileSettings.dark_mode' : 'profileSettings.light_mode') | translate}}</span>
+                    <span
+                      class="width-100">{{(loggedInUser.dark_mode ? 'profileSettings.dark_mode' : 'profileSettings.light_mode') | translate}}</span>
                   </div>
                 </div>
               </div>
@@ -192,7 +193,9 @@
               <!--change lang-->
               <div class="col-xs-12 col-sm-6 col-md-6 margin-t-full">
                 <mat-form-field class="full-width">
-                  <mat-label class="text-weight-bold"><mat-icon>translate</mat-icon></mat-label>
+                  <mat-label class="text-weight-bold">
+                    <mat-icon>translate</mat-icon>
+                  </mat-label>
                   <mat-select (selectionChange)="changeLang($event)" [(value)]="defaultLang">
                     <mat-option *ngFor="let lang of langs" [value]="lang.id">
                       {{lang.name}}

@@ -21,7 +21,6 @@ import {WindowAppContainerComponent} from './dashboard-toolbar/window-app-contai
 import {DashboardDatepickerComponent} from "./dashboard-datepicker/dashboard-datepicker.component";
 import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-call/soft-phone-incoming-call.component';
 
-
 @NgModule({
   declarations: [
     DatetimeService,

@@ -41,7 +41,7 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
     if (this.webFrame) {
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'adminPanel'});
 
-      const address = `http://localhost:4201/#/home/?tokenType=${this.loginData.token_type}&accessToken=${this.loginData.access_token}`;
+      const address = `http://admincontainer.dabacenter.ir/#/home/?tokenType=${this.loginData.token_type}&accessToken=${this.loginData.access_token}`;
 
       this.webFrame.nativeElement.setAttribute('src', address);
 
