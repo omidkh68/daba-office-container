@@ -21,6 +21,11 @@ export interface Timezones {
   timezone: string;
 }
 
+export interface LangInterface {
+  id: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-profile-setting',
   templateUrl: './profile-setting.component.html',
@@ -28,6 +33,7 @@ export interface Timezones {
 })
 export class ProfileSettingComponent extends LoginDataClass implements OnInit, AfterViewInit {
 
+  defaultLang = 'fa';
   tabs = [];
   form: FormGroup;
   activeTab: number = 0;
@@ -41,6 +47,16 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
   checkMoreClock: boolean;
   checkMoreClockContent: boolean;
   cityClocksList: Timezones[];
+  langs: LangInterface[] = [
+    {
+      id: 'en',
+      name: 'English'
+    },
+    {
+      id: 'fa',
+      name: 'پارسی'
+    }
+  ];
   private _subscription: Subscription = new Subscription();
 
   /*timezone*/
@@ -128,7 +144,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
   }
 
   formPatchValue() {
-    this.form.disable();
+    // this.form.disable();
     this.editable = false;
 
     const newTimezone = {};
@@ -275,12 +291,12 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
   changeLang(language) {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
 
-    this.viewDirection.changeDirection(language === true);
+    this.viewDirection.changeDirection(language.value === true);
 
-    setTimeout(() => {
+    /*setTimeout(() => {
       window.location.reload();
 
-    }, 500);
+    }, 500);*/
   }
 
   setClockCity(option) {

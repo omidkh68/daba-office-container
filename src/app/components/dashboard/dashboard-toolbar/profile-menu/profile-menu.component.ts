@@ -54,8 +54,8 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
   settingProfile() {
     const dialogRef = this.dialog.open(ProfileSettingComponent, {
       autoFocus: false,
-      width: '700px',
-      height: '600px',
+      width: '450px',
+      height: '620px',
       panelClass: 'status-dialog'
     });
 

@@ -234,6 +234,7 @@
     "drag_drop_text2": "و یا",
     "drag_drop_text3": "انتخاب کنید",
     "timezone": "وقت محلی",
-    "timezone_error": "لطفا وقت محلی خود را انتخاب کنید"
+    "timezone_error": "لطفا وقت محلی خود را انتخاب کنید",
+    "name_family": "نام و نام خانوادگی"
   }
 }
