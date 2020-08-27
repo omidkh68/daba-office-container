@@ -2,15 +2,17 @@
      [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <form [formGroup]="form" (submit)="submit()" class="full-height">
     <div class="full-width height-full-minus-35">
-      <h1 class="font-full-em height-35 line-height-35 text-weight-500">{{'status.apply_status' | translate}}</h1>
+      <h1 class="font-full-em height-35 line-height-35 text-weight-500 no-margin">
+        {{'status.apply_status' | translate}}
+      </h1>
 
       <a (click)="closeDialog()" [ngClass]="rtlDirection ? 'left-full' : 'right-full'"
          class="pos-abs top-full cursor-pointer text-gray-600">
         <mat-icon class="text-grey-500">close</mat-icon>
       </a>
 
-      <div class="height-full-minus-35 overflow-y-auto overflow-x-hide padding-half">
-        <mat-grid-list *ngIf="statusList.length" cols="4" gutterSize="30" rowHeight="100px" class="margin-b-full">
+      <div class="height-full-minus-35 padding-b-full">
+        <mat-grid-list *ngIf="statusList.length" cols="3" gutterSize="15" rowHeight="80px">
           <mat-grid-tile
             class="board-container"
             *ngFor="let status of statusList"
@@ -18,7 +20,7 @@
             [rowspan]="1">
             <mat-card (click)="activeStatus(status)"
                       [ngClass]="[status.id === form.get('status').value.id ? 'active-status' : '', status.label.toLowerCase() === 'smoking' ? 'cursor-ignore' : '']"
-                      [class]="'status-' + status.label.replace(' ', '_').toLocaleLowerCase() + ' status-item pos-rel full-width full-height round-corner mat-elevation-z1 card-bg cursor-pointer'">
+                      [class]="'status-' + status.label.replace(' ', '_').toLocaleLowerCase() + ' status-item pos-rel full-width full-height round-corner mat-elevation-z1 card-bg cursor-pointer padding-half'">
               <mat-icon
                 *ngIf="status.id === form.get('status').value.id"
                 class="pos-abs font-9-em text-center line-height-15 text-white bg-green bottom-half-reverse right-0 left-0 margin-auto width-15 height-15 round-corner-all">
@@ -36,8 +38,8 @@
           </mat-grid-tile>
         </mat-grid-list>
 
-        <div *ngIf="form.get('status').value.is_description" class="margin-b-half">
-          <mat-form-field class="full-width height-110 font-9-em">
+        <div *ngIf="form.get('status').value.is_description" class="padding-t-full margin-b-half">
+          <mat-form-field class="full-width height-100 font-9-em">
             <mat-label>{{'status.status_description' | translate}}</mat-label>
             <textarea matInput formControlName="description"
                       placeholder="{{'status.status_description_error' | translate}}"></textarea>

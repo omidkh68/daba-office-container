@@ -22,31 +22,31 @@ export class ApiService {
     })
   };
 
-  constructor(private _http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   getTodoList(taskId: number): Observable<TodoInterface[]> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
     this.headers.headers = this.headers.headers.set('From', 'app_application');
 
-    return this._http.get<TodoInterface[]>(`${this.API_URL}/todo/?taskId=${taskId}`, this.headers);
+    return this.http.get<TodoInterface[]>(`${this.API_URL}/todo/?taskId=${taskId}`, this.headers);
   }
 
   createTodo(todo: TodoInterface): Observable<TodoInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.post<TodoInterface>(`${this.API_URL}/todo/add`, todo, this.headers);
+    return this.http.post<TodoInterface>(`${this.API_URL}/todo/add`, todo, this.headers);
   }
 
   updateTodo(todo: TodoInterface): Observable<TodoInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.patch<TodoInterface>(`${this.API_URL}/todo`, todo, this.headers);
+    return this.http.patch<TodoInterface>(`${this.API_URL}/todo`, todo, this.headers);
   }
 
   deleteTodo(todoInfo: TodoTaskInterface) {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.delete(`${this.API_URL}/todo/?todoId=${todoInfo.todoId}&taskId=${todoInfo.taskId}`, this.headers);
+    return this.http.delete(`${this.API_URL}/todo/?todoId=${todoInfo.todoId}&taskId=${todoInfo.taskId}`, this.headers);
   }
 }

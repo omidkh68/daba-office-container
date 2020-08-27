@@ -40,13 +40,13 @@ export class TimeAreaClockComponent implements AfterViewInit{
     event.stopPropagation();
     if(this.item_index != 0)
       this.cityClocksList.splice(this.item_index, 1)
-  }
+  };
 
   init = () => {
     this.createIndicators();
     this.setHands();
     setInterval(this.runClock,1000);
-  }
+  };
 
   setHands = () => {
     const _date = new Date().toLocaleTimeString("en-US", {timeZone: this.item.timezone , hour12: false});
@@ -63,7 +63,8 @@ export class TimeAreaClockComponent implements AfterViewInit{
     this.hours.nativeElement.style.transform = 'rotate('+ (this.hours_angle) +'deg)';
     this.minutes.nativeElement.style.transform = 'rotate('+ (this.minutes_angle) +'deg)';
     this.seconds.nativeElement.style.transform = 'rotate('+ (this.seconds_angle) +'deg)';
-  }
+  };
+
   runClock = () => {
     this.seconds.nativeElement.style.transform = 'rotate('+ (this.seconds_angle) +'deg)';
 
@@ -84,7 +85,7 @@ export class TimeAreaClockComponent implements AfterViewInit{
     }else {
       this.seconds_angle += (this.degrees/60);
     }
-  }
+  };
 
   controlBouncing = () => {
     this.seconds.nativeElement.classList.add('no-transition');
@@ -96,7 +97,7 @@ export class TimeAreaClockComponent implements AfterViewInit{
 
     this.seconds.nativeElement.removeEventListener('transitionend', this.controlBouncing);
     this.seconds_angle += (this.degrees/60);
-  }
+  };
 
   createIndicators = () => {
     for(let i = 0; i< 60; i++) {
@@ -110,7 +111,7 @@ export class TimeAreaClockComponent implements AfterViewInit{
 
       this.clock.nativeElement.appendChild(indicator);
     }
-  }
+  };
 
 
   ngAfterViewInit(): void {

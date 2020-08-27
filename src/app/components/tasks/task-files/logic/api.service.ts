@@ -17,7 +17,7 @@ export class ApiService extends FilePickerAdapter {
     })
   };
 
-  constructor(private _http: HttpClient) {
+  constructor(private http: HttpClient) {
     super();
   }
 
@@ -28,7 +28,7 @@ export class ApiService extends FilePickerAdapter {
 
     const req = new HttpRequest('POST', `${this.API_URL}/boards/task/file`, form, {reportProgress: true});
 
-    return this._http.request(req)
+    return this.http.request(req)
       .pipe(
         map((res: HttpEvent<any>) => {
           if (res.type === HttpEventType.Response) {
@@ -43,6 +43,6 @@ export class ApiService extends FilePickerAdapter {
   }
 
   public removeFile(fileItem): Observable<any> {
-    return this._http.post(`${this.API_URL}`, {});
+    return this.http.post(`${this.API_URL}`, {});
   }
 }

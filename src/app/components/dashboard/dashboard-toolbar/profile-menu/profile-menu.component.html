@@ -1,7 +1,7 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'"
      class="box mat-elevation-z1 pos-rel text-center round-corner width-40 height-40 overflow-hide">
   <img [matMenuTriggerFor]="profileMenu" class="full-width full-height cursor-pointer"
-       [src]="'assets/profileImg/'+ loggedInUser.email +'.jpg'"
+       [src]="loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser.email +'.jpg'"
        onerror="this.src='assets/profileImg/0.jpg'"
        [alt]="loggedInUser.name">
 </div>
@@ -22,7 +22,7 @@
   </h4>
   <button mat-menu-item (click)="settingProfile()" class="font-7-rem padding-mini-r-l">
     <mat-icon class="text-dark-mode-color">settings</mat-icon>
-    <span class="text-dark-mode-color">{{'global.settings' | translate}}</span>
+    <span class="text-dark-mode-color">{{'profileSettings.profile_settings' | translate}}</span>
   </button>
   <button mat-menu-item (click)="logout()" class="font-7-rem padding-mini-r-l">
     <mat-icon class="text-dark-mode-color">power_settings_new</mat-icon>

@@ -14,14 +14,6 @@ export interface Timezones {
   providedIn: 'root',
 })
 export class DatetimeService {
-  private weekDaysFa = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
-  private monthFa = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
-  private weekDaysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  private datetime;
-  private todayJalali = moment().locale('fa').format('D') + ' ' + this.monthFa[moment().locale('fa').format('M')] + ' ' + moment().locale('fa').format('YYYY');
-  private todayGregorian = moment().locale('en').format('D') + ' ' + moment().locale('en').format('MMMM') + ' ' + moment().locale('en').format('YYYY');
-  private todayJalaliDayName = this.weekDaysFa[new Date().getDay() + 1];
-  private todayGregorianDayName = this.weekDaysEn[new Date().getDay()];
   public aryIannaTimeZones: Timezones[] = [
     {city: 'Tehran', timezone: 'Asia/Tehran'},
     {city: 'Andorra', timezone: 'Europe/Andorra'},
@@ -372,6 +364,14 @@ export class DatetimeService {
     {city: 'Apia', timezone: 'Pacific/Apia'},
     {city: 'Johannesburg', timezone: 'Africa/Johannesburg'}
   ];
+  private weekDaysFa = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
+  private monthFa = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+  private weekDaysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  private datetime;
+  private todayJalali = moment().locale('fa').format('D') + ' ' + this.monthFa[moment().locale('fa').format('M')] + ' ' + moment().locale('fa').format('YYYY');
+  private todayGregorian = moment().locale('en').format('D') + ' ' + moment().locale('en').format('MMMM') + ' ' + moment().locale('en').format('YYYY');
+  private todayJalaliDayName = this.weekDaysFa[new Date().getDay() + 1];
+  private todayGregorianDayName = this.weekDaysEn[new Date().getDay()];
 
   changeDatetimeLabel(rtlDirection: boolean) {
     if (rtlDirection) {

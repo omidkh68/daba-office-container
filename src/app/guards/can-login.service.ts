@@ -3,10 +3,10 @@ import {of} from 'rxjs/internal/observable/of';
 import {catchError, map} from 'rxjs/operators';
 import {Observable} from 'rxjs/internal/Observable';
 import {ApiService} from '../components/users/logic/api.service';
-import {CanActivate, Router} from '@angular/router';
+import {CanActivate} from '@angular/router';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {UserInfoService} from '../components/users/services/user-info.service';
 import {LoginDataClass} from '../services/loginData.class';
+import {UserInfoService} from '../components/users/services/user-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,6 @@ export class CanShowLogin extends LoginDataClass implements CanActivate, OnDestr
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
-              private _router: Router,
               private injector: Injector,
               private userInfoService: UserInfoService) {
     super(injector, userInfoService);

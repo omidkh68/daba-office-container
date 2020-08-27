@@ -25,7 +25,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
-              private _fb: FormBuilder,
+              private fb: FormBuilder,
               private injector: Injector,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
@@ -59,7 +59,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
 
   createForm() {
     return new Promise((resolve) => {
-      this.form = this._fb.group({
+      this.form = this.fb.group({
         taskId: new FormControl(0),
         taskName: new FormControl('', Validators.required),
         percentage: new FormControl(0, Validators.required),

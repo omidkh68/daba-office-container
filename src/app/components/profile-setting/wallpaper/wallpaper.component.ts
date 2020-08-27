@@ -1,15 +1,14 @@
-import {Component, OnInit, OnDestroy, Inject, Injector} from '@angular/core';
-import {ViewDirectionService} from "../../../services/view-direction.service";
-import {WallpaperSelectorService} from "../../../services/wallpaper-selector.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {LoadingIndicatorInterface, LoadingIndicatorService} from "../../../services/loading-indicator.service";
-import {Subscription} from "rxjs/internal/Subscription";
-import {ElectronService} from "../../../services/electron.service";
-import {UserContainerInterface} from "../../users/logic/user-container.interface";
-import {HttpErrorResponse} from "@angular/common/http";
-import {ProfileSettingService} from "../logic/profile-setting.service";
-import {LoginDataClass} from "../../../services/loginData.class";
-import {UserInfoService} from "../../users/services/user-info.service";
+import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {LoginDataClass} from '../../../services/loginData.class';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ElectronService} from '../../../services/electron.service';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {ProfileSettingService} from '../logic/profile-setting.service';
+import {WallpaperSelectorService} from '../../../services/wallpaper-selector.service';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-wallpaper',
@@ -20,13 +19,10 @@ import {UserInfoService} from "../../users/services/user-info.service";
 /*code file uploader va base64 az do code tashkil shode, ghesmat haye code aval va dovom moshakhas shode ba code1 code2*/
 
 export class WallpaperComponent extends LoginDataClass implements OnInit, OnDestroy {
-
   showProgress = true;
   environment;
   rtlDirection: boolean = false;
-  private _subscription: Subscription = new Subscription();
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'wallpaper'};
-
   wallpapersPictures = [
     {
       id: 1,
@@ -85,7 +81,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       value: 'url(./assets/images/wallpapers/14.jpg)'
     }
   ];
-
   wallpapersGrediant = [
     {
       id: 1,
@@ -108,7 +103,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       value: 'linear-gradient(to top, #48c6ef 0%, #6f86d6 100%)'
     }
   ];
-
   wallpapersSolidColors = [
     {
       id: 1,
@@ -135,20 +129,20 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       value: '#43e97b'
     }
   ];
-
   /*code1*/
   files: any[] = [];
-  /*code1*/
-
-
   /*code2*/
   imageSrc;
+  /*code1*/
   sellersPermitFile: any;
   sellersPermitString: string = '';
+
+  private _subscription: Subscription = new Subscription();
+
   /*code2*/
 
-  constructor(private _viewDirection: ViewDirectionService,
-              private _wallPaperSelector: WallpaperSelectorService,
+  constructor(private viewDirection: ViewDirectionService,
+              private wallPaperSelector: WallpaperSelectorService,
               public dialogRef: MatDialogRef<WallpaperComponent>,
               private loadingIndicatorService: LoadingIndicatorService,
               private electronService: ElectronService,
@@ -163,7 +157,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     );
 
     this._subscription.add(
-      this._viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
   }
 
@@ -193,9 +187,8 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       const file: File = fileList[0];
       this.sellersPermitFile = file;
       this.handleInputChange(file); //turn into base64
-    }
-    else {
-      alert("No file selected");
+    } else {
+      alert('No file selected');
     }
     /*code2*/
   }
@@ -223,8 +216,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
           }
         }, 200);
       }
-
-
     }, 1000);
   }
 
@@ -246,6 +237,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
+
   /*code1*/
 
   /*code2*/
@@ -272,6 +264,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.onSubmit(this.sellersPermitString);
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
   }
+
   /*code2*/
 
   onSubmit(img) {
@@ -290,9 +283,9 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
         temp = {...temp, background_image: resp.data.background_image};
 
-       this.userInfoService.changeUserInfo(temp);
+        this.userInfoService.changeUserInfo(temp);
         // url(./assets/images/wallpapers/1.jpg)
-       this.changeWallpaper('url(' + resp.data.background_image + ')');
+        this.changeWallpaper('url(' + resp.data.background_image + ')');
 
         /*if (resp.result) {
           this.bottomSheetData.bottomSheetRef.close();
@@ -377,10 +370,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   changeWallpaper(value) {
-
-    console.log('value', value);
-
-    this._wallPaperSelector.changeWallpaper(value);
+    this.wallPaperSelector.changeWallpaper(value);
   }
 
   ngOnDestroy() {

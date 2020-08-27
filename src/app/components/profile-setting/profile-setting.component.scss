@@ -35,7 +35,7 @@
       position: relative !important;
 
       /* To make outline on mobile invisible */
-      -webkit-tap-highlight-color:  rgba(255, 255, 255, 0) !important;
+      -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
 
       input[type="checkbox"] {
         height: 0 !important;
@@ -95,27 +95,35 @@
             fill: var(--bg-planet-bright) !important;
             transition: fill 400ms ease !important;
           }
+
           &:first-child {
             transform: translate(1.8em, 0.35em) !important;
           }
+
           &:nth-child(2) {
             transform: translate(2.8em, 0.7em) !important;
           }
+
           &:nth-child(3) {
             transform: translate(3.2em, 1.8em) !important;
           }
+
           &:nth-child(4) {
             transform: translate(2.8em, 2.8em) !important;
           }
+
           &:nth-child(5) {
             transform: translate(1.8em, 3.2em) !important;
           }
+
           &:nth-child(6) {
             transform: translate(0.7em, 2.8em) !important;
           }
+
           &:nth-child(7) {
             transform: translate(0.35em, 1.8em) !important;
           }
+
           &:nth-child(8) {
             transform: translate(0.7em, 0.7em) !important;
           }
@@ -133,9 +141,8 @@
   }
 
   label {
-
     input:checked {
-      &+.planet {
+      & + .planet {
         --bg-planet-bright: #D7D7D8 !important;
 
         &::after {
@@ -144,7 +151,7 @@
         }
       }
 
-      &~.elements {
+      & ~ .elements {
         transform: rotate(180deg) !important;
 
         svg {
@@ -152,46 +159,57 @@
             transform: translate(2em, 1em) !important;
             opacity: 0 !important;
           }
+
           &:nth-child(2) {
             transform: translate(3em, 1.5em) !important;
             opacity: 0 !important;
           }
+
           &:nth-child(3) {
             transform: translate(3em, 2em) !important;
             opacity: 0 !important;
           }
+
           &:nth-child(4) {
             transform: translate(3em, 2em) !important;
             opacity: 0 !important;
           }
+
           &:nth-child(5) {
             transform: translate(1.9em, 2.6em) !important;
             width: 0.3em !important;
             height: 0.3em !important;
+
             circle {
               fill: var(--bg-planet-lightshadow) !important;
             }
           }
+
           &:nth-child(6) {
             transform: translate(1.4em, 2.5em) !important;
             width: 0.3em !important;
             height: 0.3em !important;
+
             circle {
               fill: var(--bg-planet-lightshadow) !important;
             }
           }
+
           &:nth-child(7) {
             transform: translate(1.1em, 1.6em) !important;
             width: 0.7em !important;
             height: 0.7em !important;
+
             circle {
               fill: var(--bg-planet-lightshadow) !important;
             }
           }
+
           &:nth-child(8) {
             width: 0.45em !important;
             height: 0.45em !important;
             transform: translate(1.7em, 2.1em) !important;
+
             circle {
               fill: var(--bg-planet-lightshadow) !important;
             }
@@ -201,6 +219,7 @@
     }
   }
 }
+
 /*ed of dark mode*/
 
 /*change lang*/
@@ -212,4 +231,5 @@
     border-bottom: 1px solid red;
   }
 }
+
 /*end of change lang*/

@@ -9,6 +9,7 @@ import {
   Pipe,
   PipeTransform
 } from '@angular/core';
+import {timer} from 'rxjs';
 import * as lodash from 'lodash';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -19,12 +20,11 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {ExtensionInterface} from '../logic/extension.interface';
 import {ResultApiInterface} from '../logic/result-api.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
-import {MatSlideToggleChange} from '@angular/material/slide-toggle';
-import {timer} from 'rxjs';
 
 export interface LoggedInUserExtensionInterface {
   user: UserContainerInterface,
@@ -103,6 +103,8 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnD
               }
             });
           }
+
+          // this.sortSoftphoneUsers();
         } else {
 
         }
@@ -124,6 +126,21 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnD
       height: '200px',
       width: '98%',
       data: user
+    });
+  }
+
+  sortSoftphoneUsers() {
+    this.softPhoneUsers = this.softPhoneUsers.sort((first, second) => {
+      const a = first.is_online;
+      const b = second.is_online;
+
+      let comparison = 0;
+      if (a < b) {
+        comparison = 1;
+      } else if (a > b) {
+        comparison = -1;
+      }
+      return comparison;
     });
   }
 

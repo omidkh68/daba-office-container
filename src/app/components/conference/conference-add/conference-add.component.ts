@@ -18,7 +18,7 @@ export class ConferenceAddComponent extends LoginDataClass implements OnInit {
 
   constructor(private viewDirection: ViewDirectionService,
               private injector: Injector,
-              private _fb: FormBuilder,
+              private fb: FormBuilder,
               private userInfoService: UserInfoService,
               public dialogRef: MatDialogRef<ConferenceAddComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -34,7 +34,7 @@ export class ConferenceAddComponent extends LoginDataClass implements OnInit {
   }
 
   createForm() {
-    this.form = this._fb.group({
+    this.form = this.fb.group({
       username: new FormControl(this.loggedInUser.email.replace('@dabacenter.ir', '')),
       confname: new FormControl('')
     });

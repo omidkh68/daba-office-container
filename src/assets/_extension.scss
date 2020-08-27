@@ -36,7 +36,7 @@ a{text-decoration: none !important}
 
 :focus{outline: none}
 
-textarea{height: 80px !important;max-height: 100px !important;resize: none !important}
+textarea{height: 60px !important;max-height: 100px !important;resize: none !important}
 
 .bg-white{background-color: #FFF !important}
 .bg-grey{background-color: #f5f5f5 !important}
@@ -302,6 +302,7 @@ textarea{height: 80px !important;max-height: 100px !important;resize: none !impo
 .left-half-reverse{left: -.5em !important}
 
 .display-block{display: block !important}
+.display-none{display: none !important}
 .display-inline-block{display: inline-block !important}
 .display-table{display: table !important}
 .display-gird{display: grid !important}

@@ -26,79 +26,79 @@ export class ApiService {
     })
   };
 
-  constructor(private _http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   boards(email: string): Observable<BoardInterface[]> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
     this.headers.headers = this.headers.headers.set('From', 'app_application');
 
-    return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/?email=${email}&page=-1`, this.headers);
+    return this.http.get<BoardInterface[]>(`${this.API_URL}/boards/?email=${email}&page=-1`, this.headers);
   }
 
   boardsCalendar(email: string): Observable<BoardInterface[]> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<BoardInterface[]>(`${this.API_URL}/boards/calendar/?email=${email}&page=-1`, this.headers);
+    return this.http.get<BoardInterface[]>(`${this.API_URL}/boards/calendar/?email=${email}&page=-1`, this.headers);
   }
 
   getAllHolidays(): Observable<any[]> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<any[]>(`${this.API_URL}/boards/getAllHolidays`, this.headers);
+    return this.http.get<any[]>(`${this.API_URL}/boards/getAllHolidays`, this.headers);
   }
 
   getTaskReport(taskId: number): Observable<any> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<any>(`${this.API_URL}/boards/getTaskReport?taskId=${taskId}`, this.headers);
+    return this.http.get<any>(`${this.API_URL}/boards/getTaskReport?taskId=${taskId}`, this.headers);
   }
 
   boardsCalendarDurationTask(task: TaskDurationInterface) {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.post<TaskDurationInterface>(`${this.API_URL}/boards/calendar/durationTask`, task, this.headers);
+    return this.http.post<TaskDurationInterface>(`${this.API_URL}/boards/calendar/durationTask`, task, this.headers);
   }
 
   createTask(task: TaskInterface): Observable<TaskInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.post<TaskInterface>(`${this.API_URL}/boards/add`, task, this.headers);
+    return this.http.post<TaskInterface>(`${this.API_URL}/boards/add`, task, this.headers);
   }
 
   taskChangeStatus(task: TaskInterface, boardStatus: string): Observable<TaskInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.post<TaskInterface>(`${this.API_URL}/boards/changeStatus`, {task, boardStatus}, this.headers);
+    return this.http.post<TaskInterface>(`${this.API_URL}/boards/changeStatus`, {task, boardStatus}, this.headers);
   }
 
   filterTask(filters: FilterInterface): Observable<FilterInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.post<FilterInterface>(`${this.API_URL}/boards/filter`, filters, this.headers);
+    return this.http.post<FilterInterface>(`${this.API_URL}/boards/filter`, filters, this.headers);
   }
 
   taskStop(taskInfo: any): Observable<TaskInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.post<TaskInterface>(`${this.API_URL}/boards/stopTask`, taskInfo, this.headers);
+    return this.http.post<TaskInterface>(`${this.API_URL}/boards/stopTask`, taskInfo, this.headers);
   }
 
   updateTask(task: TaskInterface): Observable<TaskInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.patch<TaskInterface>(`${this.API_URL}/boards`, task, this.headers);
+    return this.http.patch<TaskInterface>(`${this.API_URL}/boards`, task, this.headers);
   }
 
   deleteTask(task: TaskInterface): Observable<TaskInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.delete<TaskInterface>(`${this.API_URL}/boards/task/?taskId=${task.taskId}`, this.headers);
+    return this.http.delete<TaskInterface>(`${this.API_URL}/boards/task/?taskId=${task.taskId}`, this.headers);
   }
 
   getActivities(taskId: number): Observable<ActivityInterface[]> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<ActivityInterface[]>(`${this.API_URL}/boards/task/getActivities?taskId=${taskId}`, this.headers);
+    return this.http.get<ActivityInterface[]>(`${this.API_URL}/boards/task/getActivities?taskId=${taskId}`, this.headers);
   }
 }

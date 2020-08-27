@@ -1,7 +1,6 @@
 import {Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MessageService} from '../../../services/message.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
@@ -20,10 +19,9 @@ export class WebBrowserMainComponent implements OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
-              private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private messageService: MessageService) {
+              private translateService: TranslateService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );

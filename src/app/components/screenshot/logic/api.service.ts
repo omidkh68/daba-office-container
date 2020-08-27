@@ -21,18 +21,18 @@ export class ApiService {
     })
   };
 
-  constructor(private _http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   userScreenshot(screenshotData: ScreenshotInterface): Observable<ScreenshotInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.post<ScreenshotInterface>(`${this.API_URL}/userScreenshot`, screenshotData, this.headers);
+    return this.http.post<ScreenshotInterface>(`${this.API_URL}/userScreenshot`, screenshotData, this.headers);
   }
 
   getTickTock(): Observable<string> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this._http.get<string>(`${this.API_URL}/userScreenshot/serverTickTock`, this.headers);
+    return this.http.get<string>(`${this.API_URL}/userScreenshot/serverTickTock`, this.headers);
   }
 }

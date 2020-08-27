@@ -10,6 +10,7 @@ import {UserInfoService} from '../components/users/services/user-info.service';
 import {ElectronService} from '../services/electron.service';
 import {ChangeStatusService} from '../components/status/services/change-status.service';
 import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
+import {ViewDirectionService} from '../services/view-direction.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +19,10 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private router: Router,
               private injector: Injector,
+              private viewDirection: ViewDirectionService,
               private electronService: ElectronService,
-              private _router: Router,
               private userInfoService: UserInfoService,
               private changeStatusService: ChangeStatusService) {
     super(injector, userInfoService);
@@ -45,6 +47,8 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
           if (resp.success === true) {
             this.userInfoService.changeUserInfo(resp.data);
 
+            this.viewDirection.changeDirection(resp.data.lang === 'fa');
+
             this.changeStatusService.changeUserStatus(resp.data.user_status);
 
             return true;
@@ -57,7 +61,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
         })
       );
     } else {
-      this._router.navigateByUrl(`/login`);
+      this.router.navigateByUrl(`/login`);
 
       return of(false);
     }

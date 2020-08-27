@@ -1,0 +1,23 @@
+<div class="datepicker-container mat-elevation-z1 padding-full round-corner"
+     [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+     [dir]="rtlDirection ? 'rtl' : 'ltr'">
+    <mat-calendar (selectedChange)="onSelect()" [dateClass]="dateClass()"></mat-calendar>
+    <mat-list>
+        <div mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}}</div>
+        <mat-list-item>
+            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
+            <div mat-line class="font-6-em">سلام تست من اتست</div>
+            <div mat-line class="font-6-rem"> 1399/01/01 </div>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
+            <div mat-line class="font-6-em">سلام تست من اتست</div>
+            <div mat-line class="font-6-rem"> 1399/01/01 </div>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
+            <div mat-line class="font-6-em">سلام تست من اتست</div>
+            <div mat-line class="font-6-rem"> 1399/01/01 </div>
+        </mat-list-item>
+    </mat-list>
+</div>

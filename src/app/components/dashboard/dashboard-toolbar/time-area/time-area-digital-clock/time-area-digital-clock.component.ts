@@ -1,31 +1,49 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {Subscription, timer} from 'rxjs';
 
 @Component({
   selector: 'app-time-area-digital-clock',
   templateUrl: './time-area-digital-clock.component.html',
   styleUrls: ['./time-area-digital-clock.component.scss']
 })
-export class TimeAreaDigitalClockComponent implements OnInit {
+export class TimeAreaDigitalClockComponent implements OnChanges, OnDestroy {
   @Input()
   timezone: string;
 
+  timerDueTime: number = 0;
+  timerPeriod: number = 1000;
   time: string;
+  globalTimer = null;
+  globalTimerSubscription: Subscription;
 
   constructor() {
   }
 
-  ngOnInit(): void {
-    this.getTime();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.timezone.firstChange) {
+      this.globalTimer = timer(
+        this.timerDueTime, this.timerPeriod
+      );
 
-    setInterval(() => this.getTime(), 1000);
+      this.globalTimerSubscription = this.globalTimer.subscribe(t => {
+        this.getTime();
+      });
+    }
   }
 
   getTime() {
     this.time = new Date().toLocaleTimeString('en-US', {
-      timeZone: this.timezone,
+      timeZone: this.timezone.length ? this.timezone : 'UTC',
       hour12: false,
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+      this.globalTimer = null;
+    }
   }
 }

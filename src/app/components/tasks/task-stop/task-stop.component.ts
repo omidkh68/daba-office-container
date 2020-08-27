@@ -25,7 +25,7 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
-              private _fb: FormBuilder,
+              private fb: FormBuilder,
               private injector: Injector,
               private viewDirection: ViewDirectionService,
               private refreshLoginService: RefreshLoginService,
@@ -54,7 +54,7 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
 
   createForm() {
     return new Promise((resolve) => {
-      this.form = this._fb.group({
+      this.form = this.fb.group({
         taskId: new FormControl(0),
         description: new FormControl('', Validators.required),
         percentage: new FormControl(0, Validators.required),

@@ -55,7 +55,7 @@ export class LoginFormComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
 
-    // setTimeout(() => this.login(), 200);
+    // setTimeout(() => this.login(), 200); // todo: remove this in production
   }
 
   createForm() {

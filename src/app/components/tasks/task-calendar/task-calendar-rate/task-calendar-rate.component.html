@@ -1,13 +1,13 @@
 <mat-drawer-container autosize class="rate-calendar" id="rate-container">
   <mat-drawer #drawer class="round-corner mat-elevation-z4" mode="side">
-    <div *ngIf="userSelected && userSelected.email" class="padding-full text-white">
+    <div *ngIf="userSelected && userSelected.email" class="padding-full">
       <!--            <mat-icon class="cursor-pointer" (click)="drawer.toggle()" aria-hidden="false">close</mat-icon>-->
       <div class="text-center">
         <img [src]="'/assets/profileImg/'+userSelected.email+'.jpg'"
              class="width-70 height-70 text-center round-corner-all margin-auto pos-rel top-six-tenth">
-        <div class="text-white padding-t">{{userSelected.name}} {{userSelected.family}}</div>
-        <div class="text-white padding-b">{{userSelected.email}}</div>
-        <div class="text-white padding-t-b">
+        <div class="padding-t">{{userSelected.name}} {{userSelected.family}}</div>
+        <div class="padding-b">{{userSelected.email}}</div>
+        <div class="padding-t-b">
           {{'tasks.task_filter.tasks_filter_calendar_hours' | translate}}: {{sumTime}}</div>
       </div>
     </div>

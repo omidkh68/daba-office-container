@@ -1,22 +1,21 @@
-import {Component, Inject, Injector, OnInit} from '@angular/core';
-import {Subscription} from "rxjs/internal/Subscription";
-import {ViewDirectionService} from "../../../services/view-direction.service";
-import {TranslateService} from "@ngx-translate/core";
-import {Dimensions, ImageCroppedEvent, ImageTransform} from "ngx-image-cropper";
-import {ProfileSettingService} from "../logic/profile-setting.service";
-import {HttpErrorResponse} from "@angular/common/http";
-import {LoginDataClass} from "../../../services/loginData.class";
-import {UserInfoService} from "../../users/services/user-info.service";
-import {LoadingIndicatorInterface, LoadingIndicatorService} from "../../../services/loading-indicator.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {Component, Inject, Injector} from '@angular/core';
+import {Dimensions, ImageCroppedEvent, ImageTransform} from 'ngx-image-cropper';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {LoginDataClass} from '../../../services/loginData.class';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {ProfileSettingService} from '../logic/profile-setting.service';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-show-image-cropper',
   templateUrl: './show-image-cropper.component.html',
   styleUrls: ['./show-image-cropper.component.scss']
 })
-export class ShowImageCropperComponent extends LoginDataClass implements OnInit {
-
+export class ShowImageCropperComponent extends LoginDataClass {
   imageChangedEvent: any = '';
   croppedImage: any = '';
   canvasRotation = 0;
@@ -25,9 +24,9 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit 
   showCropper = false;
   containWithinAspectRatio = false;
   transform: ImageTransform = {};
-
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'changeLang'};
   rtlDirection: boolean;
+
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
@@ -43,9 +42,6 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit 
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
-  }
-
-  ngOnInit(): void {
   }
 
   onSubmit() {
@@ -159,15 +155,10 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit 
 
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
-    // console.log(event, base64ToFile(event.base64));
-
-
-
   }
 
   imageLoaded() {
     this.showCropper = true;
-    console.log('Image loaded');
   }
 
   cropperReady(sourceImageDimensions: Dimensions) {
@@ -175,27 +166,18 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit 
   }
 
   loadImageFailed() {
-    console.log('Load failed');
   }
 
   rotateLeft() {
     this.canvasRotation--;
+
     this.flipAfterRotate();
   }
 
   rotateRight() {
     this.canvasRotation++;
-    this.flipAfterRotate();
-  }
 
-  private flipAfterRotate() {
-    const flippedH = this.transform.flipH;
-    const flippedV = this.transform.flipV;
-    this.transform = {
-      ...this.transform,
-      flipH: flippedV,
-      flipV: flippedH
-    };
+    this.flipAfterRotate();
   }
 
   flipHorizontal() {
@@ -243,6 +225,16 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit 
     this.transform = {
       ...this.transform,
       rotate: this.rotation
+    };
+  }
+
+  private flipAfterRotate() {
+    const flippedH = this.transform.flipH;
+    const flippedV = this.transform.flipV;
+    this.transform = {
+      ...this.transform,
+      flipH: flippedV,
+      flipV: flippedH
     };
   }
 }
