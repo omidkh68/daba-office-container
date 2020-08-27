@@ -49,7 +49,7 @@ export class ConferenceMainComponent implements OnDestroy {
     this._subscription.add(
       dialogRef.afterClosed().subscribe((resp: ConferenceInterface) => {
         if (resp) {
-          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'videoConference'});
 
           this.confAddress = resp.confname;
 
@@ -63,7 +63,7 @@ export class ConferenceMainComponent implements OnDestroy {
             });
 
             this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
-              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'videoConference'});
             });
 
             setTimeout(() => {
