@@ -6,6 +6,14 @@
       </mat-icon>
       {{'profileSettings.edit_user_photo' | translate}}
     </h3>
+
+    <div class="window-actions display-flex"
+         [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'">
+      <button (click)="closeModal();"
+              class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">close</mat-icon>
+      </button>
+    </div>
   </div>
   <div class="window-content pos-rel">
     <div class="component-content full-width full-height pos-abs left-0 right-0 top-0">
@@ -58,10 +66,18 @@
         <div class="container-tools display-inline-block full-width height-100">
 
           <button (click)="onSubmit()"
-            [ngClass]="rtlDirection ? 'right-0' : 'left-0'"
-            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l pos-abs">
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
             <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-700">
               save
+            </mat-icon>
+          </button>
+
+          <button
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
+            [ngClass]="rtlDirection ? 'right-0' : 'left-0'"
+            (click)="closeModal()">
+            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-red-700">
+              close
             </mat-icon>
           </button>
 

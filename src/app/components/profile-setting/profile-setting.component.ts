@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, Injector, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {AfterViewInit, Component, Inject, Injector, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/internal/Observable';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -15,6 +15,8 @@ import {ProfileSettingService} from './logic/profile-setting.service';
 import {UserContainerInterface} from '../users/logic/user-container.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
 import {ShowImageCropperComponent} from './show-image-cropper/show-image-cropper.component';
+import {WindowManagerService} from "../../services/window-manager.service";
+import {ServiceItemsInterface} from "../dashboard/logic/service-items.interface";
 
 export interface Timezones {
   city: string;
@@ -61,6 +63,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
 
   /*timezone*/
 
+  // @ts-ignore
   constructor(private viewDirection: ViewDirectionService,
               private translate: TranslateService,
               public dialog: MatDialog,
@@ -69,7 +72,9 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
               private loadingIndicatorService: LoadingIndicatorService,
               private injector: Injector,
               private userInfoService: UserInfoService,
-              private datetimeService: DatetimeService) {
+              private datetimeService: DatetimeService,
+              public dialogRef: MatDialogRef<ProfileSettingComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -116,6 +121,10 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
         }
       ];
     }, 200);
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 
   displayFn(timezone: Timezones): string {

@@ -110,21 +110,19 @@
     </label>
   </div>
 
-  <mat-dialog-content class="display-block custom-mat-dialog-content no-margin no-padding overflow-hide">
-    <mat-tab-group mat-align-tabs="center">
+  <div class="display-block custom-mat-dialog-content no-padding overflow-hide margin-t-full margin-b-full-2">
+    <!--<mat-tab-group mat-align-tabs="center">
       <mat-tab class="height-48" label="{{'profileSettings.pictures' | translate}}">
         <div class="pos-rel full-height">
           <div class="scrollable-content">
-            <div class="row center-block font-8-rem">
-              <div *ngFor="let picture of wallpapersPictures"
-                   [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-                   class="col-xs-4 col-sm-3 col-md-3 margin-b-full height-100">
-                <mat-card (click)="changeWallpaper(picture.value)"
-                          [style.background]="picture.value"
-                          class="mat-elevation-z1 full-width full-height wallpaper cursor-pointer">
-                </mat-card>
-              </div>
-            </div>
+
+
+
+
+
+
+
+
           </div>
         </div>
       </mat-tab>
@@ -160,6 +158,21 @@
           </div>
         </div>
       </mat-tab>
-    </mat-tab-group>
-  </mat-dialog-content>
+    </mat-tab-group>-->
+
+
+    <div class="row center-block font-8-rem">
+      <div *ngFor="let picture of wallpapersPictures"
+           [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+           class="col-xs-4 col-sm-4 col-md-4 margin-b-full height-100">
+        <mat-card (click)="changeWallpaper(picture.value)"
+                  [style.background]="picture.value"
+                  class="mat-elevation-z1 full-width full-height wallpaper cursor-pointer">
+        </mat-card>
+      </div>
+    </div>
+
+
+
+  </div>
 </div>

@@ -44,6 +44,10 @@ export class ShowImageCropperComponent extends LoginDataClass {
     );
   }
 
+  closeModal() {
+    this.dialogRef.close();
+  }
+
   onSubmit() {
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 

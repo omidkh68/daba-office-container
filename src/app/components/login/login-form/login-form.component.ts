@@ -66,6 +66,8 @@ export class LoginFormComponent implements OnInit {
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
 
+      // todo: remove user pass
+
       this.viewDirection.changeDirection(this.form.get('lang').value === 'fa');
 
       resolve(true);
