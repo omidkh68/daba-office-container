@@ -9,6 +9,7 @@ import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
 import {WallpaperSelectorService} from '../../../services/wallpaper-selector.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {CheckLoginInterface} from "../../login/logic/check-login.interface";
 
 @Component({
   selector: 'app-wallpaper',
@@ -19,7 +20,8 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 /*code file uploader va base64 az do code tashkil shode, ghesmat haye code aval va dovom moshakhas shode ba code1 code2*/
 
 export class WallpaperComponent extends LoginDataClass implements OnInit, OnDestroy {
-  showProgress = true;
+  showProgress = false;
+  showDelete = false;
   environment;
   rtlDirection: boolean = false;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'wallpaper'};
@@ -81,54 +83,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       value: 'url(./assets/images/wallpapers/14.jpg)'
     }
   ];
-  wallpapersGrediant = [
-    {
-      id: 1,
-      value: 'linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%)'
-    },
-    {
-      id: 2,
-      value: 'linear-gradient(120deg, #f6d365 0%, #fda085 100%)'
-    },
-    {
-      id: 3,
-      value: 'linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%)'
-    },
-    {
-      id: 4,
-      value: 'linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%)'
-    },
-    {
-      id: 5,
-      value: 'linear-gradient(to top, #48c6ef 0%, #6f86d6 100%)'
-    }
-  ];
-  wallpapersSolidColors = [
-    {
-      id: 1,
-      value: '#9890e3'
-    },
-    {
-      id: 2,
-      value: '#fddb92'
-    },
-    {
-      id: 3,
-      value: '#e2d1c3'
-    },
-    {
-      id: 4,
-      value: '#fef9d7'
-    },
-    {
-      id: 5,
-      value: '#f5576c'
-    },
-    {
-      id: 6,
-      value: '#43e97b'
-    }
-  ];
+
   /*code1*/
   files: any[] = [];
   /*code2*/
@@ -136,10 +91,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   /*code1*/
   sellersPermitFile: any;
   sellersPermitString: string = '';
-
   private _subscription: Subscription = new Subscription();
-
-  /*code2*/
 
   constructor(private viewDirection: ViewDirectionService,
               private wallPaperSelector: WallpaperSelectorService,
@@ -167,7 +119,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
   /*code1*/
   onFileDropped(files) {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
+    // this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
     this.prepareFilesList(files);
 
     /*code2*/
@@ -179,7 +131,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
   fileBrowseHandler(files) {
     this.prepareFilesList(files.target.files);
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
+    // this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
 
     /*code2*/
     let fileList: FileList = files.target.files;
@@ -197,7 +149,8 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.files.splice(index, 1);
 
     this.sellersPermitString = '';
-    this.showProgress = true;
+    this.showProgress = false;
+    this.showDelete = false;
   }
 
   uploadFilesSimulator(index: number) {
@@ -209,8 +162,9 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
           if (this.files[index].progress === 100) {
             clearInterval(progressInterval);
             this.uploadFilesSimulator(index + 1);
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'wallpaper'});
-            this.showProgress = false;
+
+            this.onSubmit(this.sellersPermitString);
+
           } else {
             this.files[index].progress += 5;
           }
@@ -237,7 +191,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
-
   /*code1*/
 
   /*code2*/
@@ -261,112 +214,45 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.imageSrc = base64result;
     this.sellersPermitString = base64result;
 
-    this.onSubmit(this.sellersPermitString);
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
+    this.showProgress = true;
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
   }
-
   /*code2*/
 
   onSubmit(img) {
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'sendProfile'});
+    // this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'sendProfile'});
 
     const finalValue = {};
 
     finalValue['background_image'] = img;
 
     this._subscription.add(
-      this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: any) => {
+      this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
 
-        let temp = this.loggedInUser;
+        if (resp.success) {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'wallpaper'});
+          this.showProgress = false;
+          this.showDelete = true;
 
-        temp = {...temp, background_image: resp.data.background_image};
+          let temp = this.loggedInUser;
 
-        this.userInfoService.changeUserInfo(temp);
-        // url(./assets/images/wallpapers/1.jpg)
-        this.changeWallpaper('url(' + resp.data.background_image + ')');
+          temp = {...temp, background_image: resp.data.background_image};
 
-        /*if (resp.result) {
-          this.bottomSheetData.bottomSheetRef.close();
+          this.userInfoService.changeUserInfo(temp);
 
-          this.messageService.showMessage(resp.message);
+          this.changeWallpaper('url(' + resp.data.background_image + ')');
 
-          this.refreshBoardService.changeCurrentDoRefresh(true);
-        } else {
-          this.form.enable();
-        }*/
+        }
 
-
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
       }, (error: HttpErrorResponse) => {
-        // this.form.enable();
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'wallpaper'});
+        this.showProgress = false;
+        this.showDelete = true;
 
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
-
-        /*this.refreshLoginService.openLoginDialog(error);*/
       })
     );
-    /*if (this.dialogData.action === 'addUser') {
-      const finalValue = this.form.value;
-      finalValue.c_password = this.form.get('password').value;
-      finalValue.timezone = this.form.get('timezone').value.timezone;
-      this._subscription.add(
-        this._hrManagementService.addUser(finalValue).subscribe((resp: any) => {
-            if (resp.status === 200) {
-              this.overlayLoading = false;
-              this.form.enable();
-
-              this.showMessage(0, resp.body.msg);
-              this.dialogRef.close(resp);
-            }
-          },
-          error => {
-            this.overlayLoading = false;
-            this.form.enable();
-
-            const objectKeys = Object.keys(error.error.error);
-            objectKeys.forEach(obj => {
-              error.error.error[obj].forEach(val => {
-                this.showMessage(1, val);
-              });
-            });
-
-            if (error.status === 401) {
-              this.userInfoService.changeLoginData('');
-              this._router.navigateByUrl(`/login`);
-            }
-          }
-        )
-      );
-    } else if (this.dialogData.action === 'editUser') {
-      const finalValue = this.form.value;
-      finalValue.c_password = this.form.get('password').value;
-      finalValue.timezone = this.form.get('timezone').value.timezone;
-
-      this._subscription.add(
-        this._hrManagementService.updateUser(this.form.value, this.dialogData.data.id).subscribe((resp: any) => {
-            if (resp.status === 200) {
-              this.overlayLoading = false;
-              this.form.enable();
-
-              this.showMessage(0, resp.body.msg);
-              this.dialogRef.close(resp);
-            }
-          },
-          error => {
-            this.overlayLoading = false;
-            this.form.enable();
-            this.showMessage(1, error.error.msg);
-
-            if (error.status === 401) {
-              this.userInfoService.changeLoginData('');
-              this._router.navigateByUrl(`/login`);
-            }
-          }
-        )
-      );
-    }*/
   }
 
   changeWallpaper(value) {

@@ -1,20 +1,22 @@
 @import '../../../assets/mixin';
 
-.container-image-profile .overlay-image {
-  background-image: linear-gradient(-20deg, #4a148ca6 0%, #ce93d8ab 100%);
-  display: block;
-  opacity: 0;
-  transition: opacity 400ms ease-in-out;
+.container-image-profile {
+  .overlay-image {
+    background-image: linear-gradient(-20deg, #4a148ca6 0%, #ce93d8ab 100%);
+    display: block;
+    opacity: 0;
+    transition: opacity 400ms ease-in-out;
+  }
 }
 
-.image-profile:hover .overlay-image {
-  opacity: 1;
+.image-profile:hover {
+  .overlay-image {
+    opacity: 1;
+  }
 }
 
 /*dark mode*/
 .dark-mode {
-  transform: scale(0.8);
-
   --bg-planet-bright: #F2C94C !important;
   --bg-planet-shadow: #828894 !important;
   --bg-planet-lightshadow: #D7D7D820 !important;
@@ -141,6 +143,8 @@
   }
 
   label {
+    transform: scale(0.8);
+
     input:checked {
       & + .planet {
         --bg-planet-bright: #D7D7D8 !important;
@@ -220,6 +224,21 @@
   }
 }
 
+.margin-l-reverse {
+  margin-left: -1em !important;
+}
+
+.margin-r-reverse {
+  margin-right: -1em !important;
+}
+
+.l-reverse {
+  left: -110% !important;
+}
+
+.r-reverse {
+  right: -110% !important;
+}
 /*ed of dark mode*/
 
 /*change lang*/
@@ -234,14 +253,10 @@
 
 /*end of change lang*/
 
-.width-170 {
-  width: 170px !important;
+.line-height-150 {
+  line-height: 150px !important;
 }
 
-.height-170 {
-  height: 170px !important;
-}
-
-.line-height-170 {
-  line-height: 170px !important;
+.top-6 {
+  top: 6px;
 }

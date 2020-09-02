@@ -61,8 +61,8 @@ export class LoginFormComponent implements OnInit {
   createForm() {
     return new Promise((resolve) => {
       this.form = this.fb.group({
-        username: new FormControl('ab.ebrahimi@dabacenter.ir'),
-        password: new FormControl('123456'),
+        username: new FormControl(''),
+        password: new FormControl(''),
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
 
