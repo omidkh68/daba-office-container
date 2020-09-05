@@ -78,6 +78,22 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     {
       id: 14,
       value: 'url(./assets/images/wallpapers/14.jpg)'
+    },
+    {
+      id: 15,
+      value: 'url(./assets/images/wallpapers/15.jpg)'
+    },
+    {
+      id: 16,
+      value: 'url(./assets/images/wallpapers/16.jpg)'
+    },
+    {
+      id: 17,
+      value: 'url(./assets/images/wallpapers/17.jpg)'
+    },
+    {
+      id: 18,
+      value: 'url(./assets/images/wallpapers/18.jpg)'
     }
   ];
 
@@ -241,7 +257,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
           this.userInfoService.changeUserInfo(temp);
 
           this.changeWallpaper('url(' + resp.data.background_image + ')');
-
         }
 
       }, (error: HttpErrorResponse) => {

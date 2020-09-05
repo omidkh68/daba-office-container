@@ -11,6 +11,7 @@ import {UserInfoService} from '../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CheckLoginInterface} from '../login/logic/check-login.interface';
 import {ViewDirectionService} from '../../services/view-direction.service';
+import {WindowManagerService} from '../../services/window-manager.service';
 import {ProfileSettingService} from './logic/profile-setting.service';
 import {ShowImageCropperComponent} from './show-image-cropper/show-image-cropper.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
@@ -66,6 +67,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private datetimeService: DatetimeService,
+              private windowManagerService: WindowManagerService,
               private profileSettingService: ProfileSettingService,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
@@ -225,6 +227,8 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       height: '600px',
       panelClass: 'status-dialog'
     });
+
+    this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(() => {
