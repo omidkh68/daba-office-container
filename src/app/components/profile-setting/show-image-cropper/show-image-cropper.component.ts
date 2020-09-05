@@ -1,23 +1,23 @@
-import {Component, Inject, Injector, OnInit} from '@angular/core';
-import {Dimensions, ImageCroppedEvent, ImageTransform} from 'ngx-image-cropper';
+import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {ImageCroppedEvent, ImageTransform} from 'ngx-image-cropper';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../../services/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
+import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
-import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {MessageService} from "../../../services/message.service";
-import {CheckLoginInterface} from "../../login/logic/check-login.interface";
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-show-image-cropper',
   templateUrl: './show-image-cropper.component.html',
   styleUrls: ['./show-image-cropper.component.scss']
 })
-export class ShowImageCropperComponent extends LoginDataClass implements OnInit {
+export class ShowImageCropperComponent extends LoginDataClass implements OnInit, OnDestroy {
   imageChangedEvent: any = '';
   croppedImage: any = '';
   canvasRotation = 0;
@@ -32,15 +32,15 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit 
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private viewDirection: ViewDirectionService,
-              private profileSettingService: ProfileSettingService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private translate: TranslateService,
-              private injector: Injector,
-              private userInfoService: UserInfoService,
-              private messageService: MessageService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data,
               public dialogRef: MatDialogRef<ShowImageCropperComponent>,
-              @Inject(MAT_DIALOG_DATA) public data) {
+              private injector: Injector,
+              private translate: TranslateService,
+              private messageService: MessageService,
+              private userInfoService: UserInfoService,
+              private viewDirection: ViewDirectionService,
+              private profileSettingService: ProfileSettingService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -166,6 +166,16 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit 
     this.containWithinAspectRatio = !this.containWithinAspectRatio;
   }
 
+  getTranslate(word) {
+    return this.translate.instant(word);
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
+  }
+
   private flipAfterRotate() {
     const flippedH = this.transform.flipH;
     const flippedV = this.transform.flipV;
@@ -174,9 +184,5 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit 
       flipH: flippedV,
       flipV: flippedH
     };
-  }
-
-  getTranslate(word) {
-    return this.translate.instant(word);
   }
 }

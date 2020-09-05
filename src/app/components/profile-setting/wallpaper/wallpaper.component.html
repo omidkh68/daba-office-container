@@ -6,10 +6,10 @@
        class="height-160 pos-rel margin-auto round-corner monitor-image"
        style="background-color: blueviolet; height: 100vh; max-height: 160px">
 
-    <img [src]="sellersPermitString" class="display-block margin-auto full-height">
+    <img [src]="sellersPermitString" class="display-block margin-auto full-height" alt="">
 
     <div *ngIf="showProgress" class="files-list pos-abs bottom-0 full-width z-index-9999" dir="ltr">
-      <div *ngFor="let file of files; let i = index" class="single-file round-corner">
+      <div *ngFor="let file of files" class="single-file round-corner">
 
         <div class="info">
           <h4 class="name">
@@ -63,22 +63,21 @@
   <div (fileDropped)="onFileDropped($event)" *ngIf="sellersPermitString === ''" appDnd
        class="container full-width padding-half round-corner bg-white">
 
-    <input #fileDropRef (change)="fileBrowseHandler($event)" id="fileDropRef" multiple type="file"/>
+    <input (change)="fileBrowseHandler($event)" id="fileDropRef" multiple type="file"/>
 
     <svg class="icon icon-tabler icon-tabler-cloud-upload" fill="none" height="44" stroke="#009688"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="44"
          xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 0h24v24H0z" stroke="none"/>
-      <path d="M7 18a4.6 4.4 0 0 1 0 -9h0a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"/>
-      <polyline points="9 15 12 12 15 15"/>
-      <line x1="12" x2="12" y1="12" y2="21"/>
+      <path d="M0 0h24v24H0z" stroke="none"></path>
+      <path d="M7 18a4.6 4.4 0 0 1 0 -9h0a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"></path>
+      <polyline points="9 15 12 12 15 15"></polyline>
+      <line x1="12" x2="12" y1="12" y2="21"></line>
     </svg>
 
     <h6 class="margin-t-half font-full-plus-one-tenth-em">{{'profileSettings.drag_drop_text1' | translate}}</h6>
     <label
       class="margin-t-full display-inline-block cursor-pointer mat-raised-button green-gradient padding-mini-r-l text-white line-height-30 font-9-em text-weight-normal"
-      for="fileDropRef"
-      mat-raised-button>
+      for="fileDropRef">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
       <span class="padding-mini-r-l">{{'profileSettings.drag_drop_text3' | translate}}</span>
     </label>
