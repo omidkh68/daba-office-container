@@ -130,7 +130,6 @@
                            formControlName="timezone"
                            matInput
                            required
-                           placeholder=""
                            type="text">
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                       <mat-option (click)="setClockCity(option)" *ngFor="let option of filteredOptions | async"
