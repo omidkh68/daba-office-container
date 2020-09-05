@@ -112,7 +112,7 @@ try {
     }
   });
 
-  if (!gotTheLock) {
+  /*if (!gotTheLock) {
     if (process.platform !== 'darwin') {
       app.quit();
     }

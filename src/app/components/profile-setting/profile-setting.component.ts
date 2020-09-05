@@ -38,7 +38,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
   defaultLang;
   selectDarkMode;
   form: FormGroup;
-  activeTab: number = 0;
   rtlDirection: boolean;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'changeLang'};
   filteredOptions: Observable<any>;
@@ -110,7 +109,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       this.form = this.fb.group({
         name: new FormControl('', Validators.required),
         email: new FormControl('', [Validators.required, Validators.email]),
-        c_password: new FormControl(''),
+        c_password: new FormControl(null),
         extension_no: new FormControl(''),
         timezone: new FormControl('', Validators.required),
         dark_mode: new FormControl(0),
@@ -121,9 +120,13 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
   }
 
   formPatchValue() {
-    this.defaultLang = this.loggedInUser.lang;
+    if (this.loggedInUser.lang !== null) {
+      this.defaultLang = this.loggedInUser.lang;
+    }
 
-    this.selectDarkMode = this.loggedInUser.dark_mode;
+    if (this.loggedInUser.dark_mode !== null) {
+      this.selectDarkMode = this.loggedInUser.dark_mode;
+    }
 
     const newTimezone = {};
     const requestTimezone = this.loggedInUser.timezone;
@@ -138,7 +141,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       extension_no: this.loggedInUser.extension_no,
       timezone: newTimezone,
       dark_mode: this.loggedInUser.dark_mode,
-      lang: this.loggedInUser.lang,
+      lang: this.loggedInUser.lang
     });
   }
 
@@ -152,16 +155,10 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
 
   changeDarkMode($event) {
     this.form.get('dark_mode').setValue($event.target.checked ? 1 : 0);
-
-    this.userInfoService.changeDarkMode();
   }
 
   changeLang(language) {
-    this.viewDirection.changeDirection(language.value === 'fa');
-
     this.form.get('lang').setValue(language.value);
-
-    console.log(language.value);
   }
 
   onSubmit() {
@@ -175,11 +172,11 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
     finalValue['name'] = this.form.get('name').value;
     finalValue['timezone'] = this.form.get('timezone').value.timezone;
 
-    if (this.form.get('c_password').value.length) {
+    if (this.form.get('c_password').value !== null) {
       finalValue['c_password'] = this.form.get('c_password').value;
     }
 
-    if (this.form.get('extension_no').value.length) {
+    if (this.form.get('extension_no').value !== null) {
       finalValue['extension_no'] = this.form.get('extension_no').value;
     }
 
@@ -191,6 +188,10 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
 
         if (resp.success) {
           this.form.enable();
+
+          this.viewDirection.changeDirection(resp.data.lang === 'fa');
+
+          this.userInfoService.changeDarkMode();
 
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
 
@@ -234,10 +235,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
         this.resetInput = '';
       })
     );
-  }
-
-  tabChange(event: MatTabChangeEvent) {
-    this.activeTab = event.index;
   }
 
   getTranslate(word) {

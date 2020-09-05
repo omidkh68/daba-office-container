@@ -222,8 +222,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   onSubmit(img) {
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-    // this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'sendProfile'});
-
     const finalValue = {};
 
     finalValue['background_image'] = img;
