@@ -235,6 +235,8 @@
     "drag_drop_text3": "Browse for file",
     "timezone": "Timezone",
     "timezone_error": "Select Timezone",
-    "name_family": "First Name And Last Name"
+    "name_family": "First Name And Last Name",
+    "profile_update": "Profile Information Has Been Updated",
+    "error_upload": "Problem Uploading Photos"
   }
 }

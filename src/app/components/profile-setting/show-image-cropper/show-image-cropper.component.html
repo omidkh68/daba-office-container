@@ -6,31 +6,29 @@
       </mat-icon>
       {{'profileSettings.edit_user_photo' | translate}}
     </h3>
+
+    <div class="window-actions display-flex"
+         [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'">
+      <button (click)="closeModal();"
+              class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">close</mat-icon>
+      </button>
+    </div>
   </div>
   <div class="window-content pos-rel">
     <div class="component-content full-width full-height pos-abs left-0 right-0 top-0">
       <div class="container-show-cropper padding-full display-inline-block full-width">
 
-        <!--<button (click)="rotateLeft()">Rotate left</button>-->
-        <!--<button (click)="rotateRight()">Rotate right</button>-->
-        <!--<button (click)="flipHorizontal()">Flip horizontal</button>-->
-        <!--<button (click)="flipVertical()">Flip vertical</button>-->
-        <!--<button (click)="zoomOut()">Zoom -</button>-->
-        <!--<button (click)="zoomIn()">Zoom +</button>-->
-        <!--<button (click)="toggleContainWithinAspectRatio()">{{containWithinAspectRatio ? 'Fill Aspect Ratio' : 'Contain Within Aspect Ratio'}}</button>-->
-        <!--<button (click)="resetImage()">Reset image</button>-->
-
-        <label *ngIf="!showCropper" class="cursor-pointer pos-abs full-width full-height purple-gradient right-0 top-0 text-white text-center z-index-99"
+        <!--<label *ngIf="!showCropper" class="cursor-pointer pos-abs full-width full-height purple-gradient right-0 top-0 text-white text-center z-index-99"
                for="fileChange"
                style="line-height: 80vh">
           {{'profileSettings.insert_picture' | translate}}
-        </label>
+        </label>-->
 
-        <input (change)="fileChangeEvent($event)" hidden id="fileChange" type="file"/>
+        <!--<input (change)="fileChangeEvent($event)" hidden id="fileChange" type="file"/>-->
 
         <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" style="width: 50% !important;">
-          <image-cropper (cropperReady)="cropperReady($event)"
-                         (imageCropped)="imageCropped($event)"
+          <image-cropper (imageCropped)="imageCropped($event)"
                          (imageLoaded)="imageLoaded()"
                          (loadImageFailed)="loadImageFailed()"
                          [alignImage]="'center'"
@@ -58,10 +56,18 @@
         <div class="container-tools display-inline-block full-width height-100">
 
           <button (click)="onSubmit()"
-            [ngClass]="rtlDirection ? 'right-0' : 'left-0'"
-            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l pos-abs">
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
             <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-700">
               save
+            </mat-icon>
+          </button>
+
+          <button
+            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
+            [ngClass]="rtlDirection ? 'right-0' : 'left-0'"
+            (click)="closeModal()">
+            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-red-700">
+              close
             </mat-icon>
           </button>
 
@@ -126,9 +132,37 @@
               restore_page
             </mat-icon>
           </button>
-          <!--<input [(ngModel)]="rotation" placeholder="Rotation" type="number" (keyup)="updateRotation()"/>-->
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'imageCropper'"
+     class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-999">
+  <div class="text-center">
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+         width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+        <rect x="0" y="13" width="4" height="5" fill="#333">
+          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+        </rect>
+      <rect x="10" y="13" width="4" height="5" fill="#333">
+          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.15s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+        <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.15s" dur="0.6s"
+                 repeatCount="indefinite"></animate>
+        </rect>
+      <rect x="20" y="13" width="4" height="5" fill="#333">
+          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.3s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+        <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.3s" dur="0.6s"
+                 repeatCount="indefinite"></animate>
+        </rect>
+      </svg>
+
+    <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
   </div>
 </div>

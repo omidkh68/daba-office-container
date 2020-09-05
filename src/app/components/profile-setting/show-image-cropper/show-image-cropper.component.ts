@@ -1,4 +1,4 @@
-import {Component, Inject, Injector} from '@angular/core';
+import {Component, Inject, Injector, OnInit} from '@angular/core';
 import {Dimensions, ImageCroppedEvent, ImageTransform} from 'ngx-image-cropper';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
@@ -9,23 +9,26 @@ import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MessageService} from "../../../services/message.service";
+import {CheckLoginInterface} from "../../login/logic/check-login.interface";
 
 @Component({
   selector: 'app-show-image-cropper',
   templateUrl: './show-image-cropper.component.html',
   styleUrls: ['./show-image-cropper.component.scss']
 })
-export class ShowImageCropperComponent extends LoginDataClass {
+export class ShowImageCropperComponent extends LoginDataClass implements OnInit {
   imageChangedEvent: any = '';
   croppedImage: any = '';
   canvasRotation = 0;
   rotation = 0;
   scale = 1;
+  dialogData;
   showCropper = false;
   containWithinAspectRatio = false;
   transform: ImageTransform = {};
-  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'changeLang'};
   rtlDirection: boolean;
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'imageCropper'};
 
   private _subscription: Subscription = new Subscription();
 
@@ -35,118 +38,61 @@ export class ShowImageCropperComponent extends LoginDataClass {
               private translate: TranslateService,
               private injector: Injector,
               private userInfoService: UserInfoService,
+              private messageService: MessageService,
               public dialogRef: MatDialogRef<ShowImageCropperComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data) {
     super(injector, userInfoService);
 
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
+
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
+  }
+
+  ngOnInit() {
+    this.dialogData = this.data;
+
+    this.fileChangeEvent(this.dialogData.data);
+  }
+
+  closeModal() {
+    this.dialogRef.close();
   }
 
   onSubmit() {
-    this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'imageCropper'});
 
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
+    this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     const finalValue = {};
 
     finalValue['profile_image'] = this.croppedImage;
 
     this._subscription.add(
-      this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+      this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
 
-        let temp = this.loggedInUser;
+        if (resp.success) {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'imageCropper'});
 
-        temp = {...temp, profile_image: 'assets/profileImg/0.jpg'};
+          let temp = this.loggedInUser;
 
-        this.userInfoService.changeUserInfo(temp);
+          temp = {...temp, profile_image: 'assets/profileImg/0.jpg'};
 
-        temp = {...temp, profile_image: resp.data.profile_image};
+          this.userInfoService.changeUserInfo(temp);
 
-        this.userInfoService.changeUserInfo(temp);
+          temp = {...temp, profile_image: resp.data.profile_image};
 
-        this.dialogRef.close();
+          this.userInfoService.changeUserInfo(temp);
 
-
-        /*if (resp.result) {
-          this.bottomSheetData.bottomSheetRef.close();
-
-          this.messageService.showMessage(resp.message);
-
-          this.refreshBoardService.changeCurrentDoRefresh(true);
-        } else {
-          this.form.enable();
-        }*/
+          this.dialogRef.close();
+        }
       }, (error: HttpErrorResponse) => {
-        // this.form.enable();
-
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
-
-        /*this.refreshLoginService.openLoginDialog(error);*/
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'imageCropper'});
       })
     );
-    /*if (this.dialogData.action === 'addUser') {
-      const finalValue = this.form.value;
-      finalValue.c_password = this.form.get('password').value;
-      finalValue.timezone = this.form.get('timezone').value.timezone;
-      this._subscription.add(
-        this._hrManagementService.addUser(finalValue).subscribe((resp: any) => {
-            if (resp.status === 200) {
-              this.overlayLoading = false;
-              this.form.enable();
-
-              this.showMessage(0, resp.body.msg);
-              this.dialogRef.close(resp);
-            }
-          },
-          error => {
-            this.overlayLoading = false;
-            this.form.enable();
-
-            const objectKeys = Object.keys(error.error.error);
-            objectKeys.forEach(obj => {
-              error.error.error[obj].forEach(val => {
-                this.showMessage(1, val);
-              });
-            });
-
-            if (error.status === 401) {
-              this.userInfoService.changeLoginData('');
-              this._router.navigateByUrl(`/login`);
-            }
-          }
-        )
-      );
-    } else if (this.dialogData.action === 'editUser') {
-      const finalValue = this.form.value;
-      finalValue.c_password = this.form.get('password').value;
-      finalValue.timezone = this.form.get('timezone').value.timezone;
-
-      this._subscription.add(
-        this._hrManagementService.updateUser(this.form.value, this.dialogData.data.id).subscribe((resp: any) => {
-            if (resp.status === 200) {
-              this.overlayLoading = false;
-              this.form.enable();
-
-              this.showMessage(0, resp.body.msg);
-              this.dialogRef.close(resp);
-            }
-          },
-          error => {
-            this.overlayLoading = false;
-            this.form.enable();
-            this.showMessage(1, error.error.msg);
-
-            if (error.status === 401) {
-              this.userInfoService.changeLoginData('');
-              this._router.navigateByUrl(`/login`);
-            }
-          }
-        )
-      );
-    }*/
   }
 
   fileChangeEvent(event: any): void {
@@ -161,11 +107,10 @@ export class ShowImageCropperComponent extends LoginDataClass {
     this.showCropper = true;
   }
 
-  cropperReady(sourceImageDimensions: Dimensions) {
-    // console.log('Cropper ready', sourceImageDimensions);
-  }
-
   loadImageFailed() {
+    const successfulMessage = this.getTranslate('profileSettings.error_upload');
+
+    this.messageService.showMessage(successfulMessage, 'error');
   }
 
   rotateLeft() {
@@ -221,13 +166,6 @@ export class ShowImageCropperComponent extends LoginDataClass {
     this.containWithinAspectRatio = !this.containWithinAspectRatio;
   }
 
-  updateRotation() {
-    this.transform = {
-      ...this.transform,
-      rotate: this.rotation
-    };
-  }
-
   private flipAfterRotate() {
     const flippedH = this.transform.flipH;
     const flippedV = this.transform.flipV;
@@ -236,5 +174,9 @@ export class ShowImageCropperComponent extends LoginDataClass {
       flipH: flippedV,
       flipV: flippedH
     };
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 }
