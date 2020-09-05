@@ -11,11 +11,11 @@ export interface UserContainerInterface {
   services?: ServiceInterface[],
   role?: RoleInterface;
   user_status: UserStatusInterface;
-  "password"?: string;
-  "c_password"?: string;
-  "lang"?:string;
-  "dark_mode"?: number,
-  "extension_no"?:number,
-  "profile_image"?:string;
-  "background_image"?:string;
+  password?: string;
+  c_password?: string;
+  lang?: string;
+  dark_mode?: number;
+  extension_no?: number;
+  profile_image?: string;
+  background_image?: string;
 }

@@ -70,3 +70,9 @@
     border: solid 1px #DDD;
   }
 }
+
+.overdue-task {
+  border: solid 1px #F44336;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px -4px #F44336;
+}

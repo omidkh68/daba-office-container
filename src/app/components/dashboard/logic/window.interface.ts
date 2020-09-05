@@ -17,7 +17,7 @@ export interface WindowInterface {
   minimizable: boolean;
   isDraggable: boolean;
   isActive: boolean;
-  hasFrame: boolean;
-  position: DialogPositionInterface;
+  // position: DialogPositionInterface;
   windowService: ServiceItemsInterface;
+  priority: number;
 }

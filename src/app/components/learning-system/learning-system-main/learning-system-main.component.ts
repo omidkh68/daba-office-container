@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, Injector, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {AppConfig} from '../../../../environments/environment';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
@@ -41,7 +42,7 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
     if (this.webFrame) {
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'learningSystem'});
 
-      const address = `https://eis.enoox.com/`;
+      const address = `${AppConfig.EIS_URL}`;
 
       this.webFrame.nativeElement.setAttribute('src', address);
 

@@ -7,7 +7,6 @@ import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {IncomingInterface} from '../logic/incoming.interface';
 import {ExtensionInterface} from '../logic/extension.interface';
-import {WindowManagerService} from '../../../services/window-manager.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 
 export interface EssentialTagsInterface {
@@ -72,11 +71,10 @@ export class SoftPhoneService extends LoginDataClass {
   oReadyStateTimer;
   viewLocalScreencast; // <video> (webrtc) or <div> (webrtc4all)*/
 
-  constructor(private userInfoService: UserInfoService,
+  constructor(private injector: Injector,
               private messageService: MessageService,
-              private windowManagerService: WindowManagerService,
-              private translateService: TranslateService,
-              private injector: Injector) {
+              private userInfoService: UserInfoService,
+              private translateService: TranslateService) {
     super(injector, userInfoService);
   }
 
@@ -208,12 +206,6 @@ export class SoftPhoneService extends LoginDataClass {
         }
       }
       //btnRegister.disabled = false;
-    }).catch(() => {
-      const currentWindowInstance = this.windowManagerService.windowListArray.filter(item => item.windowService.serviceTitle === 'pbx_service').pop();
-
-      this.windowManagerService.closeWindow(currentWindowInstance.windowService);
-
-      this.messageService.showMessage(this.getTranslate('soft_phone.main.no_permission'));
     });
   };
 

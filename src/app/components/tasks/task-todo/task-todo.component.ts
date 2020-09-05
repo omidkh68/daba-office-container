@@ -11,6 +11,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
+import {WindowManagerService} from '../../../services/window-manager.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
@@ -41,13 +42,14 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
-              public dialog: MatDialog,
+  constructor(public dialog: MatDialog,
               private fb: FormBuilder,
+              private api: ApiService,
               private messageService: MessageService,
-              private refreshLoginService: RefreshLoginService,
               private translateService: TranslateService,
+              private refreshLoginService: RefreshLoginService,
               private refreshBoardService: RefreshBoardService,
+              private windowManagerService: WindowManagerService,
               private loadingIndicatorService: LoadingIndicatorService) {
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
@@ -165,6 +167,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       panelClass: 'approve-detail-dialog',
       height: '160px'
     });
+
+    this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {

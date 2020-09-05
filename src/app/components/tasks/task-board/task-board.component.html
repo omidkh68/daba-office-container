@@ -38,7 +38,9 @@
       </div>
 
       <mat-card class="margin-b-full bg-white card-hover"
+                [ngClass]="{'overdue-task': task.overdue}"
                 [cdkDragData]="task"
+                matTooltip="{{task.overdue ? ('tasks.boards.overdue' | translate) : null}}"
                 (click)="showTaskDetail(task, board.id)"
                 *ngFor="let task of board.tasks" cdkDrag>
         <mat-card-header class="full-width">

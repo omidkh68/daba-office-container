@@ -11,6 +11,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ViewDirectionService} from '../../services/view-direction.service';
+import {WindowManagerService} from '../../services/window-manager.service';
 import {ProfileSettingService} from './logic/profile-setting.service';
 import {UserContainerInterface} from '../users/logic/user-container.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
@@ -32,7 +33,6 @@ export interface LangInterface {
   styleUrls: ['./profile-setting.component.scss']
 })
 export class ProfileSettingComponent extends LoginDataClass implements OnInit, AfterViewInit {
-
   defaultLang = 'fa';
   tabs = [];
   form: FormGroup;
@@ -61,15 +61,16 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
 
   /*timezone*/
 
-  constructor(private viewDirection: ViewDirectionService,
-              private translate: TranslateService,
-              public dialog: MatDialog,
+  constructor(public dialog: MatDialog,
               private fb: FormBuilder,
-              private profileSettingService: ProfileSettingService,
-              private loadingIndicatorService: LoadingIndicatorService,
               private injector: Injector,
+              private translate: TranslateService,
               private userInfoService: UserInfoService,
-              private datetimeService: DatetimeService) {
+              private datetimeService: DatetimeService,
+              private viewDirection: ViewDirectionService,
+              private windowManagerService: WindowManagerService,
+              private profileSettingService: ProfileSettingService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -312,6 +313,8 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, A
       height: '600px',
       panelClass: 'status-dialog'
     });
+
+    this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe((resp: any) => {

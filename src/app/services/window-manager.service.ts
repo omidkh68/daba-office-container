@@ -35,7 +35,6 @@ export class WindowManagerService {
 
   openWindowState(service: ServiceItemsInterface) {
     let component: any = null;
-    let hasFrame: boolean = false;
     let maximizable: boolean = true;
     let windowWidth = service && service.width ? service.width : 0;
     let windowHeight = service && service.height ? service.height : 0;
@@ -44,60 +43,51 @@ export class WindowManagerService {
       switch (service.serviceTitle) {
         case 'project_service': {
           component = TasksComponent;
-
           break;
         }
 
         case 'pbx_service': {
           component = SoftPhoneComponent;
           maximizable = false;
-
           break;
         }
 
         case 'conference_service': {
           component = ConferenceComponent;
-          hasFrame = true;
-
           break;
         }
 
         case 'web_browser': {
           component = WebBrowserComponent;
-          hasFrame = true;
-
           break;
         }
 
         case 'events_calendar': {
           component = EventsHandlerComponent;
-          hasFrame = true;
           break;
         }
 
         case 'admin_panel': {
           component = AdminPanelComponent;
-          hasFrame = true;
           break;
         }
 
         case 'learning_service': {
           component = LearningSystemComponent;
-          hasFrame = true;
           break;
         }
       }
 
-      const findIndex = this._defaultWindows.findIndex(windowItem => windowItem.windowService.serviceTitle === service.serviceTitle);
+      const findIndex = this.windowListArray.findIndex(windowItem => windowItem.windowService.serviceTitle === service.serviceTitle);
 
       if (findIndex === -1) {
         // const widthEmptyState = (this.window.innerWidth - windowWidth) / 2;
-        const widthEmptyState = (Math.random() * (this.window.innerWidth - windowWidth)).toFixed();
+        /*const widthEmptyState = (Math.random() * (this.window.innerWidth - windowWidth)).toFixed();
         const heightEmptyState = (Math.random() * (this.window.innerHeight - windowHeight)).toFixed();
         const rndNumForWidth = this.randInt(50, widthEmptyState);
         const rndNumForHeight = this.randInt(50, heightEmptyState);
 
-        const position: DialogPositionInterface = {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`};
+        const position: DialogPositionInterface = {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`};*/
 
         const dialogRef = this.dialog.open(component, {
           data: service,
@@ -110,6 +100,8 @@ export class WindowManagerService {
           // position: {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`}
         });
 
+        let maxZIndex = this.getNextZIndex();
+
         const mwindow: WindowInterface = {
           windowRef: dialogRef,
           minimizable: true,
@@ -118,18 +110,19 @@ export class WindowManagerService {
           isMinimized: false,
           isDraggable: true,
           isActive: false,
-          hasFrame: hasFrame,
           resizable: true,
-          position: position,
-          windowService: service
+          // position: position,
+          windowService: service,
+          priority: maxZIndex
         };
 
-        this._defaultWindows.push(mwindow);
+        this.windowListArray.push(mwindow);
 
-        this.windows.next(this._defaultWindows);
+        this.windows.next(this.windowListArray);
 
+        setTimeout(() => this.activeWindow(service), 200);
 
-        this.updateWindowPosition(mwindow, false);
+        // this.updateWindowPosition(mwindow, false);
       } else {
         this.restoreWindow(service);
       }
@@ -163,7 +156,7 @@ export class WindowManagerService {
   }
 
   minimizeWindow(service: ServiceItemsInterface) {
-    const windowInstance = this._defaultWindows.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
 
     windowInstance.isMinimized = true;
     windowInstance.isMaximized = false;
@@ -174,7 +167,7 @@ export class WindowManagerService {
   }
 
   maximizeWindow(service: ServiceItemsInterface) {
-    const windowInstance = this._defaultWindows.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
 
     windowInstance.isMinimized = false;
     windowInstance.isMaximized = true;
@@ -182,10 +175,12 @@ export class WindowManagerService {
     windowInstance.windowRef.removePanelClass('minimized');
     windowInstance.windowRef.addPanelClass('maximized');
     // windowInstance.windowRef.updatePosition({top: '0'});
+
+    this.activeWindow(service);
   }
 
   restoreWindow(service: ServiceItemsInterface) {
-    const windowInstance = this._defaultWindows.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
 
     windowInstance.isMinimized = false;
     windowInstance.isMaximized = false;
@@ -198,47 +193,38 @@ export class WindowManagerService {
   }
 
   activeWindow(service: ServiceItemsInterface) {
-    if (this._defaultWindows.length === 1) {
-      return;
-    }
+    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
 
-    const windowInstance = this._defaultWindows.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+    let priority = this.getMaxZIndex();
 
     const dialogId = windowInstance.windowRef.id;
 
     this.element = document.getElementById(dialogId) as HTMLElement;
 
-    this.cdkOverlayContainer = document.querySelector('.cdk-overlay-container') as HTMLElement;
-
-    const cdkElements = this.cdkOverlayContainer.children;
-
-    try {
-      if (!windowInstance.hasFrame) {
-        const lastElementId = cdkElements.item(cdkElements.length - 1).querySelector('.mat-dialog-container').getAttribute('id');
-
-        if (dialogId !== lastElementId) {
-          const godParentElement = this.element.parentElement.parentElement;
-
-          this.cdkOverlayContainer.insertAdjacentElement('beforeend', godParentElement);
-        }
+    if (windowInstance.priority === priority) {
+      if (this.windowListArray.length === 1) {
+        windowInstance.priority = ++priority;
       } else {
-        Object.keys(cdkElements).map((value, index) => {
-          let findId = cdkElements.item(index).querySelector('.mat-dialog-container').getAttribute('id');
-
-          if (findId !== dialogId) {
-            this.cdkOverlayContainer.insertAdjacentElement('afterbegin', cdkElements.item(index));
-          }
-        });
+        if (this.getExistZIndex(priority)) {
+          windowInstance.priority = ++priority;
+        } else {
+          windowInstance.priority = priority;
+        }
       }
-    } catch (e) {
+    } else if (windowInstance.priority < priority) {
+      windowInstance.priority = ++priority;
     }
+
+    this.element.parentElement.parentElement.style.zIndex = windowInstance.priority.toString();
+
+    this.windows.next(this.windowListArray);
   }
 
   closeWindow(service: ServiceItemsInterface) {
-    const windowInstance = this._defaultWindows.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
-    const findIndex = this._defaultWindows.findIndex(window => window.windowService.serviceTitle === service.serviceTitle);
+    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+    const findIndex = this.windowListArray.findIndex(window => window.windowService.serviceTitle === service.serviceTitle);
 
-    this._defaultWindows.splice(findIndex, 1);
+    this.windowListArray.splice(findIndex, 1);
 
     windowInstance.windowRef.close();
   }
@@ -256,7 +242,7 @@ export class WindowManagerService {
   }
 
   centerWindow(service: ServiceItemsInterface) {
-    const windowInstance = this._defaultWindows.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
 
     const centerWidth = (this.window.innerWidth - windowInstance.windowService.width) / 2;
     const centerHeight = (this.window.innerHeight - windowInstance.windowService.height) / 2;
@@ -270,7 +256,6 @@ export class WindowManagerService {
   }
 
   updateWindowPosition(windowInstance: any, center: boolean) {
-
     const widthEmptyState = (Math.random() * (this.window.innerWidth - windowInstance.windowService.width)).toFixed();
     const heightEmptyState = (Math.random() * (this.window.innerHeight - windowInstance.windowService.height)).toFixed();
     const rndNumForWidth = this.randInt(50, widthEmptyState);
@@ -281,5 +266,49 @@ export class WindowManagerService {
     } else {
       element.style.transform = 'translate3d(' + rndNumForWidth + 'px, ' + rndNumForHeight + 'px, 0px)';
     }*/
+  }
+
+  getMaxZIndex(): number {
+    let zIndex = 1000;
+
+    if (this.windowListArray.length === 1 || this.windowListArray.length === 0) {
+      return zIndex;
+    }
+
+    return Math.max(...this.windowListArray.map(window => window.priority));
+  }
+
+  getNextZIndex(): number {
+    let currentZIndex = this.getMaxZIndex();
+
+    if (this.windowListArray.length === 1 || this.windowListArray.length === 0) {
+      return currentZIndex;
+    }
+
+    return ++currentZIndex;
+  }
+
+  getExistZIndex(zIndex: number): boolean {
+    let exist = false;
+
+    this.windowListArray.map(window => {
+      exist = window.priority === zIndex;
+    });
+
+    return exist;
+  }
+
+  dialogOnTop(dialogId: string) {
+    setTimeout(() => {
+      let maxWindowZIndex = (this.getMaxZIndex() + 500).toString();
+
+      const element = document.getElementById(dialogId) as HTMLElement;
+
+      const elementOverlay = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
+
+      elementOverlay.style.zIndex = maxWindowZIndex;
+
+      element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
+    });
   }
 }

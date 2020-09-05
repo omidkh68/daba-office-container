@@ -15,6 +15,7 @@ import {CurrentTaskService} from '../services/current-task.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {WindowManagerService} from '../../../services/window-manager.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
@@ -50,14 +51,16 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private viewDirection: ViewDirectionService,
+  constructor(public dialog: MatDialog,
               private injector: Injector,
-              private loadingIndicatorService: LoadingIndicatorService,
               private translate: TranslateService,
               private userInfoService: UserInfoService,
+              private viewDirection: ViewDirectionService,
               private currentTaskService: CurrentTaskService,
-              public dialog: MatDialog) {
+              private windowManagerService: WindowManagerService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
+
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
@@ -119,6 +122,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       height: '560px'
     });
 
+    this.windowManagerService.dialogOnTop(dialogRef.id);
+
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -162,6 +167,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       height: '250px'
     });
 
+    this.windowManagerService.dialogOnTop(dialogRef.id);
+
     this._subscription.add(
       dialogRef.afterClosed().subscribe(resp => {
         if (resp) {
@@ -184,6 +191,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       width: '500px',
       height: '350px'
     });
+
+    this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(resp => {
