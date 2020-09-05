@@ -1,64 +1,66 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="container-wallpaper padding-half">
 
   <!--drag & drop file-->
-  <div *ngIf="sellersPermitString !== ''"
-       [ngStyle]="{'width': 'calc(160px *' + environment.width / environment.height + ')' }"
-       class="height-160 pos-rel margin-auto round-corner monitor-image"
-       style="background-color: blueviolet; height: 100vh; max-height: 160px">
+  <div class="pos-rel">
+    <div *ngIf="sellersPermitString !== ''"
+         [ngStyle]="{'width': 'calc(160px *' + environment.width / environment.height + ')' }"
+         class="height-160 pos-rel margin-auto round-corner monitor-image display-flex justify-content-center overflow-hide"
+         style="background-color: blueviolet; height: 100vh; max-height: 160px">
 
-    <img [src]="sellersPermitString" class="display-block margin-auto full-height" alt="">
+      <img [src]="sellersPermitString" class="display-block margin-auto full-height" alt="">
 
-    <div *ngIf="showProgress" class="files-list pos-abs bottom-0 full-width z-index-9999" dir="ltr">
-      <div *ngFor="let file of files" class="single-file round-corner">
+      <div *ngIf="showProgress" class="files-list pos-abs bottom-0 full-width z-index-9999" dir="ltr">
+        <div *ngFor="let file of files" class="single-file round-corner">
 
-        <div class="info">
-          <h4 class="name">
-            {{ file?.name }}
-          </h4>
-          <p class="size">
-            {{ formatBytes(file?.size) }}
-          </p>
-          <app-progress [progress]="file?.progress"></app-progress>
+          <div class="info">
+            <h4 class="name">
+              {{ file?.name }}
+            </h4>
+            <p class="size">
+              {{ formatBytes(file?.size) }}
+            </p>
+            <app-progress [progress]="file?.progress"></app-progress>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div *ngIf="showDelete" (click)="deleteFile(0)" class="delete pos-abs top-0 cursor-pointer">
-      <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-800">
-        replay
-      </mat-icon>
-    </div>
-
-    <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'wallpaper'"
-         class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-999">
-      <div class="text-center">
-        <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"
-             width="24px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
-             y="0px">
+      <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'wallpaper'"
+           class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-999">
+        <div class="text-center">
+          <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"
+               width="24px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+               y="0px">
         <rect fill="#333" height="5" width="4" x="0" y="13">
           <animate attributeName="height" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
                    values="5;21;5"></animate>
           <animate attributeName="y" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
                    values="13; 5; 13"></animate>
         </rect>
-          <rect fill="#333" height="5" width="4" x="10" y="13">
+            <rect fill="#333" height="5" width="4" x="10" y="13">
           <animate attributeName="height" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
                    values="5;21;5"></animate>
-            <animate attributeName="y" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
-                     values="13; 5; 13"></animate>
+              <animate attributeName="y" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                       values="13; 5; 13"></animate>
         </rect>
-          <rect fill="#333" height="5" width="4" x="20" y="13">
+            <rect fill="#333" height="5" width="4" x="20" y="13">
           <animate attributeName="height" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
                    values="5;21;5"></animate>
-            <animate attributeName="y" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
-                     values="13; 5; 13"></animate>
+              <animate attributeName="y" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                       values="13; 5; 13"></animate>
         </rect>
       </svg>
 
-        <!--<span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>-->
+          <!--<span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>-->
+        </div>
       </div>
     </div>
+
+    <div *ngIf="showDelete" (click)="deleteFile(0)" class="delete pos-abs right-0 cursor-pointer">
+      <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-800">
+        replay
+      </mat-icon>
+    </div>
   </div>
+
 
   <div (fileDropped)="onFileDropped($event)" *ngIf="sellersPermitString === ''" appDnd
        class="container full-width padding-half round-corner bg-white">

@@ -16,7 +16,7 @@ export class WallpaperSelectorService {
 
   constructor(private userInfoService: UserInfoService) {
 
-    this.preWallpaper = this.userInfoService.getUserInfo().background_image !== null ? 'url(' + this.userInfoService.getUserInfo().background_image + ')' : 'url(assets/bg/bg-18.jpg)';
+    this.preWallpaper = this.userInfoService.getUserInfo().background_image !== null ? 'url(' + this.userInfoService.getUserInfo().background_image + ')' : 'url(./assets/images/wallpapers/18.jpg)';
     this._defaultFromLocalStorage = DEFAULT_WALLPAPER !== null ? DEFAULT_WALLPAPER : this.preWallpaper;
     this._wallpaper = new BehaviorSubject(this._defaultFromLocalStorage);
     this.currentWallpaper = this._wallpaper.asObservable();

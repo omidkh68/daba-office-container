@@ -1,4 +1,4 @@
-<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 bottom-0 top-0 full-width">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 bottom-0 top-0 full-width bg-white">
   <div class="window-heading full-width height-45 padding-half display-flex">
     <h3 class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex">
       <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
@@ -17,7 +17,7 @@
       </button>
     </div>
   </div>
-  <div class="window-content pos-rel">
+  <div class="window-content pos-rel bg-grey">
     <div class="component-content full-width full-height pos-abs left-0 right-0 top-0">
       <div class="container-show-cropper padding-full display-inline-block full-width">
 
@@ -55,23 +55,7 @@
           <img [src]="croppedImage" class="round-corner full-width"/>
         </div>
 
-        <div class="container-tools display-inline-block full-width height-100">
-
-          <button (click)="onSubmit()"
-                  class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-700">
-              save
-            </mat-icon>
-          </button>
-
-          <button
-            class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l"
-            [ngClass]="rtlDirection ? 'right-0' : 'left-0'"
-            (click)="closeModal()">
-            <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-red-700">
-              close
-            </mat-icon>
-          </button>
+        <div class="container-tools display-inline-block full-width height-50 margin-t-full">
 
           <button (click)="rotateLeft()"
                   class="display-block cursor-pointer text-center no-padding no-border no-bg margin-r-l">
@@ -133,6 +117,22 @@
               class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-purple-800">
               restore_page
             </mat-icon>
+          </button>
+        </div>
+
+        <div class="height-35 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
+          <button type="button"
+                  (click)="closeModal()"
+                  class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
+            <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
+          </button>
+
+          <button mat-raised-button
+                  (click)="onSubmit()"
+                  type="button"
+                  class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+            <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+            <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
           </button>
         </div>
       </div>

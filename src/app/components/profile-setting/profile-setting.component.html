@@ -46,7 +46,8 @@
             <div class="image-profile margin-t-full-2 margin-b-full">
               <div class="box mat-elevation-z1 pos-rel text-center round-corner width-150 height-150 overflow-hide">
                 <img class="full-width full-height cursor-pointer"
-                     [src]="loggedInUser.profile_image" alt=""
+                     [src]="loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser.email +'.jpg'"
+                     [alt]="loggedInUser.name"
                      onerror="this.src='assets/profileImg/0.jpg'">
                 <label for="fileChange"
                        class="overlay-image cursor-pointer pos-abs full-width full-height purple-gradient">

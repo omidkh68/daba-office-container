@@ -11,7 +11,7 @@ import {ElectronService} from '../services/electron.service';
 import {ChangeStatusService} from '../components/status/services/change-status.service';
 import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
 import {ViewDirectionService} from '../services/view-direction.service';
-import * as Datastore from 'nedb';
+// import * as Datastore from 'nedb';
 import {delay} from 'rxjs/internal/operators';
 
 @Injectable({

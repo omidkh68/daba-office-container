@@ -3,7 +3,7 @@ import {app, BrowserWindow, ipcMain, Menu, screen, webFrame} from 'electron';
 import * as path from 'path';
 import {join} from 'path';
 import * as url from 'url';
-import * as Datastore from 'nedb';
+// import * as Datastore from 'nedb';
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -38,7 +38,7 @@ function createWindow(): BrowserWindow {
 
   win.webContents.on('devtools-opened', function () {
     if (!serve) {
-      // win.webContents.closeDevTools();
+      win.webContents.closeDevTools();
     }
   });
 
@@ -79,14 +79,14 @@ function createWindow(): BrowserWindow {
           autoUpdater.checkForUpdatesAndNotify();
       });*/
 
-  let userInfoDb: Datastore = new Datastore({
+  /*let userInfoDb: Datastore = new Datastore({
     filename: path.join(__dirname, 'Collections.db'),
     autoload: true
   });
 
   const globalAny: any = global;
 
-  globalAny.collectionsDb = userInfoDb;
+  globalAny.collectionsDb = userInfoDb;*/
 
   return win;
 }
@@ -134,9 +134,9 @@ try {
         win.focus();
       }
     });
-  }
+  }*/
 
-  // todo: remove comment
+  // todo: ebi - remove comment
 
   app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
