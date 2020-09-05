@@ -119,6 +119,9 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
   }
 
   formPatchValue() {
+    // this.form.valueChanges.subscribe()
+
+
     if (this.loggedInUser.lang !== null) {
       this.defaultLang = this.loggedInUser.lang;
     }
