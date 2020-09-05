@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {AppConfig} from '../../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
-import {CheckLoginInterface} from "../../login/logic/check-login.interface";
-
+import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 
 @Injectable({
   providedIn: 'root'

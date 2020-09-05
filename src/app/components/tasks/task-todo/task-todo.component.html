@@ -25,6 +25,7 @@
             <div mat-line class="text-italic font-7-em">{{todoItem.creationDate | jalali}}</div>
 
             <button
+              type="button"
               [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
               class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
               (click)="$event.stopPropagation(); updateTodo(todoItem)">
@@ -32,6 +33,7 @@
             </button>
 
             <button
+              type="button"
               class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
               (click)="$event.stopPropagation(); deleteTodo(todoItem)">
               <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-red-600">close</mat-icon>
@@ -49,6 +51,7 @@
                    (keydown)="$event.code === 'Enter' ? edit ? saveTodo() : addTodo() : ''">
 
             <button mat-raised-button matSuffix
+                    type="button"
                     [disabled]="form.get('todo').value.text === ''"
                     (click)="edit ? saveTodo() : addTodo()">
               <mat-icon>check</mat-icon>

@@ -39,9 +39,8 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(// private electronService: ElectronService,
-              private currentTaskService: CurrentTaskService,
-              private userInfoService: UserInfoService) {
+  constructor(private userInfoService: UserInfoService,
+              private currentTaskService: CurrentTaskService) {
     this._subscription.add(
       this.currentTaskService.currentTask.subscribe(currentTasks => this.currentTasks = currentTasks)
     );
@@ -83,31 +82,12 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
       boardStatus: 'inProgress'
     };
 
-    /*const bottomSheetRef = this.bottomSheet.open(TaskDetailComponent, {
-      data: data,
-      autoFocus: false
-    });
-
-    this._subscription.add(
-      bottomSheetRef.afterDismissed().subscribe(result => {
-        if (result !== undefined && result !== false) {
-          this.assignNewTaskToBoard(result.task, result.prevContainer, result.newContainer);
-
-          // this.socket.emit('updatedata');
-        }
-      })
-    );*/
-
     this.triggerBottomSheet.emit({
       component: TaskDetailComponent,
       height: '98%',
       width: '95%',
       data: data
     });
-  }
-
-  currentTaskPushToBoard(task: TaskInterface, prevContainer, newContainer) {
-    this.pushTaskToBoard.emit({task: task, prevContainer: prevContainer, newContainer: newContainer});
   }
 
   ngOnChanges(changes: SimpleChanges): void {

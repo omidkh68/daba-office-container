@@ -3,11 +3,11 @@
   <div class="window-heading full-width height-45 padding-half display-flex bg-white">
 
     <h1
-      class="text-dark-mode-color margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half padding-r-full padding-l-full">
+      class="text-gray-800 font-full-em text-weight-500 padding-mini-r-l no-margin">
       {{'profileSettings.profile_settings' | translate}}
     </h1>
 
-    <div class="pos-abs right-0 left-0 top-6 margin-auto width-250 height-45">
+    <div class="pos-abs right-0 left-0 top-6 margin-auto width-240 height-45">
       <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                                (change)="changeViewMode(viewMode.value)"
                                [ngClass]="{'view-mode': viewMode}"
@@ -27,7 +27,7 @@
       <button (click)="close();"
               class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
-          class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">close
+          class="full-width full-height text-center font-9-em text-gray-600 text-weight-bold">close
         </mat-icon>
       </button>
     </div>

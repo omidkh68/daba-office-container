@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {timer} from 'rxjs';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -12,7 +12,6 @@ import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-pho
 import {SoftPhoneTransferCallComponent} from '../soft-phone-transfer-call/soft-phone-transfer-call.component';
 import {ConferenceOnlineExtensionInterface} from '../logic/extension.interface';
 import {ResultConfOnlineExtensionApiInterface} from '../logic/result-api.interface';
-import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 
 export interface KeysInterface {
   type: string;
@@ -62,11 +61,11 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private viewDirection: ViewDirectionService,
-              private apiService: ApiService,
-              private notificationService: NotificationService,
+  constructor(private apiService: ApiService,
+              private viewDirection: ViewDirectionService,
+              private userInfoService: UserInfoService,
               private softPhoneService: SoftPhoneService,
-              private userInfoService: UserInfoService) {
+              private notificationService: NotificationService) {
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
@@ -218,6 +217,10 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     if (key.num === '#') {
       setTimeout(() => this.activeDialPad = false, 5000);
     }
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
+    this.activeExtensionList = false;
   }
 
   ngOnDestroy(): void {

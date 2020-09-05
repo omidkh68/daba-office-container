@@ -5,16 +5,15 @@ import {Observable} from 'rxjs/internal/Observable';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {map, startWith} from 'rxjs/operators';
 import {LoginDataClass} from '../../services/loginData.class';
+import {MessageService} from '../../services/message.service';
 import {DatetimeService} from './logic/datetime.service';
 import {UserInfoService} from '../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {CheckLoginInterface} from '../login/logic/check-login.interface';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ProfileSettingService} from './logic/profile-setting.service';
-import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
 import {ShowImageCropperComponent} from './show-image-cropper/show-image-cropper.component';
-import {MessageService} from "../../services/message.service";
-import {CheckLoginInterface} from "../login/logic/check-login.interface";
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
 
 export interface Timezones {
   city: string;
@@ -32,7 +31,6 @@ export interface LangInterface {
   styleUrls: ['./profile-setting.component.scss']
 })
 export class ProfileSettingComponent extends LoginDataClass implements OnInit {
-
   viewModeTypes = 'information';
   resetInput;
   defaultLang;
@@ -55,20 +53,21 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       name: 'پارسی'
     }
   ];
+
   private _subscription: Subscription = new Subscription();
 
-  constructor(private viewDirection: ViewDirectionService,
-              private translate: TranslateService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               public dialog: MatDialog,
+              public dialogRef: MatDialogRef<ProfileSettingComponent>,
               private fb: FormBuilder,
-              private profileSettingService: ProfileSettingService,
-              private loadingIndicatorService: LoadingIndicatorService,
               private injector: Injector,
+              private translate: TranslateService,
+              private viewDirection: ViewDirectionService,
+              private messageService: MessageService,
               private userInfoService: UserInfoService,
               private datetimeService: DatetimeService,
-              private messageService: MessageService,
-              public dialogRef: MatDialogRef<ProfileSettingComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              private profileSettingService: ProfileSettingService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -130,9 +129,8 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
 
     const newTimezone = {};
     const requestTimezone = this.loggedInUser.timezone;
-    const tempTimezone = this.loggedInUser.timezone !== '' && this.loggedInUser.timezone !== null ? this.loggedInUser.timezone.split('/')[1] : '';
 
-    newTimezone['city'] = tempTimezone;
+    newTimezone['city'] = this.loggedInUser.timezone !== '' && this.loggedInUser.timezone !== null ? this.loggedInUser.timezone.split('/')[1] : '';
     newTimezone['timezone'] = requestTimezone;
 
     this.form.patchValue({

@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, Injector, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {AppConfig} from '../../../../environments/environment';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
@@ -16,7 +17,7 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
   @ViewChild('webFrame', {static: false}) webFrame: ElementRef;
 
   rtlDirection: boolean;
-  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'videoConference'};
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'adminPanel'};
 
   private _subscription: Subscription = new Subscription();
 
@@ -39,11 +40,15 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
 
   ngAfterViewInit(): void {
     if (this.webFrame) {
-      const address = `http://localhost:4201/#/home/?tokenType=${this.loginData.token_type}&accessToken=${this.loginData.access_token}`;
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'adminPanel'});
 
-      console.log(address);
+      const address = `${AppConfig.ADMIN_URL}/#/home/?tokenType=${this.loginData.token_type}&accessToken=${this.loginData.access_token}`;
 
       this.webFrame.nativeElement.setAttribute('src', address);
+
+      this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'adminPanel'});
+      });
     }
   }
 

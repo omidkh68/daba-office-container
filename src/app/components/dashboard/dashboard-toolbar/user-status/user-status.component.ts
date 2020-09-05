@@ -81,6 +81,8 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
         height: '160px'
       });
 
+      this.windowManagerService.dialogOnTop(dialogRef.id);
+
       this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
@@ -131,16 +133,9 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
       width: '500px',
       height: '385px',
       panelClass: 'status-dialog'
-    });/*
+    });
 
-    this._subscription.add(
-      dialogRef.afterClosed().subscribe((resp: any) => {
-        if (resp) {
-          console.log(resp);
-          this.messageService.showMessage(`${resp.message}`);
-        }
-      })
-    );*/
+    this.windowManagerService.dialogOnTop(dialogRef.id);
   }
 
   getElapsedTime(entry): void {
@@ -177,11 +172,11 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
         const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
         if (serviceName === 'pbx_service') {
-          this.serviceList.map(service => {
-            if (service.serviceTitle === 'pbx_service') {
-              this.openService(service);
-            }
-          })
+          const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();
+
+          if (service) {
+            this.openService(service);
+          }
         }
       });
     }, 2000);

@@ -17,8 +17,7 @@ export interface LangInterface {
 
 @Component({
   selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss']
+  templateUrl: './login-form.component.html'
 })
 export class LoginFormComponent implements OnInit {
   @Input()
@@ -63,10 +62,10 @@ export class LoginFormComponent implements OnInit {
       this.form = this.fb.group({
         username: new FormControl(''),
         password: new FormControl(''),
+        // username: new FormControl('khosrojerdi@dabacenter.ir'),
+        // password: new FormControl('123456'),
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
-
-      // todo: remove user pass
 
       this.viewDirection.changeDirection(this.form.get('lang').value === 'fa');
 

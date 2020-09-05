@@ -77,6 +77,8 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   ngOnInit(): void {
     this.electronService.window.on('close', () => {
       this.softPhoneService.sipHangUp();
+
+      // todo: change status to stop working
     });
   }
 

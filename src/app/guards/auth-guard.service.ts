@@ -11,6 +11,8 @@ import {ElectronService} from '../services/electron.service';
 import {ChangeStatusService} from '../components/status/services/change-status.service';
 import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
 import {ViewDirectionService} from '../services/view-direction.service';
+import * as Datastore from 'nedb';
+import {delay} from 'rxjs/internal/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -29,15 +31,16 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
   }
 
   canActivate(): Observable<boolean> {
-    /*const store = new Store();
+    /*const userInfoStore: Datastore = this.electronService.remote.getGlobal('collectionsDb');
 
-    if (store.get('userInfo')) {
-      this.userInfoService.changeUserInfo(store.get('userInfo'));
-    }
+    let result;
+    userInfoStore.findOne({}, (err, docs) => {
+      result = docs;
+    });
 
-    if (store.get('loginData')) {
-      this.userInfoService.changeLoginData(store.get('loginData'));
-    }*/
+    setTimeout(() => {
+      return
+    });*/
 
     if (this.loginData) {
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
@@ -50,6 +53,15 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
             this.viewDirection.changeDirection(resp.data.lang === 'fa');
 
             this.changeStatusService.changeUserStatus(resp.data.user_status);
+
+            /*const userInfo = {
+              loginData: this.loginData,
+              userInfo: resp.data
+            };
+
+            userInfoStore.insert(userInfo, (err, doc) => {
+              console.log('Inserted', doc, 'with ID', doc._id);
+            });*/
 
             return true;
           }

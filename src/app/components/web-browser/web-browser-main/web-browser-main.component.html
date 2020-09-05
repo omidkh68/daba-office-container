@@ -1,3 +1,12 @@
 <div class="full-width full-height bg-white pos-rel">
-  <webview src="https://www.google.com" class="webView-frame full-width full-height"></webview>
+  <div class="height-50 address-bar-container">
+    <input type="text" #addressBar
+           (focus)="addressBar.select()"
+           (keyup)="enterAddress($event)"
+           placeholder="Type a URL"
+           [value]="currentUrl"
+           class="no-box-shadow btn-rounded full-height full-width padding-r-l font-9-em">
+  </div>
+
+  <webview #webFrame class="webView-frame full-width height-full-minus-50"></webview>
 </div>

@@ -8,6 +8,7 @@ import {ConferenceInterface} from '../logic/conference.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ConferenceAddComponent} from '../conference-add/conference-add.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {WindowManagerService} from '../../../services/window-manager.service';
 
 @Component({
   selector: 'app-conference-main',
@@ -25,10 +26,11 @@ export class ConferenceMainComponent implements OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
+              private messageService: MessageService,
               private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private messageService: MessageService) {
+              private windowManagerService: WindowManagerService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );
@@ -46,10 +48,12 @@ export class ConferenceMainComponent implements OnDestroy {
       data: {action: 'add'}
     });
 
+    this.windowManagerService.dialogOnTop(dialogRef.id);
+
     this._subscription.add(
       dialogRef.afterClosed().subscribe((resp: ConferenceInterface) => {
         if (resp) {
-          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'videoConference'});
 
           this.confAddress = resp.confname;
 
@@ -63,7 +67,7 @@ export class ConferenceMainComponent implements OnDestroy {
             });
 
             this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
-              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'videoConference'});
             });
 
             setTimeout(() => {

@@ -5,20 +5,17 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ElectronService} from '../../../services/electron.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
 import {WallpaperSelectorService} from '../../../services/wallpaper-selector.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {CheckLoginInterface} from "../../login/logic/check-login.interface";
 
 @Component({
   selector: 'app-wallpaper',
   templateUrl: './wallpaper.component.html',
   styleUrls: ['./wallpaper.component.scss']
 })
-
-/*code file uploader va base64 az do code tashkil shode, ghesmat haye code aval va dovom moshakhas shode ba code1 code2*/
-
 export class WallpaperComponent extends LoginDataClass implements OnInit, OnDestroy {
   showProgress = false;
   showDelete = false;
@@ -91,17 +88,18 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   /*code1*/
   sellersPermitFile: any;
   sellersPermitString: string = '';
+
   private _subscription: Subscription = new Subscription();
 
-  constructor(private viewDirection: ViewDirectionService,
-              private wallPaperSelector: WallpaperSelectorService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               public dialogRef: MatDialogRef<WallpaperComponent>,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private electronService: ElectronService,
-              private profileSettingService: ProfileSettingService,
               private injector: Injector,
+              private viewDirection: ViewDirectionService,
+              private electronService: ElectronService,
               private userInfoService: UserInfoService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              private wallPaperSelector: WallpaperSelectorService,
+              private profileSettingService: ProfileSettingService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -191,6 +189,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
+
   /*code1*/
 
   /*code2*/
@@ -217,6 +216,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.showProgress = true;
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
   }
+
   /*code2*/
 
   onSubmit(img) {

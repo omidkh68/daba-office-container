@@ -59,6 +59,8 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
       panelClass: 'status-dialog'
     });
 
+    this.windowManagerService.dialogOnTop(dialogRef.id);
+
     this._subscription.add(
       dialogRef.afterClosed().subscribe((resp: any) => {
         if (resp) {

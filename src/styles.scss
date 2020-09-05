@@ -780,3 +780,7 @@ file-preview-container {
 .cdk-overlay-dark-backdrop {
   background: rgba(0,0,0,.6);
 }
+
+.cdk-overlay-transparent-backdrop, .cdk-overlay-connected-position-bounding-box {
+  z-index: 99999;
+}

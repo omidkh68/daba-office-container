@@ -15,6 +15,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
@@ -35,17 +36,18 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
+  constructor(public dialog: MatDialog,
               private fb: FormBuilder,
-              public dialog: MatDialog,
+              private api: ApiService,
               private injector: Injector,
               private messageService: MessageService,
-              private refreshLoginService: RefreshLoginService,
-              private refreshBoardService: RefreshBoardService,
-              private loadingIndicatorService: LoadingIndicatorService,
               private userInfoService: UserInfoService,
               private translateService: TranslateService,
-              private viewDirection: ViewDirectionService) {
+              private viewDirection: ViewDirectionService,
+              private refreshLoginService: RefreshLoginService,
+              private refreshBoardService: RefreshBoardService,
+              private windowManagerService: WindowManagerService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -118,7 +120,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     }
   }
 
-  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
     this.bottomSheetData.bottomSheetRef.close();
   }
 
@@ -183,6 +185,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
       panelClass: 'approve-detail-dialog',
       height: '160px'
     });
+
+    this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {

@@ -21,8 +21,10 @@ import {CurrentTaskService} from '../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
+import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-task-board',
@@ -59,17 +61,18 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
-              private userInfoService: UserInfoService,
-              private socketService: SocketioService,
-              private refreshLoginService: RefreshLoginService,
+  constructor(public dialog: MatDialog,
+              private api: ApiService,
               private injector: Injector,
-              private currentTaskService: CurrentTaskService,
-              private messageService: MessageService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              public dialog: MatDialog,
               private translate: TranslateService,
-              private refreshBoardService: RefreshBoardService) {
+              private socketService: SocketioService,
+              private messageService: MessageService,
+              private userInfoService: UserInfoService,
+              private currentTaskService: CurrentTaskService,
+              private refreshLoginService: RefreshLoginService,
+              private refreshBoardService: RefreshBoardService,
+              private windowManagerService: WindowManagerService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -202,6 +205,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       disableClose: true
     });
 
+    this.windowManagerService.dialogOnTop(dialogRef.id);
+
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -271,13 +276,23 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
         this.myTasks.push(task);
       }
 
+      const taskStopDate = task.stopAt;
+      const localDate = new Date();
+
+      const localDateTmp = moment(localDate).format('YYYY-MM-DD HH:mm:ss');
+
+      const m = moment.utc(taskStopDate, "YYYY-MM-DD HH:mm:ss");
+      const isSameOrBefore = m.isSameOrBefore(localDateTmp);
+
       // determine todoList, inProgressList, doneList into board array
       switch (task.boardStatus) {
         case 'todo':
+          task.overdue = isSameOrBefore;
           todo_tasks.push(task);
           break;
 
         case 'inProgress':
+          task.overdue = isSameOrBefore;
           inProgress_tasks.push(task);
           break;
 

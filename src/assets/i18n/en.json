@@ -38,7 +38,7 @@
   },
   "dashboard": {
     "dashboard_toolbar": {
-      "": "Services",
+      "service_list": "Services",
       "reminder" : "Reminders",
       "active_clocks": "Active Clocks",
       "exist_app": "Log Out"
@@ -143,7 +143,8 @@
       "todo_count": "Count of Todo items",
       "todo": "Todo",
       "in_progress": "In Progress",
-      "done": "Done"
+      "done": "Done",
+      "overdue": "Task date is overdue"
     },
     "task_stop": {
       "stop_description": "Explain about stopped task",

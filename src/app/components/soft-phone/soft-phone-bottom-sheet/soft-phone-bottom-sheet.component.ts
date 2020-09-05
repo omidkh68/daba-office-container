@@ -1,4 +1,12 @@
-import {Component, ComponentFactoryResolver, ElementRef, Renderer2, ViewChild, ViewContainerRef} from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  HostListener,
+  Renderer2,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {SoftPhoneBottomSheetInterface} from './logic/soft-phone-bottom-sheet.interface';
@@ -17,15 +25,14 @@ export class SoftPhoneBottomSheetComponent {
   private _subscription: Subscription = new Subscription();
 
   constructor(private renderer: Renderer2,
-              private softPhoneService: SoftPhoneService,
-              private cfr: ComponentFactoryResolver) {
+              private cfr: ComponentFactoryResolver,
+              private softPhoneService: SoftPhoneService) {
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => {
         this.minimizeStatus = status;
 
         try {
           const parentNode = this.oBottomSheet.nativeElement.parentNode.parentNode;
-          // const el = this.oBottomSheet.nativeElement;
 
           if (this.minimizeStatus) {
             this.renderer.addClass(parentNode, 'minimizePopUp');
@@ -65,6 +72,10 @@ export class SoftPhoneBottomSheetComponent {
         this.renderer.setStyle(parentNode, 'z-index', '-1');
       }, 100);
     }
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
+    this.close();
   }
 
   close() {

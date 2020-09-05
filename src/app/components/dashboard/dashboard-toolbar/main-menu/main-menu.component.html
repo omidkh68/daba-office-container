@@ -2,18 +2,18 @@
      [matMenuTriggerFor]="mainMenu"
      [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
      class="box pos-rel mat-elevation-z1 width-40 text-center round-corner height-40 overflow-hide cursor-pointer">
-  <mat-icon class="text-dark-mode-color">menu</mat-icon>
+  <mat-icon class="">menu</mat-icon>
 </div>
 <mat-menu class="toolbar-menu main-menu" #mainMenu="matMenu" xPosition="before" yPosition="above">
-  <h6 mat-subheader class="padding-r-l padding-tiny-t-b no-margin text-weight-normal font-9-rem text-dark-mode-color">
+  <h6 mat-subheader class="padding-r-l padding-tiny-t-b no-margin text-weight-normal font-9-rem">
     {{'dashboard.dashboard_toolbar.service_list' | translate}}
   </h6>
 
   <button mat-menu-item *ngFor="let service of serviceList"
           (click)="openService(service)"
-          class="font-7-rem padding-r-l text-dark-mode-color">
-    <mat-icon class="text-dark-mode-color">{{service.icon}}</mat-icon>
+          class="font-7-rem padding-r-l">
+    <mat-icon class="">{{service.icon}}</mat-icon>
 
-    <span class="font-full-plus-two-tenth-em">{{rtlDirection ? service.name_fa : service.name}}</span>
+    <span class="font-full-plus-two-tenth-em">{{(rtlDirection ? service.name_fa : service.name) | translate}}</span>
   </button>
 </mat-menu>
