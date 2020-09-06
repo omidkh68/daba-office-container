@@ -23,6 +23,7 @@
           </div>
         </div>
       </div>
+
       <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'wallpaper'"
            class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-999">
         <div class="text-center">
@@ -52,6 +53,7 @@
           <!--<span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>-->
         </div>
       </div>
+
     </div>
 
     <div *ngIf="showDelete" (click)="deleteFile(0)" class="delete pos-abs right-0 cursor-pointer">
@@ -92,7 +94,7 @@
     <div class="display-flex flex-direction-row flex-wrap justify-content-space-between">
       <div *ngFor="let picture of wallpapersPictures"
            class="thirty-width margin-b-full height-100">
-        <mat-card (click)="changeWallpaper(picture.value)"
+        <mat-card (click)="changeWallpaperPhysical(picture.img)"
                   [style.background]="picture.value"
                   class="mat-elevation-z1 full-width full-height wallpaper cursor-pointer">
         </mat-card>

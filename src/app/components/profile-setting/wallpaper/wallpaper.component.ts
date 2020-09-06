@@ -4,12 +4,16 @@ import {LoginDataClass} from '../../../services/loginData.class';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ElectronService} from '../../../services/electron.service';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
 import {WallpaperSelectorService} from '../../../services/wallpaper-selector.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {TranslateService} from "@ngx-translate/core";
+import {MessageService} from "../../../services/message.service";
+import {Observable, Observer} from "rxjs";
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-wallpaper',
@@ -17,6 +21,8 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
   styleUrls: ['./wallpaper.component.scss']
 })
 export class WallpaperComponent extends LoginDataClass implements OnInit, OnDestroy {
+
+  base64Image;
   showProgress = false;
   showDelete = false;
   environment;
@@ -25,75 +31,93 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   wallpapersPictures = [
     {
       id: 1,
-      value: 'url(./assets/images/wallpapers/1.jpg)'
+      value: 'url(./assets/images/wallpapers/1.jpg)',
+      img: './assets/images/wallpapers/1.jpg'
     },
     {
       id: 2,
-      value: 'url(./assets/images/wallpapers/2.jpg)'
+      value: 'url(./assets/images/wallpapers/2.jpg)',
+      img: './assets/images/wallpapers/2.jpg'
     },
     {
       id: 3,
-      value: 'url(./assets/images/wallpapers/3.jpg)'
+      value: 'url(./assets/images/wallpapers/3.jpg)',
+      img: './assets/images/wallpapers/3.jpg'
     },
     {
       id: 4,
-      value: 'url(./assets/images/wallpapers/4.jpg)'
+      value: 'url(./assets/images/wallpapers/4.jpg)',
+      img: './assets/images/wallpapers/4.jpg'
     },
     {
       id: 5,
-      value: 'url(./assets/images/wallpapers/5.jpg)'
+      value: 'url(./assets/images/wallpapers/5.jpg)',
+      img: './assets/images/wallpapers/5.jpg'
     },
     {
       id: 6,
-      value: 'url(./assets/images/wallpapers/6.jpg)'
+      value: 'url(./assets/images/wallpapers/6.jpg)',
+      img: './assets/images/wallpapers/6.jpg'
     },
     {
       id: 7,
-      value: 'url(./assets/images/wallpapers/7.jpg)'
+      value: 'url(./assets/images/wallpapers/7.jpg)',
+      img: './assets/images/wallpapers/7.jpg'
     },
     {
       id: 8,
-      value: 'url(./assets/images/wallpapers/8.jpg)'
+      value: 'url(./assets/images/wallpapers/8.jpg)',
+      img: './assets/images/wallpapers/8.jpg'
     },
     {
       id: 9,
-      value: 'url(./assets/images/wallpapers/9.jpg)'
+      value: 'url(./assets/images/wallpapers/9.jpg)',
+      img: './assets/images/wallpapers/9.jpg'
     },
     {
       id: 10,
-      value: 'url(./assets/images/wallpapers/10.jpg)'
+      value: 'url(./assets/images/wallpapers/10.jpg)',
+      img: './assets/images/wallpapers/10.jpg'
     },
     {
       id: 11,
-      value: 'url(./assets/images/wallpapers/11.jpg)'
+      value: 'url(./assets/images/wallpapers/11.jpg)',
+      img: './assets/images/wallpapers/11.jpg'
     },
     {
       id: 12,
-      value: 'url(./assets/images/wallpapers/12.jpg)'
+      value: 'url(./assets/images/wallpapers/12.jpg)',
+      img: './assets/images/wallpapers/12.jpg'
     },
     {
       id: 13,
-      value: 'url(./assets/images/wallpapers/13.jpg)'
+      value: 'url(./assets/images/wallpapers/13.jpg)',
+      img: './assets/images/wallpapers/13.jpg'
     },
     {
       id: 14,
-      value: 'url(./assets/images/wallpapers/14.jpg)'
+      value: 'url(./assets/images/wallpapers/14.jpg)',
+      img: './assets/images/wallpapers/14.jpg'
     },
     {
       id: 15,
-      value: 'url(./assets/images/wallpapers/15.jpg)'
+      value: 'url(./assets/images/wallpapers/15.jpg)',
+      img: './assets/images/wallpapers/15.jpg'
     },
     {
       id: 16,
-      value: 'url(./assets/images/wallpapers/16.jpg)'
+      value: 'url(./assets/images/wallpapers/16.jpg)',
+      img: './assets/images/wallpapers/16.jpg'
     },
     {
       id: 17,
-      value: 'url(./assets/images/wallpapers/17.jpg)'
+      value: 'url(./assets/images/wallpapers/17.jpg)',
+      img: './assets/images/wallpapers/17.jpg'
     },
     {
       id: 18,
-      value: 'url(./assets/images/wallpapers/18.jpg)'
+      value: 'url(./assets/images/wallpapers/18.jpg)',
+      img: './assets/images/wallpapers/18.jpg'
     }
   ];
 
@@ -115,6 +139,9 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
               private userInfoService: UserInfoService,
               private wallPaperSelector: WallpaperSelectorService,
               private profileSettingService: ProfileSettingService,
+              private translate: TranslateService,
+              private messageService: MessageService,
+              private http: HttpClient,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
@@ -178,7 +205,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
             this.uploadFilesSimulator(index + 1);
 
             this.onSubmit(this.sellersPermitString);
-
           } else {
             this.files[index].progress += 5;
           }
@@ -246,7 +272,12 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
 
         if (resp.success) {
+          const successfulMessage = this.getTranslate('profileSettings.profile_update');
+
+          this.messageService.showMessage(successfulMessage, 'success');
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'wallpaper'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
           this.showProgress = false;
           this.showDelete = true;
 
@@ -261,6 +292,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
       }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'wallpaper'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
         this.showProgress = false;
         this.showDelete = true;
 
@@ -268,8 +300,42 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     );
   }
 
+  /*WallpaperPhysical to base46*/
+  changeWallpaperPhysical(value) {
+    this.http.get(value, {responseType: 'blob'})
+      .pipe(
+        switchMap(blob => this.convertBlobToBase64(blob))
+      )
+      .subscribe(base64ImageUrl => {
+        this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
+        this.onSubmit(base64ImageUrl);
+      });
+  }
+
+  convertBlobToBase64(blob: Blob) {
+    return Observable.create(observer => {
+      const reader = new FileReader();
+      const binaryString = reader.readAsDataURL(blob);
+      reader.onload = (event: any) => {
+        observer.next(event.target.result);
+        observer.complete();
+      };
+
+      reader.onerror = (event: any) => {
+        console.log("File could not be read: " + event.target.error.code);
+        observer.next(event.target.error.code);
+        observer.complete();
+      };
+    });
+  }
+  /*end of WallpaperPhysical to base46*/
+
   changeWallpaper(value) {
     this.wallPaperSelector.changeWallpaper(value);
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy() {

@@ -32,6 +32,8 @@ export interface LangInterface {
   styleUrls: ['./profile-setting.component.scss']
 })
 export class ProfileSettingComponent extends LoginDataClass implements OnInit {
+
+  changeValueForm: boolean = false;
   viewModeTypes = 'information';
   resetInput;
   defaultLang;
@@ -99,6 +101,13 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       map(value => typeof value === 'string' ? value : value.name),
       map(name => name ? this.filter(name) : this.options.slice())
     );
+
+
+    this._subscription.add(
+      this.form.valueChanges.subscribe(value => {
+        this.changeValueForm = true;
+      })
+    );
   }
 
   changeViewMode(mode) {
@@ -121,9 +130,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
   }
 
   formPatchValue() {
-    // this.form.valueChanges.subscribe()
-
-
     if (this.loggedInUser.lang !== null) {
       this.defaultLang = this.loggedInUser.lang;
     }
@@ -146,6 +152,8 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       dark_mode: this.loggedInUser.dark_mode,
       lang: this.loggedInUser.lang
     });
+
+    this.changeValueForm = false;
   }
 
   close() {
@@ -165,7 +173,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
   }
 
   onSubmit() {
-    this.form.disable();
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
 
@@ -190,7 +197,12 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
 
         if (resp.success) {
-          this.form.enable();
+
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+
+          const successfulMessage = this.getTranslate('profileSettings.profile_update');
+
+          this.messageService.showMessage(successfulMessage, 'success');
 
           if (resp.data.lang !== null) {
             this.defaultLang = resp.data.lang;
@@ -205,12 +217,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
           if (resp.data.dark_mode !== this.loggedInUser.dark_mode) {
             this.userInfoService.changeDarkMode();
           }
-
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
-
-          const successfulMessage = this.getTranslate('profileSettings.profile_update');
-
-          this.messageService.showMessage(successfulMessage, 'success');
 
           let user = this.loggedInUser;
 
@@ -241,6 +247,8 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
       })
     );
+
+    this.changeValueForm = false;
   }
 
   setClockCity(option) {

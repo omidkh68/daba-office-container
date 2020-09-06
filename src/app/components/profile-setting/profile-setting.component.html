@@ -209,7 +209,7 @@
               <div class="display-flex margin-r-l-reverse margin-t-full-plus-half">
                 <div class="full-width padding-r-l">
                   <button (click)="onSubmit()"
-                          [disabled]="!form.valid"
+                          [disabled]="!form.valid || !changeValueForm"
                           class="full-width green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
                           mat-raised-button
                           tabindex="13"
