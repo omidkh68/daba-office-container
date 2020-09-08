@@ -22,4 +22,5 @@ export interface TaskInterface {
   trackable: number;
   todoCount: number;
   creationDate?: string;
+  overdue?: boolean;
 }

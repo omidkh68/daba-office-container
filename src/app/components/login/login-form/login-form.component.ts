@@ -17,8 +17,7 @@ export interface LangInterface {
 
 @Component({
   selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss']
+  templateUrl: './login-form.component.html'
 })
 export class LoginFormComponent implements OnInit {
   @Input()
@@ -55,7 +54,7 @@ export class LoginFormComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
 
-    //setTimeout(() => this.login(), 200); // todo: remove this in production
+    // setTimeout(() => this.login(), 200); // todo: remove this in production
   }
 
   createForm() {

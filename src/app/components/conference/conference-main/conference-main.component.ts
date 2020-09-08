@@ -8,6 +8,7 @@ import {ConferenceInterface} from '../logic/conference.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ConferenceAddComponent} from '../conference-add/conference-add.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {WindowManagerService} from '../../../services/window-manager.service';
 
 @Component({
   selector: 'app-conference-main',
@@ -25,10 +26,11 @@ export class ConferenceMainComponent implements OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
+              private messageService: MessageService,
               private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private messageService: MessageService) {
+              private windowManagerService: WindowManagerService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );
@@ -45,6 +47,8 @@ export class ConferenceMainComponent implements OnDestroy {
       height: '280px',
       data: {action: 'add'}
     });
+
+    this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe((resp: ConferenceInterface) => {
@@ -66,9 +70,7 @@ export class ConferenceMainComponent implements OnDestroy {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'videoConference'});
             });
 
-            setTimeout(() => {
-              this.showConference = true;
-            });
+            setTimeout(() => this.showConference = true);
           }
         }
       })

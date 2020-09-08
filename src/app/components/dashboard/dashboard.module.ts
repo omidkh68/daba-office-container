@@ -2,6 +2,7 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
+import {DndDirective} from "../profile-setting/dnd.directive";
 import {DatetimeService} from "../profile-setting/logic/datetime.service";
 import {ProgressComponent} from "../profile-setting/progress/progress.component";
 import {TimeAreaComponent} from './dashboard-toolbar/time-area/time-area.component';
@@ -23,6 +24,7 @@ import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-
 
 @NgModule({
   declarations: [
+    DndDirective,
     DatetimeService,
     ProgressComponent,
     MainMenuComponent,

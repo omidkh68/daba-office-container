@@ -3,6 +3,7 @@ import {
   BrowserWindow,
   desktopCapturer,
   ipcRenderer,
+  ipcMain,
   Notification,
   remote,
   screen,
@@ -19,6 +20,7 @@ import * as path from 'path';
 })
 export class ElectronService {
   ipcRenderer: typeof ipcRenderer;
+  ipcMain: typeof ipcMain;
   webFrame: typeof webFrame;
   remote: typeof remote;
   shell: typeof shell;
@@ -35,6 +37,7 @@ export class ElectronService {
     // Conditional imports
     if (this.isElectron) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
+      this.ipcMain = window.require('electron').ipcMain;
       this.webFrame = window.require('electron').webFrame;
       this.remote = window.require('electron').remote;
       this.fs = window.require('fs');

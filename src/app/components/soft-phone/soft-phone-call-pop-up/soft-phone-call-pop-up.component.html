@@ -12,12 +12,13 @@
     <ul (click)="activeExtensionList = !activeExtensionList"
         class="list-style-none no-padding no-margin cursor-pointer">
       <ng-container *ngFor="let ext of extensionList; let i = index">
-        <li *ngIf="i < 3" class="pos-abs"
+        <li *ngIf="i < 3" class="pos-abs display-flex align-items-center"
             [ngStyle]="{'right.px': rtlDirection ? i + '2' : 'inherit', 'left.px' : rtlDirection ? 'inherit' : i + '2'}">
           <img [src]="'assets/profileImg/'+ (ext.username ? ext.username : '0') +'.jpg'" [alt]="ext.extension_name"
                onerror="this.src='assets/profileImg/0.jpg'"
                class="mat-elevation-z3 width-30 height-30 round-corner-all"
                matListAvatar>
+          <span *ngIf="extensionList.length > 3" class="text-white">{{'+' + extensionList.length - 3}}</span>
         </li>
       </ng-container>
     </ul>
@@ -86,9 +87,9 @@
            onerror="this.src='assets/profileImg/0.jpg'"
            class="mat-elevation-z2 width-35 height-35 online-user" matListAvatar>
 
-      <h3 class="font-7-rem text-weight-bold" matLine> {{user.extension_name}} </h3>
+      <h3 class="font-7-rem text-weight-bold no-margin" matLine> {{user.extension_name}} </h3>
 
-      <div class="pos-rel text-red-700 height-30 round-corner-all font-8-em">{{user.extension_no}}</div>
+      <div class="pos-rel online-extension height-30 font-8-em display-flex flex-center-y">{{user.extension_no}}</div>
     </mat-list-item>
   </mat-list>
 </div>
@@ -101,7 +102,7 @@
   </h3>
 
   <div class="key-container">
-    <mat-grid-list class="full-height" cols="3" gutterSize="30" rowHeight="fit">
+    <mat-grid-list class="full-height" cols="3" gutterSize="30" rowHeight="fit" dir="ltr">
       <mat-grid-tile
         *ngFor="let key of dialPadKeys"
         [colspan]="1"

@@ -25,15 +25,13 @@ export class TimeAreaDigitalClockComponent implements OnChanges, OnDestroy {
         this.timerDueTime, this.timerPeriod
       );
 
-      this.globalTimerSubscription = this.globalTimer.subscribe(t => {
-        this.getTime();
-      });
+      this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getTime());
     }
   }
 
   getTime() {
     this.time = new Date().toLocaleTimeString('en-US', {
-      timeZone: this.timezone.length ? this.timezone : 'UTC',
+      timeZone: this.timezone && this.timezone.length ? this.timezone : 'UTC',
       hour12: false,
       hour: '2-digit',
       minute: '2-digit'

@@ -1,5 +1,6 @@
-import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {AppConfig} from '../../../environments/environment';
 import {ApiService} from '../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../services/message.service';
@@ -9,10 +10,13 @@ import {UserInfoService} from '../users/services/user-info.service';
 import {ElectronService} from '../../services/electron.service';
 import {SoftPhoneService} from '../soft-phone/service/soft-phone.service';
 import {ServiceInterface} from '../services/logic/service-interface';
+import {TranslateService} from '@ngx-translate/core';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ServiceItemsInterface} from './logic/service-items.interface';
-import {WallpaperSelectorService} from "../../services/wallpaper-selector.service";
+import {WallpaperSelectorService} from '../../services/wallpaper-selector.service';
+import {StatusChangeResultInterface} from '../status/logic/result-interface';
+import {ApiService as StatusApiService} from '../status/logic/api.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +24,6 @@ import {WallpaperSelectorService} from "../../services/wallpaper-selector.servic
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent extends LoginDataClass implements OnInit, OnDestroy {
-
   rtlDirection: boolean;
   windowManager: Array<WindowInterface>;
   serviceList: ServiceItemsInterface[] = [];
@@ -28,16 +31,19 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(public dialog: MatDialog,
+  constructor(@Inject('windowObject') public window,
+              public dialog: MatDialog,
               private api: ApiService,
               private injector: Injector,
+              private viewDirection: ViewDirectionService,
               private messageService: MessageService,
               private electronService: ElectronService,
               private userInfoService: UserInfoService,
+              private statusApiService: StatusApiService,
               private softPhoneService: SoftPhoneService,
-              private viewDirection: ViewDirectionService,
-              private windowManagerService: WindowManagerService,
-              private wallPaperSelector: WallpaperSelectorService) {
+              private translateService: TranslateService,
+              private wallPaperSelector: WallpaperSelectorService,
+              private windowManagerService: WindowManagerService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -75,9 +81,38 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit(): void {
-    this.electronService.window.on('close', () => {
-      this.softPhoneService.sipHangUp();
-    });
+    if (AppConfig.production) { // if environment in production mode change status when user want to close app
+      this.window.onbeforeunload = (event) => {
+        event.returnValue = false;
+
+        this.softPhoneService.sipHangUp();
+
+        const stopWorkingStatus = {
+          user_id: this.loggedInUser.id,
+          status: 2 // this means stop working status will emit
+        };
+
+        this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+        this._subscription.add(
+          this.statusApiService.userChangeStatus(stopWorkingStatus).subscribe((resp: StatusChangeResultInterface) => {
+            if (resp.success === true) {
+              new Notification(`Office Container`, {
+                body: this.getTranslate('status.close_app_stop_working'),
+                icon: 'assets/profileImg/' + this.loggedInUser.email + '.jpg',
+                dir: 'auto'
+              });
+
+              this.electronService.remote.getCurrentWindow().destroy();
+            }
+          })
+        );
+      };
+    }
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
   }
 
   ngOnDestroy(): void {

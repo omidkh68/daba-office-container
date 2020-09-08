@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {AppConfig} from '../../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
-
+import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -26,10 +25,10 @@ export class ProfileSettingService {
   constructor(private http: HttpClient) {
   }
 
-  updateUser(userInfo, userId): Observable<UserContainerInterface> {
+  updateUser(userInfo, userId): Observable<CheckLoginInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
     this.headers.headers = this.headers.headers.set('From', 'app_application');
 
-    return this.http.patch<UserContainerInterface>(`${this.API_URL}/users/${userId}`, userInfo, this.headers);
+    return this.http.patch<CheckLoginInterface>(`${this.API_URL}/users/${userId}`, userInfo, this.headers);
   }
 }

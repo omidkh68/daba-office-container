@@ -23,5 +23,5 @@ export interface UserStatusInterface {
 export interface StatusInfoInterface {
   user_id: number;
   status: number;
-  description: string;
+  description?: string;
 }

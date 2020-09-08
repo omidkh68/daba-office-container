@@ -1,15 +1,4 @@
-import {
-    AfterViewInit,
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    SimpleChanges,
-    ViewEncapsulation
-} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, ViewEncapsulation} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -18,131 +7,130 @@ import {UserInterface} from '../../../users/logic/user-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {TaskDataInterface} from '../../logic/task-data-interface';
 import {TaskDetailComponent} from '../../task-detail/task-detail.component';
+import {TaskCalendarService} from '../services/task-calendar.service';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
 import {TaskBottomSheetInterface} from '../../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import {TaskCalendarService} from "../services/task-calendar.service";
 
 @Component({
-    selector: 'app-task-calendar-weekday',
-    templateUrl: './task-calendar-weekday.component.html',
-    styleUrls: ['./task-calendar-weekday.component.scss'],
-    encapsulation: ViewEncapsulation.None
+  selector: 'app-task-calendar-weekday',
+  templateUrl: './task-calendar-weekday.component.html',
+  styleUrls: ['./task-calendar-weekday.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
-    @Input()
-    calendarEvents: any;
+  @Input()
+  calendarEvents: any;
 
-    @Input()
-    loginData: any;
+  @Input()
+  loginData: any;
 
-    @Input()
-    holidays: [];
+  @Input()
+  holidays: [];
 
-    @Output()
-    triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
+  @Output()
+  triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
 
-    rtlDirection: boolean;
-    header = {};
-    buttonLabels = {};
-    slotLabelFormat = [{
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    }];
+  rtlDirection: boolean;
+  header = {};
+  buttonLabels = {};
+  slotLabelFormat = [{
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }];
 
-    views = {};
+  views = {};
 
-    calendarPlugins = [dayGridPlugin];
-    tasks: TaskInterface[] = [];
-    options: any;
+  calendarPlugins = [dayGridPlugin];
+  tasks: TaskInterface[] = [];
+  options: any;
 
-    usersList: UserInterface[] = [];
+  usersList: UserInterface[] = [];
 
-    private _subscription: Subscription = new Subscription();
+  private _subscription: Subscription = new Subscription();
 
-    constructor(public dialog: MatDialog,
-                private viewDirection: ViewDirectionService,
-                private taskCalendarService: TaskCalendarService,
-                private translateService: TranslateService) {
-        this._subscription.add(
-            this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
-        );
+  constructor(public dialog: MatDialog,
+              private viewDirection: ViewDirectionService,
+              private taskCalendarService: TaskCalendarService,
+              private translateService: TranslateService) {
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
+  }
+
+  ngAfterViewInit(): void {
+    this.views = {
+      dayGridMonthCustom: {
+        type: 'dayGridMonth',
+        buttonText: this.getTranslate('tasks.calendar.month')
+      }
+    };
+
+    this.buttonLabels = {
+      today: this.getTranslate('tasks.calendar.today'),
+      month: this.getTranslate('tasks.calendar.month'),
+      week: this.getTranslate('tasks.calendar.week'),
+      day: this.getTranslate('tasks.calendar.day'),
+      list: this.getTranslate('tasks.calendar.list')
+    };
+
+    if (this.rtlDirection) {
+      this.header = {
+        left: 'title',
+        center: '',
+        right: 'prev,next today'
+      };
+    } else {
+      this.header = {
+        left: 'today next,prev',
+        center: 'title',
+        right: 'timeGridWeek,timeGridDay'
+      };
     }
+  }
 
-    ngAfterViewInit(): void {
-        this.views = {
-            dayGridMonthCustom: {
-                type: 'dayGridMonth',
-                buttonText: this.getTranslate('tasks.calendar.month')
-            }
-        };
+  eventRender(event: any) {
+    if (event.event.extendedProps.imageurl) {
+      let tag = event.el.getElementsByClassName('fc-title');
 
-        this.buttonLabels = {
-            today: this.getTranslate('tasks.calendar.today'),
-            month: this.getTranslate('tasks.calendar.month'),
-            week: this.getTranslate('tasks.calendar.week'),
-            day: this.getTranslate('tasks.calendar.day'),
-            list: this.getTranslate('tasks.calendar.list')
-        };
-
-        if (this.rtlDirection) {
-            this.header = {
-                left: 'title',
-                center: '',
-                right: 'prev,next today'
-            };
-        } else {
-            this.header = {
-                left: 'today next,prev',
-                center: 'title',
-                right: 'timeGridWeek,timeGridDay'
-            };
-        }
+      tag[0].insertAdjacentHTML('beforeBegin',
+        '<img class="round-corner-all float-right" src="' + event.event.extendedProps.imageurl + '" width="20px" height="20px">');
     }
+  }
 
-    eventRender(event: any) {
-        if (event.event.extendedProps.imageurl) {
-            let tag = event.el.getElementsByClassName('fc-title');
+  eventClick(event: any) {
+    let boardStatus: any;
 
-            tag[0].insertAdjacentHTML('beforeBegin',
-                '<img class="round-corner-all float-right" src="' + event.event.extendedProps.imageurl + '" width="20px" height="20px">');
-        }
+    const data: TaskDataInterface = {
+      action: 'detail',
+      usersList: event.event.extendedProps.usersList,
+      projectsList: event.event.extendedProps.projectsList,
+      task: event.event.extendedProps,
+      boardStatus: boardStatus
+    };
+
+    this.triggerBottomSheet.emit({
+      component: TaskDetailComponent,
+      height: '98%',
+      width: '98%',
+      data: data
+    });
+  }
+
+  getTranslate(word) {
+    return this.translateService.instant(word);
+  }
+
+  ngAfterViewChecked() {
+    let weekdayContainer = document.getElementsByClassName('holiday-date');
+    if (!weekdayContainer.length) {
+      this.taskCalendarService.setHolidayHighlight(this.holidays);
     }
+  }
 
-    eventClick(event: any) {
-        let boardStatus: any;
-
-        const data: TaskDataInterface = {
-            action: 'detail',
-            usersList: event.event.extendedProps.usersList,
-            projectsList: event.event.extendedProps.projectsList,
-            task: event.event.extendedProps,
-            boardStatus: boardStatus
-        };
-
-        this.triggerBottomSheet.emit({
-            component: TaskDetailComponent,
-            height: '98%',
-            width: '98%',
-            data: data
-        });
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
     }
-
-    getTranslate(word) {
-        return this.translateService.instant(word);
-    }
-
-
-    ngOnDestroy(): void {
-        if (this._subscription) {
-            this._subscription.unsubscribe();
-        }
-    }
-
-    ngAfterViewChecked() {
-        let weekdayContainer = document.getElementsByClassName("holiday-date");
-        if (!weekdayContainer.length) {
-            this.taskCalendarService.setHolidayHighlight(this.holidays);
-        }
-    }
+  }
 }

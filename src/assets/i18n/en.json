@@ -51,7 +51,8 @@
     "status_description_error": "Please explain about status",
     "status_success": "Status applied successfully",
     "start_working": "Start Working?",
-    "start_working_time": "Do you want to start your working?"
+    "start_working_time": "Do you want to start your working?",
+    "close_app_stop_working": "Your working hours are over, have nice day"
   },
   "soft_phone": {
     "main": {
@@ -143,7 +144,8 @@
       "todo_count": "Count of Todo items",
       "todo": "Todo",
       "in_progress": "In Progress",
-      "done": "Done"
+      "done": "Done",
+      "overdue": "Task date is overdue"
     },
     "task_stop": {
       "stop_description": "Explain about stopped task",
@@ -234,7 +236,9 @@
     "drag_drop_text3": "Browse for file",
     "timezone": "Timezone",
     "timezone_error": "Select Timezone",
-    "name_family": "First Name And Last Name"
+    "name_family": "First Name And Last Name",
+    "profile_update": "Profile Information Has Been Updated",
+    "error_upload": "Problem Uploading Photos"
   },
   "events_handler": {
     "main" : {

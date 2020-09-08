@@ -7,5 +7,10 @@ export const AppConfig = {
   CONF_URL: 'https://conference.dabacenter.ir/main.php',
   ATTENDANCE_URL: 'http://loginofficecontainer.dabacenter.ir/api',
   WRTC_URL: 'http://wrtc.dabacenter.ir/api',
+  ADMIN_URL: 'http://admincontainer.dabacenter.ir',
+  EIS_URL: 'https://eis.enoox.com',
+  REALM: '213.202.217.19',
+  WEBSOCKET_PROXY_URL: 'wss://213.202.217.19:8089/ws',
+  WRTC_URL: 'http://wrtc.dabacenter.ir/api',
   EVENT_HANDLER_URL : 'http://192.168.110.180:8080/'
 };

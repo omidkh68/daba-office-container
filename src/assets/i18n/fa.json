@@ -51,7 +51,8 @@
     "status_description_error": "توضیح وضعیت را وارد نمایید",
     "status_success": "وضعیت مربوطه با موفقیت اعمال گردید",
     "start_working": "شروع کار",
-    "start_working_time": "آیا میخواهید ساعت کاری خود را شروع کنید؟"
+    "start_working_time": "آیا میخواهید ساعت کاری خود را شروع کنید؟",
+    "close_app_stop_working": "ساعت کاری شما به اتمام رسید، روز خوبی داشته باشید"
   },
   "soft_phone": {
     "main": {
@@ -143,7 +144,8 @@
       "todo_count": "تعداد لیست انجام کار",
       "todo": "آماده انجام",
       "in_progress": "در حال انجام",
-      "done": "به اتمام رسیده"
+      "done": "به اتمام رسیده",
+      "overdue": "زمان انجام تسک به تأخیر خورده است"
     },
     "task_stop": {
       "stop_description": "توضیح توقف تسک",
@@ -234,7 +236,9 @@
     "drag_drop_text3": "انتخاب کنید",
     "timezone": "وقت محلی",
     "timezone_error": "لطفا وقت محلی خود را انتخاب کنید",
-    "name_family": "نام و نام خانوادگی"
+    "name_family": "نام و نام خانوادگی",
+    "profile_update": "اطلاعات پروفایل بروزرسانی شد",
+    "error_upload": "مشکل در آپلود عکس"
   },
   "events_handler": {
     "main" : {

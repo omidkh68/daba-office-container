@@ -43,19 +43,23 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private viewDirection: ViewDirectionService,
-              private api: ApiService,
+  constructor(private api: ApiService,
               private injector: Injector,
-              private refreshLoginService: RefreshLoginService,
-              private softPhoneService: SoftPhoneService,
-              private notificationService: NotificationService,
-              private loadingIndicatorService: LoadingIndicatorService,
               private translate: TranslateService,
-              private userInfoService: UserInfoService) {
+              private userInfoService: UserInfoService,
+              private softPhoneService: SoftPhoneService,
+              private viewDirection: ViewDirectionService,
+              private notificationService: NotificationService,
+              private refreshLoginService: RefreshLoginService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
-      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+      this.viewDirection.currentDirection.subscribe(direction => {
+        this.rtlDirection = direction;
+
+        this.changeMainTabLanguage();
+      })
     );
 
     this._subscription.add(
@@ -128,7 +132,6 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
           this.softPhoneService.changeSoftPhoneUsers(extensionList);
 
           this.softPhoneService.changeExtensionList(extensionList).then(() => {
-
             this.softPhoneUsers = extensionList;
 
             this.softPhoneService.sipRegister();
@@ -150,6 +153,10 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
       dtmfTone: this.dtmfTone
     });
 
+    this.changeMainTabLanguage();
+  }
+
+  changeMainTabLanguage() {
     setTimeout(() => {
       this.tabs = [
         {

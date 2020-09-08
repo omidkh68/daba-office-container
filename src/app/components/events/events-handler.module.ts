@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {SharedModule} from '../../shared/shared.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {FilePickerModule} from 'ngx-awesome-uploader';
 import {FullCalendarModule} from "@fullcalendar/angular";
 import {EventsHandlerComponent} from "./events-handler.component";
 import {EventsHandlerMainComponent} from "./events-handler-main/events-handler-main.component";
@@ -27,7 +26,6 @@ import {EventsHandlerAddReminderComponent} from "./events-handler-add-reminder/e
         SharedModule,
         NgxChartsModule,
         FullCalendarModule,
-        FilePickerModule,
         TranslateModule.forChild({}),
         A11yModule
     ]

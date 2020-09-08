@@ -21,6 +21,10 @@ export class UserInfoService {
 
   body = document.querySelector('html');
 
+  public getUserInfo(): UserContainerInterface {
+    return this.userInfo.getValue();
+  }
+
   changeUserInfo(user: UserContainerInterface) {
     if (user.dark_mode) {
       this.body.classList.add('dark-mode');
@@ -29,10 +33,6 @@ export class UserInfoService {
     }
 
     this.userInfo.next(user);
-  }
-
-  changeAllUsers(users: Array<UserContainerInterface> | null) {
-    this.allUsers.next(users);
   }
 
   changeDarkMode() {

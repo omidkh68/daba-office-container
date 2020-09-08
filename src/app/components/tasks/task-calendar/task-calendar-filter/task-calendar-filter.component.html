@@ -38,7 +38,8 @@
                    readonly tabindex="5">
             <mat-datepicker #picker1></mat-datepicker>
 
-            <button (click)="form.get('dateStart').setValue('')" *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
+            <button (click)="form.get('dateStart').setValue('')"
+                    *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
                     aria-label="Clear"
                     class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
                     type="button">
@@ -62,7 +63,8 @@
                    readonly tabindex="6">
             <mat-datepicker #picker2></mat-datepicker>
 
-            <button (click)="form.get('dateStop').setValue('')" *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
+            <button (click)="form.get('dateStop').setValue('')"
+                    *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
                     aria-label="Clear"
                     class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
                     type="button">

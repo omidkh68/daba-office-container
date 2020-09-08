@@ -261,12 +261,6 @@ a {
   }
 }
 
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .mat-grid-tile {
   overflow: visible !important;
 }
@@ -798,4 +792,8 @@ file-preview-container {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.cdk-overlay-transparent-backdrop, .cdk-overlay-connected-position-bounding-box {
+  z-index: 99999;
 }

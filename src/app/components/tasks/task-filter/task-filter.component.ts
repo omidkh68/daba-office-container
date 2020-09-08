@@ -135,9 +135,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
 
       this.form.markAllAsTouched();
 
-      setTimeout(_ => {
-        this.checkFormValidation();
-      }, 1000);
+      setTimeout(() => this.checkFormValidation(), 1000);
 
       this._subscription.add(
         this.form.get('adminId').valueChanges.subscribe(selectedValue => {

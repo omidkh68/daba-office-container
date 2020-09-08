@@ -88,7 +88,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
     this.randomHours = lodash.sampleSize(this.availableHours, 5);
 
     this.globalTimerSubscription = this.globalTimer.subscribe(
-      t => {
+      () => {
         if (this.loginData && this.loginData.token_type) {
           this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 

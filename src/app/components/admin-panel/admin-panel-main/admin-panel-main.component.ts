@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, Injector, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {AppConfig} from '../../../../environments/environment';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
@@ -41,7 +42,7 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
     if (this.webFrame) {
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'adminPanel'});
 
-      const address = `http://admincontainer.dabacenter.ir/#/home/?tokenType=${this.loginData.token_type}&accessToken=${this.loginData.access_token}`;
+      const address = `${AppConfig.ADMIN_URL}/#/home/?tokenType=${this.loginData.token_type}&accessToken=${this.loginData.access_token}`;
 
       this.webFrame.nativeElement.setAttribute('src', address);
 

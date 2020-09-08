@@ -123,9 +123,7 @@ export class SoftPhoneContactsComponent implements OnInit {
 
     this.softPhoneService.sipTransfer(contact.extension_no);
 
-    setTimeout(() => {
-      this.triggerCloseBottomSheet.emit();
-    }, 1000);
+    setTimeout(() => this.triggerCloseBottomSheet.emit(), 1000);
   }
 
   dismissTransferCall() {

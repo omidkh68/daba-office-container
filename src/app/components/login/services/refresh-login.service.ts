@@ -1,11 +1,12 @@
-import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {Injectable} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../services/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
-import {LoginFormComponent} from '../login-form/login-form.component';
 import {HttpErrorResponse} from '@angular/common/http';
+import {LoginFormComponent} from '../login-form/login-form.component';
+import {WindowManagerService} from '../../../services/window-manager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,10 @@ export class RefreshLoginService {
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
+              private messageService: MessageService,
               private userInfoService: UserInfoService,
               private translateService: TranslateService,
-              private messageService: MessageService) {
+              private windowManagerService: WindowManagerService) {
   }
 
   openLoginDialog(error: HttpErrorResponse) {
@@ -31,6 +33,8 @@ export class RefreshLoginService {
         panelClass: 'refresh-login-dialog',
         data: {action: 'refresh-login'}
       });
+
+      this.windowManagerService.dialogOnTop(dialogRef.id);
 
       const message = this.getTranslate('login_info.refresh_login');
 

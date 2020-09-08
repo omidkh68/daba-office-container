@@ -1,14 +1,14 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {TaskInterface} from '../logic/task-interface';
-import {ProjectInterface} from '../../projects/logic/project-interface';
-import {UserInterface} from '../../users/logic/user-interface';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
+import {FormGroup} from '@angular/forms';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {TaskInterface} from '../logic/task-interface';
+import {UserInterface} from '../../users/logic/user-interface';
+import {ProjectInterface} from '../../projects/logic/project-interface';
+import {TranslateService} from '@ngx-translate/core';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {TranslateService} from '@ngx-translate/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-task-form',
@@ -66,8 +66,8 @@ export class TaskFormComponent implements OnChanges, OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private viewDirection: ViewDirectionService,
-              private translate: TranslateService,) {
+  constructor(private translate: TranslateService,
+              private viewDirection: ViewDirectionService) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );

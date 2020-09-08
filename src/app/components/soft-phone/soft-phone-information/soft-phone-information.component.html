@@ -10,7 +10,7 @@
       <div class="font-8-rem" [dir]="rtlDirection ? 'ltr' : 'rtl'">
         <mat-slide-toggle #slideToggle
                           (change)="changeSoftphoneStatus($event)" class="soft-phone-status"
-                          [checked]="loggedInUserExtension && loggedInUserExtension.extension.is_online">
+                          [checked]="loggedInUserExtension && softphoneConnectedStatus && loggedInUserExtension.extension.is_online">
           <span class="padding-mini-r-l">
             {{(slideToggle.checked ? 'global.active' : 'global.deactivate') | translate}}
           </span>
@@ -30,7 +30,7 @@
              [ngClass]="user.is_online ? 'active' : ''"
              class="online-user mat-elevation-z2 width-35 height-35 transition" matListAvatar>
 
-        <h3 class="font-7-rem text-weight-bold" matLine> {{user.extension_name}} </h3>
+        <h3 class="font-7-rem text-weight-bold no-margin" matLine> {{user.extension_name}} </h3>
 
         <div matLine>
           <mat-icon [ngClass]="rtlDirection ? 'text-right' : 'text-left'"

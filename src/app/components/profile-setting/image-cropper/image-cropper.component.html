@@ -13,8 +13,8 @@
     [style.height.px]="maxSize.height"
     [style.margin-left]="alignImage === 'center' ? marginLeft : null"
     [style.width.px]="maxSize.width"
-    class="overlay"
-  ></div>
+    class="overlay">
+  </div>
   <div (keydown)="keyboardAccess($event)"
        *ngIf="imageVisible"
        [class.rounded]="roundCropper"
@@ -39,44 +39,37 @@
                 <span class="square"></span>
             </span>
       <span (mousedown)="startMove($event, moveTypes.Resize, 'topright')"
-            class="resize topright"
-      >
+            class="resize topright">
                 <span class="square"></span>
             </span>
       <span class="resize right">
                 <span class="square"></span>
             </span>
       <span (mousedown)="startMove($event, moveTypes.Resize, 'bottomright')"
-            class="resize bottomright"
-      >
+            class="resize bottomright">
                 <span class="square"></span>
             </span>
       <span class="resize bottom">
                 <span class="square"></span>
             </span>
       <span (mousedown)="startMove($event, moveTypes.Resize, 'bottomleft')"
-            class="resize bottomleft"
-      >
+            class="resize bottomleft">
                 <span class="square"></span>
             </span>
       <span class="resize left">
                 <span class="square"></span>
             </span>
       <span (mousedown)="startMove($event, moveTypes.Resize, 'top')"
-            class="resize-bar top"
-      >
+            class="resize-bar top">
             </span>
       <span (mousedown)="startMove($event, moveTypes.Resize, 'right')"
-            class="resize-bar right"
-      >
+            class="resize-bar right">
             </span>
       <span (mousedown)="startMove($event, moveTypes.Resize, 'bottom')"
-            class="resize-bar bottom"
-      >
+            class="resize-bar bottom">
             </span>
       <span (mousedown)="startMove($event, moveTypes.Resize, 'left')"
-            class="resize-bar left"
-      >
+            class="resize-bar left">
             </span>
     </ng-container>
   </div>

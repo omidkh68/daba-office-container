@@ -1,6 +1,4 @@
-import {Injectable, Injector, OnDestroy} from '@angular/core';
-import {of} from 'rxjs/internal/observable/of';
-import {catchError, map} from 'rxjs/operators';
+import {Inject, Injectable, Injector, OnDestroy} from '@angular/core';
 import {Observable} from 'rxjs/internal/Observable';
 import {ApiService} from '../components/users/logic/api.service';
 import {CanActivate, Router} from '@angular/router';
@@ -18,7 +16,8 @@ import {ViewDirectionService} from '../services/view-direction.service';
 export class AuthGuardService extends LoginDataClass implements CanActivate, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
+  constructor(@Inject('windowObject') private window,
+              private api: ApiService,
               private router: Router,
               private injector: Injector,
               private viewDirection: ViewDirectionService,
@@ -28,43 +27,76 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     super(injector, userInfoService);
   }
 
-  canActivate(): Observable<boolean> {
-    /*const store = new Store();
+  canActivate(): Observable<boolean> | Promise<boolean> {
+    return new Promise((resolve) => {
+      this.getCookie().then(userInfo => {
+        this.setUserData(userInfo);
 
-    if (store.get('userInfo')) {
-      this.userInfoService.changeUserInfo(store.get('userInfo'));
-    }
+        resolve(true);
+      }).catch(() => {
+        this.checkLogin().then(userInfo => {
+          this.setUserData(userInfo);
 
-    if (store.get('loginData')) {
-      this.userInfoService.changeLoginData(store.get('loginData'));
-    }*/
+          resolve(true);
+        });
+      });
+    });
+  }
 
-    if (this.loginData) {
-      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+  getCookie() {
+    return new Promise((resolve, reject) => {
+      this.electronService.session.defaultSession.cookies.get({url: this.window.location.href}).then(userInfo => {
+        if (!userInfo.length) {
+          reject(false);
+        } else {
+          const cookieValues = userInfo;
+          const loginDataCookie = cookieValues.filter(cookie => cookie.name === 'loginData').pop().value;
 
-      return this.api.checkLogin().pipe(
-        map((resp: CheckLoginInterface) => {
-          if (resp.success === true) {
-            this.userInfoService.changeUserInfo(resp.data);
+          if (loginDataCookie) {
+            this.userInfoService.changeLoginData(JSON.parse(loginDataCookie));
 
-            this.viewDirection.changeDirection(resp.data.lang === 'fa');
+            reject(false);
+          } else {
+            this.userInfoService.changeLoginData(JSON.parse(loginDataCookie));
 
-            this.changeStatusService.changeUserStatus(resp.data.user_status);
-
-            return true;
+            const userInfoCookie = cookieValues.filter(cookie => cookie.name === 'userInfo').pop().value;
+            resolve(JSON.parse(userInfoCookie));
           }
-        }),
-        catchError(e => {
-          console.log(e);
+        }
+      });
+    });
+  }
 
-          return of(false);
-        })
-      );
-    } else {
-      this.router.navigateByUrl(`/login`);
+  checkLogin() {
+    return new Promise((resolve, reject) => {
+      if (!this.loginData) {
+        this.router.navigateByUrl(`/login`);
+      } else {
+        this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-      return of(false);
-    }
+        const userInfo = this.userInfoService.getUserInfo();
+
+        if (!userInfo) {
+          this.api.checkLogin().subscribe((resp: CheckLoginInterface) => {
+            if (resp.success === true) {
+              resolve(resp.data);
+            }
+          }, () => {
+            reject(false);
+          });
+        } else {
+          resolve(true);
+        }
+      }
+    });
+  }
+
+  setUserData(info) {
+    this.userInfoService.changeUserInfo(info);
+
+    this.viewDirection.changeDirection(info.lang === 'fa');
+
+    this.changeStatusService.changeUserStatus(info.user_status);
   }
 
   ngOnDestroy() {
