@@ -64,6 +64,7 @@
         </div>
     </div>
     <div class="window-content pos-rel">
-        <app-events-handler-main></app-events-handler-main>
+        <app-events-handler-main (triggerBottomSheet)="openButtonSheet($event)" [rtlDirection]="rtlDirection"></app-events-handler-main>
+        <app-task-bottom-sheet #bottomSheet></app-task-bottom-sheet>
     </div>
 </div>

@@ -235,5 +235,40 @@
     "timezone": "Timezone",
     "timezone_error": "Select Timezone",
     "name_family": "First Name And Last Name"
+  },
+  "events_handler": {
+    "main" : {
+      "add_new_event" : "Add New Event",
+      "add_new_reminder" : "Add New Reminder",
+      "see_more" : "See More",
+      "event_title" : "Event",
+      "events_title" : "Events",
+      "reminder_title" : "Reminder",
+      "reminders_title" : "Reminders"
+    },
+    "form": {
+      "event_name" : "Event Name",
+      "event_name_error": "Please enter event name",
+      "start_at": "Start Date",
+      "start_at_error": "Please choose start date",
+      "stop_at": "End Date",
+      "stop_at_error": "Please choose end date",
+      "start_time": "Start Time",
+      "start_time_error": "Please choose start time",
+      "start_stop_compare": "Start date is bigger than end date",
+      "stop_time": "End Time",
+      "stop_time_error": "Please choose end time",
+      "event_description": "Event Description",
+      "reminder_description": "Reminder Description",
+      "assign_to": "Event assign to",
+      "action_type": "Action Type",
+      "action_job_type": "Action Job Type",
+      "users": "Users",
+      "assign_to_error": "Please choose event assign to",
+      "user_phone" : "User Mobile",
+      "all_day" : "All Day",
+      "reminder_type" : "Reminder Type",
+      "reminder_status" : "Reminder Status"
+    }
   }
 }

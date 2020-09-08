@@ -8,7 +8,7 @@
   }
 }
 .special-date {
-  div{
+  div.mat-calendar-body-cell-content{
     &::before {
       width: 4px;
       height: 4px;
@@ -20,4 +20,30 @@
     }
   }
 }
-
+.custom-popover{
+  background: #fff;
+  width: 280px;
+  min-height: 0;
+  z-index: 999;
+  position: absolute;
+  right: -25px;
+  top: 28px;
+  transition: all 0.2s;
+  display: none;
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 25px;
+    top: -7px;
+    border-bottom: 10px solid #fff;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+  }
+  a{
+    text-align: right;
+  }
+  p{
+    direction: ltr;
+  }
+}

@@ -1,0 +1,131 @@
+<div class="full-page-size padding-full overflow-hide" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+    <div class="task-heading clear-both full-width height-45 display-flex flex-space-between">
+        <h1 class="no-margin height-45 line-height-45 font-full-plus-one-tenth-em text-eclipse padding-r-l text-pink-600 text-weight-500">
+            <span class="text-gray-700">{{'events_handler.main.add_new_reminder' | translate}}</span>
+        </h1>
+    </div>
+    <form (submit)="submitReminder()" *ngIf="reminderForm" [formGroup]="reminderForm" class="full-height"
+          [dir]="rtlDirection ? 'rtl' : 'ltr'">
+        <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
+            <div class="display-flex margin-r-l-reverse">
+                <div class="half-width padding-r-l">
+                    <mat-form-field class="full-width font-9-em">
+                        <mat-label>{{'events_handler.form.reminder_type' | translate}}</mat-label>
+                        <mat-select formControlName="reminderType" tabIndex="5">
+                            <mat-option *ngFor="let type of reminderTypeList" [value]="type">
+                                {{type.description}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="half-width padding-r-l">
+                    <mat-form-field class="full-width font-9-em">
+                        <mat-label>{{'events_handler.form.reminder_status' | translate}}</mat-label>
+                        <mat-select formControlName="status" tabIndex="5">
+                            <mat-option *ngFor="let status of statusList" [value]="status">
+                                {{status.description}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="display-flex margin-r-l-reverse">
+                <div class="quarter-width padding-r-l">
+                    <mat-form-field class="full-width font-9-em">
+                        <mat-label>{{'events_handler.form.start_at' | translate}}</mat-label>
+                        <input matInput [matDatepicker]="picker1" readonly
+                               placeholder="{{'events_handler.form.start_at' | translate}}"
+                               (focus)="picker1.open()" (click)="picker1.open()"
+                               (dateChange)="dateToGregorianReminder('startReminder', $event)"
+                               formControlName="startReminder" tabindex="8">
+                        <mat-datepicker #picker1></mat-datepicker>
+
+                        <mat-error>
+                            {{'events_handler.form.start_stop_compare' | translate}}
+                        </mat-error>
+
+                        <mat-error
+                                *ngIf="!reminderForm.get('startReminder').valid && reminderForm.get('startReminder').touched">
+                            {{'events_handler.form.start_at_error' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="quarter-width padding-r-l">
+                    <mat-form-field class="full-width font-9-em">
+                        <mat-label>{{'events_handler.form.start_time' | translate}}</mat-label>
+                        <mat-select formControlName="startTime" tabIndex="9">
+                            <mat-option *ngFor="let hour of hours" [value]="hour">
+                                {{hour}}
+                            </mat-option>
+                        </mat-select>
+
+                        <mat-error
+                                *ngIf="!reminderForm.get('startTime').valid && reminderForm.get('startTime').touched">
+                            {{'events_handler.form.start_time_error' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="quarter-width padding-r-l">
+                    <mat-form-field class="full-width font-9-em">
+                        <mat-label>{{'events_handler.form.stop_at' | translate}}</mat-label>
+                        <input matInput [matDatepicker]="picker2" readonly
+                               (focus)="picker2.open()" (click)="picker2.open()"
+                               (dateChange)="dateToGregorianReminder('endReminder', $event)"
+                               formControlName="endReminder" tabindex="10">
+                        <mat-datepicker #picker2></mat-datepicker>
+
+                        <mat-error
+                                *ngIf="!reminderForm.get('endReminder').valid && reminderForm.get('endReminder').touched">
+                            {{'events_handler.form.stop_at_error' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="quarter-width padding-r-l">
+                    <mat-form-field class="full-width font-9-em">
+                        <mat-label>{{'events_handler.form.stop_time' | translate}}</mat-label>
+                        <mat-select formControlName="endTime" tabIndex="11">
+                            <mat-option *ngFor="let hour of hours" [value]="hour">
+                                {{hour}}
+                            </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!reminderForm.get('endTime').valid && reminderForm.get('endTime').touched">
+                            {{'events_handler.form.stop_time_error' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="display-flex margin-b-full margin-r-l-reverse">
+                <div class="full-width padding-r-l">
+                    <mat-form-field class="full-width height-80 font-9-em">
+                        <mat-label>{{'events_handler.form.reminder_description' | translate}}</mat-label>
+                        <textarea matInput formControlName="description"
+                                  placeholder="{{'events_handler.form.reminder_description' | translate}}"
+                                  tabindex="12"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+
+        </div>
+        <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
+            <button *ngIf="editableReminder || data.action !== 'detail'"
+                    (click)="cancelReminderBtn()"
+                    type="button"
+                    class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
+                <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
+            </button>
+
+            <button mat-raised-button
+                    *ngIf="editableReminder"
+                    [disabled]="!reminderForm.valid"
+                    type="submit"
+                    tabindex="13"
+                    class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+                <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+                <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
+            </button>
+        </div>
+    </form>
+</div>

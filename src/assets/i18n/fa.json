@@ -235,5 +235,40 @@
     "timezone": "وقت محلی",
     "timezone_error": "لطفا وقت محلی خود را انتخاب کنید",
     "name_family": "نام و نام خانوادگی"
+  },
+  "events_handler": {
+    "main" : {
+      "add_new_event" : "افزودن رویداد",
+      "add_new_reminder" : "افزودن یادآور",
+      "see_more" : "مشاهده بیشتر",
+      "event_title" : "رویداد",
+      "events_title" : "رویدادها",
+      "reminder_title" : "یادآوری",
+      "reminders_title" : "یادآوری ها"
+    },
+    "form": {
+      "event_name" : "نام رویداد",
+      "event_name_error": "لطفا نام رویداد را وارد کنید",
+      "start_at": "تاریخ شروع",
+      "start_at_error": "لطفا تاریخ شروع را انتخاب نمایید",
+      "stop_at": "تاریخ اتمام",
+      "stop_at_error": "لطفا تاریخ اتمام را انتخاب نمایید",
+      "start_time": "ساعت شروع رویداد",
+      "start_time_error": "لطفا ساعت شروع را انتخاب نمایید",
+      "stop_time": "ساعت اتمام رویداد",
+      "stop_time_error": "لطفا ساعت اتمام را انتخاب نمایید",
+      "start_stop_compare": "تاریخ شروع بزرگتر از تاریخ پایان است",
+      "event_description": "توضیح رویداد",
+      "reminder_description": "توضیح یادآور",
+      "assign_to": "کابران مشترک شده",
+      "action_type": "نوع اکشن",
+      "action_job_type": "نوع اکشن جاب",
+      "users": "کاربران",
+      "assign_to_error": "لطفا کاربران مهمان را مشخص کنید",
+      "user_phone" : "شماره همراه کاربر",
+      "all_day" : "تمام روز",
+      "reminder_type" : "نوع یادآور",
+      "reminder_status" : "وضعیت یادآور"
+    }
   }
 }

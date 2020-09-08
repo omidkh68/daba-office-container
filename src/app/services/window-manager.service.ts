@@ -69,7 +69,7 @@ export class WindowManagerService {
           break;
         }
 
-        case 'events_calendar': {
+        case 'events_calender': {
           component = EventsHandlerComponent;
           hasFrame = true;
           break;
