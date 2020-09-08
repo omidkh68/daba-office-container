@@ -75,6 +75,11 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
       this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
 
         if (resp.success) {
+
+          const successfulMessage = this.getTranslate('profileSettings.profile_update');
+
+          this.messageService.showMessage(successfulMessage, 'success');
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'imageCropper'});
 
           let temp = this.loggedInUser;

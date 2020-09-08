@@ -1,4 +1,4 @@
-import {Component, Inject, Injector, OnInit} from '@angular/core';
+import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/internal/Observable';
@@ -31,7 +31,8 @@ export interface LangInterface {
   templateUrl: './profile-setting.component.html',
   styleUrls: ['./profile-setting.component.scss']
 })
-export class ProfileSettingComponent extends LoginDataClass implements OnInit {
+export class ProfileSettingComponent extends LoginDataClass implements OnInit, OnDestroy {
+  changeValueForm: boolean = false;
   viewModeTypes = 'information';
   resetInput;
   defaultLang;
@@ -97,6 +98,12 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       map(value => typeof value === 'string' ? value : value.name),
       map(name => name ? this.filter(name) : this.options.slice())
     );
+
+    this._subscription.add(
+      this.form.valueChanges.subscribe(value => {
+        this.changeValueForm = true;
+      })
+    );
   }
 
   changeViewMode(mode) {
@@ -141,6 +148,8 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       dark_mode: this.loggedInUser.dark_mode,
       lang: this.loggedInUser.lang
     });
+
+    this.changeValueForm = false;
   }
 
   close() {
@@ -160,7 +169,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
   }
 
   onSubmit() {
-    this.form.disable();
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
 
@@ -184,17 +192,47 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
     this._subscription.add(
       this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
         if (resp.success) {
-          this.form.enable();
-
-          this.viewDirection.changeDirection(resp.data.lang === 'fa');
-
-          this.userInfoService.changeDarkMode();
 
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
 
           const successfulMessage = this.getTranslate('profileSettings.profile_update');
 
-          this.messageService.showMessage(successfulMessage);
+          this.messageService.showMessage(successfulMessage, 'success');
+
+          if (resp.data.lang !== null) {
+            this.defaultLang = resp.data.lang;
+
+            this.viewDirection.changeDirection(resp.data.lang === 'fa');
+          }
+
+          if (resp.data.dark_mode !== null) {
+            this.selectDarkMode = resp.data.dark_mode;
+          }
+
+          if (resp.data.dark_mode !== this.loggedInUser.dark_mode) {
+            this.userInfoService.changeDarkMode();
+          }
+
+          let user = this.loggedInUser;
+
+          const newUser = resp.data;
+
+          user = {
+            ...user,
+            profile_image: newUser.profile_image,
+            background_image: newUser.background_image,
+            email: newUser.email,
+            name: newUser.name,
+            timezone: newUser.timezone,
+            lang: newUser.lang,
+            dark_mode: newUser.dark_mode,
+            extension_no: newUser.extension_no,
+            status: newUser.status
+          };
+
+          this.userInfoService.changeUserInfo(user);
+
+          this.dialogRef.close();
         } else {
           this.form.enable();
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
@@ -204,6 +242,8 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
       })
     );
+
+    this.changeValueForm = false;
   }
 
   setClockCity(option) {
@@ -221,7 +261,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
       data: {data: event},
       autoFocus: false,
       width: '900px',
-      height: '600px',
+      height: '615px',
       panelClass: 'status-dialog'
     });
 
