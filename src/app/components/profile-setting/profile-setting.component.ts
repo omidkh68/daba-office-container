@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/internal/Observable';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {map, startWith} from 'rxjs/operators';
 import {LoginDataClass} from '../../services/loginData.class';
-import {MessageService} from '../../services/message.service';
+import {MessageService} from '../message/service/message.service';
 import {DatetimeService} from './logic/datetime.service';
 import {UserInfoService} from '../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -195,10 +195,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
 
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
 
-          const successfulMessage = this.getTranslate('profileSettings.profile_update');
-
-          this.messageService.showMessage(successfulMessage, 'success');
-
           if (resp.data.lang !== null) {
             this.defaultLang = resp.data.lang;
 
@@ -233,6 +229,12 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
           this.userInfoService.changeUserInfo(user);
 
           this.dialogRef.close();
+
+          setTimeout(() => {
+            const successfulMessage = this.getTranslate('profileSettings.profile_update');
+
+            this.messageService.showMessage(successfulMessage, 'success');
+          }, 200);
         } else {
           this.form.enable();
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});

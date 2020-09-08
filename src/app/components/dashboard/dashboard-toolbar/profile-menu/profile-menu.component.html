@@ -6,23 +6,25 @@
        [alt]="loggedInUser.name">
 </div>
 <mat-menu class="toolbar-menu box-menu-profile padding-r-l" #profileMenu="matMenu" xPosition="before" yPosition="above">
-  <h4 mat-subheader matLine class="padding-half text-weight-normal font-9-rem text-dark-mode-color no-margin">
-    <mat-icon class="text-dark-mode-color text-gray-600" [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">
-      person_outline
-    </mat-icon>
+  <ng-container *ngIf="loggedInUser">
+    <h4 mat-subheader matLine class="padding-half text-weight-normal font-9-rem text-dark-mode-color no-margin">
+      <mat-icon class="text-dark-mode-color text-gray-600" [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">
+        person_outline
+      </mat-icon>
 
-    <span class="display-flex flex-direction-column">
+      <span class="display-flex flex-direction-column">
       <span matLine>{{loggedInUser.name}}</span>
 
       <span matLine class="font-8-em">{{loggedInUser.role.title}}</span>
     </span>
-  </h4>
-  <button mat-menu-item (click)="settingProfile()" class="font-7-rem padding-mini-r-l">
-    <mat-icon class="text-dark-mode-color">settings</mat-icon>
-    <span class="text-dark-mode-color">{{'profileSettings.profile_settings' | translate}}</span>
-  </button>
-  <button mat-menu-item (click)="logout()" class="font-7-rem padding-mini-r-l">
-    <mat-icon class="text-dark-mode-color">power_settings_new</mat-icon>
-    <span class="text-dark-mode-color">{{'dashboard.dashboard_toolbar.exist_app' | translate}}</span>
-  </button>
+    </h4>
+    <button mat-menu-item (click)="settingProfile()" class="font-7-rem padding-mini-r-l">
+      <mat-icon class="text-dark-mode-color">settings</mat-icon>
+      <span class="text-dark-mode-color">{{'profileSettings.profile_settings' | translate}}</span>
+    </button>
+    <button mat-menu-item (click)="logout()" class="font-7-rem padding-mini-r-l">
+      <mat-icon class="text-dark-mode-color">power_settings_new</mat-icon>
+      <span class="text-dark-mode-color">{{'dashboard.dashboard_toolbar.exist_app' | translate}}</span>
+    </button>
+  </ng-container>
 </mat-menu>

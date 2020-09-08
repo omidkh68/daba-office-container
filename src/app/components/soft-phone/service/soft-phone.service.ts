@@ -2,7 +2,7 @@ import {ElementRef, Injectable, Injector} from '@angular/core';
 import SIPml from 'ecmascript-webrtc-sipml';
 import {AppConfig} from '../../../../environments/environment';
 import {LoginDataClass} from '../../../services/loginData.class';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -203,10 +203,10 @@ export class SoftPhoneService extends LoginDataClass {
         // create SIP stack
         this.oSipStack = new SIPml.Stack({
           realm: AppConfig.REALM,
-          impi: `${this.loggedInUserSoftphone.extension_no}-wrtc`,
-          impu: `sip:${this.loggedInUserSoftphone.extension_no}-wrtc@${AppConfig.REALM}`,
+          impi: `${this.loggedInUserSoftphone.extension_no}-wrtcnew`,
+          impu: `sip:${this.loggedInUserSoftphone.extension_no}-wrtcnew@${AppConfig.REALM}`,
           password: this.loggedInUserSoftphone.extension_no,
-          display_name: `${this.loggedInUserSoftphone.extension_no}-wrtc`,
+          display_name: `${this.loggedInUserSoftphone.extension_no}-wrtcnew`,
           websocket_proxy_url: AppConfig.WEBSOCKET_PROXY_URL,
           outbound_proxy_url: null,
           ice_servers: null,
@@ -611,12 +611,12 @@ export class SoftPhoneService extends LoginDataClass {
 
         switch (description) {
           case 'forbidden': {
-            this.messageService.showMessage(`Rejected by ${incomingExtensionTo.extension_name}`);
+            this.messageService.showMessage(`Rejected by ${incomingExtensionTo ? incomingExtensionTo.extension_name : ''}`);
             break;
           }
 
           case 'declined': {
-            this.messageService.showMessage(`Not answered by ${incomingExtensionTo.extension_name}`);
+            this.messageService.showMessage(`Not answered by ${incomingExtensionTo ? incomingExtensionTo.extension_name : ''}`);
             break;
           }
 

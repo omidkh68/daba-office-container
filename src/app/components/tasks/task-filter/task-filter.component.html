@@ -10,7 +10,7 @@
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'tasks.task_filter.filter_types' | translate}}</mat-label>
             <mat-select formControlName="type" tabIndex="1" required>
-              <mat-option *ngFor="let type of filterTypes" [value]="type.typeName">
+              <mat-option *ngFor="let type of filterTypes" [value]="type.typeName" class="font-full-em">
                 {{type.textName | translate}}
               </mat-option>
             </mat-select>
@@ -37,7 +37,7 @@
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'tasks.form.task_project' | translate}}</mat-label>
             <mat-select formControlName="projectId" tabIndex="3">
-              <mat-option *ngFor="let project of projectsList" [value]="project.projectId">
+              <mat-option *ngFor="let project of projectsList" [value]="project.projectId" class="font-full-em">
                 {{project.projectName}}
               </mat-option>
             </mat-select>
@@ -58,12 +58,15 @@
                  class="width-20 height-20 round-corner-all pos-rel top-three-tenth">
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
             <mat-select formControlName="adminId" tabIndex="4">
-              <mat-option *ngFor="let user of usersList" [value]="user.adminId">
-                <img matPrefix
-                     [src]="'assets/profileImg/'+user.email+'.jpg'"
-                     class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
-                     onerror="this.src='assets/profileImg/0.jpg'">
-                {{user.name + ' ' + user.family}}
+              <mat-option *ngFor="let user of usersList" [value]="user.adminId" class="font-full-em">
+                <div class="display-flex">
+                  <img matPrefix
+                       [src]="'assets/profileImg/'+user.email+'.jpg'"
+                       [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                       class="width-20 height-20 round-corner-all pos-rel top-six-tenth"
+                       onerror="this.src='assets/profileImg/0.jpg'">
+                  <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
+                </div>
               </mat-option>
             </mat-select>
 

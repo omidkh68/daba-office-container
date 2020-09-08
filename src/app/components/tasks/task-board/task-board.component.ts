@@ -1,6 +1,7 @@
 import {
   Component, EventEmitter, Injector, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges
 } from '@angular/core';
+import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
@@ -9,7 +10,7 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {TaskInterface} from '../logic/task-interface';
 import {BoardInterface} from '../logic/board-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {SocketioService} from '../../../services/socketio.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
@@ -24,7 +25,6 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-task-board',

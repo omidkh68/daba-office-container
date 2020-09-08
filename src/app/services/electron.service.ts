@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {
   BrowserWindow,
   desktopCapturer,
-  ipcRenderer,
   ipcMain,
+  ipcRenderer,
   Notification,
   remote,
   screen,
+  session,
   shell,
   systemPreferences,
   webFrame
@@ -32,6 +33,7 @@ export class ElectronService {
   notification: typeof Notification;
   systemPreferences: typeof systemPreferences;
   window: BrowserWindow;
+  session: typeof session;
 
   constructor() {
     // Conditional imports
@@ -49,6 +51,7 @@ export class ElectronService {
       this.notification = Notification;
       this.systemPreferences = window.require('electron').remote.systemPreferences;
       this.window = window.require('electron').remote.getCurrentWindow();
+      this.session = window.require('electron').remote.session;
 
       this.window.center();
     }

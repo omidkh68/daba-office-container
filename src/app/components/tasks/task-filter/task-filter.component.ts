@@ -5,6 +5,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FilterInterface} from '../logic/filter-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
@@ -16,7 +17,6 @@ import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {MessageService} from '../../../services/message.service';
 
 export interface filterType {
   index: number;

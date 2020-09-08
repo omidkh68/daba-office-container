@@ -1,19 +1,19 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {switchMap} from "rxjs/operators";
+import {Observable} from "rxjs";
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ElectronService} from '../../../services/electron.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {TranslateService} from "@ngx-translate/core";
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
 import {WallpaperSelectorService} from '../../../services/wallpaper-selector.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {TranslateService} from "@ngx-translate/core";
-import {MessageService} from "../../../services/message.service";
-import {Observable, Observer} from "rxjs";
-import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-wallpaper',
@@ -21,8 +21,6 @@ import {switchMap} from "rxjs/operators";
   styleUrls: ['./wallpaper.component.scss']
 })
 export class WallpaperComponent extends LoginDataClass implements OnInit, OnDestroy {
-
-  base64Image;
   showProgress = false;
   showDelete = false;
   environment;
@@ -133,15 +131,15 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               public dialogRef: MatDialogRef<WallpaperComponent>,
+              private http: HttpClient,
               private injector: Injector,
+              private translate: TranslateService,
               private viewDirection: ViewDirectionService,
+              private messageService: MessageService,
               private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private wallPaperSelector: WallpaperSelectorService,
               private profileSettingService: ProfileSettingService,
-              private translate: TranslateService,
-              private messageService: MessageService,
-              private http: HttpClient,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 

@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {ApiService} from '../../users/logic/api.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -54,14 +54,16 @@ export class LoginFormComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
 
-    // setTimeout(() => this.login(), 200); // todo: remove this in production
+    setTimeout(() => this.login(), 200); // todo: remove this in production
   }
 
   createForm() {
     return new Promise((resolve) => {
       this.form = this.fb.group({
-        username: new FormControl(''),
-        password: new FormControl(''),
+        // username: new FormControl(''),
+        // password: new FormControl(''),
+        username: new FormControl('khosrojerdi@dabacenter.ir'),
+        password: new FormControl('123456'),
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
 

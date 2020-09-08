@@ -21,7 +21,7 @@
     </div>
     <div class="display-flex margin-r-l-reverse">
       <div class="half-width padding-r-l">
-        <mat-form-field class="full-width font-9-em">
+        <mat-form-field class="full-width font-full-em">
           <mat-label>{{'tasks.form.task_status' | translate}}</mat-label>
           <mat-select formControlName="boardStatus" tabIndex="2" (selectionChange)="changeBoardStatus($event)">
             <mat-option *ngFor="let board of boardsList" [value]="board.id">

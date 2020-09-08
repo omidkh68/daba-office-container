@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy} from '@angular/core';
-import {MessageService} from './services/message.service';
+import {MessageService} from './components/message/service/message.service';
 import {TranslateService} from '@ngx-translate/core';
 import {fromEvent, Observable, Subscription} from 'rxjs';
 import {ViewDirectionService} from './services/view-direction.service';

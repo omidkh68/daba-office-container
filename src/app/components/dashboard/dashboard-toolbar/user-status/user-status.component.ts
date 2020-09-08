@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../status/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MessageService} from '../../../../services/message.service';
+import {MessageService} from '../../../message/service/message.service';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {ApproveComponent} from '../../../approve/approve.component';

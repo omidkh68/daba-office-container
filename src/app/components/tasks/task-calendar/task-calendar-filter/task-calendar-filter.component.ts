@@ -1,4 +1,5 @@
 import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
+import * as moment from 'moment';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -8,7 +9,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {TaskDurationInterface} from '../../logic/task-duration-interface';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-task-calendar-filter',
@@ -31,10 +31,10 @@ export class TaskCalendarFilterComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+              private api: ApiService,
               private loadingIndicatorService: LoadingIndicatorService,
-              private dialogRef: MatDialogRef<TaskCalendarFilterComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              private dialogRef: MatDialogRef<TaskCalendarFilterComponent>) {
     this.usersList = this.data.usersList;
     this.loginData = this.data.loginData;
     this.rtlDirection = this.data.rtlDirection;
@@ -44,7 +44,8 @@ export class TaskCalendarFilterComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       adminId: new FormControl(null, Validators.required),
       dateStart: new FormControl('', Validators.required),
-      dateStop: new FormControl('', Validators.required)
+      dateStop: new FormControl('', Validators.required),
+      userImg: new FormControl('0')
     });
   }
 

@@ -23,4 +23,8 @@ export class MessageComponent {
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
   }
+
+  hideMessage() {
+    this.snackbarRef.dismiss();
+  }
 }

@@ -13,7 +13,7 @@ import {timer} from 'rxjs';
 import * as lodash from 'lodash';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';

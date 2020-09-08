@@ -2,7 +2,7 @@ import {Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AppConfig} from '../../../../environments/environment';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ConferenceInterface} from '../logic/conference.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
