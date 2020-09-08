@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Injector, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';

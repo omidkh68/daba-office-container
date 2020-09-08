@@ -5,16 +5,16 @@
       {{'profileSettings.profile_settings' | translate}}
     </h1>
 
-    <div class="pos-abs right-0 left-0 top-6 margin-auto width-240 height-45">
+    <div class="pos-abs top-6 height-45 content-switcher">
       <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                                (change)="changeViewMode(viewMode.value)"
                                [ngClass]="{'view-mode': viewMode}"
                                class="full-width mat-button-custom line-height-20 round-corner-all"
                                [value]="viewModeTypes">
-        <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'information'">
+        <mat-button-toggle class="overflow-hide font-7-rem line-height-20 height-30" [value]="'information'">
           <span>{{'profileSettings.profile_information' | translate}}</span>
         </mat-button-toggle>
-        <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'wallpaper'">
+        <mat-button-toggle class="overflow-hide font-7-rem line-height-20 height-30" [value]="'wallpaper'">
           <span>{{'profileSettings.profile_wallpaper' | translate}}</span>
         </mat-button-toggle>
       </mat-button-toggle-group>
@@ -44,7 +44,8 @@
             <div class="image-profile margin-t-full-2 margin-b-full">
               <div class="box mat-elevation-z1 pos-rel text-center round-corner width-150 height-150 overflow-hide">
                 <img class="full-width full-height cursor-pointer"
-                     [src]="loggedInUser.profile_image" alt=""
+                     [src]="loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser.email +'.jpg'"
+                     [alt]="loggedInUser.name"
                      onerror="this.src='assets/profileImg/0.jpg'">
                 <label for="fileChange"
                        class="overlay-image cursor-pointer pos-abs full-width full-height purple-gradient">
@@ -207,7 +208,7 @@
               <div class="display-flex margin-r-l-reverse margin-t-full-plus-half">
                 <div class="full-width padding-r-l">
                   <button (click)="onSubmit()"
-                          [disabled]="!form.valid"
+                          [disabled]="!form.valid || !changeValueForm"
                           class="full-width green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
                           mat-raised-button
                           tabindex="13"

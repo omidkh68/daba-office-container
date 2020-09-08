@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {AppConfig} from '../../../environments/environment';
 import {ApiService} from '../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MessageService} from '../../services/message.service';
+import {MessageService} from '../message/service/message.service';
 import {LoginDataClass} from '../../services/loginData.class';
 import {WindowInterface} from './logic/window.interface';
 import {UserInfoService} from '../users/services/user-info.service';

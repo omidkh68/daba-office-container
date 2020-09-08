@@ -29,7 +29,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
   canActivate(): Observable<boolean> | Promise<boolean> {
     return new Promise((resolve) => {
-      this.getCookie().then(userInfo => {
+      /*this.getCookie().then(userInfo => {
         this.setUserData(userInfo);
 
         resolve(true);
@@ -39,6 +39,12 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
           resolve(true);
         });
+      });*/
+
+      this.checkLogin().then(userInfo => {
+        this.setUserData(userInfo);
+
+        resolve(true);
       });
     });
   }
@@ -74,19 +80,21 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
       } else {
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-        const userInfo = this.userInfoService.getUserInfo();
+        this.api.checkLogin().subscribe((resp: CheckLoginInterface) => {
+          if (resp.success === true) {
+            resolve(resp.data);
+          }
+        }, () => {
+          reject(false);
+        });
 
-        if (!userInfo) {
-          this.api.checkLogin().subscribe((resp: CheckLoginInterface) => {
-            if (resp.success === true) {
-              resolve(resp.data);
-            }
-          }, () => {
-            reject(false);
-          });
-        } else {
+        /*const userInfo = this.userInfoService.getUserInfo();
+
+        if (userInfo) {
           resolve(true);
-        }
+        } else {
+
+        }*/
       }
     });
   }

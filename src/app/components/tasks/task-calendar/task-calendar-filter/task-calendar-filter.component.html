@@ -14,6 +14,7 @@
             {{'tasks.form.assign_to' | translate}}
             <mat-select formControlName="adminId" tabIndex="4">
               <mat-option (onSelectionChange)="updateImage($event , user)" *ngFor="let user of usersList"
+                          class="font-full-em"
                           [value]="user.adminId">
                 <img [src]="'/assets/profileImg/'+user.email+'.jpg'"
                      class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"

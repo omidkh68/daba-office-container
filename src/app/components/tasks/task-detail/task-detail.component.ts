@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {ProjectInterface} from '../../projects/logic/project-interface';

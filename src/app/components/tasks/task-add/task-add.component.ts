@@ -4,7 +4,7 @@ import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';

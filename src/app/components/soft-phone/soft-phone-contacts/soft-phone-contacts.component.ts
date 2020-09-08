@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, Pipe, PipeTransform, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';

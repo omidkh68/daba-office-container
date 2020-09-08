@@ -2,7 +2,7 @@ import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {ImageCroppedEvent, ImageTransform} from 'ngx-image-cropper';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -75,6 +75,11 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
       this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
 
         if (resp.success) {
+
+          const successfulMessage = this.getTranslate('profileSettings.profile_update');
+
+          this.messageService.showMessage(successfulMessage, 'success');
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'imageCropper'});
 
           let temp = this.loggedInUser;

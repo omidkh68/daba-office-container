@@ -1,9 +1,9 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {MessageComponent} from '../components/message/message.component';
-import {ViewDirectionService} from './view-direction.service';
-import {WindowManagerService} from './window-manager.service';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {MessageComponent} from '../message.component';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {WindowManagerService} from '../../../services/window-manager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,7 @@ export class MessageService implements OnDestroy {
     const snackBar = this.snackBar.openFromComponent(MessageComponent, {
       data: title,
       duration: duration ? duration : this._durationInSeconds,
-      horizontalPosition: this.rtlDirection ? 'right' : 'left',
+      horizontalPosition: this.rtlDirection ? 'left' : 'right',
       verticalPosition: 'bottom',
       politeness: 'polite',
       panelClass: type ? type : ''

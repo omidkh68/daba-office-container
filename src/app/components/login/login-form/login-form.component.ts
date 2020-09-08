@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {ApiService} from '../../users/logic/api.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';

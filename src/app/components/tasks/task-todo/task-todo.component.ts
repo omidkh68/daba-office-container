@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TodoInterface} from './logic/todo-interface';
 import {LoginInterface} from '../../login/logic/login.interface';
-import {MessageService} from '../../../services/message.service';
+import {MessageService} from '../../message/service/message.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
