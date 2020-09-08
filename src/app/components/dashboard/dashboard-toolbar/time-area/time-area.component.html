@@ -22,12 +22,6 @@
   </div>
 </div>
 <mat-menu class="toolbar-menu time-area-menu" #timeAreaMenu="matMenu" xPosition="before" yPosition="above">
-
-  <!--  <div #clock class="clock">-->
-  <!--    <div #hours class="hands hours"></div>-->
-  <!--    <div #minutes class="hands minutes"></div>-->
-  <!--    <div #seconds class="hands seconds"></div>-->
-  <!--  </div>-->
   <h6 (click)="addMoreClock($event);" mat-subheader
       class="padding-mini-t-b padding-r-l text-weight-normal font-9-rem text-dark-mode-color display-flex flex-space-between">
     {{'dashboard.dashboard_toolbar.active_clocks' | translate}}
@@ -37,21 +31,21 @@
 
   <div *ngIf="!checkMoreClockContent" class="display-flex flex-space-around padding-half">
     <div
-      *ngIf="cityClocksList.length < 3"
+      *ngIf="cityClocksList && cityClocksList.length < 3"
       (click)="showMoreClockContent($event);"
-      [ngClass]="checkMoreClock ? 'right-to-left' : 'left-to-right'"
-      #clockPlus class="animate opacity-0 clock-plus">
+      [ngClass]="checkMoreClock ? 'right-to-left' : 'left-to-right'" class="animate opacity-0 clock-plus">
       <mat-icon class="text-white">add</mat-icon>
     </div>
 
-    <app-time-area-clock [cityClocksList]="cityClocksList" [item]="clock" [item_index]="i"
-                         [checkMoreClock]="checkMoreClock" *ngFor="let clock of cityClocksList; index as i"
-                         class="transition">
-    </app-time-area-clock>
+    <ng-container *ngFor="let clock of cityClocksList; let i = index;">
+      <app-time-area-clock [cityClocksList]="cityClocksList" [item]="clock" [item_index]="i"
+                           [checkMoreClock]="checkMoreClock"
+                           class="transition">
+      </app-time-area-clock>
+    </ng-container>
   </div>
 
   <div class="padding-half" *ngIf="checkMoreClockContent">
-
     <form class="example-form">
       <mat-form-field class="full-width">
         <mat-label>{{'soft_phone.call_to_action.timezone' | translate}}</mat-label>
@@ -64,21 +58,5 @@
         </mat-autocomplete>
       </mat-form-field>
     </form>
-
-    <!--    <form [formGroup]="form" (submit)="submit()">-->
-    <!--      <mat-form-field class="full-width font-9-em">-->
-    <!--        <input (click)="$event.stopPropagation()" matInput placeholder="جستجو" class="full-width" type="text"-->
-    <!--               formControlName="cityName" tabindex="2">-->
-    <!--        <mat-label>-->
-    <!--          جستجوی شهر-->
-    <!--        </mat-label>-->
-    <!--      </mat-form-field>-->
-    <!--    </form>-->
-
-
-    <!--    <input (click)="$event.stopPropagation()" type="text" placeholder="جستجوی شهر..." />-->
-
   </div>
-
-
 </mat-menu>

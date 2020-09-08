@@ -88,9 +88,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     );
 
     this._subscription.add(
-      this.userInfoService.currentLoginData.subscribe(() => {
-        this.getBoards();
-      })
+      this.userInfoService.currentLoginData.subscribe(() => this.getBoards())
     );
   }
 

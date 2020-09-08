@@ -90,9 +90,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createForm().then(() => {
-      this.formPatchValue();
-    });
+    this.createForm().then(() => this.formPatchValue());
 
     this.filteredOptions = this.form.get('timezone').valueChanges.pipe(
       startWith(''),
@@ -185,7 +183,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
 
     this._subscription.add(
       this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
-
         if (resp.success) {
           this.form.enable();
 
@@ -197,12 +194,10 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
 
           const successfulMessage = this.getTranslate('profileSettings.profile_update');
 
-          this.messageService.showMessage(successfulMessage, 'success');
-
+          this.messageService.showMessage(successfulMessage);
         } else {
           this.form.enable();
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
-
         }
       }, () => {
         this.form.enable();
@@ -233,9 +228,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
     this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
-      dialogRef.afterClosed().subscribe(() => {
-        this.resetInput = '';
-      })
+      dialogRef.afterClosed().subscribe(() => this.resetInput = '')
     );
   }
 
@@ -243,15 +236,15 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit {
     return this.translate.instant(word);
   }
 
-  ngOnDestroy(): void {
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-    }
-  }
-
   filter(name: string): Timezones[] {
     const filterValue = name.toLowerCase();
 
     return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

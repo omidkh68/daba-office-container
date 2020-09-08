@@ -1,10 +1,11 @@
-import {Component, Injector, Input, OnDestroy} from '@angular/core';
+import {Component, Inject, Injector, Input, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
+import {ElectronService} from '../../../../services/electron.service';
 import {SoftPhoneService} from '../../../soft-phone/service/soft-phone.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
@@ -23,10 +24,12 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(public dialog: MatDialog,
+  constructor(@Inject('windowObject') private window,
+              public dialog: MatDialog,
               private router: Router,
               private api: ApiService,
               private injector: Injector,
+              private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private softPhoneService: SoftPhoneService,
               private windowManagerService: WindowManagerService) {
@@ -36,19 +39,19 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
   logout() {
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-    this.api.logout().subscribe((resp: any) => {
-      if (resp.success) {
-        this.userInfoService.changeLoginData(null);
+    this._subscription.add(
+      this.api.logout().subscribe((resp: any) => {
+        if (resp.success) {
+          this.userInfoService.changeLoginData(null);
 
-        this.softPhoneService.sipHangUp();
+          this.softPhoneService.sipHangUp();
 
-        this.windowManagerService.closeAllServices().then(() => {
-          setTimeout(() => {
-            this.router.navigateByUrl(`/login`);
-          }, 500);
-        });
-      }
-    });
+          this.windowManagerService.closeAllServices().then(() => {
+            setTimeout(() => this.router.navigateByUrl(`/login`), 500);
+          });
+        }
+      })
+    );
   }
 
   settingProfile() {

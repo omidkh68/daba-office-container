@@ -51,7 +51,8 @@
     "status_description_error": "توضیح وضعیت را وارد نمایید",
     "status_success": "وضعیت مربوطه با موفقیت اعمال گردید",
     "start_working": "شروع کار",
-    "start_working_time": "آیا میخواهید ساعت کاری خود را شروع کنید؟"
+    "start_working_time": "آیا میخواهید ساعت کاری خود را شروع کنید؟",
+    "close_app_stop_working": "ساعت کاری شما به اتمام رسید، روز خوبی داشته باشید"
   },
   "soft_phone": {
     "main": {

@@ -1,9 +1,7 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 bottom-0 top-0">
+  <div class="full-width height-45 padding-half display-flex bg-white border-bottom">
 
-  <div class="window-heading full-width height-45 padding-half display-flex bg-white">
-
-    <h1
-      class="text-gray-800 font-full-em text-weight-500 padding-mini-r-l no-margin">
+    <h1 class="text-gray-800 font-full-em text-weight-500 padding-mini-r-l no-margin">
       {{'profileSettings.profile_settings' | translate}}
     </h1>
 
@@ -22,7 +20,7 @@
       </mat-button-toggle-group>
     </div>
 
-    <div class="window-actions display-flex"
+    <div class="display-flex"
          [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'">
       <button (click)="close();"
               class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
@@ -33,7 +31,7 @@
     </div>
   </div>
 
-  <div class="window-content pos-rel">
+  <div class="pos-rel">
     <div class="component-content full-width full-height">
 
       <div class="overflow full-width full-height">
@@ -145,6 +143,21 @@
 
               <!--container dark mode & change lang-->
               <div class="display-flex margin-r-l-reverse margin-b-half">
+                <!--change lang-->
+                <div class="half-width padding-r-l">
+                  <mat-form-field class="full-width font-9-em">
+                    <mat-label class="text-weight-bold">
+                      <mat-icon>translate</mat-icon>
+                    </mat-label>
+                    <mat-select (selectionChange)="changeLang($event)" [(value)]="defaultLang">
+                      <mat-option *ngFor="let lang of langs" [value]="lang.id">
+                        {{lang.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <!--end of change lang-->
+
                 <!--dark mode-->
                 <div class="half-width padding-r-l">
                   <div class="display-flex dark-mode height-50 align-items-center">
@@ -187,20 +200,6 @@
                   </div>
                 </div>
                 <!--end of dark mode-->
-                <!--change lang-->
-                <div class="half-width padding-r-l">
-                  <mat-form-field class="full-width font-9-em">
-                    <mat-label class="text-weight-bold">
-                      <mat-icon>translate</mat-icon>
-                    </mat-label>
-                    <mat-select (selectionChange)="changeLang($event)" [(value)]="defaultLang">
-                      <mat-option *ngFor="let lang of langs" [value]="lang.id">
-                        {{lang.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <!--end of change lang-->
               </div>
               <!--end of container dark mode & change lang-->
 

@@ -60,6 +60,10 @@
   box-shadow: 0 0 0 2px #4ec060;
 }
 
+.online-extension {
+  color: #4ec060;
+}
+
 .blink-effect {
   @include transition(all .4s);
 

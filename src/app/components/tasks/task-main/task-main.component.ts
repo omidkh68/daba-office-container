@@ -129,9 +129,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
         if (result) {
           this.refreshBoardData = true;
 
-          setTimeout(_ => {
-            this.refreshBoardData = false;
-          }, 500);
+          setTimeout(() => this.refreshBoardData = false, 500);
         }
       })
     );

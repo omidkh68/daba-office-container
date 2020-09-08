@@ -70,9 +70,7 @@ export class ConferenceMainComponent implements OnDestroy {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'videoConference'});
             });
 
-            setTimeout(() => {
-              this.showConference = true;
-            });
+            setTimeout(() => this.showConference = true);
           }
         }
       })

@@ -1,9 +1,8 @@
 import {app, BrowserWindow, ipcMain, Menu, screen, webFrame} from 'electron';
 // import {autoUpdater} from 'electron-updater';
-import * as path from 'path';
 import {join} from 'path';
-import * as url from 'url';
-import * as Datastore from 'nedb';
+import {format} from 'url';
+// const Datastore = require('nedb');
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -12,8 +11,6 @@ const args = process.argv.slice(1),
 const gotTheLock = app.requestSingleInstanceLock();
 
 function createWindow(): BrowserWindow {
-  let bound = screen.getPrimaryDisplay().bounds;
-
   // Create the browser window.
   win = new BrowserWindow({
     x: 0,
@@ -31,14 +28,13 @@ function createWindow(): BrowserWindow {
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,
-      // allowRunningInsecureContent: (serve) ? true : false,
-      // allowRunningInsecureContent: true
+      allowRunningInsecureContent: true
     },
   });
 
   win.webContents.on('devtools-opened', function () {
     if (!serve) {
-      // win.webContents.closeDevTools();
+      win.webContents.closeDevTools();
     }
   });
 
@@ -47,8 +43,6 @@ function createWindow(): BrowserWindow {
   if (serve) {
     require('devtron').install();
 
-    //const debug = require('electron-debug');
-    //debug();
     win.webContents.openDevTools();
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
@@ -60,33 +54,29 @@ function createWindow(): BrowserWindow {
 
     Menu.setApplicationMenu(null);
 
-    win.loadURL(url.format({
-      pathname: path.join(__dirname, 'dist/index.html'),
+    win.loadURL(format({
+      pathname: join(__dirname, 'dist/index.html'),
       protocol: 'file:',
       slashes: true
     }));
   }
 
-  // Emitted when the window is closed.
   win.on('closed', () => {
-    // Dereference the window object, usually you would store window
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
     win = null;
   });
-  /*
-      mainWindow.once('ready-to-show', () => {
-          autoUpdater.checkForUpdatesAndNotify();
-      });*/
 
-  let userInfoDb: Datastore = new Datastore({
+  /*mainWindow.once('ready-to-show', () => {
+        autoUpdater.checkForUpdatesAndNotify();
+    });*/
+
+  /*let userInfoDb = new Datastore({
     filename: path.join(__dirname, 'Collections.db'),
     autoload: true
   });
 
   const globalAny: any = global;
 
-  globalAny.collectionsDb = userInfoDb;
+  globalAny.collectionsDb = userInfoDb;*/
 
   return win;
 }
@@ -95,10 +85,6 @@ try {
 
   app.allowRendererProcessReuse = true;
 
-  // This method will be called when Electron has finished
-  // initialization and is ready to create browser windows.
-  // Some APIs can only be used after this event occurs.
-  // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
   app.on('ready', () => setTimeout(createWindow, 400));
 
   app.commandLine.appendSwitch('disable-pinch');
@@ -113,21 +99,18 @@ try {
     });
   }
 
-  // Quit when all windows are closed.
   app.on('window-all-closed', () => {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
       app.quit();
     }
   });
 
-  /*if (!gotTheLock) {
+  if (!gotTheLock) {
     if (process.platform !== 'darwin') {
       app.quit();
     }
   } else {
-    app.on('second-instance', (event, commandLine, workingDirectory) => {
+    app.on('second-instance', () => {
       if (win) {
         if (win.isMinimized()) win.restore();
 
@@ -136,11 +119,7 @@ try {
     });
   }
 
-  // todo: remove comment
-
   app.on('activate', () => {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (win === null) {
       createWindow();
     }

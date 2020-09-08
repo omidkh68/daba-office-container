@@ -1,5 +1,6 @@
 import {ElementRef, Injectable, Injector} from '@angular/core';
 import SIPml from 'ecmascript-webrtc-sipml';
+import {AppConfig} from '../../../../environments/environment';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../../services/message.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
@@ -53,6 +54,10 @@ export class SoftPhoneService extends LoginDataClass {
   private connectedCall = new BehaviorSubject(this._connectedCall);
   public currentConnectedCall = this.connectedCall.asObservable();
 
+  private _softphoneConnected: boolean = false;
+  private softphoneConnected = new BehaviorSubject(this._softphoneConnected);
+  public currentSoftphoneConnected = this.softphoneConnected.asObservable();
+
   private _minimizeCallPopUp: boolean = false;
   private minimizeCallPopUp = new BehaviorSubject(this._minimizeCallPopUp);
   public currentMinimizeCallPopUp = this.minimizeCallPopUp.asObservable();
@@ -104,14 +109,38 @@ export class SoftPhoneService extends LoginDataClass {
   }
 
   changeOnCallUser(onCallUser: SoftphoneUserInterface | null) {
+    if (onCallUser === null && this.debugMode) {
+      console.log('On Call Destroyed');
+    }
+
     this.onCallUser.next(onCallUser);
   }
 
   changeConnectedCall(status: boolean) {
+    if (status === false && this.debugMode) {
+      console.log('Connected Call Destroyed');
+    }
+
     this.connectedCall.next(status);
   }
 
+  public getSoftphoneConnectedStatus() {
+    return this.softphoneConnected.getValue();
+  }
+
+  changeSoftphoneConnected(status: boolean) {
+    if (status === false && this.debugMode) {
+      console.log('Softphone Connected Call Destroyed');
+    }
+
+    this.softphoneConnected.next(status);
+  }
+
   changeMinimizeCallPopUp(minimize: boolean) {
+    if (minimize === false && this.debugMode) {
+      console.log('Minimize Call PopUp Destroyed');
+    }
+
     this.minimizeCallPopUp.next(minimize);
   }
 
@@ -159,8 +188,6 @@ export class SoftPhoneService extends LoginDataClass {
   sipRegister = () => {
     this.combineUsersSoftPhoneInformation().then(() => {
       try {
-        this.sipUnRegister();
-
         // enable notifications if not already done
         // if (webkitNotifications && webkitNotifications.checkPermission() != 0) {
         //     webkitNotifications.requestPermission();
@@ -171,27 +198,27 @@ export class SoftPhoneService extends LoginDataClass {
         //saveCredentials();
 
         // update debug level to be sure new values will be used if the user haven't updated the page
-        SIPml.setDebugLevel((localStorage && localStorage.getItem('org.doubango.expert.disable_debug') == 'true') ? 'error' : 'info');
+        SIPml.setDebugLevel('info');
 
         // create SIP stack
         this.oSipStack = new SIPml.Stack({
-          realm: '213.202.217.19',
+          realm: AppConfig.REALM,
           impi: `${this.loggedInUserSoftphone.extension_no}-wrtc`,
-          impu: `sip:${this.loggedInUserSoftphone.extension_no}-wrtc@213.202.217.19`,
+          impu: `sip:${this.loggedInUserSoftphone.extension_no}-wrtc@${AppConfig.REALM}`,
           password: this.loggedInUserSoftphone.extension_no,
           display_name: `${this.loggedInUserSoftphone.extension_no}-wrtc`,
-          websocket_proxy_url: 'wss://213.202.217.19:8089/ws',
-          outbound_proxy_url: (localStorage ? localStorage.getItem('org.doubango.expert.sip_outboundproxy_url') : null),
-          ice_servers: (localStorage ? localStorage.getItem('org.doubango.expert.ice_servers') : null),
-          enable_rtcweb_breaker: (localStorage ? localStorage.getItem('org.doubango.expert.enable_rtcweb_breaker') == 'true' : false),
+          websocket_proxy_url: AppConfig.WEBSOCKET_PROXY_URL,
+          outbound_proxy_url: null,
+          ice_servers: null,
+          enable_rtcweb_breaker: false,
           events_listener: {events: '*', listener: this.onSipEventStack},
-          enable_early_ims: (localStorage ? localStorage.getItem('org.doubango.expert.disable_early_ims') != 'true' : true), // Must be true unless you're using a real IMS network
-          enable_media_stream_cache: (localStorage ? localStorage.getItem('org.doubango.expert.enable_media_caching') == 'true' : false),
-          // bandwidth: (localStorage ? tsk_string_to_object(localStorage.getItem('org.doubango.expert.bandwidth')) : null), // could be redefined a session-level
-          // video_size: (localStorage ? tsk_string_to_object(localStorage.getItem('org.doubango.expert.video_size')) : null), // could be redefined a session-level
+          enable_early_ims: true, // Must be true unless you're using a real IMS network
+          enable_media_stream_cache: false,
+          // bandwidth: null, // could be redefined a session-level
+          // video_size: null, // could be redefined a session-level
           sip_headers: [
             {name: 'User-Agent', value: 'IM-client/OMA1.0 sipML5-v1.2016.03.04'},
-            {name: 'Organization', value: 'Doubango Telecom'}
+            {name: 'Organization', value: 'Enoox Office Container'}
           ]
         });
 
@@ -250,11 +277,6 @@ export class SoftPhoneService extends LoginDataClass {
       // btnCall.disabled = true;
       // btnHangUp.disabled = false;
 
-      // if (localStorage) {
-      // oConfigCall.bandwidth = tsk_string_to_object(localStorage.getItem('org.doubango.expert.bandwidth')); // already defined at stack-level but redifined to use latest values
-      // oConfigCall.video_size = tsk_string_to_object(localStorage.getItem('org.doubango.expert.video_size')); // already defined at stack-level but redifined to use latest values
-      // }
-
       // create call session
       this.oSipSessionCall = this.oSipStack.newSession(s_type, this.oConfigCall);
       // make call
@@ -279,6 +301,8 @@ export class SoftPhoneService extends LoginDataClass {
 
   sipUnRegister = () => {
     if (this.oSipStack) {
+      this.changeSoftphoneConnected(false);
+
       this.oSipStack.stop(); // shutdown all sessions
     }
   };
@@ -534,6 +558,8 @@ export class SoftPhoneService extends LoginDataClass {
           }
 
           case 'connected': {
+            this.changeSoftphoneConnected(true);
+
             this.messageService.showMessage(`Your soft phone is now connected`);
 
             break;
@@ -860,8 +886,6 @@ export class SoftPhoneService extends LoginDataClass {
   uiBtnCallSetText = (s_text) => {
     switch (s_text) {
       case 'Call': {
-
-        const bDisableCallBtnOptions = (localStorage && localStorage.getItem('org.doubango.expert.disable_callbtn_options') == 'true');
         this.sipCall('call-audio');
 
         break;

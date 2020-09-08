@@ -51,7 +51,8 @@
     "status_description_error": "Please explain about status",
     "status_success": "Status applied successfully",
     "start_working": "Start Working?",
-    "start_working_time": "Do you want to start your working?"
+    "start_working_time": "Do you want to start your working?",
+    "close_app_stop_working": "Your working hours are over, have nice day"
   },
   "soft_phone": {
     "main": {

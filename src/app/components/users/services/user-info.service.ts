@@ -35,10 +35,6 @@ export class UserInfoService {
     this.userInfo.next(user);
   }
 
-  changeAllUsers(users: Array<UserContainerInterface> | null) {
-    this.allUsers.next(users);
-  }
-
   changeDarkMode() {
     const user = this.userInfo.getValue();
 

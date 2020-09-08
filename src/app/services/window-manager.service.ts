@@ -147,7 +147,7 @@ export class WindowManagerService {
         return display.bounds.x === 0 || display.bounds.y === 0
       });
       if (externalDisplay) {
-        const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;//document.getElementById(window.windowRef.id) as HTMLElement;
+        const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;
         const temp_size = temp.window.getBounds().width - primaryDisplay.bounds.width;
         const size = temp_size / 2;
         element.style.transform = 'translate3d(' + size + 'px, ' + 0 + 'px, 0px)';
@@ -199,7 +199,7 @@ export class WindowManagerService {
 
     const dialogId = windowInstance.windowRef.id;
 
-    this.element = document.getElementById(dialogId) as HTMLElement;
+    this.element = document.querySelector('#' + dialogId) as HTMLElement;
 
     if (windowInstance.priority === priority) {
       if (this.windowListArray.length === 1) {
@@ -230,11 +230,9 @@ export class WindowManagerService {
   }
 
   closeAllServices() {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       await this.windowListArray.map((item: WindowInterface) => {
-        setTimeout(() => {
-          this.closeWindow(item.windowService);
-        });
+        setTimeout(() => this.closeWindow(item.windowService));
       });
 
       resolve(true);
@@ -260,7 +258,7 @@ export class WindowManagerService {
     const heightEmptyState = (Math.random() * (this.window.innerHeight - windowInstance.windowService.height)).toFixed();
     const rndNumForWidth = this.randInt(50, widthEmptyState);
     const rndNumForHeight = this.randInt(50, heightEmptyState);
-    const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;//document.getElementById(window.windowRef.id) as HTMLElement;
+    const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;
     /*if (center) {
       element.style.transform = null;
     } else {
@@ -302,13 +300,18 @@ export class WindowManagerService {
     setTimeout(() => {
       let maxWindowZIndex = (this.getMaxZIndex() + 500).toString();
 
-      const element = document.getElementById(dialogId) as HTMLElement;
+      let element: HTMLElement;
 
-      const elementOverlay = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
+      if (dialogId !== 'snackBar') {
+        const elementOverlay = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
+        elementOverlay.style.zIndex = maxWindowZIndex;
 
-      elementOverlay.style.zIndex = maxWindowZIndex;
-
-      element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
+        element = document.querySelector('#' + dialogId) as HTMLElement;
+        element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
+      } else if (dialogId === 'snackBar') {
+        element = document.querySelector('.mat-snack-bar-container') as HTMLElement;
+        element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
+      }
     });
   }
 }

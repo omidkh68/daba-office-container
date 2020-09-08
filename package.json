@@ -1,7 +1,7 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "author": "Omid Khosrojerdi, Husin Sajjadi, Abolfazl Ebrahimik",
   "repository": {
     "type": "git",
@@ -74,7 +74,6 @@
     "electron-debug": "3.1.0",
     "electron-packager": "15.0.0",
     "electron-reload": "1.5.0",
-    "electron-store": "5.2.0",
     "electron-updater": "^4.2.5",
     "electron-util": "0.14.2",
     "eslint": "6.8.0",
@@ -89,11 +88,8 @@
     "karma-jasmine": "3.1.1",
     "karma-jasmine-html-reporter": "1.5.3",
     "lodash": ">=4.17.19",
-    "material-design-icons": "3.0.1",
     "mocha": "7.1.2",
     "moment": "^2.24.0",
-    "nedb": "1.8.0",
-    "ngx-awesome-uploader": "9.0.4",
     "ngx-image-cropper": "3.2.1",
     "npm-run-all": "4.1.5",
     "rxjs": "6.5.5",

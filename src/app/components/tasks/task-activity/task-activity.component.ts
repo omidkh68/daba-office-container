@@ -48,9 +48,7 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.getActivities().then((activities: Array<ActivityInterface>) => {
-      setTimeout(() => {
-        this.activityList = activities;
-      });
+      setTimeout(() => this.activityList = activities);
 
       this.single = [
         {

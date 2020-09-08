@@ -91,9 +91,7 @@ export class TimeAreaClockComponent implements AfterViewInit{
     this.seconds.nativeElement.classList.add('no-transition');
     this.seconds.nativeElement.style.transform = 'rotate('+ (this.seconds_angle) +'deg)';
 
-    setTimeout(() => {
-      this.seconds.nativeElement.classList.remove('no-transition');
-    },200);
+    setTimeout(() => this.seconds.nativeElement.classList.remove('no-transition'),200);
 
     this.seconds.nativeElement.removeEventListener('transitionend', this.controlBouncing);
     this.seconds_angle += (this.degrees/60);

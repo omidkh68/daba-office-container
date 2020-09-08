@@ -36,9 +36,7 @@ export class TaskBottomSheetComponent {
       this.renderer.setStyle(el, 'height', '0');
       this.renderer.setStyle(el, 'width', '0');
 
-      setTimeout(() => {
-        this.renderer.setStyle(parentNode, 'z-index', '-1');
-      }, 100);
+      setTimeout(() => this.renderer.setStyle(parentNode, 'z-index', '-1'), 100);
     }
   }
 

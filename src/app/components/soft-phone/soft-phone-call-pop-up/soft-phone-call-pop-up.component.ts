@@ -128,11 +128,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
             this.timerDueTime, this.timerPeriod
           );
 
-          this.globalTimerSubscription = this.globalTimer.subscribe(
-            t => {
-              this.getConferenceOnlineUser();
-            }
-          );
+          this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getConferenceOnlineUser());
         } else {
           if (this.globalTimerSubscription) {
             this.globalTimerSubscription.unsubscribe();

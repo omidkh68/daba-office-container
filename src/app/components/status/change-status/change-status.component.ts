@@ -1,18 +1,18 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ApiService as UserApiService} from '../../users/logic/api.service';
+import {ApiService as StatusApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../services/message.service';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {StatusDetailInterface, UserStatusInterface} from '../logic/status-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ChangeStatusService} from '../services/change-status.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {StatusDetailInterface, UserStatusInterface} from '../logic/status-interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {ApiService as UserApiService} from '../../users/logic/api.service';
-import {ApiService as StatusApiService} from '../logic/api.service';
 import {StatusListResultInterface, StatusChangeResultInterface} from '../logic/result-interface';
 
 @Component({
@@ -29,19 +29,19 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private userStatusService: ChangeStatusService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data,
+              public dialogRef: MatDialogRef<ChangeStatusComponent>,
+              private fb: FormBuilder,
               private injector: Injector,
+              private translate: TranslateService,
               private viewDirection: ViewDirectionService,
               private userApiService: UserApiService,
               private messageService: MessageService,
               private statusApiService: StatusApiService,
               private userInfoService: UserInfoService,
-              private fb: FormBuilder,
-              private translate: TranslateService,
+              private userStatusService: ChangeStatusService,
               private refreshLoginService: RefreshLoginService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              public dialogRef: MatDialogRef<ChangeStatusComponent>,
-              @Inject(MAT_DIALOG_DATA) public data) {
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -58,9 +58,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     await this.createForm().then(() => {
       this.form.markAllAsTouched();
 
-      setTimeout(_ => {
-        this.checkFormValidation();
-      }, 1000);
+      setTimeout(() => this.checkFormValidation(), 1000);
 
       this._subscription.add(
         this.userStatusService.currentUserStatus.subscribe(status => {
@@ -194,9 +192,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
   }
 
   getTranslate(word) {
-    return new Promise((resolve, reject) => {
-      resolve(this.translate.instant(word));
-    });
+    return new Promise((resolve) => resolve(this.translate.instant(word)));
   }
 
   ngOnDestroy(): void {

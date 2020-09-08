@@ -136,9 +136,7 @@ export class SoftPhoneKeypadComponent {
 
     this.softPhoneService.sipTransfer(contactInfo);
 
-    setTimeout(() => {
-      this.triggerCloseBottomSheet.emit();
-    }, 1000);
+    setTimeout(() => this.triggerCloseBottomSheet.emit(), 1000);
   }
 
   dismissTransferCall() {

@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {SharedModule} from '../../shared/shared.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {FilePickerModule} from 'ngx-awesome-uploader';
 import {TaskAddComponent} from './task-add/task-add.component';
 import {TaskMainComponent} from './task-main/task-main.component';
 import {TaskStopComponent} from './task-stop/task-stop.component';
@@ -11,7 +10,6 @@ import {TaskTodoComponent} from './task-todo/task-todo.component';
 import {TaskFormComponent} from './task-form/task-form.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import {TaskBoardComponent} from './task-board/task-board.component';
-import {TaskFilesComponent} from './task-files/task-files.component';
 import {TaskFilterComponent} from './task-filter/task-filter.component';
 import {TaskDetailComponent} from './task-detail/task-detail.component';
 import {TaskReportComponent} from './task-report/task-report.component';
@@ -32,7 +30,6 @@ import {TaskCalendarWeekdayComponent} from './task-calendar/task-calendar-weekda
     TaskFormComponent,
     TaskTodoComponent,
     TaskBoardComponent,
-    TaskFilesComponent,
     TaskDetailComponent,
     TaskFilterComponent,
     TaskReportComponent,
@@ -49,7 +46,6 @@ import {TaskCalendarWeekdayComponent} from './task-calendar/task-calendar-weekda
     CommonModule,
     SharedModule,
     NgxChartsModule,
-    FilePickerModule,
     FullCalendarModule,
     TranslateModule.forChild({})
   ]

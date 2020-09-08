@@ -56,13 +56,15 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnD
   loggedInUserExtension: LoggedInUserExtensionInterface = null;
   filterArgs = null;
   callPopUpMinimizeStatus: boolean = false;
+  softphoneConnectedStatus: boolean = false;
 
+  private extensionStatusSubscription: Subscription;
   private _subscription: Subscription = new Subscription();
 
-  constructor(private softPhoneService: SoftPhoneService,
-              private translateService: TranslateService,
-              private apiService: ApiService,
+  constructor(private apiService: ApiService,
               private messageService: MessageService,
+              private softPhoneService: SoftPhoneService,
+              private translateService: TranslateService,
               private refreshLoginService: RefreshLoginService) {
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
@@ -78,40 +80,36 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnD
       this.timerDueTime, this.timerPeriod
     );
 
-    this.globalTimerSubscription = this.globalTimer.subscribe(
-      t => {
-        this.getExtensionStatus();
-      }
-    );
+    this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getExtensionStatus());
   }
 
   getExtensionStatus() {
-    this._subscription.add(
-      this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
-        if (resp.success) {
-          if (this.softPhoneUsers && this.softPhoneUsers.length) {
-            const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, resp.data);
+    if (this.extensionStatusSubscription) {
+      this.extensionStatusSubscription.unsubscribe();
+    }
 
-            this.softPhoneService.changeSoftPhoneUsers(extensionsList);
+    this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
+      if (resp.success) {
+        if (this.softPhoneUsers && this.softPhoneUsers.length) {
+          const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, resp.data);
 
-            extensionsList.map(item => {
-              if (item.username === this.loggedInUser.email) {
-                this.loggedInUserExtension = {
-                  user: this.loggedInUser,
-                  extension: item
-                }
+          this.softPhoneService.changeSoftPhoneUsers(extensionsList);
+
+          this.softphoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus();
+
+          extensionsList.map(item => {
+            if (item.username === this.loggedInUser.email) {
+              this.loggedInUserExtension = {
+                user: this.loggedInUser,
+                extension: item
               }
-            });
-          }
-
-          // this.sortSoftphoneUsers();
-        } else {
-
+            }
+          });
         }
-      }, (error: HttpErrorResponse) => {
-        this.refreshLoginService.openLoginDialog(error);
-      })
-    );
+      }
+    }, (error: HttpErrorResponse) => {
+      this.refreshLoginService.openLoginDialog(error);
+    });
   }
 
   openSheet(user) {
@@ -126,21 +124,6 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnD
       height: '200px',
       width: '98%',
       data: user
-    });
-  }
-
-  sortSoftphoneUsers() {
-    this.softPhoneUsers = this.softPhoneUsers.sort((first, second) => {
-      const a = first.is_online;
-      const b = second.is_online;
-
-      let comparison = 0;
-      if (a < b) {
-        comparison = 1;
-      } else if (a > b) {
-        comparison = -1;
-      }
-      return comparison;
     });
   }
 

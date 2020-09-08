@@ -2,7 +2,6 @@ import {
   Component,
   ComponentFactoryResolver,
   ElementRef,
-  HostListener,
   Renderer2,
   ViewChild,
   ViewContainerRef
@@ -24,8 +23,8 @@ export class SoftPhoneBottomSheetComponent {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private renderer: Renderer2,
-              private cfr: ComponentFactoryResolver,
+  constructor(private cfr: ComponentFactoryResolver,
+              private renderer: Renderer2,
               private softPhoneService: SoftPhoneService) {
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => {
@@ -68,14 +67,8 @@ export class SoftPhoneBottomSheetComponent {
       this.renderer.setStyle(el, 'height', '0');
       this.renderer.setStyle(el, 'width', '0');
 
-      setTimeout(() => {
-        this.renderer.setStyle(parentNode, 'z-index', '-1');
-      }, 100);
+      setTimeout(() => this.renderer.setStyle(parentNode, 'z-index', '-1'), 100);
     }
-  }
-
-  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
-    this.close();
   }
 
   close() {
