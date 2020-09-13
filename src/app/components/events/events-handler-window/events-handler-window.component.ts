@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {WindowInterface} from '../../dashboard/logic/window.interface';
 import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -13,6 +13,7 @@ export class EventsHandlerWindowComponent implements OnInit, OnDestroy {
     rtlDirection: boolean;
     windowInstance: WindowInterface;
     data: ServiceItemsInterface;
+    @ViewChild('bottomSheet', {static: false}) bottomSheet: any;
 
     private _subscription: Subscription = new Subscription();
 
@@ -53,6 +54,16 @@ export class EventsHandlerWindowComponent implements OnInit, OnDestroy {
 
     centerWindow() {
         this.windowManagerService.centerWindow(this.data);
+    }
+
+    openButtonSheet(bottomSheetConfig: any) {
+        try {
+            bottomSheetConfig.bottomSheetRef = this.bottomSheet;
+
+            this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     ngOnDestroy(): void {

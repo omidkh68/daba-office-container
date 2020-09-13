@@ -16,4 +16,5 @@ export interface UserContainerInterface {
   extension_no: number | null;
   profile_image: string | null;
   background_image: string | null;
+  editable?: boolean;
 }

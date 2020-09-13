@@ -1,38 +1,32 @@
-<mat-drawer-container autosize class="rate-calendar" id="rate-container">
+<mat-drawer-container autosize class="event-main-datepicker">
     <mat-drawer #drawer mode="side">
         <div class="padding-full text-white">
             <div class="datepicker-container padding-full round-corner"
                  [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
                  [dir]="rtlDirection ? 'rtl' : 'ltr'">
-                <mat-calendar></mat-calendar>
+                <mat-calendar #myCalendar [dateClass]="dateClass()" (click)="getPosition($event)" (selectedChange)="onSelect($event)"></mat-calendar>
                 <mat-list>
-                    <div mat-subheader>یادآوری ها</div>
-                    <mat-list-item>
-                        <mat-icon class="font-full-plus-three-tenth-rem" mat-list-icon>access_alarm</mat-icon>
-                        <div mat-line class="font-6-em">سلام تست من اتست</div>
-                        <div mat-line class="font-6-rem"> 1399/01/01</div>
-                    </mat-list-item>
-                    <mat-list-item>
-                        <mat-icon class="font-full-plus-three-tenth-rem" mat-list-icon>access_alarm</mat-icon>
-                        <div mat-line class="font-6-em">سلام تست من اتست</div>
-                        <div mat-line class="font-6-rem"> 1399/01/01</div>
-                    </mat-list-item>
-                    <mat-list-item>
-                        <mat-icon class="font-full-plus-three-tenth-rem" mat-list-icon>access_alarm</mat-icon>
-                        <div mat-line class="font-6-em">سلام تست من اتست</div>
-                        <div mat-line class="font-6-rem"> 1399/01/01</div>
-                    </mat-list-item>
+                    <div mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}} <b class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}: {{remindersList.length}}</b></div>
+                    <div *ngIf="remindersList != null">
+                        <mat-list-item *ngFor="let item of remindersList">
+                            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
+                            <div mat-line class="font-8-em">{{item.description}}</div>
+                            <div mat-line class="font-6-rem">{{item.startdate_format}} - {{item.enddate_format}}</div>
+                        </mat-list-item>
+                    </div>
                 </mat-list>
             </div>
         </div>
     </mat-drawer>
     <div class="padding-full" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
-        <full-calendar #calendar [allDaySlot]="false" [buttonText]="buttonLabels"
+        <full-calendar [events]="calendarEvents" #calendar [allDaySlot]="false" [buttonText]="buttonLabels"
                        [dir]="rtlDirection ? 'rtl' : 'ltr'"
                        [displayEventTime]="false"
                        [editable]="false"
                        [eventLimit]="2"
                        [firstDay]="1"
+                       (eventClick)="loadBottomSheetFromFullCalendar($event)"
+                       [eventLimitText]="''"
                        [handleWindowResize]="true"
                        [header]="header"
                        [locale]="rtlDirection ? 'fa' : 'en'"

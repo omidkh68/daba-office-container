@@ -42,7 +42,7 @@ export class ApiService {
   getHRUsers(): Observable<any> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get(`${this.API_URL}/hr/users`, this.headers);
+    return this.http.get(`${this.API_URL}/hr/users/subset`, this.headers);
   }
 
   getServiceUsers(serviceId: number): Observable<any> {

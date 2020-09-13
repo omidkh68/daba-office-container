@@ -1,23 +1,24 @@
-<div class="datepicker-container mat-elevation-z1 padding-full round-corner"
+<div class="datepicker-popover datepicker-container mat-elevation-z1 padding-full round-corner"
      [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
      [dir]="rtlDirection ? 'rtl' : 'ltr'">
-    <mat-calendar (selectedChange)="onSelect()" [dateClass]="dateClass()"></mat-calendar>
-    <mat-list>
-        <div mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}}</div>
-        <mat-list-item>
-            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
-            <div mat-line class="font-6-em">سلام تست من اتست</div>
-            <div mat-line class="font-6-rem"> 1399/01/01 </div>
-        </mat-list-item>
-        <mat-list-item>
-            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
-            <div mat-line class="font-6-em">سلام تست من اتست</div>
-            <div mat-line class="font-6-rem"> 1399/01/01 </div>
-        </mat-list-item>
-        <mat-list-item>
-            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
-            <div mat-line class="font-6-em">سلام تست من اتست</div>
-            <div mat-line class="font-6-rem"> 1399/01/01 </div>
-        </mat-list-item>
-    </mat-list>
+    <mat-calendar #myCalendar (click)="getPosition($event)" (selectedChange)="onSelect($event)"
+                  [dateClass]="dateClass()"></mat-calendar>
+    <div *ngIf="reminders.length">
+        <mat-list>
+            <div mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}} <b
+                    class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}
+                : {{reminders.length}}</b></div>
+            <div>
+                <mat-list-item *ngFor="let item of reminders.slice(0, 3)">
+                    <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
+                    <div mat-line class="font-8-em">{{item.description}}</div>
+                    <div mat-line class="font-6-rem">{{item.startdate_format}} - {{item.enddate_format}}</div>
+                </mat-list-item>
+            </div>
+        </mat-list>
+        <button mat-raised-button (click)="showEventHandlerWindow(null,$event)"
+                class="custom-flat-button full-width padding-mini-r-l line-height-30 font-9-em overflow-hide text-weight-normal">
+            <span class="padding-mini-r-l">{{'events_handler.main.see_more' | translate}}</span>
+        </button>
+    </div>
 </div>

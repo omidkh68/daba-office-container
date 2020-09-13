@@ -21,7 +21,6 @@ export class EventsHandlerComponent implements AfterViewInit {
 
     async ngAfterViewInit() {
         const ref = this.lazyComponentService.loadComponent('eventsHandlerModuleId', this.container);
-
         ref.then(result => {
             result.instance.data = this.data;
         });

@@ -21,6 +21,10 @@ import {ShowImageCropperComponent} from "../profile-setting/show-image-cropper/s
 import {WindowAppContainerComponent} from './dashboard-toolbar/window-app-container/window-app-container.component';
 import {DashboardDatepickerComponent} from "./dashboard-datepicker/dashboard-datepicker.component";
 import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-call/soft-phone-incoming-call.component';
+import {A11yModule} from "@angular/cdk/a11y";
+import {PortalModule} from '@angular/cdk/portal'
+import {PopoverContnetComponent} from "../popover-widget/popover/popover-content/popover-content.component";
+import {PopoverModule} from "../popover-widget/popover.module";
 
 @NgModule({
   declarations: [
@@ -37,20 +41,24 @@ import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-
     ChangeStatusComponent,
     TimeAreaClockComponent,
     ProfileSettingComponent,
+    PopoverContnetComponent,
     DashboardToolbarComponent,
     ShowImageCropperComponent,
     WindowAppContainerComponent,
     DashboardDatepickerComponent,
     SoftPhoneIncomingCallComponent
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    ImageCropperModule,
-    RouterModule.forChild([
-      {path: '', component: DashboardComponent},
-    ])
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        PopoverModule,
+        ImageCropperModule,
+        RouterModule.forChild([
+            {path: '', component: DashboardComponent},
+        ]),
+        A11yModule
+    ],
+  entryComponents: [PopoverContnetComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DashboardModule {

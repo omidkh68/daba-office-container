@@ -7,19 +7,27 @@ import {FullCalendarModule} from "@fullcalendar/angular";
 import {EventsHandlerComponent} from "./events-handler.component";
 import {EventsHandlerMainComponent} from "./events-handler-main/events-handler-main.component";
 import {EventsHandlerWindowComponent} from "./events-handler-window/events-handler-window.component";
+import {EventHandlerDetailComponent} from "./event-handler-detail/event-handler-detail.component";
+import {A11yModule} from "@angular/cdk/a11y";
+import {EventsHandlerAddReminderComponent} from "./events-handler-add-reminder/events-handler-add-reminder.component";
+import {EventHandlerBottomSheetComponent} from "./event-handler-bottom-sheet/event-handler-bottom-sheet.component";
 
 @NgModule({
     declarations: [
         EventsHandlerComponent,
         EventsHandlerMainComponent,
-        EventsHandlerWindowComponent
+        EventHandlerDetailComponent,
+        EventsHandlerWindowComponent,
+        EventHandlerBottomSheetComponent,
+        EventsHandlerAddReminderComponent,
     ],
     imports: [
         CommonModule,
         SharedModule,
         NgxChartsModule,
         FullCalendarModule,
-        TranslateModule.forChild({})
+        TranslateModule.forChild({}),
+        A11yModule
     ]
 })
 export class EventsHandlerModule {

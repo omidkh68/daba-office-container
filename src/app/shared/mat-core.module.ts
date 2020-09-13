@@ -31,9 +31,10 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatRadioModule} from '@angular/material/radio';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import {PortalModule} from "@angular/cdk/portal";
 
 @NgModule({
-  imports: [MatTableModule],
+  imports: [MatTableModule ,PortalModule],
   exports: [
     MatAutocompleteModule,
     MatBadgeModule,
@@ -66,7 +67,8 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
     MatTableModule,
     MatPaginatorModule,
     MatRadioModule,
-    ClipboardModule
+    ClipboardModule,
+    PortalModule
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DATA, useValue: []}
