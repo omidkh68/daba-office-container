@@ -248,7 +248,17 @@
       "event_title" : "Event",
       "events_title" : "Events",
       "reminder_title" : "Reminder",
-      "reminders_title" : "Reminders"
+      "reminders_title" : "Reminders",
+      "event_count" : "Events Count",
+      "reminder_count" : "Counts"
+    },
+    "event_detail": {
+      "delete_title": "Delete Event",
+      "delete_text": "Are you sure want to delete this event?"
+    },
+    "reminder_detail": {
+      "delete_title": "Delete Reminder",
+      "delete_text": "Are you sure want to delete this reminder?"
     },
     "form": {
       "event_name" : "Event Name",
@@ -269,10 +279,21 @@
       "action_job_type": "Action Job Type",
       "users": "Users",
       "assign_to_error": "Please choose event assign to",
-      "user_phone" : "User Mobile",
+      "user_phone" : "Mobile",
+      "user_email" : "Email",
       "all_day" : "All Day",
       "reminder_type" : "Reminder Type",
-      "reminder_status" : "Reminder Status"
+      "reminder_status" : "Reminder Status",
+      "add_event_successful" : "Event added successfully",
+      "delete_event_successful" : "Event deleted successfully",
+      "delete_event_error" : "Event delete has error",
+      "update_event_successful" : "Event updated successfully",
+      "update_event_error" : "Event update has error",
+      "add_reminder_successful" : "Reminder added successfully",
+      "delete_reminder_successful" : "Reminder deleted successfully",
+      "delete_reminder_error" : "Reminder delete has error",
+      "update_reminder_successful" : "Reminder updated successfully",
+      "update_reminder_error" : "Reminder update has error"
     }
   }
 }

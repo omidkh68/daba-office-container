@@ -11,6 +11,5 @@ export const AppConfig = {
   EIS_URL: 'https://eis.enoox.com',
   REALM: '213.202.217.19',
   WEBSOCKET_PROXY_URL: 'wss://213.202.217.19:8089/ws',
-  WRTC_URL: 'http://wrtc.dabacenter.ir/api',
-  EVENT_HANDLER_URL : 'http://192.168.110.180:8080/'
+  EVENT_HANDLER_URL : 'http://192.168.110.156:8080/eventhandler-0.0.1'
 };

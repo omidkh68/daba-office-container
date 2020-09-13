@@ -12,7 +12,10 @@ export interface ActionTypeInterface {
 export interface UserEventHandlerInterface {
     id?: number;
     email?: string;
+    emailTemp?: string;
     name?: string;
     role?: any,
-    phoneNumber?: string
+    editable?: boolean;
+    phoneNumber?: string;
+    phoneNumberTemp?: string;
 }

@@ -40,14 +40,9 @@
                                (dateChange)="dateToGregorianReminder('startReminder', $event)"
                                formControlName="startReminder" tabindex="8">
                         <mat-datepicker #picker1></mat-datepicker>
-
                         <mat-error>
-                            {{'events_handler.form.start_stop_compare' | translate}}
-                        </mat-error>
-
-                        <mat-error
-                                *ngIf="!reminderForm.get('startReminder').valid && reminderForm.get('startReminder').touched">
-                            {{'events_handler.form.start_at_error' | translate}}
+                            <span *ngIf="!reminderForm.get('startReminder').value">{{'events_handler.form.start_at_error' | translate}}</span>
+                            <span *ngIf="reminderForm.get('startReminder').value > reminderForm.get('endReminder').value">{{'events_handler.form.start_stop_compare' | translate}}</span>
                         </mat-error>
                     </mat-form-field>
                 </div>

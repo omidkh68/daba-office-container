@@ -9,16 +9,16 @@ import {EventsHandlerMainComponent} from "./events-handler-main/events-handler-m
 import {EventsHandlerWindowComponent} from "./events-handler-window/events-handler-window.component";
 import {EventHandlerDetailComponent} from "./event-handler-detail/event-handler-detail.component";
 import {A11yModule} from "@angular/cdk/a11y";
-import {TaskBottomSheetComponent} from "../tasks/task-bottom-sheet/task-bottom-sheet.component";
 import {EventsHandlerAddReminderComponent} from "./events-handler-add-reminder/events-handler-add-reminder.component";
+import {EventHandlerBottomSheetComponent} from "./event-handler-bottom-sheet/event-handler-bottom-sheet.component";
 
 @NgModule({
     declarations: [
         EventsHandlerComponent,
-        TaskBottomSheetComponent,
         EventsHandlerMainComponent,
         EventHandlerDetailComponent,
         EventsHandlerWindowComponent,
+        EventHandlerBottomSheetComponent,
         EventsHandlerAddReminderComponent,
     ],
     imports: [

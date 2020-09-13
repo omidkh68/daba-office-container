@@ -34,12 +34,13 @@ import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from './jalali_moment_formats';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from './jalali-moment-date-adapter';
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import {PortalModule} from "@angular/cdk/portal";
 
 const defaultLangStorage = localStorage.getItem('defaultLang');
 const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
 @NgModule({
-  imports: [MatTableModule],
+  imports: [MatTableModule ,PortalModule],
   exports: [
     MatAutocompleteModule,
     MatBadgeModule,
@@ -72,7 +73,8 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
     MatTableModule,
     MatPaginatorModule,
     MatRadioModule,
-    ClipboardModule
+    ClipboardModule,
+    PortalModule
   ],
   providers: [
     {

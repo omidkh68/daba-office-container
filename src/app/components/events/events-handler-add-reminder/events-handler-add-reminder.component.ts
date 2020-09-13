@@ -11,7 +11,9 @@ import {ReminderTypeInterface} from "../logic/event-reminder.interface";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import * as moment from 'moment';
 import {hours} from "../../../shared/utils";
-import {MessageService} from "../../../services/message.service";
+import {MessageService} from "../../message/service/message.service";
+import {TranslateService} from "@ngx-translate/core";
+import {EventHandlerService} from "../service/event-handler.service";
 
 @Component({
     selector: 'app-events-handler-add-reminder',
@@ -23,14 +25,16 @@ export class EventsHandlerAddReminderComponent implements OnInit {
     eventItems: EventHandlerInterface;
     reminderForm: FormGroup;
     editableReminder: boolean = false;
-    private _subscription: Subscription = new Subscription();
     reminderTypeList: ReminderTypeInterface[] = [];
     statusList: ReminderTypeInterface[] = [];
     hours = hours;
+    private _subscription: Subscription = new Subscription();
 
     constructor(private fb: FormBuilder,
                 public dialog: MatDialog,
                 private messageService: MessageService,
+                private translateService: TranslateService,
+                private eventHandlerService: EventHandlerService,
                 public dialogRef: MatDialogRef<EventsHandlerAddReminderComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 private eventApi : EventApiService) {
@@ -39,7 +43,6 @@ export class EventsHandlerAddReminderComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
         this._subscription.add(
             this.eventApi.getAllReminderType().subscribe((resp: any) => {
                 if (resp.status == 200) {
@@ -47,7 +50,6 @@ export class EventsHandlerAddReminderComponent implements OnInit {
                 }
             })
         );
-
         this._subscription.add(
             this.eventApi.getAllStatusType().subscribe((resp: any) => {
                 if (resp.status == 200) {
@@ -55,7 +57,6 @@ export class EventsHandlerAddReminderComponent implements OnInit {
                 }
             })
         );
-
         this.createReminderForm().then(() => {
             this.editableReminder = true;
             this.reminderForm.enable();
@@ -78,18 +79,23 @@ export class EventsHandlerAddReminderComponent implements OnInit {
     }
 
     submitReminder() {
-        debugger;
         let formValue = {reminders : [this.reminderForm.value] , id: this.data.eventItems.id} ;
-
         formValue.reminders[0].startReminder = formValue.reminders[0].startReminder + " " + formValue.reminders[0].startTime + ":00";
         formValue.reminders[0].endReminder = formValue.reminders[0].endReminder + " " + formValue.reminders[0].endTime + ":00";
         if(formValue.reminders[0].startReminder > formValue.reminders[0].endReminder){
+            this.reminderForm.controls['startReminder'].setErrors({'incorrect': true});
             return;
         }
         this._subscription.add(
             this.eventApi.addNewReminder(formValue).subscribe((resp: any) => {
-                this.messageService.showMessage(resp.result);
-                this.dialogRef.close(true);
+                if(resp.result == "successful"){
+                    this.messageService.showMessage(this.getTranslate('events_handler.form.add_reminder_successful'));
+                    this.dialogRef.close(true);
+                    this.eventHandlerService.moveEventItems(null);
+
+                }else{
+                    this.messageService.showMessage(this.getTranslate('events_handler.form.add_reminder_error'));
+                }
             })
         );
     }
@@ -102,9 +108,7 @@ export class EventsHandlerAddReminderComponent implements OnInit {
         this.reminderForm.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
     }
 
-
-    ngAfterViewInit(): void {
-
+    getTranslate(word) {
+        return this.translateService.instant(word);
     }
-
 }

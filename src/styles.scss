@@ -797,3 +797,22 @@ file-preview-container {
 .cdk-overlay-transparent-backdrop, .cdk-overlay-connected-position-bounding-box {
   z-index: 99999;
 }
+.custom-badge b{
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 22px;
+  background: #FF9800;
+  font-size: 12px;
+}
+.custom-flat-button{
+  background: #ffffff8a !important;
+  box-shadow: none !important;
+}
+.mat-calendar-body-cell-content{
+  width: 23px !important;
+  height: 23px !important;
+}
+.pointer-events-none{
+  pointer-events: none;
+}

@@ -24,9 +24,10 @@ import {EventHandlerDetailComponent} from "../event-handler-detail/event-handler
 import {EventHandlerService} from "../service/event-handler.service";
 import {EventHandlerInterface} from "../logic/event-handler.interface";
 import {ReminderInterface} from "../logic/event-reminder.interface";
-import {MatCalendarCellCssClasses} from "@angular/material/datepicker";
-import {ServiceItemsInterface} from "../../dashboard/logic/service-items.interface";
-import {DashboardDatepickerService} from "../../dashboard/dashboard-datepicker/service/dashboard-datepicker.service";
+import {MatCalendar, MatCalendarCellCssClasses} from "@angular/material/datepicker";
+import {PopoverContnetComponent} from "../../popover-widget/popover/popover-content/popover-content.component";
+import {PopoverService} from "../../popover-widget/popover.service";
+import {WindowManagerService} from "../../../services/window-manager.service";
 
 @Component({
     selector: 'app-events-handler-main',
@@ -38,21 +39,30 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     @ViewChild('calendar') calendarComponent: FullCalendarComponent;
     @ViewChild('drawer') drawer: any; // the #calendar in the template
     @ViewChild('bottomSheet', {static: false}) bottomSheet: any;
-
-    holidays = [];
+    @ViewChild('myCalendar', {}) calendar: MatCalendar<Date>;
 
     @Input()
     rtlDirection: boolean;
-    calendarEvents:any = [];
-    eventsList: Array<EventHandlerInterface> = null;
-    eventItems: EventHandlerInterface = null;
-    remindersList: Array<ReminderInterface> = null;
-    eventTemp: any = [];
-    popoverService;
 
     @Output()
     triggerBottomSheet: EventEmitter<EventHandlerBottomSheetInterface> = new EventEmitter<EventHandlerBottomSheetInterface>();
 
+    holidays = [];
+    calendarEvents: any = [];
+    eventsList: Array<EventHandlerInterface> = null;
+    eventItems: EventHandlerInterface = null;
+    remindersList: Array<ReminderInterface> = [];
+    eventTemp: any = [];
+    popoverTarget: any;
+    calendarPlugins = [dayGridPlugin];
+    buttonLabels = {};
+    views = {};
+    header = {};
+    slotLabelFormat = [{
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    }];
     currentDate: Date;
     colorArray = [
         '#f44336',
@@ -78,16 +88,6 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         '#444444',
     ];
     private _subscription: Subscription = new Subscription();
-    calendarPlugins = [dayGridPlugin];
-
-    buttonLabels = {};
-    views = {};
-    header = {};
-    slotLabelFormat = [{
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    }];
 
     constructor(public dialog: MatDialog,
                 private injector: Injector,
@@ -96,29 +96,42 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
                 private taskCalendarService: TaskCalendarService,
                 private eventHandlerService: EventHandlerService,
                 private api: ApiService,
+                private windowManagerService: WindowManagerService,
+                private popoverService: PopoverService,
                 private elemRef: ElementRef,
                 private translateService: TranslateService) {
         super(injector, userInfoService);
+    }
+
+    ngOnInit(): void {
         this._subscription.add(
             this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
         );
         this._subscription.add(
-            this.eventHandlerService.currentEventsList.subscribe(events => this.eventsList = events)
+            this.eventHandlerService.currentEventsList.subscribe(events => {
+                this.eventsList = events;
+                this.eventsList.map((item: EventHandlerInterface) => {
+                    if (item.reminders.length)
+                        this.remindersList = [...this.remindersList, ...item.reminders]
+                });
+                this.remindersList.map((item: ReminderInterface) => {
+                    item.startdate_format = new Date(item.startReminder).toLocaleDateString();
+                    item.enddate_format = new Date(item.endReminder).toLocaleDateString();
+                });
+                setTimeout(() => {
+                    this.calendar.updateTodaysDate();
+                    this.prepareFullCalendar();
+                    let calendarApi = this.calendarComponent.getApi();
+                    calendarApi.refetchEvents();
+                }, 1000)
+            })
         );
         this._subscription.add(
             this.eventHandlerService.currentDate.subscribe(day => this.currentDate = day)
         );
         this._subscription.add(
-            this.eventHandlerService.currentRemindersList.subscribe(reminders => this.remindersList = reminders)
-        );
-        this._subscription.add(
             this.eventHandlerService.currentEventItems.subscribe(currentEventItems => this.eventItems = currentEventItems)
         );
-    }
-
-    ngOnInit(): void {
-
-        this.popoverService = new DashboardDatepickerService(this.elemRef , 'event-main-datepicker');
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
         this._subscription.add(
             this.api.getAllHolidays().subscribe((resp: any) => {
@@ -136,27 +149,16 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     }
 
     ngAfterViewInit(): void {
-
-        this.loadBottomSheet(this.eventItems);
-
-        this.eventsList.map((item: any) => {
-            item.title = item.name;
-            item.start = new Date(item.startDate);
-            item.end = new Date(item.endDate);
-            item.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
-        });
-        this.calendarEvents = this.eventsList;
-
-
+        if (this.currentDate)
+            this.loadBottomSheet(this.eventItems);
+        this.prepareFullCalendar();
         this.views = {
             dayGridMonthCustom: {
                 type: 'dayGridMonth',
                 buttonText: this.getTranslate('tasks.calendar.month')
             }
         };
-
         this.drawer.open();
-
         this.buttonLabels = {
             today: this.getTranslate('tasks.calendar.today'),
             month: this.getTranslate('tasks.calendar.month'),
@@ -164,7 +166,6 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
             day: this.getTranslate('tasks.calendar.day'),
             list: this.getTranslate('tasks.calendar.list')
         };
-
         if (this.rtlDirection) {
             this.header = {
                 left: 'title',
@@ -180,79 +181,73 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         }
     }
 
-    onSelect(event) {
-
-        this.eventTemp = this.eventsList.filter((item: EventHandlerInterface)=>{
-            return new Date(item.startDate).toLocaleDateString() == event._d.toLocaleDateString();
+    prepareFullCalendar() {
+        this.eventsList.map((item: any) => {
+            item.title = item.name;
+            item.start = new Date(item.startDate);
+            item.end = new Date(item.endDate);
+            item.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
         });
+        this.calendarEvents = this.eventsList;
+    }
 
-        if(this.eventTemp.length){
-            let date = event.jDate();
-            this.popoverService.openPopover(date);
-        }else{
-            this.loadBottomSheet(event);
-        }
+    getPosition(event) {
+        this.popoverTarget = event.target;
+    }
+
+    onSelect(event) {
+        setTimeout(() => {
+            this.eventTemp = this.eventsList.filter((item: EventHandlerInterface) => {
+                return new Date(item.startDate).toLocaleDateString() == event._d.toLocaleDateString();
+            });
+            if (this.eventTemp.length) {
+                this.popoverService.open(PopoverContnetComponent, this.popoverTarget, {
+                    data: {
+                        eventTemp: this.eventTemp,
+                        events: this.eventsList,
+                        serviceList: null,
+                        windowManagerService: null,
+                        rtlDirection: this.rtlDirection
+                    }
+                })
+                    .afterClosed()
+                    .subscribe(result => {
+                        if (result) {
+                            this.loadBottomSheet(result);
+                        }
+                    });
+                this.windowManagerService.dialogOnTop('popover');
+            } else {
+                this.currentDate = event._d;
+                this.loadBottomSheet(event);
+            }
+        })
 
     }
 
-    loadBottomSheet(event = null , $event = null) {
-        if($event)
-            $event.stopPropagation();
+    loadBottomSheetFromFullCalendar($event) {
+        let event: EventHandlerInterface = $event.event._def.extendedProps;
+        event = {...event, id: $event.event.id};
+        this.loadBottomSheet(event)
+    }
 
-        this.popoverService.closePopover();
+    loadBottomSheet(event = null, $event = null) {
+        if ($event)
+            $event.stopPropagation();
         let eventItems = event?.startDate !== undefined ? event : null;
         let data: EventHandlerDataInterface = {
             action: 'add',
-            eventItems : eventItems,
+            eventItems: eventItems,
+            currentDate: this.currentDate,
+            events: this.eventsList
         };
-
         this.triggerBottomSheet.emit({
             component: EventHandlerDetailComponent,
             height: '98%',
             width: '98%',
             data: data
         });
-
-        /*if($event)
-            this.currentDate = $event._d;
-
-        let event = this.eventsList.filter((item: EventHandlerInterface)=>{
-            return new Date(item.startDate).toLocaleDateString() == this.currentDate.toLocaleDateString();
-        })
-        let data: EventHandlerDataInterface = {
-            action: 'add',
-            eventItems : event,
-            remindersList : this.remindersList,
-            currentDate : this.currentDate
-        };
-
-        this.dialog.open(EventHandlerDetailComponent, {
-            data: data,
-            autoFocus: false,
-            width: '40%',
-            height: '580px'
-        });*/
-
     }
-
-   /* showEventHandlerWindow(event = null , $event = null) {
-        if($event)
-            $event.stopPropagation();
-
-
-        let date = null;
-        if(event){
-            date = event.startDate !== undefined ? new Date(event.startDate) : event._d;
-        }
-        let eventItems = event.startDate !== undefined ? event : null;
-
-        let service: ServiceItemsInterface[] = this.serviceList.filter(obj => {
-            return obj.serviceTitle == 'events_calender'
-        })
-
-        this.popoverService.closePopover();
-
-    }*/
 
     getTranslate(word) {
         return this.translateService.instant(word);
@@ -261,7 +256,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     dateClass() {
         return (date: any): MatCalendarCellCssClasses => {
             let events = this.eventsList;
-            return events.some(item => new Date(item.startDate).getDate() == date._d.getDate()) ? 'special-date' : ''
+            return events.some(item => new Date(item.startDate).toLocaleDateString() == date._d.toLocaleDateString()) ? 'special-date' : ''
         };
     }
 

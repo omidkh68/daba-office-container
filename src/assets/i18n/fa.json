@@ -245,10 +245,16 @@
       "add_new_event" : "افزودن رویداد",
       "add_new_reminder" : "افزودن یادآور",
       "see_more" : "مشاهده بیشتر",
+      "event_count" : "تعداد رویدادها",
+      "reminder_count" : "تعداد",
       "event_title" : "رویداد",
       "events_title" : "رویدادها",
-      "reminder_title" : "یادآوری",
+      "reminder_title" : "یادآور",
       "reminders_title" : "یادآوری ها"
+    },
+    "event_detail": {
+      "delete_title": "حذف رویداد",
+      "delete_text": "آیا از حذف این رویداد اطمینان دارید؟"
     },
     "form": {
       "event_name" : "نام رویداد",
@@ -269,10 +275,22 @@
       "action_job_type": "نوع اکشن جاب",
       "users": "کاربران",
       "assign_to_error": "لطفا کاربران مهمان را مشخص کنید",
-      "user_phone" : "شماره همراه کاربر",
+      "user_phone" : "شماره همراه",
+      "user_email" : "ایمیل",
       "all_day" : "تمام روز",
       "reminder_type" : "نوع یادآور",
-      "reminder_status" : "وضعیت یادآور"
+      "reminder_status" : "وضعیت یادآور",
+      "add_event_successful" : "رویداد با موفقیت اضافه شد",
+      "delete_event_successful" : "رویداد با موفقیت حذف شد",
+      "delete_event_error" : "خطا در حذف رویداد",
+      "update_event_successful" : "رویداد با موفقیت ویرایش شد",
+      "update_event_error" : "خطا در ویرایش رویداد",
+      "add_reminder_successful" : "یادآور با موفقیت اضافه شد",
+      "add_reminder_error" : "خطا در ثبت یادآور",
+      "delete_reminder_successful" : "یادآور با موفقیت حذف شد",
+      "delete_reminder_error" : "خطا در حذف یادآور",
+      "update_reminder_successful" : "یادآور با موفقیت ویرایش شد",
+      "update_reminder_error" : "خطا در ویرایش یادآور"
     }
   }
 }

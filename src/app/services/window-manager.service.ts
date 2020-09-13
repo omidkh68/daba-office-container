@@ -302,14 +302,20 @@ export class WindowManagerService {
 
       let element: HTMLElement;
 
-      if (dialogId !== 'snackBar') {
+      console.log(dialogId);
+
+      if (dialogId === 'snackBar') {
+        element = document.querySelector('.mat-snack-bar-container') as HTMLElement;
+        element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
+      } else if (dialogId === 'popover') {
+        setTimeout(() => {
+          element = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
+          element.style.zIndex = maxWindowZIndex;
+        },100)
+      }else{
         const elementOverlay = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
         elementOverlay.style.zIndex = maxWindowZIndex;
-
         element = document.querySelector('#' + dialogId) as HTMLElement;
-        element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
-      } else if (dialogId === 'snackBar') {
-        element = document.querySelector('.mat-snack-bar-container') as HTMLElement;
         element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
       }
     });
