@@ -14,7 +14,6 @@ import {MessageService} from '../../message/service/message.service';
 import {SocketioService} from '../../../services/socketio.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
-import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskStopComponent} from '../task-stop/task-stop.component';
@@ -64,7 +63,6 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   constructor(public dialog: MatDialog,
               private api: ApiService,
               private injector: Injector,
-              private translate: TranslateService,
               private socketService: SocketioService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
@@ -304,7 +302,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       id: 'todo',
       cols: 1,
       rows: 1,
-      name: this.getTranslate('tasks.boards.todo'),
+      name: 'tasks.boards.todo',
       tasks: todo_tasks
     });
 
@@ -312,7 +310,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       id: 'inProgress',
       cols: 1,
       rows: 1,
-      name: this.getTranslate('tasks.boards.in_progress'),
+      name: 'tasks.boards.in_progress',
       tasks: inProgress_tasks
     });
 
@@ -320,7 +318,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       id: 'done',
       cols: 1,
       rows: 1,
-      name: this.getTranslate('tasks.boards.done'),
+      name: 'tasks.boards.done',
       tasks: done_tasks
     });
 
@@ -366,10 +364,6 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
       // this.socket.emit('updatedata');
     }
-  }
-
-  getTranslate(word) {
-    return this.translate.instant(word);
   }
 
   ngOnDestroy(): void {

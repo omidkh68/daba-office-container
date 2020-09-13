@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
+import {MatNativeDateModule} from '@angular/material/core';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
@@ -30,13 +30,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatRadioModule} from '@angular/material/radio';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from './jalali_moment_formats';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from './jalali-moment-date-adapter';
 import {ClipboardModule} from '@angular/cdk/clipboard';
-
-const defaultLangStorage = localStorage.getItem('defaultLang');
-const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
 @NgModule({
   imports: [MatTableModule],
@@ -75,25 +69,6 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
     ClipboardModule
   ],
   providers: [
-    {
-      provide: DateAdapter,
-      useClass: defaultLang === 'fa' ? JalaliMomentDateAdapter : MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE]
-    },
-    {provide: MAT_DATE_LOCALE, useValue: defaultLang === 'fa' ? defaultLang : 'en-GB'}, // en-GB  fr
-    {
-      provide: MAT_DATE_FORMATS,
-      useFactory: locale => {
-        if (locale === (defaultLang === 'fa')) {
-          return JALALI_MOMENT_FORMATS;
-        } else {
-          return MOMENT_FORMATS;
-        }
-      },
-      deps: [MAT_DATE_LOCALE],
-      // useValue: JALALI_MOMENT_FORMATS
-    },
-    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}},
     {provide: MAT_SNACK_BAR_DATA, useValue: []}
   ]
 })

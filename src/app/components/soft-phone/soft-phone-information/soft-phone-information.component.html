@@ -1,11 +1,11 @@
 <div class="full-width full-height">
   <mat-list class="soft-phone-user full-width height-50">
     <mat-list-item class="padding-mini-r-l full-height">
-      <img [src]="'assets/profileImg/'+ loggedInUser.email +'.jpg'" [alt]="loggedInUser.name"
+      <img [src]="'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'" [alt]="loggedInUser ? loggedInUser.name : ''"
            class="mat-elevation-z2 my-profile-img"
            onerror="this.src='assets/profileImg/0.jpg'"
            matListAvatar>
-      <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser.name}} </h3>
+      <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser ? loggedInUser.name : ''}} </h3>
 
       <div class="font-8-rem" [dir]="rtlDirection ? 'ltr' : 'rtl'">
         <mat-slide-toggle #slideToggle
@@ -23,7 +23,7 @@
     <mat-list class="full-width">
       <mat-list-item (click)="openSheet(user)"
                      *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
-                     [ngClass]="rtlDirection ? 'padding-r-full padding-l-tiny' : 'padding-l-full padding-r-tiny'"
+                     [ngClass]="rtlDirection ? 'padding-r-half padding-l-tiny' : 'padding-l-half padding-r-tiny'"
                      class="highlight cursor-pointer full-height">
         <img [src]="'assets/profileImg/'+ user.username +'.jpg'" [alt]="user.name"
              onerror="this.src='assets/profileImg/0.jpg'"

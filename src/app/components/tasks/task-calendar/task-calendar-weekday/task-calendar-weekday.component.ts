@@ -11,6 +11,14 @@ import {TaskCalendarService} from '../services/task-calendar.service';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
 import {TaskBottomSheetInterface} from '../../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
+export interface ButtonLabelsInterface {
+  today: string;
+  month: string;
+  week: string;
+  day: string;
+  list: string;
+}
+
 @Component({
   selector: 'app-task-calendar-weekday',
   templateUrl: './task-calendar-weekday.component.html',
@@ -32,7 +40,13 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
 
   rtlDirection: boolean;
   header = {};
-  buttonLabels = {};
+  buttonLabels: ButtonLabelsInterface = {
+    today: '',
+    month: '',
+    week: '',
+    day: '',
+    list: ''
+  };
   slotLabelFormat = [{
     hour: '2-digit',
     minute: '2-digit',
@@ -54,11 +68,19 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
               private taskCalendarService: TaskCalendarService,
               private translateService: TranslateService) {
     this._subscription.add(
-      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+      this.viewDirection.currentDirection.subscribe(direction => {
+        this.rtlDirection = direction;
+
+        this.setupCalendar();
+      })
     );
   }
 
   ngAfterViewInit(): void {
+    this.setupCalendar();
+  }
+
+  setupCalendar() {
     this.views = {
       dayGridMonthCustom: {
         type: 'dayGridMonth',
@@ -66,27 +88,49 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       }
     };
 
-    this.buttonLabels = {
-      today: this.getTranslate('tasks.calendar.today'),
-      month: this.getTranslate('tasks.calendar.month'),
-      week: this.getTranslate('tasks.calendar.week'),
-      day: this.getTranslate('tasks.calendar.day'),
-      list: this.getTranslate('tasks.calendar.list')
-    };
+    this.getTranslateWords().then((words: ButtonLabelsInterface) => {
+      this.buttonLabels = {
+        today: words.today,
+        month: words.month,
+        week: words.week,
+        day: words.day,
+        list: words.list
+      };
+    });
 
     if (this.rtlDirection) {
       this.header = {
-        left: 'title',
-        center: '',
-        right: 'prev,next today'
+        left: 'timeGridMonth, timeGridWeek,timeGridDay',
+        center: 'title',
+        right: 'prev,next,today'
       };
     } else {
       this.header = {
-        left: 'today next,prev',
+        left: 'today,prev,next',
         center: 'title',
-        right: 'timeGridWeek,timeGridDay'
+        right: 'timeGridMonth, timeGridWeek,timeGridDay'
       };
     }
+  }
+
+  getTranslateWords() {
+    return new Promise(async (resolve) => {
+      const translate: ButtonLabelsInterface = {
+        today: '',
+        month: '',
+        week: '',
+        day: '',
+        list: ''
+      };
+
+      await this.getTranslate('tasks.calendar.today').then((word: string) => translate.today = word);
+      await this.getTranslate('tasks.calendar.month').then((word: string) => translate.month = word);
+      await this.getTranslate('tasks.calendar.week').then((word: string) => translate.week = word);
+      await this.getTranslate('tasks.calendar.day').then((word: string) => translate.day = word);
+      await this.getTranslate('tasks.calendar.list').then((word: string) => translate.list = word);
+
+      resolve(translate);
+    });
   }
 
   eventRender(event: any) {
@@ -118,7 +162,11 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
   }
 
   getTranslate(word) {
-    return this.translateService.instant(word);
+    return new Promise((resolve) => {
+      const translate = this.translateService.instant(word);
+
+      resolve(translate);
+    });
   }
 
   ngAfterViewChecked() {

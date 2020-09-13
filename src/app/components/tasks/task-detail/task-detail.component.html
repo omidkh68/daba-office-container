@@ -5,16 +5,16 @@
       <span class="text-gray-700">#{{task.taskId}}</span> {{task.taskName}}
     </h1>
 
-    <div class="pos-abs right-0 left-0 margin-auto width-150 height-45">
+    <div class="pos-abs top-fourth-tenth content-switcher">
       <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                                (change)="changeViewMode(viewMode.value)"
                                [ngClass]="{'view-mode': viewMode}"
-                               class="full-width mat-button-custom line-height-20 round-corner-all margin-t-half"
+                               class="full-width mat-button-custom line-height-20 round-corner-all"
                                [value]="viewModeTypes">
-        <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'info'">
+        <mat-button-toggle class="overflow-hide font-7-rem line-height-20 height-30" [value]="'info'">
           <span>{{'tasks.task_detail.overview' | translate}}</span>
         </mat-button-toggle>
-        <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-20 height-30" [value]="'report'">
+        <mat-button-toggle class="overflow-hide font-7-rem line-height-20 height-30" [value]="'report'">
           <span>{{'tasks.task_detail.reports' | translate}}</span>
         </mat-button-toggle>
       </mat-button-toggle-group>

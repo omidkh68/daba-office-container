@@ -3,7 +3,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {AppConfig} from '../../../../environments/environment';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {WebViewService} from '../service/web-view.service';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {ElectronService} from '../../../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
@@ -18,14 +20,17 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
 
   rtlDirection: boolean;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'learningSystem'};
+  reloadWebView: boolean = false;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
               private injector: Injector,
-              private viewDirection: ViewDirectionService,
+              private webViewService: WebViewService,
               private userInfoService: UserInfoService,
+              private electronService: ElectronService,
               private translateService: TranslateService,
+              private viewDirection: ViewDirectionService,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
@@ -36,6 +41,16 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
+
+    this._subscription.add(
+      this.webViewService.currentRefreshWebView.subscribe(status => {
+        this.reloadWebView = status;
+
+        if (this.reloadWebView && this.webFrame) {
+          this.webFrame.nativeElement.reloadIgnoringCache();
+        }
+      })
+    );
   }
 
   ngAfterViewInit(): void {
@@ -45,6 +60,12 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
       const address = `${AppConfig.EIS_URL}`;
 
       this.webFrame.nativeElement.setAttribute('src', address);
+
+      this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
+        this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+
+        this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'learningSystem'});
+      });
 
       this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'learningSystem'});

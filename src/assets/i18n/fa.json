@@ -34,13 +34,15 @@
     "email": "ایمیل",
     "email_error": "لطفا ایمل را وارد نمایید",
     "password": "پسورد",
-    "password_error": "لطفا پسورد را وارد نمایید"
+    "password_error": "لطفا پسورد را وارد نمایید",
+    "items": "مورد",
+    "done": "تأیید"
   },
   "dashboard": {
     "dashboard_toolbar": {
       "service_list": "سرویس ها",
       "reminder": "یادآوری ها",
-      "active_clocks": "ساعت های فعال",
+      "active_clocks": "ساعات جهانی",
       "exist_app": "خروج از حساب کاربری"
     }
   },
@@ -160,7 +162,6 @@
     },
     "task_todo": {
       "todo_list": "لیست انجام کار",
-      "items": "مورد",
       "add_an_item": "یک مورد اضافه کن",
       "delete_item": "حذف آیتم",
       "delete_text": "آیا از حذف این آیتم اطمینان دارید؟"
@@ -175,7 +176,7 @@
       "all": "همه",
       "tasks_filter": "فیلتر تسک ها",
       "tasks_filter_calendar": "فیلتر ساعات کاری",
-      "tasks_filter_calendar_hours": "ساعات کاری",
+      "tasks_filter_calendar_hours": "مجموع ساعات کاری",
       "filter_types": "نوع فیلتر",
       "by_create_date": "بر اساس تاریخ ایجاد تسک",
       "by_project": "بر اساس نام پروژه",
@@ -231,13 +232,15 @@
     "pictures": "تصاویر",
     "gradients": "طیف های رنگی",
     "solid_colors": "رنگ های ساده",
-    "drag_drop_text1": "عکس را در اینجا رها کنید",
-    "drag_drop_text2": "و یا",
-    "drag_drop_text3": "انتخاب کنید",
+    "drag_drop_text1": "عکس دلخواه خود را در اینجا رها کنید",
+    "drag_drop_text3": "انتخاب فایل پس زمینه",
     "timezone": "وقت محلی",
     "timezone_error": "لطفا وقت محلی خود را انتخاب کنید",
     "name_family": "نام و نام خانوادگی",
     "profile_update": "اطلاعات پروفایل بروزرسانی شد",
-    "error_upload": "مشکل در آپلود عکس"
+    "error_upload": "مشکل در آپلود عکس",
+    "choose_wallpaper": "از تصاویر پس زمینه زیر انتخاب کنید:",
+    "change_lang_warning_note": "نکته:",
+    "change_lang_warning_text": "با تغییر زبان، برنامه شما سریعا دوباره بارگذاری خواهد شد."
   }
 }

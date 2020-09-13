@@ -1,5 +1,6 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {switchMap} from "rxjs/operators";
+import {HttpClient} from '@angular/common/http';
 import {Observable} from "rxjs";
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
@@ -7,7 +8,6 @@ import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ElectronService} from '../../../services/electron.service';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {TranslateService} from "@ngx-translate/core";
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
@@ -125,7 +125,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   imageSrc;
   /*code1*/
   sellersPermitFile: any;
-  sellersPermitString: string = '';
+  wallpaperUrl: string = '';
 
   private _subscription: Subscription = new Subscription();
 
@@ -187,7 +187,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   deleteFile(index: number) {
     this.files.splice(index, 1);
 
-    this.sellersPermitString = '';
+    this.wallpaperUrl = '';
     this.showProgress = false;
     this.showDelete = false;
   }
@@ -202,7 +202,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
             clearInterval(progressInterval);
             this.uploadFilesSimulator(index + 1);
 
-            this.onSubmit(this.sellersPermitString);
+            this.onSubmit(this.wallpaperUrl);
           } else {
             this.files[index].progress += 5;
           }
@@ -251,7 +251,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     let base64result = reader.result;
 
     this.imageSrc = base64result;
-    this.sellersPermitString = base64result;
+    this.wallpaperUrl = base64result;
 
     this.showProgress = true;
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
@@ -287,13 +287,11 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
           this.changeWallpaper('url(' + resp.data.background_image + ')');
         }
-
-      }, (error: HttpErrorResponse) => {
+      }, () => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'wallpaper'});
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
         this.showProgress = false;
         this.showDelete = true;
-
       })
     );
   }

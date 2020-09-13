@@ -8,6 +8,7 @@ import {LoginDataClass} from '../../services/loginData.class';
 import {MessageService} from '../message/service/message.service';
 import {DatetimeService} from './logic/datetime.service';
 import {UserInfoService} from '../users/services/user-info.service';
+import {ElectronService} from '../../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CheckLoginInterface} from '../login/logic/check-login.interface';
 import {ViewDirectionService} from '../../services/view-direction.service';
@@ -66,6 +67,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
               private translate: TranslateService,
               private viewDirection: ViewDirectionService,
               private messageService: MessageService,
+              private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private datetimeService: DatetimeService,
               private windowManagerService: WindowManagerService,
@@ -192,11 +194,14 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     this._subscription.add(
       this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
         if (resp.success) {
-
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
 
           if (resp.data.lang !== null) {
             this.defaultLang = resp.data.lang;
+
+            if (this.viewDirection.getCurrentLang() !== resp.data.lang) {
+              this.electronService.remote.getCurrentWindow().reload();
+            }
 
             this.viewDirection.changeDirection(resp.data.lang === 'fa');
           }

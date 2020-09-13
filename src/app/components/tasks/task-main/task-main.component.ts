@@ -62,7 +62,11 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     super(injector, userInfoService);
 
     this._subscription.add(
-      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+      this.viewDirection.currentDirection.subscribe(direction => {
+        this.rtlDirection = direction;
+
+        this.changeMainTabLanguage();
+      })
     );
 
     this._subscription.add(
@@ -79,6 +83,23 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   }
 
   ngAfterViewInit(): void {
+    this.changeMainTabLanguage();
+
+    this.filterData = {
+      userId: 0,
+      userImg: '0',
+      adminId: 0,
+      dateStart: '',
+      dateStop: '',
+      projectId: 0,
+      taskName: '',
+      type: '',
+      email: this.loggedInUser.email,
+      status: 0
+    };
+  }
+
+  changeMainTabLanguage() {
     setTimeout(() => {
       this.tabs = [
         {
@@ -93,19 +114,6 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
         }
       ];
     }, 200);
-
-    this.filterData = {
-      userId: 0,
-      userImg: '0',
-      adminId: 0,
-      dateStart: '',
-      dateStop: '',
-      projectId: 0,
-      taskName: '',
-      type: '',
-      email: this.loggedInUser.email,
-      status: 0
-    };
   }
 
   addNewTask() {

@@ -49,8 +49,8 @@ export class SoftPhoneInformationComponent implements OnInit, AfterViewInit, OnD
   @Input()
   loggedInUser: UserContainerInterface;
 
-  timerDueTime: number = 1000;
-  timerPeriod: number = 5000;
+  timerDueTime: number = 0;
+  timerPeriod: number = 10000;
   globalTimer = null;
   globalTimerSubscription: Subscription;
   loggedInUserExtension: LoggedInUserExtensionInterface = null;

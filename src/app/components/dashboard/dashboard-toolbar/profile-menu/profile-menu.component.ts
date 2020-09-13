@@ -42,16 +42,22 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
     this._subscription.add(
       this.api.logout().subscribe((resp: any) => {
         if (resp.success) {
-          this.userInfoService.changeLoginData(null);
-
-          this.softPhoneService.sipHangUp();
-
-          this.windowManagerService.closeAllServices().then(() => {
-            setTimeout(() => this.router.navigateByUrl(`/login`), 500);
-          });
+          this.clearData();
         }
+      }, () => {
+        this.clearData();
       })
     );
+  }
+
+  clearData() {
+    this.userInfoService.changeLoginData(null);
+
+    this.softPhoneService.sipHangUp();
+
+    this.windowManagerService.closeAllServices().then(() => {
+      setTimeout(() => this.router.navigateByUrl(`/login`), 500);
+    });
   }
 
   settingProfile() {

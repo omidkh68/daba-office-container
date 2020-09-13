@@ -1,11 +1,14 @@
 import {Inject, Injectable, Injector, OnDestroy} from '@angular/core';
+import {AppConfig} from '../../environments/environment';
 import {Observable} from 'rxjs/internal/Observable';
 import {ApiService} from '../components/users/logic/api.service';
 import {CanActivate, Router} from '@angular/router';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../services/loginData.class';
+import {MessageService} from '../components/message/service/message.service';
 import {UserInfoService} from '../components/users/services/user-info.service';
 import {ElectronService} from '../services/electron.service';
+import {TranslateService} from '@ngx-translate/core';
 import {ChangeStatusService} from '../components/status/services/change-status.service';
 import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
 import {ViewDirectionService} from '../services/view-direction.service';
@@ -20,8 +23,10 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
               private api: ApiService,
               private router: Router,
               private injector: Injector,
+              private translate: TranslateService,
               private viewDirection: ViewDirectionService,
               private electronService: ElectronService,
+              private messageService: MessageService,
               private userInfoService: UserInfoService,
               private changeStatusService: ChangeStatusService) {
     super(injector, userInfoService);
@@ -29,11 +34,17 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
   canActivate(): Observable<boolean> | Promise<boolean> {
     return new Promise((resolve) => {
-      /*this.getCookie().then(userInfo => {
+      /*debugger;
+
+      this.getUserLoginInfo().then(userInfo => {
         this.setUserData(userInfo);
+
+        console.log('after get: ', userInfo);
 
         resolve(true);
       }).catch(() => {
+        debugger;
+
         this.checkLogin().then(userInfo => {
           this.setUserData(userInfo);
 
@@ -49,27 +60,66 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     });
   }
 
-  getCookie() {
+  getUserLoginInfo() {
+    return new Promise(async (resolve, reject) => {
+      debugger;
+
+      const loginData = await this.getLoginDataFile();
+      const userInfo = await this.getUserInfoFile();
+
+      console.log('login Data: ', loginData, 'user Info: ', userInfo);
+    });
+  }
+
+  getLoginDataFile() {
     return new Promise((resolve, reject) => {
-      this.electronService.session.defaultSession.cookies.get({url: this.window.location.href}).then(userInfo => {
-        if (!userInfo.length) {
-          reject(false);
-        } else {
-          const cookieValues = userInfo;
-          const loginDataCookie = cookieValues.filter(cookie => cookie.name === 'loginData').pop().value;
+      debugger;
 
-          if (loginDataCookie) {
-            this.userInfoService.changeLoginData(JSON.parse(loginDataCookie));
+      try {
+        const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 
-            reject(false);
-          } else {
-            this.userInfoService.changeLoginData(JSON.parse(loginDataCookie));
+        const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
 
-            const userInfoCookie = cookieValues.filter(cookie => cookie.name === 'userInfo').pop().value;
-            resolve(JSON.parse(userInfoCookie));
-          }
-        }
-      });
+        this.electronService.fs.readFile(loginDataPath, 'utf8', (err, data) => {
+          if (err) reject(false);
+
+          resolve(data ? JSON.parse(data) : true);
+        });
+      } catch (e) {
+        reject(false);
+      }
+    });
+  }
+
+  getUserInfoFile() {
+    return new Promise((resolve, reject) => {
+      debugger;
+
+      try {
+        const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+
+        const loggedInUserPath = this.electronService.path.join(homeDirectory, 'loggedInUser.txt');
+
+        this.electronService.fs.readFile(loggedInUserPath, 'utf8', (err, data) => {
+          if (err) reject(false);
+
+          resolve(data ? JSON.parse(data) : false);
+        });
+      } catch (e) {
+        reject(false);
+      }
+    });
+  }
+
+  setUserInfoFile(data) {
+    const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+
+    const loggedInUserPath = this.electronService.path.join(homeDirectory, 'loggedInUser.txt');
+
+    this.electronService.fs.writeFile(loggedInUserPath, JSON.stringify(data), (err) => {
+      if (err) throw err;
+
+      console.log('Login Data Path Saved');
     });
   }
 
@@ -82,6 +132,13 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
         this.api.checkLogin().subscribe((resp: CheckLoginInterface) => {
           if (resp.success === true) {
+            const successfulMessage = this.getTranslate('login_info.login_successfully');
+
+            this.messageService.showMessage(successfulMessage, 'success');
+
+            this.setUserInfoFile(resp.data);
+            this.setUserData(resp.data);
+
             resolve(resp.data);
           }
         }, () => {
@@ -100,11 +157,17 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
   }
 
   setUserData(info) {
+    debugger;
+
     this.userInfoService.changeUserInfo(info);
 
     this.viewDirection.changeDirection(info.lang === 'fa');
 
     this.changeStatusService.changeUserStatus(info.user_status);
+  }
+
+  getTranslate(word) {
+    return this.translate.instant(word);
   }
 
   ngOnDestroy() {

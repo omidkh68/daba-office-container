@@ -59,11 +59,11 @@
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
             <mat-select formControlName="adminId" tabIndex="4">
               <mat-option *ngFor="let user of usersList" [value]="user.adminId" class="font-full-em">
-                <div class="display-flex">
+                <div class="display-flex align-items-center">
                   <img matPrefix
                        [src]="'assets/profileImg/'+user.email+'.jpg'"
                        [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                       class="width-20 height-20 round-corner-all pos-rel top-six-tenth"
+                       class="width-20 height-20 round-corner-all pos-rel"
                        onerror="this.src='assets/profileImg/0.jpg'">
                   <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
                 </div>

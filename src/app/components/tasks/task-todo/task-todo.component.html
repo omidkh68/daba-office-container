@@ -4,7 +4,7 @@
     {{'tasks.task_todo.todo_list' | translate}}
     <span [ngClass]="rtlDirection ? 'margin-r-half' : 'margin-l-half'"
           class="text-gray-500 font-7-em text-italic">
-      {{todoList.length ? todoList.length : ''}} {{(todoList.length ? 'tasks.task_todo.items' : '') | translate}}
+      {{todoList.length ? todoList.length : ''}} {{(todoList.length ? 'global.items' : '') | translate}}
     </span>
   </h1>
   <div class="todo-content-container padding-full padding-b-half">
@@ -22,7 +22,7 @@
             <div mat-line class="no-text-eclipse font-8-em height-auto padding-mini-t-b"
                  [ngClass]="{'text-line-through': todoItem.isChecked}">{{todoItem.text}}</div>
 
-            <div mat-line class="text-italic font-7-em">{{todoItem.creationDate | jalali}}</div>
+            <div mat-line class="text-italic font-7-em">{{todoItem.creationDate | jalali:rtlDirection}}</div>
 
             <button
               type="button"

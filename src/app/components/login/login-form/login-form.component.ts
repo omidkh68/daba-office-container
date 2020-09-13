@@ -1,5 +1,6 @@
 import {Component, Injector, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {AppConfig} from '../../../../environments/environment';
 import {ApiService} from '../../users/logic/api.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -9,6 +10,7 @@ import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoginResultInterface} from '../logic/login.interface';
+import {ElectronService} from '../../../services/electron.service';
 
 export interface LangInterface {
   id: string;
@@ -35,14 +37,15 @@ export class LoginFormComponent implements OnInit {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private fb: FormBuilder,
+  constructor(private router: Router,
+              private fb: FormBuilder,
               private api: ApiService,
-              private router: Router,
+              private injector: Injector,
               private translate: TranslateService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
-              private viewDirection: ViewDirectionService,
-              private injector: Injector) {
+              private electronService: ElectronService,
+              private viewDirection: ViewDirectionService) {
     this.dialogRef = this.injector.get(MatDialogRef, null);
     this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
 
@@ -54,16 +57,16 @@ export class LoginFormComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
 
-    // setTimeout(() => this.login(), 200); // todo: remove this in production
+    setTimeout(() => this.login(), 200); // todo: remove this in production
   }
 
   createForm() {
     return new Promise((resolve) => {
       this.form = this.fb.group({
-        username: new FormControl(''),
-        password: new FormControl(''),
-        // username: new FormControl('khosrojerdi@dabacenter.ir'),
-        // password: new FormControl('123456'),
+        // username: new FormControl(''),
+        // password: new FormControl(''),
+        username: new FormControl('khosrojerdi@dabacenter.ir'),
+        password: new FormControl('123456'),
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
 
@@ -83,9 +86,7 @@ export class LoginFormComponent implements OnInit {
     this._subscription.add(
       this.api.login(formValue).subscribe((resp: LoginResultInterface) => {
         if (resp.success) {
-          const successfulMessage = this.getTranslate('login_info.login_successfully');
-
-          this.messageService.showMessage(successfulMessage, 'success');
+          this.createFiles(resp.data);
 
           this.userInfoService.changeLoginData(resp.data);
 
@@ -101,6 +102,25 @@ export class LoginFormComponent implements OnInit {
         this.showErrorLogin();
       })
     );
+  }
+
+  createFiles(data) {
+    const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+
+    const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+    const loggedInUserPath = this.electronService.path.join(homeDirectory, 'loggedInUser.txt');
+
+    this.electronService.fs.writeFile(loginDataPath, JSON.stringify(data), (err) => {
+        if (err) throw err;
+
+        console.log('Login Data Path Saved');
+    });
+
+    this.electronService.fs.writeFile(loggedInUserPath, '', (err) => {
+        if (err) throw err;
+
+        console.log('Logged In User Path Saved');
+    });
   }
 
   showErrorLogin() {

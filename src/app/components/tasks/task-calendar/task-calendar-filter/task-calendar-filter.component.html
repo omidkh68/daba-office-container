@@ -7,19 +7,23 @@
       <div class="display-flex margin-r-l-reverse">
         <div class="full-width padding-r-l">
           <mat-form-field class="full-width font-8-em">
-            <img *ngIf="userSelected && userSelected.email"
-                 [src]="'/assets/profileImg/'+userSelected.email+'.jpg'"
-                 class="width-20 height-20 margin-l-half round-corner-all pos-rel top-full"
-                 matPrefix>
-            {{'tasks.form.assign_to' | translate}}
+            <img matPrefix
+                 [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                 [srcset]="'assets/profileImg/'+form.get('userImg').value +'.jpg'"
+                 class="width-20 height-20 round-corner-all pos-rel top-three-tenth">
+            <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
             <mat-select formControlName="adminId" tabIndex="4">
               <mat-option (onSelectionChange)="updateImage($event , user)" *ngFor="let user of usersList"
                           class="font-full-em"
                           [value]="user.adminId">
-                <img [src]="'/assets/profileImg/'+user.email+'.jpg'"
-                     class="width-20 height-20 round-corner-all margin-l-half pos-rel top-six-tenth"
-                     matPrefix>
-                {{user.name}} {{user.family}}
+                <div class="display-flex align-items-center">
+                  <img matPrefix
+                       [src]="'assets/profileImg/'+user.email+'.jpg'"
+                       [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                       class="width-20 height-20 round-corner-all pos-rel"
+                       onerror="this.src='assets/profileImg/0.jpg'">
+                  <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
+                </div>
               </mat-option>
             </mat-select>
 

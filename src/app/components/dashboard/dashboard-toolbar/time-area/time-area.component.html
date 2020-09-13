@@ -14,49 +14,69 @@
 
     <mat-list [ngClass]="rtlDirection ? 'text-left' : 'text-right'">
       <mat-list-item class="text-dark-mode-color font-8-rem text-gray-800">
-        <app-time-area-digital-clock [timezone]="loggedInUser.timezone" matLine>
+        <app-time-area-digital-clock [timezone]="loggedInUser ? loggedInUser.timezone : null" matLine>
         </app-time-area-digital-clock>
-        <div mat-line dir="ltr" class="font-8-rem"><span>{{loggedInUser.timezone}}</span></div>
+        <div mat-line dir="ltr" class="font-8-rem"><span>{{loggedInUser ? loggedInUser.timezone : ''}}</span></div>
       </mat-list-item>
     </mat-list>
   </div>
 </div>
 <mat-menu class="toolbar-menu time-area-menu" #timeAreaMenu="matMenu" xPosition="before" yPosition="above">
-  <h6 (click)="addMoreClock($event);" mat-subheader
+  <h6 mat-subheader (click)="$event.stopPropagation()"
       class="padding-mini-t-b padding-r-l text-weight-normal font-9-rem text-dark-mode-color display-flex flex-space-between">
     {{'dashboard.dashboard_toolbar.active_clocks' | translate}}
-    <mat-icon *ngIf="!checkMoreClock">add</mat-icon>
-    <span *ngIf="checkMoreClock">Done</span>
+
+    <a *ngIf="!checkMoreClockContent; else showDoneClockSelector;" (click)="checkMoreClock = !checkMoreClock;"
+       class="cursor-pointer">
+      <span *ngIf="checkMoreClock; else showDone;">{{'global.done' | translate}}</span>
+
+      <ng-template #showDone>
+        <mat-icon class="width-20 height-20 font-full-plus-half-em rotate-180">error_outline</mat-icon>
+      </ng-template>
+    </a>
+
+    <ng-template #showDoneClockSelector>
+      <a (click)="checkMoreClockContent = !checkMoreClockContent;"
+         class="cursor-pointer">
+        <span>{{'global.done' | translate}}</span>
+      </a>
+    </ng-template>
   </h6>
 
-  <div *ngIf="!checkMoreClockContent" class="display-flex flex-space-around padding-half">
-    <div
-      *ngIf="cityClocksList && cityClocksList.length < 3"
-      (click)="showMoreClockContent($event);"
-      [ngClass]="checkMoreClock ? 'right-to-left' : 'left-to-right'" class="animate opacity-0 clock-plus">
+  <div (click)="$event.stopPropagation();"
+       *ngIf="checkMoreClockContent === false; else showClockSelector;"
+       class="display-flex flex-space-around padding-half">
+    <a *ngIf="cityClocksList && cityClocksList.length < 3"
+       (click)="checkMoreClockContent = !checkMoreClockContent; $event.stopPropagation();"
+       [ngClass]="checkMoreClock ? 'right-to-left pos-rel' : 'left-to-right pos-abs'"
+       class="animate opacity-0 clock-plus cursor-pointer">
       <mat-icon class="text-white">add</mat-icon>
-    </div>
+    </a>
 
     <ng-container *ngFor="let clock of cityClocksList; let i = index;">
       <app-time-area-clock [cityClocksList]="cityClocksList" [item]="clock" [item_index]="i"
                            [checkMoreClock]="checkMoreClock"
+                           [rtlDirection]="rtlDirection"
                            class="transition">
       </app-time-area-clock>
     </ng-container>
   </div>
 
-  <div class="padding-half" *ngIf="checkMoreClockContent">
-    <form class="example-form">
-      <mat-form-field class="full-width">
-        <mat-label>{{'soft_phone.call_to_action.timezone' | translate}}</mat-label>
-        <input class="full-width" type="text" (click)="$event.stopPropagation()" matInput [formControl]="myControl"
-               [matAutocomplete]="auto">
-        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-          <mat-option (click)="setClockCity(option)" *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option.city}} - {{option.timezone}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-    </form>
-  </div>
+  <ng-template #showClockSelector>
+    <div (click)="$event.stopPropagation();" class="padding-r-l">
+      <form>
+        <mat-form-field class="full-width text-dark-mode-color">
+          <mat-label>{{'soft_phone.call_to_action.timezone' | translate}}</mat-label>
+          <input class="full-width" type="text" matInput [formControl]="myControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                            class="text-dark-mode-color">
+            <mat-option (click)="setClockCity(option)" *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option.city}} - {{option.timezone}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+    </div>
+  </ng-template>
 </mat-menu>

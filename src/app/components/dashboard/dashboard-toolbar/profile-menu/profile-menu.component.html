@@ -1,9 +1,9 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'"
      class="box mat-elevation-z1 pos-rel text-center round-corner width-40 height-40 overflow-hide">
   <img [matMenuTriggerFor]="profileMenu" class="full-width full-height cursor-pointer"
-       [src]="loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser.email +'.jpg'"
+       [src]="loggedInUser && loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'"
        onerror="this.src='assets/profileImg/0.jpg'"
-       [alt]="loggedInUser.name">
+       [alt]="loggedInUser ? loggedInUser.name : ''">
 </div>
 <mat-menu class="toolbar-menu box-menu-profile padding-r-l" #profileMenu="matMenu" xPosition="before" yPosition="above">
   <ng-container *ngIf="loggedInUser">
@@ -13,9 +13,9 @@
       </mat-icon>
 
       <span class="display-flex flex-direction-column">
-      <span matLine>{{loggedInUser.name}}</span>
+      <span matLine>{{loggedInUser ? loggedInUser.name : ''}}</span>
 
-      <span matLine class="font-8-em">{{loggedInUser.role.title}}</span>
+      <span matLine class="font-8-em">{{loggedInUser ? loggedInUser.role.title : ''}}</span>
     </span>
     </h4>
     <button mat-menu-item (click)="settingProfile()" class="font-7-rem padding-mini-r-l">

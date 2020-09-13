@@ -6,7 +6,7 @@
     class="board-container">
     <div
       class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l display-flex flex-space-between">
-      <span class="font-9-em">{{board.name}}</span>
+      <span class="font-9-em">{{board.name | translate}}</span>
 
       <span [ngClass]="board.id"
             class="task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500">
@@ -48,7 +48,7 @@
             <span class="display-flex">
               <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                         class="width-18 height-18 font-full-plus-three-tenth-em">access_alarm</mat-icon>
-              {{task.stopAt | jalali}}
+              {{task.stopAt | jalali:rtlDirection}}
             </span>
 
             <span>

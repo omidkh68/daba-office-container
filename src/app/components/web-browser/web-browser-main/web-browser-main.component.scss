@@ -6,5 +6,16 @@
   input {
     background-color: #FFF;
     border: solid 1px #DDD;
+    width: calc(100% - 40px);
+  }
+}
+
+.reload-btn {
+  width: 32px;
+  height: 32px;
+  border: solid 1px #DDD !important;
+
+  .mat-icon {
+    transform: scale(.8);
   }
 }
