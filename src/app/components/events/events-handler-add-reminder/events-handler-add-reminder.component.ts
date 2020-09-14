@@ -1,5 +1,5 @@
 import {
-    Component, Inject,
+    Component, Inject, OnDestroy,
     OnInit,
 } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
@@ -19,7 +19,7 @@ import {EventHandlerService} from "../service/event-handler.service";
     selector: 'app-events-handler-add-reminder',
     templateUrl: './events-handler-add-reminder.component.html'
 })
-export class EventsHandlerAddReminderComponent implements OnInit {
+export class EventsHandlerAddReminderComponent implements OnInit,OnDestroy {
 
     rtlDirection: boolean;
     eventItems: EventHandlerInterface;
@@ -65,15 +65,35 @@ export class EventsHandlerAddReminderComponent implements OnInit {
         });
     }
 
+    selectCurrentTime() {
+        const curDate = new Date();
+        const curHour = curDate.getHours() < 10 ? '0' + curDate.getHours() : curDate.getHours();
+        const curMinute = curDate.getMinutes();
+        let selectedMinute = '';
+
+        if (curMinute < 15) {
+            selectedMinute = '00';
+        } else if (curMinute >= 15 && curMinute < 30) {
+            selectedMinute = '15';
+        } else if (curMinute >= 30 && curMinute < 45) {
+            selectedMinute = '15';
+        } else if (curMinute >= 45) {
+            selectedMinute = '45';
+        }
+
+        const totalCurrentTime = curHour + ':' + selectedMinute;
+        return totalCurrentTime;
+    }
+
     createReminderForm() {
         return new Promise((resolve) => {
             this.reminderForm = this.fb.group({
                 reminderType: new FormControl(null, Validators.required),
                 status: new FormControl(null, Validators.required),
-                endReminder: new FormControl('0000-00-00', Validators.required),
+                // endReminder: new FormControl('0000-00-00'),
                 startReminder: new FormControl('0000-00-00', Validators.required),
-                startTime: new FormControl('00:00:00', Validators.required),
-                endTime: new FormControl('00:00:00', Validators.required),
+                startTime: new FormControl(this.selectCurrentTime(), Validators.required),
+                endTime: new FormControl(this.selectCurrentTime(), Validators.required),
                 description: new FormControl('', Validators.required)
             });
             resolve();
@@ -81,15 +101,16 @@ export class EventsHandlerAddReminderComponent implements OnInit {
     }
 
     submitReminder() {
+        debugger;
         let formValue = {reminders : [this.reminderForm.value] , id: this.data.eventItems.id} ;
         formValue.reminders[0].startReminder = formValue.reminders[0].startReminder + " " + formValue.reminders[0].startTime + ":00";
-        formValue.reminders[0].endReminder = formValue.reminders[0].endReminder + " " + formValue.reminders[0].endTime + ":00";
-/*        if(formValue.reminders[0].startReminder > formValue.reminders[0].endReminder){
+        /*formValue.reminders[0].endReminder = formValue.reminders[0].endReminder + " " + formValue.reminders[0].endTime + ":00";
+        if(formValue.reminders[0].startReminder > formValue.reminders[0].endReminder){
             this.reminderForm.controls['startReminder'].setErrors({'incorrect': true});
             this.reminderForm.enable();
             return;
-        }*/
-        delete formValue.reminders[0].endReminder;
+        }
+        delete formValue.reminders[0].endReminder;*/
         this._subscription.add(
             this.eventApi.addNewReminder(formValue).subscribe((resp: any) => {
                 if(resp.result == "successful"){
@@ -115,4 +136,11 @@ export class EventsHandlerAddReminderComponent implements OnInit {
     getTranslate(word) {
         return this.translateService.instant(word);
     }
+
+    ngOnDestroy() {
+        if (this._subscription) {
+            this._subscription.unsubscribe();
+        }
+    }
+
 }

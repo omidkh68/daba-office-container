@@ -259,6 +259,10 @@
       "delete_title": "حذف رویداد",
       "delete_text": "آیا از حذف این رویداد اطمینان دارید؟"
     },
+    "reminder_detail": {
+      "delete_title": "حذف یادآور",
+      "delete_text": "آیا از حذف این یادآور اطمینان دارید؟"
+    },
     "form": {
       "event_name" : "نام رویداد",
       "event_name_error": "لطفا نام رویداد را وارد کنید",

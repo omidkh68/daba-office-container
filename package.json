@@ -52,6 +52,7 @@
     "@fullcalendar/core": "^4.4.0",
     "@fullcalendar/daygrid": "^4.4.0",
     "@fullcalendar/timegrid": "4.4.0",
+    "@fullcalendar/interaction": "^4.4.0",
     "@ngx-translate/core": "12.1.2",
     "@ngx-translate/http-loader": "4.0.0",
     "@swimlane/ngx-charts": "14.0.0",
@@ -103,6 +104,5 @@
   },
   "engines": {
     "node": ">=10.13.0"
-  },
-  "dependencies": {}
+  }
 }

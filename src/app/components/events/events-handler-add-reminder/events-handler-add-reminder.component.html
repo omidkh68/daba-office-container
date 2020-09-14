@@ -11,7 +11,7 @@
                 <div class="half-width padding-r-l">
                     <mat-form-field class="full-width font-9-em">
                         <mat-label>{{'events_handler.form.reminder_type' | translate}}</mat-label>
-                        <mat-select formControlName="reminderType" tabIndex="5">
+                        <mat-select required formControlName="reminderType" tabIndex="5">
                             <mat-option *ngFor="let type of reminderTypeList" [value]="type">
                                 {{type.description}}
                             </mat-option>
@@ -21,7 +21,7 @@
                 <div class="half-width padding-r-l">
                     <mat-form-field class="full-width font-9-em">
                         <mat-label>{{'events_handler.form.reminder_status' | translate}}</mat-label>
-                        <mat-select formControlName="status" tabIndex="5">
+                        <mat-select required formControlName="status" tabIndex="5">
                             <mat-option *ngFor="let status of statusList" [value]="status">
                                 {{status.description}}
                             </mat-option>
@@ -31,10 +31,10 @@
             </div>
 
             <div class="display-flex margin-r-l-reverse">
-                <div class="quarter-width padding-r-l">
+                <div class="half-width padding-r-l">
                     <mat-form-field class="full-width font-9-em">
                         <mat-label>{{'events_handler.form.start_at' | translate}}</mat-label>
-                        <input matInput [matDatepicker]="picker1" readonly
+                        <input required matInput [matDatepicker]="picker1" readonly
                                placeholder="{{'events_handler.form.start_at' | translate}}"
                                (focus)="picker1.open()" (click)="picker1.open()"
                                (dateChange)="dateToGregorianReminder('startReminder', $event)"
@@ -42,14 +42,13 @@
                         <mat-datepicker #picker1></mat-datepicker>
                         <mat-error>
                             <span *ngIf="!reminderForm.get('startReminder').value">{{'events_handler.form.start_at_error' | translate}}</span>
-                            <span *ngIf="reminderForm.get('startReminder').value > reminderForm.get('endReminder').value">{{'events_handler.form.start_stop_compare' | translate}}</span>
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <div class="quarter-width padding-r-l">
+                <div class="half-width padding-r-l">
                     <mat-form-field class="full-width font-9-em">
                         <mat-label>{{'events_handler.form.start_time' | translate}}</mat-label>
-                        <mat-select formControlName="startTime" tabIndex="9">
+                        <mat-select required formControlName="startTime" tabIndex="9">
                             <mat-option *ngFor="let hour of hours" [value]="hour">
                                 {{hour}}
                             </mat-option>
@@ -61,7 +60,7 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <div class="quarter-width padding-r-l">
+                <!--div class="quarter-width padding-r-l display-none">
                     <mat-form-field class="full-width font-9-em">
                         <mat-label>{{'events_handler.form.stop_at' | translate}}</mat-label>
                         <input matInput [matDatepicker]="picker2" readonly
@@ -76,7 +75,7 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <div class="quarter-width padding-r-l">
+                <div class="quarter-width padding-r-l display-none">
                     <mat-form-field class="full-width font-9-em">
                         <mat-label>{{'events_handler.form.stop_time' | translate}}</mat-label>
                         <mat-select formControlName="endTime" tabIndex="11">
@@ -89,14 +88,14 @@
                             {{'events_handler.form.stop_time_error' | translate}}
                         </mat-error>
                     </mat-form-field>
-                </div>
+                </div-->
             </div>
 
             <div class="display-flex margin-b-full margin-r-l-reverse">
                 <div class="full-width padding-r-l">
                     <mat-form-field class="full-width height-80 font-9-em">
                         <mat-label>{{'events_handler.form.reminder_description' | translate}}</mat-label>
-                        <textarea matInput formControlName="description"
+                        <textarea required matInput formControlName="description"
                                   placeholder="{{'events_handler.form.reminder_description' | translate}}"
                                   tabindex="12"></textarea>
                     </mat-form-field>

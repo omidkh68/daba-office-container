@@ -15,6 +15,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ViewDirectionService} from "../../../services/view-direction.service";
 import {TranslateService} from "@ngx-translate/core";
 import {FullCalendarComponent} from "@fullcalendar/angular";
+import interactionPlugin from '@fullcalendar/interaction';
 import {ApiService} from "../../tasks/logic/api.service";
 import {TaskCalendarService} from "../../tasks/task-calendar/services/task-calendar.service";
 import {LoginDataClass} from "../../../services/loginData.class";
@@ -28,6 +29,7 @@ import {MatCalendar, MatCalendarCellCssClasses} from "@angular/material/datepick
 import {PopoverContnetComponent} from "../../popover-widget/popover/popover-content/popover-content.component";
 import {PopoverService} from "../../popover-widget/popover.service";
 import {WindowManagerService} from "../../../services/window-manager.service";
+import {ButtonLabelsInterface} from "../../tasks/task-calendar/task-calendar-weekday/task-calendar-weekday.component";
 
 @Component({
     selector: 'app-events-handler-main',
@@ -54,7 +56,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     remindersList: Array<ReminderInterface> = [];
     eventTemp: any = [];
     popoverTarget: any;
-    calendarPlugins = [dayGridPlugin];
+    calendarPlugins = [dayGridPlugin , interactionPlugin];
     buttonLabels = {};
     views = {};
     header = {};
@@ -105,7 +107,10 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
 
     ngOnInit(): void {
         this._subscription.add(
-            this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+            this.viewDirection.currentDirection.subscribe(direction => {
+                this.rtlDirection = direction;
+                this.setupCalendar();
+            })
         );
         this._subscription.add(
             this.eventHandlerService.currentEventsList.subscribe(events => {
@@ -143,12 +148,6 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         );
     }
 
-    ngOnDestroy(): void {
-        if (this._subscription) {
-            this._subscription.unsubscribe();
-        }
-    }
-
     ngAfterViewInit(): void {
         if (this.currentDate)
             this.loadBottomSheet(this.eventItems);
@@ -183,6 +182,66 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         }
     }
 
+    ngAfterViewChecked() {
+        let weekdayContainer = document.getElementsByClassName("holiday-date");
+        if (!weekdayContainer.length) {
+            this.taskCalendarService.setHolidayHighlight(this.holidays);
+        }
+    }
+
+    setupCalendar() {
+        this.views = {
+            dayGridMonthCustom: {
+                type: 'dayGridMonth',
+                buttonText: this.getTranslate('tasks.calendar.month')
+            }
+        };
+
+        this.getTranslateWords().then((words: ButtonLabelsInterface) => {
+            this.buttonLabels = {
+                today: words.today,
+                month: words.month,
+                week: words.week,
+                day: words.day,
+                list: words.list
+            };
+        });
+
+        if (this.rtlDirection) {
+            this.header = {
+                left: 'timeGridMonth, timeGridWeek,timeGridDay',
+                center: 'title',
+                right: 'prev,next,today'
+            };
+        } else {
+            this.header = {
+                left: 'today,prev,next',
+                center: 'title',
+                right: 'timeGridMonth, timeGridWeek,timeGridDay'
+            };
+        }
+    }
+
+    getTranslateWords() {
+        return new Promise(async (resolve) => {
+            const translate: ButtonLabelsInterface = {
+                today: '',
+                month: '',
+                week: '',
+                day: '',
+                list: ''
+            };
+
+            await this.getTranslate('tasks.calendar.today').then((word: string) => translate.today = word);
+            await this.getTranslate('tasks.calendar.month').then((word: string) => translate.month = word);
+            await this.getTranslate('tasks.calendar.week').then((word: string) => translate.week = word);
+            await this.getTranslate('tasks.calendar.day').then((word: string) => translate.day = word);
+            await this.getTranslate('tasks.calendar.list').then((word: string) => translate.list = word);
+
+            resolve(translate);
+        });
+    }
+
     prepareFullCalendar() {
         this.eventsList.map((item: any) => {
             item.title = item.name;
@@ -191,6 +250,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
             item.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
         });
         this.calendarEvents = this.eventsList;
+        this.setupCalendar();
     }
 
     getPosition(event) {
@@ -233,9 +293,14 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         this.loadBottomSheet(event)
     }
 
+    myTest(event) {
+        console.log(event);
+    }
+
     loadBottomSheet(event = null, $event = null) {
         if ($event)
             $event.stopPropagation();
+        this.currentDate = event && event.date && event.date.constructor === Date ? event.date : this.currentDate;
         let eventItems = event?.startDate !== undefined ? event : null;
         let data: EventHandlerDataInterface = {
             action: 'add',
@@ -252,7 +317,11 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     }
 
     getTranslate(word) {
-        return this.translateService.instant(word);
+        return new Promise((resolve) => {
+            const translate = this.translateService.instant(word);
+
+            resolve(translate);
+        });
     }
 
     dateClass() {
@@ -262,10 +331,9 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         };
     }
 
-    ngAfterViewChecked() {
-        let weekdayContainer = document.getElementsByClassName("holiday-date");
-        if (!weekdayContainer.length) {
-            this.taskCalendarService.setHolidayHighlight(this.holidays);
+    ngOnDestroy(): void {
+        if (this._subscription) {
+            this._subscription.unsubscribe();
         }
     }
 }

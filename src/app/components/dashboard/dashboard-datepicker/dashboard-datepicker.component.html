@@ -12,7 +12,7 @@
                 <mat-list-item *ngFor="let item of reminders.slice(0, 3)">
                     <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
                     <div mat-line class="font-8-em">{{item.description}}</div>
-                    <div mat-line class="font-6-rem">{{item.startdate_format}} - {{item.enddate_format}}</div>
+                    <div mat-line class="font-8-rem">{{item.startReminder}}</div>
                 </mat-list-item>
             </div>
         </mat-list>

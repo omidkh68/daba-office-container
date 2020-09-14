@@ -174,6 +174,8 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         var d = new Date(date),
             hour = '' + (d.getHours()),
             min = '' + d.getMinutes();
+        if (hour.length < 2)
+            hour = '0' + hour;
         if (min.length < 2)
             min = '0' + min;
         return [hour, min].join(':');
@@ -352,14 +354,32 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         })
     }
 
+    selectCurrentTime() {
+        const curDate = new Date();
+        const curHour = curDate.getHours() < 10 ? '0' + curDate.getHours() : curDate.getHours();
+        const curMinute = curDate.getMinutes();
+        let selectedMinute = '';
+
+        if (curMinute < 15) {
+            selectedMinute = '00';
+        } else if (curMinute >= 15 && curMinute < 30) {
+            selectedMinute = '15';
+        } else if (curMinute >= 30 && curMinute < 45) {
+            selectedMinute = '15';
+        } else if (curMinute >= 45) {
+            selectedMinute = '45';
+        }
+
+        const totalCurrentTime = curHour + ':' + selectedMinute;
+        return totalCurrentTime;
+    }
+
     createForm() {
         return new Promise((resolve) => {
-
-            debugger;
             let sdate = this.data.eventItems ? this.formatDate(this.data.eventItems?.startDate) : this.formatDate(this.data.currentDate.toLocaleDateString());
             let edate = this.data.eventItems ? this.formatDate(this.data.eventItems?.endDate) : this.formatDate(this.data.currentDate.toLocaleDateString());
-            let stime = this.data.eventItems ? this.formatTime(this.data.eventItems?.startDate) : '00:00';
-            let etime = this.data.eventItems ? this.formatTime(this.data.eventItems?.endDate) : '00:00';
+            let stime = this.data.eventItems ? this.formatTime(this.data.eventItems?.startDate) : this.selectCurrentTime();
+            let etime = this.data.eventItems ? this.formatTime(this.data.eventItems?.endDate) : this.selectCurrentTime();
 
             this.form = this.fb.group({
                 users: new FormControl(this.data.eventItems ? this.data.eventItems.users : []),

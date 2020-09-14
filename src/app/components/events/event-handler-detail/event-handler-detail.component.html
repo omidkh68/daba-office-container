@@ -52,7 +52,7 @@
                             <mat-form-field class="full-width font-9-em">
                                 <mat-label>{{'events_handler.form.action_type' | translate}}</mat-label>
                                 <mat-select (selectionChange)="onChangeAction($event)" formControlName="actionType"
-                                            tabIndex="5">
+                                            required tabIndex="5">
                                     <mat-option *ngFor="let action of actionTypeList" [value]="action">
                                         {{action.actionDescription}}
                                     </mat-option>
@@ -62,7 +62,7 @@
                         <div *ngIf="actionTypeJobList.length" class="half-width padding-r-l">
                             <mat-form-field class="full-width font-9-em">
                                 <mat-label>{{'events_handler.form.action_job_type' | translate}}</mat-label>
-                                <mat-select formControlName="actionTypeJobModel" tabIndex="5">
+                                <mat-select formControlName="actionTypeJobModel" tabIndex="5" required>
                                     <mat-option *ngFor="let actionJob of actionTypeJobList" [value]="actionJob">
                                         {{actionJob.description}}
                                     </mat-option>
@@ -71,15 +71,15 @@
                         </div>
                     </div>
 
-                    <div class="display-flex margin-r-l-reverse">
-                        <div class="quarter-width padding-r-l">
+                    <div class="display-flex margin-r-l-reverse ">
+                        <div class="half-width padding-r-l">
                             <mat-form-field class="full-width font-9-em">
                                 <mat-label>{{'events_handler.form.start_at' | translate}}</mat-label>
                                 <input matInput [matDatepicker]="picker1" readonly
                                        placeholder="{{'events_handler.form.start_at' | translate}}"
                                        (focus)="picker1.open()" (click)="picker1.open()"
                                        (dateChange)="dateToGregorian('startDate', $event)"
-                                       formControlName="startDate" tabindex="8">
+                                       formControlName="startDate" tabindex="8" required>
                                 <mat-datepicker #picker1></mat-datepicker>
                                 <mat-error>
                                     <span *ngIf="!form.get('startDate').value">{{'events_handler.form.start_at_error' | translate}}</span>
@@ -87,10 +87,10 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div class="quarter-width padding-r-l">
+                        <div class="half-width padding-r-l">
                             <mat-form-field class="full-width font-9-em">
                                 <mat-label>{{'events_handler.form.start_time' | translate}}</mat-label>
-                                <mat-select formControlName="startTime" tabIndex="9">
+                                <mat-select formControlName="startTime" tabIndex="9" required>
                                     <mat-option *ngFor="let hour of hours" [value]="hour">
                                         {{hour}}
                                     </mat-option>
@@ -101,7 +101,7 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div class="quarter-width padding-r-l">
+                        <div class="quarter-width padding-r-l display-none">
                             <mat-form-field class="full-width font-9-em">
                                 <mat-label>{{'events_handler.form.stop_at' | translate}}</mat-label>
                                 <input matInput [matDatepicker]="picker2" readonly
@@ -115,7 +115,7 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div class="quarter-width padding-r-l">
+                        <div class="quarter-width padding-r-l display-none">
                             <mat-form-field class="full-width font-9-em">
                                 <mat-label>{{'events_handler.form.stop_time' | translate}}</mat-label>
                                 <mat-select formControlName="endTime" tabIndex="11">
@@ -135,7 +135,7 @@
                             <mat-form-field class="full-width height-80 font-9-em">
                                 <mat-label>{{'events_handler.form.event_description' | translate}}</mat-label>
                                 <textarea matInput formControlName="description"
-                                          placeholder="{{'events_handler.form.event_description' | translate}}"
+                                          required placeholder="{{'events_handler.form.event_description' | translate}}"
                                           tabindex="12"></textarea>
                             </mat-form-field>
                         </div>
@@ -241,7 +241,7 @@
                     </button>
                     <mat-icon class="padding-r-half" mat-list-icon>calendar_today</mat-icon>
                     <p mat-line class="demo-2">{{reminder.description}}</p>
-                    <div mat-line class="font-6-rem">{{reminder.startdate_format}} - {{reminder.enddate_format}}</div>
+                    <div mat-line class="font-8-rem">{{reminder.startReminder | jalali:rtlDirection}}</div>
                     <mat-divider class="full-width" [inset]="true" *ngIf="!last"></mat-divider>
                 </a>
             </mat-nav-list>

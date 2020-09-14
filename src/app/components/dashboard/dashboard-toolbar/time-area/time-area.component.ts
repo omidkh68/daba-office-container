@@ -50,6 +50,8 @@ export class TimeAreaComponent implements OnInit {
           this.loggedInUser.timezone = 'Asia/Tehran';
         }
 
+        this.currentTimezone = this.loggedInUser.timezone.split('/')[1].replace("_", " ");
+
         this.cityClocksList = [{city: this.loggedInUser.timezone.split('/')[1], timezone: this.loggedInUser.timezone}];
 
         this.init();
@@ -64,7 +66,10 @@ export class TimeAreaComponent implements OnInit {
   setClockCity(option) {
     this.checkMoreClock = false;
     this.checkMoreClockContent = false;
-    this.cityClocksList.push(option)
+    if(this.cityClocksList.some(item => item.timezone !== option.timezone)){
+      this.cityClocksList.push(option)
+    }
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
