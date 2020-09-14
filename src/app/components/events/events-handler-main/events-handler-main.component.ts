@@ -110,6 +110,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         this._subscription.add(
             this.eventHandlerService.currentEventsList.subscribe(events => {
                 this.eventsList = events;
+                this.remindersList = [];
                 this.eventsList.map((item: EventHandlerInterface) => {
                     if (item.reminders.length)
                         this.remindersList = [...this.remindersList, ...item.reminders]
