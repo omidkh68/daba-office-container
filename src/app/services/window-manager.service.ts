@@ -302,8 +302,6 @@ export class WindowManagerService {
 
       let element: HTMLElement;
 
-      console.log(dialogId);
-
       if (dialogId === 'snackBar') {
         element = document.querySelector('.mat-snack-bar-container') as HTMLElement;
         element.parentElement.parentElement.style.zIndex = maxWindowZIndex;

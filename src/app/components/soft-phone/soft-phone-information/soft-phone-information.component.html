@@ -1,7 +1,7 @@
 <div class="full-width full-height">
   <mat-list class="soft-phone-user full-width height-50">
     <mat-list-item class="padding-mini-r-l full-height">
-      <img [src]="'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'" [alt]="loggedInUser ? loggedInUser.name : ''"
+      <img [src]="'assets/profileImg/'+ (loggedInUser ? loggedInUser.email : '0') +'.jpg'" [alt]="loggedInUser ? loggedInUser.name : ''"
            class="mat-elevation-z2 my-profile-img"
            onerror="this.src='assets/profileImg/0.jpg'"
            matListAvatar>

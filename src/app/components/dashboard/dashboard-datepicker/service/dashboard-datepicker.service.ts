@@ -4,17 +4,17 @@ import {ElementRef, Injectable} from '@angular/core';
   providedIn: 'root'
 })
 export class DashboardDatepickerService {
-
-  constructor(private _elemRef: ElementRef = null , private elementByClass:string = null) {
-    if(_elemRef){
+  constructor(private elemRef: ElementRef = null,
+              private elementByClass:string = null) {
+    if(elemRef){
       document.addEventListener('click', this.offClickHandler.bind(this));
     }
-
   }
 
   offClickHandler(event:any) {
     event.stopPropagation();
-    if (!this._elemRef.nativeElement.contains(event.target)) { // check click origin
+
+    if (!this.elemRef.nativeElement.contains(event.target)) { // check click origin
       this.closePopover();
     }
   }
@@ -26,5 +26,4 @@ export class DashboardDatepickerService {
       tag[0].classList.add('display-none')
     }
   }
-
 }
