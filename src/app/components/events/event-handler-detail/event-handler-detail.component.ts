@@ -170,6 +170,14 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
 
         return [year, month, day].join('-');
     }
+    formatTime(date) {
+        var d = new Date(date),
+            hour = '' + (d.getHours()),
+            min = '' + d.getMinutes();
+        if (min.length < 2)
+            min = '0' + min;
+        return [hour, min].join(':');
+    }
 
     enableForm() {
         this.form.enable();
@@ -346,14 +354,21 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
 
     createForm() {
         return new Promise((resolve) => {
+
+            debugger;
+            let sdate = this.data.eventItems ? this.formatDate(this.data.eventItems?.startDate) : this.formatDate(this.data.currentDate.toLocaleDateString());
+            let edate = this.data.eventItems ? this.formatDate(this.data.eventItems?.endDate) : this.formatDate(this.data.currentDate.toLocaleDateString());
+            let stime = this.data.eventItems ? this.formatTime(this.data.eventItems?.startDate) : '00:00';
+            let etime = this.data.eventItems ? this.formatTime(this.data.eventItems?.endDate) : '00:00';
+
             this.form = this.fb.group({
                 users: new FormControl(this.data.eventItems ? this.data.eventItems.users : []),
                 id: new FormControl(this.data.eventItems ? this.data.eventItems.id : 0),
                 name: new FormControl(this.data.eventItems ? this.data.eventItems.name : '', Validators.required),
-                startDate: new FormControl(this.data.eventItems ? new Date(this.data.eventItems?.startDate).toLocaleDateString() : this.data.currentDate.toLocaleDateString(), Validators.required),
-                startTime: new FormControl(this.data.eventItems ? this.data.eventItems?.sTime : '00:00', Validators.required),
-                endDate: new FormControl(this.data.eventItems ? new Date(this.data.eventItems?.endDate).toLocaleDateString() : this.data.currentDate.toLocaleDateString(), Validators.required),
-                endTime: new FormControl(this.data.eventItems ? this.data.eventItems?.eTime : '00:00', Validators.required),
+                startDate: new FormControl(sdate, Validators.required),
+                startTime: new FormControl(stime, Validators.required),
+                endDate: new FormControl(edate, Validators.required),
+                endTime: new FormControl(etime, Validators.required),
                 description: new FormControl(this.data.eventItems ? this.data.eventItems.description : '', Validators.required),
                 actionType: new FormControl(this.data.eventItems ? this.data.eventItems.actionType : [], Validators.required),
                 actionTypeJobModel: new FormControl(this.data.eventItems ? this.data.eventItems.actionTypeJobModel : [], Validators.required),

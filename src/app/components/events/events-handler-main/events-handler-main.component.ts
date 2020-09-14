@@ -152,6 +152,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     ngAfterViewInit(): void {
         if (this.currentDate)
             this.loadBottomSheet(this.eventItems);
+
         this.prepareFullCalendar();
         this.views = {
             dayGridMonthCustom: {
