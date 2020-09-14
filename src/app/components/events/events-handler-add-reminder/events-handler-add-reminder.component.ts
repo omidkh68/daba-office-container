@@ -84,6 +84,7 @@ export class EventsHandlerAddReminderComponent implements OnInit {
         formValue.reminders[0].endReminder = formValue.reminders[0].endReminder + " " + formValue.reminders[0].endTime + ":00";
         if(formValue.reminders[0].startReminder > formValue.reminders[0].endReminder){
             this.reminderForm.controls['startReminder'].setErrors({'incorrect': true});
+            this.reminderForm.enable();
             return;
         }
         this._subscription.add(

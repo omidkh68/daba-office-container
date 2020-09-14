@@ -267,6 +267,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         formValue.endDate = this.formatDate(this.form.value.endDate) + " " + this.form.value.endTime + ":00";
         if (formValue.startDate > formValue.endDate) {
             this.form.controls['startDate'].setErrors({'incorrect': true});
+            this.form.enable();
             return;
         }
 
