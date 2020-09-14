@@ -265,15 +265,16 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         formValue.creatorUser = this.loggedInUser;
         formValue.startDate = this.formatDate(this.form.value.startDate) + " " + this.form.value.startTime + ":00";
         formValue.endDate = this.formatDate(this.form.value.endDate) + " " + this.form.value.endTime + ":00";
-        if (formValue.startDate > formValue.endDate) {
+/*        if (formValue.startDate > formValue.endDate) {
             this.form.controls['startDate'].setErrors({'incorrect': true});
             this.form.enable();
             return;
-        }
+        }*/
 
         delete formValue.actionType.actionTypeJobModels;
         delete formValue.actionType.actionDescription;
         delete formValue.actionTypeJobModel.description;
+        delete formValue.endDate;
 
 
         if (formValue.id) {

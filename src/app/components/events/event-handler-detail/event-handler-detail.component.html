@@ -160,7 +160,7 @@
                             <div class="example-container">
                                 <mat-label>{{'events_handler.form.assign_to' | translate}}</mat-label>
                                 <div cdkDropList
-                                     [cdkDropListData]="usersListDone"
+                                     [cdkDropListData]="form.get('users').value"
                                      class="example-list"
                                      (cdkDropListDropped)="drop($event)">
                                     <div (click)="transferToLeft(user)" class="example-box no-padding"
@@ -222,11 +222,12 @@
         <div [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
              class="task-todo-container full-height padding-mini-t-b pos-rel">
             <div class="padding-full margin-b-full-3">
-                <h3 class="float-right no-padding"
+                <h3 [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="no-padding"
                     mat-subheader>{{'events_handler.main.reminder_title' | translate}}</h3>
                 <button *ngIf="data.eventItems" mat-raised-button
                         (click)="openAddReminderDialog()"
-                        class="float-left green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+                        [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
+                        class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
                     <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
                     <span class="padding-mini-r-l">{{'events_handler.main.add_new_reminder' | translate}}</span>
                 </button>

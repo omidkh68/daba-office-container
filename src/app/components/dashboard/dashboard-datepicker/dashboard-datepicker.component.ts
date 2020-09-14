@@ -44,7 +44,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
   popoverTarget: any;
   eventTemp: any = [];
   events: Array<EventHandlerInterface> = null;
-  reminders: any = [];
+  reminders: Array<ReminderInterface> = [];
 
   private _subscription: Subscription = new Subscription();
 

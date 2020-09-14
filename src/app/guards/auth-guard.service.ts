@@ -41,7 +41,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
   canActivate(): Observable<boolean> | Promise<boolean> {
     return new Promise((resolve) => {
-      this.getUserLoginInfo().then((data: DataInterface) => {
+      /*this.getUserLoginInfo().then((data: DataInterface) => {
         // this.setUserData(userInfo);
 
         console.log('data: ', data);
@@ -61,7 +61,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
           resolve(true);
         }
 
-        /*console.log('after get: ', userInfo);
+        /!*console.log('after get: ', userInfo);
 
         this.checkLogin().then(userInfo => {
           this.setUserData(userInfo);
@@ -69,18 +69,18 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
           resolve(true);
         });
 
-        resolve(true);*/
+        resolve(true);*!/
       }).catch(() => {
         this.router.navigateByUrl(`/login`);
 
         resolve(false);
-      });
+      });*/
 
-      /*this.checkLogin().then(userInfo => {
+      this.checkLogin().then(userInfo => {
         this.setUserData(userInfo);
 
         resolve(true);
-      });*/
+      });
     });
   }
 
@@ -181,7 +181,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     });
   }
 
-  setUserData(data: DataInterface) {
+  /*setUserData(data: DataInterface) {
     this.userInfoService.changeLoginData(data.loginData);
 
     this.userInfoService.changeUserInfo(data.userInfo);
@@ -189,6 +189,16 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     this.viewDirection.changeDirection(data.userInfo.lang === 'fa');
 
     this.changeStatusService.changeUserStatus(data.userInfo.user_status);
+  }*/
+
+  setUserData(data) {
+    // this.userInfoService.changeLoginData(data.loginData);
+
+    this.userInfoService.changeUserInfo(data);
+
+    this.viewDirection.changeDirection(data.lang === 'fa');
+
+    this.changeStatusService.changeUserStatus(data.user_status);
   }
 
   getTranslate(word) {

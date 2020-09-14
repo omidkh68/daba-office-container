@@ -42,8 +42,8 @@ export class EventApiService {
         return this.http.get<ReminderTypeInterface>(`${this.API_URL}/reminderType/getAllReminderType`);
     }
 
-    getAllStatusType(): Observable<ReminderInterface> {
-        return this.http.get<ReminderInterface>(`${this.API_URL}/statusReminderType/getAllStatusType`);
+    getAllStatusType(): Observable<ReminderTypeInterface> {
+        return this.http.get<ReminderTypeInterface>(`${this.API_URL}/statusReminderType/getAllStatusType`);
     }
 
     getEventByEmail(email: string): Observable<EventHandlerInterface> {

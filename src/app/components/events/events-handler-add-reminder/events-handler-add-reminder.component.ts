@@ -32,12 +32,12 @@ export class EventsHandlerAddReminderComponent implements OnInit {
 
     constructor(private fb: FormBuilder,
                 public dialog: MatDialog,
+                private eventApi : EventApiService,
                 private messageService: MessageService,
                 private translateService: TranslateService,
                 private eventHandlerService: EventHandlerService,
                 public dialogRef: MatDialogRef<EventsHandlerAddReminderComponent>,
-                @Inject(MAT_DIALOG_DATA) public data: any,
-                private eventApi : EventApiService) {
+                @Inject(MAT_DIALOG_DATA) public data: any) {
         this.rtlDirection = this.data.rtlDirection;
         this.eventItems = this.data.eventItems;
     }
@@ -45,15 +45,17 @@ export class EventsHandlerAddReminderComponent implements OnInit {
     ngOnInit(): void {
         this._subscription.add(
             this.eventApi.getAllReminderType().subscribe((resp: any) => {
+                debugger;
                 if (resp.status == 200) {
                     this.reminderTypeList = resp.content;
-                }
-            })
-        );
-        this._subscription.add(
-            this.eventApi.getAllStatusType().subscribe((resp: any) => {
-                if (resp.status == 200) {
-                    this.statusList = resp.content;
+                    this._subscription.add(
+                        this.eventApi.getAllStatusType().subscribe((result: any) => {
+                            debugger;
+                            if (result.status == 200) {
+                                this.statusList = result.content;
+                            }
+                        })
+                    );
                 }
             })
         );
@@ -82,11 +84,12 @@ export class EventsHandlerAddReminderComponent implements OnInit {
         let formValue = {reminders : [this.reminderForm.value] , id: this.data.eventItems.id} ;
         formValue.reminders[0].startReminder = formValue.reminders[0].startReminder + " " + formValue.reminders[0].startTime + ":00";
         formValue.reminders[0].endReminder = formValue.reminders[0].endReminder + " " + formValue.reminders[0].endTime + ":00";
-        if(formValue.reminders[0].startReminder > formValue.reminders[0].endReminder){
+/*        if(formValue.reminders[0].startReminder > formValue.reminders[0].endReminder){
             this.reminderForm.controls['startReminder'].setErrors({'incorrect': true});
             this.reminderForm.enable();
             return;
-        }
+        }*/
+        delete formValue.reminders[0].endReminder;
         this._subscription.add(
             this.eventApi.addNewReminder(formValue).subscribe((resp: any) => {
                 if(resp.result == "successful"){
