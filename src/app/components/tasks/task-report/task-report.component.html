@@ -5,7 +5,7 @@
       <ng-container matColumnDef="taskDateStart">
         <th mat-header-cell *matHeaderCellDef class="font-7-em">{{'tasks.form.start_at' | translate}}</th>
         <td mat-cell *matCellDef="let element">
-          <span class="font-7-em display-block width-60">{{element.taskDateStart | jalali}}</span>
+          <span class="font-7-em display-block width-60">{{element.taskDateStart | jalali:rtlDirection}}</span>
         </td>
       </ng-container>
 
@@ -13,7 +13,7 @@
       <ng-container matColumnDef="taskDateStop">
         <th mat-header-cell *matHeaderCellDef class="font-7-em">{{'tasks.form.stop_at' | translate}}</th>
         <td mat-cell *matCellDef="let element">
-          <span class="font-7-em display-block width-60">{{element.taskDateStop | jalali}}</span>
+          <span class="font-7-em display-block width-60">{{element.taskDateStop | jalali:rtlDirection}}</span>
         </td>
       </ng-container>
 

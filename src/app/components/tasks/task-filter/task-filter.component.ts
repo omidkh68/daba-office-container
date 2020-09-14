@@ -96,17 +96,17 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
-              private viewDirection: ViewDirectionService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: FilterTaskInterface,
+              private api: ApiService,
               private fb: FormBuilder,
               private injector: Injector,
               private translate: TranslateService,
               private messageService: MessageService,
-              private refreshLoginService: RefreshLoginService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              public dialogRef: MatDialogRef<TaskFilterComponent>,
               private userInfoService: UserInfoService,
-              @Inject(MAT_DIALOG_DATA) public data: FilterTaskInterface) {
+              private viewDirection: ViewDirectionService,
+              private refreshLoginService: RefreshLoginService,
+              public dialogRef: MatDialogRef<TaskFilterComponent>,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(

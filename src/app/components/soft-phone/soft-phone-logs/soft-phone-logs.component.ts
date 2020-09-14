@@ -160,9 +160,11 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
               };
             }
 
-            cdrExtensionItem = {...cdrExtensionItem, user: findUser};
-
             if (findUser) {
+              cdrExtensionItem = {...cdrExtensionItem, user: findUser};
+
+              this.cdrExtensionList.push(cdrExtensionItem);
+            } else {
               this.cdrExtensionList.push(cdrExtensionItem);
             }
           });

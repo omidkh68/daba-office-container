@@ -1,7 +1,11 @@
 <div #clock class="clock">
-  <mat-icon *ngIf="checkMoreClock && item_index != 0" (click)="removeClock($event)" class="close-button">close</mat-icon>
+  <mat-icon *ngIf="checkMoreClock && item_index != 0" (click)="removeClock($event)"
+            [ngClass]="rtlDirection ? 'left-full-reverse' : 'right-full-reverse'"
+            class="close-button pos-abs top-full-reverse round-corner-all text-white width-18 height-18 line-height-18 text-center cursor-pointer font-9-em text-weight-bold">
+    close
+  </mat-icon>
   <div #hours class="hands hours"></div>
   <div #minutes class="hands minutes"></div>
   <div #seconds class="hands seconds"></div>
 </div>
-<h6 class="text-center padding-t-half">{{item.city}}</h6>
+<h6 class="text-center padding-t-half no-margin text-dark-mode-color font-full-em">{{item.city}}</h6>

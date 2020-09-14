@@ -1,11 +1,10 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 bottom-0 top-0">
   <div class="full-width height-45 padding-half display-flex bg-white border-bottom">
-
     <h1 class="text-gray-800 font-full-em text-weight-500 padding-mini-r-l no-margin">
       {{'profileSettings.profile_settings' | translate}}
     </h1>
 
-    <div class="pos-abs top-6 height-45 content-switcher">
+    <div class="pos-abs top-fourth-tenth content-switcher">
       <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                                (change)="changeViewMode(viewMode.value)"
                                [ngClass]="{'view-mode': viewMode}"
@@ -31,207 +30,204 @@
     </div>
   </div>
 
-  <div class="pos-rel">
-    <div class="component-content full-width full-height">
+  <div class="pos-rel height-full-minus-45 padding-full">
+    <!-- profile container -->
+    <div *ngIf="viewModeTypes === 'information'" class="full-height">
+      <!--image cropper-->
+      <div class="container-image-profile display-flex justify-content-center">
+        <div class="image-profile margin-t-full-2 margin-b-full">
+          <div class="box mat-elevation-z1 pos-rel text-center round-corner width-150 height-150 overflow-hide">
+            <img class="full-width full-height cursor-pointer"
+                 [src]="loggedInUser && loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'"
+                 [alt]="loggedInUser ? loggedInUser.name : ''"
+                 onerror="this.src='assets/profileImg/0.jpg'">
+            <label for="fileChange" class="overlay-image cursor-pointer pos-abs full-width full-height purple-gradient">
+              <mat-icon class="no-padding full-width full-height line-height-150 font-full-rem-2 text-white">
+                camera_alt
+              </mat-icon>
+            </label>
+            <input (change)="fileChangeEvent($event)" hidden [(ngModel)]="resetInput" id="fileChange" type="file"/>
+          </div>
+        </div>
+      </div>
+      <!--end of image cropper-->
 
-      <div class="overflow full-width full-height">
-
-        <!-- profile container -->
-        <div *ngIf="viewModeTypes === 'information'" class="full-height padding-full">
-
-          <!--image cropper-->
-          <div class="container-image-profile display-flex justify-content-center">
-            <div class="image-profile margin-t-full-2 margin-b-full">
-              <div class="box mat-elevation-z1 pos-rel text-center round-corner width-150 height-150 overflow-hide">
-                <img class="full-width full-height cursor-pointer"
-                     [src]="loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser.email +'.jpg'"
-                     [alt]="loggedInUser.name"
-                     onerror="this.src='assets/profileImg/0.jpg'">
-                <label for="fileChange"
-                       class="overlay-image cursor-pointer pos-abs full-width full-height purple-gradient">
-                  <mat-icon class="no-padding full-width full-height line-height-150 font-full-rem-2 text-white">
-                    camera_alt
-                  </mat-icon>
-                </label>
-
-                <input (change)="fileChangeEvent($event)" hidden [(ngModel)]="resetInput" id="fileChange" type="file"/>
-              </div>
+      <div class="full-width display-inline-block margin-t-full">
+        <form *ngIf="form" [formGroup]="form">
+          <!--form-->
+          <div class="display-flex margin-r-l-reverse margin-b-half">
+            <div class="full-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'profileSettings.name_family' | translate}}</mat-label>
+                <input class="full-width"
+                       formControlName="name"
+                       matInput
+                       placeholder="{{'profileSettings.name_family' | translate}}"
+                       required>
+                <mat-error>{{'global.name_error' | translate}}</mat-error>
+              </mat-form-field>
             </div>
           </div>
-          <!--end of image cropper-->
 
-
-          <div class="full-width display-inline-block margin-t-full">
-            <form *ngIf="form" [formGroup]="form">
-
-              <!--form-->
-              <div class="display-flex margin-r-l-reverse margin-b-half">
-                <div class="full-width padding-r-l">
-                  <mat-form-field class="full-width font-9-em">
-                    <mat-label>{{'profileSettings.name_family' | translate}}</mat-label>
-                    <input class="full-width"
-                           formControlName="name"
-                           matInput
-                           placeholder="{{'profileSettings.name_family' | translate}}"
-                           required>
-                    <mat-error>{{'global.name_error' | translate}}</mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <div class="display-flex margin-r-l-reverse margin-b-half">
-                <div class="half-width padding-r-l">
-                  <mat-form-field class="full-width font-9-em">
-                    <mat-label>{{'global.email' | translate}}</mat-label>
-                    <input class="full-width text-left"
-                           formControlName="email"
-                           matInput
-                           placeholder="{{'global.email' | translate}}"
-                           required
-                           type="email">
-                    <mat-error>
-                      {{'global.email_error' | translate}}
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="half-width padding-r-l">
-                  <mat-form-field class="full-width font-9-em">
-                    <mat-label>{{'login_info.password' | translate}}</mat-label>
-                    <input class="full-width"
-                           formControlName="c_password"
-                           matInput
-                           placeholder="{{'login_info.password' | translate}}"
-                           type="password">
-                    <mat-error>{{'login_info.password_error' | translate}}</mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <div class="display-flex margin-r-l-reverse margin-b-half">
-                <div class="half-width padding-r-l">
-                  <mat-form-field class="full-width font-9-em">
-                    <mat-label>{{'global.extension_placeholder' | translate}}</mat-label>
-                    <input class="full-width"
-                           formControlName="extension_no"
-                           matInput
-                           placeholder="{{'global.extension_placeholder' | translate}}"
-                           type="number">
-                    <mat-error
-                      *ngIf="!form.get('extension_no').valid">{{'global.extension_error' | translate}}</mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="half-width padding-r-l">
-                  <mat-form-field class="full-width font-9-em">
-                    <mat-label>{{'profileSettings.timezone' | translate}}</mat-label>
-                    <input (click)="$event.stopPropagation()"
-                           [matAutocomplete]="auto"
-                           class="full-width"
-                           formControlName="timezone"
-                           matInput
-                           required
-                           type="text">
-                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                      <mat-option (click)="setClockCity(option)" *ngFor="let option of filteredOptions | async"
-                                  [value]="option">
-                        {{option.city}} - {{option.timezone}}
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error>{{'profileSettings.timezone_error' | translate}}</mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-              <!--end of form-->
-
-              <!--container dark mode & change lang-->
-              <div class="display-flex margin-r-l-reverse margin-b-half">
-                <!--change lang-->
-                <div class="half-width padding-r-l">
-                  <mat-form-field class="full-width font-9-em">
-                    <mat-label class="text-weight-bold">
-                      <mat-icon>translate</mat-icon>
-                    </mat-label>
-                    <mat-select (selectionChange)="changeLang($event)" [(value)]="defaultLang">
-                      <mat-option *ngFor="let lang of langs" [value]="lang.id">
-                        {{lang.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <!--end of change lang-->
-
-                <!--dark mode-->
-                <div class="half-width padding-r-l">
-                  <div class="display-flex dark-mode height-50 align-items-center">
-                    <div class="container-dark-mode">
-                      <label for="darkMode" [ngClass]="rtlDirection ? 'margin-r-reverse' : 'margin-l-reverse'">
-                        <input (change)="changeDarkMode($event)" id="darkMode" type="checkbox"
-                               [checked]="selectDarkMode">
-                        <span class="planet display-block"></span>
-                        <span class="elements display-block">
-                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="250" cy="250" r="200"></circle>
-                          </svg>
-                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="250" cy="250" r="200"></circle>
-                          </svg>
-                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="250" cy="250" r="200"></circle>
-                          </svg>
-                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="250" cy="250" r="200"></circle>
-                          </svg>
-                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="250" cy="250" r="200"></circle>
-                          </svg>
-                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="250" cy="250" r="200"></circle>
-                          </svg>
-                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="250" cy="250" r="200"></circle>
-                          </svg>
-                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="250" cy="250" r="200"></circle>
-                          </svg>
-                        </span>
-                        <span class="pos-abs top-full-plus-half"
-                              [ngClass]="rtlDirection ? 'l-reverse' : 'r-reverse'">{{(loggedInUser.dark_mode ? 'profileSettings.dark_mode' : 'profileSettings.light_mode') | translate}}
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <!--end of dark mode-->
-              </div>
-              <!--end of container dark mode & change lang-->
-
-              <!--btn submit-->
-              <div class="display-flex margin-r-l-reverse margin-t-full-plus-half">
-                <div class="full-width padding-r-l">
-                  <button (click)="onSubmit()"
-                          [disabled]="!form.valid || !changeValueForm"
-                          class="full-width green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
-                          mat-raised-button
-                          tabindex="13"
-                          type="submit">
-                    <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
-                  </button>
-                </div>
-              </div>
-              <!--end of btn submit-->
-            </form>
+          <div class="display-flex margin-r-l-reverse margin-b-half">
+            <div class="half-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'global.email' | translate}}</mat-label>
+                <input class="full-width text-left"
+                       formControlName="email"
+                       matInput
+                       placeholder="{{'global.email' | translate}}"
+                       required
+                       type="email">
+                <mat-error>
+                  {{'global.email_error' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="half-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'login_info.password' | translate}}</mat-label>
+                <input class="full-width"
+                       formControlName="c_password"
+                       matInput
+                       placeholder="{{'login_info.password' | translate}}"
+                       type="password">
+                <mat-error>{{'login_info.password_error' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
           </div>
-        </div>
-        <!--/ end of profile container -->
 
+          <div class="display-flex margin-r-l-reverse margin-b-half">
+            <div class="half-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'global.extension_placeholder' | translate}}</mat-label>
+                <input class="full-width"
+                       formControlName="extension_no"
+                       matInput
+                       placeholder="{{'global.extension_placeholder' | translate}}"
+                       type="number">
+                <mat-error
+                  *ngIf="!form.get('extension_no').valid">{{'global.extension_error' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="half-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'profileSettings.timezone' | translate}}</mat-label>
+                <input (click)="$event.stopPropagation()"
+                       [matAutocomplete]="auto"
+                       class="full-width"
+                       formControlName="timezone"
+                       matInput
+                       required
+                       type="text">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                  <mat-option (click)="setClockCity(option)" *ngFor="let option of filteredOptions | async"
+                              [value]="option">
+                    {{option.city}} - {{option.timezone}}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error>{{'profileSettings.timezone_error' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <!--end of form-->
 
-        <!-- wallpaper container -->
-        <div *ngIf="viewModeTypes === 'wallpaper'" class="full-height padding-full">
-          <app-wallpaper></app-wallpaper>
-        </div>
-        <!--/ end of wallpaper container -->
+          <!--container dark mode & change lang-->
+          <div class="display-flex margin-r-l-reverse">
+            <!--change lang-->
+            <div class="half-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label class="text-weight-bold">
+                  <mat-icon>translate</mat-icon>
+                </mat-label>
+                <mat-select (selectionChange)="changeLang($event)" [(value)]="defaultLang">
+                  <mat-option *ngFor="let lang of langs" [value]="lang.id">
+                    {{lang.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!--end of change lang-->
 
+            <!--dark mode-->
+            <div class="half-width padding-r-l">
+              <div class="display-flex dark-mode height-50 align-items-center">
+                <div class="container-dark-mode">
+                  <label for="darkMode" [ngClass]="rtlDirection ? 'margin-r-reverse' : 'margin-l-reverse'">
+                    <input (change)="changeDarkMode($event)" id="darkMode" type="checkbox"
+                           [checked]="selectDarkMode">
+                    <span class="planet display-block"></span>
+                    <span class="elements display-block">
+                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="250" cy="250" r="200"></circle>
+                          </svg>
+                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="250" cy="250" r="200"></circle>
+                          </svg>
+                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="250" cy="250" r="200"></circle>
+                          </svg>
+                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="250" cy="250" r="200"></circle>
+                          </svg>
+                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="250" cy="250" r="200"></circle>
+                          </svg>
+                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="250" cy="250" r="200"></circle>
+                          </svg>
+                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="250" cy="250" r="200"></circle>
+                          </svg>
+                          <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="250" cy="250" r="200"></circle>
+                          </svg>
+                        </span>
+                    <span class="pos-abs top-full-plus-half"
+                          [ngClass]="rtlDirection ? 'l-reverse' : 'r-reverse'">{{(loggedInUser && loggedInUser.dark_mode ? 'profileSettings.dark_mode' : 'profileSettings.light_mode') | translate}}
+                        </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!--end of dark mode-->
+          </div>
+
+          <div class="display-flex margin-r-l-reverse">
+            <div class="padding-r-l display-flex">
+              <mat-icon class="width-18 height-18 line-height-20 font-full-plus-two-tenth-em text-orange-700">
+                warning
+              </mat-icon>
+              <b class="text-orange-700">{{'profileSettings.change_lang_warning_note' | translate}}</b>
+              <span class="font-9-em padding-tiny-r-l">{{'profileSettings.change_lang_warning_text' | translate}}</span>
+            </div>
+          </div>
+          <!--end of container dark mode & change lang-->
+
+          <!--btn submit-->
+          <div class="display-flex margin-r-l-reverse margin-t-half">
+            <div class="full-width padding-r-l">
+              <button (click)="onSubmit()"
+                      [disabled]="!form.valid || !changeValueForm"
+                      class="full-width green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+                      mat-raised-button
+                      tabindex="13"
+                      type="submit">
+                <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
+              </button>
+            </div>
+          </div>
+          <!--end of btn submit-->
+        </form>
       </div>
     </div>
+    <!--/ end of profile container -->
+
+    <!-- wallpaper container -->
+    <div *ngIf="viewModeTypes === 'wallpaper'" class="full-height">
+      <app-wallpaper></app-wallpaper>
+    </div>
+    <!--/ end of wallpaper container -->
   </div>
 </div>
 

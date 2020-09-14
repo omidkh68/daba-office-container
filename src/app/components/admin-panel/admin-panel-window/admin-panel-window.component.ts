@@ -4,6 +4,7 @@ import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interfa
 import {Subscription} from 'rxjs/internal/Subscription';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {WebViewService} from '../service/web-view.service';
 
 @Component({
   selector: 'app-admin-panel-window',
@@ -16,8 +17,9 @@ export class AdminPanelWindowComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private windowManagerService: WindowManagerService,
-              private viewDirection: ViewDirectionService) {
+  constructor(private webViewService: WebViewService,
+              private viewDirection: ViewDirectionService,
+              private windowManagerService: WindowManagerService) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
@@ -53,6 +55,10 @@ export class AdminPanelWindowComponent implements OnInit, OnDestroy {
 
   centerWindow() {
     this.windowManagerService.centerWindow(this.data);
+  }
+
+  reload() {
+    this.webViewService.changeRefreshWebView(true);
   }
 
   ngOnDestroy(): void {

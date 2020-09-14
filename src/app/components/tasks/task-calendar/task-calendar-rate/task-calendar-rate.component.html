@@ -1,18 +1,37 @@
-<mat-drawer-container autosize class="rate-calendar" id="rate-container">
-  <mat-drawer #drawer class="round-corner mat-elevation-z4" mode="side">
-    <div *ngIf="userSelected && userSelected.email" class="padding-full">
+<mat-drawer-container autosize class="rate-calendar display-flex flex-space-between padding-tiny-t-b"
+                      id="rate-container">
+  <mat-drawer #drawer class="round-corner mat-elevation-z1 padding-tiny-r-l" mode="side">
+    <div *ngIf="userSelected && userSelected.email" class="padding-half">
       <!--            <mat-icon class="cursor-pointer" (click)="drawer.toggle()" aria-hidden="false">close</mat-icon>-->
-      <div class="text-center">
-        <img [src]="'/assets/profileImg/'+userSelected.email+'.jpg'"
-             class="width-70 height-70 text-center round-corner-all margin-auto pos-rel top-six-tenth">
-        <div class="padding-t">{{userSelected.name}} {{userSelected.family}}</div>
-        <div class="padding-b">{{userSelected.email}}</div>
-        <div class="padding-t-b">
-          {{'tasks.task_filter.tasks_filter_calendar_hours' | translate}}: {{sumTime}}</div>
+      <img [src]="'/assets/profileImg/'+userSelected.email+'.jpg'" [alt]="userSelected.name + ' ' + userSelected.family"
+           class="width-70 height-70 display-block margin-t-b margin-auto text-center round-corner-all margin-auto pos-rel top-six-tenth mat-elevation-z2">
+
+      <div class="padding-t-b display-flex align-items-center">
+        <mat-icon class="width-20 height-20 line-height-20 font-full-plus-half-em">person</mat-icon>
+
+        <span [ngClass]="rtlDirection ? 'padding-r-half' : 'padding-l-half'">
+          {{userSelected.name}} {{userSelected.family}}
+        </span>
+      </div>
+
+      <div class="padding-t-b display-flex align-items-center">
+        <mat-icon class="width-20 height-20 line-height-20 font-full-plus-half-em">mail_outline</mat-icon>
+
+        <span [ngClass]="rtlDirection ? 'padding-r-half' : 'padding-l-half'">
+          {{userSelected.email}}
+        </span>
+      </div>
+
+      <div class="padding-t-b display-flex align-items-center">
+        <mat-icon class="width-20 height-20 line-height-20 font-full-plus-half-em">av_timer</mat-icon>
+
+        <span [ngClass]="rtlDirection ? 'padding-r-half' : 'padding-l-half'">
+          {{'tasks.task_filter.tasks_filter_calendar_hours' | translate}}: {{sumTime}}
+        </span>
       </div>
     </div>
   </mat-drawer>
-  <div [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
+  <div class="padding-mini-r-l" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'" [dir]="rtlDirection ? 'rtl' : 'ltr'">
     <full-calendar #calendar [allDaySlot]="false" [buttonText]="buttonLabels"
                    [dir]="rtlDirection ? 'rtl' : 'ltr'"
                    [displayEventTime]="false"
@@ -27,7 +46,7 @@
                    [plugins]="calendarPlugins"
                    [slotLabelFormat]="slotLabelFormat"
                    [views]="views"
-                   class="float-right w-100"
+                   class="w-100"
                    defaultView="dayGridMonth"
                    id="full_calendar">
     </full-calendar>

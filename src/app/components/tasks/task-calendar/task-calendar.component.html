@@ -1,4 +1,4 @@
-<div class="content-container padding-r-l full-width full-height">
+<div class="content-container padding-mini-r-l full-width full-height">
   <div class="calendar-switcher pos-abs left-0 right-0 top-full text-center margin-auto">
     <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                              (change)="changeViewMode(viewMode.value)"
@@ -34,7 +34,6 @@
         [dateStart]="calendarParameters.dateStart"
         [holidays]="holidays"
         [loginData]="loginData"
-        [rtlDirection]="rtlDirection"
         [sumTime]="calendarParameters.sumTime"
         [userSelected]="calendarParameters.userSelected"
         [usersList]="usersList"></app-task-calendar-rate>

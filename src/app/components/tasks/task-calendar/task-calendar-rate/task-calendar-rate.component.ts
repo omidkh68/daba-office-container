@@ -19,6 +19,7 @@ import {UserInterface} from '../../../users/logic/user-interface';
 import {LoginInterface} from '../../../login/logic/login.interface';
 import {TranslateService} from '@ngx-translate/core';
 import {TaskCalendarService} from '../services/task-calendar.service';
+import {ViewDirectionService} from '../../../../services/view-direction.service';
 import {FullCalendarComponent} from '@fullcalendar/angular';
 
 @Component({
@@ -50,11 +51,9 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
   userSelected: UserInterface;
 
   @Input()
-  rtlDirection: boolean;
-
-  @Input()
   holidays: [];
 
+  rtlDirection: boolean;
   containerHeight = 300;
   calendarPlugins = [dayGridPlugin, timeGridPlugin];
   form: FormGroup;
@@ -73,12 +72,27 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
   constructor(private api: ApiService,
               private utilService: UtilsService,
               private translateService: TranslateService,
-              private taskCalendarService: TaskCalendarService) {
+              private taskCalendarService: TaskCalendarService,
+              private viewDirectionService: ViewDirectionService) {
+    this._subscription.add(
+      this.viewDirectionService.currentDirection.subscribe(direction => {
+        this.rtlDirection = direction;
+
+        this.setupCalendar();
+      })
+    );
   }
 
   ngAfterViewInit(): void {
+    this.setupCalendar();
+  }
+
+  setupCalendar() {
     const element = document.querySelector('#rate-container') as HTMLElement;
-    this.containerHeight = element.offsetHeight;
+
+    if (element) {
+      this.containerHeight = element.offsetHeight;
+    }
 
     this.views = {
       dayGridMonthCustom: {
@@ -103,7 +117,7 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
       };
     } else {
       this.header = {
-        left: 'today next,prev',
+        left: 'today prev,next',
         center: 'title',
         right: 'timeGridWeek,timeGridDay'
       };

@@ -23,8 +23,8 @@ export class TimeAreaComponent implements OnInit {
 
   datetime: DatetimeInterface;
 
-  checkMoreClock: boolean;
-  checkMoreClockContent: boolean;
+  checkMoreClock: boolean = false;
+  checkMoreClockContent: boolean = false;
   cityClocksList: Timezones[];
   item: number;
 
@@ -57,16 +57,6 @@ export class TimeAreaComponent implements OnInit {
 
   displayFn(timezone: Timezones): string {
     return timezone && timezone.city ? timezone.city : '';
-  }
-
-  addMoreClock(event) {
-    event.stopPropagation();
-    this.checkMoreClock = !this.checkMoreClock;
-  }
-
-  showMoreClockContent(event) {
-    event.stopPropagation();
-    this.checkMoreClockContent = true;
   }
 
   setClockCity(option) {

@@ -1,4 +1,5 @@
-<mat-drawer-container [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'" autosize class="rate-calendar">
+<mat-drawer-container [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'"
+                      autosize class="rate-calendar" [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <full-calendar (eventClick)="eventClick($event)" (eventRender)="eventRender($event)"
                  *ngIf="calendarEvents.length"
                  [allDaySlot]="true"

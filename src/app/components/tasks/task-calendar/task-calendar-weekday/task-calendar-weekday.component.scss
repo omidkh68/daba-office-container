@@ -55,6 +55,7 @@
   .fc-content {
     white-space: normal !important;
     display: flex;
+    flex-direction: inherit !important;
 
     .fc-title {
       font-size: 11px;

@@ -44,4 +44,8 @@ export class ViewDirectionService {
       this.translate.use('en');
     }
   }
+
+  public getCurrentLang() {
+    return this.translate.getDefaultLang();
+  }
 }

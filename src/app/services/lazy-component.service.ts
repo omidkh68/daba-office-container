@@ -6,11 +6,11 @@ import {Injectable, Compiler, Injector} from '@angular/core';
 export class LazyComponentService {
   private componentRefs = {
     tasksModuleId: import('../components/tasks/tasks.module'),
-    eventsHandlerModuleId: import('../components/events/events-handler.module'),
-    conferenceModuleId: import('../components/conference/conference.module'),
     softPhoneModuleId: import('../components/soft-phone/soft-phone.module'),
+    conferenceModuleId: import('../components/conference/conference.module'),
     webBrowserModuleId: import('../components/web-browser/web-browser.module'),
     adminPanelModuleId: import('../components/admin-panel/admin-panel.module'),
+    eventsHandlerModuleId: import('../components/events/events-handler.module'),
     learningSystemModuleId: import('../components/learning-system/learning-system.module')
   };
 

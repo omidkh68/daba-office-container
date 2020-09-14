@@ -17,13 +17,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(
-    private messageService: MessageService,
-    private translate: TranslateService,
-    private viewDirection: ViewDirectionService
-  ) {
-    translate.setDefaultLang('fa');
-
+  constructor(private translate: TranslateService,
+              private messageService: MessageService,
+              private viewDirection: ViewDirectionService) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );

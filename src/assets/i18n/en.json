@@ -34,13 +34,15 @@
     "email": "Email",
     "email_error": "Please enter email",
     "password": "Password",
-    "password_error": "Please enter Password"
+    "password_error": "Please enter Password",
+    "items": "Items",
+    "done": "Done"
   },
   "dashboard": {
     "dashboard_toolbar": {
       "service_list": "Services",
       "reminder" : "Reminders",
-      "active_clocks": "Active Clocks",
+      "active_clocks": "World Clocks",
       "exist_app": "Log Out"
     }
   },
@@ -160,7 +162,6 @@
     },
     "task_todo": {
       "todo_list": "Todo List",
-      "items": "Items",
       "add_an_item": "Add an item",
       "delete_item": "Delete todo",
       "delete_text": "Are you sure want to delete this item?"
@@ -175,7 +176,7 @@
       "all": "All",
       "tasks_filter": "Task Filter",
       "tasks_filter_calendar": "Calendar Task Filter",
-      "tasks_filter_calendar_hours": "Hours",
+      "tasks_filter_calendar_hours": "Total Working Hours",
       "filter_types": "Filter types",
       "by_create_date": "Based on task creation date",
       "by_project": "Based on project name",
@@ -231,14 +232,16 @@
     "pictures": "Pictures",
     "gradients": "Gradients",
     "solid_colors": "Solid Colors",
-    "drag_drop_text1": "drag it here",
-    "drag_drop_text2": "and or",
-    "drag_drop_text3": "Browse for file",
+    "drag_drop_text1": "Drop your own wallpaper here",
+    "drag_drop_text3": "Choose wallpaper file",
     "timezone": "Timezone",
     "timezone_error": "Select Timezone",
     "name_family": "First Name And Last Name",
     "profile_update": "Profile Information Has Been Updated",
-    "error_upload": "Problem Uploading Photos"
+    "error_upload": "Problem Uploading Photos",
+    "choose_wallpaper": "Choose from wallpapers below:",
+    "change_lang_warning_note": "Note:",
+    "change_lang_warning_text": "By change your language, your app will refresh immediately."
   },
   "events_handler": {
     "main" : {

@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {WindowInterface} from '../../dashboard/logic/window.interface';
-import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {WebViewService} from '../service/web-view.service';
+import {WindowInterface} from '../../dashboard/logic/window.interface';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
 
 @Component({
   selector: 'app-conference-window',
@@ -16,8 +17,9 @@ export class ConferenceWindowComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private windowManagerService: WindowManagerService,
-              private viewDirection: ViewDirectionService) {
+  constructor(private webViewService: WebViewService,
+              private viewDirection: ViewDirectionService,
+              private windowManagerService: WindowManagerService) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
@@ -53,6 +55,10 @@ export class ConferenceWindowComponent implements OnInit, OnDestroy {
 
   centerWindow() {
     this.windowManagerService.centerWindow(this.data);
+  }
+
+  reload() {
+    this.webViewService.changeRefreshWebView(true);
   }
 
   ngOnDestroy(): void {
