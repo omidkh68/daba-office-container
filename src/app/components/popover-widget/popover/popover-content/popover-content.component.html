@@ -3,12 +3,12 @@
         <span>{{'events_handler.main.event_count' | translate}}</span>
         <b class="round-corner-all text-white">{{data.eventTemp.length}}</b>
     </div>
-    <mat-nav-list>
+    <mat-nav-list class="event-list">
         <a (click)="showEventHandlerWindow(item , $event)" mat-list-item
            *ngFor="let item of data.eventTemp; last as last">
             <mat-icon class="padding-r-half" mat-list-icon>calendar_today</mat-icon>
             <h5 class="font-9-em" mat-line>{{item.name}}</h5>
-            <p class="demo-2 font-7-em" mat-line>{{item.sTime}} - {{item.eTime}}</p>
+            <p class="demo-2 font-7-em" mat-line>{{formatTime(item.startDate)}} - {{formatDate(item.startDate)}}</p>
             <mat-divider class="no-margin full-width" [inset]="true" *ngIf="!last"></mat-divider>
         </a>
     </mat-nav-list>

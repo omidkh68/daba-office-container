@@ -253,6 +253,23 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         this.setupCalendar();
     }
 
+    formatTime(date) {
+        var d = new Date(date),
+            hour = '' + (d.getHours()),
+            min = '' + d.getMinutes();
+        if (hour.length < 2)
+            hour = '0' + hour;
+        if (min.length < 2)
+            min = '0' + min;
+        return [hour, min].join(':');
+    }
+
+    eventRender(event: any) {
+        let tag = event.el.getElementsByClassName('fc-title');
+        tag[0].insertAdjacentHTML('beforeBegin',
+            '<span class="display-block custom-time-calendar">'+this.formatTime(event.event._def.extendedProps.startDate)+'</span>');
+    }
+
     getPosition(event) {
         this.popoverTarget = event.target;
     }

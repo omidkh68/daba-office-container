@@ -1,5 +1,5 @@
-<div class="datepicker-popover datepicker-container mat-elevation-z1 padding-full round-corner"
-     [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+<div class="box-dark datepicker-popover datepicker-container mat-elevation-z1 padding-full round-corner"
+     [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
      [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <mat-calendar #myCalendar (click)="getPosition($event)" (selectedChange)="onSelect($event)"
                 [dateClass]="dateClass()"></mat-calendar>

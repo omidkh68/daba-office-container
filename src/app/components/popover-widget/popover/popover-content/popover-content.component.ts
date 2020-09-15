@@ -43,6 +43,31 @@ export class PopoverContnetComponent {
         }
     }
 
+    formatTime(date) {
+        var d = new Date(date),
+            hour = '' + (d.getHours()),
+            min = '' + d.getMinutes();
+        if (hour.length < 2)
+            hour = '0' + hour;
+        if (min.length < 2)
+            min = '0' + min;
+        return [hour, min].join(':');
+    }
+
+    formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
     closeManually(data: any = null): void {
         this.popoverRef.close(data);
     }

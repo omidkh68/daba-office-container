@@ -784,6 +784,7 @@ file-preview-container {
 .datepicker-container {
   width: 222px !important;
   color: #333;
+  padding-top: 10px !important;
 }
 
 .holiday-date {
@@ -842,4 +843,19 @@ file-preview-container {
 
 .mat-form-field-type-mat-select .mat-form-field-wrapper {
   padding-bottom: .8em !important;
+}
+.calendar-rtl [ng-reflect-ng-switch="year"]{
+  .mat-calendar-body-cell{
+    height: 30px;
+    font-size: 11px;
+  }
+}
+.mat-calendar-header{
+  padding: 0 !important;
+}
+.custom-time-calendar{
+  position: absolute;
+  left: 0;
+  font-size: 9px;
+  bottom: -3px;
 }

@@ -2,12 +2,12 @@
     <mat-drawer #drawer mode="side">
         <div class="padding-full text-white">
             <div class="datepicker-container padding-full round-corner"
-                 [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
+                 [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
                  [dir]="rtlDirection ? 'rtl' : 'ltr'">
                 <mat-calendar #myCalendar [dateClass]="dateClass()" (click)="getPosition($event)" (selectedChange)="onSelect($event)"></mat-calendar>
-                <mat-list>
+                <mat-list *ngIf="remindersList.length" class="event-list">
                     <div mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}} <b class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}: {{remindersList.length}}</b></div>
-                    <div *ngIf="remindersList != null">
+                    <div>
                         <mat-list-item *ngFor="let item of remindersList">
                             <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
                             <div mat-line class="font-8-em">{{item.description}}</div>
@@ -27,6 +27,7 @@
                        [firstDay]="1"
                        (eventClick)="loadBottomSheetFromFullCalendar($event)"
                        (dateClick)="loadBottomSheet($event)"
+                       (eventRender)="eventRender($event)"
                        [eventLimitText]="''"
                        [handleWindowResize]="true"
                        [header]="header"
