@@ -289,7 +289,6 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
 
   submit() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
-    // this.form.disable();
 
     const formValue: FilterInterface = Object.assign({}, this.form.value);
 
@@ -324,6 +323,8 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
     }
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+    this.form.disable();
 
     this._subscription.add(
       this.api.filterTask(formValue).subscribe((resp: any) => {

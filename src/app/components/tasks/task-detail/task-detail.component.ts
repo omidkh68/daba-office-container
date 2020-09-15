@@ -222,7 +222,6 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
   submit() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
-    // this.form.disable();
 
     const formValue = Object.assign({}, this.form.value);
 
@@ -230,6 +229,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+    this.form.disable();
 
     this._subscription.add(
       this.api.updateTask(formValue).subscribe((resp: any) => {

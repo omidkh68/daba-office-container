@@ -63,10 +63,10 @@ export class LoginFormComponent implements OnInit {
   createForm() {
     return new Promise((resolve) => {
       this.form = this.fb.group({
-        //username: new FormControl(''),
-        //password: new FormControl(''),
-        username: new FormControl('h.sajjadi@dabacenter.ir'),
-        password: new FormControl('123456'),
+        username: new FormControl(''),
+        password: new FormControl(''),
+        // username: new FormControl('khosrojerdi@dabacenter.ir'),
+        // password: new FormControl('123456'),
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
 
@@ -110,17 +110,9 @@ export class LoginFormComponent implements OnInit {
     const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
     const loggedInUserPath = this.electronService.path.join(homeDirectory, 'loggedInUser.txt');
 
-    this.electronService.fs.writeFile(loginDataPath, JSON.stringify(data), (err) => {
-        if (err) throw err;
+    this.electronService.fs.writeFileSync(loginDataPath, JSON.stringify(data));
 
-        console.log('Login Data Path Saved');
-    });
-
-    this.electronService.fs.writeFile(loggedInUserPath, '', (err) => {
-        if (err) throw err;
-
-        console.log('Logged In User Path Saved');
-    });
+    this.electronService.fs.writeFileSync(loggedInUserPath, '');
   }
 
   showErrorLogin() {

@@ -1,14 +1,9 @@
 import {ServiceItemsInterface} from './service-items.interface';
 import {MatDialogRef} from '@angular/material/dialog';
 
-export interface DialogPositionInterface {
-  top?: string;
-  left?: string;
-  right?: string;
-  bottom?: string;
-}
-
 export interface WindowInterface {
+  isActive: boolean;
+  priority: number;
   windowRef: MatDialogRef<any>;
   resizable: boolean;
   isMinimized: boolean;
@@ -16,8 +11,5 @@ export interface WindowInterface {
   maximizable: boolean;
   minimizable: boolean;
   isDraggable: boolean;
-  isActive: boolean;
-  // position: DialogPositionInterface;
   windowService: ServiceItemsInterface;
-  priority: number;
 }

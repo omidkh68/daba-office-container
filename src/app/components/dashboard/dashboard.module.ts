@@ -1,10 +1,11 @@
-import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {DndDirective} from '../profile-setting/dnd.directive';
 import {PopoverModule} from '../popover-widget/popover.module';
 import {DatetimeService} from '../profile-setting/logic/datetime.service';
+import {TranslateModule} from '@ngx-translate/core';
 import {ProgressComponent} from '../profile-setting/progress/progress.component';
 import {TimeAreaComponent} from './dashboard-toolbar/time-area/time-area.component';
 import {MainMenuComponent} from './dashboard-toolbar/main-menu/main-menu.component';
@@ -61,7 +62,8 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
     ImageCropperModule,
     RouterModule.forChild([
       {path: '', component: DashboardComponent},
-    ])
+    ]),
+    TranslateModule.forChild()
   ],
   providers: [
     {
@@ -84,8 +86,7 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
     },
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
   ],
-  entryComponents: [PopoverContnetComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  entryComponents: [PopoverContnetComponent]
 })
 export class DashboardModule {
 }

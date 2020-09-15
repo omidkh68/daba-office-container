@@ -3,6 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {TasksComponent} from '../components/tasks/tasks.component';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {ElectronService} from './electron.service';
+import {WindowInterface} from '../components/dashboard/logic/window.interface';
 import {SoftPhoneComponent} from '../components/soft-phone/soft-phone.component';
 import {AdminPanelComponent} from '../components/admin-panel/admin-panel.component';
 import {ConferenceComponent} from '../components/conference/conference.component';
@@ -10,14 +11,12 @@ import {WebBrowserComponent} from '../components/web-browser/web-browser.compone
 import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
 import {EventsHandlerComponent} from '../components/events/events-handler.component';
 import {LearningSystemComponent} from '../components/learning-system/learning-system.component';
-import {DialogPositionInterface, WindowInterface} from '../components/dashboard/logic/window.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WindowManagerService {
   element: HTMLElement;
-  cdkOverlayContainer: HTMLElement;
 
   private _defaultWindows: Array<WindowInterface> = [];
   private windows = new BehaviorSubject(this._defaultWindows);
@@ -81,14 +80,6 @@ export class WindowManagerService {
       const findIndex = this.windowListArray.findIndex(windowItem => windowItem.windowService.serviceTitle === service.serviceTitle);
 
       if (findIndex === -1) {
-        // const widthEmptyState = (this.window.innerWidth - windowWidth) / 2;
-        /*const widthEmptyState = (Math.random() * (this.window.innerWidth - windowWidth)).toFixed();
-        const heightEmptyState = (Math.random() * (this.window.innerHeight - windowHeight)).toFixed();
-        const rndNumForWidth = this.randInt(50, widthEmptyState);
-        const rndNumForHeight = this.randInt(50, heightEmptyState);
-
-        const position: DialogPositionInterface = {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`};*/
-
         const dialogRef = this.dialog.open(component, {
           data: service,
           autoFocus: false,
@@ -97,7 +88,6 @@ export class WindowManagerService {
           hasBackdrop: false,
           panelClass: 'window-dialog',
           disableClose: true,
-          // position: {top: `${rndNumForWidth}px`, left: `${rndNumForHeight}px`}
         });
 
         let maxZIndex = this.getNextZIndex();
@@ -121,18 +111,10 @@ export class WindowManagerService {
         this.windows.next(this.windowListArray);
 
         setTimeout(() => this.activeWindow(service), 200);
-
-        // this.updateWindowPosition(mwindow, false);
       } else {
         this.restoreWindow(service);
       }
-    } catch (e) {
-      // e
-    }
-  }
-
-  randInt(min, max) {
-    return Math.round((Math.random() * Math.abs(max - min)) + min);
+    } catch (e) {}
   }
 
   fixPositionByTransform(event) {
@@ -163,7 +145,6 @@ export class WindowManagerService {
     windowInstance.isDraggable = false;
     windowInstance.windowRef.removePanelClass('maximized');
     windowInstance.windowRef.addPanelClass('minimized');
-    //windowInstance.windowRef.updatePosition({bottom: '0'});
   }
 
   maximizeWindow(service: ServiceItemsInterface) {
@@ -174,7 +155,6 @@ export class WindowManagerService {
     windowInstance.isDraggable = false;
     windowInstance.windowRef.removePanelClass('minimized');
     windowInstance.windowRef.addPanelClass('maximized');
-    // windowInstance.windowRef.updatePosition({top: '0'});
 
     this.activeWindow(service);
   }
@@ -187,9 +167,8 @@ export class WindowManagerService {
     windowInstance.isDraggable = true;
     windowInstance.windowRef.removePanelClass('minimized');
     windowInstance.windowRef.removePanelClass('maximized');
-    // windowInstance.windowRef.updatePosition(windowInstance.position);
 
-    this.activeWindow(service);
+    // this.centerWindow(windowInstance);
   }
 
   activeWindow(service: ServiceItemsInterface) {
@@ -239,31 +218,14 @@ export class WindowManagerService {
     });
   }
 
-  centerWindow(service: ServiceItemsInterface) {
-    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
-
-    const centerWidth = (this.window.innerWidth - windowInstance.windowService.width) / 2;
-    const centerHeight = (this.window.innerHeight - windowInstance.windowService.height) / 2;
-
-    const updatePosition: DialogPositionInterface = {top: `${centerHeight}px`, left: `${centerWidth}px`};
-
-    //windowInstance.windowRef.updatePosition(updatePosition);
-    this.updateWindowPosition(windowInstance, true);
-
-    this.activeWindow(service);
-  }
-
-  updateWindowPosition(windowInstance: any, center: boolean) {
-    const widthEmptyState = (Math.random() * (this.window.innerWidth - windowInstance.windowService.width)).toFixed();
-    const heightEmptyState = (Math.random() * (this.window.innerHeight - windowInstance.windowService.height)).toFixed();
-    const rndNumForWidth = this.randInt(50, widthEmptyState);
-    const rndNumForHeight = this.randInt(50, heightEmptyState);
-    const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;
-    /*if (center) {
-      element.style.transform = null;
-    } else {
-      element.style.transform = 'translate3d(' + rndNumForWidth + 'px, ' + rndNumForHeight + 'px, 0px)';
-    }*/
+  centerWindow() {
+    // const dialogId = windowInstance.windowRef.id;
+    //
+    // this.element = document.querySelector('#' + dialogId) as HTMLElement;
+    //
+    // this.element.parentElement.style.transform = 'translate3d(0, 0, 0)';
+    //
+    // this.activeWindow(windowInstance.windowService);
   }
 
   getMaxZIndex(): number {

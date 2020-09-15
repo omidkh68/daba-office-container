@@ -54,7 +54,7 @@ export class ConferenceWindowComponent implements OnInit, OnDestroy {
   }
 
   centerWindow() {
-    this.windowManagerService.centerWindow(this.data);
+    this.windowManagerService.centerWindow();
   }
 
   reload() {

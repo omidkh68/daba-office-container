@@ -39,6 +39,7 @@
             <mat-label>{{'global.from_date' | translate}}</mat-label>
 
             <input (click)="picker1.open()" (focus)="picker1.open()" [matDatepicker]="picker1"
+                   (dateChange)="dateToGregorian('dateStart', $event)"
                    formControlName="dateStart" matInput
                    readonly tabindex="5">
             <mat-datepicker #picker1></mat-datepicker>
@@ -65,6 +66,7 @@
             <mat-label>{{'global.to_date' | translate}}</mat-label>
             <input (click)="picker2.open()" (focus)="picker2.open()" [matDatepicker]="picker2"
                    formControlName="dateStop" matInput
+                   (dateChange)="dateToGregorian('dateStop', $event)"
                    readonly tabindex="6">
             <mat-datepicker #picker2></mat-datepicker>
 

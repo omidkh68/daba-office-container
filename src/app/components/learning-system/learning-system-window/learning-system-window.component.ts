@@ -54,7 +54,7 @@ export class LearningSystemWindowComponent implements OnInit, OnDestroy {
   }
 
   centerWindow() {
-    this.windowManagerService.centerWindow(this.data);
+    this.windowManagerService.centerWindow();
   }
 
   reload() {

@@ -52,7 +52,7 @@ export class TaskWindowComponent implements OnInit, OnDestroy {
   }
 
   centerWindow() {
-    this.windowManagerService.centerWindow(this.data);
+    this.windowManagerService.centerWindow();
   }
 
   ngOnDestroy(): void {

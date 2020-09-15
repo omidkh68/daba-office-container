@@ -203,10 +203,10 @@ export class SoftPhoneService extends LoginDataClass {
         // create SIP stack
         this.oSipStack = new SIPml.Stack({
           realm: AppConfig.REALM,
-          impi: `${this.loggedInUserSoftphone.extension_no}-wrtcnew`,
-          impu: `sip:${this.loggedInUserSoftphone.extension_no}-wrtcnew@${AppConfig.REALM}`,
+          impi: `${this.loggedInUserSoftphone.extension_no}-wrtc`, // todo
+          impu: `sip:${this.loggedInUserSoftphone.extension_no}-wrtc@${AppConfig.REALM}`, // todo
           password: this.loggedInUserSoftphone.extension_no,
-          display_name: `${this.loggedInUserSoftphone.extension_no}-wrtcnew`,
+          display_name: `${this.loggedInUserSoftphone.extension_no}-wrtc`, // todo
           websocket_proxy_url: AppConfig.WEBSOCKET_PROXY_URL,
           outbound_proxy_url: null,
           ice_servers: null,

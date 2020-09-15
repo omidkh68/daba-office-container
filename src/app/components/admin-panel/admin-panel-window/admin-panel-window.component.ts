@@ -54,7 +54,7 @@ export class AdminPanelWindowComponent implements OnInit, OnDestroy {
   }
 
   centerWindow() {
-    this.windowManagerService.centerWindow(this.data);
+    this.windowManagerService.centerWindow();
   }
 
   reload() {

@@ -1,7 +1,7 @@
 <section [dir]="data.rtlDirection ? 'rtl' : 'ltr'" class="padding-b-half custom-popover">
-    <div class="padding-full custom-badge">
+    <div class="padding-full custom-badge display-flex flex-space-between">
         <span>{{'events_handler.main.event_count' | translate}}</span>
-        <b [ngClass]="data.rtlDirection ? 'float-left' : 'float-right'" class="round-corner-all text-white">{{data.eventTemp.length}}</b>
+        <b class="round-corner-all text-white">{{data.eventTemp.length}}</b>
     </div>
     <mat-nav-list>
         <a (click)="showEventHandlerWindow(item , $event)" mat-list-item

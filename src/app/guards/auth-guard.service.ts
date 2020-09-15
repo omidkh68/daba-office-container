@@ -142,11 +142,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
     const loggedInUserPath = this.electronService.path.join(homeDirectory, 'loggedInUser.txt');
 
-    this.electronService.fs.writeFile(loggedInUserPath, JSON.stringify(data), (err) => {
-      if (err) throw err;
-
-      console.log('Login Data Path Saved');
-    });
+    this.electronService.fs.writeFileSync(loggedInUserPath, JSON.stringify(data));
   }
 
   checkLogin(): Promise<UserContainerInterface> {
@@ -169,14 +165,6 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
         }, () => {
           reject(false);
         });
-
-        /*const userInfo = this.userInfoService.getUserInfo();
-
-        if (userInfo) {
-          resolve(true);
-        } else {
-
-        }*/
       }
     });
   }
@@ -192,8 +180,6 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
   }*/
 
   setUserData(data) {
-    // this.userInfoService.changeLoginData(data.loginData);
-
     this.userInfoService.changeUserInfo(data);
 
     this.viewDirection.changeDirection(data.lang === 'fa');

@@ -103,8 +103,14 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
                 dir: 'auto'
               });
 
-              this.electronService.remote.getCurrentWindow().destroy();
+              setTimeout(() => {
+                // this.electronService.remote.getCurrentWindow().destroy();
+                setTimeout(() => this.electronService.remote.app.quit(), 500);
+              }, 500);
             }
+          }, () => {
+            // this.electronService.remote.getCurrentWindow().destroy();
+            setTimeout(() => this.electronService.remote.app.quit(), 500);
           })
         );
       };

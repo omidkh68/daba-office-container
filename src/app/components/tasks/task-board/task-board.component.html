@@ -72,7 +72,8 @@
                onerror="this.src='assets/profileImg/0.jpg'"
                class="width-25 height-25 round-corner-all mat-elevation-z1"
                [matTooltip]="task.assignTo.name + ' ' + task.assignTo.family"
-               [matTooltipPosition]="rtlDirection ? 'left' : 'right'">
+               [matTooltipPosition]="rtlDirection ? 'left' : 'right'"
+               [alt]="task.assignTo.name + ' ' + task.assignTo.family">
 
           <span [ngClass]="rtlDirection ? 'margin-r-full margin-l-auto' : 'margin-l-full margin-r-auto'"
                 class="width-25 height-25 round-corner-all mat-elevation-z1 pos-rel"

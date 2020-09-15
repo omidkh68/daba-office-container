@@ -1,5 +1,4 @@
 import {Component, Inject, Injector, Input, OnDestroy, OnInit} from '@angular/core';
-import * as moment from 'moment';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -9,8 +8,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {TaskDurationInterface} from '../../logic/task-duration-interface';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
+import * as moment from 'moment';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-task-calendar-filter',
@@ -27,7 +27,6 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
   loginData: LoginInterface;
   usersList: UserInterface[];
   userSelected: UserInterface;
-  userSelectedCheck: boolean;
   form: FormGroup;
   calendarDifferentEvents: any;
 
@@ -61,7 +60,7 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
   }
 
   createForm() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.form = new FormGroup({
         adminId: new FormControl(null, Validators.required),
         dateStart: new FormControl('', Validators.required),
@@ -95,13 +94,14 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
+    this.form.disable();
+
     this._subscription.add(
       this.api.boardsCalendarDurationTask(formValue).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
         try {
           if (resp.result === 1) {
             let calendarEvent = [];
-            let sum = 0;
 
             resp.content[0].map(time => {
               const taskEvent = {
@@ -130,7 +130,9 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
         } catch (e) {
           console.log(e);
         }
-      }, error => {
+      }, () => {
+        this.form.enable();
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
       })
     );

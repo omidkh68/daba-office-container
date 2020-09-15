@@ -54,7 +54,7 @@
     "status_success": "Status applied successfully",
     "start_working": "Start Working?",
     "start_working_time": "Do you want to start your working?",
-    "close_app_stop_working": "Your working hours are over, have nice day"
+    "close_app_stop_working": "Your working time is over, have a nice day."
   },
   "soft_phone": {
     "main": {
@@ -235,10 +235,10 @@
     "drag_drop_text1": "Drop your own wallpaper here",
     "drag_drop_text3": "Choose wallpaper file",
     "timezone": "Timezone",
-    "timezone_error": "Select Timezone",
-    "name_family": "First Name And Last Name",
-    "profile_update": "Profile Information Has Been Updated",
-    "error_upload": "Problem Uploading Photos",
+    "timezone_error": "Select timezone",
+    "name_family": "First name and last name",
+    "profile_update": "Profile information has been updated",
+    "error_upload": "Problem uploading photos",
     "choose_wallpaper": "Choose from wallpapers below:",
     "change_lang_warning_note": "Note:",
     "change_lang_warning_text": "By change your language, your app will refresh immediately."

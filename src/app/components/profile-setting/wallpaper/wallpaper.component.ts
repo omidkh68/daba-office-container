@@ -1,14 +1,14 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
-import {switchMap} from "rxjs/operators";
+import {switchMap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from "rxjs";
+import {Observable} from 'rxjs';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ElectronService} from '../../../services/electron.service';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {TranslateService} from "@ngx-translate/core";
+import {TranslateService} from '@ngx-translate/core';
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
@@ -116,6 +116,51 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       id: 18,
       value: 'url(./assets/images/wallpapers/18.jpg)',
       img: './assets/images/wallpapers/18.jpg'
+    },
+    {
+      id: 19,
+      value: 'url(./assets/images/wallpapers/19.jpg)',
+      img: './assets/images/wallpapers/19.jpg'
+    },
+    {
+      id: 20,
+      value: 'url(./assets/images/wallpapers/20.jpg)',
+      img: './assets/images/wallpapers/20.jpg'
+    },
+    {
+      id: 21,
+      value: 'url(./assets/images/wallpapers/21.jpg)',
+      img: './assets/images/wallpapers/21.jpg'
+    },
+    {
+      id: 22,
+      value: 'url(./assets/images/wallpapers/22.jpg)',
+      img: './assets/images/wallpapers/22.jpg'
+    },
+    {
+      id: 23,
+      value: 'url(./assets/images/wallpapers/23.jpg)',
+      img: './assets/images/wallpapers/23.jpg'
+    },
+    {
+      id: 24,
+      value: 'url(./assets/images/wallpapers/24.jpg)',
+      img: './assets/images/wallpapers/24.jpg'
+    },
+    {
+      id: 25,
+      value: 'url(./assets/images/wallpapers/25.jpg)',
+      img: './assets/images/wallpapers/25.jpg'
+    },
+    {
+      id: 26,
+      value: 'url(./assets/images/wallpapers/26.jpg)',
+      img: './assets/images/wallpapers/26.jpg'
+    },
+    {
+      id: 27,
+      value: 'url(./assets/images/wallpapers/27.jpg)',
+      img: './assets/images/wallpapers/27.jpg'
     }
   ];
 
@@ -303,7 +348,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
         switchMap(blob => this.convertBlobToBase64(blob))
       )
       .subscribe(base64ImageUrl => {
-        this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
+        this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
         this.onSubmit(base64ImageUrl);
       });
   }
@@ -318,12 +363,13 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       };
 
       reader.onerror = (event: any) => {
-        console.log("File could not be read: " + event.target.error.code);
+        console.log('File could not be read: ' + event.target.error.code);
         observer.next(event.target.error.code);
         observer.complete();
       };
     });
   }
+
   /*end of WallpaperPhysical to base46*/
 
   changeWallpaper(value) {
