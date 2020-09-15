@@ -116,6 +116,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
             this.eventHandlerService.currentEventsList.subscribe(events => {
                 this.eventsList = events;
                 this.remindersList = [];
+                this.eventsList = this.eventsList ? this.eventsList : [];
                 this.eventsList.map((item: EventHandlerInterface) => {
                     if (item.reminders.length)
                         this.remindersList = [...this.remindersList, ...item.reminders]
@@ -243,13 +244,15 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     }
 
     prepareFullCalendar() {
-        this.eventsList.map((item: any) => {
-            item.title = item.name;
-            item.start = new Date(item.startDate);
-            item.end = new Date(item.endDate);
-            item.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
-        });
-        this.calendarEvents = this.eventsList;
+        if(this.eventsList){
+            this.eventsList.map((item: any) => {
+                item.title = item.name;
+                item.start = new Date(item.startDate);
+                item.end = new Date(item.endDate);
+                item.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
+            });
+            this.calendarEvents = this.eventsList;
+        }
         this.setupCalendar();
     }
 
