@@ -85,7 +85,6 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
       return obj.serviceTitle == 'events_calender'
     });
 
-    this.eventHandlerService.moveEvents(this.events);
     this.eventHandlerService.moveEventItems(eventItems);
     this.eventHandlerService.moveDay(date);
     this.windowManagerService.openWindowState(service[0])
@@ -137,6 +136,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
             if (resp.contents) {
               if (resp.contents.length) {
                 this.events = resp.contents;
+                this.eventHandlerService.moveEvents(this.events);
                 this.prepareEventAndReminder();
               }
             }

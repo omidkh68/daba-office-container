@@ -51,7 +51,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
 
     holidays = [];
     calendarEvents: any = [];
-    eventsList: Array<EventHandlerInterface> = null;
+    eventsList: Array<EventHandlerInterface> = [];
     eventItems: EventHandlerInterface = null;
     remindersList: Array<ReminderInterface> = [];
     eventTemp: any = [];

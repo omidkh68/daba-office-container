@@ -2,6 +2,8 @@ import {AfterViewInit, Component, Inject, ViewChild, ViewContainerRef, ViewEncap
 import {LazyComponentService} from '../../services/lazy-component.service';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ServiceItemsInterface} from '../dashboard/logic/service-items.interface';
+import {Subscription} from "rxjs";
+import {EventHandlerService} from "./service/event-handler.service";
 
 @Component({
     selector: 'app-events-handler',
@@ -15,7 +17,10 @@ export class EventsHandlerComponent implements AfterViewInit {
     width: number = 0;
     height: number = 0;
 
-    constructor(private lazyComponentService: LazyComponentService,
+    private _subscription: Subscription = new Subscription();
+
+    constructor(private eventHandlerService: EventHandlerService,
+                private lazyComponentService: LazyComponentService,
                 @Inject(MAT_DIALOG_DATA) public data: ServiceItemsInterface) {
     }
 
