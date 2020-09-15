@@ -4,6 +4,13 @@
             <div class="datepicker-container padding-full round-corner"
                  [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
                  [dir]="rtlDirection ? 'rtl' : 'ltr'">
+                <button mat-raised-button
+                        tabindex="15"
+                        (click)="loadBottomSheet($event)"
+                        class="full-width green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+                    <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
+                    <span class="padding-mini-r-l">{{'events_handler.main.add_event_title' | translate}}</span>
+                </button>
                 <mat-calendar #myCalendar [dateClass]="dateClass()" (click)="getPosition($event)" (selectedChange)="onSelect($event)"></mat-calendar>
                 <mat-list *ngIf="remindersList.length" class="event-list">
                     <div mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}} <b class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}: {{remindersList.length}}</b></div>

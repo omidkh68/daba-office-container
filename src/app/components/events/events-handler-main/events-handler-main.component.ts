@@ -269,8 +269,9 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
 
     eventRender(event: any) {
         let tag = event.el.getElementsByClassName('fc-title');
+        let myClass = this.rtlDirection ? 'left-0' : 'right-0';
         tag[0].insertAdjacentHTML('beforeBegin',
-            '<span class="display-block custom-time-calendar">'+this.formatTime(event.event._def.extendedProps.startDate)+'</span>');
+            '<span class="display-block custom-time-calendar '+ myClass +'">'+this.formatTime(event.event._def.extendedProps.startDate)+'</span>');
     }
 
     getPosition(event) {
@@ -320,7 +321,9 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     loadBottomSheet(event = null, $event = null) {
         if ($event)
             $event.stopPropagation();
-        this.currentDate = event && event.date && event.date.constructor === Date ? event.date : this.currentDate;
+
+        let curdate = event && event.date && event.date.constructor === Date ? event.date : this.currentDate;
+        this.currentDate = curdate ? curdate : new Date();
         let eventItems = event?.startDate !== undefined ? event : null;
         let data: EventHandlerDataInterface = {
             action: 'add',
