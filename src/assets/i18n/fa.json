@@ -251,6 +251,8 @@
       "event_count" : "تعداد رویدادها",
       "reminder_count" : "تعداد",
       "event_title" : "رویداد",
+      "add_event_title" : "اضافه کردن رویداد",
+      "update_event_title" : "ویرایش رویداد",
       "events_title" : "رویدادها",
       "reminder_title" : "یادآور",
       "reminders_title" : "یادآوری ها"

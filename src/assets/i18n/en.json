@@ -250,6 +250,8 @@
       "see_more" : "See More",
       "event_title" : "Event",
       "events_title" : "Events",
+      "add_event_title" : "Add Event",
+      "update_event_title" : "Update Event",
       "reminder_title" : "Reminder",
       "reminders_title" : "Reminders",
       "event_count" : "Events Count",
