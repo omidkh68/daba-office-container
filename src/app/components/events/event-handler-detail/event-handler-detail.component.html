@@ -3,7 +3,7 @@
         <h1
                 class="no-margin height-45 line-height-45 font-full-plus-one-tenth-em text-eclipse padding-r-l text-pink-600 text-weight-500">
             <span *ngIf="!data.eventItems" class="text-gray-700">{{'events_handler.main.add_event_title' | translate}}</span>
-            <span *ngIf="data.eventItems" class="text-gray-700" >{{'events_handler.main.update_event_title' | translate}}</span>
+            <span *ngIf="data.eventItems"><span class="text-gray-700">#{{data.eventItems.id}}</span> {{data.eventItems.name}}</span>
         </h1>
 
         <div class="display-flex flex-direction-row-reverse">
@@ -12,12 +12,12 @@
                     class="no-border cursor-pointer no-bg text-center width-45 height-45 text-gray-600 no-padding">
                 <mat-icon class="line-height-30">close</mat-icon>
             </button>
-            <button *ngIf="data.eventItems" (click)="deleteEvent()"
+            <button *ngIf="data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" (click)="deleteEvent()"
                     type="button"
                     class="no-border cursor-pointer no-bg text-center width-45 height-45 text-danger no-padding">
                 <mat-icon class="line-height-30">delete</mat-icon>
             </button>
-            <button *ngIf="data.eventItems" (click)="enableForm()"
+            <button *ngIf="data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" (click)="enableForm()"
                     type="button"
                     class="no-border cursor-pointer no-bg text-center width-45 height-45 text-green-600 no-padding">
                 <mat-icon class="line-height-30">edit</mat-icon>
@@ -168,7 +168,7 @@
                                          *ngFor="let user of form.get('users').value" cdkDrag>
                                         <section class="full-width">
                                             <span class="float-right example-box-padding">{{user.name}}</span>
-                                            <mat-icon *ngIf="!user.editable" (click)="editUser(user , $event)"
+                                            <mat-icon *ngIf="!user.editable && editable" (click)="editUser(user , $event)"
                                                       class="cursor-pointer font-full-plus-two-tenth-rem text-green-400 float-left example-box-padding">
                                                 edit
                                             </mat-icon>

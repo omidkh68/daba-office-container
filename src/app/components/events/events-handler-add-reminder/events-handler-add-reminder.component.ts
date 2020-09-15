@@ -42,12 +42,10 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._subscription.add(
       this.eventApi.getAllReminderType().subscribe((resp: any) => {
-        debugger;
         if (resp.status == 200) {
           this.reminderTypeList = resp.content;
           this._subscription.add(
             this.eventApi.getAllStatusType().subscribe((result: any) => {
-              debugger;
               if (result.status == 200) {
                 this.statusList = result.content;
               }
@@ -98,7 +96,6 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
   }
 
   submitReminder() {
-    debugger;
     let formValue = {reminders: [this.reminderForm.value], id: this.data.eventItems.id};
     formValue.reminders[0].startReminder = formValue.reminders[0].startReminder + ' ' + formValue.reminders[0].startTime + ':00';
     /*formValue.reminders[0].endReminder = formValue.reminders[0].endReminder + " " + formValue.reminders[0].endTime + ":00";

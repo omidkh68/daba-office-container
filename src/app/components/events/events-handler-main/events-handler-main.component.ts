@@ -137,7 +137,15 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
             this.eventHandlerService.currentDate.subscribe(day => this.currentDate = day)
         );
         this._subscription.add(
-            this.eventHandlerService.currentEventItems.subscribe(currentEventItems => this.eventItems = currentEventItems)
+            this.eventHandlerService.currentEventItems.subscribe(currentEventItems => {
+                if (this.currentDate){
+                    setTimeout(() => {
+                        this.eventItems = currentEventItems;
+                        this.loadBottomSheet(this.eventItems);
+                    },100)
+                }
+
+            })
         );
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
         this._subscription.add(
@@ -150,8 +158,6 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     }
 
     ngAfterViewInit(): void {
-        if (this.currentDate)
-            this.loadBottomSheet(this.eventItems);
 
         this.prepareFullCalendar();
         this.views = {

@@ -10,6 +10,7 @@ export interface EventHandlerInterface {
     eTime?: string;
     name: string;
     startDate: string;
+    creatorUser: UserEventHandlerInterface;
     sTime?: string;
     reminders?: ReminderInterface[];
     users: UserEventHandlerInterface[];

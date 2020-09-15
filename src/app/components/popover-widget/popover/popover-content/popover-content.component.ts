@@ -21,7 +21,6 @@ export class PopoverContnetComponent {
         if ($event)
             $event.stopPropagation();
 
-
         if (this.data.serviceList) {
             this.closeManually();
             let date = null;
