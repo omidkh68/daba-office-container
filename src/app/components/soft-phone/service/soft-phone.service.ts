@@ -1,4 +1,4 @@
-import {ElementRef, Injectable, Injector} from '@angular/core';
+import {ElementRef, Inject, Injectable, Injector} from '@angular/core';
 import SIPml from 'ecmascript-webrtc-sipml';
 import {AppConfig} from '../../../../environments/environment';
 import {LoginDataClass} from '../../../services/loginData.class';
@@ -24,7 +24,7 @@ export class SoftPhoneService extends LoginDataClass {
   allUsersSoftphone: Array<SoftphoneUserInterface> = [];
   loggedInUserSoftphone: SoftphoneUserInterface;
 
-  debugMode: boolean = false;
+  debugMode: boolean = true;
   oSipStack;
   oSipSessionRegister;
   oSipSessionCall;
@@ -33,6 +33,7 @@ export class SoftPhoneService extends LoginDataClass {
   oConfigCall;
   ringtone;
   ringbacktone;
+  ipAddresses: any = [];
 
   private _users: Array<SoftphoneUserInterface> | null;
   private users = new BehaviorSubject(this._users);
@@ -76,7 +77,7 @@ export class SoftPhoneService extends LoginDataClass {
   oReadyStateTimer;
   viewLocalScreencast; // <video> (webrtc) or <div> (webrtc4all)*/
 
-  constructor(private injector: Injector,
+  constructor(@Inject('windowObject') private window,private injector: Injector,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private translateService: TranslateService) {
@@ -490,6 +491,8 @@ export class SoftPhoneService extends LoginDataClass {
   };
 
   onSipEventSession = (e) => {
+
+    this.checkVpnConnection();
     const type = e.type.toLowerCase();
     const description = e.description.toLowerCase();
     let extensionNumberFrom: string = '';
@@ -922,6 +925,55 @@ export class SoftPhoneService extends LoginDataClass {
     } else {
       this.audioRemoteTagValue.dtmfTone.play();
     }
+  }
+
+  getConnectionStatus = (logInfo = true) => new Promise( (resolve, reject) => {
+    this.window.RTCPeerConnection = this.window.RTCPeerConnection
+        || this.window.mozRTCPeerConnection
+        || this.window.webkitRTCPeerConnection;
+
+    if ( typeof this.window.RTCPeerConnection == 'undefined' )
+      return reject('WebRTC not supported by browser');
+
+    let pc = new RTCPeerConnection();
+    let ips = [];
+
+    pc.createDataChannel("");
+    pc.createOffer()
+        .then(offer => pc.setLocalDescription(offer))
+        .catch(err => reject(err));
+    pc.onicecandidate = event => {
+      if ( !event || !event.candidate ) {
+        // All ICE candidates have been sent.
+        if ( ips.length == 0 )
+          return reject('WebRTC disabled or restricted by browser');
+
+        return resolve(ips);
+      }
+
+      let parts = event.candidate.candidate.split(' ');
+      let [base,componentId,protocol,priority,ip,port,,type,...attr] = parts;
+      let component = ['rtp', 'rtpc'];
+
+      if ( ! ips.some(e => e == ip) )
+        ips.push(ip);
+
+      if ( ! logInfo )
+        return;
+
+    };
+  } );
+
+  checkVpnConnection() {
+    this.getConnectionStatus().then(
+        ips => {
+          let tempIps = ips;
+          if(this.ipAddresses.length && JSON.stringify(tempIps) != JSON.stringify(this.ipAddresses)){
+            console.log("register / unregister");
+          }
+          this.ipAddresses = ips;
+        },
+    );
   }
 
   getTranslate(word) {
