@@ -20,3 +20,8 @@ export interface AddReminderInterface {
     id?: number;
     reminders?: ReminderInterface[];
 }
+
+export interface EventsReminderInterface {
+    events: EventHandlerInterface[];
+    reminders:  ReminderInterface[];
+}
