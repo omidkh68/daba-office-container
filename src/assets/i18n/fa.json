@@ -96,9 +96,9 @@
     },
     "call_logs": {
       "missed_call": "جواب ندادم",
-      "rejected":"رد تماس کرد",
+      "rejected": "رد تماس کرد",
       "not_answered": "جواب داده نشد",
-      "busy":"مشغول بود",
+      "busy": "مشغول بود",
       "answered": "برقرار شد"
     }
   },
@@ -193,9 +193,9 @@
     "calendar": {
       "month": "ماه",
       "today": "امروز",
-      "week":"هفته",
+      "week": "هفته",
       "day": "روز",
-      "list":"لیست"
+      "list": "لیست"
     }
   },
   "login_info": {
@@ -244,18 +244,18 @@
     "change_lang_warning_text": "با تغییر زبان، برنامه شما سریعا دوباره بارگذاری خواهد شد."
   },
   "events_handler": {
-    "main" : {
-      "add_new_event" : "افزودن رویداد",
-      "add_new_reminder" : "افزودن یادآور",
-      "see_more" : "مشاهده بیشتر",
-      "event_count" : "تعداد رویدادها",
-      "reminder_count" : "تعداد",
-      "event_title" : "رویداد",
-      "add_event_title" : "اضافه کردن رویداد",
-      "update_event_title" : "ویرایش رویداد",
-      "events_title" : "رویدادها",
-      "reminder_title" : "یادآور",
-      "reminders_title" : "یادآوری ها"
+    "main": {
+      "add_new_event": "افزودن رویداد",
+      "add_new_reminder": "افزودن یادآور",
+      "see_more": "مشاهده بیشتر",
+      "event_count": "تعداد رویدادها",
+      "reminder_count": "تعداد",
+      "event_title": "رویداد",
+      "add_event_title": "اضافه کردن رویداد",
+      "update_event_title": "ویرایش رویداد",
+      "events_title": "رویدادها",
+      "reminder_title": "یادآور",
+      "reminders_title": "یادآوری ها"
     },
     "event_detail": {
       "delete_title": "حذف رویداد",
@@ -266,7 +266,7 @@
       "delete_text": "آیا از حذف این یادآور اطمینان دارید؟"
     },
     "form": {
-      "event_name" : "نام رویداد",
+      "event_name": "نام رویداد",
       "event_name_error": "لطفا نام رویداد را وارد کنید",
       "start_at": "تاریخ شروع",
       "start_at_error": "لطفا تاریخ شروع را انتخاب نمایید",
@@ -284,22 +284,50 @@
       "action_job_type": "نوع اکشن جاب",
       "users": "کاربران",
       "assign_to_error": "لطفا کاربران مهمان را مشخص کنید",
-      "user_phone" : "شماره همراه",
-      "user_email" : "ایمیل",
-      "all_day" : "تمام روز",
-      "reminder_type" : "نوع یادآور",
-      "reminder_status" : "وضعیت یادآور",
-      "add_event_successful" : "رویداد با موفقیت اضافه شد",
-      "delete_event_successful" : "رویداد با موفقیت حذف شد",
-      "delete_event_error" : "خطا در حذف رویداد",
-      "update_event_successful" : "رویداد با موفقیت ویرایش شد",
-      "update_event_error" : "خطا در ویرایش رویداد",
-      "add_reminder_successful" : "یادآور با موفقیت اضافه شد",
-      "add_reminder_error" : "خطا در ثبت یادآور",
-      "delete_reminder_successful" : "یادآور با موفقیت حذف شد",
-      "delete_reminder_error" : "خطا در حذف یادآور",
-      "update_reminder_successful" : "یادآور با موفقیت ویرایش شد",
-      "update_reminder_error" : "خطا در ویرایش یادآور"
+      "user_phone": "شماره همراه",
+      "user_email": "ایمیل",
+      "all_day": "تمام روز",
+      "reminder_type": "نوع یادآور",
+      "reminder_status": "وضعیت یادآور",
+      "add_event_successful": "رویداد با موفقیت اضافه شد",
+      "delete_event_successful": "رویداد با موفقیت حذف شد",
+      "delete_event_error": "خطا در حذف رویداد",
+      "update_event_successful": "رویداد با موفقیت ویرایش شد",
+      "update_event_error": "خطا در ویرایش رویداد",
+      "add_reminder_successful": "یادآور با موفقیت اضافه شد",
+      "add_reminder_error": "خطا در ثبت یادآور",
+      "delete_reminder_successful": "یادآور با موفقیت حذف شد",
+      "delete_reminder_error": "خطا در حذف یادآور",
+      "update_reminder_successful": "یادآور با موفقیت ویرایش شد",
+      "update_reminder_error": "خطا در ویرایش یادآور"
     }
+  },
+  "learning": {
+    "title": "لیست اتاق های کنفرانس",
+    "add_new_room": "ساخت اتاق کنفرانس",
+    "welcome_banner": "به سیستم مدیریت آموزش خوش آمدید",
+    "meeting_name": "نام اتاق کنفرانس",
+    "meeting_name_error": "لطفا نام اتاق کنفرانس را وارد نمایید",
+    "room_pass": "رمز عبور اتاق",
+    "room_pass_error": "لطفا حداقل ۳ کاراکتر وارد نمایید",
+    "room_moderator_pass": "رمز عبور مدیریت",
+    "room_moderator_pass_error": "لطفا حداقل ۳ کاراکتر وارد نمایید",
+    "webcam_only_moderator": "وبکم تنها برای مدیریت",
+    "record_meeting": "ضبط   کنفرانس",
+    "mute_on_start": "بی صدا در زمان شروع",
+    "disable_user_webcam": "غیر فعال کردن وبکم کاربر",
+    "disable_user_mic": "غیر فعال کردن میکروفن کاربر",
+    "disable_private_chat": "غیر فعال کردن چت خصوصی",
+    "disable_public_chat": "غیر فعال کردن چت عمومی",
+    "join_room": "اتصال به اتاق",
+    "room_password": "برای اتصال به اتاق، لطفا رمز عبور را وارد نمایید:",
+    "wrong_password": "رمز عبور اشتباه است، لطفا مجددا تلاش نمایید",
+    "no_room": "اتاقی موجود نیست",
+    "exit_room": "خروج از اتاق",
+    "confirm_exit_room": "آیا اطمینان از خروج دارید؟",
+    "delete_room": "حذف اتاق کنفرانس",
+    "delete_room_error": "اتاق مورد نظر یافت نشد و یا قبلا حذف شده است",
+    "delete_room_success": "اتاق حذف شد",
+    "confirm_delete_room": "آیا از حذف این اتاق اطمینان دارید؟"
   }
 }

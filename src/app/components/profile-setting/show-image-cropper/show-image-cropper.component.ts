@@ -59,7 +59,7 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
   }
 
   closeModal() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   onSubmit() {
@@ -92,7 +92,7 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
 
           this.userInfoService.changeUserInfo(temp);
 
-          this.dialogRef.close();
+          this.dialogRef.close(true);
         }
       }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'imageCropper'});
@@ -175,12 +175,6 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
     return this.translate.instant(word);
   }
 
-  ngOnDestroy(): void {
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-    }
-  }
-
   private flipAfterRotate() {
     const flippedH = this.transform.flipH;
     const flippedV = this.transform.flipV;
@@ -189,5 +183,11 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
       flipH: flippedV,
       flipV: flippedH
     };
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

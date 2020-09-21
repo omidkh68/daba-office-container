@@ -24,7 +24,7 @@ export class SoftPhoneService extends LoginDataClass {
   allUsersSoftphone: Array<SoftphoneUserInterface> = [];
   loggedInUserSoftphone: SoftphoneUserInterface;
 
-  debugMode: boolean = true;
+  debugMode: boolean = false;
   oSipStack;
   oSipSessionRegister;
   oSipSessionCall;

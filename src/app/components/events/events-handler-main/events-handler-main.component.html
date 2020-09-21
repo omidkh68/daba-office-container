@@ -1,5 +1,5 @@
 <mat-drawer-container autosize class="event-main-datepicker" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-    <mat-drawer #drawer mode="side">
+    <mat-drawer #drawer mode="side" [disableClose]="true">
         <div class="padding-full text-white">
             <div class="datepicker-container padding-full round-corner"
                  [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"

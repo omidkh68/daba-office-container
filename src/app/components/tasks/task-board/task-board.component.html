@@ -29,8 +29,7 @@
          [cdkDropListConnectedTo]="connectedTo">
       <div *ngIf="!board.tasks.length"
            class="flex-center full-width full-height pos-abs left-0 right-0 top-0 bottom-0 z-index-0">
-        <img [src]="'assets/board-empty-state/'+board.id+'.png'" [alt]="board.id" class="width-250"
-             onerror="this.src='assets/profileImg/0.jpg'">
+        <img [src]="'assets/board-empty-state/'+board.id+'.png'" [alt]="board.id" class="width-250">
         <span
           class="pos-abs left-0 right-0 bottom-0 top-0 z-index-0 margin-auto text-gray-400 font-8-rem full-width height-45 line-height-150 text-center">
           {{'global.no_result' | translate}}

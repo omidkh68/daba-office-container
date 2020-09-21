@@ -82,7 +82,18 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
 
   ngOnInit(): void {
     if (AppConfig.production) { // if environment in production mode change status when user want to close app
-      this.window.onbeforeunload = (event) => {
+
+      /*this.window.onbeforeunload = (event) => {
+        event.preventDefault();
+
+        setTimeout(() => event.returnValue = true, 5000);
+        /!*event.returnValue = false;
+
+        event.returnValue = true;
+        return true;*!/
+      };*/
+
+      /*this.window.onbeforeunload = (event) => {
         event.returnValue = false;
 
         this.softPhoneService.sipHangUp();
@@ -94,6 +105,8 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
 
         this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
+        console.log('process: ', this.electronService.remote.process);
+
         this._subscription.add(
           this.statusApiService.userChangeStatus(stopWorkingStatus).subscribe((resp: StatusChangeResultInterface) => {
             if (resp.success === true) {
@@ -103,17 +116,27 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
                 dir: 'auto'
               });
 
-              setTimeout(() => {
-                // this.electronService.remote.getCurrentWindow().destroy();
-                setTimeout(() => this.electronService.remote.app.quit(), 500);
-              }, 500);
+              // this.electronService.remote.app.exit();
+
+              event.returnValue = true;
+
+              // setTimeout(() => {
+                // if (this.electronService.remote.process.platform !== 'darwin') {
+                  /!*this.electronService.remote.app.quit();
+                  setTimeout(() => this.electronService.remote.getCurrentWindow().destroy(), 500);
+                  setTimeout(() => this.electronService.remote.app.quit(), 800);*!/
+                // }
+              // }, 500);
             }
           }, () => {
-            // this.electronService.remote.getCurrentWindow().destroy();
-            setTimeout(() => this.electronService.remote.app.quit(), 500);
+            // if (this.electronService.remote.process.platform !== 'darwin') {
+              /!*this.electronService.remote.app.quit();
+              setTimeout(() => this.electronService.remote.getCurrentWindow().destroy(), 500);
+              setTimeout(() => this.electronService.remote.app.quit(), 800);*!/
+            // }
           })
         );
-      };
+      };*/
     }
   }
 

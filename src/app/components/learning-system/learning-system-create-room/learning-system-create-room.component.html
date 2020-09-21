@@ -1,0 +1,161 @@
+<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
+  <form *ngIf="form" [formGroup]="form" (submit)="submit()" class="full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+    <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
+      <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
+        {{'learning.add_new_room' | translate}}
+      </h1>
+
+      <div class="display-flex margin-r-l-reverse">
+        <div class="full-width padding-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <input matInput placeholder="{{'learning.meeting_name' | translate}}" class="full-width" type="text"
+                   formControlName="meetingID" required tabindex="1">
+            <mat-label>
+              {{'learning.meeting_name' | translate}}
+            </mat-label>
+
+            <mat-error *ngIf="!form.get('meetingID').valid && form.get('meetingID').touched">
+              {{'learning.meeting_name_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="display-flex margin-r-l-reverse margin-b-full">
+        <div class="half-width padding-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <input matInput placeholder="{{'learning.room_pass' | translate}}" class="full-width" type="password"
+                   formControlName="viewerPassword" required tabindex="1">
+            <mat-label>
+              {{'learning.room_pass' | translate}}
+            </mat-label>
+
+            <mat-error *ngIf="!form.get('viewerPassword').valid && form.get('viewerPassword').touched">
+              {{'learning.room_pass_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="half-width padding-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <input matInput placeholder="{{'learning.room_moderator_pass' | translate}}" class="full-width" type="password"
+                   formControlName="moderatorPassword" required tabindex="1">
+            <mat-label>
+              {{'learning.room_moderator_pass' | translate}}
+            </mat-label>
+
+            <mat-error *ngIf="!form.get('moderatorPassword').valid && form.get('moderatorPassword').touched">
+              {{'learning.room_moderator_pass_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="display-flex margin-r-l-reverse margin-b-full padding-tiny-r-l">
+        <div class="half-width padding-r-l">
+          <mat-slide-toggle
+            formControlName="isWebCamModeratorOnly"
+            [color]="'primary'">
+            {{'learning.webcam_only_moderator' | translate}}
+          </mat-slide-toggle>
+        </div>
+        <div class="half-width padding-r-l">
+          <mat-slide-toggle
+            formControlName="isRecord"
+            [color]="'primary'">
+            {{'learning.record_meeting' | translate}}
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="display-flex margin-r-l-reverse margin-b-full padding-tiny-r-l">
+        <div class="half-width padding-r-l">
+          <mat-slide-toggle
+            formControlName="isMuteOnStart"
+            [color]="'primary'">
+            {{'learning.mute_on_start' | translate}}
+          </mat-slide-toggle>
+        </div>
+        <div class="half-width padding-r-l">
+          <mat-slide-toggle
+            formControlName="isUserWebCamDisable"
+            [color]="'primary'">
+            {{'learning.disable_user_webcam' | translate}}
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="display-flex margin-r-l-reverse margin-b-full padding-tiny-r-l">
+        <div class="half-width padding-r-l">
+          <mat-slide-toggle
+            formControlName="isUserMicDisable"
+            [color]="'primary'">
+            {{'learning.disable_user_mic' | translate}}
+          </mat-slide-toggle>
+        </div>
+        <div class="half-width padding-r-l">
+          <mat-slide-toggle
+            formControlName="isPrivateChatDisable"
+            [color]="'primary'">
+            {{'learning.disable_private_chat' | translate}}
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="display-flex margin-r-l-reverse margin-b-full padding-tiny-r-l">
+        <div class="half-width padding-r-l">
+          <mat-slide-toggle
+            formControlName="isPublicChatDisable"
+            [color]="'primary'">
+            {{'learning.disable_public_chat' | translate}}
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+
+    <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
+      <button (click)="cancelBtn()"
+              type="button"
+              class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
+        <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
+      </button>
+
+      <button mat-raised-button
+              [disabled]="!form.valid"
+              type="submit"
+              tabindex="13"
+              class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+        <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'createRoom'"
+       class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
+    <div class="text-center">
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+           width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+        <rect x="0" y="13" width="4" height="5" fill="#333">
+          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+        </rect>
+        <rect x="10" y="13" width="4" height="5" fill="#333">
+          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.15s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.15s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+        </rect>
+        <rect x="20" y="13" width="4" height="5" fill="#333">
+          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.3s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.3s" dur="0.6s"
+                   repeatCount="indefinite"></animate>
+        </rect>
+      </svg>
+
+      <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
+    </div>
+  </div>
+</div>

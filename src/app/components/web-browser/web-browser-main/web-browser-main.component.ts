@@ -16,7 +16,7 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
 
   rtlDirection: boolean;
   currentUrl = 'https://www.google.com';
-  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'webBrowser'};
+  loadingIndicator: LoadingIndicatorInterface = null;
 
   private _subscription: Subscription = new Subscription();
 
@@ -36,8 +36,6 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (this.webFrame) {
-      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'webBrowser'});
-
       this.webFrame.nativeElement.setAttribute('src', 'https://www.google.com');
 
       this.webFrame.nativeElement.addEventListener('did-start-loading', () => {

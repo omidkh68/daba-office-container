@@ -24,7 +24,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
 
   rtlDirection: boolean;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'videoConference'};
-  showConference: boolean = false;
+  showFrame: boolean = false;
   confAddress: string = '';
   reloadWebView: boolean = false;
 
@@ -96,7 +96,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'videoConference'});
             });
 
-            setTimeout(() => this.showConference = true);
+            setTimeout(() => this.showFrame = true);
           }
         }
       })
@@ -112,7 +112,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
     this.webFrame.nativeElement.setAttribute('src', '');
     this.webFrame.nativeElement.stop();
 
-    this.showConference = false;
+    this.showFrame = false;
   }
 
   getTranslate(word) {

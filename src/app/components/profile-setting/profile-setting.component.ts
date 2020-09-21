@@ -275,7 +275,10 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
-      dialogRef.afterClosed().subscribe(() => this.resetInput = '')
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(result);
+        this.resetInput = ''
+      })
     );
   }
 
