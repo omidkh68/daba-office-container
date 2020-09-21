@@ -20,7 +20,7 @@ import {EventHandlerService} from "../service/event-handler.service";
 import {TranslateService} from "@ngx-translate/core";
 import {WindowManagerService} from "../../../services/window-manager.service";
 import {ApproveComponent} from "../../approve/approve.component";
-import {EventHandlerSocketService} from "../service/event-handler-socket.ervice";
+import {EventHandlerSocketService} from "../service/event-handler-socket.service";
 import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
