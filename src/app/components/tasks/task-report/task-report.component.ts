@@ -9,6 +9,10 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {MatTableDataSource} from '@angular/material/table';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {WindowManagerService} from "../../../services/window-manager.service";
+import {MatDialog} from "@angular/material/dialog";
+import {TaskReportDescriptionComponent} from "../description-task/task-report-description.component";
+import {TaskInterface} from "../logic/task-interface";
 
 export interface TaskReportInterface {
   taskSheetId: number;
@@ -35,7 +39,7 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   loginData: LoginInterface;
 
   @Input()
-  taskId: number = 0;
+  task: TaskInterface;
 
   @Input()
   usersList: Array<UserInterface> = [];
@@ -47,13 +51,16 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   pageLimit: number[] = [10, 25, 50, 100];
   dataSource = new MatTableDataSource<TaskReportInterface>(this.taskReports);
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'project-report-report'};
+  dataChange = false;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              public dialog: MatDialog,
               private translate: TranslateService,
               private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
+              private windowManagerService: WindowManagerService,
               private matPaginatorIntl: MatPaginatorIntl) {
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
@@ -79,7 +86,7 @@ export class TaskReportComponent implements OnInit, OnDestroy {
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
-      this.api.getTaskReport(this.taskId).subscribe((resp: any) => {
+      this.api.getTaskReport(this.task.taskId).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-report'});
 
         if (resp.result === 1) {
@@ -121,6 +128,35 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   getTranslate(word) {
     return this.translate.instant(word);
   }
+
+
+
+  descriptionTask(description) {
+    const dialogRef = this.dialog.open(TaskReportDescriptionComponent, {
+      data: {
+        task: this.task,
+        description: description
+      },
+      autoFocus: false,
+      width: '500px',
+      height: '250px'
+    });
+
+    this.windowManagerService.dialogOnTop(dialogRef.id);
+
+    this._subscription.add(
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.dataChange = true;
+
+          setTimeout(() => {
+            this.dataChange = false;
+          }, 500);
+        }
+      })
+    );
+  }
+
 
   ngOnDestroy(): void {
     if (this._subscription) {

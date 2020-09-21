@@ -63,14 +63,14 @@
 
   <ng-template #reportView>
     <div *ngIf="task" class="full-width height-full-minus-45">
-      <div class="task-report-container padding-r-l padding-mini-t-b full-height float-right pos-rel">
+      <div class="task-report-container padding-r-l padding-mini-t-b full-height pos-rel" [ngClass]="rtlDirection ? ' float-right'  : ' float-left'">
         <app-task-report [rtlDirection]="rtlDirection"
                          [loginData]="loginData"
-                         [taskId]="task.taskId"
+                         [task]="task"
                          [usersList]="usersList"></app-task-report>
       </div>
 
-      <div class="task-activity-container full-height padding-r-l padding-mini-t-b float-left pos-rel">
+      <div class="task-activity-container full-height padding-r-l padding-mini-t-b pos-rel" [ngClass]="rtlDirection ? ' float-left'  : ' float-right'">
         <app-task-activity
           [rtlDirection]="rtlDirection"
           [loginData]="loginData"

@@ -2,6 +2,7 @@
   "global": {
     "search": "جستجو...",
     "name": "نام",
+    "descriptions": "توضیحات",
     "name_error": "لطفا نام را وارد نمایید",
     "family": "نام خانوادگی",
     "family_error": "لطفا نام خانوادگی را وارد نمایید",
@@ -156,6 +157,7 @@
     },
     "task_detail": {
       "overview": "اطلاعات کلی",
+      "overview_description": "نمایش توضیحات",
       "reports": "گزارشات",
       "delete_title": "حذف تسک",
       "delete_text": "آیا از حذف این تسک اطمینان دارید؟"

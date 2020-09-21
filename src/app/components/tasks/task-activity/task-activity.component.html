@@ -1,6 +1,6 @@
-<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <h1
-    class="margin-b-full padding-r-l full-width text-gray-800 text-right font-full-em text-weight-500 no-margin height-35">
+<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'" >
+  <h1 [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
+    class="margin-b-full padding-r-l full-width text-gray-800  font-full-em text-weight-500 no-margin height-35">
     {{'tasks.activity.task_completion_percentage' | translate}}
   </h1>
   <div class="full-width padding-b-full-2 height-200" dir="ltr">
@@ -15,8 +15,8 @@
     </ngx-charts-pie-chart>
   </div>
 
-  <h1
-    class="margin-b-full padding-r-l full-width text-gray-800 text-right font-full-em text-weight-500 no-margin height-35">
+  <h1 [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
+    class="margin-b-full padding-r-l full-width text-gray-800  font-full-em text-weight-500 no-margin height-35">
     {{'tasks.activity.activity_list' | translate}}
   </h1>
   <div class="activity-content-container padding-r-l overflow-y-auto overflow-x-hide">
