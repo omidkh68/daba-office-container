@@ -20,7 +20,7 @@ import {ServiceItemsInterface} from '../logic/service-items.interface';
 import {EventHandlerInterface, EventsReminderInterface} from '../../events/logic/event-handler.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {PopoverContnetComponent} from '../../popover-widget/popover/popover-content/popover-content.component';
-import {EventHandlerSocketService} from "../../events/service/event-handler-socket.ervice";
+import {EventHandlerSocketService} from "../../events/service/event-handler-socket.service";
 
 @Component({
   selector: 'app-dashboard-datepicker',

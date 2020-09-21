@@ -30,7 +30,7 @@ import {PopoverContnetComponent} from "../../popover-widget/popover/popover-cont
 import {PopoverService} from "../../popover-widget/popover.service";
 import {WindowManagerService} from "../../../services/window-manager.service";
 import {ButtonLabelsInterface} from "../../tasks/task-calendar/task-calendar-weekday/task-calendar-weekday.component";
-import {EventHandlerSocketService} from "../service/event-handler-socket.ervice";
+import {EventHandlerSocketService} from "../service/event-handler-socket.service";
 import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
 
 @Component({
