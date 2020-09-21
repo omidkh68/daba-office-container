@@ -37,17 +37,6 @@
     </mat-error>
   </mat-form-field>
 
-  <!--<mat-form-field class="thirty-width font-full-em margin-b-full">
-    <mat-label class="text-weight-bold">
-      <mat-icon>translate</mat-icon>
-    </mat-label>
-    <mat-select formControlName="lang" (selectionChange)="changeLang($event)">
-      <mat-option *ngFor="let lang of languages" [value]="lang.id">
-        {{lang.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>-->
-
   <button mat-raised-button
           [disabled]="!form.valid"
           (click)="login()"

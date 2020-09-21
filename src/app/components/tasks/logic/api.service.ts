@@ -3,7 +3,7 @@ import {AppConfig} from '../../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {TaskInterface} from './task-interface';
-import {BoardInterface} from './board-interface';
+import {BoardInterface, ResultInterface} from './board-interface';
 import {FilterInterface} from './filter-interface';
 import {TaskDurationInterface} from './task-duration-interface';
 import {ActivityInterface} from '../task-activity/logic/activity-interface';
@@ -29,17 +29,17 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  boards(email: string): Observable<BoardInterface[]> {
+  boards(email: string): Observable<ResultInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
     this.headers.headers = this.headers.headers.set('From', 'app_application');
 
-    return this.http.get<BoardInterface[]>(`${this.API_URL}/boards/?email=${email}&page=-1`, this.headers);
+    return this.http.get<ResultInterface>(`${this.API_URL}/boards/?email=${email}&page=-1`, this.headers);
   }
 
-  boardsCalendar(email: string): Observable<BoardInterface[]> {
+  boardsCalendar(email: string): Observable<ResultInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get<BoardInterface[]>(`${this.API_URL}/boards/calendar/?email=${email}&page=-1`, this.headers);
+    return this.http.get<ResultInterface>(`${this.API_URL}/boards/calendar/?email=${email}&page=-1`, this.headers);
   }
 
   getAllHolidays(): Observable<any[]> {

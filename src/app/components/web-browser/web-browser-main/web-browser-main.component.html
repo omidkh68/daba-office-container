@@ -15,7 +15,7 @@
 
   <webview #webFrame class="webView-frame full-width height-full-minus-50"></webview>
 
-  <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'webBrowser'"
+  <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'webBrowser'"
        class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
     <div class="text-center">
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"

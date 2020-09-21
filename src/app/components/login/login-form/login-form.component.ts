@@ -67,10 +67,8 @@ export class LoginFormComponent implements OnInit {
         password: new FormControl(''),
         // username: new FormControl('khosrojerdi@dabacenter.ir'),
         // password: new FormControl('123456'),
-        lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
+        // lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
       });
-
-      this.viewDirection.changeDirection(this.form.get('lang').value === 'fa');
 
       resolve(true);
     });
@@ -80,8 +78,6 @@ export class LoginFormComponent implements OnInit {
     this.form.disable();
 
     const formValue = this.form.value;
-
-    delete (formValue.lang);
 
     this._subscription.add(
       this.api.login(formValue).subscribe((resp: LoginResultInterface) => {
@@ -125,10 +121,6 @@ export class LoginFormComponent implements OnInit {
 
   getTranslate(word) {
     return this.translate.instant(word);
-  }
-
-  changeLang(event) {
-    this.viewDirection.changeDirection(event.value === 'fa');
   }
 
   ngOnDestroy(): void {

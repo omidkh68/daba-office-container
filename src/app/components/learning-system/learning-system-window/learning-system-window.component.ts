@@ -5,6 +5,7 @@ import {WebViewService} from '../service/web-view.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
+import {RefreshInterface} from '../logic/refresh.interface';
 
 @Component({
   selector: 'app-learning-system-window',
@@ -14,6 +15,7 @@ export class LearningSystemWindowComponent implements OnInit, OnDestroy {
   rtlDirection: boolean;
   windowInstance: WindowInterface;
   data: ServiceItemsInterface;
+  showReload: RefreshInterface;
 
   private _subscription: Subscription = new Subscription();
 
@@ -26,6 +28,14 @@ export class LearningSystemWindowComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this._subscription.add(
+      this.webViewService.currentRefreshWebView.subscribe(status => {
+        this.showReload = status;
+
+        console.log(status);
+      })
+    );
+
     this._subscription.add(
       this.windowManagerService.windowsList.subscribe(window => {
         this.windowInstance = window.filter(item => item.windowService.serviceTitle === this.data.serviceTitle).pop();
@@ -58,7 +68,8 @@ export class LearningSystemWindowComponent implements OnInit, OnDestroy {
   }
 
   reload() {
-    this.webViewService.changeRefreshWebView(true);
+    console.log('window reload');
+    this.webViewService.changeRefreshWebView({doRefresh: true, visible: true});
   }
 
   ngOnDestroy(): void {

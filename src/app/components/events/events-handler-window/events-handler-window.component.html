@@ -7,14 +7,14 @@
             <h3 cdkDragHandle
                 class="window-title full-width full-height font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
                 <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                          class="text-dark-mode-color pos-rel top-one-tenth">{{data.icon}}</mat-icon>
+                          class="text-dark-mode-color pos-rel">{{data.icon}}</mat-icon>
                 {{rtlDirection ? data.name_fa : data.name}}
             </h3>
         </ng-template>
 
         <ng-template #notDraggableHeading>
             <h3 class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
-                <mat-icon class="text-dark-mode-color pos-rel top-one-tenth"
+                <mat-icon class="text-dark-mode-color pos-rel"
                           [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">{{data.icon}}</mat-icon>
                 {{rtlDirection ? data.name_fa : data.name}}
             </h3>

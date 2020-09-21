@@ -7,14 +7,14 @@
       <h3 cdkDragHandle
           class="window-title full-width full-height font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
         <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                  class="text-dark-mode-color pos-rel top-one-tenth">{{data.icon}}</mat-icon>
+                  class="text-dark-mode-color pos-rel">{{data.icon}}</mat-icon>
         {{rtlDirection ? data.name_fa : data.name}}
       </h3>
     </ng-template>
 
     <ng-template #notDraggableHeading>
       <h3 class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
-        <mat-icon class="text-dark-mode-color pos-rel top-one-tenth"
+        <mat-icon class="text-dark-mode-color pos-rel"
                   [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">{{data.icon}}</mat-icon>
         {{rtlDirection ? data.name_fa : data.name}}
       </h3>
@@ -29,7 +29,7 @@
           center_focus_strong
         </mat-icon>
       </button>-->
-      <button (click)="reload(); $event.stopPropagation();"
+      <button *ngIf="showReload && showReload.visible" (click)="reload(); $event.stopPropagation();"
               class="width-30 height-30 text-center line-height-25 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em display-flex align-items-center">
         <mat-icon
           class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">

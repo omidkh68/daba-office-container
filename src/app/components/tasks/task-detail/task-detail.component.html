@@ -28,6 +28,7 @@
       </button>
 
       <button *ngIf="viewModeTypes === 'info'" (click)="deleteTask()"
+              matTooltip="{{'tasks.task_detail.delete_title' | translate}}"
               type="button"
               class="no-border cursor-pointer no-bg text-center width-45 height-45 text-red-400 no-padding">
         <mat-icon class="line-height-30">delete</mat-icon>

@@ -35,7 +35,7 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
   @ViewChild('dtmfTone', {static: false}) dtmfTone: ElementRef;
 
   rtlDirection: boolean;
-  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'pbx'};
+  loadingIndicator: LoadingIndicatorInterface = null;
   activeTab: number = 0;
   tabs: Array<TabInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
