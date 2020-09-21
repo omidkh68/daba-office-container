@@ -6,7 +6,6 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {map, startWith} from 'rxjs/operators';
 import {LoginDataClass} from '../../services/loginData.class';
 import {MessageService} from '../message/service/message.service';
-import {DatetimeService} from './logic/datetime.service';
 import {UserInfoService} from '../users/services/user-info.service';
 import {ElectronService} from '../../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -16,6 +15,7 @@ import {WindowManagerService} from '../../services/window-manager.service';
 import {ProfileSettingService} from './logic/profile-setting.service';
 import {ShowImageCropperComponent} from './show-image-cropper/show-image-cropper.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
+import {DatetimeService} from "../dashboard/dashboard-toolbar/time-area/service/datetime.service";
 
 export interface Timezones {
   city: string;

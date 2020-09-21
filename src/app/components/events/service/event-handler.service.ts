@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {EventHandlerInterface} from "../logic/event-handler.interface";
+import {EventHandlerInterface, EventsReminderInterface} from "../logic/event-handler.interface";
 import {ReminderInterface} from "../logic/event-reminder.interface";
 
 @Injectable({
@@ -11,6 +11,10 @@ export class EventHandlerService {
     private _events: Array<EventHandlerInterface> | null;
     private events = new BehaviorSubject(this._events);
     public currentEventsList = this.events.asObservable();
+
+    private _event_reminder: EventsReminderInterface | null;
+    private event_reminder = new BehaviorSubject(this._event_reminder);
+    public currentEventsReminderList = this.event_reminder.asObservable();
 
     private _eventItems: EventHandlerInterface | null;
     private eventItems = new BehaviorSubject(this._eventItems);
@@ -24,6 +28,10 @@ export class EventHandlerService {
     private day = new BehaviorSubject(this._day);
     public currentDate = this.day.asObservable();
 
+
+    public moveEventsReminders(eventReminders: EventsReminderInterface | null) {
+        this.event_reminder.next(eventReminders);
+    }
 
     public moveEvents(events: Array<EventHandlerInterface> | null) {
         this.events.next(events);

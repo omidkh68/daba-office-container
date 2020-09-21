@@ -17,9 +17,10 @@ import {ReminderInterface} from '../../events/logic/event-reminder.interface';
 import {EventHandlerService} from '../../events/service/event-handler.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ServiceItemsInterface} from '../logic/service-items.interface';
-import {EventHandlerInterface} from '../../events/logic/event-handler.interface';
+import {EventHandlerInterface, EventsReminderInterface} from '../../events/logic/event-handler.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {PopoverContnetComponent} from '../../popover-widget/popover/popover-content/popover-content.component';
+import {EventHandlerSocketService} from "../../events/service/event-handler-socket.ervice";
 
 @Component({
   selector: 'app-dashboard-datepicker',
@@ -43,8 +44,8 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
 
   popoverTarget: any;
   eventTemp: any = [];
-  events: Array<EventHandlerInterface> = null;
-  reminders: Array<ReminderInterface> = [];
+  result: any;
+  events_reminders: EventsReminderInterface = {events:[] , reminders:[]};
 
   private _subscription: Subscription = new Subscription();
 
@@ -53,6 +54,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
               private eventApi: EventApiService,
               private popoverService: PopoverService,
               private eventHandlerService: EventHandlerService,
+              private eventHandlerSocketService: EventHandlerSocketService,
               private windowManagerService: WindowManagerService) {
   }
 
@@ -62,8 +64,11 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
 
   ngAfterViewInit(): void {
     this._subscription.add(
-      this.eventHandlerService.currentEventsList.subscribe(events => {
-        this.events = events;
+      this.eventHandlerService.currentEventsReminderList.subscribe((events_reminder: EventsReminderInterface) => {
+        if(events_reminder){
+          this.events_reminders.events = events_reminder.events;
+          this.events_reminders.reminders = events_reminder.reminders;
+        }
         setTimeout(() => {
           this.calendar.updateTodaysDate();
         }, 1000)
@@ -96,14 +101,14 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
 
   onSelect(event) {
     setTimeout(() => {
-      this.eventTemp = this.events.filter((item: EventHandlerInterface) => {
+      this.eventTemp = this.events_reminders.events.filter((item: EventHandlerInterface) => {
         return new Date(item.startDate).toLocaleDateString() == event._d.toLocaleDateString();
       });
       if (this.eventTemp.length) {
         this.popoverService.open(PopoverContnetComponent, this.popoverTarget, {
           data: {
             eventTemp: this.eventTemp,
-            events: this.events,
+            events: this.events_reminders.events,
             serviceList: this.serviceList,
             windowManagerService: this.windowManagerService,
             rtlDirection: this.rtlDirection
@@ -119,7 +124,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
 
   dateClass() {
     return (date: any): MatCalendarCellCssClasses => {
-      let events = this.events;
+      let events = this.events_reminders ? this.events_reminders.events : [];
       if (events)
         return events.some(item => new Date(item.startDate).toLocaleDateString() == date._d.toLocaleDateString()) ? 'special-date' : '';
       else
@@ -128,34 +133,10 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
   }
 
   getEvents() {
-    if (this.loggedInUser) {
+    this.eventHandlerSocketService.getEventsByEmail(this.loggedInUser).then((result: any) => {
       this._subscription.add(
-        this.eventApi.getEventByEmail(this.loggedInUser.email).subscribe((resp: any) => {
-          this.events = [];
-          if (resp.status == 200) {
-            if (resp.contents) {
-              if (resp.contents.length) {
-                this.events = resp.contents;
-                this.eventHandlerService.moveEvents(this.events);
-                this.prepareEventAndReminder();
-              }
-            }
-          }
-        })
+          this.events_reminders = result
       );
-    }
-  }
-
-  prepareEventAndReminder() {
-    this.events.map((item: EventHandlerInterface) => {
-      item.sTime = new Date(item.startDate).toLocaleTimeString();
-      item.eTime = new Date(item.endDate).toLocaleTimeString();
-      if (item.reminders.length)
-        this.reminders = [...this.reminders, ...item.reminders]
-    });
-    this.reminders.map((item: ReminderInterface) => {
-      item.startdate_format = new Date(item.startReminder).toLocaleDateString();
-      item.enddate_format = new Date(item.endReminder).toLocaleDateString();
     })
   }
 

@@ -118,8 +118,8 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
     } else {
       this.header = {
         left: 'today prev,next',
-        center: 'title',
-        right: 'timeGridWeek,timeGridDay'
+        center: '',
+        right: 'title'
       };
     }
   }
@@ -129,11 +129,12 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
       let calendarApi = this.calendarComponent.getApi();
 
       if (this.dateStart) {
-        let month = this.dateStart._d.getMonth() + 1;
+        //let month = this.dateStart.getMonth() + 1;
 
-        month = this.utilService.pad(month, 2, null);
+        //month = this.utilService.pad(month, 2, null);
 
-        calendarApi.gotoDate(this.dateStart._d.getFullYear() + '-' + month + '-' + this.dateStart._d.getDate());
+        //calendarApi.gotoDate(this.dateStart._d.getFullYear() + '-' + month + '-' + this.dateStart._d.getDate());
+        calendarApi.gotoDate(this.dateStart);
 
         this.drawer.open();
 

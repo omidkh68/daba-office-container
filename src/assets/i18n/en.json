@@ -268,6 +268,7 @@
     "form": {
       "event_name": "Event Name",
       "event_name_error": "Please enter event name",
+      "event_desc_error": "Please enter event description",
       "start_at": "Start Date",
       "start_at_error": "Please choose start date",
       "stop_at": "End Date",

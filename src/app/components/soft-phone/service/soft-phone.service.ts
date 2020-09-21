@@ -492,7 +492,6 @@ export class SoftPhoneService extends LoginDataClass {
 
   onSipEventSession = (e) => {
 
-    this.checkVpnConnection();
     const type = e.type.toLowerCase();
     const description = e.description.toLowerCase();
     let extensionNumberFrom: string = '';
@@ -964,8 +963,15 @@ export class SoftPhoneService extends LoginDataClass {
     };
   } );
 
-  checkVpnConnection() {
-    this.getConnectionStatus().then(
+  checkIpAddressVPN() {
+    this.window.addEventListener('online', () => {
+      console.log('Online');
+    });
+
+    this.window.addEventListener('offline', () => {
+      console.log('Offline');
+    });
+/*    this.getConnectionStatus().then(
         ips => {
           let tempIps = ips;
           if(this.ipAddresses.length && JSON.stringify(tempIps) != JSON.stringify(this.ipAddresses)){
@@ -973,7 +979,7 @@ export class SoftPhoneService extends LoginDataClass {
           }
           this.ipAddresses = ips;
         },
-    );
+    );*/
   }
 
   getTranslate(word) {
