@@ -168,7 +168,7 @@ export class WindowManagerService {
     windowInstance.windowRef.removePanelClass('minimized');
     windowInstance.windowRef.removePanelClass('maximized');
 
-    // this.centerWindow(windowInstance);
+    this.activeWindow(service);
   }
 
   activeWindow(service: ServiceItemsInterface) {

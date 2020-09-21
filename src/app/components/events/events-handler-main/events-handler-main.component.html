@@ -1,31 +1,51 @@
 <mat-drawer-container autosize class="event-main-datepicker" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-    <mat-drawer #drawer mode="side">
+    <mat-drawer #drawer mode="side" [disableClose]="true">
         <div class="padding-full text-white">
             <div class="datepicker-container padding-full round-corner"
                  [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
                  [dir]="rtlDirection ? 'rtl' : 'ltr'">
-                <button mat-raised-button
-                        tabindex="15"
-                        (click)="loadBottomSheet($event)"
-                        class="full-width green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
-                    <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
-                    <span class="padding-mini-r-l">{{'events_handler.main.add_event_title' | translate}}</span>
-                </button>
-                <mat-calendar #myCalendar [dateClass]="dateClass()" (click)="getPosition($event)" (selectedChange)="onSelect($event)"></mat-calendar>
-                <mat-list *ngIf="remindersList.length" class="event-list">
-                    <div mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}} <b class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}: {{remindersList.length}}</b></div>
-                    <div>
-                        <mat-list-item *ngFor="let item of remindersList">
-                            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
-                            <div mat-line class="font-8-em">{{item.description}}</div>
-                            <div mat-line class="font-8-rem">{{item.startReminder | jalali:rtlDirection}}</div>
-                        </mat-list-item>
-                    </div>
-                </mat-list>
+                <div class="switch-container height-45 padding-mini-t-b padding-r-l">
+                    <mat-button-toggle-group #viewMode="matButtonToggleGroup"
+                                             (change)="changeViewMode(viewMode.value)"
+                                             [value]="viewModeTypes"
+                                             class="full-width mat-button-custom height-30 line-height-15 round-corner-all">
+                        <mat-button-toggle class="active overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'container'">
+                            <span>Container</span>
+                        </mat-button-toggle>
+                        <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'google'">
+                            <span>Google</span>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+
+                <div *ngIf="viewModeTypes == 'google'">
+                    <mat-calendar></mat-calendar>
+                </div>
+
+                <div *ngIf="viewModeTypes == 'container'">
+                    <mat-calendar #myCalendar [dateClass]="dateClass()" (click)="getPosition($event)" (selectedChange)="onSelect($event)"></mat-calendar>
+                    <mat-list *ngIf="events_reminders && events_reminders.reminders.length" class="event-list">
+                        <div mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}} <b class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}: {{events_reminders.reminders.length}}</b></div>
+                        <div>
+                            <mat-list-item *ngFor="let item of events_reminders.reminders">
+                                <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
+                                <div mat-line class="font-8-em">{{item.description}}</div>
+                                <div mat-line class="font-8-rem">{{item.startReminder | jalali:rtlDirection}}</div>
+                            </mat-list-item>
+                        </div>
+                    </mat-list>
+                </div>
             </div>
         </div>
     </mat-drawer>
-    <div class="padding-full" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
+    <div *ngIf="viewModeTypes=='container'" class="padding-full" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
+        <button mat-raised-button
+                tabindex="15"
+                (click)="loadBottomSheet($event)"
+                class="width-145 right-15 pos-abs green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+            <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
+            <span class="padding-mini-r-l">{{'events_handler.main.add_event_title' | translate}}</span>
+        </button>
         <full-calendar [events]="calendarEvents" #calendar [allDaySlot]="false" [buttonText]="buttonLabels"
                        [dir]="rtlDirection ? 'rtl' : 'ltr'"
                        [displayEventTime]="false"
@@ -38,6 +58,7 @@
                        [eventLimitText]="''"
                        [handleWindowResize]="true"
                        [header]="header"
+                       [customButtons]="customButtons"
                        [locale]="rtlDirection ? 'fa' : 'en'"
                        [plugins]="calendarPlugins"
                        [slotLabelFormat]="slotLabelFormat"
@@ -45,6 +66,28 @@
                        class="float-right w-100"
                        defaultView="dayGridMonth"
                        id="full_calendar">
+        </full-calendar>
+    </div>
+    <div *ngIf="viewModeTypes=='google'" class="padding-full" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
+        <full-calendar
+                       [dir]="rtlDirection ? 'rtl' : 'ltr'"
+                       [displayEventTime]="false"
+                       [editable]="false"
+                       [eventLimit]="2"
+                       (eventClick)="nothing($event)"
+                       [firstDay]="1"
+                       [eventLimitText]="''"
+                       [handleWindowResize]="true"
+                       [header]="header"
+                       [locale]="rtlDirection ? 'fa' : 'en'"
+                       [events]="googleCalendarEvents"
+                       [plugins]="calendarGooglePlugins"
+                       [googleCalendarApiKey] = "'AIzaSyDRh5gMFmnP207A3zG0c4E8CKCyYObVhSU'"
+                       [slotLabelFormat]="slotLabelFormat"
+                       [views]="views"
+                       class="float-right w-100"
+                       defaultView="dayGridMonth"
+                       id="full_calendar_google">
         </full-calendar>
     </div>
 </mat-drawer-container>

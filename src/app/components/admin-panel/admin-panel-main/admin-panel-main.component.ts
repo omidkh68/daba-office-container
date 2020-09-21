@@ -19,7 +19,7 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
   @ViewChild('webFrame', {static: false}) webFrame: ElementRef;
 
   rtlDirection: boolean;
-  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'adminPanel'};
+  loadingIndicator: LoadingIndicatorInterface = null;
   reloadWebView: boolean = false;
 
   private _subscription: Subscription = new Subscription();
@@ -55,8 +55,6 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
 
   ngAfterViewInit(): void {
     if (this.webFrame) {
-      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'adminPanel'});
-
       const address = `${AppConfig.ADMIN_URL}/#/home/?tokenType=${this.loginData.token_type}&accessToken=${this.loginData.access_token}`;
 
       this.webFrame.nativeElement.setAttribute('src', address);

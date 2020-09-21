@@ -1,17 +1,17 @@
 <div class="full-width full-height bg-white pos-rel">
   <div class="content-container full-width full-height display-flex flex-center">
-    <div *ngIf="!showConference" class="width-200">
+    <div *ngIf="!showFrame" class="width-200">
       <button mat-raised-button (click)="addNewVideoConf()"
               class="blue-gradient full-width padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
         <span class="padding-mini-r-l">{{'conference.add' | translate}}</span>
       </button>
     </div>
 
-    <webview enableremotemodule="false" [ngClass]="{'showFrame': !showConference}" partition="persist:sessionstorage" #webFrame
+    <webview #webFrame [ngClass]="{'showFrame': !showFrame}"
              class="webView-frame full-width full-height"></webview>
   </div>
 
-  <div *ngIf="showConference" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="copy-clipboard-container pos-abs bottom-half">
+  <div *ngIf="showFrame" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="copy-clipboard-container pos-abs bottom-half">
     <button mat-raised-button (click)="exitOfConference()"
             class="red-gradient mat-elevation-z1 padding-mini-r-l margin-mini-r-l text-white line-height-20 font-7-em overflow-hide text-weight-normal">
       <mat-icon class="width-18 height-18 line-height-18 font-8-rem">close</mat-icon>

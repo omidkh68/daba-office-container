@@ -8,7 +8,7 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {TaskInterface} from '../logic/task-interface';
-import {BoardInterface} from '../logic/board-interface';
+import {BoardInterface, ResultInterface} from '../logic/board-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
 import {SocketioService} from '../../../services/socketio.service';
@@ -236,7 +236,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.api.boards(this.loggedInUser.email).subscribe((resp: any) => {
+        this.api.boards(this.loggedInUser.email).subscribe((resp: ResultInterface) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result === 1) {

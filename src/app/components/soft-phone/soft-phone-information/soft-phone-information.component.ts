@@ -50,8 +50,8 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
   @Input()
   loggedInUser: UserContainerInterface;
 
-  timerDueTime: number = 10000;
-  timerPeriod: number = 10000;
+  timerDueTime: number = 5000;
+  timerPeriod: number = 15000;
   globalTimer = null;
   globalTimerSubscription: Subscription;
   loggedInUserExtension: LoggedInUserExtensionInterface = null;
@@ -74,8 +74,6 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
 
   ngOnInit(): void {
     this.filterArgs = {email: this.loggedInUser.email};
-
-    this.getExtensionStatus();
   }
 
   ngAfterContentInit(): void {
@@ -98,7 +96,9 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
     this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
       if (resp.success) {
         if (this.softPhoneUsers && this.softPhoneUsers.length) {
-          const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, resp.data);
+          const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
+
+          const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, extensionList);
 
           this.softPhoneService.changeSoftPhoneUsers(extensionsList);
 

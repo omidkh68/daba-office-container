@@ -42,7 +42,7 @@
   "dashboard": {
     "dashboard_toolbar": {
       "service_list": "Services",
-      "reminder" : "Reminders",
+      "reminder": "Reminders",
       "active_clocks": "World Clocks",
       "exist_app": "Log Out"
     }
@@ -55,7 +55,7 @@
     "status_success": "Status applied successfully",
     "start_working": "Start Working?",
     "start_working_time": "Do you want to start your working?",
-    "close_app_stop_working": "Your working time is over, have a nice day."
+    "close_app_stop_working": "Your working hours are over, have a good day"
   },
   "soft_phone": {
     "main": {
@@ -97,9 +97,9 @@
     },
     "call_logs": {
       "missed_call": "Missed Call",
-      "rejected":"I Rejected",
+      "rejected": "I Rejected",
       "not_answered": "Not Answered",
-      "busy":"Was Busy",
+      "busy": "Was Busy",
       "answered": "Answered"
     }
   },
@@ -246,18 +246,18 @@
     "change_lang_warning_text": "By change your language, your app will refresh immediately."
   },
   "events_handler": {
-    "main" : {
-      "add_new_event" : "Add New Event",
-      "add_new_reminder" : "Add New Reminder",
-      "see_more" : "See More",
-      "event_title" : "Event",
-      "events_title" : "Events",
-      "add_event_title" : "Add New Event",
-      "update_event_title" : "Update Event",
-      "reminder_title" : "Reminder",
-      "reminders_title" : "Reminders",
-      "event_count" : "Events Count",
-      "reminder_count" : "Counts"
+    "main": {
+      "add_new_event": "Add New Event",
+      "add_new_reminder": "Add New Reminder",
+      "see_more": "See More",
+      "event_title": "Event",
+      "events_title": "Events",
+      "add_event_title": "Add New Event",
+      "update_event_title": "Update Event",
+      "reminder_title": "Reminder",
+      "reminders_title": "Reminders",
+      "event_count": "Events Count",
+      "reminder_count": "Counts"
     },
     "event_detail": {
       "delete_title": "Delete Event",
@@ -268,8 +268,9 @@
       "delete_text": "Are you sure want to delete this reminder?"
     },
     "form": {
-      "event_name" : "Event Name",
+      "event_name": "Event Name",
       "event_name_error": "Please enter event name",
+      "event_desc_error": "Please enter event description",
       "start_at": "Start Date",
       "start_at_error": "Please choose start date",
       "stop_at": "End Date",
@@ -286,21 +287,50 @@
       "action_job_type": "Action Job Type",
       "users": "Available Users",
       "assign_to_error": "Please choose event assign to",
-      "user_phone" : "Mobile",
-      "user_email" : "Email",
-      "all_day" : "All Day",
-      "reminder_type" : "Reminder Type",
-      "reminder_status" : "Reminder Status",
-      "add_event_successful" : "Event added successfully",
-      "delete_event_successful" : "Event deleted successfully",
-      "delete_event_error" : "Event delete has error",
-      "update_event_successful" : "Event updated successfully",
-      "update_event_error" : "Event update has error",
-      "add_reminder_successful" : "Reminder added successfully",
-      "delete_reminder_successful" : "Reminder deleted successfully",
-      "delete_reminder_error" : "Reminder delete has error",
-      "update_reminder_successful" : "Reminder updated successfully",
-      "update_reminder_error" : "Reminder update has error"
+      "user_phone": "Mobile",
+      "user_email": "Email",
+      "all_day": "All Day",
+      "reminder_type": "Reminder Type",
+      "reminder_status": "Reminder Status",
+      "add_event_successful": "Event added successfully",
+      "delete_event_successful": "Event deleted successfully",
+      "delete_event_error": "Event delete has error",
+      "update_event_successful": "Event updated successfully",
+      "update_event_error": "Event update has error",
+      "add_reminder_successful": "Reminder added successfully",
+      "add_reminder_error": "Error in add reminder",
+      "delete_reminder_successful": "Reminder deleted successfully",
+      "delete_reminder_error": "Reminder delete has error",
+      "update_reminder_successful": "Reminder updated successfully",
+      "update_reminder_error": "Reminder update has error"
     }
+  },
+  "learning": {
+    "title": "Available Conference Rooms",
+    "add_new_room": "Add Conference Room",
+    "welcome_banner": "Welcome to Learning Management System",
+    "meeting_name": "Conference room name",
+    "meeting_name_error": "Please enter conference room name",
+    "room_pass": "Room password",
+    "room_pass_error": "Please enter room password",
+    "room_moderator_pass": "Moderator password",
+    "room_moderator_pass_error": "Please enter moderator password",
+    "webcam_only_moderator": "WebCam only for moderator",
+    "record_meeting": "Record meeting",
+    "mute_on_start": "Mute on start",
+    "disable_user_webcam": "Disable user webCam",
+    "disable_user_mic": "Disable user mic",
+    "disable_private_chat": "Disable private chat",
+    "disable_public_chat": "Disable public chat",
+    "join_room": "Join Room",
+    "room_password": "For joining this room, please enter room`s password:",
+    "wrong_password": "Password is wrong, please try again",
+    "no_room": "No room exist",
+    "exit_room": "Exit room",
+    "confirm_exit_room": "Are you sure want to exit room?",
+    "delete_room": "Delete Conference Room",
+    "delete_room_error": "The room you are looking for not exist or has been deleted before",
+    "delete_room_success": "Room has been deleted",
+    "confirm_delete_room": "Are you sure want to delete this room?"
   }
 }

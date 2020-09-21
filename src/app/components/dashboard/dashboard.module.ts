@@ -4,7 +4,6 @@ import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {DndDirective} from '../profile-setting/dnd.directive';
 import {PopoverModule} from '../popover-widget/popover.module';
-import {DatetimeService} from '../profile-setting/logic/datetime.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {ProgressComponent} from '../profile-setting/progress/progress.component';
 import {TimeAreaComponent} from './dashboard-toolbar/time-area/time-area.component';
@@ -29,6 +28,7 @@ import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '../../sh
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
 import {JalaliPipe} from "../../pipes/jalali.pipe";
+import {DatetimeService} from "./dashboard-toolbar/time-area/service/datetime.service";
 
 const defaultLangStorage = localStorage.getItem('defaultLang');
 const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
