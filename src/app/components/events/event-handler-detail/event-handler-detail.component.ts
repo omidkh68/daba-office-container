@@ -18,10 +18,12 @@ import {hours} from "../../../shared/utils";
 import {MessageService} from "../../message/service/message.service";
 import {EventHandlerService} from "../service/event-handler.service";
 import {TranslateService} from "@ngx-translate/core";
-import {EventHandlerInterface} from "../logic/event-handler.interface";
-import {ReminderInterface} from "../logic/event-reminder.interface";
 import {WindowManagerService} from "../../../services/window-manager.service";
 import {ApproveComponent} from "../../approve/approve.component";
+import {EventHandlerSocketService} from "../service/event-handler-socket.ervice";
+import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
+import {SelectionModel} from '@angular/cdk/collections';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
     styleUrls: ['./event-handler-detail.component.scss'],
@@ -38,6 +40,10 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     rtlDirection: boolean;
     usersList: UserContainerInterface[] = [];
     usersListDone: UserEventHandlerInterface[] = [];
+    displayedColumns: string[] = ['select' , 'name' , 'symbol'];
+    dataSource = null;
+    selection = new SelectionModel<UserContainerInterface>(true, []);
+
     actionTypeList: ActionTypeInterface[] = [];
     actionTypeJobList: ActionTypeJobInterface[] = [];
     bottomSheetData: EventHandlerBottomSheetInterface;
@@ -52,6 +58,8 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
                 private viewDirection: ViewDirectionService,
                 private eventHandlerService: EventHandlerService,
                 private injector: Injector,
+                private dateTimeService: DatetimeService,
+                private eventHandlerSocketService: EventHandlerSocketService,
                 private translateService: TranslateService,
                 private messageService: MessageService,
                 private windowManagerService: WindowManagerService,
@@ -71,6 +79,20 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         );
     }
 
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+
     ngOnInit(): void {
         this.data = this.bottomSheetData.data;
         this.createForm().then(() => {
@@ -87,6 +109,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
             this.api.getHRUsers().subscribe((resp: any) => {
                 if (resp.success) {
                     this.usersList = resp.data;
+                    this.dataSource = new MatTableDataSource<UserContainerInterface>(this.usersList);
                     this.form.patchValue({
                         users: this.data.eventItems ? this.data.eventItems.users : []
                     });
@@ -155,30 +178,6 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
 
     onKeyPhoneNumber(user: UserEventHandlerInterface, $event) {
         user.phoneNumberTemp = $event.target.value;
-    }
-
-    formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-        if (month.length < 2)
-            month = '0' + month;
-        if (day.length < 2)
-            day = '0' + day;
-
-        return [year, month, day].join('-');
-    }
-    formatTime(date) {
-        var d = new Date(date),
-            hour = '' + (d.getHours()),
-            min = '' + d.getMinutes();
-        if (hour.length < 2)
-            hour = '0' + hour;
-        if (min.length < 2)
-            min = '0' + min;
-        return [hour, min].join(':');
     }
 
     enableForm() {
@@ -273,8 +272,8 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     submit() {
         let formValue = this.form.value;
         formValue.creatorUser = this.loggedInUser;
-        formValue.startDate = this.formatDate(this.form.value.startDate) + " " + this.form.value.startTime + ":00";
-        formValue.endDate = this.formatDate(this.form.value.endDate) + " " + this.form.value.endTime + ":00";
+        formValue.startDate = this.dateTimeService.formatDate(this.form.value.startDate) + " " + this.form.value.startTime + ":00";
+        formValue.endDate = this.dateTimeService.formatDate(this.form.value.endDate) + " " + this.form.value.endTime + ":00";
 /*        if (formValue.startDate > formValue.endDate) {
             this.form.controls['startDate'].setErrors({'incorrect': true});
             this.form.enable();
@@ -334,22 +333,8 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     }
 
     refreshEvents() {
-        this.eventApi.getEventByEmail(this.loggedInUser.email).subscribe((result: any) => {
-            let events = [];
-            if (result.status == 200) {
-                if (result.contents.length) {
-                    result.contents.map((item: EventHandlerInterface) => {
-                        item.sTime = new Date(item.startDate).toLocaleTimeString();
-                        item.eTime = new Date(item.endDate).toLocaleTimeString();
-                        item.reminders.map((item: ReminderInterface) => {
-                            item.startdate_format = new Date(item.startReminder).toLocaleDateString();
-                            item.enddate_format = new Date(item.endReminder).toLocaleDateString();
-                        })
-                    });
-                    events = result.contents;
-                }
-            }
-            this.eventHandlerService.moveEvents(events);
+        this.eventHandlerSocketService.getEventsByEmail(this.loggedInUser).then((result: any) => {
+            this._subscription.add();
             this.bottomSheetData.bottomSheetRef.close();
         })
     }
@@ -376,10 +361,10 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
 
     createForm() {
         return new Promise((resolve) => {
-            let sdate = this.data.eventItems ? this.formatDate(this.data.eventItems?.startDate) : this.formatDate(this.data.currentDate.toLocaleDateString());
-            let edate = this.data.eventItems ? this.formatDate(this.data.eventItems?.endDate) : this.formatDate(this.data.currentDate.toLocaleDateString());
-            let stime = this.data.eventItems ? this.formatTime(this.data.eventItems?.startDate) : this.selectCurrentTime();
-            let etime = this.data.eventItems ? this.formatTime(this.data.eventItems?.endDate) : this.selectCurrentTime();
+            let sdate = this.data.eventItems ? this.dateTimeService.formatDate(this.data.eventItems?.startDate) : this.dateTimeService.formatDate(this.data.currentDate.toLocaleDateString());
+            let edate = this.data.eventItems ? this.dateTimeService.formatDate(this.data.eventItems?.endDate) : this.dateTimeService.formatDate(this.data.currentDate.toLocaleDateString());
+            let stime = this.data.eventItems ? this.dateTimeService.formatTime(this.data.eventItems?.startDate) : this.selectCurrentTime();
+            let etime = this.data.eventItems ? this.dateTimeService.formatTime(this.data.eventItems?.endDate) : this.selectCurrentTime();
 
             this.form = this.fb.group({
                 users: new FormControl(this.data.eventItems ? this.data.eventItems.users : []),
