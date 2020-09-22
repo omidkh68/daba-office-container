@@ -1,7 +1,7 @@
 <mat-drawer-container autosize class="event-main-datepicker" [dir]="rtlDirection ? 'rtl' : 'ltr'">
     <mat-drawer #drawer mode="side" [disableClose]="true">
         <div class="padding-full text-white">
-            <div class="datepicker-container padding-full round-corner"
+            <div class="datepicker-container-main padding-full round-corner"
                  [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
                  [dir]="rtlDirection ? 'rtl' : 'ltr'">
                 <div class="switch-container height-45 padding-mini-t-b padding-r-l">
@@ -10,10 +10,10 @@
                                              [value]="viewModeTypes"
                                              class="full-width mat-button-custom height-30 line-height-15 round-corner-all">
                         <mat-button-toggle class="active overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'container'">
-                            <span>Container</span>
+                            <span>{{'events_handler.main.container_calendar_title' | translate}}</span>
                         </mat-button-toggle>
                         <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'google'">
-                            <span>Google</span>
+                            <span>{{'events_handler.main.google_calendar_title' | translate}}</span>
                         </mat-button-toggle>
                     </mat-button-toggle-group>
                 </div>
@@ -73,6 +73,7 @@
                        [dir]="rtlDirection ? 'rtl' : 'ltr'"
                        [displayEventTime]="false"
                        [editable]="false"
+                       [buttonText]="buttonLabels"
                        [eventLimit]="2"
                        (eventClick)="nothing($event)"
                        [firstDay]="1"

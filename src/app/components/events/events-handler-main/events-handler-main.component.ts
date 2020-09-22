@@ -99,10 +99,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         '#444444',
     ]; */
     colorArray = [
-        '#4caf50',
-        '#8bc34a',
-        '#cddc39'
-
+        '#4caf50'
     ];
     private _subscription: Subscription = new Subscription();
 
@@ -172,33 +169,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     ngAfterViewInit(): void {
 
         this.prepareFullCalendar();
-        this.views = {
-            dayGridMonthCustom: {
-                type: 'dayGridMonth',
-                buttonText: this.getTranslate('tasks.calendar.month')
-            }
-        };
         this.drawer.open();
-        this.buttonLabels = {
-            today: this.getTranslate('tasks.calendar.today'),
-            month: this.getTranslate('tasks.calendar.month'),
-            week: this.getTranslate('tasks.calendar.week'),
-            day: this.getTranslate('tasks.calendar.day'),
-            list: this.getTranslate('tasks.calendar.list')
-        };
-        if (this.rtlDirection) {
-            this.header = {
-                left: 'title',
-                center: '',
-                right: 'prev,next today'
-            };
-        } else {
-            this.header = {
-                left: 'today next,prev',
-                center: 'title',
-                right: 'timeGridWeek,timeGridDay'
-            };
-        }
     }
 
     ngAfterViewChecked() {
@@ -229,17 +200,6 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
                 list: words.list
             };
         });
-
-
-/*        let text = this.rtlDirection ? '+ رویداد جدید' : '+ Add New Event';
-        this.customButtons = {
-            add_event: {
-                text: text,
-                click: () => {
-                    this.loadBottomSheet();
-                }
-            }
-        }*/
 
         if (this.rtlDirection) {
             this.header = {
@@ -339,8 +299,8 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     }
 
     nothing($event) {
-        console.log($event);
-        return;
+        $event.jsEvent.preventDefault();
+        //return false;
     }
 
     loadBottomSheetFromFullCalendar($event) {

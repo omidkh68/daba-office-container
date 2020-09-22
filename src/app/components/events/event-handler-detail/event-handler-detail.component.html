@@ -26,8 +26,8 @@
     </div>
 
     <div class="full-width height-full-minus-45">
-        <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
-             class="task-form-container full-height padding-full overflow-hide pos-rel">
+        <div [ngClass]="[rtlDirection ? 'float-right' : 'float-left' , data.eventItems ? 'task-form-container' : 'full-width']"
+             class="full-height padding-full overflow-hide pos-rel">
             <form *ngIf="form" [formGroup]="form" (submit)="submit()" class="full-height"
                   [dir]="rtlDirection ? 'rtl' : 'ltr'">
                 <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
@@ -131,73 +131,158 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div class="display-flex margin-b-full margin-r-l-reverse">
+                    <div class="display-flex margin-r-l-reverse">
                         <div class="full-width padding-r-l">
                             <mat-form-field class="full-width height-80 font-9-em">
                                 <mat-label>{{'events_handler.form.event_description' | translate}}</mat-label>
                                 <textarea matInput formControlName="description"
                                           required placeholder="{{'events_handler.form.event_description' | translate}}"
                                           tabindex="12"></textarea>
+                                <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
+                                    {{'events_handler.form.event_name_error' | translate}}
+                                </mat-error>
                             </mat-form-field>
                         </div>
                     </div>
-                    <div [ngClass]="editable ? '' : 'pointer-events-none'" cdkDropListGroup
-                         class="display-flex margin-r-l-reverse">
-                        <div class="half-width padding-r-l">
-                            <div class="example-container">
-                                <mat-label>{{'events_handler.form.users' | translate}}</mat-label>
-                                <div cdkDropList
-                                     [cdkDropListData]="usersList"
-                                     class="example-list"
-                                     (cdkDropListDropped)="drop($event)">
-                                    <div (click)="transferToRight(user)" class="example-box"
-                                         *ngFor="let user of usersList" cdkDrag>
-                                        <span>{{user.name}}</span>
-                                    </div>
+                    <div style="height: 290px;overflow: overlay;" class="full-width display-flex">
+                        <div class="full-width bg-grey padding-full">
+                            <div class="display-flex margin-r-l-reverse">
+                                <div class="half-width padding-l-full padding-r-full">
+                                    <mat-form-field class="font-8-em full-width custom-select-search" appearance="fill">
+                                        <mat-label>Filter</mat-label>
+                                        <input (keyup)="filterMatTable($event)" type="search" matInput value="">
+                                    </mat-form-field>
+                                </div>
+                                <div class="half-width padding-l-full">
+                                    <mat-form-field class="font-7-em full-width custom-select-search" appearance="fill">
+                                        <mat-label>Category</mat-label>
+                                        <mat-select>
+                                            <mat-option>
+                                                UI Team
+                                            </mat-option>
+                                            <mat-option>
+                                                Designer Team
+                                            </mat-option>
+                                            <mat-option>
+                                                Development Team
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
                                 </div>
                             </div>
-                        </div>
-                        <div class="half-width padding-r-l">
-                            <div class="example-container">
-                                <mat-label>{{'events_handler.form.assign_to' | translate}}</mat-label>
-                                <div cdkDropList
-                                     [cdkDropListData]="form.get('users').value"
-                                     class="example-list"
-                                     (cdkDropListDropped)="drop($event)">
-                                    <div (click)="transferToLeft(user)" class="example-box no-padding"
-                                         *ngFor="let user of form.get('users').value" cdkDrag>
-                                        <section class="full-width">
-                                            <span class="float-right example-box-padding">{{user.name}}</span>
-                                            <mat-icon *ngIf="!user.editable && editable" (click)="editUser(user , $event)"
-                                                      class="cursor-pointer font-full-plus-two-tenth-rem text-green-400 float-left example-box-padding">
-                                                edit
-                                            </mat-icon>
-                                            <mat-icon *ngIf="user.editable" (click)="editUser(user , $event , 'submit')"
-                                                      class="cursor-pointer font-full-plus-two-tenth-rem text-green-400 float-left example-box-padding">
-                                                check
-                                            </mat-icon>
-                                            <mat-icon *ngIf="user.editable" (click)="editUser(user , $event , 'close')"
-                                                      class="cursor-pointer font-full-plus-two-tenth-rem text-danger float-left example-box-padding">
-                                                close
-                                            </mat-icon>
-                                            <div (click)="$event.stopPropagation()"
-                                                 class="float-left full-width example-box-padding"
-                                                 style="box-shadow: rgb(197, 197, 197) 0px 5px 8px -3px"
-                                                 *ngIf="user.editable">
-                                                <mat-form-field class="full-width">
-                                                    <mat-label>{{'events_handler.form.user_phone' | translate}}</mat-label>
-                                                    <input type="tel" matInput placeholder="xxx-xxx-xx-xx"
-                                                           (keyup)="onKeyPhoneNumber(user , $event)"
-                                                           value="{{user.phoneNumber}}">
-                                                </mat-form-field>
-                                            </div>
-                                        </section>
+                            <table mat-table [dataSource]="dataSource" class="full-width">
+                                <!-- Checkbox Column -->
+                                <ng-container matColumnDef="select">
+                                    <th class="padding-l-full" mat-header-cell *matHeaderCellDef>
+                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                      [checked]="selection.hasValue() && isAllSelected()"
+                                                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell class="padding-l-full" *matCellDef="let row">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                                      (change)="$event ? selection.toggle(row) : null"
+                                                      [checked]="selection.isSelected(row)">
+                                        </mat-checkbox>
+                                    </td>
+                                </ng-container>
 
-                                    </div>
-                                </div>
-                            </div>
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                </ng-container>
+
+                                <!-- Symbol Column -->
+                                <ng-container matColumnDef="symbol">
+                                    <th mat-header-cell *matHeaderCellDef> Phone Number </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <input type="tel" matInput placeholder="xxx-xxx-xx-xx"
+                                               (keyup)="onKeyPhoneNumber(element , $event)"
+                                               value="{{element.phoneNumber}}">
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                                    (click)="selection.toggle(row)">
+                                </tr>
+                            </table>
                         </div>
                     </div>
+
+
+
+                    <!--                    <div class="display-flex margin-b-full margin-r-l-reverse">
+                                            <div class="full-width padding-r-l">
+                                                <mat-form-field class="full-width height-80 font-9-em">
+                                                    <mat-label>{{'events_handler.form.event_description' | translate}}</mat-label>
+                                                    <textarea matInput formControlName="description"
+                                                              required placeholder="{{'events_handler.form.event_description' | translate}}"
+                                                              tabindex="12"></textarea>
+                                                    <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
+                                                        {{'events_handler.form.event_name_error' | translate}}
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div [ngClass]="editable ? '' : 'pointer-events-none'" cdkDropListGroup
+                                             class="display-flex margin-r-l-reverse">
+                                            <div class="half-width padding-r-l">
+                                                <div class="example-container">
+                                                    <mat-label>{{'events_handler.form.users' | translate}}</mat-label>
+                                                    <div cdkDropList
+                                                         [cdkDropListData]="usersList"
+                                                         class="example-list"
+                                                         (cdkDropListDropped)="drop($event)">
+                                                        <div (click)="transferToRight(user)" class="example-box"
+                                                             *ngFor="let user of usersList" cdkDrag>
+                                                            <span>{{user.name}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="half-width padding-r-l">
+                                                <div class="example-container">
+                                                    <mat-label>{{'events_handler.form.assign_to' | translate}}</mat-label>
+                                                    <div cdkDropList
+                                                         [cdkDropListData]="form.get('users').value"
+                                                         class="example-list"
+                                                         (cdkDropListDropped)="drop($event)">
+                                                        <div (click)="transferToLeft(user)" class="example-box no-padding"
+                                                             *ngFor="let user of form.get('users').value" cdkDrag>
+                                                            <section class="full-width">
+                                                                <span class="float-right example-box-padding">{{user.name}}</span>
+                                                                <mat-icon *ngIf="!user.editable && editable" (click)="editUser(user , $event)"
+                                                                          class="cursor-pointer font-full-plus-two-tenth-rem text-green-400 float-left example-box-padding">
+                                                                    edit
+                                                                </mat-icon>
+                                                                <mat-icon *ngIf="user.editable" (click)="editUser(user , $event , 'submit')"
+                                                                          class="cursor-pointer font-full-plus-two-tenth-rem text-green-400 float-left example-box-padding">
+                                                                    check
+                                                                </mat-icon>
+                                                                <mat-icon *ngIf="user.editable" (click)="editUser(user , $event , 'close')"
+                                                                          class="cursor-pointer font-full-plus-two-tenth-rem text-danger float-left example-box-padding">
+                                                                    close
+                                                                </mat-icon>
+                                                                <div (click)="$event.stopPropagation()"
+                                                                     class="float-left full-width example-box-padding"
+                                                                     style="box-shadow: rgb(197, 197, 197) 0px 5px 8px -3px"
+                                                                     *ngIf="user.editable">
+                                                                    <mat-form-field class="full-width">
+                                                                        <mat-label>{{'events_handler.form.user_phone' | translate}}</mat-label>
+                                                                        <input type="tel" matInput placeholder="xxx-xxx-xx-xx"
+                                                                               (keyup)="onKeyPhoneNumber(user , $event)"
+                                                                               value="{{user.phoneNumber}}">
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            </section>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>-->
 
                 </div>
                 <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
@@ -220,7 +305,7 @@
                 </div>
             </form>
         </div>
-        <div [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
+        <div *ngIf="data.eventItems" [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
              class="task-todo-container full-height padding-mini-t-b pos-rel">
             <div class="padding-full margin-b-full-3">
                 <h3 [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="no-padding"
@@ -233,7 +318,7 @@
                     <span class="padding-mini-r-l">{{'events_handler.main.add_new_reminder' | translate}}</span>
                 </button>
             </div>
-            <mat-nav-list *ngIf="data.eventItems" class="clear-both">
+            <mat-nav-list class="clear-both">
                 <a mat-list-item *ngFor="let reminder of data.eventItems.reminders; last as last">
                     <button *ngIf="data.eventItems" (click)="deleteReminder($event , reminder)"
                             type="button"

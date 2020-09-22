@@ -79,20 +79,6 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         );
     }
 
-    /** Whether the number of selected elements matches the total number of rows. */
-    isAllSelected() {
-        const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.data.length;
-        return numSelected === numRows;
-    }
-
-    /** Selects all rows if they are not all selected; otherwise clear selection. */
-    masterToggle() {
-        this.isAllSelected() ?
-            this.selection.clear() :
-            this.dataSource.data.forEach(row => this.selection.select(row));
-    }
-
     ngOnInit(): void {
         this.data = this.bottomSheetData.data;
         this.createForm().then(() => {
@@ -110,15 +96,28 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
                 if (resp.success) {
                     this.usersList = resp.data;
                     this.dataSource = new MatTableDataSource<UserContainerInterface>(this.usersList);
+                    if(this.data.eventItems){
+                        if(this.data.eventItems.users){
+                            this.dataSource.data.forEach(row => {
+                                this.data.eventItems.users.forEach(row_2 => {
+                                    if(row_2.email == row.email){
+                                        row.phoneNumber = row_2.phoneNumber;
+                                        this.selection.select(row)
+                                    }
+                                })
+
+                            });
+                        }
+                    }
                     this.form.patchValue({
                         users: this.data.eventItems ? this.data.eventItems.users : []
                     });
-                    if (this.data.eventItems) {
+/*                    if (this.data.eventItems) {
                         if (this.data.eventItems.users.length) {
                             let cars1IDs = new Set(this.data.eventItems.users.map(({email}) => email));
                             this.usersList = this.usersList.filter(({email}) => !cars1IDs.has(email));
                         }
-                    }
+                    }*/
                 }
             })
         );
@@ -156,6 +155,24 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         }
     }
 
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+
+    filterMatTable($event) {
+        this.dataSource.filter = $event.target.value;
+    }
+
     transferToRight(user: UserContainerInterface) {
         this.form.patchValue({
             users: [...this.form.get("users").value, user]
@@ -177,7 +194,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     }
 
     onKeyPhoneNumber(user: UserEventHandlerInterface, $event) {
-        user.phoneNumberTemp = $event.target.value;
+        user.phoneNumber = $event.target.value;
     }
 
     enableForm() {
@@ -274,12 +291,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         formValue.creatorUser = this.loggedInUser;
         formValue.startDate = this.dateTimeService.formatDate(this.form.value.startDate) + " " + this.form.value.startTime + ":00";
         formValue.endDate = this.dateTimeService.formatDate(this.form.value.endDate) + " " + this.form.value.endTime + ":00";
-/*        if (formValue.startDate > formValue.endDate) {
-            this.form.controls['startDate'].setErrors({'incorrect': true});
-            this.form.enable();
-            return;
-        }*/
-
+        formValue.users = this.selection.selected;
         delete formValue.actionType.actionTypeJobModels;
         delete formValue.actionType.actionDescription;
         delete formValue.actionTypeJobModel.description;

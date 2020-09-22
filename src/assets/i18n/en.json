@@ -245,6 +245,8 @@
   },
   "events_handler": {
     "main": {
+      "google_calendar_title": "Google Calendar",
+      "container_calendar_title": "Container Calendar",
       "add_new_event": "Add New Event",
       "add_new_reminder": "Add New Reminder",
       "see_more": "See More",

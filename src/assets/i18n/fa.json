@@ -245,6 +245,8 @@
   },
   "events_handler": {
     "main": {
+      "google_calendar_title": "تقویم گوگل",
+      "container_calendar_title": "تقویم رویداد",
       "add_new_event": "افزودن رویداد",
       "add_new_reminder": "افزودن یادآور",
       "see_more": "مشاهده بیشتر",
