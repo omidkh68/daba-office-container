@@ -15,6 +15,7 @@ import {WindowManagerService} from '../../services/window-manager.service';
 import {ProfileSettingService} from './logic/profile-setting.service';
 import {ShowImageCropperComponent} from './show-image-cropper/show-image-cropper.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
+import {ApproveComponent} from "../approve/approve.component";
 import {DatetimeService} from "../dashboard/dashboard-toolbar/time-area/service/datetime.service";
 
 export interface Timezones {
@@ -171,86 +172,111 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
   }
 
   onSubmit() {
-    this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
 
-    const finalValue = {};
+    const dialogRef = this.dialog.open(ApproveComponent, {
 
-    finalValue['email'] = this.form.get('email').value;
-    finalValue['name'] = this.form.get('name').value;
-    finalValue['timezone'] = this.form.get('timezone').value.timezone;
+      data: {
+        title: this.getTranslate('profileSettings.change_lang_warning_note'),
+        message: this.getTranslate('profileSettings.change_lang_warning_text')
+      },
+      autoFocus: false,
+      width: '70vh',
+      maxWidth: '350px',
+      panelClass: 'approve-detail-dialog',
+      height: '160px'
+    });
 
-    if (this.form.get('c_password').value !== null) {
-      finalValue['c_password'] = this.form.get('c_password').value;
-    }
-
-    if (this.form.get('extension_no').value !== null) {
-      finalValue['extension_no'] = this.form.get('extension_no').value;
-    }
-
-    finalValue['lang'] = this.form.get('lang').value;
-    finalValue['dark_mode'] = this.form.get('dark_mode').value;
+    this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
-      this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
-        if (resp.success) {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
 
-          if (resp.data.lang !== null) {
-            this.defaultLang = resp.data.lang;
+          this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
 
-            if (this.viewDirection.getCurrentLang() !== resp.data.lang) {
-              this.electronService.remote.getCurrentWindow().reload();
-            }
+          const finalValue = {};
 
-            this.viewDirection.changeDirection(resp.data.lang === 'fa');
+          finalValue['email'] = this.form.get('email').value;
+          finalValue['name'] = this.form.get('name').value;
+          finalValue['timezone'] = this.form.get('timezone').value.timezone;
+
+          if (this.form.get('c_password').value !== null) {
+            finalValue['c_password'] = this.form.get('c_password').value;
           }
 
-          if (resp.data.dark_mode !== null) {
-            this.selectDarkMode = resp.data.dark_mode;
+          if (this.form.get('extension_no').value !== null) {
+            finalValue['extension_no'] = this.form.get('extension_no').value;
           }
 
-          if (resp.data.dark_mode !== this.loggedInUser.dark_mode) {
-            this.userInfoService.changeDarkMode();
-          }
+          finalValue['lang'] = this.form.get('lang').value;
+          finalValue['dark_mode'] = this.form.get('dark_mode').value;
 
-          let user = this.loggedInUser;
+          this._subscription.add(
+            this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
+              if (resp.success) {
+                this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
 
-          const newUser = resp.data;
+                if (resp.data.lang !== null) {
+                  this.defaultLang = resp.data.lang;
 
-          user = {
-            ...user,
-            profile_image: newUser.profile_image,
-            background_image: newUser.background_image,
-            email: newUser.email,
-            name: newUser.name,
-            timezone: newUser.timezone,
-            lang: newUser.lang,
-            dark_mode: newUser.dark_mode,
-            extension_no: newUser.extension_no,
-            status: newUser.status
-          };
+                  if (this.viewDirection.getCurrentLang() !== resp.data.lang) {
+                    this.electronService.remote.getCurrentWindow().reload();
 
-          this.userInfoService.changeUserInfo(user);
+                  }
 
-          this.dialogRef.close();
+                  this.viewDirection.changeDirection(resp.data.lang === 'fa');
+                }
 
-          setTimeout(() => {
-            const successfulMessage = this.getTranslate('profileSettings.profile_update');
+                if (resp.data.dark_mode !== null) {
+                  this.selectDarkMode = resp.data.dark_mode;
+                }
 
-            this.messageService.showMessage(successfulMessage, 'success');
-          }, 200);
-        } else {
-          this.form.enable();
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+                if (resp.data.dark_mode !== this.loggedInUser.dark_mode) {
+                  this.userInfoService.changeDarkMode();
+                }
+
+                let user = this.loggedInUser;
+
+                const newUser = resp.data;
+
+                user = {
+                  ...user,
+                  profile_image: newUser.profile_image,
+                  background_image: newUser.background_image,
+                  email: newUser.email,
+                  name: newUser.name,
+                  timezone: newUser.timezone,
+                  lang: newUser.lang,
+                  dark_mode: newUser.dark_mode,
+                  extension_no: newUser.extension_no,
+                  status: newUser.status
+                };
+
+                this.userInfoService.changeUserInfo(user);
+
+                this.dialogRef.close();
+
+                setTimeout(() => {
+                  const successfulMessage = this.getTranslate('profileSettings.profile_update');
+
+                  this.messageService.showMessage(successfulMessage, 'success');
+                }, 200);
+              } else {
+                this.form.enable();
+                this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+              }
+            }, () => {
+              this.form.enable();
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+            })
+          );
+
+          this.changeValueForm = false;
         }
-      }, () => {
-        this.form.enable();
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
       })
     );
 
-    this.changeValueForm = false;
   }
 
   setClockCity(option) {

@@ -2,6 +2,7 @@
   "global": {
     "search": "Search...",
     "name": "Name",
+    "descriptions": "Description",
     "name_error": "Please enter name",
     "family": "Family",
     "family_error": "Please enter family",
@@ -156,6 +157,7 @@
     },
     "task_detail": {
       "overview": "Overview",
+      "overview_description": "Show description",
       "reports": "Reports",
       "delete_title": "Delete Task",
       "delete_text": "Are you sure want to delete this task?"
