@@ -17,4 +17,5 @@ export interface UserContainerInterface {
   profile_image: string | null;
   background_image: string | null;
   editable?: boolean;
+  phoneNumber?: string;
 }
