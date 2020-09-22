@@ -37,10 +37,8 @@ export class EventHandlerSocketService {
                             events.map((item: EventHandlerInterface) => {
                                 item.sTime = new Date(item.startDate).toLocaleTimeString();
                                 item.eTime = new Date(item.endDate).toLocaleTimeString();
-                                debugger;
                                 item.startDate = this.dateTimeservice.getDateByTimezone(item.startDate , user.timezone);
                                 item.endDate = this.dateTimeservice.getDateByTimezone(item.endDate , user.timezone);
-
                                 if (item.reminders.length)
                                     reminders = [...reminders, ...item.reminders]
                             });
