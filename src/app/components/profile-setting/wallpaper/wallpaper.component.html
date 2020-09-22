@@ -8,7 +8,7 @@
       <img [src]="wallpaperUrl" class="display-block margin-auto full-height" alt="">
 
       <div *ngIf="showProgress" class="files-list pos-abs bottom-0 full-width z-index-9999" dir="ltr">
-        <div *ngFor="let file of files" class="single-file round-corner">
+        <div *ngFor="let file of files" class="single-file display-flex round-corner align-items-center justify-content-center">
 
           <div class="info">
             <h4 class="name">
@@ -62,9 +62,9 @@
 
   <ng-template #emptyWallpaperUrl>
     <div (fileDropped)="onFileDropped($event)" appDnd
-         class="wallpaper-container full-width height-135 padding-half round-corner bg-white cursor-pointer">
+         class="wallpaper-container full-width height-135 padding-half round-corner bg-white cursor-pointer margin-auto pos-rel text-center">
 
-      <input (change)="fileBrowseHandler($event)" id="fileDropRef" multiple type="file"/>
+      <input (change)="fileBrowseHandler($event)" id="fileDropRef" multiple type="file" class="pos-abs full-width full-height top-0 left-0 right-0">
 
       <svg class="icon icon-tabler icon-tabler-cloud-upload" fill="none" height="44" stroke="#009688"
            stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="44"
@@ -94,7 +94,7 @@
   </h6>
 
   <!--wallpaper-->
-  <div class="display-block height-full-minus-175 custom-mat-dialog-content no-padding overflow-y-auto display-flex flex-direction-row flex-wrap justify-content-space-between">
+  <div class="display-block height-full-minus-175 custom-mat-dialog-content no-padding overflow-y-auto display-flex flex-direction-row flex-wrap flex-space-between">
     <mat-card  *ngFor="let picture of wallpapersPictures" (click)="changeWallpaperPhysical(picture.img)"
                [style.background]="picture.value"
                class="mat-elevation-z1 full-width height-100 wallpaper thirty-width cursor-pointer margin-b-full">

@@ -1,6 +1,5 @@
 import {
   AfterContentInit,
-  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -37,7 +36,7 @@ export interface LoggedInUserExtensionInterface {
   templateUrl: './soft-phone-information.component.html',
   styleUrls: ['./soft-phone-information.component.scss']
 })
-export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, AfterViewInit, OnDestroy {
+export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, OnDestroy {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
@@ -82,10 +81,6 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
     );
 
     this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getExtensionStatus());
-  }
-
-  ngAfterViewInit(): void {
-
   }
 
   getExtensionStatus() {

@@ -14,6 +14,7 @@ import {LearningSystemPasswordComponent} from '../learning-system-password/learn
 import {LmsResultInterface, RoomInterface} from '../logic/lms.interface';
 import {LearningSystemCreateRoomComponent} from '../learning-system-create-room/learning-system-create-room.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {timer} from 'rxjs';
 
 @Component({
   selector: 'app-learning-system-main',
@@ -24,9 +25,12 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
   rooms: Array<RoomInterface> = null;
   rtlDirection: boolean;
   loadingIndicator: LoadingIndicatorInterface = null;
-
   showFrame: boolean = false;
   frameUrl: string;
+  timerDueTime: number = 5000;
+  timerPeriod: number = 20000;
+  globalTimer = null;
+  globalTimerSubscription: Subscription;
 
   private _subscription: Subscription = new Subscription();
 
@@ -52,7 +56,11 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
   }
 
   ngAfterViewInit(): void {
-    this.getRooms();
+    this.globalTimer = timer(
+      this.timerDueTime, this.timerPeriod
+    );
+
+    this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getRooms());
   }
 
   getRooms() {
@@ -102,6 +110,8 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
     this._subscription.add(
       dialogRef.afterClosed().subscribe(url => {
         if (url) {
+          this.getRooms();
+
           this.frameUrl = url;
 
           this.showFrame = true;
@@ -130,8 +140,9 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
         if (result) {
           this.showFrame = !this.showFrame;
 
-          console.log('main exit');
-          this.webViewService.changeRefreshWebView(null);
+          this.webViewService.changeRefreshWebView({visible: false, doRefresh: false});
+
+          this.getRooms();
         }
       })
     );
@@ -188,7 +199,11 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
       this._subscription.unsubscribe();
     }
 
-    console.log('main destroy');
-    this.webViewService.changeRefreshWebView(null);
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+      this.globalTimer = null;
+    }
+
+    this.webViewService.changeRefreshWebView({visible: false, doRefresh: false});
   }
 }

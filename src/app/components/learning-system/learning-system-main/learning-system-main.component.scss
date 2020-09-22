@@ -21,3 +21,25 @@
 .line-height-22 {
   line-height: 22px;
 }
+
+.inactive {
+  opacity: .5;
+}
+
+.online-in-room {
+  color: #757575;
+
+  animation: blink-online-in-room 1s infinite linear;
+}
+
+@keyframes blink-online-in-room {
+  0% {
+    color: #4ec060;
+  }
+  33.33333% {
+    color: #757575;
+  }
+  100% {
+    color: #4ec060;
+  }
+}

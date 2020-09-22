@@ -21,7 +21,7 @@
         </li>
       </ng-container>
     </ul>
-    <span *ngIf="extensionList.length > 3"
+    <span *ngIf="extensionList && extensionList.length > 3"
           [ngClass]="rtlDirection ? 'left-full-two-em-reverse' : 'right-full-two-em-reverse'"
           class="text-white pos-abs line-height-30">+{{extensionList.length - 3}}</span>
   </div>

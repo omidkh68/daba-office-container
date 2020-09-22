@@ -12,8 +12,8 @@
 
   <div *ngIf="!showFrame" class="content-container padding-full full-width height-full-minus-60 pos-rel">
     <div *ngIf="rooms && rooms.length; else showPlaceholder;"
-         class="display-flex margin-r-l-reverse margin-b-full padding-tiny-r-l flex-space-between">
-      <div *ngFor="let room of rooms" class="thirty-width padding-r-l">
+         class="display-flex flex-wrap margin-r-l-reverse margin-b-full padding-tiny-r-l">
+      <div *ngFor="let room of rooms" class="thirty-three-width padding-r-l">
         <mat-card (click)="joinRoom(room)"
                   class="room-item margin-b-full bg-white cursor-pointer pos-rel overflow-hide">
           <mat-card-header class="full-width">
@@ -27,14 +27,24 @@
             </mat-card-subtitle>
           </mat-card-header>
 
-          <mat-card-content>
+          <mat-card-content class="no-margin-b">
             <button *ngIf="room.userCreator === loggedInUser.email" (click)="deleteRoom(room.id); $event.stopPropagation();"
                     matTooltip="{{'learning.delete_room' | translate}}"
                     [ngClass]="rtlDirection ? 'left-0' : 'right-0'"
                     type="button"
-                    class="no-border cursor-pointer no-bg text-center width-45 height-45 text-red-400 no-padding pos-abs margin-auto top-half bottom-half">
+                    class="no-border cursor-pointer no-bg text-center width-45 height-45 text-red-400 no-padding pos-abs bottom-half">
               <mat-icon class="line-height-30">delete</mat-icon>
             </button>
+
+            <div class="display-flex pos-abs top-full flex-direction-row-reverse align-items-center"
+                 [ngClass]="rtlDirection ? 'left-half' : 'right-half'">
+              <mat-icon [ngClass]="room.users.length ? 'online-in-room' : ''">persons</mat-icon>
+              <span [ngClass]="room.users.length ? 'online-in-room' : ''">{{room.users.length}}</span>
+            </div>
+
+            <img [src]="'assets/images/conferences/audio-video-' + (room.users.length ? '' : 'in') + 'active.svg'"
+                 [ngClass]="{'inactive': !room.users.length}"
+                 [alt]="room.roomName" class="height-150 margin-auto display-flex">
           </mat-card-content>
 
           <mat-card-footer

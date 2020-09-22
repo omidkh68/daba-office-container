@@ -29,11 +29,7 @@ export class LearningSystemWindowComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._subscription.add(
-      this.webViewService.currentRefreshWebView.subscribe(status => {
-        this.showReload = status;
-
-        console.log(status);
-      })
+      this.webViewService.currentRefreshWebView.subscribe(status => this.showReload = status)
     );
 
     this._subscription.add(

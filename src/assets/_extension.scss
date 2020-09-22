@@ -134,6 +134,7 @@ textarea{height: 60px !important;max-height: 100px !important;resize: none !impo
 .half-width{width: 50% !important}
 .forty-width{width: 40% !important}
 .thirty-width{width: 30% !important}
+.thirty-three-width{width: 33% !important}
 .quarter-width{width:25% !important}
 .twenty-width{width: 20% !important}
 
@@ -341,6 +342,7 @@ textarea{height: 60px !important;max-height: 100px !important;resize: none !impo
 .flex-center {display: flex;align-items: center;justify-content: center}
 .flex-center-y {display: flex;align-items: center;justify-content: inherit}
 .flex-center-x {display: flex;align-items: inherit;justify-content: center}
+.flex-wrap {flex-wrap: wrap !important}
 
 .center-block{display: block;float: none !important;margin-left: auto !important;margin-right: auto !important}
 

@@ -70,8 +70,6 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
       });
 
       this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
-        console.log('in webview ');
-
         this.webViewService.changeRefreshWebView({doRefresh: false, visible: true});
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'learningSystem'});
@@ -80,7 +78,6 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
   }
 
   ngOnDestroy(): void {
-    console.log('in webview destroy');
-    this.webViewService.changeRefreshWebView(null);
+    this.webViewService.changeRefreshWebView({doRefresh: false, visible: false});
   }
 }

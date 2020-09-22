@@ -1,63 +1,64 @@
 <div (click)="activeWindow()"
      [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 bottom-0 top-0 full-width">
-    <div (dblclick)="!windowInstance.isMaximized ? maximize() : restore()"
-         class="window-heading full-width height-45 padding-mini-r-l display-flex align-items-center"
-         cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragBoundary=".dashboard-app-boundary">
-        <ng-template [ngIf]="windowInstance.isDraggable" [ngIfElse]="notDraggableHeading">
-            <h3 cdkDragHandle
-                class="window-title full-width full-height font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
-                <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                          class="text-dark-mode-color pos-rel">{{data.icon}}</mat-icon>
-                {{rtlDirection ? data.name_fa : data.name}}
-            </h3>
-        </ng-template>
+  <div (dblclick)="!windowInstance.isMaximized ? maximize() : restore()"
+       cdkDrag
+       cdkDragBoundary=".dashboard-app-boundary" cdkDragRootElement=".cdk-overlay-pane" class="window-heading full-width height-45 padding-mini-r-l display-flex align-items-center">
+    <ng-template [ngIfElse]="notDraggableHeading" [ngIf]="windowInstance.isDraggable">
+      <h3 cdkDragHandle
+          class="window-title full-width full-height font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
+        <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                  class="text-dark-mode-color pos-rel">{{data.icon}}</mat-icon>
+        {{rtlDirection ? data.name_fa : data.name}}
+      </h3>
+    </ng-template>
 
-        <ng-template #notDraggableHeading>
-            <h3 class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
-                <mat-icon class="text-dark-mode-color pos-rel"
-                          [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'">{{data.icon}}</mat-icon>
-                {{rtlDirection ? data.name_fa : data.name}}
-            </h3>
-        </ng-template>
+    <ng-template #notDraggableHeading>
+      <h3
+        class="window-title full-width font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
+        <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                  class="text-dark-mode-color pos-rel">{{data.icon}}</mat-icon>
+        {{rtlDirection ? data.name_fa : data.name}}
+      </h3>
+    </ng-template>
 
-        <div class="window-actions display-flex"
-             [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'">
-            <button (click)="minimize(); $event.stopPropagation();"
-                    *ngIf="!windowInstance.isMinimized"
-                    class="width-30 height-30 text-center line-height-25 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
-                <mat-icon
-                        class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
-                    minimize
-                </mat-icon>
-            </button>
-            <button (click)="restore(); $event.stopPropagation();"
-                    *ngIf="windowInstance.isMaximized || windowInstance.isMinimized"
-                    class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
-                <mat-icon
-                        class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
-                    filter_none
-                </mat-icon>
-            </button>
-            <button (click)="maximize(); $event.stopPropagation();"
-                    *ngIf="!windowInstance.isMaximized && !windowInstance.isMinimized"
-                    class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
-                <mat-icon
-                        class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
-                    crop_square
-                </mat-icon>
-            </button>
-            <button (click)="close(); $event.stopPropagation();"
-                    class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
-                <mat-icon
-                        class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
-                    close
-                </mat-icon>
-            </button>
-        </div>
+    <div [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'"
+         class="window-actions display-flex">
+      <button (click)="minimize(); $event.stopPropagation();"
+              *ngIf="!windowInstance.isMinimized"
+              class="width-30 height-30 text-center line-height-25 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
+          minimize
+        </mat-icon>
+      </button>
+      <button (click)="restore(); $event.stopPropagation();"
+              *ngIf="windowInstance.isMaximized || windowInstance.isMinimized"
+              class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
+          filter_none
+        </mat-icon>
+      </button>
+      <button (click)="maximize(); $event.stopPropagation();"
+              *ngIf="!windowInstance.isMaximized && !windowInstance.isMinimized"
+              class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
+          crop_square
+        </mat-icon>
+      </button>
+      <button (click)="close(); $event.stopPropagation();"
+              class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
+          close
+        </mat-icon>
+      </button>
     </div>
-    <div class="window-content pos-rel">
-        <app-events-handler-main (triggerBottomSheet)="openButtonSheet($event)"
-                                 [rtlDirection]="rtlDirection"></app-events-handler-main>
-        <app-event-handler-bottom-sheet #bottomSheet></app-event-handler-bottom-sheet>
-    </div>
+  </div>
+  <div class="window-content pos-rel">
+    <app-events-handler-main (triggerBottomSheet)="openButtonSheet($event)"
+                             [rtlDirection]="rtlDirection"></app-events-handler-main>
+    <app-event-handler-bottom-sheet #bottomSheet></app-event-handler-bottom-sheet>
+  </div>
 </div>
