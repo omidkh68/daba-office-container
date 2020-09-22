@@ -65,6 +65,7 @@ export class LoginFormComponent implements OnInit {
       this.form = this.fb.group({
         username: new FormControl(''),
         password: new FormControl(''),
+        // todo: ebi - remove comment
         // username: new FormControl('khosrojerdi@dabacenter.ir'),
         // password: new FormControl('123456'),
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en')
@@ -86,7 +87,7 @@ export class LoginFormComponent implements OnInit {
     this._subscription.add(
       this.api.login(formValue).subscribe((resp: LoginResultInterface) => {
         if (resp.success) {
-          this.createFiles(resp.data);
+          this.createFile(resp.data);
 
           this.userInfoService.changeLoginData(resp.data);
 
@@ -104,15 +105,12 @@ export class LoginFormComponent implements OnInit {
     );
   }
 
-  createFiles(data) {
+  createFile(data) {
     const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 
     const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
-    const loggedInUserPath = this.electronService.path.join(homeDirectory, 'loggedInUser.txt');
 
     this.electronService.fs.writeFileSync(loginDataPath, JSON.stringify(data));
-
-    this.electronService.fs.writeFileSync(loggedInUserPath, '');
   }
 
   showErrorLogin() {

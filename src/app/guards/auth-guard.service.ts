@@ -1,6 +1,5 @@
 import {Inject, Injectable, Injector, OnDestroy} from '@angular/core';
 import {AppConfig} from '../../environments/environment';
-import {Observable} from 'rxjs/internal/Observable';
 import {ApiService} from '../components/users/logic/api.service';
 import {CanActivate, Router} from '@angular/router';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -12,8 +11,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {ChangeStatusService} from '../components/status/services/change-status.service';
 import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
 import {ViewDirectionService} from '../services/view-direction.service';
-import {LoginInterface} from '../components/login/logic/login.interface';
 import {UserContainerInterface} from '../components/users/logic/user-container.interface';
+import {LoginInterface} from "../components/login/logic/login.interface";
 
 export interface DataInterface {
   loginData: LoginInterface,
@@ -39,98 +38,67 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     super(injector, userInfoService);
   }
 
-  canActivate(): Observable<boolean> | Promise<boolean> {
+  canActivate(): Promise<boolean> {
     return new Promise((resolve) => {
-      /*this.getUserLoginInfo().then((data: DataInterface) => {
-        // this.setUserData(userInfo);
-
-        console.log('data: ', data);
-        if (!data.userInfo) {
-          this.checkLogin().then(info => {
-            const userEssentialData: DataInterface = {
-              userInfo: info, loginData: data.loginData
-            };
-
-            this.setUserData(userEssentialData);
-
-            resolve(true);
-          });
-        } else {
-          this.setUserData(data);
-
-          resolve(true);
-        }
-
-        /!*console.log('after get: ', userInfo);
+      this.getUserLoginInfo().then((loginData: LoginInterface) => {
 
         this.checkLogin().then(userInfo => {
-          this.setUserData(userInfo);
+          const userEssentialData: DataInterface = {
+            userInfo: userInfo,
+            loginData: loginData
+          };
+
+          this.setUserData(userEssentialData);
 
           resolve(true);
         });
 
-        resolve(true);*!/
       }).catch(() => {
         this.router.navigateByUrl(`/login`);
-
-        resolve(false);
-      });*/
-
-      this.checkLogin().then(userInfo => {
-        this.setUserData(userInfo);
-
         resolve(true);
       });
+
+      /*this.checkLogin().then(userInfo => {
+        this.setUserData(userInfo);
+        resolve(true);
+      });*/
     });
   }
 
   getUserLoginInfo() {
     return new Promise(async (resolve, reject) => {
-      this.getLoginDataFile().then(loginData => {
-        this.getUserInfoFile().then(userInfo => {
-          if (!loginData && !userInfo) {
-            reject(false);
-          } else {
-            resolve({
-              loginData: loginData,
-              userInfo: userInfo
-            });
-          }
-        }).catch(() => reject(false));
+      this.getLoginDataFile().then((loginData: LoginInterface) => {
+        if (!loginData) {
+          reject(false);
+        } else {
+          this.userInfoService.changeLoginData(loginData);
+          resolve(loginData);
+        }
       }).catch(() => reject(false));
     });
   }
 
-  getLoginDataFile() {
+  getLoginDataFile(): Promise<LoginInterface | boolean> {
     return new Promise((resolve, reject) => {
       try {
         const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 
         const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
 
-        this.electronService.fs.readFile(loginDataPath, 'utf8', (err, data) => {
+        /*this.electronService.fs.readFile(loginDataPath, 'utf8', (err, data) => {
+
           if (err) reject(false);
 
           resolve(data ? JSON.parse(data) : false);
-        });
-      } catch (e) {
-        reject(false);
-      }
-    });
-  }
+        });*/
 
-  getUserInfoFile() {
-    return new Promise((resolve, reject) => {
-      try {
-        const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+        const loginData = this.electronService.fs.readFileSync(loginDataPath, 'utf8');
 
-        const loggedInUserPath = this.electronService.path.join(homeDirectory, 'loggedInUser.txt');
-
-        this.electronService.fs.readFile(loggedInUserPath, 'utf8', (err, data) => {
-          if (err) reject(false);
-
-          resolve(data ? JSON.parse(data) : false);
-        });
+        if (!loginData) {
+          reject(false);
+        } else {
+          resolve(loginData ? JSON.parse(loginData) : false);
+        }
       } catch (e) {
         reject(false);
       }
@@ -151,7 +119,6 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
         this.router.navigateByUrl(`/login`);
       } else {
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
         this.api.checkLogin().subscribe((resp: CheckLoginInterface) => {
           if (resp.success === true) {
             const successfulMessage = this.getTranslate('login_info.login_successfully');
@@ -163,13 +130,16 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
             resolve(resp.data);
           }
         }, () => {
+
+          this.router.navigateByUrl(`/login`);
+
           reject(false);
         });
       }
     });
   }
 
-  /*setUserData(data: DataInterface) {
+  setUserData(data: DataInterface) {
     this.userInfoService.changeLoginData(data.loginData);
 
     this.userInfoService.changeUserInfo(data.userInfo);
@@ -177,15 +147,15 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     this.viewDirection.changeDirection(data.userInfo.lang === 'fa');
 
     this.changeStatusService.changeUserStatus(data.userInfo.user_status);
-  }*/
+  }
 
-  setUserData(data) {
+  /*setUserData(data) {
     this.userInfoService.changeUserInfo(data);
 
     this.viewDirection.changeDirection(data.lang === 'fa');
 
     this.changeStatusService.changeUserStatus(data.user_status);
-  }
+  }*/
 
   getTranslate(word) {
     return this.translate.instant(word);
