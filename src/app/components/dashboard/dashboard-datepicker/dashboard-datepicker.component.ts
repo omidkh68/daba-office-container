@@ -59,6 +59,9 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
   }
 
   ngOnInit(): void {
+    this.eventHandlerSocketService.initializeWebSocketConnection().then(result => {
+      console.log(result);
+    });
     this.getEvents();
   }
 
@@ -87,7 +90,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
     let eventItems = event && event.startDate !== undefined ? event : null;
 
     let service: ServiceItemsInterface[] = this.serviceList.filter(obj => {
-      return obj.serviceTitle == 'events_calender'
+      return obj.serviceTitle == 'events_calendar'
     });
 
     this.eventHandlerService.moveEventItems(eventItems);

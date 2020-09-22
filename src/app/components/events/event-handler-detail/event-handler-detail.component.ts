@@ -79,6 +79,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         );
     }
 
+    socket = null;
     ngOnInit(): void {
         this.data = this.bottomSheetData.data;
         this.createForm().then(() => {

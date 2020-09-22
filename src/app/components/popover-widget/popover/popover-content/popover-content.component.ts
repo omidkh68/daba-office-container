@@ -31,7 +31,7 @@ export class PopoverContnetComponent {
             let eventItems = event && event.startDate !== undefined ? event : null;
 
             let service: ServiceItemsInterface[] = this.data.serviceList.filter(obj => {
-                return obj.serviceTitle == 'events_calender'
+                return obj.serviceTitle == 'events_calendar'
             });
 
             this.eventHandlerService.moveEvents(this.data.events);

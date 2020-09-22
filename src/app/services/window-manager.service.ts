@@ -61,7 +61,7 @@ export class WindowManagerService {
           break;
         }
 
-        case 'events_calender': {
+        case 'events_calendar': {
           component = EventsHandlerComponent;
           break;
         }
