@@ -171,7 +171,9 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
       this.loggedInUser.services.map(userService => {
         const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
-        if (serviceName === 'pbx_service') {
+        console.log(serviceName);
+
+        if (serviceName === 'softphones_service') {
           const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();
 
           if (service) {

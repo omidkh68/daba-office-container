@@ -10,6 +10,7 @@ import {SoftPhoneService} from '../../../soft-phone/service/soft-phone.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 import {ProfileSettingComponent} from '../../../profile-setting/profile-setting.component';
+import {AppConfig} from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-profile-menu',
@@ -55,12 +56,22 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
 
     this.softPhoneService.sipHangUp();
 
+    this.removeLoginDataFileContent();
+
     this.windowManagerService.closeAllServices().then(() => {
       setTimeout(() => this.router.navigateByUrl(`/login`), 500);
     });
   }
 
-  settingProfile() {
+  removeLoginDataFileContent() {
+    const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+
+    const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+
+    this.electronService.fs.writeFileSync(loginDataPath, null);
+  }
+
+  showProfileSetting() {
     const dialogRef = this.dialog.open(ProfileSettingComponent, {
       autoFocus: false,
       width: '480px',

@@ -46,7 +46,7 @@ export class WindowManagerService {
           break;
         }
 
-        case 'pbx_service': {
+        case 'softphones_service': {
           component = SoftPhoneComponent;
           maximizable = false;
           break;
