@@ -118,6 +118,7 @@ try {
       }
     });
   }
+  // todo: ebi - remove comment
 
   app.on('activate', () => {
     if (win === null) {
