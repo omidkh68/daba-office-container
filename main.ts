@@ -2,7 +2,6 @@ import {app, BrowserWindow, ipcMain, Menu, screen, webFrame} from 'electron';
 // import {autoUpdater} from 'electron-updater';
 import {join} from 'path';
 import {format} from 'url';
-// const Datastore = require('nedb');
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -69,15 +68,6 @@ function createWindow(): BrowserWindow {
         autoUpdater.checkForUpdatesAndNotify();
     });*/
 
-  /*let userInfoDb = new Datastore({
-    filename: path.join(__dirname, 'Collections.db'),
-    autoload: true
-  });
-
-  const globalAny: any = global;
-
-  globalAny.collectionsDb = userInfoDb;*/
-
   return win;
 }
 
@@ -118,7 +108,6 @@ try {
       }
     });
   }
-  // todo: ebi - remove comment
 
   app.on('activate', () => {
     if (win === null) {

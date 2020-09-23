@@ -3,6 +3,7 @@ import {AppConfig} from '../../environments/environment';
 import {ApiService} from '../components/users/logic/api.service';
 import {CanActivate, Router} from '@angular/router';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {LoginInterface} from "../components/login/logic/login.interface";
 import {LoginDataClass} from '../services/loginData.class';
 import {MessageService} from '../components/message/service/message.service';
 import {UserInfoService} from '../components/users/services/user-info.service';
@@ -12,7 +13,6 @@ import {ChangeStatusService} from '../components/status/services/change-status.s
 import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
 import {ViewDirectionService} from '../services/view-direction.service';
 import {UserContainerInterface} from '../components/users/logic/user-container.interface';
-import {LoginInterface} from "../components/login/logic/login.interface";
 
 export interface DataInterface {
   loginData: LoginInterface,
@@ -85,13 +85,6 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
         const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
 
-        /*this.electronService.fs.readFile(loginDataPath, 'utf8', (err, data) => {
-
-          if (err) reject(false);
-
-          resolve(data ? JSON.parse(data) : false);
-        });*/
-
         const loginData = this.electronService.fs.readFileSync(loginDataPath, 'utf8');
 
         if (!loginData) {
@@ -130,7 +123,6 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
             resolve(resp.data);
           }
         }, () => {
-
           this.router.navigateByUrl(`/login`);
 
           reject(false);
@@ -148,14 +140,6 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
     this.changeStatusService.changeUserStatus(data.userInfo.user_status);
   }
-
-  /*setUserData(data) {
-    this.userInfoService.changeUserInfo(data);
-
-    this.viewDirection.changeDirection(data.lang === 'fa');
-
-    this.changeStatusService.changeUserStatus(data.user_status);
-  }*/
 
   getTranslate(word) {
     return this.translate.instant(word);
