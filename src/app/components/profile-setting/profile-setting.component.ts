@@ -175,7 +175,30 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
   }
 
   onSubmit() {
-    const dialogRef = this.dialog.open(ApproveComponent, {
+    this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
+
+    const formValue: any = {};
+
+    formValue['email'] = this.form.get('email').value;
+    formValue['name'] = this.form.get('name').value;
+    formValue['timezone'] = this.form.get('timezone').value.timezone;
+
+    if (this.form.get('c_password').value !== null) {
+      formValue['c_password'] = this.form.get('c_password').value;
+    }
+
+    if (this.form.get('extension_no').value !== null) {
+      formValue['extension_no'] = this.form.get('extension_no').value;
+    }
+
+    formValue['lang'] = this.form.get('lang').value;
+    formValue['dark_mode'] = this.form.get('dark_mode').value;
+
+    const currentLang = this.viewDirection.getCurrentLang();
+    const compareFormLangAndCurrentLang = formValue['lang'] !== currentLang;
+
+    if (compareFormLangAndCurrentLang) {    const dialogRef = this.dialog.open(ApproveComponent, {
       data: {
         title: this.getTranslate('profileSettings.change_lang_warning_note'),
         message: this.getTranslate('profileSettings.change_lang_warning_text')
@@ -193,91 +216,81 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
 
-          this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
+          this.reload(formValue, compareFormLangAndCurrentLang);
+            this.changeValueForm = false;
+          } else {
+            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+          }
+        })
+      );
+    } else {
+      this.reload(formValue, false);
+      this.changeValueForm = false;
+    }
+  }
 
-          const finalValue = {};
+  reload(formValue, hasReload: boolean) {
+    this._subscription.add(
+      this.profileSettingService.updateUser(formValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
+        if (resp.success) {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
 
-          finalValue['email'] = this.form.get('email').value;
-          finalValue['name'] = this.form.get('name').value;
-          finalValue['timezone'] = this.form.get('timezone').value.timezone;
+          if (resp.data.lang !== null) {
+            this.defaultLang = resp.data.lang;
 
-          if (this.form.get('c_password').value !== null) {
-            finalValue['c_password'] = this.form.get('c_password').value;
+            if (hasReload) {
+              this.electronService.remote.getCurrentWindow().reload();
+            }
+
+            this.viewDirection.changeDirection(resp.data.lang === 'fa');
           }
 
-          if (this.form.get('extension_no').value !== null) {
-            finalValue['extension_no'] = this.form.get('extension_no').value;
+          if (resp.data.dark_mode !== null) {
+            this.selectDarkMode = resp.data.dark_mode;
           }
 
-          finalValue['lang'] = this.form.get('lang').value;
-          finalValue['dark_mode'] = this.form.get('dark_mode').value;
+          if (resp.data.dark_mode !== this.loggedInUser.dark_mode) {
+            this.userInfoService.changeDarkMode();
+          }
 
-          this._subscription.add(
-            this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
-              if (resp.success) {
-                this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+          let user = this.loggedInUser;
 
-                if (resp.data.lang !== null) {
-                  this.defaultLang = resp.data.lang;
+          const newUser = resp.data;
 
-                  if (this.viewDirection.getCurrentLang() !== resp.data.lang) {
-                    this.electronService.remote.getCurrentWindow().reload();
+          user = {
+            ...user,
+            profile_image: newUser.profile_image,
+            background_image: newUser.background_image,
+            email: newUser.email,
+            name: newUser.name,
+            timezone: newUser.timezone,
+            lang: newUser.lang,
+            dark_mode: newUser.dark_mode,
+            extension_no: newUser.extension_no,
+            status: newUser.status
+          };
 
-                  }
+          this.userInfoService.changeUserInfo(user);
 
-                  this.viewDirection.changeDirection(resp.data.lang === 'fa');
-                }
+          this.dialogRef.close();
 
-                if (resp.data.dark_mode !== null) {
-                  this.selectDarkMode = resp.data.dark_mode;
-                }
+          setTimeout(() => {
+            const successfulMessage = this.getTranslate('profileSettings.profile_update');
 
-                if (resp.data.dark_mode !== this.loggedInUser.dark_mode) {
-                  this.userInfoService.changeDarkMode();
-                }
-
-                let user = this.loggedInUser;
-
-                const newUser = resp.data;
-
-                user = {
-                  ...user,
-                  profile_image: newUser.profile_image,
-                  background_image: newUser.background_image,
-                  email: newUser.email,
-                  name: newUser.name,
-                  timezone: newUser.timezone,
-                  lang: newUser.lang,
-                  dark_mode: newUser.dark_mode,
-                  extension_no: newUser.extension_no,
-                  status: newUser.status
-                };
-
-                this.userInfoService.changeUserInfo(user);
-
-                this.dialogRef.close();
-
-                setTimeout(() => {
-                  const successfulMessage = this.getTranslate('profileSettings.profile_update');
-
-                  this.messageService.showMessage(successfulMessage, 'success');
-                }, 200);
-              } else {
-                this.form.enable();
-                this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
-              }
-            }, (error: HttpErrorResponse) => {
-              this.form.enable();
-
-              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
-
-              this.refreshLoginService.openLoginDialog(error);
-            })
-          );
-
-          this.changeValueForm = false;
+            this.messageService.showMessage(successfulMessage, 'success');
+          }, 200);
+        } else {
+          this.form.enable();
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
         }
+
+        this.changeValueForm = false;
+      }, (error: HttpErrorResponse) => {
+        this.form.enable();
+
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }
