@@ -1,10 +1,1 @@
-<mat-drawer-container class="full-width full-height">
-  <mat-drawer class="full-height" mode="side" [opened]="false">
-    <app-sidebar class="full-width full-height"></app-sidebar>
-  </mat-drawer>
-  <!--<mat-drawer-content class="full-height overflow-hide" [@animRoutes]="getPage(appOutlet)">
-  </mat-drawer-content>-->
-  <mat-drawer-content class="full-height overflow-hide">
-    <router-outlet #appOutlet="outlet"></router-outlet>
-  </mat-drawer-content>
-</mat-drawer-container>
+<router-outlet></router-outlet>

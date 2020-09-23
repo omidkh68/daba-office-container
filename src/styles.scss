@@ -546,7 +546,8 @@ file-preview-container {
   }
 
   &.main-menu {
-    width: 250px;
+    width: fit-content;
+    max-width: inherit !important;
   }
 
   &.time-area-menu {

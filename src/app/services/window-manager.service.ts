@@ -11,6 +11,7 @@ import {WebBrowserComponent} from '../components/web-browser/web-browser.compone
 import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
 import {EventsHandlerComponent} from '../components/events/events-handler.component';
 import {LearningSystemComponent} from '../components/learning-system/learning-system.component';
+import {ConferencesCollaborationComponent} from '../components/conferences-collaboration/conferences-collaboration.component';
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +74,11 @@ export class WindowManagerService {
 
         case 'learning_service': {
           component = LearningSystemComponent;
+          break;
+        }
+
+        case 'conferences_&_collaboration_services': {
+          component = ConferencesCollaborationComponent;
           break;
         }
       }

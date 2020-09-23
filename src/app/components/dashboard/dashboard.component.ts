@@ -15,7 +15,6 @@ import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {ServiceItemsInterface} from './logic/service-items.interface';
 import {WallpaperSelectorService} from '../../services/wallpaper-selector.service';
-import {StatusChangeResultInterface} from '../status/logic/result-interface';
 import {ApiService as StatusApiService} from '../status/logic/api.service';
 
 @Component({

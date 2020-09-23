@@ -11,7 +11,8 @@ export class LazyComponentService {
     webBrowserModuleId: import('../components/web-browser/web-browser.module'),
     adminPanelModuleId: import('../components/admin-panel/admin-panel.module'),
     eventsHandlerModuleId: import('../components/events/events-handler.module'),
-    learningSystemModuleId: import('../components/learning-system/learning-system.module')
+    learningSystemModuleId: import('../components/learning-system/learning-system.module'),
+    conferenceCollaborationModuleId: import('../components/conferences-collaboration/conferences-collaboration.module')
   };
 
   constructor(private compiler: Compiler,

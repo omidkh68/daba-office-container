@@ -16,11 +16,10 @@ import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
-import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskCalendarFilterComponent} from '../task-calendar/task-calendar-filter/task-calendar-filter.component';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];
@@ -36,7 +35,6 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
   rtlDirection: boolean;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'project'};
-  loggedInUser: UserContainerInterface;
   taskEssentialInfo: TaskEssentialInfo;
   pushTaskToBoard;
   doResetFilter: boolean = false;
@@ -67,10 +65,6 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
         this.changeMainTabLanguage();
       })
-    );
-
-    this._subscription.add(
-      this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
 
     this._subscription.add(

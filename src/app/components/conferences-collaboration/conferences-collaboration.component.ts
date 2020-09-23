@@ -4,21 +4,18 @@ import {LazyComponentService} from '../../services/lazy-component.service';
 import {ServiceItemsInterface} from '../dashboard/logic/service-items.interface';
 
 @Component({
-  selector: 'app-tasks',
-  templateUrl: './tasks.component.html'
+  selector: 'app-conferences-collaboration',
+  templateUrl: './conferences-collaboration.component.html'
 })
-export class TasksComponent implements AfterViewInit {
+export class ConferencesCollaborationComponent implements AfterViewInit {
   @ViewChild('container', {read: ViewContainerRef}) container;
-
-  width: number = 0;
-  height: number = 0;
 
   constructor(private lazyComponentService: LazyComponentService,
               @Inject(MAT_DIALOG_DATA) public data: ServiceItemsInterface) {
   }
 
   async ngAfterViewInit() {
-    const ref = this.lazyComponentService.loadComponent('tasksModuleId', this.container);
+    const ref = this.lazyComponentService.loadComponent('conferenceCollaborationModuleId', this.container);
 
     ref.then(result => {
       result.instance.data = this.data;

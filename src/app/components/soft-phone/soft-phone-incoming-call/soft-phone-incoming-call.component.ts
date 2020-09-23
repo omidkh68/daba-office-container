@@ -22,10 +22,10 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private softPhoneService: SoftPhoneService,
-              private notificationService: NotificationService,
+  constructor(private electronService: ElectronService,
               private translateService: TranslateService,
-              private electronService: ElectronService) {
+              private softPhoneService: SoftPhoneService,
+              private notificationService: NotificationService) {
     this._subscription.add(
       this.softPhoneService.currentSoftPhoneUsers.subscribe(softPhoneUsers => this.softPhoneUsers = softPhoneUsers)
     );
@@ -37,12 +37,13 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
           if (incomingCall.data) {
             this.incomingData = incomingCall.data;
-            this.currentPhoneNumber = this.incomingData.o_event.o_session.o_uri_from.s_user_name;
 
+            this.currentPhoneNumber = this.incomingData.o_event.o_session.o_uri_from.s_user_name;
 
             this.currentPhoneNumber = this.currentPhoneNumber.replace('-wrtc', '');
 
             let callerID = '';
+
             const translateIncomingCall = this.getTranslate('soft_phone.incoming_call.want_to_call_with_you');
 
             if (this.softPhoneUsers) {
@@ -52,7 +53,6 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
                 this.onCallUser = currentUser;
                 this.onCallUser.extension_no = this.currentPhoneNumber;
 
-                // callerID = currentUser.name + ' ' + currentUser.family;
                 callerID = currentUser.extension_name;
               } else {
                 callerID = this.getTranslate('soft_phone.incoming_call.unknown_caller');
