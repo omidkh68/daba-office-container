@@ -57,7 +57,8 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
         if (this.reloadWebView && this.webFrame) {
           try {
             this.webFrame.nativeElement.reloadIgnoringCache();
-          } catch (e) {}
+          } catch (e) {
+          }
         }
       })
     );
@@ -80,7 +81,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
 
           this.confAddress = resp.confname;
 
-          const address = `${AppConfig.CONF_URL}?username=${resp.username}&confname=${resp.confname}&lang=${this.rtlDirection ? 'fa' : 'en'}&mode=${this.loggedInUser.dark_mode}`;
+          const address = `${AppConfig.CONF_URL}?username=${resp.username}&confname=${resp.confname}&lang=${this.rtlDirection ? 'fa' : 'en'}&darkMode=${this.loggedInUser.dark_mode}`;
 
           if (this.webFrame) {
             this.webFrame.nativeElement.setAttribute('src', address);

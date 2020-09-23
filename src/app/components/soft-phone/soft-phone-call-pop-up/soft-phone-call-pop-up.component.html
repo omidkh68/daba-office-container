@@ -1,8 +1,8 @@
 <div class="popup-container pos-rel full-height full-width padding-full">
   <button (click)="minimizePopUp()"
           *ngIf="connectedStatus"
-          class="minimizeBtn pos-abs top-full width-40 height-40 text-white no-bg no-border cursor-pointer"
-          [ngClass]="rtlDirection ? 'left-full' : 'right-full'">
+          [ngClass]="rtlDirection ? 'left-full' : 'right-full'"
+          class="minimizeBtn pos-abs top-full width-40 height-40 text-white no-bg no-border cursor-pointer">
     <mat-icon>{{rtlDirection ? 'keyboard_arrow_left' : 'keyboard_arrow_right'}}</mat-icon>
   </button>
 
@@ -12,12 +12,12 @@
     <ul (click)="activeExtensionList = !activeExtensionList"
         class="list-style-none no-padding no-margin cursor-pointer">
       <ng-container *ngFor="let ext of extensionList; let i = index">
-        <li *ngIf="i < 3" class="pos-abs display-flex align-items-center"
-            [ngStyle]="{'right.px': rtlDirection ? i + '2' : 'inherit', 'left.px' : rtlDirection ? 'inherit' : i + '2'}">
-          <img [src]="'assets/profileImg/'+ (ext.username ? ext.username : '0') +'.jpg'" [alt]="ext.extension_name"
-               onerror="this.src='assets/profileImg/0.jpg'"
+        <li *ngIf="i < 3" [ngStyle]="{'right.px': rtlDirection ? i + '2' : 'inherit', 'left.px' : rtlDirection ? 'inherit' : i + '2'}"
+            class="pos-abs display-flex align-items-center">
+          <img [alt]="ext.extension_name" [src]="'assets/profileImg/'+ (ext.username ? ext.username : '0') +'.jpg'"
                class="mat-elevation-z3 width-30 height-30 round-corner-all"
-               matListAvatar>
+               matListAvatar
+               onerror="this.src='assets/profileImg/0.jpg'">
         </li>
       </ng-container>
     </ul>
@@ -28,10 +28,10 @@
 
   <div
     class="avatar-holder text-center width-100 height-100 round-corner-all padding-half margin-auto margin-t-full-3 margin-b-full">
-    <img [src]="'assets/profileImg/'+ (data.username ? data.username : '0') +'.jpg'" [alt]="data.name"
-         onerror="this.src='assets/profileImg/0.jpg'"
+    <img [alt]="data.name" [src]="'assets/profileImg/'+ (data.username ? data.username : '0') +'.jpg'"
          class="full-width round-corner-all"
-         matListAvatar>
+         matListAvatar
+         onerror="this.src='assets/profileImg/0.jpg'">
   </div>
 
   <h2
@@ -52,7 +52,7 @@
     [ngClass]="connectedStatus ? 'flex-space-between' : 'flex-space-around'"
     class="full-width transition text-center display-flex padding-r-l-2 pos-abs right-0 left-0 bottom-full-2">
     <ng-container *ngIf="connectedStatus">
-      <button *ngFor="let key of keys" (click)="callEvent(key)"
+      <button (click)="callEvent(key)" *ngFor="let key of keys"
               class="key transition min-width-inherit cursor-pointer text-white mat-elevation-z3 no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 margin-mini-r-l text-center round-corner-all"
               mat-raised-button>
         <mat-icon>{{!muteStatus ? key.num : key.changeIcon}}</mat-icon>

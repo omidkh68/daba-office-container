@@ -3,7 +3,7 @@ import {AppConfig} from '../../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {TaskInterface} from './task-interface';
-import {BoardInterface, ResultInterface} from './board-interface';
+import {ResultInterface} from './board-interface';
 import {FilterInterface} from './filter-interface';
 import {TaskDurationInterface} from './task-duration-interface';
 import {ActivityInterface} from '../task-activity/logic/activity-interface';

@@ -1,9 +1,9 @@
 <mat-drawer-container autosize class="rate-calendar display-flex flex-space-between padding-tiny-t-b"
                       id="rate-container">
-  <mat-drawer #drawer class="round-corner mat-elevation-z1 padding-tiny-r-l" mode="side" [disableClose]="true">
+  <mat-drawer #drawer [disableClose]="true" class="round-corner mat-elevation-z1 padding-tiny-r-l" mode="side">
     <div *ngIf="userSelected && userSelected.email" class="padding-half">
       <!--            <mat-icon class="cursor-pointer" (click)="drawer.toggle()" aria-hidden="false">close</mat-icon>-->
-      <img [src]="'/assets/profileImg/'+userSelected.email+'.jpg'" [alt]="userSelected.name + ' ' + userSelected.family"
+      <img [alt]="userSelected.name + ' ' + userSelected.family" [src]="'/assets/profileImg/'+userSelected.email+'.jpg'"
            class="width-70 height-70 display-block margin-t-b margin-auto text-center round-corner-all margin-auto pos-rel top-six-tenth mat-elevation-z2">
 
       <div class="padding-t-b display-flex align-items-center">
@@ -31,7 +31,7 @@
       </div>
     </div>
   </mat-drawer>
-  <div class="padding-mini-r-l" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+  <div [dir]="rtlDirection ? 'rtl' : 'ltr'" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'" class="padding-mini-r-l">
     <full-calendar #calendar [allDaySlot]="false" [buttonText]="buttonLabels"
                    [dir]="rtlDirection ? 'rtl' : 'ltr'"
                    [displayEventTime]="false"

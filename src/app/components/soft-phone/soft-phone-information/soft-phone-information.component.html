@@ -1,16 +1,17 @@
 <div class="full-width full-height">
   <mat-list class="soft-phone-user full-width height-50">
     <mat-list-item class="padding-mini-r-l full-height">
-      <img [src]="'assets/profileImg/'+ (loggedInUser ? loggedInUser.email : '0') +'.jpg'" [alt]="loggedInUser ? loggedInUser.name : ''"
+      <img [alt]="loggedInUser ? loggedInUser.name : ''"
+           [src]="'assets/profileImg/'+ (loggedInUser ? loggedInUser.email : '0') +'.jpg'"
            class="mat-elevation-z2 my-profile-img"
-           onerror="this.src='assets/profileImg/0.jpg'"
-           matListAvatar>
+           matListAvatar
+           onerror="this.src='assets/profileImg/0.jpg'">
       <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser ? loggedInUser.name : ''}} </h3>
 
-      <div class="font-8-rem" [dir]="rtlDirection ? 'ltr' : 'rtl'">
+      <div [dir]="rtlDirection ? 'ltr' : 'rtl'" class="font-8-rem">
         <mat-slide-toggle #slideToggle
-                          (change)="changeSoftphoneStatus($event)" class="soft-phone-status"
-                          [checked]="loggedInUserExtension && softphoneConnectedStatus && loggedInUserExtension.extension.is_online">
+                          (change)="changeSoftphoneStatus($event)" [checked]="loggedInUserExtension && softphoneConnectedStatus && loggedInUserExtension.extension.is_online"
+                          class="soft-phone-status">
           <span class="padding-mini-r-l">
             {{(slideToggle.checked ? 'global.active' : 'global.deactivate') | translate}}
           </span>
@@ -25,23 +26,24 @@
                      *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
                      [ngClass]="rtlDirection ? 'padding-r-half padding-l-tiny' : 'padding-l-half padding-r-tiny'"
                      class="highlight cursor-pointer full-height">
-        <img [src]="'assets/profileImg/'+ user.username +'.jpg'" [alt]="user.name"
-             onerror="this.src='assets/profileImg/0.jpg'"
-             [ngClass]="user.is_online ? 'active' : ''"
-             class="online-user mat-elevation-z2 width-35 height-35 transition" matListAvatar>
+        <img [alt]="user.name" [ngClass]="user.is_online ? 'active' : ''"
+             [src]="'assets/profileImg/'+ user.username +'.jpg'"
+             class="online-user mat-elevation-z2 width-35 height-35 transition"
+             matListAvatar onerror="this.src='assets/profileImg/0.jpg'">
 
         <h3 class="font-7-rem text-weight-bold no-margin" matLine> {{user.extension_name}} </h3>
 
         <div matLine>
           <mat-icon [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
-                    class="width-18 height-18 font-8-em pos-rel top-two-tenth ">access_time</mat-icon>
+                    class="width-18 height-18 font-8-em pos-rel top-two-tenth ">access_time
+          </mat-icon>
 
           <app-time-area-digital-clock [timezone]="user.timezone" class="font-8-em text-gray-600">
           </app-time-area-digital-clock>
         </div>
 
-        <div class="pos-rel height-30 line-height-30 round-corner-all font-8-em"
-             [ngClass]="user.is_online ? 'text-green-700' : 'text-red-700'">
+        <div [ngClass]="user.is_online ? 'text-green-700' : 'text-red-700'"
+             class="pos-rel height-30 line-height-30 round-corner-all font-8-em">
           {{user.extension_no}}
         </div>
 

@@ -175,6 +175,12 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
     return this.translate.instant(word);
   }
 
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
+  }
+
   private flipAfterRotate() {
     const flippedH = this.transform.flipH;
     const flippedV = this.transform.flipV;
@@ -183,11 +189,5 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
       flipH: flippedV,
       flipV: flippedH
     };
-  }
-
-  ngOnDestroy(): void {
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-    }
   }
 }

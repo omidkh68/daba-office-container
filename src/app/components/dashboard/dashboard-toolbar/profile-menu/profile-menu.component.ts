@@ -10,7 +10,6 @@ import {SoftPhoneService} from '../../../soft-phone/service/soft-phone.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 import {ProfileSettingComponent} from '../../../profile-setting/profile-setting.component';
-import {AppConfig} from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-profile-menu',
@@ -56,19 +55,9 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
 
     this.softPhoneService.sipHangUp();
 
-    this.removeLoginDataFileContent();
-
     this.windowManagerService.closeAllServices().then(() => {
       setTimeout(() => this.router.navigateByUrl(`/login`), 500);
     });
-  }
-
-  removeLoginDataFileContent() {
-    const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
-
-    const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
-
-    this.electronService.fs.writeFileSync(loginDataPath, null);
   }
 
   showProfileSetting() {
@@ -80,14 +69,6 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
     });
 
     this.windowManagerService.dialogOnTop(dialogRef.id);
-
-    this._subscription.add(
-      dialogRef.afterClosed().subscribe((resp: any) => {
-        if (resp) {
-          // this.messageService.showMessage(`${resp.message}`);
-        }
-      })
-    );
   }
 
   ngOnDestroy(): void {

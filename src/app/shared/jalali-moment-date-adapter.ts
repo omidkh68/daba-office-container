@@ -162,28 +162,6 @@ export class JalaliMomentDateAdapter extends DateAdapter<moment.Moment> {
     return date.clone().locale(this.locale);
   }
 
-  private createPersianDateFrom3Numbers(
-    year: number,
-    month: number,
-    date: number
-  ): moment.Moment {
-    let result: moment.Moment;
-    if (this.options && this.options.useUtc) {
-      result = moment().utc();
-    } else {
-      result = moment();
-    }
-    return result
-      .jYear(year)
-      .jMonth(month)
-      .jDate(date)
-      .hours(0)
-      .minutes(0)
-      .seconds(0)
-      .milliseconds(0)
-      .locale('fa');
-  }
-
   createDate(year: number, month: number, date: number): moment.Moment {
     // Moment.js will create an invalid date if any of the components are out of bounds, but we
     // explicitly check each case so we can throw more descriptive errors.
@@ -279,12 +257,6 @@ export class JalaliMomentDateAdapter extends DateAdapter<moment.Moment> {
   }
 
   /**
-   * Returns the given value if given a valid Moment or null. Deserializes valid ISO 8601 strings
-   * (https://www.ietf.org/rfc/rfc3339.txt) and valid Date objects into valid Moments and empty
-   * string into null. Returns an invalid date for all other values.
-   */
-
-  /**
    * Attempts to deserialize a value to a valid date object. This is different from parsing in that
    * deserialize should only accept non-ambiguous, locale-independent formats (e.g. a ISO 8601
    * string). The default implementation does not allow any deserialization, it simply checks that
@@ -315,6 +287,34 @@ export class JalaliMomentDateAdapter extends DateAdapter<moment.Moment> {
       return date;
     }
     return super.deserialize(value);
+  }
+
+  /**
+   * Returns the given value if given a valid Moment or null. Deserializes valid ISO 8601 strings
+   * (https://www.ietf.org/rfc/rfc3339.txt) and valid Date objects into valid Moments and empty
+   * string into null. Returns an invalid date for all other values.
+   */
+
+  private createPersianDateFrom3Numbers(
+    year: number,
+    month: number,
+    date: number
+  ): moment.Moment {
+    let result: moment.Moment;
+    if (this.options && this.options.useUtc) {
+      result = moment().utc();
+    } else {
+      result = moment();
+    }
+    return result
+      .jYear(year)
+      .jMonth(month)
+      .jDate(date)
+      .hours(0)
+      .minutes(0)
+      .seconds(0)
+      .milliseconds(0)
+      .locale('fa');
   }
 
   /** Creates a Moment instance while respecting the current UTC settings. */

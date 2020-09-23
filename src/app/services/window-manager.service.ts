@@ -120,7 +120,8 @@ export class WindowManagerService {
       } else {
         this.restoreWindow(service);
       }
-    } catch (e) {}
+    } catch (e) {
+    }
   }
 
   fixPositionByTransform(event) {
@@ -277,12 +278,24 @@ export class WindowManagerService {
         setTimeout(() => {
           element = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
           element.style.zIndex = maxWindowZIndex;
-        },100)
-      }else{
-        const elementOverlay = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
-        elementOverlay.style.zIndex = maxWindowZIndex;
-        element = document.querySelector('#' + dialogId) as HTMLElement;
-        element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
+        }, 100)
+      } else {
+        const overlayHtmlElements = document.getElementsByClassName('cdk-overlay-backdrop-showing');
+
+        if (overlayHtmlElements.length === 1) {
+          const elementOverlay = overlayHtmlElements[0] as HTMLElement;
+          elementOverlay.style.zIndex = maxWindowZIndex;
+          element = document.querySelector('#' + dialogId) as HTMLElement;
+          element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
+        } else if (overlayHtmlElements.length > 1) {
+          // if dialog open on another dialog, second overlay has to more z-index
+          let elementOverlay = overlayHtmlElements[1] as HTMLElement;
+          let maxZIndex = (parseInt(maxWindowZIndex, 10) + 11).toString();
+
+          elementOverlay.style.zIndex = maxZIndex;
+          element = document.querySelector('#' + dialogId) as HTMLElement;
+          element.parentElement.parentElement.style.zIndex = maxZIndex;
+        }
       }
     });
   }

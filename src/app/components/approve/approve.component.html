@@ -1,7 +1,7 @@
-<div class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
   <div class="pos-rel height-full-minus-30">
-    <h1 class="margin-b-full font-full-em text-weight-500 margin-b-half"
-        [ngClass]="dialogData.action === 'success' ? 'text-green-600' : 'text-red-600'">
+    <h1 [ngClass]="dialogData.action === 'success' ? 'text-green-600' : 'text-red-600'"
+        class="margin-b-full font-full-em text-weight-500 margin-b-half">
       {{dialogData.title ? dialogData.title : ''}}
     </h1>
 
@@ -9,15 +9,15 @@
   </div>
 
   <div class="height-30 full-width display-flex flex-direction-row-reverse">
-    <button mat-raised-button [mat-dialog-close]="true" type="submit" tabindex="13"
-            [ngClass]="dialogData.action === 'success' ? 'green-gradient' : 'red-gradient'"
-            class="text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+    <button [mat-dialog-close]="true" [ngClass]="dialogData.action === 'success' ? 'green-gradient' : 'red-gradient'" class="text-white line-height-30 font-9-em overflow-hide text-weight-normal" mat-raised-button
+            tabindex="13"
+            type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
       <span class="padding-mini-r-l">{{'global.confirm' | translate}}</span>
     </button>
 
-    <button [mat-dialog-close]="false" type="button"
-            class="no-bg no-border cursor-pointer line-height-30 font-9-em overflow-hide text-weight-normal">
+    <button [mat-dialog-close]="false" class="no-bg no-border cursor-pointer line-height-30 font-9-em overflow-hide text-weight-normal"
+            type="button">
       <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
     </button>
   </div>

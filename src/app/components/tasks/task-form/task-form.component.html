@@ -1,4 +1,4 @@
-<form *ngIf="form" [formGroup]="form" (submit)="submit()" class="full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<form (submit)="submit()" *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="form" class="full-height">
   <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
     <h1 *ngIf="data.action !== 'detail'"
         class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
@@ -7,7 +7,8 @@
     <div class="display-flex ">
       <div class="full-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
-          <input matInput placeholder="{{'tasks.form.task_name' | translate}}" class="full-width" type="text" formControlName="taskName" required tabindex="1">
+          <input class="full-width" formControlName="taskName" matInput placeholder="{{'tasks.form.task_name' | translate}}"
+                 required tabindex="1" type="text">
           <mat-label>
             {{'tasks.form.task_name' | translate}}
           </mat-label>
@@ -22,9 +23,9 @@
       <div class="half-width padding-r-l">
         <mat-form-field class="full-width font-full-em">
           <mat-label>{{'tasks.form.task_status' | translate}}</mat-label>
-          <mat-select formControlName="boardStatus" tabIndex="2" (selectionChange)="changeBoardStatus($event)">
+          <mat-select (selectionChange)="changeBoardStatus($event)" formControlName="boardStatus" tabIndex="2">
             <mat-option *ngFor="let board of boardsList" [value]="board.id">
-              <span class="task-count" [ngClass]="board.id">{{board.name}}</span>
+              <span [ngClass]="board.id" class="task-count">{{board.name}}</span>
             </mat-option>
           </mat-select>
           <mat-error *ngIf="!form.get('boardStatus').valid && form.get('boardStatus').touched">
@@ -39,13 +40,13 @@
           <span>{{form.get('percentage').value}}</span> ٪
         </div>
         <mat-slider
-          class="full-width pos-rel top-half"
-          formControlName="percentage"
           [max]="100"
           [min]="0"
           [step]="5"
           [thumbLabel]="true"
-          [tickInterval]="2" tabindex="3">
+          [tickInterval]="2"
+          class="full-width pos-rel top-half"
+          formControlName="percentage" tabindex="3">
         </mat-slider>
       </div>
     </div>
@@ -67,18 +68,18 @@
       </div>
       <div class="half-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
-          <img matPrefix
-               [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+          <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                [srcset]="'assets/profileImg/'+form.get('email').value +'.jpg'"
-               class="width-20 height-20 round-corner-all pos-rel top-three-tenth">
+               class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
+               matPrefix>
           <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
           <mat-select formControlName="assignTo" tabIndex="5">
             <mat-option *ngFor="let user of usersList" [value]="user" class="font-full-em">
               <div class="display-flex align-items-center">
-                <img matPrefix
+                <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                      [src]="'assets/profileImg/'+user.email+'.jpg'"
-                     [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                      class="width-20 height-20 round-corner-all pos-rel"
+                     matPrefix
                      onerror="this.src='assets/profileImg/0.jpg'">
                 <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
               </div>
@@ -95,8 +96,8 @@
     <div class="display-flex margin-b-full margin-r-l-reverse">
       <div class="half-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
-          <input matInput placeholder="{{'tasks.form.task_durationHours' | translate}}" class="full-width" type="number"
-                 formControlName="taskDurationHours" required tabindex="6">
+          <input class="full-width" formControlName="taskDurationHours" matInput placeholder="{{'tasks.form.task_durationHours' | translate}}"
+                 required tabindex="6" type="number">
           <mat-label>
             {{'tasks.form.task_durationHours' | translate}}
           </mat-label>
@@ -122,11 +123,11 @@
       <div class="quarter-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
           <mat-label>{{'tasks.form.start_at' | translate}}</mat-label>
-          <input matInput [matDatepicker]="picker1" readonly
+          <input (click)="picker1.open()" (dateChange)="dateToGregorian('startAt', $event)" (focus)="picker1.open()"
+                 [matDatepicker]="picker1"
+                 formControlName="startAt" matInput
                  placeholder="{{'tasks.form.start_at' | translate}}"
-                 (focus)="picker1.open()" (click)="picker1.open()"
-                 (dateChange)="dateToGregorian('startAt', $event)"
-                 formControlName="startAt" tabindex="8">
+                 readonly tabindex="8">
           <mat-datepicker #picker1></mat-datepicker>
 
           <mat-error *ngIf="!form.get('startAt').valid && form.get('startAt').touched">
@@ -152,10 +153,10 @@
       <div class="quarter-width padding-r-l">
         <mat-form-field class="full-width font-9-em">
           <mat-label>{{'tasks.form.stop_at' | translate}}</mat-label>
-          <input matInput [matDatepicker]="picker2" readonly
-                 (focus)="picker2.open()" (click)="picker2.open()"
-                 (dateChange)="dateToGregorian('stopAt', $event)"
-                 formControlName="stopAt" tabindex="10">
+          <input (click)="picker2.open()" (dateChange)="dateToGregorian('stopAt', $event)" (focus)="picker2.open()"
+                 [matDatepicker]="picker2" formControlName="stopAt"
+                 matInput
+                 readonly tabindex="10">
           <mat-datepicker #picker2></mat-datepicker>
 
           <mat-error *ngIf="!form.get('stopAt').valid && form.get('stopAt').touched">
@@ -183,7 +184,7 @@
       <div class="full-width padding-r-l">
         <mat-form-field class="full-width height-80 font-9-em">
           <mat-label>{{'tasks.form.task_description' | translate}}</mat-label>
-          <textarea matInput formControlName="taskDesc"
+          <textarea formControlName="taskDesc" matInput
                     placeholder="{{'tasks.form.task_description' | translate}}" tabindex="12"></textarea>
         </mat-form-field>
       </div>
@@ -192,8 +193,8 @@
     <div class="display-flex margin-b-full margin-r-l-reverse">
       <div class="full-width padding-r-l">
         <mat-slide-toggle
-          formControlName="trackable"
-          [color]="'primary'">
+          [color]="'primary'"
+          formControlName="trackable">
           {{'tasks.form.trackable_by_mobile' | translate}}
         </mat-slide-toggle>
       </div>
@@ -202,8 +203,8 @@
     <div *ngIf="data.action === 'detail'" class="display-flex margin-b-full margin-r-l-reverse">
       <div class="full-width padding-r-l">
         <mat-slide-toggle
-          formControlName="status"
-          [color]="'primary'">
+          [color]="'primary'"
+          formControlName="status">
           {{form.get('status').value ? ('global.active' | translate) : ('global.deactivate' | translate)}}
         </mat-slide-toggle>
       </div>
@@ -211,19 +212,19 @@
   </div>
 
   <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
-    <button *ngIf="editable || data.action !== 'detail'"
-            (click)="cancelBtn()"
-            type="button"
-            class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
+    <button (click)="cancelBtn()"
+            *ngIf="editable || data.action !== 'detail'"
+            class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal"
+            type="button">
       <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
     </button>
 
-    <button mat-raised-button
-            *ngIf="editable"
+    <button *ngIf="editable"
             [disabled]="!form.valid"
-            type="submit"
+            class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+            mat-raised-button
             tabindex="13"
-            class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+            type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
       <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
     </button>

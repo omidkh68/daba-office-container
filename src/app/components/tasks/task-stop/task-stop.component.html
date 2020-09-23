@@ -1,6 +1,6 @@
-<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99 overflow-hide"
-     [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <form [formGroup]="form" (submit)="submit()" class="full-height">
+<div *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'"
+     class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99 overflow-hide">
+  <form (submit)="submit()" [formGroup]="form" class="full-height">
     <div class="full-width">
       <h1 class="margin-b-full font-full-em text-weight-500">
         {{'tasks.task_stop.stop_description' | translate}}
@@ -14,20 +14,20 @@
 
       <div class="row">
         <div class="col-md-12 no-padding-r-l">
-          <div class="font-9-em pos-abs top-half right-full" [ngClass]="rtlDirection ? 'right-full' : 'left-full'">
+          <div [ngClass]="rtlDirection ? 'right-full' : 'left-full'" class="font-9-em pos-abs top-half right-full">
             {{'tasks.boards.task_percentage' | translate}}
             <span>{{form.get('percentage').value}}</span> ٪
           </div>
           <mat-slider
-            class="full-width no-padding-r-l pos-rel top-half"
-            formControlName="percentage"
-            tabIndex="1"
+            [disabled]="task.boardStatus === 'done'"
             [max]="100"
             [min]="0"
             [step]="5"
-            [disabled]="task.boardStatus === 'done'"
             [thumbLabel]="true"
-            [tickInterval]="2" tabindex="3">
+            [tickInterval]="2"
+            class="full-width no-padding-r-l pos-rel top-half"
+            formControlName="percentage"
+            tabIndex="1" tabindex="3">
           </mat-slider>
         </div>
       </div>
@@ -36,8 +36,8 @@
         <div class="col-md-12">
           <mat-form-field class="full-width height-110 font-9-em">
             <mat-label>{{'tasks.task_stop.description' | translate}}</mat-label>
-            <textarea matInput required formControlName="description"
-                      placeholder="{{'tasks.task_stop.description' | translate}}" tabindex="2"></textarea>
+            <textarea formControlName="description" matInput placeholder="{{'tasks.task_stop.description' | translate}}"
+                      required tabindex="2"></textarea>
 
             <mat-error *ngIf="!form.get('description').valid && form.get('description').touched">
               {{'tasks.task_stop.description_error' | translate}}
@@ -48,11 +48,11 @@
     </div>
 
     <div class="height-30 full-width display-flex justify-content-end">
-      <button mat-raised-button
-              [disabled]="!form.valid"
-              type="submit"
+      <button [disabled]="!form.valid"
+              class="green-gradient float-left text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+              mat-raised-button
               tabindex="3"
-              class="green-gradient float-left text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+              type="submit">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
         <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
       </button>

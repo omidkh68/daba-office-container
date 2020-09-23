@@ -1,10 +1,11 @@
 <div class="full-width full-height">
   <mat-list *ngIf="!fromPopUp" class="soft-phone-user full-width height-50">
     <mat-list-item class="padding-mini-r-l full-height">
-      <img [src]="'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'" [alt]="loggedInUser ? loggedInUser.name : ''"
-           onerror="this.src='assets/profileImg/0.jpg'"
+      <img [alt]="loggedInUser ? loggedInUser.name : ''"
+           [src]="'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'"
            class="mat-elevation-z2"
-           matListAvatar>
+           matListAvatar
+           onerror="this.src='assets/profileImg/0.jpg'">
       <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser ? loggedInUser.name : ''}} </h3>
 
       <div class="font-8-rem">
@@ -36,7 +37,7 @@
 
         <div class="text-gray-700 margin-r-l">{{contact.extension_no}}</div>
 
-        <button *ngIf="!fromPopUp" (click)="editContact(contact); $event.stopPropagation();"
+        <button (click)="editContact(contact); $event.stopPropagation();" *ngIf="!fromPopUp"
                 class="cursor-pointer no-bg no-border width-30 height-30 text-center text-green-500">
           <mat-icon class="full-width full-height text-center line-height-30 font-full-plus-two-tenth-rem">edit
           </mat-icon>
@@ -49,10 +50,10 @@
 
   <div *ngIf="fromPopUp"
        class="height-45 padding-mini-t-b padding-r-l full-width display-flex flex-direction-row-reverse flex-space-between">
-    <button mat-raised-button (click)="dismissTransferCall()"
-            [disabled]="disableContacts"
-            type="button"
-            class="full-width red-gradient text-white line-height-30 font-9-em text-weight-normal">
+    <button (click)="dismissTransferCall()" [disabled]="disableContacts"
+            class="full-width red-gradient text-white line-height-30 font-9-em text-weight-normal"
+            mat-raised-button
+            type="button">
       <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
     </button>
   </div>

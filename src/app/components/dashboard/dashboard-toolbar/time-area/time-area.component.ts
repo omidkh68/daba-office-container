@@ -27,7 +27,7 @@ export class TimeAreaComponent implements OnInit {
   checkMoreClockContent: boolean = false;
   cityClocksList: Timezones[];
   item: number;
-  currentTimezone:string;
+  currentTimezone: string;
 
   myControl = new FormControl();
   options: Timezones[];
@@ -50,7 +50,7 @@ export class TimeAreaComponent implements OnInit {
           this.loggedInUser.timezone = 'Asia/Tehran';
         }
 
-        this.currentTimezone = this.loggedInUser.timezone.split('/')[1].replace("_", " ");
+        this.currentTimezone = this.loggedInUser.timezone.split('/')[1].replace('_', ' ');
 
         this.cityClocksList = [{city: this.loggedInUser.timezone.split('/')[1], timezone: this.loggedInUser.timezone}];
 
@@ -66,7 +66,7 @@ export class TimeAreaComponent implements OnInit {
   setClockCity(option) {
     this.checkMoreClock = false;
     this.checkMoreClockContent = false;
-    if(this.cityClocksList.some(item => item.timezone !== option.timezone)){
+    if (this.cityClocksList.some(item => item.timezone !== option.timezone)) {
       this.cityClocksList.push(option)
     }
 

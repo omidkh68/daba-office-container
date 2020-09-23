@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {UserInfoService} from "../components/users/services/user-info.service";
+import {UserInfoService} from '../components/users/services/user-info.service';
 
 const DEFAULT_WALLPAPER = null;
 

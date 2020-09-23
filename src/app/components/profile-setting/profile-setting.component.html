@@ -8,19 +8,19 @@
       <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                                (change)="changeViewMode(viewMode.value)"
                                [ngClass]="{'view-mode': viewMode}"
-                               class="full-width mat-button-custom line-height-20 round-corner-all"
-                               [value]="viewModeTypes">
-        <mat-button-toggle class="overflow-hide font-7-rem line-height-20 height-30" [value]="'information'">
+                               [value]="viewModeTypes"
+                               class="full-width mat-button-custom line-height-20 round-corner-all">
+        <mat-button-toggle [value]="'information'" class="overflow-hide font-7-rem line-height-20 height-30">
           <span>{{'profileSettings.profile_information' | translate}}</span>
         </mat-button-toggle>
-        <mat-button-toggle class="overflow-hide font-7-rem line-height-20 height-30" [value]="'wallpaper'">
+        <mat-button-toggle [value]="'wallpaper'" class="overflow-hide font-7-rem line-height-20 height-30">
           <span>{{'profileSettings.profile_wallpaper' | translate}}</span>
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
 
-    <div class="display-flex"
-         [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'">
+    <div [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'"
+         class="display-flex">
       <button (click)="close();"
               class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
@@ -37,16 +37,16 @@
       <div class="container-image-profile display-flex justify-content-center">
         <div class="image-profile margin-t-full-2 margin-b-full">
           <div class="box mat-elevation-z1 pos-rel text-center round-corner width-150 height-150 overflow-hide">
-            <img class="full-width full-height cursor-pointer"
+            <img [alt]="loggedInUser ? loggedInUser.name : ''"
                  [src]="loggedInUser && loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'"
-                 [alt]="loggedInUser ? loggedInUser.name : ''"
+                 class="full-width full-height cursor-pointer"
                  onerror="this.src='assets/profileImg/0.jpg'">
-            <label for="fileChange" class="overlay-image cursor-pointer pos-abs full-width full-height purple-gradient">
+            <label class="overlay-image cursor-pointer pos-abs full-width full-height purple-gradient" for="fileChange">
               <mat-icon class="no-padding full-width full-height line-height-150 font-full-rem-2 text-white">
                 camera_alt
               </mat-icon>
             </label>
-            <input (change)="fileChangeEvent($event)" hidden [(ngModel)]="resetInput" id="fileChange" type="file"/>
+            <input (change)="fileChangeEvent($event)" [(ngModel)]="resetInput" hidden id="fileChange" type="file"/>
           </div>
         </div>
       </div>
@@ -153,9 +153,9 @@
             <div class="half-width padding-r-l">
               <div class="display-flex dark-mode height-50 align-items-center">
                 <div class="container-dark-mode">
-                  <label for="darkMode" [ngClass]="rtlDirection ? 'margin-r-reverse' : 'margin-l-reverse'">
-                    <input (change)="changeDarkMode($event)" id="darkMode" type="checkbox"
-                           [checked]="selectDarkMode">
+                  <label [ngClass]="rtlDirection ? 'margin-r-reverse' : 'margin-l-reverse'" for="darkMode">
+                    <input (change)="changeDarkMode($event)" [checked]="selectDarkMode" id="darkMode"
+                           type="checkbox">
                     <span class="planet display-block"></span>
                     <span class="elements display-block">
                           <svg version="1.1" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
@@ -183,8 +183,8 @@
                             <circle cx="250" cy="250" r="200"></circle>
                           </svg>
                         </span>
-                    <span class="pos-abs top-full-plus-half"
-                          [ngClass]="rtlDirection ? 'l-reverse' : 'r-reverse'">{{(loggedInUser && loggedInUser.dark_mode ? 'profileSettings.dark_mode' : 'profileSettings.light_mode') | translate}}
+                    <span [ngClass]="rtlDirection ? 'l-reverse' : 'r-reverse'"
+                          class="pos-abs top-full-plus-half">{{(loggedInUser && loggedInUser.dark_mode ? 'profileSettings.dark_mode' : 'profileSettings.light_mode') | translate}}
                         </span>
                   </label>
                 </div>

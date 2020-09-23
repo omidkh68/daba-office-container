@@ -1,7 +1,7 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {switchMap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/internal/Observable';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';

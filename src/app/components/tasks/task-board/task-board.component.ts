@@ -1,5 +1,13 @@
 import {
-  Component, EventEmitter, Injector, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges
+  Component,
+  EventEmitter,
+  Injector,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
 } from '@angular/core';
 import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
@@ -277,7 +285,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
       const localDateTmp = moment(localDate).format('YYYY-MM-DD HH:mm:ss');
 
-      const m = moment.utc(taskStopDate, "YYYY-MM-DD HH:mm:ss");
+      const m = moment.utc(taskStopDate, 'YYYY-MM-DD HH:mm:ss');
       const isSameOrBefore = m.isSameOrBefore(localDateTmp);
 
       // determine todoList, inProgressList, doneList into board array

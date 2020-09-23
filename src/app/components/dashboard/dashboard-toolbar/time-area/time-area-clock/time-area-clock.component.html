@@ -1,5 +1,5 @@
 <div #clock class="clock">
-  <mat-icon *ngIf="checkMoreClock && item_index != 0" (click)="removeClock($event)"
+  <mat-icon (click)="removeClock($event)" *ngIf="checkMoreClock && item_index != 0"
             [ngClass]="rtlDirection ? 'left-full-reverse' : 'right-full-reverse'"
             class="close-button pos-abs top-full-reverse round-corner-all text-white width-18 height-18 line-height-18 text-center cursor-pointer font-9-em text-weight-bold">
     close

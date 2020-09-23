@@ -6,7 +6,7 @@ import {Timezones} from '../timezones.interface';
   templateUrl: './time-area-clock.component.html',
   styleUrls: ['./time-area-clock.component.scss']
 })
-export class TimeAreaClockComponent implements OnInit,AfterViewInit {
+export class TimeAreaClockComponent implements OnInit, AfterViewInit {
   @Input()
   rtlDirection: boolean;
 
@@ -36,7 +36,7 @@ export class TimeAreaClockComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.item.city = this.item.city.replace("_", " ");
+    this.item.city = this.item.city.replace('_', ' ');
   }
 
   removeClock = (event) => {

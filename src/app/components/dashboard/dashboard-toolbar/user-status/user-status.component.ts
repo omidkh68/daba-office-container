@@ -1,4 +1,5 @@
-import {interval, Subject} from 'rxjs';
+import {Subject} from 'rxjs/internal/Subject';
+import {interval} from 'rxjs/internal/Observable/interval';
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnDestroy, OnInit} from '@angular/core';
 import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
@@ -170,8 +171,6 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     setTimeout(() => {
       this.loggedInUser.services.map(userService => {
         const serviceName = userService.name.replace(' ', '_').toLowerCase();
-
-        console.log(serviceName);
 
         if (serviceName === 'softphones_service') {
           const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();

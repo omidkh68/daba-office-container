@@ -10,8 +10,6 @@ import {WindowManagerService} from '../../../services/window-manager.service';
 })
 export class MessageService implements OnDestroy {
   rtlDirection;
-  _durationInSeconds = 3000;
-
   private _subscription: Subscription = new Subscription();
 
   constructor(private snackBar: MatSnackBar,
@@ -21,6 +19,8 @@ export class MessageService implements OnDestroy {
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
   }
+
+  _durationInSeconds = 3000;
 
   set durationInSeconds(value: number) {
     this._durationInSeconds = value;

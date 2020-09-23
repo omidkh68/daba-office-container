@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {LoginInterface} from "../../login/logic/login.interface";
-import {UserInterface} from "../../users/logic/user-interface";
-import {WindowManagerService} from "../../../services/window-manager.service";
-import {ViewDirectionService} from "../../../services/view-direction.service";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {LoginInterface} from '../../login/logic/login.interface';
+import {UserInterface} from '../../users/logic/user-interface';
+import {WindowManagerService} from '../../../services/window-manager.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
 
 @Component({
   selector: 'app-description-task',

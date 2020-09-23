@@ -1,5 +1,5 @@
 import {Component, Injector, OnDestroy} from '@angular/core';
-import {timer} from 'rxjs';
+import {timer} from 'rxjs/internal/Observable/timer';
 import * as moment from 'moment';
 import * as lodash from 'lodash';
 import {AppConfig} from '../../../environments/environment';

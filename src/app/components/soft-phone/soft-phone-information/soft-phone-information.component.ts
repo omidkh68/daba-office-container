@@ -9,7 +9,7 @@ import {
   Pipe,
   PipeTransform
 } from '@angular/core';
-import {timer} from 'rxjs';
+import {timer} from 'rxjs/internal/Observable/timer';
 import * as lodash from 'lodash';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';

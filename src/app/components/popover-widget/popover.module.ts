@@ -8,16 +8,16 @@ import {PopoverCloseDirective} from './popover-close.directive';
 import {PopoverComponent} from './popover/popover.components';
 
 @NgModule({
-    declarations: [PopoverComponent, PopoverCloseDirective, PopoverArrowDirective],
-    imports: [
-        CommonModule,
-        OverlayModule,
-        PortalModule
-    ],
-    exports: [
-        PopoverCloseDirective
-    ],
-    entryComponents: [PopoverComponent]
+  declarations: [PopoverComponent, PopoverCloseDirective, PopoverArrowDirective],
+  imports: [
+    CommonModule,
+    OverlayModule,
+    PortalModule
+  ],
+  exports: [
+    PopoverCloseDirective
+  ],
+  entryComponents: [PopoverComponent]
 })
 export class PopoverModule {
 }

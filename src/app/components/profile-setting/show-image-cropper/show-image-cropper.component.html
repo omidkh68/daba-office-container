@@ -7,8 +7,8 @@
       {{'profileSettings.edit_user_photo' | translate}}
     </h3>
 
-    <div class="display-flex"
-         [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'">
+    <div [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'"
+         class="display-flex">
       <button (click)="closeModal();"
               class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
@@ -122,16 +122,16 @@
 
         <div
           class="height-35 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
-          <button type="button"
-                  (click)="closeModal()"
-                  class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
+          <button (click)="closeModal()"
+                  class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal"
+                  type="button">
             <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
           </button>
 
-          <button mat-raised-button
-                  (click)="onSubmit()"
-                  type="button"
-                  class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+          <button (click)="onSubmit()"
+                  class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+                  mat-raised-button
+                  type="button">
             <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
             <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
           </button>

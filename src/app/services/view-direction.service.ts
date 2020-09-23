@@ -8,10 +8,10 @@ const DEFAULT_LANG = localStorage.getItem('defaultLang');
   providedIn: 'root'
 })
 export class ViewDirectionService {
+  body = document.querySelector('html');
   private _defaultDirection: boolean = DEFAULT_LANG !== null ? (DEFAULT_LANG === 'fa') : false;
   private _rtlDirection = new BehaviorSubject(this._defaultDirection);
   currentDirection = this._rtlDirection.asObservable();
-  body = document.querySelector('html');
 
   constructor(private translate: TranslateService) {
     this.body.classList.add(this._defaultDirection ? 'direction-fa' : 'direction-en');

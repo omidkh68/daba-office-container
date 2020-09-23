@@ -21,7 +21,8 @@
 
             <input formControlName="name" matInput tabindex="1">
 
-            <button (click)="form.get('name').setValue('')" *ngIf="form.get('name').touched && form.get('name').value.length"
+            <button (click)="form.get('name').setValue('')"
+                    *ngIf="form.get('name').touched && form.get('name').value.length"
                     aria-label="Clear"
                     class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
                     type="button">
@@ -40,7 +41,8 @@
 
             <input formControlName="family" matInput tabindex="2">
 
-            <button (click)="form.get('family').setValue('')" *ngIf="form.get('family').touched && form.get('family').value.length"
+            <button (click)="form.get('family').setValue('')"
+                    *ngIf="form.get('family').touched && form.get('family').value.length"
                     aria-label="Clear"
                     class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
                     type="button">
@@ -59,7 +61,8 @@
 
             <input formControlName="extension" matInput tabindex="3">
 
-            <button (click)="form.get('extension').setValue('')" *ngIf="form.get('extension').touched && form.get('extension').value.length"
+            <button (click)="form.get('extension').setValue('')"
+                    *ngIf="form.get('extension').touched && form.get('extension').value.length"
                     aria-label="Clear"
                     class="close-icon pos-rel top-half float-left" mat-button mat-icon-button matSuffix
                     type="button">
@@ -85,7 +88,8 @@
         </button>
 
         <button *ngIf="data && data.action === 'edit'"
-                class="red-gradient width-30 height-30 text-white line-height-30 font-9-em overflow-hide text-weight-normal" mat-raised-button
+                class="red-gradient width-30 height-30 text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+                mat-raised-button
                 tabindex="5">
           <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">delete</mat-icon>
         </button>

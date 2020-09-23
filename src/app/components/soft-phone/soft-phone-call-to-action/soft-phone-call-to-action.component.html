@@ -1,4 +1,4 @@
-<div class="full-width full-height padding-full" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-width full-height padding-full">
   <h3 class="text-weight-bold font-full-plus-three-tenth-em no-margin"> {{data.extension_name}} </h3>
 
   <button (click)="closeBottomSheet();"
@@ -12,11 +12,11 @@
 
   <mat-list class="margin-t-half">
     <mat-list-item>
-      <img [src]="'assets/profileImg/'+ data.username +'.jpg'" [alt]="data.name"
-           [ngClass]="data.is_online ? 'active' : ''"
-           onerror="this.src='assets/profileImg/0.jpg'"
+      <img [alt]="data.name" [ngClass]="data.is_online ? 'active' : ''"
+           [src]="'assets/profileImg/'+ data.username +'.jpg'"
            class="online-user mat-elevation-z2 width-50 height-50 round-corner-all margin-auto"
-           matListAvatar>
+           matListAvatar
+           onerror="this.src='assets/profileImg/0.jpg'">
 
       <p class="font-8-rem" matLine>
           <span> <b>{{'soft_phone.call_to_action.timezone' | translate}}</b>

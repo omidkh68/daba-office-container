@@ -7,20 +7,20 @@
       <div class="display-flex margin-r-l-reverse">
         <div class="full-width padding-r-l">
           <mat-form-field class="full-width font-8-em">
-            <img matPrefix
-                 [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+            <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                  [srcset]="'assets/profileImg/'+form.get('userImg').value +'.jpg'"
-                 class="width-20 height-20 round-corner-all pos-rel top-three-tenth">
+                 class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
+                 matPrefix>
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
             <mat-select formControlName="adminId" tabIndex="4">
               <mat-option (onSelectionChange)="updateImage($event , user)" *ngFor="let user of usersList"
-                          class="font-full-em"
-                          [value]="user.adminId">
+                          [value]="user.adminId"
+                          class="font-full-em">
                 <div class="display-flex align-items-center">
-                  <img matPrefix
+                  <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                        [src]="'assets/profileImg/'+user.email+'.jpg'"
-                       [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                        class="width-20 height-20 round-corner-all pos-rel"
+                       matPrefix
                        onerror="this.src='assets/profileImg/0.jpg'">
                   <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
                 </div>
@@ -38,8 +38,8 @@
           <mat-form-field class="full-width font-8-em">
             <mat-label>{{'global.from_date' | translate}}</mat-label>
 
-            <input (click)="picker1.open()" (focus)="picker1.open()" [matDatepicker]="picker1"
-                   (dateChange)="dateToGregorian('dateStart', $event)"
+            <input (click)="picker1.open()" (dateChange)="dateToGregorian('dateStart', $event)" (focus)="picker1.open()"
+                   [matDatepicker]="picker1"
                    formControlName="dateStart" matInput
                    readonly tabindex="5">
             <mat-datepicker #picker1></mat-datepicker>
@@ -64,9 +64,9 @@
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-8-em">
             <mat-label>{{'global.to_date' | translate}}</mat-label>
-            <input (click)="picker2.open()" (focus)="picker2.open()" [matDatepicker]="picker2"
-                   formControlName="dateStop" matInput
-                   (dateChange)="dateToGregorian('dateStop', $event)"
+            <input (click)="picker2.open()" (dateChange)="dateToGregorian('dateStop', $event)" (focus)="picker2.open()"
+                   [matDatepicker]="picker2" formControlName="dateStop"
+                   matInput
                    readonly tabindex="6">
             <mat-datepicker #picker2></mat-datepicker>
 

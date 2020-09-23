@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, Inject} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ViewDirectionService} from '../../services/view-direction.service';

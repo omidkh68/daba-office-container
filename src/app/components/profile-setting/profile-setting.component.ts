@@ -8,15 +8,17 @@ import {LoginDataClass} from '../../services/loginData.class';
 import {MessageService} from '../message/service/message.service';
 import {UserInfoService} from '../users/services/user-info.service';
 import {ElectronService} from '../../services/electron.service';
+import {DatetimeService} from '../dashboard/dashboard-toolbar/time-area/service/datetime.service';
 import {TranslateService} from '@ngx-translate/core';
+import {ApproveComponent} from '../approve/approve.component';
+import {HttpErrorResponse} from '@angular/common/http';
 import {CheckLoginInterface} from '../login/logic/check-login.interface';
+import {RefreshLoginService} from '../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ProfileSettingService} from './logic/profile-setting.service';
 import {ShowImageCropperComponent} from './show-image-cropper/show-image-cropper.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
-import {ApproveComponent} from "../approve/approve.component";
-import {DatetimeService} from "../dashboard/dashboard-toolbar/time-area/service/datetime.service";
 
 export interface Timezones {
   city: string;
@@ -66,11 +68,12 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
               private fb: FormBuilder,
               private injector: Injector,
               private translate: TranslateService,
-              private viewDirection: ViewDirectionService,
               private messageService: MessageService,
               private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private datetimeService: DatetimeService,
+              private viewDirection: ViewDirectionService,
+              private refreshLoginService: RefreshLoginService,
               private windowManagerService: WindowManagerService,
               private profileSettingService: ProfileSettingService,
               private loadingIndicatorService: LoadingIndicatorService) {
@@ -172,9 +175,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
   }
 
   onSubmit() {
-
     const dialogRef = this.dialog.open(ApproveComponent, {
-
       data: {
         title: this.getTranslate('profileSettings.change_lang_warning_note'),
         message: this.getTranslate('profileSettings.change_lang_warning_text')
@@ -266,9 +267,12 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
                 this.form.enable();
                 this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
               }
-            }, () => {
+            }, (error: HttpErrorResponse) => {
               this.form.enable();
+
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
+
+              this.refreshLoginService.openLoginDialog(error);
             })
           );
 
@@ -276,7 +280,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
         }
       })
     );
-
   }
 
   setClockCity(option) {

@@ -13,7 +13,7 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {StatusDetailInterface, UserStatusInterface} from '../logic/status-interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {StatusListResultInterface, StatusChangeResultInterface} from '../logic/result-interface';
+import {StatusChangeResultInterface, StatusListResultInterface} from '../logic/result-interface';
 
 @Component({
   selector: 'app-change-status',

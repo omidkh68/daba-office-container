@@ -5,10 +5,11 @@
          class="height-135 pos-rel margin-auto round-corner monitor-image display-flex justify-content-center overflow-hide"
          style="background-color: blueviolet; height: 100vh; max-height: 160px">
 
-      <img [src]="wallpaperUrl" class="display-block margin-auto full-height" alt="">
+      <img [src]="wallpaperUrl" alt="" class="display-block margin-auto full-height">
 
       <div *ngIf="showProgress" class="files-list pos-abs bottom-0 full-width z-index-9999" dir="ltr">
-        <div *ngFor="let file of files" class="single-file display-flex round-corner align-items-center justify-content-center">
+        <div *ngFor="let file of files"
+             class="single-file display-flex round-corner align-items-center justify-content-center">
 
           <div class="info">
             <h4 class="name">
@@ -53,7 +54,7 @@
       </div>
     </div>
 
-    <div *ngIf="showDelete" (click)="deleteFile(0)" class="delete pos-abs right-0 cursor-pointer">
+    <div (click)="deleteFile(0)" *ngIf="showDelete" class="delete pos-abs right-0 cursor-pointer">
       <mat-icon class="no-padding line-height-50 full-width full-height font-full-rem-2-plus-half text-green-800">
         replay
       </mat-icon>
@@ -64,7 +65,8 @@
     <div (fileDropped)="onFileDropped($event)" appDnd
          class="wallpaper-container full-width height-135 padding-half round-corner bg-white cursor-pointer margin-auto pos-rel text-center">
 
-      <input (change)="fileBrowseHandler($event)" id="fileDropRef" multiple type="file" class="pos-abs full-width full-height top-0 left-0 right-0">
+      <input (change)="fileBrowseHandler($event)" class="pos-abs full-width full-height top-0 left-0 right-0" id="fileDropRef" multiple
+             type="file">
 
       <svg class="icon icon-tabler icon-tabler-cloud-upload" fill="none" height="44" stroke="#009688"
            stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="44"
@@ -75,7 +77,7 @@
         <line x1="12" x2="12" y1="12" y2="21"></line>
       </svg>
 
-      <h6 class="no-margin" [ngClass]="rtlDirection ? 'font-9-em' : 'font-full-plus-one-tenth-em'">
+      <h6 [ngClass]="rtlDirection ? 'font-9-em' : 'font-full-plus-one-tenth-em'" class="no-margin">
         {{'profileSettings.drag_drop_text1' | translate}}
       </h6>
 
@@ -94,10 +96,11 @@
   </h6>
 
   <!--wallpaper-->
-  <div class="display-block height-full-minus-175 custom-mat-dialog-content no-padding overflow-y-auto display-flex flex-direction-row flex-wrap flex-space-between">
-    <mat-card  *ngFor="let picture of wallpapersPictures" (click)="changeWallpaperPhysical(picture.img)"
-               [style.background]="picture.value"
-               class="mat-elevation-z1 full-width height-100 wallpaper thirty-width cursor-pointer margin-b-full">
+  <div
+    class="display-block height-full-minus-175 custom-mat-dialog-content no-padding overflow-y-auto display-flex flex-direction-row flex-wrap flex-space-between">
+    <mat-card (click)="changeWallpaperPhysical(picture.img)" *ngFor="let picture of wallpapersPictures"
+              [style.background]="picture.value"
+              class="mat-elevation-z1 full-width height-100 wallpaper thirty-width cursor-pointer margin-b-full">
     </mat-card>
   </div>
   <!--end of wallpaper-->
