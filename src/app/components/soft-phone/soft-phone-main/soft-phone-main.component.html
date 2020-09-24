@@ -5,7 +5,7 @@
   </a>
   <div [ngClass]="callPopUpMinimizeStatus ? 'height-full-minus-80' : 'height-full-minus-45'"
        class="soft-phone-container full-width pos-rel">
-    <ng-container [ngSwitch]="activeTab">
+    <ng-container [ngSwitch]="activeTab.value">
       <ng-template [ngSwitchCase]="0">
         <!-- Show soft phone information -->
         <app-soft-phone-information (triggerBottomSheet)="openButtonSheet($event)"
@@ -52,7 +52,7 @@
   </div>
 
   <div class="soft-phone-toolbar clear-both full-width height-45 z-index-1">
-    <mat-tab-group (selectedTabChange)="tabChange($event)" [selectedIndex]="activeTab"
+    <mat-tab-group (selectedTabChange)="tabChange($event)" [selectedIndex]="activeTab.value"
                    class="full-height soft-phone-tab" color="primary">
       <mat-tab *ngFor="let tab of tabs;" class="full-height">
         <ng-template class="full-height" mat-tab-label>

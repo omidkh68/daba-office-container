@@ -23,8 +23,7 @@ export class UserInfoService {
   constructor(private electronService: ElectronService) {
   }
 
-
-  public getUserInfo(): UserContainerInterface {
+  get getUserInfo(): UserContainerInterface {
     return this.userInfo.getValue();
   }
 

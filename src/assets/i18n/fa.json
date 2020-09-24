@@ -37,7 +37,8 @@
     "password": "پسورد",
     "password_error": "لطفا پسورد را وارد نمایید",
     "items": "مورد",
-    "done": "تأیید"
+    "done": "تأیید",
+    "enter": "ورود"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -334,5 +335,10 @@
     "delete_room_error": "اتاق مورد نظر یافت نشد و یا قبلا حذف شده است",
     "delete_room_success": "اتاق حذف شد",
     "confirm_delete_room": "آیا از حذف این اتاق اطمینان دارید؟"
+  },
+  "conference_collaboration": {
+    "audio_only": "کنفرانس صوتی",
+    "audio_video": "کنفرانس صوتی / تصویری",
+    "training": "کنفرانس آموزشی"
   }
 }

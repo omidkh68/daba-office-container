@@ -1,9 +1,83 @@
-<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-width full-height pos-abs left-0 right-0 top-0">
-  <div class="title-container pos-rel height-40 line-height-40 overflow-hide full-width display-flex align-items-end">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-height pos-abs left-0 right-0 top-0">
+  <div class="content-container full-height padding-t-b">
+    <div class="display-flex full-height flex-space-around align-items-center justify-content-center">
+      <mat-card (click)="openService('softphone')" class="card-softphone quarter-width transition">
+        <mat-card-header>
+          <mat-card-subtitle
+            class="full-width header height-30 text-gray-600 no-margin text-weight-bold text-center transition">
+            {{'conference_collaboration.audio_only' | translate}}
+          </mat-card-subtitle>
+        </mat-card-header>
 
-  </div>
+        <mat-card-content class="display-flex justify-content-center">
+          <div class="image-container pos-rel width-230 height-230">
+            <img [src]="'assets/images/conferences/audio_inactive.svg'"
+                 alt="{{'conference_collaboration.audio_only' | translate}}"
+                 class="pos-abs top-0 left-0 right-0 bottom-0 transition">
+            <img [src]="'assets/images/conferences/audio_active.svg'"
+                 alt="{{'conference_collaboration.audio_only' | translate}}"
+                 class="pos-abs top-0 left-0 right-0 bottom-0 transition">
+          </div>
+        </mat-card-content>
 
-  <div class="content-container full-width height-full-minus-40 padding-t-b">
+        <mat-card-actions class="no-margin">
+          <button mat-raised-button class="white-gradient btn-softphone transition full-width text-gray-700">
+            {{'global.enter' | translate}}
+          </button>
+        </mat-card-actions>
+      </mat-card>
 
+      <mat-card (click)="openService('conference')" class="card-conference quarter-width transition">
+        <mat-card-header>
+          <mat-card-subtitle
+            class="full-width header height-30 text-gray-600 no-margin text-weight-bold text-center transition">
+            {{'conference_collaboration.audio_video' | translate}}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="display-flex justify-content-center">
+          <div class="image-container pos-rel width-230 height-230">
+            <img [src]="'assets/images/conferences/audio-video_inactive.svg'"
+                 alt="{{'conference_collaboration.audio_video' | translate}}"
+                 class="pos-abs top-0 left-0 right-0 bottom-0 transition">
+            <img [src]="'assets/images/conferences/audio-video_active.svg'"
+                 alt="{{'conference_collaboration.audio_video' | translate}}"
+                 class="pos-abs top-0 left-0 right-0 bottom-0 transition">
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions class="no-margin">
+            <button mat-raised-button class="white-gradient btn-conference transition full-width text-gray-700">
+            {{'global.enter' | translate}}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card (click)="openService('learning')" class="card-learning quarter-width transition">
+        <mat-card-header>
+          <mat-card-subtitle
+            class="full-width header height-30 text-gray-600 no-margin text-weight-bold text-center transition">
+            {{'conference_collaboration.training' | translate}}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="display-flex justify-content-center">
+          <div class="image-container pos-rel width-230 height-230">
+            <img [src]="'assets/images/conferences/training_inactive.svg'"
+                 alt="{{'conference_collaboration.training' | translate}}"
+                 class="pos-abs top-0 left-0 right-0 bottom-0 transition">
+            <img [src]="'assets/images/conferences/training_active.svg'"
+                 alt="{{'conference_collaboration.training' | translate}}"
+                 class="pos-abs top-0 left-0 right-0 bottom-0 transition">
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions class="no-margin">
+          <button mat-raised-button class="white-gradient btn-learning transition full-width text-gray-700">
+            {{'global.enter' | translate}}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
 </div>

@@ -31,7 +31,8 @@
       </div>
     </div>
   </mat-drawer>
-  <div [dir]="rtlDirection ? 'rtl' : 'ltr'" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'" class="padding-mini-r-l">
+  <div [dir]="rtlDirection ? 'rtl' : 'ltr'" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'"
+       class="padding-mini-r-l full-height">
     <full-calendar #calendar [allDaySlot]="false" [buttonText]="buttonLabels"
                    [dir]="rtlDirection ? 'rtl' : 'ltr'"
                    [displayEventTime]="false"
@@ -46,8 +47,8 @@
                    [plugins]="calendarPlugins"
                    [slotLabelFormat]="slotLabelFormat"
                    [views]="views"
-                   class="w-100"
                    defaultView="dayGridMonth"
+                   class="full-height"
                    id="full_calendar">
     </full-calendar>
   </div>

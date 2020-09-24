@@ -1,5 +1,5 @@
 import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {timer} from 'rxjs/internal/Observable/timer';
+import {timer} from 'rxjs';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInfoService} from '../../users/services/user-info.service';

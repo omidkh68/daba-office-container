@@ -198,38 +198,40 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     const currentLang = this.viewDirection.getCurrentLang();
     const compareFormLangAndCurrentLang = formValue['lang'] !== currentLang;
 
-    if (compareFormLangAndCurrentLang) {    const dialogRef = this.dialog.open(ApproveComponent, {
-      data: {
-        title: this.getTranslate('profileSettings.change_lang_warning_note'),
-        message: this.getTranslate('profileSettings.change_lang_warning_text')
-      },
-      autoFocus: false,
-      width: '70vh',
-      maxWidth: '350px',
-      panelClass: 'approve-detail-dialog',
-      height: '160px'
-    });
+    if (compareFormLangAndCurrentLang) {
+      const dialogRef = this.dialog.open(ApproveComponent, {
+        data: {
+          title: this.getTranslate('profileSettings.change_lang_warning_note'),
+          message: this.getTranslate('profileSettings.change_lang_warning_text')
+        },
+        autoFocus: false,
+        width: '70vh',
+        maxWidth: '350px',
+        panelClass: 'approve-detail-dialog',
+        height: '160px'
+      });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+      this.windowManagerService.dialogOnTop(dialogRef.id);
 
-    this._subscription.add(
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-
-          this.reload(formValue, compareFormLangAndCurrentLang);
-            this.changeValueForm = false;
+      this._subscription.add(
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.updateUser(formValue, compareFormLangAndCurrentLang);
           } else {
+            this.defaultLang = currentLang;
+
+            this.form.get('lang').setValue(currentLang);
+
             this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
           }
         })
       );
     } else {
-      this.reload(formValue, false);
-      this.changeValueForm = false;
+      this.updateUser(formValue, false);
     }
   }
 
-  reload(formValue, hasReload: boolean) {
+  updateUser(formValue, hasReload: boolean) {
     this._subscription.add(
       this.profileSettingService.updateUser(formValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
         if (resp.success) {
@@ -239,7 +241,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
             this.defaultLang = resp.data.lang;
 
             if (hasReload) {
-              this.electronService.remote.getCurrentWindow().reload();
+              this.electronService.remote.app.relaunch();
             }
 
             this.viewDirection.changeDirection(resp.data.lang === 'fa');

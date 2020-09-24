@@ -63,6 +63,10 @@ export class SoftPhoneService extends LoginDataClass {
   private minimizeCallPopUp = new BehaviorSubject(this._minimizeCallPopUp);
   public currentMinimizeCallPopUp = this.minimizeCallPopUp.asObservable();
 
+  private _activeTab: number = 0;
+  private activeTab = new BehaviorSubject(this._activeTab);
+  public currentActiveTab = this.activeTab.asObservable();
+
   private audioRemoteTag: BehaviorSubject<EssentialTagsInterface> = new BehaviorSubject(null);
 
   /*videoRemote;
@@ -152,6 +156,10 @@ export class SoftPhoneService extends LoginDataClass {
     this.ringbacktone = this.audioRemoteTagValue.ringbacktone;
 
     SIPml.init(this.postInit, false);
+  }
+
+  changeActiveTab(tab: number) {
+    this.activeTab.next(tab);
   }
 
   combineUsersSoftPhoneInformation() {
@@ -562,7 +570,7 @@ export class SoftPhoneService extends LoginDataClass {
           case 'connected': {
             this.changeSoftphoneConnected(true);
 
-            this.messageService.showMessage(`Your soft phone is now connected`);
+            this.messageService.showMessage(`Your Softphone is now connected`);
 
             break;
           }
@@ -628,7 +636,7 @@ export class SoftPhoneService extends LoginDataClass {
           }
 
           case 'ok': {
-            this.messageService.showMessage('Soft phone was disconnected');
+            this.messageService.showMessage('Softphone was disconnected');
             break;
           }
 

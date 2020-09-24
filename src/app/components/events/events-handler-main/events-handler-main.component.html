@@ -4,7 +4,7 @@
             <div class="datepicker-container-main padding-full round-corner"
                  [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
                  [dir]="rtlDirection ? 'rtl' : 'ltr'">
-                <div class="switch-container height-45 padding-mini-t-b padding-r-l">
+                <div class="switch-container height-45 padding-mini-t-b">
                     <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                                              (change)="changeViewMode(viewMode.value)"
                                              [value]="viewModeTypes"
@@ -38,7 +38,7 @@
             </div>
         </div>
     </mat-drawer>
-    <div *ngIf="viewModeTypes=='container'" class="padding-full" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
+    <div *ngIf="viewModeTypes=='container'" class="padding-full full-height" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
         <button mat-raised-button
                 tabindex="15"
                 (click)="loadBottomSheet($event)"
@@ -63,7 +63,7 @@
                        [plugins]="calendarPlugins"
                        [slotLabelFormat]="slotLabelFormat"
                        [views]="views"
-                       class="float-right w-100"
+                       class="float-right full-height"
                        defaultView="dayGridMonth"
                        id="full_calendar">
         </full-calendar>
@@ -86,7 +86,7 @@
                        [googleCalendarApiKey] = "'AIzaSyDRh5gMFmnP207A3zG0c4E8CKCyYObVhSU'"
                        [slotLabelFormat]="slotLabelFormat"
                        [views]="views"
-                       class="float-right w-100"
+                       class="float-right full-height"
                        defaultView="dayGridMonth"
                        id="full_calendar_google">
         </full-calendar>

@@ -1,5 +1,5 @@
 import {Subject} from 'rxjs/internal/Subject';
-import {interval} from 'rxjs/internal/Observable/interval';
+import {interval} from 'rxjs';
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnDestroy, OnInit} from '@angular/core';
 import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';

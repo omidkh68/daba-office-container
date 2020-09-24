@@ -67,6 +67,8 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
             this.serviceList.push(service);
           }
         });
+
+        this.windowManagerService.changeServices(this.serviceList);
       })
     );
 

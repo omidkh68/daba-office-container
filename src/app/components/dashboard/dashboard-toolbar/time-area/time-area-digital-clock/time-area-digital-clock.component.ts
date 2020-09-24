@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {timer} from 'rxjs/internal/Observable/timer';
+import {timer} from 'rxjs';
 
 @Component({
   selector: 'app-time-area-digital-clock',

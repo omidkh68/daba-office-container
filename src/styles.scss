@@ -754,10 +754,6 @@ file-preview-container {
   background-color: #fff;
 }
 
-.fc-toolbar.fc-header-toolbar {
-  margin-bottom: .5em !important;
-}
-
 .fc-toolbar h2 {
   font-size: 1.2em !important;
 }
@@ -769,6 +765,25 @@ file-preview-container {
 .fc-widget-header {
   font-size: .9em !important;
 }
+
+.event-main-datepicker, .rate-calendar {
+  table, .fc-view, .fc-widget-content, .fc-day-grid-container, .fc-day-grid {
+    height: 100% !important;
+  }
+
+  .fc-widget-content {
+    height: calc(100% / 6) !important;
+  }
+
+  .fc-view-container {
+    height: calc(100% - 52px) !important;
+  }
+
+  .fc-header-toolbar {
+    margin-bottom: 0 !important;
+  }
+}
+// end of Fullcalendar stylesheets
 
 .soft-phone-status.mat-checked .mat-slide-toggle-thumb {
   background-color: #40b252;
