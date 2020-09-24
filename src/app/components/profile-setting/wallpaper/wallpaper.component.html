@@ -36,7 +36,8 @@
     <div (fileDropped)="onFileDropped($event)" appDnd
          class="wallpaper-container full-width height-135 padding-half round-corner bg-white cursor-pointer margin-auto pos-rel text-center">
 
-      <input (change)="fileBrowseHandler($event)" class="pos-abs full-width full-height top-0 left-0 right-0" id="fileDropRef" multiple
+      <input (change)="fileBrowseHandler($event)" class="pos-abs full-width full-height top-0 left-0 right-0"
+             id="fileDropRef" multiple
              type="file">
 
       <svg class="icon icon-tabler icon-tabler-cloud-upload" fill="none" height="44" stroke="#009688"
@@ -100,8 +101,8 @@
         <animate attributeName="y" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
                  values="13; 5; 13"></animate>
         </rect>
-      </svg>
+    </svg>
 
-    <!--<span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>-->
+    <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
   </div>
 </div>

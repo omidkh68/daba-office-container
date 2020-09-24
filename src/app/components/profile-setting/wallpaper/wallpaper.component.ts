@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {switchMap} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
@@ -10,6 +10,7 @@ import {ElectronService} from '../../../services/electron.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
 import {WallpaperSelectorService} from '../../../services/wallpaper-selector.service';
@@ -183,6 +184,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
               private messageService: MessageService,
               private electronService: ElectronService,
               private userInfoService: UserInfoService,
+              private refreshLoginService: RefreshLoginService,
               private wallPaperSelector: WallpaperSelectorService,
               private profileSettingService: ProfileSettingService,
               private loadingIndicatorService: LoadingIndicatorService) {
@@ -307,13 +309,12 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   onSubmit(img) {
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-    const finalValue = {};
+    const formValue = {};
 
-    finalValue['background_image'] = img;
+    formValue['background_image'] = img;
 
     this._subscription.add(
-      this.profileSettingService.updateUser(finalValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
-
+      this.profileSettingService.updateUser(formValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
         if (resp.success) {
           const successfulMessage = this.getTranslate('profileSettings.profile_update');
 
@@ -332,11 +333,13 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
           this.changeWallpaper('url(' + resp.data.background_image + ')');
         }
-      }, () => {
+      }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'wallpaper'});
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
         this.showProgress = false;
         this.showDelete = true;
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }
