@@ -8,6 +8,7 @@ import {LoginDataClass} from '../../../services/loginData.class';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
 import {ChangeStatusService} from '../services/change-status.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
@@ -114,7 +115,6 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
   checkFormValidation() {
     this._subscription.add(
       this.form.valueChanges.subscribe(selectedValue => {
-
         const descriptionControl = this.form.get('description');
 
         if (selectedValue.status.is_description) {
@@ -153,6 +153,8 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
       this.form.disable();
 
+      this.dialogRef.disableClose = true;
+
       const formValue = Object.assign({}, this.form.value);
 
       formValue.status = formValue.status.id;
@@ -162,6 +164,8 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
       this._subscription.add(
         this.statusApiService.userChangeStatus(formValue).subscribe((resp: StatusChangeResultInterface) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
+
+          this.dialogRef.disableClose = false;
 
           if (resp.success) {
             this.userStatusService.changeUserStatus(resp.data);
@@ -178,7 +182,9 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
             this.form.enable();
           }
-        }, error => {
+        }, (error: HttpErrorResponse) => {
+          this.dialogRef.disableClose = false;
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
 
           this.refreshLoginService.openLoginDialog(error);
