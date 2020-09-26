@@ -1,11 +1,11 @@
 <form *ngIf="form" [formGroup]="form" (submit)="submit()" class="full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
+  <div class="height-full-minus-45 full-width">
     <h1 *ngIf="data.action !== 'detail'"
         class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
       {{'tasks.main.add_new_task' | translate}}
     </h1>
-    <div class="display-flex ">
-      <div class="full-width padding-r-l">
+    <div class="display-flex margin-r-l-reverse">
+      <div class="full-width padding-mini-r-l">
         <mat-form-field class="full-width font-9-em">
           <input matInput placeholder="{{'tasks.form.task_name' | translate}}" class="full-width" type="text" formControlName="taskName" required tabindex="1">
           <mat-label>
@@ -18,8 +18,8 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="display-flex">
-      <div class="half-width padding-r-l">
+    <div class="display-flex margin-r-l-reverse">
+      <div class="half-width padding-mini-r-l">
         <mat-form-field class="full-width font-full-em">
           <mat-label>{{'tasks.form.task_status' | translate}}</mat-label>
           <mat-select formControlName="boardStatus" tabIndex="2" (selectionChange)="changeBoardStatus($event)">
@@ -51,7 +51,7 @@
     </div>
 
     <div class="display-flex margin-r-l-reverse">
-      <div class="half-width padding-r-l">
+      <div class="half-width padding-mini-r-l">
         <mat-form-field class="full-width font-9-em">
           <mat-label>{{'tasks.form.task_project' | translate}}</mat-label>
           <mat-select formControlName="project" tabIndex="4">
@@ -65,7 +65,7 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="half-width padding-r-l">
+      <div class="half-width padding-mini-r-l">
         <mat-form-field class="full-width font-9-em">
           <img matPrefix
                [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
@@ -93,7 +93,7 @@
     </div>
 
     <div class="display-flex margin-b-full margin-r-l-reverse">
-      <div class="half-width padding-r-l">
+      <div class="half-width padding-mini-r-l">
         <mat-form-field class="full-width font-9-em">
           <input matInput placeholder="{{'tasks.form.task_durationHours' | translate}}" class="full-width" type="number"
                  formControlName="taskDurationHours" required tabindex="6">
@@ -119,7 +119,7 @@
     </div>
 
     <div class="display-flex margin-r-l-reverse">
-      <div class="quarter-width padding-r-l">
+      <div class="quarter-width padding-mini-r-l">
         <mat-form-field class="full-width font-9-em">
           <mat-label>{{'tasks.form.start_at' | translate}}</mat-label>
           <input matInput [matDatepicker]="picker1" readonly
@@ -180,7 +180,7 @@
     </div>
 
     <div class="display-flex margin-b-full margin-r-l-reverse">
-      <div class="full-width padding-r-l">
+      <div class="full-width padding-mini-r-l">
         <mat-form-field class="full-width height-80 font-9-em">
           <mat-label>{{'tasks.form.task_description' | translate}}</mat-label>
           <textarea matInput formControlName="taskDesc"
@@ -190,7 +190,7 @@
     </div>
 
     <div class="display-flex margin-b-full margin-r-l-reverse">
-      <div class="full-width padding-r-l">
+      <div class="full-width padding-mini-r-l">
         <mat-slide-toggle
           formControlName="trackable"
           [color]="'primary'">
