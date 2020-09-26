@@ -1,0 +1,73 @@
+.mat-card {
+  .image-container {
+    img:first-child {
+      opacity: 1;
+    }
+
+    img:last-child {
+      opacity: 0;
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
+                0 12px 17px 2px rgba(0, 0, 0, 0.14),
+                0 5px 22px 4px rgba(0, 0, 0, 0.12);
+
+    &.card-softphone {
+      .header {
+        color: #ff5252 !important;
+      }
+    }
+
+    &.card-conference {
+      .header {
+        color: #3949ab !important;
+      }
+    }
+
+    &.card-learning {
+      .header {
+        color: #0f6e5d !important;
+      }
+    }
+
+
+    .image-container {
+      img:first-child {
+        opacity: 0;
+      }
+
+      img:last-child {
+        opacity: 1;
+      }
+    }
+
+    .white-gradient {
+      &.btn-softphone {
+        &, &:active, &:active:focus, &.active, &:focus, &:hover{
+          color: #FFF !important;
+          background-image: -webkit-linear-gradient(-20deg, #ff5252 0%, #ffc107 100%);
+          background-image: linear-gradient(-20deg, #ff5252 0%, #ffc107 100%);
+        }
+      }
+
+      &.btn-conference {
+        &, &:active, &:active:focus, &.active, &:focus, &:hover{
+          color: #FFF !important;
+          background-image: -webkit-linear-gradient(-20deg, #3949ab 0%, #4fc3f7 100%);
+          background-image: linear-gradient(-20deg, #3949ab 0%, #4fc3f7 100%);
+        }
+      }
+
+      &.btn-learning {
+        &, &:active, &:active:focus, &.active, &:focus, &:hover{
+          color: #FFF !important;
+          background-image: -webkit-linear-gradient(15deg, #0f6e5d 0%, #80d0c7 100%);
+          background-image: linear-gradient(15deg, #0f6e5d 0%, #80d0c7 100%);
+        }
+      }
+
+    }
+  }
+}

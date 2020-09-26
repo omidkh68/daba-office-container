@@ -13,6 +13,19 @@ import {
   selector: '[digitOnly]'
 })
 export class digitalOnlyDirective implements OnChanges {
+  @Input()
+  decimal = false;
+  @Input()
+  decimalSeparator = '.';
+  @Input()
+  min = -Infinity;
+  @Input()
+  max = Infinity;
+  @Input()
+  pattern?: string | RegExp;
+  @Output()
+  onValueChanged = new EventEmitter<any>();
+  inputElement: HTMLInputElement;
   private hasDecimalPoint = false;
   private navigationKeys = [
     'Backspace',
@@ -28,28 +41,7 @@ export class digitalOnlyDirective implements OnChanges {
     'Copy',
     'Paste',
   ];
-
-  @Input()
-  decimal = false;
-
-  @Input()
-  decimalSeparator = '.';
-
-  @Input()
-  min = -Infinity;
-
-  @Input()
-  max = Infinity;
-
-  @Input()
-  pattern?: string | RegExp;
-
-  @Output()
-  onValueChanged = new EventEmitter<any>();
-
   private regex: RegExp;
-
-  inputElement: HTMLInputElement;
 
   constructor(public el: ElementRef) {
     this.inputElement = el.nativeElement;
@@ -136,11 +128,18 @@ export class digitalOnlyDirective implements OnChanges {
     event.preventDefault();
   }
 
+  updateDecimalPoint(): void {
+    if (this.decimal) {
+      this.hasDecimalPoint =
+        this.inputElement.value.indexOf(this.decimalSeparator) > -1;
+    }
+  }
+
   private pasteData(pastedContent: string): void {
     const sanitizedContent = this.sanitizeInput(pastedContent);
     const pasted = document.execCommand('insertText', false, sanitizedContent);
     if (!pasted) {
-      const { selectionStart: start, selectionEnd: end } = this.inputElement;
+      const {selectionStart: start, selectionEnd: end} = this.inputElement;
       this.inputElement.setRangeText(sanitizedContent, start, end, 'end');
     }
     this.updateDecimalPoint();
@@ -175,13 +174,6 @@ export class digitalOnlyDirective implements OnChanges {
       } else {
         return string.indexOf(this.decimalSeparator) < 0;
       }
-    }
-  }
-
-  updateDecimalPoint(): void {
-    if (this.decimal) {
-      this.hasDecimalPoint =
-        this.inputElement.value.indexOf(this.decimalSeparator) > -1;
     }
   }
 

@@ -1,6 +1,6 @@
-<div class="box-dark datepicker-popover datepicker-container mat-elevation-z1 padding-full round-corner"
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'"
      [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
-     [dir]="rtlDirection ? 'rtl' : 'ltr'">
+     class="box-dark datepicker-popover datepicker-container mat-elevation-z1 padding-full round-corner">
   <mat-calendar #myCalendar (click)="getPosition($event)" (selectedChange)="onSelect($event)"
                 [dateClass]="dateClass()"></mat-calendar>
   <div *ngIf="events_reminders && events_reminders.reminders.length">
@@ -11,14 +11,14 @@
       <div>
         <mat-list-item *ngFor="let item of events_reminders.reminders.slice(0, 3)">
           <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
-          <div mat-line class="font-8-em">{{item.description}}</div>
-          <div mat-line class="font-8-rem">{{item.startReminder}}</div>
+          <div class="font-8-em" mat-line>{{item.description}}</div>
+          <div class="font-8-rem" mat-line>{{item.startReminder}}</div>
         </mat-list-item>
       </div>
     </mat-list>
 
-    <button mat-raised-button (click)="showEventHandlerWindow(null,$event)"
-            class="custom-flat-button full-width padding-mini-r-l line-height-30 font-9-em overflow-hide text-weight-normal">
+    <button (click)="showEventHandlerWindow(null,$event)" class="custom-flat-button full-width padding-mini-r-l line-height-30 font-9-em overflow-hide text-weight-normal"
+            mat-raised-button>
       <span class="padding-mini-r-l">{{'events_handler.main.see_more' | translate}}</span>
     </button>
   </div>

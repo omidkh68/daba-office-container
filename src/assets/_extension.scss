@@ -13,9 +13,7 @@ $depths: 50 100 200 300 400 500 600 700 800 900 A100 A200 A400 A700;
     $color: nth($colors-list, $i);
     $color-name: nth($colors-name, $i);
 
-    .text-#{""+$color-name}-#{""+$depth}{
-      color: #{map_get($color, $depth)} !important;
-    }
+    .text-#{""+$color-name}-#{""+$depth}{color: #{map_get($color, $depth)} !important}
   }
 }
 

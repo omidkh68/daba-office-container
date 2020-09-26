@@ -3,7 +3,7 @@ import {AppConfig} from '../../environments/environment';
 import {ApiService} from '../components/users/logic/api.service';
 import {CanActivate, Router} from '@angular/router';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {LoginInterface} from "../components/login/logic/login.interface";
+import {LoginInterface} from '../components/login/logic/login.interface';
 import {LoginDataClass} from '../services/loginData.class';
 import {MessageService} from '../components/message/service/message.service';
 import {UserInfoService} from '../components/users/services/user-info.service';

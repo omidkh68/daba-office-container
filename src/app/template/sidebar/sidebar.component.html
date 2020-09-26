@@ -1,10 +1,10 @@
 <mat-list class="text-white">
-  <h3 mat-subheader class="text-white">نرم افزار مدیریت پروژه دابا</h3>
+  <h3 class="text-white" mat-subheader>نرم افزار مدیریت پروژه دابا</h3>
 
   <!--<button mat-raised-button (click)="openLazyLoadDialog()">باز کردن دیالوگ لیزی لود</button>-->
 
-  <a mat-list-item *ngFor="let menu of menus" [routerLink]="[menu.link]" routerLinkActive="active-sidebar-link"
-     class="full-width no-padding text-white font-8-rem text-decoration-none">
+  <a *ngFor="let menu of menus" [routerLink]="[menu.link]" class="full-width no-padding text-white font-8-rem text-decoration-none" mat-list-item
+     routerLinkActive="active-sidebar-link">
     <mat-icon class="text-white" mat-list-icon>{{menu.icon}}</mat-icon>
     <h4 class="text-white" mat-line>{{menu.name | translate}}</h4>
   </a>

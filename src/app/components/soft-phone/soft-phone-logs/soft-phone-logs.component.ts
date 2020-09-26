@@ -57,10 +57,16 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.softPhoneService.currentExtensionList.subscribe((ext: Array<ExtensionInterface>) => {
-        setTimeout(() => {
-          this.loggedInUserExtension = ext.filter(item => item.username === this.loggedInUser.email).pop().extension_no;
-        });
+        if (ext && ext.length) {
+          setTimeout(() => {
+            this.loggedInUserExtension = ext.filter(item => item.username === this.loggedInUser.email).pop().extension_no;
+          });
+        }
       })
+    );
+
+    this._subscription.add(
+      this.softPhoneService.currentActiveTab.subscribe(tab => tab === 2 ? this.getCdr() : null)
     );
   }
 

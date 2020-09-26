@@ -63,6 +63,10 @@ export class SoftPhoneService extends LoginDataClass {
   private minimizeCallPopUp = new BehaviorSubject(this._minimizeCallPopUp);
   public currentMinimizeCallPopUp = this.minimizeCallPopUp.asObservable();
 
+  private _activeTab: number = 0;
+  private activeTab = new BehaviorSubject(this._activeTab);
+  public currentActiveTab = this.activeTab.asObservable();
+
   private audioRemoteTag: BehaviorSubject<EssentialTagsInterface> = new BehaviorSubject(null);
 
   /*videoRemote;
@@ -77,7 +81,7 @@ export class SoftPhoneService extends LoginDataClass {
   oReadyStateTimer;
   viewLocalScreencast; // <video> (webrtc) or <div> (webrtc4all)*/
 
-  constructor(@Inject('windowObject') private window,private injector: Injector,
+  constructor(@Inject('windowObject') private window, private injector: Injector,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private translateService: TranslateService) {
@@ -152,6 +156,10 @@ export class SoftPhoneService extends LoginDataClass {
     this.ringbacktone = this.audioRemoteTagValue.ringbacktone;
 
     SIPml.init(this.postInit, false);
+  }
+
+  changeActiveTab(tab: number) {
+    this.activeTab.next(tab);
   }
 
   combineUsersSoftPhoneInformation() {
@@ -562,7 +570,7 @@ export class SoftPhoneService extends LoginDataClass {
           case 'connected': {
             this.changeSoftphoneConnected(true);
 
-            this.messageService.showMessage(`Your soft phone is now connected`);
+            this.messageService.showMessage(`Your Softphone is now connected`);
 
             break;
           }
@@ -628,7 +636,7 @@ export class SoftPhoneService extends LoginDataClass {
           }
 
           case 'ok': {
-            this.messageService.showMessage('Soft phone was disconnected');
+            this.messageService.showMessage('Softphone was disconnected');
             break;
           }
 
@@ -926,42 +934,42 @@ export class SoftPhoneService extends LoginDataClass {
     }
   }
 
-  getConnectionStatus = (logInfo = true) => new Promise( (resolve, reject) => {
+  getConnectionStatus = (logInfo = true) => new Promise((resolve, reject) => {
     this.window.RTCPeerConnection = this.window.RTCPeerConnection
-        || this.window.mozRTCPeerConnection
-        || this.window.webkitRTCPeerConnection;
+      || this.window.mozRTCPeerConnection
+      || this.window.webkitRTCPeerConnection;
 
-    if ( typeof this.window.RTCPeerConnection == 'undefined' )
+    if (typeof this.window.RTCPeerConnection == 'undefined')
       return reject('WebRTC not supported by browser');
 
     let pc = new RTCPeerConnection();
     let ips = [];
 
-    pc.createDataChannel("");
+    pc.createDataChannel('');
     pc.createOffer()
-        .then(offer => pc.setLocalDescription(offer))
-        .catch(err => reject(err));
+      .then(offer => pc.setLocalDescription(offer))
+      .catch(err => reject(err));
     pc.onicecandidate = event => {
-      if ( !event || !event.candidate ) {
+      if (!event || !event.candidate) {
         // All ICE candidates have been sent.
-        if ( ips.length == 0 )
+        if (ips.length == 0)
           return reject('WebRTC disabled or restricted by browser');
 
         return resolve(ips);
       }
 
       let parts = event.candidate.candidate.split(' ');
-      let [base,componentId,protocol,priority,ip,port,,type,...attr] = parts;
+      let [base, componentId, protocol, priority, ip, port, , type, ...attr] = parts;
       let component = ['rtp', 'rtpc'];
 
-      if ( ! ips.some(e => e == ip) )
+      if (!ips.some(e => e == ip))
         ips.push(ip);
 
-      if ( ! logInfo )
+      if (!logInfo)
         return;
 
     };
-  } );
+  });
 
   checkIpAddressVPN() {
     this.window.addEventListener('online', () => {
@@ -971,15 +979,15 @@ export class SoftPhoneService extends LoginDataClass {
     this.window.addEventListener('offline', () => {
       console.log('Offline');
     });
-/*    this.getConnectionStatus().then(
-        ips => {
-          let tempIps = ips;
-          if(this.ipAddresses.length && JSON.stringify(tempIps) != JSON.stringify(this.ipAddresses)){
-            console.log("register / unregister");
-          }
-          this.ipAddresses = ips;
-        },
-    );*/
+    /*    this.getConnectionStatus().then(
+            ips => {
+              let tempIps = ips;
+              if(this.ipAddresses.length && JSON.stringify(tempIps) != JSON.stringify(this.ipAddresses)){
+                console.log("register / unregister");
+              }
+              this.ipAddresses = ips;
+            },
+        );*/
   }
 
   getTranslate(word) {

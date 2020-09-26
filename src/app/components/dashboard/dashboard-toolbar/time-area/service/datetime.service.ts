@@ -11,14 +11,6 @@ import {Timezones} from '../timezones.interface';
   providedIn: 'root',
 })
 export class DatetimeService {
-  private weekDaysFa = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
-  private monthFa = ['','فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
-  private weekDaysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  private datetime: DatetimeInterface;
-  private todayJalali = moment().locale('fa').format('D') + ' ' + this.monthFa[moment().locale('fa').format('M')] + ' ' + moment().locale('fa').format('YYYY');
-  private todayGregorian = moment().locale('en').format('D') + ' ' + moment().locale('en').format('MMMM') + ' ' + moment().locale('en').format('YYYY');
-  private todayJalaliDayName = this.weekDaysFa[new Date().getDay() + 1];
-  private todayGregorianDayName = this.weekDaysEn[new Date().getDay()];
   public aryIannaTimeZones: Timezones[] = [
     {city: 'Tehran', timezone: 'Asia/Tehran'},
     {city: 'Andorra', timezone: 'Europe/Andorra'},
@@ -369,6 +361,14 @@ export class DatetimeService {
     {city: 'Apia', timezone: 'Pacific/Apia'},
     {city: 'Johannesburg', timezone: 'Africa/Johannesburg'}
   ];
+  private weekDaysFa = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
+  private monthFa = ['', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+  private weekDaysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  private datetime: DatetimeInterface;
+  private todayJalali = moment().locale('fa').format('D') + ' ' + this.monthFa[moment().locale('fa').format('M')] + ' ' + moment().locale('fa').format('YYYY');
+  private todayGregorian = moment().locale('en').format('D') + ' ' + moment().locale('en').format('MMMM') + ' ' + moment().locale('en').format('YYYY');
+  private todayJalaliDayName = this.weekDaysFa[new Date().getDay() + 1];
+  private todayGregorianDayName = this.weekDaysEn[new Date().getDay()];
 
   changeDatetimeLabel(rtlDirection: boolean) {
     if (rtlDirection) {
@@ -389,8 +389,8 @@ export class DatetimeService {
 
   formatTime(date) {
     var d = new Date(date),
-        hour = '' + (d.getHours()),
-        min = '' + d.getMinutes();
+      hour = '' + (d.getHours()),
+      min = '' + d.getMinutes();
     if (hour.length < 2)
       hour = '0' + hour;
     if (min.length < 2)
@@ -400,22 +400,22 @@ export class DatetimeService {
 
   formatDate(date) {
     var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
 
     if (month.length < 2)
       month = '0' + month;
     if (day.length < 2)
       day = '0' + day;
 
-    return [year , month , day ].join('-');
+    return [year, month, day].join('-');
   }
 
-  getDateByTimezone(date: string , timezone: string){
+  getDateByTimezone(date: string, timezone: string) {
 
-    let _date = new Date(date).toLocaleString('en-US', {timeZone: timezone });
-    return this.formatDate(_date) + " " + this.formatTime(_date);
+    let _date = new Date(date).toLocaleString('en-US', {timeZone: timezone});
+    return this.formatDate(_date) + ' ' + this.formatTime(_date);
 
   }
 }

@@ -1,9 +1,9 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'"
      class="box mat-elevation-z1 pos-rel text-center round-corner width-40 height-40 overflow-hide">
-  <img [matMenuTriggerFor]="profileMenu" class="full-width full-height cursor-pointer"
+  <img [alt]="loggedInUser ? loggedInUser.name : ''" [matMenuTriggerFor]="profileMenu"
        [src]="loggedInUser && loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'"
-       onerror="this.src='assets/profileImg/0.jpg'"
-       [alt]="loggedInUser ? loggedInUser.name : ''">
+       class="full-width full-height cursor-pointer"
+       onerror="this.src='assets/profileImg/0.jpg'">
 </div>
 <mat-menu class="toolbar-menu box-menu-profile padding-r-l" #profileMenu="matMenu" xPosition="before" yPosition="above">
   <ng-container *ngIf="loggedInUser">

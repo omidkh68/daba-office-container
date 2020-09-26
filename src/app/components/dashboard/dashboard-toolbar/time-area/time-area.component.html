@@ -7,8 +7,8 @@
   <div class="display-flex">
     <mat-list [ngClass]="rtlDirection ? 'text-right' : 'text-left'">
       <mat-list-item class="text-dark-mode-color text-gray-800">
-        <div mat-line class="font-8-rem">{{datetime ? datetime.date : ''}}</div>
-        <div mat-line class="font-8-rem">{{datetime ? datetime.weekday : ''}}</div>
+        <div class="font-8-rem" mat-line>{{datetime ? datetime.date : ''}}</div>
+        <div class="font-8-rem" mat-line>{{datetime ? datetime.weekday : ''}}</div>
       </mat-list-item>
     </mat-list>
 
@@ -16,7 +16,7 @@
       <mat-list-item class="text-dark-mode-color font-8-rem text-gray-800">
         <app-time-area-digital-clock [timezone]="loggedInUser ? loggedInUser.timezone : null" matLine>
         </app-time-area-digital-clock>
-        <div mat-line dir="ltr" class="font-8-rem"><span>{{loggedInUser ? currentTimezone : ''}}</span></div>
+        <div class="font-8-rem" dir="ltr" mat-line><span>{{loggedInUser ? currentTimezone : ''}}</span></div>
       </mat-list-item>
     </mat-list>
   </div>

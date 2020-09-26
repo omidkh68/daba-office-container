@@ -1,16 +1,16 @@
 <div class="full-width full-height bg-white pos-rel">
   <div class="height-50 address-bar-container display-flex flex-space-between">
     <a (click)="reloadWebView()" [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-            class="reload-btn round-corner-all no-padding display-flex flex-center cursor-pointer bg-white">
+       class="reload-btn round-corner-all no-padding display-flex flex-center cursor-pointer bg-white">
       <mat-icon>refresh</mat-icon>
     </a>
 
-    <input type="text" #addressBar
-           (focus)="addressBar.select()"
+    <input #addressBar (focus)="addressBar.select()"
            (keyup)="enterAddress($event)"
-           placeholder="Type a URL"
            [value]="currentUrl"
-           class="no-box-shadow btn-rounded full-height padding-r-l font-9-em">
+           class="no-box-shadow btn-rounded full-height padding-r-l font-9-em"
+           placeholder="Type a URL"
+           type="text">
   </div>
 
   <webview #webFrame class="webView-frame full-width height-full-minus-50"></webview>
@@ -18,25 +18,25 @@
   <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'webBrowser'"
        class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
     <div class="text-center">
-      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-           width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-        <rect x="0" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+      <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"
+           width="24px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" y="0px">
+        <rect fill="#333" height="5" width="4" x="0" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
-        <rect x="10" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.15s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.15s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+        <rect fill="#333" height="5" width="4" x="10" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
-        <rect x="20" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.3s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.3s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+        <rect fill="#333" height="5" width="4" x="20" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
       </svg>
 

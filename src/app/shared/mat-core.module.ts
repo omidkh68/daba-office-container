@@ -31,10 +31,10 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatRadioModule} from '@angular/material/radio';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ClipboardModule} from '@angular/cdk/clipboard';
-import {PortalModule} from "@angular/cdk/portal";
+import {PortalModule} from '@angular/cdk/portal';
 
 @NgModule({
-  imports: [MatTableModule ,PortalModule],
+  imports: [MatTableModule, PortalModule],
   exports: [
     MatAutocompleteModule,
     MatBadgeModule,

@@ -1,96 +1,96 @@
-<div class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height">
   <div class="full-width full-height overflow-y-auto overflow-x-hide">
-    <table class="full-width" mat-table [dataSource]="dataSource">
+    <table [dataSource]="dataSource" class="full-width" mat-table>
       <!-- Name Column -->
       <ng-container matColumnDef="taskDateStart">
-        <th mat-header-cell *matHeaderCellDef class="font-7-em">{{'tasks.form.start_at' | translate}}</th>
-        <td mat-cell *matCellDef="let element">
+        <th *matHeaderCellDef class="font-7-em" mat-header-cell>{{'tasks.form.start_at' | translate}}</th>
+        <td *matCellDef="let element" mat-cell>
           <span class="font-7-em display-block width-60">{{element.taskDateStart | jalali:rtlDirection}}</span>
         </td>
       </ng-container>
 
       <!-- lang Column -->
       <ng-container matColumnDef="taskDateStop">
-        <th mat-header-cell *matHeaderCellDef class="font-7-em">{{'tasks.form.stop_at' | translate}}</th>
-        <td mat-cell *matCellDef="let element">
+        <th *matHeaderCellDef class="font-7-em" mat-header-cell>{{'tasks.form.stop_at' | translate}}</th>
+        <td *matCellDef="let element" mat-cell>
           <span class="font-7-em display-block width-60">{{element.taskDateStop | jalali:rtlDirection}}</span>
         </td>
       </ng-container>
 
       <!-- lang Column -->
       <ng-container matColumnDef="adminIdStartTask">
-        <th mat-header-cell *matHeaderCellDef class="font-7-em">{{'tasks.form.task_admin_start' | translate}}</th>
-        <td mat-cell *matCellDef="let element">
+        <th *matHeaderCellDef class="font-7-em" mat-header-cell>{{'tasks.form.task_admin_start' | translate}}</th>
+        <td *matCellDef="let element" mat-cell>
           <span class="font-7-em display-block width-60">{{element.adminIdStartTask}}</span>
         </td>
       </ng-container>
 
       <!-- lang Column -->
       <ng-container matColumnDef="adminIdStopTask">
-        <th mat-header-cell *matHeaderCellDef class="font-7-em">{{'tasks.form.task_admin_stop' | translate}}</th>
-        <td mat-cell *matCellDef="let element">
+        <th *matHeaderCellDef class="font-7-em" mat-header-cell>{{'tasks.form.task_admin_stop' | translate}}</th>
+        <td *matCellDef="let element" mat-cell>
           <span class="font-7-em display-block width-60">{{element.adminIdStopTask}}</span>
         </td>
       </ng-container>
 
       <!-- priority Column -->
       <ng-container matColumnDef="percentage">
-        <th mat-header-cell *matHeaderCellDef class="font-7-em">{{'tasks.boards.task_percentage' | translate}}</th>
-        <td mat-cell *matCellDef="let element">
+        <th *matHeaderCellDef class="font-7-em" mat-header-cell>{{'tasks.boards.task_percentage' | translate}}</th>
+        <td *matCellDef="let element" mat-cell>
           <span class="font-7-em display-block width-60">{{element.percentage}}%</span>
         </td>
       </ng-container>
 
       <!-- priority Column -->
       <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef class="font-7-em">{{'tasks.form.task_description' | translate}}</th>
-        <td mat-cell *matCellDef="let element">
+        <th *matHeaderCellDef class="font-7-em" mat-header-cell>{{'tasks.form.task_description' | translate}}</th>
+        <td *matCellDef="let element" mat-cell>
           <!--<span
             class="font-7-em display-block width-60">{{element.description.length ? element.description : '-'}}
           </span>-->
           <span *ngIf="!element.description.length">
-            <a  class="font-7-em display-block">
+            <a class="font-7-em display-block">
              {{'-'}}
             </a>
           </span>
 
-          <a *ngIf="element.description.length"  (click)="descriptionTask(element.description)"
-                  class="padding-mini-r-l  line-height-30 font-9-em overflow-hide text-weight-normal no-box-shadow cursor-pointer">
+          <a (click)="descriptionTask(element.description)" *ngIf="element.description.length"
+             class="padding-mini-r-l  line-height-30 font-9-em overflow-hide text-weight-normal no-box-shadow cursor-pointer">
             <span class="padding-mini-r-l text-blue">{{'tasks.task_detail.overview_description' | translate}}</span>
           </a>
 
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
     </table>
 
-    <mat-paginator class="full-width" [pageSizeOptions]="pageLimit" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="pageLimit" class="full-width" showFirstLastButtons></mat-paginator>
   </div>
 
   <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'project-report'"
        class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
     <div class="text-center">
-      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-           width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-        <rect x="0" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+      <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"
+           width="24px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" y="0px">
+        <rect fill="#333" height="5" width="4" x="0" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
-        <rect x="10" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.15s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.15s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+        <rect fill="#333" height="5" width="4" x="10" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
-        <rect x="20" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.3s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.3s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+        <rect fill="#333" height="5" width="4" x="20" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
       </svg>
 

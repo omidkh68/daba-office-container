@@ -13,14 +13,13 @@ import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {PopoverService} from '../../popover-widget/popover.service';
 import {EventApiService} from '../../events/logic/api.service';
-import {ReminderInterface} from '../../events/logic/event-reminder.interface';
 import {EventHandlerService} from '../../events/service/event-handler.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ServiceItemsInterface} from '../logic/service-items.interface';
 import {EventHandlerInterface, EventsReminderInterface} from '../../events/logic/event-handler.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {PopoverContnetComponent} from '../../popover-widget/popover/popover-content/popover-content.component';
-import {EventHandlerSocketService} from "../../events/service/event-handler-socket.service";
+import {EventHandlerSocketService} from '../../events/service/event-handler-socket.service';
 
 @Component({
   selector: 'app-dashboard-datepicker',
@@ -45,7 +44,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
   popoverTarget: any;
   eventTemp: any = [];
   result: any;
-  events_reminders: EventsReminderInterface = {events:[] , reminders:[]};
+  events_reminders: EventsReminderInterface = {events: [], reminders: []};
 
   private _subscription: Subscription = new Subscription();
 
@@ -68,7 +67,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
   ngAfterViewInit(): void {
     this._subscription.add(
       this.eventHandlerService.currentEventsReminderList.subscribe((events_reminder: EventsReminderInterface) => {
-        if(events_reminder){
+        if (events_reminder) {
           this.events_reminders.events = events_reminder.events;
           this.events_reminders.reminders = events_reminder.reminders;
         }
@@ -138,7 +137,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
   getEvents() {
     this.eventHandlerSocketService.getEventsByEmail(this.loggedInUser).then((result: any) => {
       this._subscription.add(
-          this.events_reminders = result
+        this.events_reminders = result
       );
     })
   }

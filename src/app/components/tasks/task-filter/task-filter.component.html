@@ -1,5 +1,6 @@
-<div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-  <form [formGroup]="form" (submit)="submit()" class="full-height">
+<div *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'"
+     class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
+  <form (submit)="submit()" [formGroup]="form" class="full-height">
     <div class="height-full-minus-30 full-width">
       <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
         {{'tasks.task_filter.tasks_filter' | translate}}
@@ -9,7 +10,7 @@
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'tasks.task_filter.filter_types' | translate}}</mat-label>
-            <mat-select formControlName="type" tabIndex="1" required>
+            <mat-select formControlName="type" required tabIndex="1">
               <mat-option *ngFor="let type of filterTypes" [value]="type.typeName" class="font-full-em">
                 {{type.textName | translate}}
               </mat-option>
@@ -19,8 +20,8 @@
 
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
-            <input matInput placeholder="{{'tasks.form.task_name' | translate}}" class="full-width" type="text"
-                   formControlName="taskName" tabindex="2">
+            <input class="full-width" formControlName="taskName" matInput placeholder="{{'tasks.form.task_name' | translate}}"
+                   tabindex="2" type="text">
             <mat-label>
               {{'tasks.form.task_name' | translate}}
             </mat-label>
@@ -50,20 +51,20 @@
 
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
-            <img matPrefix
-                 *ngIf="form.get('adminId').valid"
-                 [src]="'assets/profileImg/'+form.get('userImg').value+'.jpg'"
-                 onerror="this.src='assets/profileImg/0.jpg'"
+            <img *ngIf="form.get('adminId').valid"
                  [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                 class="width-20 height-20 round-corner-all pos-rel top-three-tenth">
+                 [src]="'assets/profileImg/'+form.get('userImg').value+'.jpg'"
+                 class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
+                 matPrefix
+                 onerror="this.src='assets/profileImg/0.jpg'">
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
             <mat-select formControlName="adminId" tabIndex="4">
               <mat-option *ngFor="let user of usersList" [value]="user.adminId" class="font-full-em">
                 <div class="display-flex align-items-center">
-                  <img matPrefix
+                  <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                        [src]="'assets/profileImg/'+user.email+'.jpg'"
-                       [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                        class="width-20 height-20 round-corner-all pos-rel"
+                       matPrefix
                        onerror="this.src='assets/profileImg/0.jpg'">
                   <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
                 </div>
@@ -81,17 +82,17 @@
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'global.from_date' | translate}}</mat-label>
-            <input matInput [matDatepicker]="picker1" readonly
-                   (focus)="picker1.open()" (click)="picker1.open()"
-                   (dateChange)="dateToGregorian('dateStart', $event)"
-                   formControlName="dateStart" tabindex="5">
+            <input (click)="picker1.open()" (dateChange)="dateToGregorian('dateStart', $event)" (focus)="picker1.open()"
+                   [matDatepicker]="picker1" formControlName="dateStart"
+                   matInput
+                   readonly tabindex="5">
             <mat-datepicker #picker1></mat-datepicker>
 
-            <button class="close-icon pos-rel top-half" type="button"
+            <button (click)="form.get('dateStart').setValue('')" *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
                     [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
-                    *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
-                    mat-button matSuffix mat-icon-button aria-label="Clear"
-                    (click)="form.get('dateStart').setValue('')">
+                    aria-label="Clear"
+                    class="close-icon pos-rel top-half" mat-button mat-icon-button matSuffix
+                    type="button">
               <mat-icon>close</mat-icon>
             </button>
 
@@ -104,17 +105,17 @@
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'global.to_date' | translate}}</mat-label>
-            <input matInput [matDatepicker]="picker2" readonly
-                   (focus)="picker2.open()" (click)="picker2.open()"
-                   (dateChange)="dateToGregorian('dateStop', $event)"
-                   formControlName="dateStop" tabindex="6">
+            <input (click)="picker2.open()" (dateChange)="dateToGregorian('dateStop', $event)" (focus)="picker2.open()"
+                   [matDatepicker]="picker2" formControlName="dateStop"
+                   matInput
+                   readonly tabindex="6">
             <mat-datepicker #picker2></mat-datepicker>
 
-            <button class="close-icon pos-rel top-half" type="button"
+            <button (click)="form.get('dateStop').setValue('')" *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
                     [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
-                    *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
-                    mat-button matSuffix mat-icon-button aria-label="Clear"
-                    (click)="form.get('dateStop').setValue('')">
+                    aria-label="Clear"
+                    class="close-icon pos-rel top-half" mat-button mat-icon-button matSuffix
+                    type="button">
               <mat-icon>close</mat-icon>
             </button>
 
@@ -128,16 +129,16 @@
       <div class="display-flex margin-r-l-reverse margin-t-full-2">
         <div class="half-width padding-r-l">
           <mat-slide-toggle
-                  formControlName="percentageStatus"
-                  [color]="'primary'">
+            [color]="'primary'"
+            formControlName="percentageStatus">
             <span class="font-9-em">{{'tasks.task_filter.in_progress_tasks' | translate}}</span>
           </mat-slide-toggle>
         </div>
 
         <div class="half-width padding-r-l">
           <mat-slide-toggle
-                  formControlName="status"
-                  [color]="'primary'">
+            [color]="'primary'"
+            formControlName="status">
             <span class="font-9-em">{{'tasks.task_filter.show_disabled_task' | translate}}</span>
           </mat-slide-toggle>
         </div>
@@ -145,18 +146,18 @@
     </div>
 
     <div class="height-30 full-width display-flex flex-direction-row-reverse">
-      <button mat-raised-button
-              [disabled]="!form.valid && form.touched"
-              type="submit"
+      <button [disabled]="!form.valid && form.touched"
+              class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+              mat-raised-button
               tabindex="13"
-              class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+              type="submit">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
         <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
       </button>
 
       <button (click)="dialogRef.close(false)"
-              type="button"
-              class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
+              class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal"
+              type="button">
         <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
       </button>
     </div>

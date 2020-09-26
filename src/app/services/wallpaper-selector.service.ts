@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {UserInfoService} from "../components/users/services/user-info.service";
-
-const DEFAULT_WALLPAPER = null;
+import {UserInfoService} from '../components/users/services/user-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +9,11 @@ export class WallpaperSelectorService {
   currentWallpaper;
 
   protected preWallpaper;
-  private _defaultFromLocalStorage: string;
   private _wallpaper;
 
   constructor(private userInfoService: UserInfoService) {
-
-    this.preWallpaper = this.userInfoService.getUserInfo().background_image !== null ? 'url(' + this.userInfoService.getUserInfo().background_image + ')' : 'url(./assets/images/wallpapers/18.jpg)';
-    this._defaultFromLocalStorage = DEFAULT_WALLPAPER !== null ? DEFAULT_WALLPAPER : this.preWallpaper;
-    this._wallpaper = new BehaviorSubject(this._defaultFromLocalStorage);
+    this.preWallpaper = this.userInfoService.getUserInfo.background_image !== null ? 'url(' + this.userInfoService.getUserInfo.background_image + ')' : 'url(./assets/images/wallpapers/18.jpg)';
+    this._wallpaper = new BehaviorSubject(this.preWallpaper);
     this.currentWallpaper = this._wallpaper.asObservable();
   }
 

@@ -9,10 +9,10 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {MatTableDataSource} from '@angular/material/table';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {WindowManagerService} from "../../../services/window-manager.service";
-import {MatDialog} from "@angular/material/dialog";
-import {TaskReportDescriptionComponent} from "../description-task/task-report-description.component";
-import {TaskInterface} from "../logic/task-interface";
+import {WindowManagerService} from '../../../services/window-manager.service';
+import {MatDialog} from '@angular/material/dialog';
+import {TaskReportDescriptionComponent} from '../description-task/task-report-description.component';
+import {TaskInterface} from '../logic/task-interface';
 
 export interface TaskReportInterface {
   taskSheetId: number;
@@ -72,7 +72,9 @@ export class TaskReportComponent implements OnInit, OnDestroy {
 
     this.matPaginatorIntl.itemsPerPageLabel = this.getTranslate('global.pagination.item_per_page');
     this.matPaginatorIntl.getRangeLabel = (page: number, pageSize: number, length: number) => {
-      if (length === 0 || pageSize === 0) { return `0 ${this.getTranslate('global.pagination.from')} ${length}`; }
+      if (length === 0 || pageSize === 0) {
+        return `0 ${this.getTranslate('global.pagination.from')} ${length}`;
+      }
       length = Math.max(length, 0);
       const startIndex = page * pageSize;
       const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
@@ -128,7 +130,6 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   getTranslate(word) {
     return this.translate.instant(word);
   }
-
 
 
   descriptionTask(description) {

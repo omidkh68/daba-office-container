@@ -23,104 +23,124 @@ export class WindowManagerService {
   private windows = new BehaviorSubject(this._defaultWindows);
   public windowsList = this.windows.asObservable();
 
+  private _services: Array<ServiceItemsInterface> | null = null;
+  private services = new BehaviorSubject(this._services);
+
   constructor(public dialog: MatDialog,
               private electron: ElectronService,
               @Inject('windowObject') private window: Window) {
     window.addEventListener('resize', this.fixPositionByTransform.bind(this))
   }
 
+  changeServices(services: Array<ServiceItemsInterface> | null) {
+    this.services.next(services);
+  }
+
   get windowListArray(): Array<WindowInterface> {
     return this.windows.getValue();
   }
 
+  get serviceList(): Array<ServiceItemsInterface> {
+    return this.services.getValue();
+  }
+
   openWindowState(service: ServiceItemsInterface) {
-    let component: any = null;
-    let maximizable: boolean = true;
-    let windowWidth = service && service.width ? service.width : 0;
-    let windowHeight = service && service.height ? service.height : 0;
+    return new Promise((resolve) => {
+      let component: any = null;
+      let maximizable: boolean = true;
+      let windowWidth = service && service.width ? service.width : 0;
+      let windowHeight = service && service.height ? service.height : 0;
 
-    try {
-      switch (service.serviceTitle) {
-        case 'project_service': {
-          component = TasksComponent;
-          break;
+      try {
+        switch (service.serviceTitle) {
+          case 'project_service': {
+            component = TasksComponent;
+            break;
+          }
+
+          case 'softphones_service': {
+            component = SoftPhoneComponent;
+            maximizable = false;
+            break;
+          }
+
+          case 'conference_service': {
+            component = ConferenceComponent;
+            break;
+          }
+
+          case 'web_browser': {
+            component = WebBrowserComponent;
+            break;
+          }
+
+          case 'events_calendar': {
+            component = EventsHandlerComponent;
+            break;
+          }
+
+          case 'admin_panel': {
+            component = AdminPanelComponent;
+            break;
+          }
+
+          case 'learning_service': {
+            component = LearningSystemComponent;
+            break;
+          }
+
+          case 'conferences_&_collaboration_services': {
+            component = ConferencesCollaborationComponent;
+            break;
+          }
         }
 
-        case 'softphones_service': {
-          component = SoftPhoneComponent;
-          maximizable = false;
-          break;
-        }
+        const findIndex = this.windowListArray.findIndex(windowItem => windowItem.windowService.serviceTitle === service.serviceTitle);
 
-        case 'conference_service': {
-          component = ConferenceComponent;
-          break;
-        }
+        if (findIndex === -1) {
+          const dialogRef = this.dialog.open(component, {
+            data: service,
+            autoFocus: false,
+            width: `${windowWidth}px`,
+            height: `${windowHeight}px`,
+            hasBackdrop: false,
+            panelClass: 'window-dialog',
+            disableClose: true,
+          });
 
-        case 'web_browser': {
-          component = WebBrowserComponent;
-          break;
-        }
+          let maxZIndex = this.getNextZIndex();
 
-        case 'events_calendar': {
-          component = EventsHandlerComponent;
-          break;
-        }
+          const mwindow: WindowInterface = {
+            windowRef: dialogRef,
+            minimizable: true,
+            maximizable: maximizable,
+            isMaximized: false,
+            isMinimized: false,
+            isDraggable: true,
+            isActive: false,
+            resizable: true,
+            // position: position,
+            windowService: service,
+            priority: maxZIndex
+          };
 
-        case 'admin_panel': {
-          component = AdminPanelComponent;
-          break;
-        }
+          this.windowListArray.push(mwindow);
 
-        case 'learning_service': {
-          component = LearningSystemComponent;
-          break;
-        }
+          this.windows.next(this.windowListArray);
 
-        case 'conferences_&_collaboration_services': {
-          component = ConferencesCollaborationComponent;
-          break;
+          setTimeout(() => {
+            this.activeWindow(service);
+
+            resolve(true);
+          }, 200);
+        } else {
+          this.restoreWindow(service);
+
+          resolve(true);
         }
+      } catch (e) {
       }
-
-      const findIndex = this.windowListArray.findIndex(windowItem => windowItem.windowService.serviceTitle === service.serviceTitle);
-
-      if (findIndex === -1) {
-        const dialogRef = this.dialog.open(component, {
-          data: service,
-          autoFocus: false,
-          width: `${windowWidth}px`,
-          height: `${windowHeight}px`,
-          hasBackdrop: false,
-          panelClass: 'window-dialog',
-          disableClose: true,
-        });
-
-        let maxZIndex = this.getNextZIndex();
-
-        const mwindow: WindowInterface = {
-          windowRef: dialogRef,
-          minimizable: true,
-          maximizable: maximizable,
-          isMaximized: false,
-          isMinimized: false,
-          isDraggable: true,
-          isActive: false,
-          resizable: true,
-          // position: position,
-          windowService: service,
-          priority: maxZIndex
-        };
-
-        this.windowListArray.push(mwindow);
-
-        this.windows.next(this.windowListArray);
-
-        setTimeout(() => this.activeWindow(service), 200);
-      } else {
-        this.restoreWindow(service);
-      }
-    } catch (e) {}
+    });
   }
 
   fixPositionByTransform(event) {
@@ -277,12 +297,24 @@ export class WindowManagerService {
         setTimeout(() => {
           element = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
           element.style.zIndex = maxWindowZIndex;
-        },100)
-      }else{
-        const elementOverlay = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
-        elementOverlay.style.zIndex = maxWindowZIndex;
-        element = document.querySelector('#' + dialogId) as HTMLElement;
-        element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
+        }, 100)
+      } else {
+        const overlayHtmlElements = document.getElementsByClassName('cdk-overlay-backdrop-showing');
+
+        if (overlayHtmlElements.length === 1) {
+          const elementOverlay = overlayHtmlElements[0] as HTMLElement;
+          elementOverlay.style.zIndex = maxWindowZIndex;
+          element = document.querySelector('#' + dialogId) as HTMLElement;
+          element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
+        } else if (overlayHtmlElements.length > 1) {
+          // if dialog open on another dialog, second overlay has to more z-index
+          let elementOverlay = overlayHtmlElements[1] as HTMLElement;
+          let maxZIndex = (parseInt(maxWindowZIndex, 10) + 11).toString();
+
+          elementOverlay.style.zIndex = maxZIndex;
+          element = document.querySelector('#' + dialogId) as HTMLElement;
+          element.parentElement.parentElement.style.zIndex = maxZIndex;
+        }
       }
     });
   }

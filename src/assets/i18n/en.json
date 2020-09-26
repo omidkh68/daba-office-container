@@ -37,7 +37,8 @@
     "password": "Password",
     "password_error": "Please enter Password",
     "items": "Items",
-    "done": "Done"
+    "done": "Done",
+    "enter": "Enter"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -151,7 +152,7 @@
       "overdue": "Task date is overdue"
     },
     "task_stop": {
-      "stop_description": "Explain about stopped task",
+      "stop_description": "Explain about task stopped",
       "description": "Task Description",
       "description_error": "Please enter task description"
     },
@@ -243,7 +244,7 @@
     "error_upload": "Problem uploading photos",
     "choose_wallpaper": "Choose from wallpapers below:",
     "change_lang_warning_note": "Note:",
-    "change_lang_warning_text": "By change your language, your app will refresh immediately."
+    "change_lang_warning_text": "By change your language, your app will relaunch immediately."
   },
   "events_handler": {
     "main": {
@@ -334,5 +335,10 @@
     "delete_room_error": "The room you are looking for not exist or has been deleted before",
     "delete_room_success": "Room has been deleted",
     "confirm_delete_room": "Are you sure want to delete this room?"
+  },
+  "conference_collaboration": {
+    "audio_only": "Audio Conference",
+    "audio_video": "Audio / Video Conference",
+    "training": "Training Conference"
   }
 }

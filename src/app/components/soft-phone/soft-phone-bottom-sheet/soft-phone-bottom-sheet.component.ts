@@ -1,11 +1,4 @@
-import {
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  Renderer2,
-  ViewChild,
-  ViewContainerRef
-} from '@angular/core';
+import {Component, ComponentFactoryResolver, ElementRef, Renderer2, ViewChild, ViewContainerRef} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {SoftPhoneBottomSheetInterface} from './logic/soft-phone-bottom-sheet.interface';

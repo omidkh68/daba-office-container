@@ -1,15 +1,15 @@
-<form [formGroup]="form" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-width padding-full-2 margin-auto">
+<form [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="form" class="full-width padding-full-2 margin-auto">
   <mat-form-field class="full-width font-full-em margin-b-full">
     <mat-icon class="text-gray-500" matPrefix>person</mat-icon>
-    <input type="text"
-           matInput
+    <input autoFocus
+           autocomplete="off"
            class="text-left padding-mini-r-l"
-           placeholder="{{'login_info.username' | translate}}"
-           autocomplete="off" required
-           tabindex="1"
-           autoFocus
            dir="ltr"
-           formControlName="username">
+           formControlName="username" matInput
+           placeholder="{{'login_info.username' | translate}}"
+           required
+           tabindex="1"
+           type="text">
     <mat-error
       *ngIf="!form.get('username').valid && form.get('username').touched">
       {{'login_info.username_error' | translate}}
@@ -18,18 +18,18 @@
 
   <mat-form-field class="full-width font-full-em margin-b-full">
     <mat-icon class="text-gray-500" matPrefix>lock</mat-icon>
-    <input matInput
-           class="text-left padding-mini-r-l"
-           placeholder="{{'login_info.password' | translate}}"
-           [type]="hide ? 'password' : 'text'"
-           required
-           dir="ltr"
-           tabindex="2"
+    <input [type]="hide ? 'password' : 'text'"
            autocomplete="off"
-           formControlName="password">
-    <mat-icon class="login-icon cursor-pointer text-red-800 font-full-plus-three-tenth-em"
-              matSuffix *ngIf="form.get('password').valid" (mousedown)="hide = !hide"
-              (mouseup)="hide = true"> {{hide ? 'visibility' : 'visibility_off'}}
+           class="text-left padding-mini-r-l"
+           dir="ltr"
+           formControlName="password"
+           matInput
+           placeholder="{{'login_info.password' | translate}}"
+           required
+           tabindex="2">
+    <mat-icon (mousedown)="hide = !hide"
+              (mouseup)="hide = true" *ngIf="form.get('password').valid" class="login-icon cursor-pointer text-red-800 font-full-plus-three-tenth-em"
+              matSuffix> {{hide ? 'visibility' : 'visibility_off'}}
     </mat-icon>
     <mat-error
       *ngIf="!form.get('password').valid && form.get('password').touched">
@@ -37,11 +37,11 @@
     </mat-error>
   </mat-form-field>
 
-  <button mat-raised-button
+  <button (click)="login()"
           [disabled]="!form.valid"
-          (click)="login()"
-          tabindex="3"
-          class="purple-gradient full-width text-white line-height-30 font-9-em text-weight-normal">
+          class="purple-gradient full-width text-white line-height-30 font-9-em text-weight-normal"
+          mat-raised-button
+          tabindex="3">
     {{'login_info.login' | translate}}
   </button>
 </form>

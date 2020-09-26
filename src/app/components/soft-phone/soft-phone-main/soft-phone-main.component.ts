@@ -16,6 +16,7 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
+import {FormControl} from '@angular/forms';
 
 export interface TabInterface {
   icon: string;
@@ -36,7 +37,7 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
 
   rtlDirection: boolean;
   loadingIndicator: LoadingIndicatorInterface = null;
-  activeTab: number = 0;
+  activeTab = new FormControl(0);
   tabs: Array<TabInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
@@ -72,6 +73,10 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
 
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
+    );
+
+    this._subscription.add(
+      this.softPhoneService.currentActiveTab.subscribe(tab => this.activeTab.setValue(tab))
     );
 
     /*this._subscription.add(
@@ -188,7 +193,7 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
   }
 
   tabChange(event: MatTabChangeEvent) {
-    this.activeTab = event.index;
+    this.activeTab.setValue(event.index);
   }
 
   openButtonSheet(bottomSheetConfig: SoftPhoneBottomSheetInterface) {

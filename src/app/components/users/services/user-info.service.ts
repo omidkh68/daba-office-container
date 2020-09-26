@@ -2,26 +2,28 @@ import {Injectable} from '@angular/core';
 import {LoginInterface} from '../../login/logic/login.interface';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {UserContainerInterface} from '../logic/user-container.interface';
+import {AppConfig} from '../../../../environments/environment';
+import {ElectronService} from '../../../services/electron.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserInfoService {
+  body = document.querySelector('html');
   private _userInfo: UserContainerInterface;
   private userInfo = new BehaviorSubject(this._userInfo);
   public currentUserInfo = this.userInfo.asObservable();
-
   private _loginData: LoginInterface | null = null;
   private loginData = new BehaviorSubject(this._loginData);
   public currentLoginData = this.loginData.asObservable();
-
   private _allUsers: Array<UserContainerInterface> | null = null;
   private allUsers = new BehaviorSubject(this._allUsers);
   public currentAllUsers = this.allUsers.asObservable();
 
-  body = document.querySelector('html');
+  constructor(private electronService: ElectronService) {
+  }
 
-  public getUserInfo(): UserContainerInterface {
+  get getUserInfo(): UserContainerInterface {
     return this.userInfo.getValue();
   }
 
@@ -50,6 +52,18 @@ export class UserInfoService {
   }
 
   changeLoginData(loginData: LoginInterface | null) {
+    if (!loginData) {
+      this.removeLoginDataFileContent();
+    }
+
     this.loginData.next(loginData);
+  }
+
+  removeLoginDataFileContent() {
+    const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+
+    const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+
+    this.electronService.fs.writeFileSync(loginDataPath, null);
   }
 }

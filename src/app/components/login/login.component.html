@@ -1,5 +1,5 @@
-<div class="animator full-width-screen full-height-screen display-flex flex-center"
-     [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'"
+     class="animator full-width-screen full-height-screen display-flex flex-center">
   <div
     class="login-container sixty-width round-corner overflow-hide sixty-height bg-white mat-elevation-z15 display-flex">
     <div class="half-width display-flex flex-center pos-rel">
@@ -11,13 +11,13 @@
     </div>
 
     <div class="half-width bg-grey display-flex flex-center">
-      <img [src]="'assets/images/login.png'" class="eighty-width"
-           [ngStyle]="{'transform' : !rtlDirection ? '' : 'scaleX(-1)'}">
+      <img [ngStyle]="{'transform' : !rtlDirection ? '' : 'scaleX(-1)'}" [src]="'assets/images/login.png'"
+           class="eighty-width">
     </div>
   </div>
 
-  <p dir="ltr"
-     class="company-sign full-width height-30 line-height-30 text-white pos-fix bottom-0 text-center font-8-em">
+  <p class="company-sign full-width height-30 line-height-30 text-white pos-fix bottom-0 text-center font-8-em"
+     dir="ltr">
     &copy; Office Container Powered By Enoox, v{{version}}.
   </p>
 </div>

@@ -22,18 +22,22 @@
     }
   }
 }
-.dark-mode{
-  .datepicker-container.box-dark{
+
+.dark-mode {
+  .datepicker-container.box-dark {
     background: rgba(30, 30, 30, 0.8) !important;
     color: #fff;
-    th,td,b,span,div,button,mat-icon{
-      color:#fff !important;
+
+    th, td, b, span, div, button, mat-icon {
+      color: #fff !important;
     }
-    .mat-calendar-arrow{
+
+    .mat-calendar-arrow {
       border-top-color: #fff !important;
     }
-    .mat-calendar-body-today:not(.mat-calendar-body-selected){
-      border:solid 1px #fff !important;
+
+    .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+      border: solid 1px #fff !important;
     }
   }
 }

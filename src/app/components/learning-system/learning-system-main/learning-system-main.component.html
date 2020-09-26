@@ -1,10 +1,10 @@
-<div class="full-width full-height pos-abs left-0 right-0 top-0 overflow-hide" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-width full-height pos-abs left-0 right-0 top-0 overflow-hide">
   <div *ngIf="!showFrame"
        class="title-container pos-rel height-60 overflow-hide full-width display-flex align-items-center flex-space-between padding-r-l pos-rel z-index-99">
     <h1 class="font-full-plus-two-tenth-em no-margin">{{'learning.title' | translate}}</h1>
 
-    <button mat-raised-button (click)="createNewTask()"
-            class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+    <button (click)="createNewTask()" class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+            mat-raised-button>
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
       <span class="padding-mini-r-l">{{'learning.add_new_room' | translate}}</span>
     </button>
@@ -28,23 +28,24 @@
           </mat-card-header>
 
           <mat-card-content class="no-margin-b">
-            <button *ngIf="room.userCreator === loggedInUser.email" (click)="deleteRoom(room.id); $event.stopPropagation();"
-                    matTooltip="{{'learning.delete_room' | translate}}"
+            <button (click)="deleteRoom(room.id); $event.stopPropagation();"
+                    *ngIf="room.userCreator === loggedInUser.email"
                     [ngClass]="rtlDirection ? 'left-0' : 'right-0'"
-                    type="button"
-                    class="no-border cursor-pointer no-bg text-center width-45 height-45 text-red-400 no-padding pos-abs bottom-half">
+                    class="no-border cursor-pointer no-bg text-center width-45 height-45 text-red-400 no-padding pos-abs bottom-half"
+                    matTooltip="{{'learning.delete_room' | translate}}"
+                    type="button">
               <mat-icon class="line-height-30">delete</mat-icon>
             </button>
 
-            <div class="display-flex pos-abs top-full flex-direction-row-reverse align-items-center"
-                 [ngClass]="rtlDirection ? 'left-half' : 'right-half'">
+            <div [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
+                 class="display-flex pos-abs top-full flex-direction-row-reverse align-items-center">
               <mat-icon [ngClass]="room.users.length ? 'online-in-room' : ''">persons</mat-icon>
               <span [ngClass]="room.users.length ? 'online-in-room' : ''">{{room.users.length}}</span>
             </div>
 
-            <img [src]="'assets/images/conferences/audio-video-' + (room.users.length ? '' : 'in') + 'active.svg'"
+            <img [alt]="room.roomName"
                  [ngClass]="{'inactive': !room.users.length}"
-                 [alt]="room.roomName" class="height-150 margin-auto display-flex">
+                 [src]="'assets/images/conferences/audio-video_' + (room.users.length ? '' : 'in') + 'active.svg'" class="height-150 margin-auto display-flex">
           </mat-card-content>
 
           <mat-card-footer
@@ -73,25 +74,25 @@
   <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'learningSystem'"
        class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
     <div class="text-center">
-      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-           width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-        <rect x="0" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+      <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"
+           width="24px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" y="0px">
+        <rect fill="#333" height="5" width="4" x="0" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
-        <rect x="10" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.15s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.15s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+        <rect fill="#333" height="5" width="4" x="10" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
-        <rect x="20" y="13" width="4" height="5" fill="#333">
-          <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.3s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
-          <animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.3s" dur="0.6s"
-                   repeatCount="indefinite"></animate>
+        <rect fill="#333" height="5" width="4" x="20" y="13">
+          <animate attributeName="height" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                   values="5;21;5"></animate>
+          <animate attributeName="y" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                   values="13; 5; 13"></animate>
         </rect>
       </svg>
 
@@ -101,11 +102,11 @@
 
   <ng-container *ngIf="showFrame">
     <div class="webView-frame showFrame transition pos-abs z-index-99">
-      <app-learning-system-webview [showFrame]="showFrame" [frameUrl]="frameUrl"></app-learning-system-webview>
+      <app-learning-system-webview [frameUrl]="frameUrl" [showFrame]="showFrame"></app-learning-system-webview>
 
-      <button mat-raised-button (click)="exitRoom()"
-              [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
-              class="white-gradient line-height-22 padding-mini-r-l font-9-em overflow-hide text-weight-normal pos-abs top-half">
+      <button (click)="exitRoom()" [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
+              class="white-gradient line-height-22 padding-mini-r-l font-9-em overflow-hide text-weight-normal pos-abs top-half"
+              mat-raised-button>
         <mat-icon class="width-20 height-20 line-height-20 font-full-plus-one-tenth-rem text-red-700">
           power_settings_new
         </mat-icon>

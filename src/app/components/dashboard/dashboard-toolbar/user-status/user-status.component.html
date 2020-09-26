@@ -1,10 +1,10 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'"
      [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
      class="box pos-rel width-150 mat-elevation-z1 text-center round-corner height-40 cursor-pointer overflow-hide">
-  <button mat-raised-button
+  <button (click)="changeStatus()"
           *ngIf="userCurrentStatus && !userCurrentStatus.end_time; else changeViewStatus"
-          (click)="changeStatus()"
-          [class]="'status-' + userCurrentStatus.status_detail.label.replace(' ', '_').toLocaleLowerCase() + ' blink-effect status-item full-width change-status-btn text-weight-500 line-height-40 full-height font-9-em overflow-hide no-bg mat-elevation-z0 text-dark-mode-color text-gray-800'">
+          [class]="'status-' + userCurrentStatus.status_detail.label.replace(' ', '_').toLocaleLowerCase() + ' blink-effect status-item full-width change-status-btn text-weight-500 line-height-40 full-height font-9-em overflow-hide no-bg mat-elevation-z0 text-dark-mode-color text-gray-800'"
+          mat-raised-button>
     <mat-icon
       class="width-20 height-20 font-full-plus-two-tenth-rem text-gray-800 text-dark-mode-color">{{userCurrentStatus.status_detail.icon}}</mat-icon>
     <span
@@ -12,7 +12,7 @@
       {{rtlDirection ? userCurrentStatus.status_detail.label_fa : userCurrentStatus.status_detail.label}}
 
       <span *ngIf="currentTimer" [ngClass]="rtlDirection ? 'justify-content-end' : 'justify-content-start'"
-            dir="ltr" class="line-height-20 display-flex font-9-em">
+            class="line-height-20 display-flex font-9-em" dir="ltr">
         <b class="text-weight-normal width-15">
           {{currentTimer.hours < 10 ? '0' + currentTimer.hours : currentTimer.hours}}
         </b>
@@ -28,9 +28,9 @@
     </span>
   </button>
   <ng-template #changeViewStatus>
-    <button mat-raised-button
-            (click)="changeStatus()"
-            class="change-status-btn text-gray-800 text-weight-500 full-width line-height-30 font-9-em full-height overflow-hide no-bg mat-elevation-z0 text-dark-mode-color">
+    <button (click)="changeStatus()"
+            class="change-status-btn text-gray-800 text-weight-500 full-width line-height-30 font-9-em full-height overflow-hide no-bg mat-elevation-z0 text-dark-mode-color"
+            mat-raised-button>
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem text-dark-mode-color text-gray-800">
         sync_problem
       </mat-icon>

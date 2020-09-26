@@ -1,13 +1,14 @@
 <div class="display-flex flex-space-between align-items-center full-height">
   <!--<div>Version: {{version}}</div>-->
   <div *ngIf="currentTasks" class="display-flex flex-space-between height-30 align-items-center">
-    <button *ngFor="let task of currentTasks" mat-raised-button
+    <button (click)="showTask(task)" *ngFor="let task of currentTasks"
             [disabled]="!taskEssentialInfo"
             [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-            (click)="showTask(task)"
-            class="blink-effect white-gradient text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal">
-      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem"
-                [ngClass]="rtlDirection ? 'rotate-180' : ''">play_arrow</mat-icon>
+            class="blink-effect white-gradient text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal"
+            mat-raised-button>
+      <mat-icon [ngClass]="rtlDirection ? 'rotate-180' : ''"
+                class="width-20 height-20 font-full-plus-two-tenth-rem">play_arrow
+      </mat-icon>
       <span class="padding-mini-r-l">{{task.taskName}}</span>
     </button>
   </div>

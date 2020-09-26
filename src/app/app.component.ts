@@ -1,7 +1,9 @@
 import {AfterViewInit, Component, OnDestroy} from '@angular/core';
 import {MessageService} from './components/message/service/message.service';
 import {TranslateService} from '@ngx-translate/core';
-import {fromEvent, Observable, Subscription} from 'rxjs';
+import {fromEvent} from 'rxjs';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {Observable} from 'rxjs/internal/Observable';
 import {ViewDirectionService} from './services/view-direction.service';
 
 @Component({

@@ -3,12 +3,12 @@
     <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                              (change)="changeViewMode(viewMode.value)"
                              [ngClass]="{'view-mode': viewMode}"
-                             class="full-width mat-button-custom height-30 line-height-15 round-corner-all"
-                             [value]="viewModeTypes">
-      <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'contact'">
+                             [value]="viewModeTypes"
+                             class="full-width mat-button-custom height-30 line-height-15 round-corner-all">
+      <mat-button-toggle [value]="'contact'" class="overflow-hide half-width font-7-rem line-height-15 height-30">
         <span>{{'soft_phone.main.address_book' | translate}}</span>
       </mat-button-toggle>
-      <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'keypad'">
+      <mat-button-toggle [value]="'keypad'" class="overflow-hide half-width font-7-rem line-height-15 height-30">
         <span>{{'soft_phone.main.dial_pad' | translate}}</span>
       </mat-button-toggle>
     </mat-button-toggle-group>
@@ -16,15 +16,15 @@
 
   <div class="component-container height-full-minus-45 pos-rel">
     <ng-container [ngSwitch]="viewModeTypes">
-      <app-soft-phone-contacts *ngSwitchCase="'contact'"
-                               (triggerCloseBottomSheet)="closeTransferBottomSheet()"
+      <app-soft-phone-contacts (triggerCloseBottomSheet)="closeTransferBottomSheet()"
+                               *ngSwitchCase="'contact'"
                                [fromPopUp]="true"
                                [loggedInUser]="loggedInUser"
                                [rtlDirection]="rtlDirection"
                                [softPhoneUsers]="softPhoneUsers"></app-soft-phone-contacts>
 
-      <app-soft-phone-keypad *ngSwitchCase="'keypad'"
-                             (triggerCloseBottomSheet)="closeTransferBottomSheet()"
+      <app-soft-phone-keypad (triggerCloseBottomSheet)="closeTransferBottomSheet()"
+                             *ngSwitchCase="'keypad'"
                              [fromPopUp]="true"
                              [rtlDirection]="rtlDirection"
                              [softPhoneUsers]="softPhoneUsers"></app-soft-phone-keypad>

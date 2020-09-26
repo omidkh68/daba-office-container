@@ -1,5 +1,5 @@
-<mat-drawer-container [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'"
-                      autosize class="rate-calendar" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<mat-drawer-container [dir]="rtlDirection ? 'rtl' : 'ltr'"
+                      [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'" autosize class="rate-calendar">
   <full-calendar (eventClick)="eventClick($event)" (eventRender)="eventRender($event)"
                  *ngIf="calendarEvents.length"
                  [allDaySlot]="true"
@@ -18,6 +18,7 @@
                  [selectOverlap]="false"
                  [slotLabelFormat]="slotLabelFormat"
                  [views]="views"
+                 class="full-height"
                  defaultView="dayGridMonth">
   </full-calendar>
 </mat-drawer-container>

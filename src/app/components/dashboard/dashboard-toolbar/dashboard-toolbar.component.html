@@ -1,37 +1,37 @@
-<div class="toolbar-container display-flex flex-space-between" [dir]="rtlDirection ? 'rtl' : 'ltr'">
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="toolbar-container display-flex flex-space-between">
   <!-- Main Menu -->
-  <app-main-menu class="box-holder"
+  <app-main-menu [loggedInUser]="loggedInUser"
                  [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
-                 [loggedInUser]="loggedInUser"
+                 [rtlDirection]="rtlDirection"
                  [serviceList]="serviceList"
-                 [rtlDirection]="rtlDirection"></app-main-menu>
+                 class="box-holder"></app-main-menu>
   <!-- /Main Menu -->
 
   <!-- Opened App Container -->
-  <app-window-app-container class="box-holder"
+  <app-window-app-container [rtlDirection]="rtlDirection"
                             [windowManager]="windowManager"
-                            [rtlDirection]="rtlDirection"></app-window-app-container>
+                            class="box-holder"></app-window-app-container>
   <!-- /Opened App Container -->
 
   <div class="flex-spacer"></div>
 
   <!-- Change User Status -->
-  <app-user-status class="box-holder pos-rel"
+  <app-user-status [loggedInUser]="loggedInUser"
                    [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
-                   [loggedInUser]="loggedInUser"
+                   [rtlDirection]="rtlDirection"
                    [serviceList]="serviceList"
-                   [rtlDirection]="rtlDirection"></app-user-status>
+                   class="box-holder pos-rel"></app-user-status>
   <!-- /Change User Status -->
 
-  <app-time-area class="box-holder"
+  <app-time-area [loggedInUser]="loggedInUser"
                  [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
-                 [loggedInUser]="loggedInUser"
-                 [rtlDirection]="rtlDirection"></app-time-area>
+                 [rtlDirection]="rtlDirection"
+                 class="box-holder"></app-time-area>
 
   <!-- Profile Menu -->
-  <app-profile-menu class="box-holder"
+  <app-profile-menu [loggedInUser]="loggedInUser"
                     [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
-                    [loggedInUser]="loggedInUser"
-                    [rtlDirection]="rtlDirection"></app-profile-menu>
+                    [rtlDirection]="rtlDirection"
+                    class="box-holder"></app-profile-menu>
   <!-- /Profile Menu -->
 </div>
