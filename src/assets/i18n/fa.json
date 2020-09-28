@@ -248,6 +248,10 @@
   },
   "events_handler": {
     "main": {
+      "notification_event_title" : "رویداد جدید",
+      "notification_event_from" : "از طرف: ",
+      "notification_reminder_title" : "یادآور جدید",
+      "notification_reminder_decs" : "از طرف: ",
       "google_calendar_title": "تقویم گوگل",
       "container_calendar_title": "تقویم رویداد",
       "add_new_event": "افزودن رویداد",
