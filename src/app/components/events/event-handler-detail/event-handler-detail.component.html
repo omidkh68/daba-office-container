@@ -28,7 +28,7 @@
     <div class="full-width height-full-minus-45">
         <div [ngClass]="[rtlDirection ? 'float-right' : 'float-left' , data.eventItems ? 'event-form-container' : 'full-width']"
              class="full-height padding-full overflow-hide pos-rel">
-            <form *ngIf="form && data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" [formGroup]="form" (submit)="submit()" class="full-height"
+            <form *ngIf="(form && data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email) || (form && !data.eventItems)" [formGroup]="form" (submit)="submit()" class="full-height"
                   [dir]="rtlDirection ? 'rtl' : 'ltr'">
                 <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
                     <div class="display-flex margin-r-l-reverse">
@@ -302,22 +302,22 @@
             <div *ngIf="data.eventItems && data.eventItems.creatorUser.email != loggedInUser.email">
                 <section class="bg-grey round-corner margin-b-full padding-half">
                     <mat-label class="display-flex font-8-em justify-content-start">
-                        <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">calendar_today</mat-icon>
+                        <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">calendar_today</mat-icon>
                         <span>{{'events_handler.form.event_name' | translate}}</span>
                     </mat-label>
                     <div class="font-full-plus-one-tenth-em">{{data.eventItems.name}}</div>
                 </section>
                 <div class="display-flex margin-r-l-reverse">
-                    <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full">
+                    <section [ngClass]="rtlDirection ? 'margin-r-full' : 'margin-l-full'" class="half-width round-corner bg-grey margin-b-full padding-half">
                         <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">assignment_turned_in</mat-icon>
+                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">assignment_turned_in</mat-icon>
                             <span>{{'events_handler.form.action_type' | translate}}</span>
                         </mat-label>
                         <div class="font-full-plus-one-tenth-em">{{data.eventItems.actionType.actionDescription}}</div>
                     </section>
                     <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
                         <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">build_circle</mat-icon>
+                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">build_circle</mat-icon>
                             <span>{{'events_handler.form.action_job_type' | translate}}</span>
                         </mat-label>
                         <div class="font-full-plus-one-tenth-em">{{data.eventItems.actionTypeJobModel.description}}</div>
@@ -325,16 +325,16 @@
                 </div>
 
                 <div class="display-flex margin-r-l-reverse">
-                    <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full">
+                    <section [ngClass]="rtlDirection ? 'margin-r-full' : 'margin-l-full'"  class="half-width round-corner bg-grey margin-b-full padding-half">
                         <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">today</mat-icon>
+                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">today</mat-icon>
                             <span>{{'events_handler.form.start_at' | translate}}</span>
                         </mat-label>
                         <div class="font-full-plus-one-tenth-em">{{dateTimeService.formatDate(data.eventItems.startDate) | jalali}}</div>
                     </section>
                     <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
                         <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">access_time</mat-icon>
+                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">access_time</mat-icon>
                             <span>{{'events_handler.form.start_time' | translate}}</span>
                         </mat-label>
                         <div class="font-full-plus-one-tenth-em">{{dateTimeService.formatTime(data.eventItems.startDate)}}</div>
@@ -344,7 +344,7 @@
                 <div class="display-flex margin-r-l-reverse">
                     <section class="full-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
                         <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">description</mat-icon>
+                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">description</mat-icon>
                             <span>{{'events_handler.form.event_description' | translate}}</span>
                         </mat-label>
                         <div class="font-full-plus-one-tenth-em">{{data.eventItems.description}}</div>
@@ -354,7 +354,7 @@
                 <div class="display-flex margin-r-l-reverse">
                     <section class="full-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
                         <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">person</mat-icon>
+                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">person</mat-icon>
                             <span>{{'events_handler.form.users' | translate}}</span>
                         </mat-label>
                         <div class="font-full-plus-one-tenth-em">
@@ -362,7 +362,7 @@
                             <ng-container *ngIf="data.eventItems.users.length">
                                 <mat-list *ngFor="let user of data.eventItems.users">
                                     <mat-list-item class="font-9-em line-height-18 height-25">
-                                        <mat-icon class="font-7-rem display-flex justify-content-end align-items-center">done</mat-icon> {{user.name}}
+                                        <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-7-rem display-flex align-items-center">done</mat-icon> {{user.name}}
                                     </mat-list-item>
                                 </mat-list>
                             </ng-container>
