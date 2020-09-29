@@ -288,7 +288,6 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     }
 
     submit() {
-        debugger;
         let formValue = this.form.value;
         formValue.creatorUser = this.loggedInUser;
         formValue.startDate = this.dateTimeService.convertToGMT(this.form.value.startDate , this.form.value.startTime);
