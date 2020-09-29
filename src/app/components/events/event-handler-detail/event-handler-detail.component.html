@@ -1,5 +1,5 @@
 <div *ngIf="data" class="full-page-size overflow-hide" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-    <div class="task-heading clear-both full-width height-45 display-flex flex-space-between">
+    <div class="event-heading clear-both full-width height-45 display-flex flex-space-between">
         <h1
                 class="no-margin height-45 line-height-45 font-full-plus-one-tenth-em text-eclipse padding-r-l text-pink-600 text-weight-500">
             <span *ngIf="!data.eventItems" class="text-gray-700">{{'events_handler.main.add_event_title' | translate}}</span>
@@ -26,9 +26,9 @@
     </div>
 
     <div class="full-width height-full-minus-45">
-        <div [ngClass]="[rtlDirection ? 'float-right' : 'float-left' , data.eventItems ? 'task-form-container' : 'full-width']"
+        <div [ngClass]="[rtlDirection ? 'float-right' : 'float-left' , data.eventItems ? 'event-form-container' : 'full-width']"
              class="full-height padding-full overflow-hide pos-rel">
-            <form *ngIf="form" [formGroup]="form" (submit)="submit()" class="full-height"
+            <form *ngIf="form && data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" [formGroup]="form" (submit)="submit()" class="full-height"
                   [dir]="rtlDirection ? 'rtl' : 'ltr'">
                 <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
                     <div class="display-flex margin-r-l-reverse">
@@ -71,7 +71,6 @@
                             </mat-form-field>
                         </div>
                     </div>
-
                     <div class="display-flex margin-r-l-reverse ">
                         <div class="half-width padding-r-l">
                             <mat-form-field class="full-width font-9-em">
@@ -196,8 +195,8 @@
                                 <!-- Symbol Column -->
                                 <ng-container matColumnDef="symbol">
                                     <th mat-header-cell *matHeaderCellDef> Phone Number </th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <input type="tel" matInput placeholder="xxx-xxx-xx-xx"
+                                    <td (click)="$event.stopPropagation()" mat-cell *matCellDef="let element">
+                                        <input (click)="$event.stopPropagation()"  type="tel" matInput placeholder="xxx-xxx-xx-xx"
                                                (keyup)="onKeyPhoneNumber(element , $event)"
                                                value="{{element.phoneNumber}}">
                                     </td>
@@ -210,9 +209,6 @@
                             </table>
                         </div>
                     </div>
-
-
-
                     <!--                    <div class="display-flex margin-b-full margin-r-l-reverse">
                                             <div class="full-width padding-r-l">
                                                 <mat-form-field class="full-width height-80 font-9-em">
@@ -283,7 +279,6 @@
                                                 </div>
                                             </div>
                                         </div>-->
-
                 </div>
                 <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
                     <button *ngIf="editable || data.action !== 'detail'"
@@ -304,9 +299,80 @@
                     </button>
                 </div>
             </form>
+            <div *ngIf="data.eventItems && data.eventItems.creatorUser.email != loggedInUser.email">
+                <section class="bg-grey round-corner margin-b-full padding-half">
+                    <mat-label class="display-flex font-8-em justify-content-start">
+                        <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">calendar_today</mat-icon>
+                        <span>{{'events_handler.form.event_name' | translate}}</span>
+                    </mat-label>
+                    <div class="font-full-plus-one-tenth-em">{{data.eventItems.name}}</div>
+                </section>
+                <div class="display-flex margin-r-l-reverse">
+                    <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full">
+                        <mat-label class="display-flex font-8-em justify-content-start">
+                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">assignment_turned_in</mat-icon>
+                            <span>{{'events_handler.form.action_type' | translate}}</span>
+                        </mat-label>
+                        <div class="font-full-plus-one-tenth-em">{{data.eventItems.actionType.actionDescription}}</div>
+                    </section>
+                    <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
+                        <mat-label class="display-flex font-8-em justify-content-start">
+                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">build_circle</mat-icon>
+                            <span>{{'events_handler.form.action_job_type' | translate}}</span>
+                        </mat-label>
+                        <div class="font-full-plus-one-tenth-em">{{data.eventItems.actionTypeJobModel.description}}</div>
+                    </section>
+                </div>
+
+                <div class="display-flex margin-r-l-reverse">
+                    <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full">
+                        <mat-label class="display-flex font-8-em justify-content-start">
+                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">today</mat-icon>
+                            <span>{{'events_handler.form.start_at' | translate}}</span>
+                        </mat-label>
+                        <div class="font-full-plus-one-tenth-em">{{dateTimeService.formatDate(data.eventItems.startDate) | jalali}}</div>
+                    </section>
+                    <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
+                        <mat-label class="display-flex font-8-em justify-content-start">
+                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">access_time</mat-icon>
+                            <span>{{'events_handler.form.start_time' | translate}}</span>
+                        </mat-label>
+                        <div class="font-full-plus-one-tenth-em">{{dateTimeService.formatTime(data.eventItems.startDate)}}</div>
+                    </section>
+                </div>
+
+                <div class="display-flex margin-r-l-reverse">
+                    <section class="full-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
+                        <mat-label class="display-flex font-8-em justify-content-start">
+                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">description</mat-icon>
+                            <span>{{'events_handler.form.event_description' | translate}}</span>
+                        </mat-label>
+                        <div class="font-full-plus-one-tenth-em">{{data.eventItems.description}}</div>
+                    </section>
+                </div>
+
+                <div class="display-flex margin-r-l-reverse">
+                    <section class="full-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
+                        <mat-label class="display-flex font-8-em justify-content-start">
+                            <mat-icon class="font-8-rem display-flex justify-content-end align-items-center">person</mat-icon>
+                            <span>{{'events_handler.form.users' | translate}}</span>
+                        </mat-label>
+                        <div class="font-full-plus-one-tenth-em">
+                            <span *ngIf="!data.eventItems.users.length">{{'events_handler.form.no_users' | translate}}</span>
+                            <ng-container *ngIf="data.eventItems.users.length">
+                                <mat-list *ngFor="let user of data.eventItems.users">
+                                    <mat-list-item class="font-9-em line-height-18 height-25">
+                                        <mat-icon class="font-7-rem display-flex justify-content-end align-items-center">done</mat-icon> {{user.name}}
+                                    </mat-list-item>
+                                </mat-list>
+                            </ng-container>
+                        </div>
+                    </section>
+                </div>
+            </div>
         </div>
         <div *ngIf="data.eventItems" [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
-             class="task-todo-container full-height padding-mini-t-b pos-rel">
+             class="event-todo-container full-height padding-mini-t-b pos-rel">
             <div class="padding-full margin-b-full-3">
                 <h3 [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="no-padding"
                     mat-subheader>{{'events_handler.main.reminder_title' | translate}}</h3>

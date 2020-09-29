@@ -105,8 +105,8 @@ export class EventHandlerSocketService {
                                 //if(item.email == this.loggedInUsers.email){
                                 if (!this.electronService.window.isFocused()) {
                                     notification = new Notification(this.getTranslate('events_handler.main.notification_event_title'), {
-                                        body: this.getTranslate('events_handler.main.notification_event_from') + " " + item.name,
-                                        icon: 'assets/profileImg/' + item.email + '.jpg',
+                                        body: this.getTranslate('events_handler.main.notification_event_from') + " " + checkNotify.createUser.name,
+                                        icon: 'assets/profileImg/' + checkNotify.createUser.email + '.jpg',
                                         dir: 'auto',
                                         data: this.loggedInUsers
                                     });
