@@ -10,6 +10,7 @@ import {ElectronService} from '../../../services/electron.service';
 })
 export class UserInfoService {
   body = document.querySelector('html');
+
   private _userInfo: UserContainerInterface;
   private userInfo = new BehaviorSubject(this._userInfo);
   public currentUserInfo = this.userInfo.asObservable();

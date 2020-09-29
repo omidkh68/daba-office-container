@@ -1,0 +1,23 @@
+<div *ngIf="companyList"
+     [dir]="rtlDirection ? 'rtl' : 'ltr'"
+     [matMenuTriggerFor]="mainMenu"
+     class="box pos-rel padding-r-l display-flex flex-direction-column mat-elevation-z1 round-corner height-40 overflow-hide cursor-pointer">
+  <span class="text-dark-mode-color font-8-em display-flex line-height-18 full-width">
+    {{'select_company.title' | translate}}
+  </span>
+  <span class="text-dark-mode-color display-flex line-height-18 full-width">
+    {{companyList[0].name}}
+  </span>
+</div>
+<mat-menu class="toolbar-menu main-menu" #mainMenu="matMenu" xPosition="before" yPosition="above">
+  <h6 mat-subheader
+      class="service-title padding-tiny-t-b padding-mini-r-l no-margin text-weight-normal font-full-rem text-dark-mode-color">
+    {{'select_company.title' | translate}}
+  </h6>
+
+  <button mat-menu-item *ngFor="let company of companyList"
+          (click)="selectCompany(company)"
+          class="font-7-rem padding-r-l text-dark-mode-color">
+    <span class="font-full-plus-two-tenth-em">{{company.name}}</span>
+  </button>
+</mat-menu>

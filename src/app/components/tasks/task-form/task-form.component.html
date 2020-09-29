@@ -4,209 +4,213 @@
         class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
       {{'tasks.main.add_new_task' | translate}}
     </h1>
-    <div class="display-flex margin-r-l-reverse">
-      <div class="full-width padding-mini-r-l">
-        <mat-form-field class="full-width font-9-em">
-          <input class="full-width" formControlName="taskName" matInput placeholder="{{'tasks.form.task_name' | translate}}"
-                 required tabindex="1" type="text">
-          <mat-label>
-            {{'tasks.form.task_name' | translate}}
-          </mat-label>
 
-          <mat-error *ngIf="!form.get('taskName').valid && form.get('taskName').touched">
-            {{'tasks.form.task_name_error' | translate}}
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="display-flex margin-r-l-reverse">
-      <div class="half-width padding-mini-r-l">
-        <mat-form-field class="full-width font-full-em">
-          <mat-label>{{'tasks.form.task_status' | translate}}</mat-label>
-          <mat-select (selectionChange)="changeBoardStatus($event)" formControlName="boardStatus" tabIndex="2">
-            <mat-option *ngFor="let board of boardsList" [value]="board.id">
-              <span [ngClass]="board.id" class="task-count">{{board.name}}</span>
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="!form.get('boardStatus').valid && form.get('boardStatus').touched">
-            {{'tasks.form.task_status_error' | translate}}
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="half-width no-padding-r-l pos-rel display-flex align-items-end">
-        <div [ngClass]="rtlDirection ? 'right-six-tenth' : 'left-six-tenth'"
-             class="font-9-em pos-abs top-full-plus-half">
-          {{'tasks.boards.task_percentage' | translate}}
-          <span>{{form.get('percentage').value}}</span> ٪
+    <div class="padding-mini-r-l">
+      <div class="display-flex margin-r-l-reverse">
+        <div class="full-width padding-mini-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <input class="full-width" formControlName="taskName" matInput placeholder="{{'tasks.form.task_name' | translate}}"
+                   required tabindex="1" type="text">
+            <mat-label>
+              {{'tasks.form.task_name' | translate}}
+            </mat-label>
+
+            <mat-error *ngIf="!form.get('taskName').valid && form.get('taskName').touched">
+              {{'tasks.form.task_name_error' | translate}}
+            </mat-error>
+          </mat-form-field>
         </div>
-        <mat-slider
-          [max]="100"
-          [min]="0"
-          [step]="5"
-          [thumbLabel]="true"
-          [tickInterval]="2"
-          class="full-width pos-rel top-half"
-          formControlName="percentage" tabindex="3">
-        </mat-slider>
-      </div>
-    </div>
-
-    <div class="display-flex margin-r-l-reverse">
-      <div class="half-width padding-mini-r-l">
-        <mat-form-field class="full-width font-9-em">
-          <mat-label>{{'tasks.form.task_project' | translate}}</mat-label>
-          <mat-select formControlName="project" tabIndex="4">
-            <mat-option *ngFor="let project of projectsList" [value]="project">
-              {{project.projectName}}
-            </mat-option>
-          </mat-select>
-
-          <mat-error *ngIf="!form.get('project').valid && form.get('project').touched">
-            {{'tasks.form.task_project_error' | translate}}
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="half-width padding-mini-r-l">
-        <mat-form-field class="full-width font-9-em">
-          <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-               [srcset]="'assets/profileImg/'+form.get('email').value +'.jpg'"
-               class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
-               matPrefix>
-          <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
-          <mat-select formControlName="assignTo" tabIndex="5">
-            <mat-option *ngFor="let user of usersList" [value]="user" class="font-full-em">
-              <div class="display-flex align-items-center">
-                <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                     [src]="'assets/profileImg/'+user.email+'.jpg'"
-                     class="width-20 height-20 round-corner-all pos-rel"
-                     matPrefix
-                     onerror="this.src='assets/profileImg/0.jpg'">
-                <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
-              </div>
-            </mat-option>
-          </mat-select>
-
-          <mat-error *ngIf="!form.get('assignTo').valid && form.get('assignTo').touched">
-            {{'tasks.form.assign_to_error' | translate}}
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="display-flex margin-b-full margin-r-l-reverse">
-      <div class="half-width padding-mini-r-l">
-        <mat-form-field class="full-width font-9-em">
-          <input class="full-width" formControlName="taskDurationHours" matInput placeholder="{{'tasks.form.task_durationHours' | translate}}"
-                 required tabindex="6" type="number">
-          <mat-label>
-            {{'tasks.form.task_durationHours' | translate}}
-          </mat-label>
-
-          <mat-error *ngIf="!form.get('taskDurationHours').valid && form.get('taskDurationHours').touched">
-            {{'tasks.form.task_durationHours_error' | translate}}
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="half-width padding-r-l">
-        <mat-form-field class="full-width font-9-em">
-          <mat-label></mat-label>
-          <mat-select formControlName="taskDurationMinutes" tabIndex="7">
-            <mat-option *ngFor="let minute of durationMinute" [value]="minute">
-              {{minute}} {{!minute ? '' : 'global.minutes' | translate}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="display-flex margin-r-l-reverse">
-      <div class="quarter-width padding-mini-r-l">
-        <mat-form-field class="full-width font-9-em">
-          <mat-label>{{'tasks.form.start_at' | translate}}</mat-label>
-          <input (click)="picker1.open()" (dateChange)="dateToGregorian('startAt', $event)" (focus)="picker1.open()"
-                 [matDatepicker]="picker1"
-                 formControlName="startAt" matInput
-                 placeholder="{{'tasks.form.start_at' | translate}}"
-                 readonly tabindex="8">
-          <mat-datepicker #picker1></mat-datepicker>
-
-          <mat-error *ngIf="!form.get('startAt').valid && form.get('startAt').touched">
-            {{'tasks.form.start_at_error' | translate}}
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="quarter-width padding-r-l">
-        <mat-form-field class="full-width font-9-em">
-          <mat-label>{{'tasks.form.start_time' | translate}}</mat-label>
-          <mat-select formControlName="startTime" tabIndex="9">
-            <mat-option *ngFor="let hour of hours" [value]="hour">
-              {{hour}}
-            </mat-option>
-          </mat-select>
-
-          <mat-error *ngIf="!form.get('startTime').valid && form.get('startTime').touched">
-            {{'tasks.form.start_time_error' | translate}}
-          </mat-error>
-        </mat-form-field>
       </div>
 
-      <div class="quarter-width padding-r-l">
-        <mat-form-field class="full-width font-9-em">
-          <mat-label>{{'tasks.form.stop_at' | translate}}</mat-label>
-          <input (click)="picker2.open()" (dateChange)="dateToGregorian('stopAt', $event)" (focus)="picker2.open()"
-                 [matDatepicker]="picker2" formControlName="stopAt"
-                 matInput
-                 readonly tabindex="10">
-          <mat-datepicker #picker2></mat-datepicker>
-
-          <mat-error *ngIf="!form.get('stopAt').valid && form.get('stopAt').touched">
-            {{'tasks.form.stop_at_error' | translate}}
-          </mat-error>
-        </mat-form-field>
+      <div class="display-flex margin-r-l-reverse">
+        <div class="half-width padding-mini-r-l">
+          <mat-form-field class="full-width font-full-em">
+            <mat-label>{{'tasks.form.task_status' | translate}}</mat-label>
+            <mat-select (selectionChange)="changeBoardStatus($event)" formControlName="boardStatus" tabIndex="2">
+              <mat-option *ngFor="let board of boardsList" [value]="board.id">
+                <span [ngClass]="board.id" class="task-count">{{board.name}}</span>
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.get('boardStatus').valid && form.get('boardStatus').touched">
+              {{'tasks.form.task_status_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="half-width no-padding-r-l pos-rel display-flex align-items-end">
+          <div [ngClass]="rtlDirection ? 'right-six-tenth' : 'left-six-tenth'"
+               class="font-9-em pos-abs top-full-plus-half">
+            {{'tasks.boards.task_percentage' | translate}}
+            <span>{{form.get('percentage').value}}</span> ٪
+          </div>
+          <mat-slider
+            [max]="100"
+            [min]="0"
+            [step]="5"
+            [thumbLabel]="true"
+            [tickInterval]="2"
+            class="full-width pos-rel top-half"
+            formControlName="percentage" tabindex="3">
+          </mat-slider>
+        </div>
       </div>
-      <div class="quarter-width padding-r-l">
-        <mat-form-field class="full-width font-9-em">
-          <mat-label>{{'tasks.form.stop_time' | translate}}</mat-label>
-          <mat-select formControlName="stopTime" tabIndex="11">
-            <mat-option *ngFor="let hour of hours" [value]="hour">
-              {{hour}}
-            </mat-option>
-          </mat-select>
 
-          <mat-error *ngIf="!form.get('stopTime').valid && form.get('stopTime').touched">
-            {{'tasks.form.stop_time_error' | translate}}
-          </mat-error>
-        </mat-form-field>
+      <div class="display-flex margin-r-l-reverse">
+        <div class="half-width padding-mini-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>{{'tasks.form.task_project' | translate}}</mat-label>
+            <mat-select formControlName="project" tabIndex="4">
+              <mat-option *ngFor="let project of projectsList" [value]="project">
+                {{project.projectName}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="!form.get('project').valid && form.get('project').touched">
+              {{'tasks.form.task_project_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="half-width padding-mini-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                 [srcset]="'assets/profileImg/'+form.get('email').value +'.jpg'"
+                 class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
+                 matPrefix>
+            <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
+            <mat-select formControlName="assignTo" tabIndex="5">
+              <mat-option *ngFor="let user of usersList" [value]="user" class="font-full-em">
+                <div class="display-flex align-items-center">
+                  <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                       [src]="'assets/profileImg/'+user.email+'.jpg'"
+                       class="width-20 height-20 round-corner-all pos-rel"
+                       matPrefix
+                       onerror="this.src='assets/profileImg/0.jpg'">
+                  <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
+                </div>
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="!form.get('assignTo').valid && form.get('assignTo').touched">
+              {{'tasks.form.assign_to_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div class="display-flex margin-b-full margin-r-l-reverse">
-      <div class="full-width padding-mini-r-l">
-        <mat-form-field class="full-width height-80 font-9-em">
-          <mat-label>{{'tasks.form.task_description' | translate}}</mat-label>
-          <textarea formControlName="taskDesc" matInput
-                    placeholder="{{'tasks.form.task_description' | translate}}" tabindex="12"></textarea>
-        </mat-form-field>
+      <div class="display-flex margin-b-full margin-r-l-reverse">
+        <div class="half-width padding-mini-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <input class="full-width" formControlName="taskDurationHours" matInput placeholder="{{'tasks.form.task_durationHours' | translate}}"
+                   required tabindex="6" type="number">
+            <mat-label>
+              {{'tasks.form.task_durationHours' | translate}}
+            </mat-label>
+
+            <mat-error *ngIf="!form.get('taskDurationHours').valid && form.get('taskDurationHours').touched">
+              {{'tasks.form.task_durationHours_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="half-width padding-mini-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label></mat-label>
+            <mat-select formControlName="taskDurationMinutes" tabIndex="7">
+              <mat-option *ngFor="let minute of durationMinute" [value]="minute">
+                {{minute}} {{!minute ? '' : 'global.minutes' | translate}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div class="display-flex margin-b-full margin-r-l-reverse">
-      <div class="full-width padding-mini-r-l">
-        <mat-slide-toggle
-          [color]="'primary'"
-          formControlName="trackable">
-          {{'tasks.form.trackable_by_mobile' | translate}}
-        </mat-slide-toggle>
+      <div class="display-flex margin-r-l-reverse">
+        <div class="quarter-width padding-mini-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>{{'tasks.form.start_at' | translate}}</mat-label>
+            <input (click)="picker1.open()" (dateChange)="dateToGregorian('startAt', $event)" (focus)="picker1.open()"
+                   [matDatepicker]="picker1"
+                   formControlName="startAt" matInput
+                   placeholder="{{'tasks.form.start_at' | translate}}"
+                   readonly tabindex="8">
+            <mat-datepicker #picker1></mat-datepicker>
+
+            <mat-error *ngIf="!form.get('startAt').valid && form.get('startAt').touched">
+              {{'tasks.form.start_at_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="quarter-width padding-mini-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>{{'tasks.form.start_time' | translate}}</mat-label>
+            <mat-select formControlName="startTime" tabIndex="9">
+              <mat-option *ngFor="let hour of hours" [value]="hour">
+                {{hour}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="!form.get('startTime').valid && form.get('startTime').touched">
+              {{'tasks.form.start_time_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="quarter-width padding-mini-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>{{'tasks.form.stop_at' | translate}}</mat-label>
+            <input (click)="picker2.open()" (dateChange)="dateToGregorian('stopAt', $event)" (focus)="picker2.open()"
+                   [matDatepicker]="picker2" formControlName="stopAt"
+                   matInput
+                   readonly tabindex="10">
+            <mat-datepicker #picker2></mat-datepicker>
+
+            <mat-error *ngIf="!form.get('stopAt').valid && form.get('stopAt').touched">
+              {{'tasks.form.stop_at_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="quarter-width padding-mini-r-l">
+          <mat-form-field class="full-width font-9-em">
+            <mat-label>{{'tasks.form.stop_time' | translate}}</mat-label>
+            <mat-select formControlName="stopTime" tabIndex="11">
+              <mat-option *ngFor="let hour of hours" [value]="hour">
+                {{hour}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="!form.get('stopTime').valid && form.get('stopTime').touched">
+              {{'tasks.form.stop_time_error' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div *ngIf="data.action === 'detail'" class="display-flex margin-b-full margin-r-l-reverse">
-      <div class="full-width padding-r-l">
-        <mat-slide-toggle
-          [color]="'primary'"
-          formControlName="status">
-          {{form.get('status').value ? ('global.active' | translate) : ('global.deactivate' | translate)}}
-        </mat-slide-toggle>
+      <div class="display-flex margin-b-full margin-r-l-reverse">
+        <div class="full-width padding-mini-r-l">
+          <mat-form-field class="full-width height-80 font-9-em">
+            <mat-label>{{'tasks.form.task_description' | translate}}</mat-label>
+            <textarea formControlName="taskDesc" matInput
+                      placeholder="{{'tasks.form.task_description' | translate}}" tabindex="12"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="display-flex margin-b-full margin-r-l-reverse">
+        <div class="full-width padding-mini-r-l">
+          <mat-slide-toggle
+            [color]="'primary'"
+            formControlName="trackable">
+            {{'tasks.form.trackable_by_mobile' | translate}}
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div *ngIf="data.action === 'detail'" class="display-flex margin-b-full margin-r-l-reverse">
+        <div class="full-width padding-mini-r-l">
+          <mat-slide-toggle
+            [color]="'primary'"
+            formControlName="status">
+            {{form.get('status').value ? ('global.active' | translate) : ('global.deactivate' | translate)}}
+          </mat-slide-toggle>
+        </div>
       </div>
     </div>
   </div>

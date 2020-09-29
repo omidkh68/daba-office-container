@@ -13,7 +13,12 @@ const routes: Routes = [
         path: '',
         loadChildren: () => import('../components/dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [AuthGuardService]
-      }
+      }/*,
+      {
+        path: 'selectCompany',
+        loadChildren: () => import('../components/select-company/select-company.module').then(m => m.SelectCompanyModule),
+        canActivate: [AuthGuardService]
+      }*/
     ]
   }
 ];

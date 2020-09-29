@@ -340,5 +340,9 @@
     "audio_only": "Audio Conference",
     "audio_video": "Audio / Video Conference",
     "training": "Training Conference"
+  },
+  "select_company": {
+    "title": "Choose company",
+    "back_to_login": "Back to login"
   }
 }

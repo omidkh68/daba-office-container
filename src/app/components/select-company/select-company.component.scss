@@ -1,0 +1,98 @@
+.background-gradient {
+  background-image: linear-gradient(120deg, #743c97 0%, #f43b47 100%);
+}
+
+.top-full-2-reverse {
+  top: -2em !important;
+}
+
+.bottom-full-reverse-2 {
+  bottom: -3em !important;
+}
+
+.company-item {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background-color: #4caf50;
+    -webkit-transition: all .4s;
+    -moz-transition: all .4s;
+    -ms-transition: all .4s;
+    -o-transition: all .4s;
+    transition: all .4s;
+  }
+
+  &[dir="rtl"] {
+    &::before {
+      right: 0;
+    }
+
+    .arrow {
+      right: -100px;
+    }
+  }
+
+  &[dir="ltr"] {
+    &::before {
+      left: 0;
+    }
+
+    .arrow {
+      left: -100px;
+    }
+  }
+
+  .arrow {
+    opacity: 0;
+  }
+
+  &:hover {
+    box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
+                0 12px 17px 2px rgba(0, 0, 0, 0.14),
+                0 5px 22px 4px rgba(0, 0, 0, 0.12);
+
+    &::before {
+      width: 10px;
+    }
+
+    .arrow {
+      opacity: 1;
+      animation: show-arrow 1s linear;
+    }
+
+    &[dir="rtl"] {
+      padding-right: 10px;
+
+      .arrow {
+        right: 0;
+      }
+    }
+
+    &[dir="ltr"] {
+      padding-left: 10px;
+
+      .arrow {
+        left: 0;
+      }
+    }
+
+    .company-name {
+      font-weight: bold;
+    }
+  }
+}
+
+@keyframes show-arrow {
+  0% {
+    opacity: 0;
+  }
+  33.33333% {
+    opacity: .5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

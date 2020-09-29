@@ -16,6 +16,13 @@
   <div class="flex-spacer"></div>
 
   <!-- Change User Status -->
+  <app-company-selector [loggedInUser]="loggedInUser"
+                   [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
+                   [rtlDirection]="rtlDirection"
+                   class="box-holder pos-rel"></app-company-selector>
+  <!-- /Change User Status -->
+
+  <!-- Change User Status -->
   <app-user-status [loggedInUser]="loggedInUser"
                    [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
                    [rtlDirection]="rtlDirection"

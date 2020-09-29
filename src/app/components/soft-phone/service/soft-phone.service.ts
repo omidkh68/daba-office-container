@@ -227,7 +227,7 @@ export class SoftPhoneService extends LoginDataClass {
           // video_size: null, // could be redefined a session-level
           sip_headers: [
             {name: 'User-Agent', value: 'IM-client/OMA1.0 sipML5-v1.2016.03.04'},
-            {name: 'Organization', value: 'Enoox Office Container'}
+            {name: 'Organization', value: 'Enoox Container'}
           ]
         });
 

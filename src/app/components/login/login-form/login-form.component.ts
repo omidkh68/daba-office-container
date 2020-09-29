@@ -88,6 +88,7 @@ export class LoginFormComponent implements OnInit {
           if (this.dialogData) {
             this.dialogRef.close();
           } else {
+            // this.router.navigateByUrl(`/home/selectCompany`);
             this.router.navigateByUrl(`/`);
           }
         } else {
