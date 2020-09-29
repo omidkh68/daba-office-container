@@ -1,4 +1,4 @@
-<section [dir]="data.rtlDirection ? 'rtl' : 'ltr'" class="padding-b-half custom-popover">
+<section [dir]="data.rtlDirection ? 'rtl' : 'ltr'" class="width-180 padding-b-half custom-popover">
   <div class="padding-full custom-badge display-flex flex-space-between">
     <span>{{'events_handler.main.event_count' | translate}}</span>
     <b class="round-corner-all text-white">{{data.eventTemp.length}}</b>
@@ -6,7 +6,7 @@
   <mat-nav-list class="event-list">
     <a (click)="showEventHandlerWindow(item , $event)" *ngFor="let item of data.eventTemp; last as last"
        mat-list-item>
-      <mat-icon class="padding-r-half" mat-list-icon>calendar_today</mat-icon>
+      <mat-icon class="padding-r-half font-full-plus-one-tenth-rem" mat-list-icon>calendar_today</mat-icon>
       <h5 class="font-9-em" mat-line>{{item.name}}</h5>
       <p class="demo-2 font-7-em" mat-line>{{dateTimeService.formatTime(item.startDate)}}
         - {{dateTimeService.formatDate(item.startDate)}}</p>

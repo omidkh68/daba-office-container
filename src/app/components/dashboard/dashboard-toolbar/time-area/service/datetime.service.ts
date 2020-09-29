@@ -387,10 +387,10 @@ export class DatetimeService {
     return this.datetime;
   }
 
-  formatTime(date) {
+  formatTime(date , gmt: boolean = false) {
     var d = new Date(date),
-      hour = '' + (d.getHours()),
-      min = '' + d.getMinutes();
+      hour = '' + (gmt ? d.getUTCHours().toString() : d.getHours().toString()),
+      min = '' + gmt ? d.getUTCMinutes().toString() : d.getMinutes().toString();
     if (hour.length < 2)
       hour = '0' + hour;
     if (min.length < 2)
@@ -398,11 +398,11 @@ export class DatetimeService {
     return [hour, min].join(':');
   }
 
-  formatDate(date) {
+  formatDate(date , gmt: boolean = false) {
     var d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
+      month = '' + (gmt ? d.getUTCMonth() + 1 : d.getMonth() + 1),
+      day = '' + gmt ? d.getUTCDate().toString() : d.getDate().toString(),
+      year = gmt ? d.getUTCFullYear() : d.getFullYear();
 
     if (month.length < 2)
       month = '0' + month;
@@ -410,6 +410,13 @@ export class DatetimeService {
       day = '0' + day;
 
     return [year, month, day].join('-');
+  }
+
+  convertToGMT(date: string , time:string) {
+    let result = this.formatDate(new Date(date + " " + time) , true)
+        + " " +
+        this.formatTime(new Date(date + " " + time) , true) + ":00";
+    return result;
   }
 
   getDateByTimezone(date: string, timezone: string) {

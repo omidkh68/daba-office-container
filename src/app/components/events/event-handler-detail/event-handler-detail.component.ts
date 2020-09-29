@@ -288,10 +288,11 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     }
 
     submit() {
+        debugger;
         let formValue = this.form.value;
         formValue.creatorUser = this.loggedInUser;
-        formValue.startDate = this.dateTimeService.formatDate(this.form.value.startDate) + " " + this.form.value.startTime + ":00";
-        formValue.endDate = this.dateTimeService.formatDate(this.form.value.endDate) + " " + this.form.value.endTime + ":00";
+        formValue.startDate = this.dateTimeService.convertToGMT(this.form.value.startDate , this.form.value.startTime);
+        formValue.endDate = this.dateTimeService.convertToGMT(this.form.value.endDate , this.form.value.endTime);
         formValue.users = this.selection.selected;
         delete formValue.actionType.actionTypeJobModels;
         delete formValue.actionType.actionDescription;

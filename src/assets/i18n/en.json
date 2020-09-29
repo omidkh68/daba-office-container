@@ -248,6 +248,10 @@
   },
   "events_handler": {
     "main": {
+      "notification_event_title" : "New Event Received",
+      "notification_event_from" : "From: ",
+      "notification_reminder_title" : "New Reminder Received",
+      "notification_reminder_from" : "From: ",
       "google_calendar_title": "Google Calendar",
       "container_calendar_title": "Container Calendar",
       "add_new_event": "Add New Event",
@@ -289,6 +293,7 @@
       "action_type": "Action Type",
       "action_job_type": "Action Job Type",
       "users": "Available Users",
+      "no_users": "No users exists in the list",
       "assign_to_error": "Please choose event assign to",
       "user_phone": "Mobile",
       "user_email": "Email",

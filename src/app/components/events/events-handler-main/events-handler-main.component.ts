@@ -300,7 +300,6 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
 
     nothing($event) {
         $event.jsEvent.preventDefault();
-        //return false;
     }
 
     loadBottomSheetFromFullCalendar($event) {
@@ -322,7 +321,9 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
             currentDate: this.currentDate,
             events: this.events_reminders.events
         };
-        let width = eventItems ? '98%' : '50%';
+        let width = '50%';
+        if(eventItems && eventItems.creatorUser.email == this.loggedInUser.email)
+            width = '80%';
 
         this.triggerBottomSheet.emit({
             component: EventHandlerDetailComponent,

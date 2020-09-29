@@ -8,7 +8,7 @@ import {PageNotFoundComponent} from './components/';
 import {TimeAreaDigitalClockComponent} from '../components/dashboard/dashboard-toolbar/time-area/time-area-digital-clock/time-area-digital-clock.component';
 
 @NgModule({
-  declarations: [PageNotFoundComponent, JalaliPipe, TimeAreaDigitalClockComponent, WebviewDirective],
+  declarations: [JalaliPipe, PageNotFoundComponent, TimeAreaDigitalClockComponent, WebviewDirective],
   imports: [TranslateModule, FormsModule, ReactiveFormsModule, MatCoreModule],
   exports: [
     JalaliPipe,
