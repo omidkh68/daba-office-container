@@ -63,6 +63,13 @@ export class TimeAreaComponent implements OnInit {
     return timezone && timezone.city ? timezone.city : '';
   }
 
+  onEnter(evt: any){
+    console.log(evt);
+    /*if (evt.source.selected) {
+      alert("hello ");
+    }*/
+  }
+
   setClockCity(option) {
     this.checkMoreClock = false;
     this.checkMoreClockContent = false;
