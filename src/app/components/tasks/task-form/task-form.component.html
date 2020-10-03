@@ -217,6 +217,7 @@
 
   <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
     <button (click)="cancelBtn()"
+            [disabled]="form.disabled"
             *ngIf="editable || data.action !== 'detail'"
             class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal"
             type="button">

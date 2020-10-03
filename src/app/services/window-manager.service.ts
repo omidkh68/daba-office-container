@@ -32,16 +32,16 @@ export class WindowManagerService {
     window.addEventListener('resize', this.fixPositionByTransform.bind(this))
   }
 
-  changeServices(services: Array<ServiceItemsInterface> | null) {
-    this.services.next(services);
-  }
-
   get windowListArray(): Array<WindowInterface> {
     return this.windows.getValue();
   }
 
   get serviceList(): Array<ServiceItemsInterface> {
     return this.services.getValue();
+  }
+
+  changeServices(services: Array<ServiceItemsInterface> | null) {
+    this.services.next(services);
   }
 
   openWindowState(service: ServiceItemsInterface) {
@@ -297,7 +297,7 @@ export class WindowManagerService {
         setTimeout(() => {
           element = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
           element.style.zIndex = maxWindowZIndex;
-        }, 100)
+        }, 300);
       } else {
         const overlayHtmlElements = document.getElementsByClassName('cdk-overlay-backdrop-showing');
 

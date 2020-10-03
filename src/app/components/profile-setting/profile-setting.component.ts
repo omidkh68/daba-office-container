@@ -92,7 +92,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     );
 
     this.checkMoreClock = false;
-    this.options = datetimeService.aryIannaTimeZones;
+    this.options = datetimeService.timezones;
     this.cityClocksList = [{city: 'Tehran', timezone: 'Asia/Tehran'}];
   }
 

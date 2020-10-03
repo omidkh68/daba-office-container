@@ -4,8 +4,7 @@ import {WindowManagerService} from '../../../../services/window-manager.service'
 
 @Component({
   selector: 'app-window-app-container',
-  templateUrl: './window-app-container.component.html',
-  styleUrls: ['./window-app-container.component.scss']
+  templateUrl: './window-app-container.component.html'
 })
 export class WindowAppContainerComponent {
   @Input()

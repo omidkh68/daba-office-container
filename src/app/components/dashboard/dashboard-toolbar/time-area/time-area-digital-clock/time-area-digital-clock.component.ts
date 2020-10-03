@@ -4,8 +4,7 @@ import {timer} from 'rxjs';
 
 @Component({
   selector: 'app-time-area-digital-clock',
-  templateUrl: './time-area-digital-clock.component.html',
-  styleUrls: ['./time-area-digital-clock.component.scss']
+  templateUrl: './time-area-digital-clock.component.html'
 })
 export class TimeAreaDigitalClockComponent implements OnChanges, OnDestroy {
   @Input()
@@ -16,9 +15,6 @@ export class TimeAreaDigitalClockComponent implements OnChanges, OnDestroy {
   time: string;
   globalTimer = null;
   globalTimerSubscription: Subscription;
-
-  constructor() {
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.timezone.firstChange) {

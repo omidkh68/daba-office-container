@@ -64,7 +64,6 @@ export class LearningSystemWindowComponent implements OnInit, OnDestroy {
   }
 
   reload() {
-    console.log('window reload');
     this.webViewService.changeRefreshWebView({doRefresh: true, visible: true});
   }
 

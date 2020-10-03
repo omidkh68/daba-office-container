@@ -104,7 +104,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
 
     const formInstance = Object.assign(this.form.value);
 
-    // this.form.disable();
+    this.form.disable();
 
     const formValue = {
       ...formInstance,

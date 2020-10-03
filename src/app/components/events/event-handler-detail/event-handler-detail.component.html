@@ -392,7 +392,7 @@
                         <mat-icon class="line-height-30">delete</mat-icon>
                     </button>
                     <mat-icon class="padding-r-half" mat-list-icon>calendar_today</mat-icon>
-                    <p mat-line class="demo-2">{{reminder.description}}</p>
+                    <p mat-line>{{reminder.description}}</p>
                     <div mat-line class="font-8-rem">{{reminder.startReminder | jalali:rtlDirection}}</div>
                     <mat-divider class="full-width" [inset]="true" *ngIf="!last"></mat-divider>
                 </a>

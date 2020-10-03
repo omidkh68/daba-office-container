@@ -8,8 +8,7 @@ import {WindowManagerService} from '../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 
 @Component({
-  selector: 'app-description-task',
-  styleUrls: ['./task-report-description.component.css'],
+  selector: 'app-task-description',
   templateUrl: './task-report-description.html',
 })
 

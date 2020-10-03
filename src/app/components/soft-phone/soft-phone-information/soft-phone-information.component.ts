@@ -76,11 +76,13 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
   }
 
   ngAfterContentInit(): void {
-    this.globalTimer = timer(
-      this.timerDueTime, this.timerPeriod
-    );
+    if (this.softPhoneUsers && this.softPhoneUsers.length) {
+      this.globalTimer = timer(
+        this.timerDueTime, this.timerPeriod
+      );
 
-    this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getExtensionStatus());
+      this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getExtensionStatus());
+    }
   }
 
   getExtensionStatus() {

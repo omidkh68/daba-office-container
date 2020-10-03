@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, Renderer2, SimpleChanges} from '@angular/core';
-import {Timezones} from './timezones.interface';
+import {TimezonesInterface} from './timezones.interface';
 import {Observable} from 'rxjs/internal/Observable';
 import {FormControl} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -25,13 +25,13 @@ export class TimeAreaComponent implements OnInit {
 
   checkMoreClock: boolean = false;
   checkMoreClockContent: boolean = false;
-  cityClocksList: Timezones[];
+  cityClocksList: TimezonesInterface[];
   item: number;
   currentTimezone: string;
 
   myControl = new FormControl();
-  options: Timezones[];
-  filteredOptions: Observable<Timezones[]>;
+  options: TimezonesInterface[];
+  filteredOptions: Observable<TimezonesInterface[]>;
 
   private _subscription: Subscription = new Subscription();
 
@@ -40,7 +40,7 @@ export class TimeAreaComponent implements OnInit {
               private userInfoService: UserInfoService) {
     this.checkMoreClock = false;
 
-    this.options = datetimeService.aryIannaTimeZones;
+    this.options = datetimeService.timezones;
 
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => {
@@ -59,7 +59,7 @@ export class TimeAreaComponent implements OnInit {
     );
   }
 
-  displayFn(timezone: Timezones): string {
+  displayFn(timezone: TimezonesInterface): string {
     return timezone && timezone.city ? timezone.city : '';
   }
 
@@ -105,7 +105,7 @@ export class TimeAreaComponent implements OnInit {
     }, 1000);
   }
 
-  private filter(name: string): Timezones[] {
+  private filter(name: string): TimezonesInterface[] {
     const filterValue = name.toLowerCase();
 
     return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);

@@ -1,4 +1,4 @@
-export interface Timezones {
+export interface TimezonesInterface {
   city: string;
   timezone: string;
 }

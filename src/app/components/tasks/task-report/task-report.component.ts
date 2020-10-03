@@ -1,8 +1,10 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
+import {TaskInterface} from '../logic/task-interface';
 import {LoginInterface} from '../../login/logic/login.interface';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -10,9 +12,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {MatDialog} from '@angular/material/dialog';
-import {TaskReportDescriptionComponent} from '../description-task/task-report-description.component';
-import {TaskInterface} from '../logic/task-interface';
+import {TaskReportDescriptionComponent} from '../task-description/task-report-description.component';
 
 export interface TaskReportInterface {
   taskSheetId: number;

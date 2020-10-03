@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {Timezones} from '../timezones.interface';
+import {TimezonesInterface} from '../timezones.interface';
 
 @Component({
   selector: 'app-time-area-clock',
@@ -24,16 +24,13 @@ export class TimeAreaClockComponent implements OnInit, AfterViewInit {
   checkMoreClock: boolean;
 
   @Input()
-  cityClocksList: Timezones[];
+  cityClocksList: TimezonesInterface[];
 
   @Input()
   item_index: number;
 
   @Input()
-  item: Timezones;
-
-  constructor() {
-  }
+  item: TimezonesInterface;
 
   ngOnInit(): void {
     this.item.city = this.item.city.replace('_', ' ');
@@ -78,15 +75,14 @@ export class TimeAreaClockComponent implements OnInit, AfterViewInit {
 
       this.seconds.nativeElement.addEventListener('transitionend', this.controlBouncing);
 
-
       this.minutes_angle += (this.degrees / 60);
+
       this.minutes.nativeElement.style.transform = 'rotate(' + (this.minutes_angle) + 'deg)';
 
       if (this.minutes_angle % 15 == 0) {
         this.hours_angle += 6;
         this.hours.nativeElement.style.transform = 'rotate(' + (this.hours_angle) + 'deg)';
       }
-
     } else {
       this.seconds_angle += (this.degrees / 60);
     }
@@ -105,7 +101,9 @@ export class TimeAreaClockComponent implements OnInit, AfterViewInit {
   createIndicators = () => {
     for (let i = 0; i < 60; i++) {
       const indicator = document.createElement('div');
+
       indicator.classList.add('seconds-indicator');
+
       indicator.style.transform = 'rotate(' + (i * 6) + 'deg)';
 
       if (i % 5 == 0) {
@@ -116,9 +114,7 @@ export class TimeAreaClockComponent implements OnInit, AfterViewInit {
     }
   };
 
-
   ngAfterViewInit(): void {
     this.init();
   }
-
 }

@@ -59,7 +59,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
 
   ngOnInit(): void {
     this.eventHandlerSocketService.initializeWebSocketConnection().then(result => {
-      console.log(result);
+      console.log('socket status: ', result);
     });
     this.getEvents();
   }

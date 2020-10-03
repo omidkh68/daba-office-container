@@ -4,12 +4,16 @@
     <b class="round-corner-all text-white">{{data.eventTemp.length}}</b>
   </div>
   <mat-nav-list class="event-list">
-    <a (click)="showEventHandlerWindow(item , $event)" *ngFor="let item of data.eventTemp; last as last"
-       mat-list-item>
-      <mat-icon class="padding-r-half font-full-plus-one-tenth-rem" mat-list-icon>calendar_today</mat-icon>
+    <a (click)="showEventHandlerWindow(item , $event)"
+       *ngFor="let item of data.eventTemp; last as last"
+       mat-list-item class="padding-mini-r-l">
+      <mat-icon class="font-full-plus-one-tenth-rem" mat-list-icon>calendar_today</mat-icon>
+
       <h5 class="font-9-em" mat-line>{{item.name}}</h5>
-      <p class="demo-2 font-7-em" mat-line>{{dateTimeService.formatTime(item.startDate)}}
-        - {{dateTimeService.formatDate(item.startDate)}}</p>
+
+      <p class="font-7-em" mat-line>
+        {{dateTimeService.formatTime(item.startDate)}} - {{dateTimeService.formatDate(item.startDate)}}
+      </p>
       <mat-divider *ngIf="!last" [inset]="true" class="no-margin full-width"></mat-divider>
     </a>
   </mat-nav-list>
