@@ -73,6 +73,8 @@ export class LoginFormComponent implements OnInit {
     });
   }
 
+  // todo: remove comment by ebi
+
   login() {
     this.form.disable();
 

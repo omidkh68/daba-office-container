@@ -7,39 +7,65 @@
       {{todoList.length ? todoList.length : ''}} {{(todoList.length ? 'global.items' : '') | translate}}
     </span>
   </h1>
+
   <div class="todo-content-container padding-full padding-b-half">
     <form [formGroup]="form" class="full-height">
+
       <div *ngIf="todoList.length" class="todo-list-container padding-b-full overflow-y-auto overflow-x-hide">
-        <mat-list class="no-padding">
-          <mat-list-item *ngFor="let todoItem of todoList"
+        <div class="no-padding"
+                  cdkDropList
+                  [cdkDropListData]="todoList"
+                  class="example-list"
+                  (cdkDropListDropped)="changeTodo($event)">
+          <mat-card *ngFor="let todoItem of todoList"
                          (click)="checkTodo(todoItem)"
-                         [ngClass]="todoItem.isChecked ? 'text-green-200' : 'text-gray-700'"
-                         class="height-auto cursor-pointer border-bottom">
-            <mat-icon mat-list-icon class="no-padding">
-              {{todoItem.isChecked ? 'check_circle_outline' : 'radio_button_unchecked'}}
-            </mat-icon>
+                         class="height-auto cursor-pointer border-bottom no-padding bg-grey no-box-shadow"
+                          cdkDragLockAxis="y"
+                         cdkDrag>
 
-            <div mat-line class="no-text-eclipse font-8-em height-auto padding-mini-t-b"
-                 [ngClass]="{'text-line-through': todoItem.isChecked}">{{todoItem.text}}</div>
+            <mat-card-content class="text-gray-600 display-flex flex-space-between">
 
-            <div mat-line class="text-italic font-7-em">{{todoItem.creationDate | jalali:rtlDirection}}</div>
+              <div class="display-flex align-items-center">
+                <mat-icon class="no-padding text-gray-400"
+                          [ngClass]="rtlDirection ? 'margin-l-tiny' : 'margin-r-tiny'"
+                          cdkDragHandle>
+                  drag_handle
+                </mat-icon>
+                <mat-icon class="no-padding"
+                          [ngClass]="todoItem.isChecked ? 'text-green-200' : 'text-gray-700'">
+                  {{todoItem.isChecked ? 'check_circle_outline' : 'radio_button_unchecked'}}
+                </mat-icon>
+              </div>
 
-            <button
-              type="button"
-              [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-              class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
-              (click)="$event.stopPropagation(); updateTodo(todoItem)">
-              <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-green-600">edit</mat-icon>
-            </button>
+              <div class="flex-grow-1"
+                   [ngClass]="todoItem.isChecked ? 'text-green-200' : 'text-gray-700'">
+                <div class="no-text-eclipse font-full-em height-auto padding-mini-t-b padding-mini-r-l"
+                     [ngClass]="{'text-line-through': todoItem.isChecked}">{{todoItem.text}}</div>
 
-            <button
-              type="button"
-              class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
-              (click)="$event.stopPropagation(); deleteTodo(todoItem)">
-              <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-red-600">close</mat-icon>
-            </button>
-          </mat-list-item>
-        </mat-list>
+                <div class="text-italic font-7-em padding-mini-r-l">{{todoItem.creationDate | jalali:rtlDirection}}</div>
+              </div>
+
+              <div class="display-flex align-items-center">
+                <button
+                  type="button"
+                  [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                  class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
+                  (click)="$event.stopPropagation(); updateTodo(todoItem)">
+                  <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-green-600">edit</mat-icon>
+                </button>
+
+                <button
+                  type="button"
+                  class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
+                  (click)="$event.stopPropagation(); deleteTodo(todoItem)">
+                  <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-red-600">close</mat-icon>
+                </button>
+              </div>
+
+            </mat-card-content>
+
+          </mat-card>
+        </div>
       </div>
 
       <div class="enter-todo-container margin-t-full">
@@ -59,6 +85,7 @@
           </mat-form-field>
         </div>
       </div>
+
     </form>
   </div>
 

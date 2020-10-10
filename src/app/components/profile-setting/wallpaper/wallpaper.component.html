@@ -94,7 +94,7 @@
   </h6>
 
   <!--wallpaper-->
-  <div class="display-block height-full-minus-175 custom-mat-dialog-content no-padding overflow-y-auto display-flex flex-direction-row flex-wrap flex-space-between">
+  <div class="height-full-minus-175 custom-mat-dialog-content no-padding overflow-y-auto display-flex flex-direction-row flex-wrap flex-space-between">
     <mat-card  *ngFor="let picture of wallpapersPictures" (click)="changeWallpaperPhysical(picture.img)"
                [style.background]="picture.value"
                class="mat-elevation-z1 full-width height-100 wallpaper thirty-width cursor-pointer margin-b-full">
