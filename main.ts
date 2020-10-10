@@ -109,6 +109,8 @@ try {
     });
   }
 
+  // todo: remove comment by ebi
+
   app.on('activate', () => {
     if (win === null) {
       createWindow();
