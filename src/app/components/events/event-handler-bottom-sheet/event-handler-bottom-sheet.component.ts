@@ -1,4 +1,12 @@
-import {Component, ComponentFactoryResolver, ElementRef, Renderer2, ViewChild, ViewContainerRef} from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  OnDestroy,
+  Renderer2,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {EventHandlerBottomSheetInterface} from '../logic/event-handler-data.interface';
 
 @Component({
@@ -6,7 +14,7 @@ import {EventHandlerBottomSheetInterface} from '../logic/event-handler-data.inte
   templateUrl: './event-handler-bottom-sheet.component.html',
   styleUrls: ['./event-handler-bottom-sheet.component.scss']
 })
-export class EventHandlerBottomSheetComponent {
+export class EventHandlerBottomSheetComponent implements OnDestroy{
   @ViewChild('oBottomSheet') oBottomSheet: ElementRef;
   @ViewChild('container', {read: ViewContainerRef}) container;
 
@@ -42,5 +50,9 @@ export class EventHandlerBottomSheetComponent {
 
   close(data?: any) {
     this.toggleBottomSheet(null, false);
+  }
+
+  ngOnDestroy(): void {
+    console.log("ngOnDestroy")
   }
 }

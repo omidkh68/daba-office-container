@@ -285,6 +285,7 @@ export class WindowManagerService {
   }
 
   dialogOnTop(dialogId: string) {
+      //debugger;
     setTimeout(() => {
       let maxWindowZIndex = (this.getMaxZIndex() + 500).toString();
 
@@ -297,7 +298,7 @@ export class WindowManagerService {
         setTimeout(() => {
           element = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
           element.style.zIndex = maxWindowZIndex;
-        }, 300);
+        }, 100);
       } else {
         const overlayHtmlElements = document.getElementsByClassName('cdk-overlay-backdrop-showing');
 
@@ -316,6 +317,6 @@ export class WindowManagerService {
           element.parentElement.parentElement.style.zIndex = maxZIndex;
         }
       }
-    });
+    },0)
   }
 }
