@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ElectronService} from '../../../services/electron.service';
+//import {ElectronService} from '../../../services/electron.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
@@ -182,7 +182,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
               private translate: TranslateService,
               private viewDirection: ViewDirectionService,
               private messageService: MessageService,
-              private electronService: ElectronService,
+            //  private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private refreshLoginService: RefreshLoginService,
               private wallPaperSelector: WallpaperSelectorService,
@@ -200,7 +200,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit() {
-    this.environment = this.electronService.remote.screen.getPrimaryDisplay().workAreaSize;
+   // this.environment = this.electronService.remote.screen.getPrimaryDisplay().workAreaSize;
   }
 
   /*code1*/

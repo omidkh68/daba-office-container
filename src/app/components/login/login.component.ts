@@ -1,7 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {ElectronService} from '../../services/electron.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
+import * as Version  from '../../../../package.json';
 
 @Component({
   selector: 'app-login',
@@ -15,12 +15,12 @@ export class LoginComponent implements OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private viewDirection: ViewDirectionService,
-              private electronService: ElectronService) {
+             ) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
 
-    this.version = this.electronService.remote.app.getVersion();
+    this.version = Version.version;
   }
 
   ngOnDestroy(): void {

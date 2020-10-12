@@ -17,7 +17,6 @@ import {LoginComponent} from './components/login/login.component';
 import {MessageComponent} from './components/message/message.component';
 import {ApproveComponent} from './components/approve/approve.component';
 import {LoginFormComponent} from './components/login/login-form/login-form.component';
-
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

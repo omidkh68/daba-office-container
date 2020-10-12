@@ -7,7 +7,6 @@ import {MessageService} from '../message/service/message.service';
 import {LoginDataClass} from '../../services/loginData.class';
 import {WindowInterface} from './logic/window.interface';
 import {UserInfoService} from '../users/services/user-info.service';
-import {ElectronService} from '../../services/electron.service';
 import {SoftPhoneService} from '../soft-phone/service/soft-phone.service';
 import {ServiceInterface} from '../services/logic/service-interface';
 import {TranslateService} from '@ngx-translate/core';
@@ -36,7 +35,6 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
               private injector: Injector,
               private viewDirection: ViewDirectionService,
               private messageService: MessageService,
-              private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private statusApiService: StatusApiService,
               private softPhoneService: SoftPhoneService,

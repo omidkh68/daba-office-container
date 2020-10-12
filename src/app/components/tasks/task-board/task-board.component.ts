@@ -32,7 +32,7 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-
+import {Observable} from "rxjs";
 @Component({
   selector: 'app-task-board',
   templateUrl: './task-board.component.html',
@@ -100,21 +100,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
   ngOnInit(): void {
     this.rowHeight = '100%';
-
-    /*this.socket.on('update-data', (data: any) => {
-      this.getBoards();
-    });*/
-
-    // this.setupSocket();
   }
-
-  /*setupSocket() {
-    this.socket = this.socketService.setupSocketConnection('boards');
-    this.socket.emit('getBoards');
-    this.socket.on('getBoards', data => {
-      console.log(data);
-    });
-  }*/
 
   changeStatus(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
@@ -370,7 +356,6 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
       this.assignNewTaskToBoard(this.pushTaskToBoard.task, this.pushTaskToBoard.prevContainer, this.pushTaskToBoard.newContainer);
 
-      // this.socket.emit('updatedata');
     }
   }
 

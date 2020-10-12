@@ -5,7 +5,6 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {WebViewService} from '../service/web-view.service';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {ElectronService} from '../../../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
@@ -28,7 +27,6 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
               private injector: Injector,
               private webViewService: WebViewService,
               private userInfoService: UserInfoService,
-              private electronService: ElectronService,
               private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
               private loadingIndicatorService: LoadingIndicatorService) {
@@ -60,7 +58,7 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
       this.webFrame.nativeElement.setAttribute('src', address);
 
       this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-        this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+       // this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
 
         this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'adminPanel'});
       });

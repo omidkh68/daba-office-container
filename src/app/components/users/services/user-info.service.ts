@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {LoginInterface} from '../../login/logic/login.interface';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {UserContainerInterface} from '../logic/user-container.interface';
-import {AppConfig} from '../../../../environments/environment';
-import {ElectronService} from '../../../services/electron.service';
+import {removeStorage} from "../../../services/storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +20,7 @@ export class UserInfoService {
   private allUsers = new BehaviorSubject(this._allUsers);
   public currentAllUsers = this.allUsers.asObservable();
 
-  constructor(private electronService: ElectronService) {
+  constructor() {
   }
 
   get getUserInfo(): UserContainerInterface {
@@ -54,17 +53,15 @@ export class UserInfoService {
 
   changeLoginData(loginData: LoginInterface | null) {
     if (!loginData) {
-      this.removeLoginDataFileContent();
+     this.removeLoginDataStorageContent();
     }
 
     this.loginData.next(loginData);
   }
 
-  removeLoginDataFileContent() {
-    const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
-
-    const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
-
-    this.electronService.fs.writeFileSync(loginDataPath, null);
+  // empty window.localStorage
+  removeLoginDataStorageContent() {
+    removeStorage('userData');
   }
+
 }

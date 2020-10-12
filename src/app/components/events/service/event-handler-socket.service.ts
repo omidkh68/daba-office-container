@@ -8,7 +8,6 @@ import {ReminderInterface} from "../logic/event-reminder.interface";
 import {Observable, Subscription} from "rxjs";
 import {UserContainerInterface} from "../../users/logic/user-container.interface";
 import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
-import {ElectronService} from "../../../services/electron.service";
 import {NotificationService} from "../../../services/notification.service";
 import {TranslateService} from "@ngx-translate/core";
 
@@ -25,7 +24,6 @@ export class EventHandlerSocketService {
     private loggedInUsers: any;
 
     constructor(private eventApi: EventApiService ,
-                private electronService: ElectronService,
                 private notificationService: NotificationService,
                 private dateTimeservice: DatetimeService,
                 private translateService: TranslateService,
@@ -90,33 +88,33 @@ export class EventHandlerSocketService {
                     if(Array.isArray(checkNotify)){
                         // receive new reminder
                         checkNotify = checkNotify[0];
-                        if (!this.electronService.window.isFocused()) {
+                       /* if (!this.electronService.window.isFocused()) {
                             notification = new Notification(this.getTranslate('events_handler.main.notification_reminder_title'), {
                                 body: checkNotify.description + " " + checkNotify.startReminder,//this.getTranslate('events_handler.main.notification_reminder_from'),
                                 icon: '',
                                 dir: 'auto',
                                 data: this.loggedInUsers
                             });
-                        }
+                        }*/
                     }else{
                         // receive new event
                         if(checkNotify.users && checkNotify.users.length){
                             checkNotify.users.forEach((item) => {
                                 //if(item.email == this.loggedInUsers.email){
-                                if (!this.electronService.window.isFocused()) {
+                               /* if (!this.electronService.window.isFocused()) {
                                     notification = new Notification(this.getTranslate('events_handler.main.notification_event_title'), {
                                         body: this.getTranslate('events_handler.main.notification_event_from') + " " + checkNotify.createUser.name,
                                         icon: 'assets/profileImg/' + checkNotify.createUser.email + '.jpg',
                                         dir: 'auto',
                                         data: this.loggedInUsers
                                     });
-                                }
+                                }*/
                                 this.getEventsByEmail(this.loggedInUsers);
                             })
                         }
                     }
 
-                    if (!this.electronService.window.isFocused()) {
+               /*     if (!this.electronService.window.isFocused()) {
                         this.notificationService.changeCurrentNotification(notification);
 
                         this._subscription.add(
@@ -132,7 +130,7 @@ export class EventHandlerSocketService {
                                 }
                             })
                         );
-                    }
+                    }*/
 
                 });
 

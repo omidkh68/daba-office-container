@@ -29,8 +29,9 @@ import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '../../sh
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
 import {DatetimeService} from './dashboard-toolbar/time-area/service/datetime.service';
+import {getStorage} from "../../services/storage.service";
 
-const defaultLangStorage = localStorage.getItem('defaultLang');
+const defaultLangStorage = getStorage('defaultLang');
 const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
 @NgModule({

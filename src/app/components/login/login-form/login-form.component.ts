@@ -1,16 +1,15 @@
 import {Component, Injector, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AppConfig} from '../../../../environments/environment';
 import {ApiService} from '../../users/logic/api.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {ElectronService} from '../../../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoginResultInterface} from '../logic/login.interface';
+import {setStorage} from "../../../services/storage.service";
 
 export interface LangInterface {
   id: string;
@@ -44,7 +43,6 @@ export class LoginFormComponent implements OnInit {
               private translate: TranslateService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
-              private electronService: ElectronService,
               private viewDirection: ViewDirectionService) {
     this.dialogRef = this.injector.get(MatDialogRef, null);
     this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
@@ -65,8 +63,6 @@ export class LoginFormComponent implements OnInit {
       this.form = this.fb.group({
         username: new FormControl(''),
         password: new FormControl(''),
-        // username: new FormControl('khosrojerdi@dabacenter.ir'),
-        // password: new FormControl('123456')
       });
 
       resolve(true);
@@ -81,14 +77,13 @@ export class LoginFormComponent implements OnInit {
     this._subscription.add(
       this.api.login(formValue).subscribe((resp: LoginResultInterface) => {
         if (resp.success) {
-          this.createFile(resp.data);
+           this.createStorage(resp.data);
 
           this.userInfoService.changeLoginData(resp.data);
 
           if (this.dialogData) {
             this.dialogRef.close();
           } else {
-            // this.router.navigateByUrl(`/home/selectCompany`);
             this.router.navigateByUrl(`/`);
           }
         } else {
@@ -100,12 +95,9 @@ export class LoginFormComponent implements OnInit {
     );
   }
 
-  createFile(data) {
-    const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
-
-    const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
-
-    this.electronService.fs.writeFileSync(loginDataPath, JSON.stringify(data));
+  // set
+  createStorage(data) {
+    setStorage("loginData" , JSON.stringify(data));
   }
 
   showErrorLogin() {

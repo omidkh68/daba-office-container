@@ -6,7 +6,7 @@ import {WebViewService} from '../service/web-view.service';
 import {MessageService} from '../../message/service/message.service';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {ElectronService} from '../../../services/electron.service';
+//import {ElectronService} from '../../../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ConferenceInterface} from '../logic/conference.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
@@ -35,7 +35,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
               private messageService: MessageService,
               private webViewService: WebViewService,
               private userInfoService: UserInfoService,
-              private electronService: ElectronService,
+             // private electronService: ElectronService,
               private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
               private windowManagerService: WindowManagerService,
@@ -88,7 +88,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
 
             this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
 
-              this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+              //this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
 
               this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'videoConference'});
             });

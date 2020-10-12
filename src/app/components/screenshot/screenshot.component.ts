@@ -8,7 +8,6 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../tasks/logic/task-interface';
 import {LoginDataClass} from '../../services/loginData.class';
 import {UserInfoService} from '../users/services/user-info.service';
-import {ElectronService} from '../../services/electron.service';
 import {CurrentTaskService} from '../tasks/services/current-task.service';
 import {ScreenshotInterface} from './logic/screenshot-interface';
 import {ChangeStatusService} from '../status/services/change-status.service';
@@ -46,7 +45,6 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
 
   constructor(private api: ApiService,
               private injector: Injector,
-              private electron: ElectronService,
               private changeStatusService: ChangeStatusService,
               private currentTaskService: CurrentTaskService,
               private userInfoService: UserInfoService) {
@@ -129,7 +127,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
       fetchWindowIcons: true
     };
 
-    this.electron.desktopCapturer.getSources(options).then(async sources => {
+/*    this.electron.desktopCapturer.getSources(options).then(async sources => {
       let screenshots: Array<string> = [];
 
       await sources.map(source => {
@@ -155,17 +153,17 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
 
     }).catch((err) => {
       throw err.message;
-    });
+    });*/
   }
 
   determineScreenShot() {
-    const screenSize = this.electron.screen.getPrimaryDisplay().workAreaSize;
+   /* const screenSize = this.electron.screen.getPrimaryDisplay().workAreaSize;
     const maxDimension = Math.max(screenSize.width, screenSize.height);
 
     return {
       width: maxDimension * window.devicePixelRatio,
       height: maxDimension * window.devicePixelRatio
-    };
+    };*/
   }
 
   ngOnDestroy(): void {

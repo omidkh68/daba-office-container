@@ -91,7 +91,7 @@ export class TimeAreaComponent implements OnInit {
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
         startWith(''),
-        map(value => typeof value === 'string' ? value : value.name),
+        map((value: TimezonesInterface) => typeof value === 'string' ? value : value.city),
         map(name => name ? this.filter(name) : this.options.slice())
       );
   }

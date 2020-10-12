@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {ElectronService} from '../../../services/electron.service';
+//import {ElectronService} from '../../../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
@@ -21,7 +21,7 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
-              private electronService: ElectronService,
+             // private electronService: ElectronService,
               private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
               private loadingIndicatorService: LoadingIndicatorService) {
@@ -39,7 +39,7 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
       this.webFrame.nativeElement.setAttribute('src', 'https://www.google.com');
 
       this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-        this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+       // this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
 
         this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'webBrowser'});
       });
@@ -59,7 +59,7 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
       this.webFrame.nativeElement.setAttribute('src', `${this.currentUrl}`);
 
       this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-        this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+       // this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
 
         this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'webBrowser'});
       });

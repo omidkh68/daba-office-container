@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {WebViewService} from '../service/web-view.service';
-import {ElectronService} from '../../../services/electron.service';
+//import {ElectronService} from '../../../services/electron.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {RefreshInterface} from '../logic/refresh.interface';
 
@@ -35,7 +35,7 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
   private _subscription: Subscription = new Subscription();
 
   constructor(private webViewService: WebViewService,
-              private electronService: ElectronService,
+             // private electronService: ElectronService,
               private loadingIndicatorService: LoadingIndicatorService) {
     this._subscription.add(
       this.webViewService.currentRefreshWebView.subscribe(status => {
@@ -54,7 +54,7 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
       this.webFrame.nativeElement.setAttribute('src', this.frameUrl);
 
       this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-        this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+       // this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
 
         this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'learningSystem'});
       });

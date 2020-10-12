@@ -7,7 +7,7 @@ import {map, startWith} from 'rxjs/operators';
 import {LoginDataClass} from '../../services/loginData.class';
 import {MessageService} from '../message/service/message.service';
 import {UserInfoService} from '../users/services/user-info.service';
-import {ElectronService} from '../../services/electron.service';
+//import {ElectronService} from '../../services/electron.service';
 import {DatetimeService} from '../dashboard/dashboard-toolbar/time-area/service/datetime.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ApproveComponent} from '../approve/approve.component';
@@ -19,6 +19,7 @@ import {WindowManagerService} from '../../services/window-manager.service';
 import {ProfileSettingService} from './logic/profile-setting.service';
 import {ShowImageCropperComponent} from './show-image-cropper/show-image-cropper.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
+import {TimezonesInterface} from "../dashboard/dashboard-toolbar/time-area/timezones.interface";
 
 export interface Timezones {
   city: string;
@@ -69,7 +70,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
               private injector: Injector,
               private translate: TranslateService,
               private messageService: MessageService,
-              private electronService: ElectronService,
+             // private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private datetimeService: DatetimeService,
               private viewDirection: ViewDirectionService,
@@ -99,11 +100,12 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
   ngOnInit(): void {
     this.createForm().then(() => this.formPatchValue());
 
-    this.filteredOptions = this.form.get('timezone').valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this.filter(name) : this.options.slice())
-    );
+    this.filteredOptions = this.form.get('timezone').valueChanges
+      .pipe(
+        startWith(''),
+        map((value: TimezonesInterface) => typeof value === 'string' ? value : value.city),
+        map(name => name ? this.filter(name) : this.options.slice())
+      );
 
     this._subscription.add(
       this.form.valueChanges.subscribe(value => {
@@ -241,8 +243,8 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
             this.defaultLang = resp.data.lang;
 
             if (hasReload) {
-              this.electronService.remote.app.relaunch();
-              this.electronService.remote.app.exit(0);
+             // this.electronService.remote.app.relaunch();
+              //this.electronService.remote.app.exit(0);
             }
 
             this.viewDirection.changeDirection(resp.data.lang === 'fa');

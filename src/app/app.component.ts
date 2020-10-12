@@ -28,6 +28,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+
+    //this.storageService.setStorage("test" , {object: 'x'});
+
+    //console.log('cookie', JSON.parse(this.storageService.getStorage('test')));
+
+
     this.onlineEvent = fromEvent(window, 'online');
     this.offlineEvent = fromEvent(window, 'offline');
 
