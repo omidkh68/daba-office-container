@@ -48,6 +48,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   @Input()
   pushTaskToBoard;
 
+
   @Input()
   rtlDirection: boolean;
 
