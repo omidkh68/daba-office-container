@@ -10,7 +10,8 @@
 
       <div [dir]="rtlDirection ? 'ltr' : 'rtl'" class="font-8-rem">
         <mat-slide-toggle #slideToggle
-                          (change)="changeSoftphoneStatus($event)" [checked]="loggedInUserExtension && softphoneConnectedStatus && loggedInUserExtension.extension.is_online"
+                          (change)="changeSoftphoneStatus($event)"
+                          [checked]="loggedInUserExtension && softphoneConnectedStatus && loggedInUserExtension.extension.is_online"
                           class="soft-phone-status">
           <span class="padding-mini-r-l">
             {{(slideToggle.checked ? 'global.active' : 'global.deactivate') | translate}}
@@ -26,16 +27,16 @@
                      *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
                      [ngClass]="rtlDirection ? 'padding-r-half padding-l-tiny' : 'padding-l-half padding-r-tiny'"
                      class="highlight cursor-pointer full-height">
-        <img [alt]="user.name" [ngClass]="user.is_online ? 'active' : ''"
+        <img [alt]="user.name" [ngClass]="{'active': user.is_online}"
              [src]="'assets/profileImg/'+ user.username +'.jpg'"
              class="online-user mat-elevation-z2 width-35 height-35 transition"
              matListAvatar onerror="this.src='assets/profileImg/0.jpg'">
 
-        <h3 class="font-7-rem text-weight-bold no-margin" matLine> {{user.extension_name}} </h3>
+        <h3 class="font-7-rem text-weight-bold no-margin" matLine>{{user.extension_name}}</h3>
 
         <div matLine>
           <mat-icon [ngClass]="rtlDirection ? 'text-right' : 'text-left'"
-                    class="width-18 height-18 font-8-em pos-rel top-two-tenth ">access_time
+                    class="width-18 height-18 font-8-em pos-rel top-two-tenth">access_time
           </mat-icon>
 
           <app-time-area-digital-clock [timezone]="user.timezone" class="font-8-em text-gray-600">

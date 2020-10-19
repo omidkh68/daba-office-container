@@ -1,402 +1,427 @@
 <div *ngIf="data" class="full-page-size overflow-hide" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-    <div class="event-heading clear-both full-width height-45 display-flex flex-space-between">
-        <h1
-                class="no-margin height-45 line-height-45 font-full-plus-one-tenth-em text-eclipse padding-r-l text-pink-600 text-weight-500">
-            <span *ngIf="!data.eventItems" class="text-gray-700">{{'events_handler.main.add_event_title' | translate}}</span>
-            <span *ngIf="data.eventItems"><span class="text-gray-700">#{{data.eventItems.id}}</span> {{data.eventItems.name}}</span>
-        </h1>
+  <div class="event-heading clear-both full-width height-45 display-flex flex-space-between">
+    <h1
+      class="no-margin height-45 line-height-45 font-full-plus-one-tenth-em text-eclipse padding-r-l text-pink-600 text-weight-500">
+      <span *ngIf="!data.eventItems" class="text-gray-700">{{'events_handler.main.add_event_title' | translate}}</span>
+      <span *ngIf="data.eventItems"><span class="text-gray-700">#{{data.eventItems.id}}</span> {{data.eventItems.name}}</span>
+    </h1>
 
-        <div class="display-flex flex-direction-row-reverse">
-            <button (click)="cancelBtn($event)"
-                    type="button"
-                    class="no-border cursor-pointer no-bg text-center width-45 height-45 text-gray-600 no-padding">
-                <mat-icon class="line-height-30">close</mat-icon>
-            </button>
-            <button *ngIf="data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" (click)="deleteEvent()"
-                    type="button"
-                    class="no-border cursor-pointer no-bg text-center width-45 height-45 text-danger no-padding">
-                <mat-icon class="line-height-30">delete</mat-icon>
-            </button>
-            <button *ngIf="data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" (click)="enableForm()"
-                    type="button"
-                    class="no-border cursor-pointer no-bg text-center width-45 height-45 text-green-600 no-padding">
-                <mat-icon class="line-height-30">edit</mat-icon>
-            </button>
-        </div>
+    <div class="display-flex flex-direction-row-reverse">
+      <button (click)="cancelBtn($event)"
+              type="button"
+              class="no-border cursor-pointer no-bg text-center width-45 height-45 text-gray-600 no-padding">
+        <mat-icon class="line-height-30">close</mat-icon>
+      </button>
+      <button *ngIf="data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" (click)="deleteEvent()"
+              type="button"
+              class="no-border cursor-pointer no-bg text-center width-45 height-45 text-danger no-padding">
+        <mat-icon class="line-height-30">delete</mat-icon>
+      </button>
+      <button *ngIf="data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" (click)="enableForm()"
+              type="button"
+              class="no-border cursor-pointer no-bg text-center width-45 height-45 text-green-600 no-padding">
+        <mat-icon class="line-height-30">edit</mat-icon>
+      </button>
     </div>
+  </div>
 
-    <div class="full-width height-full-minus-45">
-        <div [ngClass]="[rtlDirection ? 'float-right' : 'float-left' , data.eventItems ? 'event-form-container' : 'full-width']"
-             class="full-height padding-full overflow-hide pos-rel">
-            <form *ngIf="(form && data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email) || (form && !data.eventItems)" [formGroup]="form" (submit)="submit()" class="full-height"
-                  [dir]="rtlDirection ? 'rtl' : 'ltr'">
-                <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
-                    <div class="display-flex margin-r-l-reverse">
-                        <div class="full-width padding-r-l">
-                            <mat-form-field class="full-width font-9-em">
-                                <input matInput placeholder="{{'events_handler.form.event_name' | translate}}"
-                                       class="full-width" type="text"
-                                       formControlName="name" required tabindex="1">
-                                <mat-label>
-                                    {{'events_handler.form.event_name' | translate}}
-                                </mat-label>
+  <div class="full-width height-full-minus-45">
+    <div
+      [ngClass]="[rtlDirection ? 'float-right' : 'float-left' , data.eventItems ? 'event-form-container' : 'full-width']"
+      class="full-height padding-full overflow-hide pos-rel">
+      <form
+        *ngIf="(form && data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email) || (form && !data.eventItems)"
+        [formGroup]="form" (submit)="submit()" class="full-height"
+        [dir]="rtlDirection ? 'rtl' : 'ltr'">
+        <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
+          <div class="display-flex margin-r-l-reverse">
+            <div class="full-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <input matInput placeholder="{{'events_handler.form.event_name' | translate}}"
+                       class="full-width" type="text"
+                       formControlName="name" required tabindex="1">
+                <mat-label>
+                  {{'events_handler.form.event_name' | translate}}
+                </mat-label>
 
-                                <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
-                                    {{'events_handler.form.event_name_error' | translate}}
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="display-flex margin-r-l-reverse">
-                        <div class="half-width padding-r-l">
-                            <mat-form-field class="full-width font-9-em">
-                                <mat-label>{{'events_handler.form.action_type' | translate}}</mat-label>
-                                <mat-select (selectionChange)="onChangeAction($event)" formControlName="actionType"
-                                            required tabIndex="5">
-                                    <mat-option *ngFor="let action of actionTypeList" [value]="action">
-                                        {{action.actionDescription}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div *ngIf="actionTypeJobList.length" class="half-width padding-r-l">
-                            <mat-form-field class="full-width font-9-em">
-                                <mat-label>{{'events_handler.form.action_job_type' | translate}}</mat-label>
-                                <mat-select formControlName="actionTypeJobModel" tabIndex="5" required>
-                                    <mat-option *ngFor="let actionJob of actionTypeJobList" [value]="actionJob">
-                                        {{actionJob.description}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="display-flex margin-r-l-reverse ">
-                        <div class="half-width padding-r-l">
-                            <mat-form-field class="full-width font-9-em">
-                                <mat-label>{{'events_handler.form.start_at' | translate}}</mat-label>
-                                <input matInput [matDatepicker]="picker1" readonly
-                                       placeholder="{{'events_handler.form.start_at' | translate}}"
-                                       (focus)="picker1.open()" (click)="picker1.open()"
-                                       (dateChange)="dateToGregorian('startDate', $event)"
-                                       formControlName="startDate" tabindex="8" required>
-                                <mat-datepicker #picker1></mat-datepicker>
-                                <mat-error>
-                                    <span *ngIf="!form.get('startDate').value">{{'events_handler.form.start_at_error' | translate}}</span>
-                                    <span *ngIf="form.get('startDate').value > form.get('endDate').value">{{'events_handler.form.start_stop_compare' | translate}}</span>
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="half-width padding-r-l">
-                            <mat-form-field class="full-width font-9-em">
-                                <mat-label>{{'events_handler.form.start_time' | translate}}</mat-label>
-                                <mat-select formControlName="startTime" tabIndex="9" required>
-                                    <mat-option *ngFor="let hour of hours" [value]="hour">
-                                        {{hour}}
-                                    </mat-option>
-                                </mat-select>
-
-                                <mat-error *ngIf="!form.get('startTime').valid && form.get('startTime').touched">
-                                    {{'events_handler.form.start_time_error' | translate}}
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="quarter-width padding-r-l display-none">
-                            <mat-form-field class="full-width font-9-em">
-                                <mat-label>{{'events_handler.form.stop_at' | translate}}</mat-label>
-                                <input matInput [matDatepicker]="picker2" readonly
-                                       (focus)="picker2.open()" (click)="picker2.open()"
-                                       (dateChange)="dateToGregorian('endDate', $event)"
-                                       formControlName="endDate" tabindex="10">
-                                <mat-datepicker #picker2></mat-datepicker>
-
-                                <mat-error *ngIf="!form.get('endDate').valid && form.get('endDate').touched">
-                                    {{'events_handler.form.stop_at_error' | translate}}
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="quarter-width padding-r-l display-none">
-                            <mat-form-field class="full-width font-9-em">
-                                <mat-label>{{'events_handler.form.stop_time' | translate}}</mat-label>
-                                <mat-select formControlName="endTime" tabIndex="11">
-                                    <mat-option *ngFor="let hour of hours" [value]="hour">
-                                        {{hour}}
-                                    </mat-option>
-                                </mat-select>
-
-                                <mat-error *ngIf="!form.get('endTime').valid && form.get('endTime').touched">
-                                    {{'events_handler.form.stop_time_error' | translate}}
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="display-flex margin-r-l-reverse">
-                        <div class="full-width padding-r-l">
-                            <mat-form-field class="full-width height-80 font-9-em">
-                                <mat-label>{{'events_handler.form.event_description' | translate}}</mat-label>
-                                <textarea matInput formControlName="description"
-                                          required placeholder="{{'events_handler.form.event_description' | translate}}"
-                                          tabindex="12"></textarea>
-                                <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
-                                    {{'events_handler.form.event_name_error' | translate}}
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div style="height: 290px;overflow: overlay;" class="full-width display-flex">
-                        <div class="full-width bg-grey padding-full">
-                            <div class="display-flex margin-r-l-reverse">
-                                <div class="half-width padding-l-full padding-r-full">
-                                    <mat-form-field class="font-8-em full-width custom-select-search" appearance="fill">
-                                        <mat-label>Filter</mat-label>
-                                        <input (keyup)="filterMatTable($event)" type="search" matInput value="">
-                                    </mat-form-field>
-                                </div>
-                                <div class="half-width padding-l-full">
-                                    <mat-form-field class="font-7-em full-width custom-select-search" appearance="fill">
-                                        <mat-label>Category</mat-label>
-                                        <mat-select>
-                                            <mat-option>
-                                                UI Team
-                                            </mat-option>
-                                            <mat-option>
-                                                Designer Team
-                                            </mat-option>
-                                            <mat-option>
-                                                Development Team
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <table mat-table [dataSource]="dataSource" class="full-width">
-                                <!-- Checkbox Column -->
-                                <ng-container matColumnDef="select">
-                                    <th class="padding-l-full" mat-header-cell *matHeaderCellDef>
-                                        <mat-checkbox (change)="$event ? masterToggle() : null"
-                                                      [checked]="selection.hasValue() && isAllSelected()"
-                                                      [indeterminate]="selection.hasValue() && !isAllSelected()">
-                                        </mat-checkbox>
-                                    </th>
-                                    <td mat-cell class="padding-l-full" *matCellDef="let row">
-                                        <mat-checkbox (click)="$event.stopPropagation()"
-                                                      (change)="$event ? selection.toggle(row) : null"
-                                                      [checked]="selection.isSelected(row)">
-                                        </mat-checkbox>
-                                    </td>
-                                </ng-container>
-
-                                <!-- Name Column -->
-                                <ng-container matColumnDef="name">
-                                    <th mat-header-cell *matHeaderCellDef> Name </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                                </ng-container>
-
-                                <!-- Symbol Column -->
-                                <ng-container matColumnDef="symbol">
-                                    <th mat-header-cell *matHeaderCellDef> Phone Number </th>
-                                    <td (click)="$event.stopPropagation()" mat-cell *matCellDef="let element">
-                                        <input (click)="$event.stopPropagation()"  type="tel" matInput placeholder="xxx-xxx-xx-xx"
-                                               (keyup)="onKeyPhoneNumber(element , $event)"
-                                               value="{{element.phoneNumber}}">
-                                    </td>
-                                </ng-container>
-
-                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                                    (click)="selection.toggle(row)">
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <!--                    <div class="display-flex margin-b-full margin-r-l-reverse">
-                                            <div class="full-width padding-r-l">
-                                                <mat-form-field class="full-width height-80 font-9-em">
-                                                    <mat-label>{{'events_handler.form.event_description' | translate}}</mat-label>
-                                                    <textarea matInput formControlName="description"
-                                                              required placeholder="{{'events_handler.form.event_description' | translate}}"
-                                                              tabindex="12"></textarea>
-                                                    <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
-                                                        {{'events_handler.form.event_name_error' | translate}}
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div [ngClass]="editable ? '' : 'pointer-events-none'" cdkDropListGroup
-                                             class="display-flex margin-r-l-reverse">
-                                            <div class="half-width padding-r-l">
-                                                <div class="example-container">
-                                                    <mat-label>{{'events_handler.form.users' | translate}}</mat-label>
-                                                    <div cdkDropList
-                                                         [cdkDropListData]="usersList"
-                                                         class="example-list"
-                                                         (cdkDropListDropped)="drop($event)">
-                                                        <div (click)="transferToRight(user)" class="example-box"
-                                                             *ngFor="let user of usersList" cdkDrag>
-                                                            <span>{{user.name}}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="half-width padding-r-l">
-                                                <div class="example-container">
-                                                    <mat-label>{{'events_handler.form.assign_to' | translate}}</mat-label>
-                                                    <div cdkDropList
-                                                         [cdkDropListData]="form.get('users').value"
-                                                         class="example-list"
-                                                         (cdkDropListDropped)="drop($event)">
-                                                        <div (click)="transferToLeft(user)" class="example-box no-padding"
-                                                             *ngFor="let user of form.get('users').value" cdkDrag>
-                                                            <section class="full-width">
-                                                                <span class="float-right example-box-padding">{{user.name}}</span>
-                                                                <mat-icon *ngIf="!user.editable && editable" (click)="editUser(user , $event)"
-                                                                          class="cursor-pointer font-full-plus-two-tenth-rem text-green-400 float-left example-box-padding">
-                                                                    edit
-                                                                </mat-icon>
-                                                                <mat-icon *ngIf="user.editable" (click)="editUser(user , $event , 'submit')"
-                                                                          class="cursor-pointer font-full-plus-two-tenth-rem text-green-400 float-left example-box-padding">
-                                                                    check
-                                                                </mat-icon>
-                                                                <mat-icon *ngIf="user.editable" (click)="editUser(user , $event , 'close')"
-                                                                          class="cursor-pointer font-full-plus-two-tenth-rem text-danger float-left example-box-padding">
-                                                                    close
-                                                                </mat-icon>
-                                                                <div (click)="$event.stopPropagation()"
-                                                                     class="float-left full-width example-box-padding"
-                                                                     style="box-shadow: rgb(197, 197, 197) 0px 5px 8px -3px"
-                                                                     *ngIf="user.editable">
-                                                                    <mat-form-field class="full-width">
-                                                                        <mat-label>{{'events_handler.form.user_phone' | translate}}</mat-label>
-                                                                        <input type="tel" matInput placeholder="xxx-xxx-xx-xx"
-                                                                               (keyup)="onKeyPhoneNumber(user , $event)"
-                                                                               value="{{user.phoneNumber}}">
-                                                                    </mat-form-field>
-                                                                </div>
-                                                            </section>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
-                </div>
-                <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
-                    <button *ngIf="editable || data.action !== 'detail'"
-                            (click)="cancelBtn($event)"
-                            type="button"
-                            class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
-                        <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
-                    </button>
-
-                    <button mat-raised-button
-                            *ngIf="editable"
-                            [disabled]="!form.valid"
-                            type="submit"
-                            tabindex="13"
-                            class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
-                        <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
-                        <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
-                    </button>
-                </div>
-            </form>
-            <div *ngIf="data.eventItems && data.eventItems.creatorUser.email != loggedInUser.email">
-                <section class="bg-grey round-corner margin-b-full padding-half">
-                    <mat-label class="display-flex font-8-em justify-content-start">
-                        <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">calendar_today</mat-icon>
-                        <span>{{'events_handler.form.event_name' | translate}}</span>
-                    </mat-label>
-                    <div class="font-full-plus-one-tenth-em">{{data.eventItems.name}}</div>
-                </section>
-                <div class="display-flex margin-r-l-reverse">
-                    <section [ngClass]="rtlDirection ? 'margin-r-full' : 'margin-l-full'" class="half-width round-corner bg-grey margin-b-full padding-half">
-                        <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">assignment_turned_in</mat-icon>
-                            <span>{{'events_handler.form.action_type' | translate}}</span>
-                        </mat-label>
-                        <div class="font-full-plus-one-tenth-em">{{data.eventItems.actionType.actionDescription}}</div>
-                    </section>
-                    <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
-                        <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">build_circle</mat-icon>
-                            <span>{{'events_handler.form.action_job_type' | translate}}</span>
-                        </mat-label>
-                        <div class="font-full-plus-one-tenth-em">{{data.eventItems.actionTypeJobModel.description}}</div>
-                    </section>
-                </div>
-
-                <div class="display-flex margin-r-l-reverse">
-                    <section [ngClass]="rtlDirection ? 'margin-r-full' : 'margin-l-full'"  class="half-width round-corner bg-grey margin-b-full padding-half">
-                        <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">today</mat-icon>
-                            <span>{{'events_handler.form.start_at' | translate}}</span>
-                        </mat-label>
-                        <div class="font-full-plus-one-tenth-em">{{dateTimeService.formatDate(data.eventItems.startDate) | jalali}}</div>
-                    </section>
-                    <section class="half-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
-                        <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">access_time</mat-icon>
-                            <span>{{'events_handler.form.start_time' | translate}}</span>
-                        </mat-label>
-                        <div class="font-full-plus-one-tenth-em">{{dateTimeService.formatTime(data.eventItems.startDate)}}</div>
-                    </section>
-                </div>
-
-                <div class="display-flex margin-r-l-reverse">
-                    <section class="full-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
-                        <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">description</mat-icon>
-                            <span>{{'events_handler.form.event_description' | translate}}</span>
-                        </mat-label>
-                        <div class="font-full-plus-one-tenth-em">{{data.eventItems.description}}</div>
-                    </section>
-                </div>
-
-                <div class="display-flex margin-r-l-reverse">
-                    <section class="full-width round-corner bg-grey margin-b-full padding-half margin-r-full margin-l-full">
-                        <mat-label class="display-flex font-8-em justify-content-start">
-                            <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-8-rem display-flex align-items-center">person</mat-icon>
-                            <span>{{'events_handler.form.users' | translate}}</span>
-                        </mat-label>
-                        <div class="font-full-plus-one-tenth-em">
-                            <span *ngIf="!data.eventItems.users.length">{{'events_handler.form.no_users' | translate}}</span>
-                            <ng-container *ngIf="data.eventItems.users.length">
-                                <mat-list *ngFor="let user of data.eventItems.users">
-                                    <mat-list-item class="font-9-em line-height-18 height-25">
-                                        <mat-icon [ngClass]="rtlDirection ? 'justify-content-end' : ''" class="font-7-rem display-flex align-items-center">done</mat-icon> {{user.name}}
-                                    </mat-list-item>
-                                </mat-list>
-                            </ng-container>
-                        </div>
-                    </section>
-                </div>
+                <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
+                  {{'events_handler.form.event_name_error' | translate}}
+                </mat-error>
+              </mat-form-field>
             </div>
-        </div>
-        <div *ngIf="data.eventItems" [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
-             class="event-todo-container full-height padding-mini-t-b pos-rel">
-            <div class="padding-full margin-b-full-3">
-                <h3 [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="no-padding"
-                    mat-subheader>{{'events_handler.main.reminder_title' | translate}}</h3>
-                <button *ngIf="data.eventItems" mat-raised-button
-                        (click)="openAddReminderDialog()"
-                        [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
-                        class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
-                    <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
-                    <span class="padding-mini-r-l">{{'events_handler.main.add_new_reminder' | translate}}</span>
-                </button>
+          </div>
+
+          <div class="display-flex margin-r-l-reverse">
+            <div class="half-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'events_handler.form.action_type' | translate}}</mat-label>
+                <mat-select (selectionChange)="onChangeAction($event)" formControlName="actionType"
+                            required tabIndex="5">
+                  <mat-option *ngFor="let action of actionTypeList" [value]="action">
+                    {{action.actionDescription}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-            <mat-nav-list class="clear-both">
-                <a mat-list-item *ngFor="let reminder of data.eventItems.reminders; last as last">
-                    <button *ngIf="data.eventItems" (click)="deleteReminder($event , reminder)"
-                            type="button"
-                            class="no-border cursor-pointer no-bg text-center width-45 height-45 text-danger no-padding">
-                        <mat-icon class="line-height-30">delete</mat-icon>
-                    </button>
-                    <mat-icon class="padding-r-half" mat-list-icon>calendar_today</mat-icon>
-                    <p mat-line>{{reminder.description}}</p>
-                    <div mat-line class="font-8-rem">{{reminder.startReminder | jalali:rtlDirection}}</div>
-                    <mat-divider class="full-width" [inset]="true" *ngIf="!last"></mat-divider>
-                </a>
-            </mat-nav-list>
+            <div *ngIf="actionTypeJobList.length" class="half-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'events_handler.form.action_job_type' | translate}}</mat-label>
+                <mat-select formControlName="actionTypeJobModel" tabIndex="5" required>
+                  <mat-option *ngFor="let actionJob of actionTypeJobList" [value]="actionJob">
+                    {{actionJob.description}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="display-flex margin-r-l-reverse ">
+            <div class="half-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'events_handler.form.start_at' | translate}}</mat-label>
+                <input matInput [matDatepicker]="picker1" readonly
+                       placeholder="{{'events_handler.form.start_at' | translate}}"
+                       (focus)="picker1.open()" (click)="picker1.open()"
+                       (dateChange)="dateToGregorian('startDate', $event)"
+                       formControlName="startDate" tabindex="8" required>
+                <mat-datepicker #picker1></mat-datepicker>
+                <mat-error>
+                  <span *ngIf="!form.get('startDate').value">{{'events_handler.form.start_at_error' | translate}}</span>
+                  <span
+                    *ngIf="form.get('startDate').value > form.get('endDate').value">{{'events_handler.form.start_stop_compare' | translate}}</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="half-width padding-r-l">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'events_handler.form.start_time' | translate}}</mat-label>
+                <mat-select formControlName="startTime" tabIndex="9" required>
+                  <mat-option *ngFor="let hour of hours" [value]="hour">
+                    {{hour}}
+                  </mat-option>
+                </mat-select>
+
+                <mat-error *ngIf="!form.get('startTime').valid && form.get('startTime').touched">
+                  {{'events_handler.form.start_time_error' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="quarter-width padding-r-l display-none">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'events_handler.form.stop_at' | translate}}</mat-label>
+                <input matInput [matDatepicker]="picker2" readonly
+                       (focus)="picker2.open()" (click)="picker2.open()"
+                       (dateChange)="dateToGregorian('endDate', $event)"
+                       formControlName="endDate" tabindex="10">
+                <mat-datepicker #picker2></mat-datepicker>
+
+                <mat-error *ngIf="!form.get('endDate').valid && form.get('endDate').touched">
+                  {{'events_handler.form.stop_at_error' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="quarter-width padding-r-l display-none">
+              <mat-form-field class="full-width font-9-em">
+                <mat-label>{{'events_handler.form.stop_time' | translate}}</mat-label>
+                <mat-select formControlName="endTime" tabIndex="11">
+                  <mat-option *ngFor="let hour of hours" [value]="hour">
+                    {{hour}}
+                  </mat-option>
+                </mat-select>
+
+                <mat-error *ngIf="!form.get('endTime').valid && form.get('endTime').touched">
+                  {{'events_handler.form.stop_time_error' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="display-flex margin-r-l-reverse">
+            <div class="full-width padding-r-l">
+              <mat-form-field class="full-width height-80 font-9-em">
+                <mat-label>{{'events_handler.form.event_description' | translate}}</mat-label>
+                <textarea matInput formControlName="description"
+                          required placeholder="{{'events_handler.form.event_description' | translate}}"
+                          tabindex="12"></textarea>
+                <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
+                  {{'events_handler.form.event_name_error' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div style="height: 290px;overflow: overlay;" class="full-width display-flex">
+            <div class="full-width bg-grey border-grey padding-full">
+              <div class="display-flex margin-r-l-reverse">
+                <div class="half-width padding-l-full padding-r-full">
+                  <mat-form-field class="font-8-em full-width custom-select-search" appearance="fill">
+                    <mat-label>Filter</mat-label>
+                    <input (keyup)="filterMatTable($event)" type="search" matInput value="">
+                  </mat-form-field>
+                </div>
+                <div class="half-width padding-l-full">
+                  <mat-form-field class="font-7-em full-width custom-select-search" appearance="fill">
+                    <mat-label>Category</mat-label>
+                    <mat-select>
+                      <mat-option>
+                        UI Team
+                      </mat-option>
+                      <mat-option>
+                        Designer Team
+                      </mat-option>
+                      <mat-option>
+                        Development Team
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <table mat-table [dataSource]="dataSource" class="full-width">
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <th class="padding-l-full" mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                  [checked]="selection.hasValue() && isAllSelected()"
+                                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell class="padding-l-full" *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(row) : null"
+                                  [checked]="selection.isSelected(row)">
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef> Name</th>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="symbol">
+                  <th mat-header-cell *matHeaderCellDef> Phone Number</th>
+                  <td (click)="$event.stopPropagation()" mat-cell *matCellDef="let element">
+                    <input (click)="$event.stopPropagation()" type="tel" matInput placeholder="xxx-xxx-xx-xx"
+                           (keyup)="onKeyPhoneNumber(element , $event)"
+                           value="{{element.phoneNumber}}">
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                    (click)="selection.toggle(row)">
+                </tr>
+              </table>
+            </div>
+          </div>
+          <!--                    <div class="display-flex margin-b-full margin-r-l-reverse">
+                                  <div class="full-width padding-r-l">
+                                      <mat-form-field class="full-width height-80 font-9-em">
+                                          <mat-label>{{'events_handler.form.event_description' | translate}}</mat-label>
+                                          <textarea matInput formControlName="description"
+                                                    required placeholder="{{'events_handler.form.event_description' | translate}}"
+                                                    tabindex="12"></textarea>
+                                          <mat-error *ngIf="!form.get('name').valid && form.get('name').touched">
+                                              {{'events_handler.form.event_name_error' | translate}}
+                                          </mat-error>
+                                      </mat-form-field>
+                                  </div>
+                              </div>
+                              <div [ngClass]="editable ? '' : 'pointer-events-none'" cdkDropListGroup
+                                   class="display-flex margin-r-l-reverse">
+                                  <div class="half-width padding-r-l">
+                                      <div class="example-container">
+                                          <mat-label>{{'events_handler.form.users' | translate}}</mat-label>
+                                          <div cdkDropList
+                                               [cdkDropListData]="usersList"
+                                               class="example-list"
+                                               (cdkDropListDropped)="drop($event)">
+                                              <div (click)="transferToRight(user)" class="example-box"
+                                                   *ngFor="let user of usersList" cdkDrag>
+                                                  <span>{{user.name}}</span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="half-width padding-r-l">
+                                      <div class="example-container">
+                                          <mat-label>{{'events_handler.form.assign_to' | translate}}</mat-label>
+                                          <div cdkDropList
+                                               [cdkDropListData]="form.get('users').value"
+                                               class="example-list"
+                                               (cdkDropListDropped)="drop($event)">
+                                              <div (click)="transferToLeft(user)" class="example-box no-padding"
+                                                   *ngFor="let user of form.get('users').value" cdkDrag>
+                                                  <section class="full-width">
+                                                      <span class="float-right example-box-padding">{{user.name}}</span>
+                                                      <mat-icon *ngIf="!user.editable && editable" (click)="editUser(user , $event)"
+                                                                class="cursor-pointer font-full-plus-two-tenth-rem text-green-400 float-left example-box-padding">
+                                                          edit
+                                                      </mat-icon>
+                                                      <mat-icon *ngIf="user.editable" (click)="editUser(user , $event , 'submit')"
+                                                                class="cursor-pointer font-full-plus-two-tenth-rem text-green-400 float-left example-box-padding">
+                                                          check
+                                                      </mat-icon>
+                                                      <mat-icon *ngIf="user.editable" (click)="editUser(user , $event , 'close')"
+                                                                class="cursor-pointer font-full-plus-two-tenth-rem text-danger float-left example-box-padding">
+                                                          close
+                                                      </mat-icon>
+                                                      <div (click)="$event.stopPropagation()"
+                                                           class="float-left full-width example-box-padding"
+                                                           style="box-shadow: rgb(197, 197, 197) 0px 5px 8px -3px"
+                                                           *ngIf="user.editable">
+                                                          <mat-form-field class="full-width">
+                                                              <mat-label>{{'events_handler.form.user_phone' | translate}}</mat-label>
+                                                              <input type="tel" matInput placeholder="xxx-xxx-xx-xx"
+                                                                     (keyup)="onKeyPhoneNumber(user , $event)"
+                                                                     value="{{user.phoneNumber}}">
+                                                          </mat-form-field>
+                                                      </div>
+                                                  </section>
+
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>-->
         </div>
+        <div
+          class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
+          <button *ngIf="editable || data.action !== 'detail'"
+                  (click)="cancelBtn($event)"
+                  type="button"
+                  class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal">
+            <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
+          </button>
+
+          <button mat-raised-button
+                  *ngIf="editable"
+                  [disabled]="!form.valid"
+                  type="submit"
+                  tabindex="13"
+                  class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+            <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
+            <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
+          </button>
+        </div>
+      </form>
+      <div *ngIf="data.eventItems && data.eventItems.creatorUser.email != loggedInUser.email">
+        <section class="bg-grey border-grey round-corner margin-b-full padding-half">
+          <mat-label class="display-flex font-8-em justify-content-start align-items-center">
+            <mat-icon [ngClass]="{'justify-content-end': rtlDirection}"
+                      class="font-8-rem display-flex align-items-center">calendar_today
+            </mat-icon>
+            <span>{{'events_handler.form.event_name' | translate}}</span>
+          </mat-label>
+          <div class="font-full-plus-one-tenth-em">{{data.eventItems.name}}</div>
+        </section>
+        <div class="display-flex margin-r-l-reverse">
+          <section [ngClass]="rtlDirection ? 'margin-r-full' : 'margin-l-full'"
+                   class="half-width round-corner bg-grey border-grey margin-b-full padding-half">
+            <mat-label class="display-flex font-8-em justify-content-start align-items-center">
+              <mat-icon [ngClass]="{'justify-content-end': rtlDirection}"
+                        class="font-8-rem display-flex align-items-center">assignment_turned_in
+              </mat-icon>
+              <span>{{'events_handler.form.action_type' | translate}}</span>
+            </mat-label>
+            <div class="font-full-plus-one-tenth-em">{{data.eventItems.actionType.actionDescription}}</div>
+          </section>
+          <section class="half-width round-corner bg-grey border-grey margin-b-full padding-half margin-r-full margin-l-full">
+            <mat-label class="display-flex font-8-em justify-content-start align-items-center">
+              <mat-icon [ngClass]="{'justify-content-end': rtlDirection}"
+                        class="font-8-rem display-flex align-items-center">build_circle
+              </mat-icon>
+              <span>{{'events_handler.form.action_job_type' | translate}}</span>
+            </mat-label>
+            <div class="font-full-plus-one-tenth-em">{{data.eventItems.actionTypeJobModel.description}}</div>
+          </section>
+        </div>
+
+        <div class="display-flex margin-r-l-reverse">
+          <section [ngClass]="rtlDirection ? 'margin-r-full' : 'margin-l-full'"
+                   class="half-width round-corner bg-grey border-grey margin-b-full padding-half">
+            <mat-label class="display-flex font-8-em justify-content-start align-items-center">
+              <mat-icon [ngClass]="{'justify-content-end': rtlDirection}"
+                        class="font-8-rem display-flex align-items-center">today
+              </mat-icon>
+              <span>{{'events_handler.form.start_at' | translate}}</span>
+            </mat-label>
+            <div
+              class="font-full-plus-one-tenth-em">{{dateTimeService.formatDate(data.eventItems.startDate) | jalali}}</div>
+          </section>
+          <section class="half-width round-corner bg-grey border-grey margin-b-full padding-half margin-r-full margin-l-full">
+            <mat-label class="display-flex font-8-em justify-content-start align-items-center">
+              <mat-icon [ngClass]="{'justify-content-end': rtlDirection}"
+                        class="font-8-rem display-flex align-items-center">access_time
+              </mat-icon>
+              <span>{{'events_handler.form.start_time' | translate}}</span>
+            </mat-label>
+            <div class="font-full-plus-one-tenth-em">{{dateTimeService.formatTime(data.eventItems.startDate)}}</div>
+          </section>
+        </div>
+
+        <div class="display-flex margin-r-l-reverse">
+          <section class="full-width round-corner bg-grey border-grey margin-b-full padding-half margin-r-full margin-l-full">
+            <mat-label class="display-flex font-8-em justify-content-start align-items-center">
+              <mat-icon [ngClass]="{'justify-content-end': rtlDirection}"
+                        class="font-8-rem display-flex align-items-center">description
+              </mat-icon>
+              <span>{{'events_handler.form.event_description' | translate}}</span>
+            </mat-label>
+            <div class="font-full-plus-one-tenth-em">{{data.eventItems.description}}</div>
+          </section>
+        </div>
+
+        <div class="display-flex margin-r-l-reverse">
+          <section class="full-width round-corner bg-grey border-grey margin-b-full padding-half margin-r-full margin-l-full">
+            <mat-label class="display-flex font-8-em justify-content-start align-items-center">
+              <mat-icon [ngClass]="{'justify-content-end': rtlDirection}"
+                        class="font-8-rem display-flex align-items-center">person
+              </mat-icon>
+              <span>{{'events_handler.form.users' | translate}}</span>
+            </mat-label>
+            <div class="font-full-plus-one-tenth-em">
+              <span *ngIf="!data.eventItems.users.length">{{'events_handler.form.no_users' | translate}}</span>
+              <ng-container *ngIf="data.eventItems.users.length">
+                <mat-list *ngFor="let user of data.eventItems.users">
+                  <mat-list-item class="font-9-em line-height-18 height-25">
+                    <mat-icon [ngClass]="{'justify-content-end': rtlDirection}"
+                              class="font-7-rem display-flex align-items-center">done
+                    </mat-icon>
+                    {{user.name}}
+                  </mat-list-item>
+                </mat-list>
+              </ng-container>
+            </div>
+          </section>
+        </div>
+      </div>
     </div>
+    <div *ngIf="data.eventItems" [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
+         class="event-todo-container full-height padding-mini-t-b pos-rel">
+      <div class="padding-full margin-b-full-3">
+        <h3 [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="no-padding"
+            mat-subheader>{{'events_handler.main.reminder_title' | translate}}</h3>
+        <button *ngIf="data.eventItems" mat-raised-button
+                (click)="openAddReminderDialog()"
+                [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
+                class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+          <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
+          <span class="padding-mini-r-l">{{'events_handler.main.add_new_reminder' | translate}}</span>
+        </button>
+      </div>
+      <mat-nav-list class="clear-both">
+        <a mat-list-item *ngFor="let reminder of data.eventItems.reminders; last as last">
+          <button *ngIf="data.eventItems" (click)="deleteReminder($event , reminder)"
+                  type="button"
+                  class="no-border cursor-pointer no-bg text-center width-45 height-45 text-danger no-padding">
+            <mat-icon class="line-height-30">delete</mat-icon>
+          </button>
+          <mat-icon class="padding-r-half" mat-list-icon>calendar_today</mat-icon>
+          <p mat-line>{{reminder.description}}</p>
+          <div mat-line class="font-8-rem">{{reminder.startReminder | jalali:rtlDirection}}</div>
+          <mat-divider class="full-width" [inset]="true" *ngIf="!last"></mat-divider>
+        </a>
+      </mat-nav-list>
+    </div>
+  </div>
 </div>
