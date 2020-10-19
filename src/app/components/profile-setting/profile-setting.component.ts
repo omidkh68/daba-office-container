@@ -7,7 +7,6 @@ import {map, startWith} from 'rxjs/operators';
 import {LoginDataClass} from '../../services/loginData.class';
 import {MessageService} from '../message/service/message.service';
 import {UserInfoService} from '../users/services/user-info.service';
-import {ElectronService} from '../../services/electron.service';
 import {DatetimeService} from '../dashboard/dashboard-toolbar/time-area/service/datetime.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ApproveComponent} from '../approve/approve.component';
@@ -69,9 +68,8 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
               private injector: Injector,
               private translate: TranslateService,
               private messageService: MessageService,
-              private electronService: ElectronService,
               private userInfoService: UserInfoService,
-              private datetimeService: DatetimeService,
+              public dateTimeService: DatetimeService,
               private viewDirection: ViewDirectionService,
               private refreshLoginService: RefreshLoginService,
               private windowManagerService: WindowManagerService,
@@ -92,7 +90,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     );
 
     this.checkMoreClock = false;
-    this.options = datetimeService.timezones;
+    this.options = dateTimeService.timezones;
     this.cityClocksList = [{city: 'Tehran', timezone: 'Asia/Tehran'}];
   }
 
@@ -241,8 +239,9 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
             this.defaultLang = resp.data.lang;
 
             if (hasReload) {
-              this.electronService.remote.app.relaunch();
-              this.electronService.remote.app.exit(0);
+              // TODO By Husin - Comment for Web App
+              //this.electronService.remote.app.relaunch();
+              //this.electronService.remote.app.exit(0);
             }
 
             this.viewDirection.changeDirection(resp.data.lang === 'fa');

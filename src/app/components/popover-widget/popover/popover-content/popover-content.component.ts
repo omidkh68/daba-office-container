@@ -12,7 +12,7 @@ import {DatetimeService} from '../../../dashboard/dashboard-toolbar/time-area/se
 export class PopoverContnetComponent {
   constructor(
     private eventHandlerService: EventHandlerService,
-    private dateTimeService: DatetimeService,
+    public dateTimeService: DatetimeService,
     private popoverRef: PopoverRef<string>,
     @Optional() @Inject(POPOVER_DATA) public data?: any
   ) {

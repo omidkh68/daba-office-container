@@ -2,7 +2,6 @@ import {Inject, Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {TasksComponent} from '../components/tasks/tasks.component';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {ElectronService} from './electron.service';
 import {WindowInterface} from '../components/dashboard/logic/window.interface';
 import {SoftPhoneComponent} from '../components/soft-phone/soft-phone.component';
 import {AdminPanelComponent} from '../components/admin-panel/admin-panel.component';
@@ -27,7 +26,6 @@ export class WindowManagerService {
   private services = new BehaviorSubject(this._services);
 
   constructor(public dialog: MatDialog,
-              private electron: ElectronService,
               @Inject('windowObject') private window: Window) {
     window.addEventListener('resize', this.fixPositionByTransform.bind(this))
   }
@@ -144,7 +142,8 @@ export class WindowManagerService {
   }
 
   fixPositionByTransform(event) {
-    event.preventDefault();
+    // TODO By Husin - Comment for Web App
+    /*event.preventDefault();
     this.windowListArray.map((windowInstance: any) => {
       let temp = this.electron;
       let displays = this.electron.remote.screen.getAllDisplays();
@@ -160,7 +159,7 @@ export class WindowManagerService {
         const size = temp_size / 2;
         element.style.transform = 'translate3d(' + size + 'px, ' + 0 + 'px, 0px)';
       }
-    });
+    });*/
   }
 
   minimizeWindow(service: ServiceItemsInterface) {

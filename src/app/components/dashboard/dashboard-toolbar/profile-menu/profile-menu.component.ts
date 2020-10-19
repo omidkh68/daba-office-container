@@ -5,7 +5,6 @@ import {ApiService} from '../../../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
-import {ElectronService} from '../../../../services/electron.service';
 import {SoftPhoneService} from '../../../soft-phone/service/soft-phone.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
@@ -29,7 +28,6 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
               private router: Router,
               private api: ApiService,
               private injector: Injector,
-              private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private softPhoneService: SoftPhoneService,
               private windowManagerService: WindowManagerService) {

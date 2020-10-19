@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {TranslateService} from '@ngx-translate/core';
+import {getStorage, setStorage} from "./storage.service";
 
-const DEFAULT_LANG = localStorage.getItem('defaultLang');
+const DEFAULT_LANG = getStorage('defaultLang');
 
 @Injectable({
   providedIn: 'root'
@@ -21,14 +22,13 @@ export class ViewDirectionService {
     this.translate.use(this._defaultDirection ? 'fa' : 'en');
 
     this._rtlDirection.next(this._defaultDirection);
-
-    localStorage.setItem('defaultLang', DEFAULT_LANG !== null ? DEFAULT_LANG : 'en');
+    setStorage('defaultLang', DEFAULT_LANG !== null ? DEFAULT_LANG : 'fa');
   }
 
   changeDirection(direction: boolean) {
     this._rtlDirection.next(direction);
 
-    localStorage.setItem('defaultLang', direction === true ? 'fa' : 'en');
+    setStorage('defaultLang', direction === true ? 'fa' : 'en');
 
     if (direction) {
       this.body.classList.remove('direction-en');

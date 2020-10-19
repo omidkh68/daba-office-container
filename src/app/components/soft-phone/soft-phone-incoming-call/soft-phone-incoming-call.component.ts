@@ -1,6 +1,5 @@
 import {Component, Input, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {ElectronService} from '../../../services/electron.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
 import {NotificationService} from '../../../services/notification.service';
@@ -22,8 +21,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private electronService: ElectronService,
-              private translateService: TranslateService,
+  constructor(private translateService: TranslateService,
               private softPhoneService: SoftPhoneService,
               private notificationService: NotificationService) {
     this._subscription.add(
@@ -57,8 +55,8 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
               } else {
                 callerID = this.getTranslate('soft_phone.incoming_call.unknown_caller');
               }
-
-              if (!this.electronService.window.isFocused()) {
+              // TODO By Husin - Comment for Web App
+              /*if (!this.electronService.window.isFocused()) {
                 const notification: Notification = new Notification(`${callerID} ${translateIncomingCall}`, {
                   body: this.getTranslate('soft_phone.incoming_call.do_you_accept'),
                   icon: 'assets/profileImg/' + currentUser.username + '.jpg',
@@ -67,7 +65,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
                 });
 
                 this.notificationService.changeCurrentNotification(notification);
-              }
+              }*/
             }
           }
         }
@@ -78,7 +76,8 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
       this.notificationService.currentNotification.subscribe(notification => {
         if (notification) {
           notification.onclick = () => {
-            this.electronService.window.show();
+            // TODO By Husin - Comment for Web App
+            //this.electronService.window.show();
           };
 
           notification.onclose = () => {

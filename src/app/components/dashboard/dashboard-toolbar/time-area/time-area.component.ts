@@ -36,11 +36,11 @@ export class TimeAreaComponent implements OnInit {
   private _subscription: Subscription = new Subscription();
 
   constructor(private render: Renderer2,
-              private datetimeService: DatetimeService,
+              public dateTimeService: DatetimeService,
               private userInfoService: UserInfoService) {
     this.checkMoreClock = false;
 
-    this.options = datetimeService.timezones;
+    this.options = dateTimeService.timezones;
 
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => {
@@ -84,7 +84,7 @@ export class TimeAreaComponent implements OnInit {
   }
 
   getDateTime(): void {
-    this.datetime = this.datetimeService.changeDatetimeLabel(this.rtlDirection);
+    this.datetime = this.dateTimeService.changeDatetimeLabel(this.rtlDirection);
   }
 
   ngOnInit(): void {

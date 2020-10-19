@@ -7,8 +7,8 @@
       </button>
     </div>
 
-    <webview #webFrame [ngClass]="{'showFrame': !showFrame}"
-             class="webView-frame full-width full-height"></webview>
+    <iframe #webFrame [ngClass]="{'showFrame': !showFrame}"
+             class="webView-frame full-width full-height"></iframe>
   </div>
 
   <div *ngIf="showFrame" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="copy-clipboard-container pos-abs bottom-half">

@@ -58,7 +58,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
                 private viewDirection: ViewDirectionService,
                 private eventHandlerService: EventHandlerService,
                 private injector: Injector,
-                private dateTimeService: DatetimeService,
+                public dateTimeService: DatetimeService,
                 private eventHandlerSocketService: EventHandlerSocketService,
                 private translateService: TranslateService,
                 private messageService: MessageService,

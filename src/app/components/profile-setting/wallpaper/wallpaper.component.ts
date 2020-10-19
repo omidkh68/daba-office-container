@@ -6,7 +6,6 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ElectronService} from '../../../services/electron.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
@@ -175,14 +174,14 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(@Inject('windowObject') public window,
+              @Inject(MAT_DIALOG_DATA) public data: any,
               public dialogRef: MatDialogRef<WallpaperComponent>,
               private http: HttpClient,
               private injector: Injector,
               private translate: TranslateService,
               private viewDirection: ViewDirectionService,
               private messageService: MessageService,
-              private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private refreshLoginService: RefreshLoginService,
               private wallPaperSelector: WallpaperSelectorService,
@@ -200,7 +199,8 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit() {
-    this.environment = this.electronService.remote.screen.getPrimaryDisplay().workAreaSize;
+    // TODO By Husin - Comment for Web App
+    this.environment = window.outerWidth;//this.electronService.remote.screen.getPrimaryDisplay().workAreaSize;
   }
 
   /*code1*/
@@ -266,7 +266,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.uploadFilesSimulator(0);
   }
 
-  formatBytes(bytes, decimals) {
+  formatBytes(bytes, decimals = 0) {
     if (bytes === 0) {
       return '0 Bytes';
     }

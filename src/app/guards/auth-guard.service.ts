@@ -7,12 +7,12 @@ import {LoginInterface} from '../components/login/logic/login.interface';
 import {LoginDataClass} from '../services/loginData.class';
 import {MessageService} from '../components/message/service/message.service';
 import {UserInfoService} from '../components/users/services/user-info.service';
-import {ElectronService} from '../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ChangeStatusService} from '../components/status/services/change-status.service';
 import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
 import {ViewDirectionService} from '../services/view-direction.service';
 import {UserContainerInterface} from '../components/users/logic/user-container.interface';
+import {getStorage} from "../services/storage.service";
 
 export interface DataInterface {
   loginData: LoginInterface,
@@ -31,7 +31,6 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
               private injector: Injector,
               private translate: TranslateService,
               private viewDirection: ViewDirectionService,
-              private electronService: ElectronService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private changeStatusService: ChangeStatusService) {
@@ -62,7 +61,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
   getUserLoginInfo() {
     return new Promise(async (resolve, reject) => {
-      this.getLoginDataFile().then((loginData: LoginInterface) => {
+      this.getLoginDataStorage().then((loginData: LoginInterface) => {
         if (!loginData) {
           reject(false);
         } else {
@@ -73,14 +72,12 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     });
   }
 
-  getLoginDataFile(): Promise<LoginInterface | boolean> {
+  getLoginDataStorage(): Promise<LoginInterface | boolean> {
     return new Promise((resolve, reject) => {
       try {
-        const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+        const loginData = getStorage('loginData');
 
-        const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
-
-        const loginData = this.electronService.fs.readFileSync(loginDataPath, 'utf8');
+        //const loginData = window.localStorage.getItem('loginData');
 
         if (!loginData) {
           reject(false);

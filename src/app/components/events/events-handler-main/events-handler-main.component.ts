@@ -110,7 +110,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
                 private eventHandlerSocketService: EventHandlerSocketService,
                 private viewDirection: ViewDirectionService,
                 private taskCalendarService: TaskCalendarService,
-                private dateTimeService: DatetimeService,
+                public dateTimeService: DatetimeService,
                 private eventHandlerService: EventHandlerService,
                 private windowManagerService: WindowManagerService,
                 private popoverService: PopoverService,
