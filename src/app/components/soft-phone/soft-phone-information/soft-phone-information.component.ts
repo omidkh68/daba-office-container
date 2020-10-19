@@ -1,13 +1,14 @@
 import {
-  AfterContentInit,
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
   Pipe,
-  PipeTransform
+  PipeTransform,
+  SimpleChanges
 } from '@angular/core';
 import {timer} from 'rxjs';
 import * as lodash from 'lodash';
@@ -36,7 +37,7 @@ export interface LoggedInUserExtensionInterface {
   templateUrl: './soft-phone-information.component.html',
   styleUrls: ['./soft-phone-information.component.scss']
 })
-export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, OnDestroy {
+export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
@@ -49,7 +50,7 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
   @Input()
   loggedInUser: UserContainerInterface;
 
-  timerDueTime: number = 5000;
+  timerDueTime: number = 0;
   timerPeriod: number = 15000;
   globalTimer = null;
   globalTimerSubscription: Subscription;
@@ -58,7 +59,8 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
   callPopUpMinimizeStatus: boolean = false;
   softphoneConnectedStatus: boolean = false;
 
-  private extensionStatusSubscription: Subscription;
+  private extensionStatusSubscription: Subscription = new Subscription();
+  private softphoneConnectedStatusSubscription: Subscription = new Subscription();
   private _subscription: Subscription = new Subscription();
 
   constructor(private apiService: ApiService,
@@ -75,16 +77,6 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
     this.filterArgs = {email: this.loggedInUser.email};
   }
 
-  ngAfterContentInit(): void {
-    if (this.softPhoneUsers && this.softPhoneUsers.length) {
-      this.globalTimer = timer(
-        this.timerDueTime, this.timerPeriod
-      );
-
-      this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getExtensionStatus());
-    }
-  }
-
   getExtensionStatus() {
     if (this.extensionStatusSubscription) {
       this.extensionStatusSubscription.unsubscribe();
@@ -99,14 +91,21 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
 
           this.softPhoneService.changeSoftPhoneUsers(extensionsList);
 
-          this.softphoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus();
+          if (this.softphoneConnectedStatusSubscription) {
+            this.softphoneConnectedStatusSubscription.unsubscribe();
+          }
 
-          extensionsList.map(item => {
-            if (item.username === this.loggedInUser.email) {
-              this.loggedInUserExtension = {
-                user: this.loggedInUser,
-                extension: item
-              }
+          this.softphoneConnectedStatusSubscription = this.softPhoneService.currentSoftphoneConnected.subscribe(status => {
+            if (status) {
+              this.softphoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus();
+              extensionsList.map(item => {
+                if (item.username === this.loggedInUser.email) {
+                  this.loggedInUserExtension = {
+                    user: this.loggedInUser,
+                    extension: item
+                  }
+                }
+              });
             }
           });
         }
@@ -140,6 +139,16 @@ export class SoftPhoneInformationComponent implements OnInit, AfterContentInit, 
       this.softPhoneService.sipRegister();
     } else {
       this.softPhoneService.sipUnRegister();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.softPhoneUsers.currentValue) {
+      this.globalTimer = timer(
+        this.timerDueTime, this.timerPeriod
+      );
+
+      this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getExtensionStatus());
     }
   }
 

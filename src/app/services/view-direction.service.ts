@@ -22,7 +22,7 @@ export class ViewDirectionService {
 
     this._rtlDirection.next(this._defaultDirection);
 
-    localStorage.setItem('defaultLang', DEFAULT_LANG !== null ? DEFAULT_LANG : 'fa');
+    localStorage.setItem('defaultLang', DEFAULT_LANG !== null ? DEFAULT_LANG : 'en');
   }
 
   changeDirection(direction: boolean) {

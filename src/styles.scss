@@ -545,11 +545,6 @@ file-preview-container {
     }
   }
 
-  &.main-menu {
-    width: fit-content;
-    max-width: inherit !important;
-  }
-
   &.time-area-menu {
     width: 300px;
   }
@@ -773,6 +768,7 @@ file-preview-container {
 
   .fc-widget-content {
     height: calc(100% / 6) !important;
+    overflow: hidden;
   }
 
   .fc-view-container {

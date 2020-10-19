@@ -27,7 +27,6 @@ export class ProfileSettingService {
 
   updateUser(userInfo, userId): Observable<CheckLoginInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
-    this.headers.headers = this.headers.headers.set('From', 'app_application');
 
     return this.http.patch<CheckLoginInterface>(`${this.API_URL}/users/${userId}`, userInfo, this.headers);
   }

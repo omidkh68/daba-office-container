@@ -31,7 +31,6 @@ export class ApiService {
 
   boards(email: string): Observable<ResultInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
-    this.headers.headers = this.headers.headers.set('From', 'app_application');
 
     return this.http.get<ResultInterface>(`${this.API_URL}/boards/?email=${email}&page=-1`, this.headers);
   }
