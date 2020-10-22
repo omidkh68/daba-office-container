@@ -36,3 +36,9 @@ export interface ResultInterface {
     users: UsersResultInterface;
   };
 }
+
+export interface ResultIncompleteTaskInterface {
+  result: number;
+  message: string;
+  contents: TaskInterface[];
+}

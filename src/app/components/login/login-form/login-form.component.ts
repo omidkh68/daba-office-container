@@ -72,7 +72,6 @@ export class LoginFormComponent implements OnInit {
       resolve(true);
     });
   }
-
   // todo: remove comment by ebi
 
   login() {

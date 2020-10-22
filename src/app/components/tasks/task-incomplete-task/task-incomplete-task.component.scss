@@ -1,0 +1,39 @@
+.title-task {
+  text-overflow: ellipsis;
+}
+
+.flex-grow-1 {
+  flex-grow: 1 !important;
+}
+
+.transform-origin-50 {
+  transform-origin: 50% 50%;
+}
+
+.left-3 {
+  left: 3px !important;
+}
+
+.right-3 {
+  right: 3px !important;
+}
+
+.top-3 {
+  top: 3px !important;
+}
+
+.incomplete-task-item {
+  &:hover {
+    box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
+    0 12px 17px 2px rgba(0, 0, 0, 0.10),
+    0 5px 4px 2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.height-220 {
+  height: 220px;
+}
+
+.incomplete-task {
+  padding: 0 .5em .5em .5em !important;
+}
