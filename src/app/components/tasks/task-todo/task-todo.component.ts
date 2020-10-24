@@ -14,6 +14,7 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-task-todo',
@@ -73,6 +74,51 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
         creationDate: ['']
       })
     });
+  }
+
+  changeTodo(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+
+      this.changeTodoPriority(event.container.data);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
+
+  changeTodoPriority(todoList) {
+    let tempTodoList = todoList;
+
+    tempTodoList.map((todo, i) => {
+
+      return todo.priority = i;
+    });
+
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
+
+    this.form.disable();
+
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+    this._subscription.add(
+      this.api.changePriority(tempTodoList).subscribe((resp: any) => {
+
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
+
+        if (resp.result === 1) {
+
+          this.form.enable();
+        }
+      }, (error: HttpErrorResponse) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
+
+        this.refreshLoginService.openLoginDialog(error);
+      })
+    );
   }
 
   getTodoList() {
