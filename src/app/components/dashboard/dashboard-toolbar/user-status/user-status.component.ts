@@ -157,6 +157,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
                   this.openDialogIncompleteTasks(resp.contents);
                 }
               }, (error: HttpErrorResponse) => {
+                this.refreshLoginService.openLoginDialog(error);
               })
             );
           }
