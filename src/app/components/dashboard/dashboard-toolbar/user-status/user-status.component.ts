@@ -117,9 +117,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
         })
       );
     } else {
-      this.openSoftPhone().then(() => {
-        this.openIncompleteTasks();
-      });
+      this.openSoftPhone();
     }
 
 
