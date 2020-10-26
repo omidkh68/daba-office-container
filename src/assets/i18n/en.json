@@ -199,6 +199,9 @@
       "week": "Week",
       "day": "Day",
       "list": "List"
+    },
+    "incomplete_task": {
+      "applicable_tasks": "Applicable tasks"
     }
   },
   "login_info": {

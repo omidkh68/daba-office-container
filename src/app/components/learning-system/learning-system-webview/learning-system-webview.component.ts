@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {WebViewService} from '../service/web-view.service';
+import {RefreshInterface} from '../logic/refresh.interface';
 import {ElectronService} from '../../../services/electron.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {RefreshInterface} from '../logic/refresh.interface';
 
 @Component({
   selector: 'app-learning-system-webview',
@@ -69,5 +69,9 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
 
   ngOnDestroy(): void {
     this.webViewService.changeRefreshWebView({doRefresh: false, visible: false});
+
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

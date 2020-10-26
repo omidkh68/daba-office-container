@@ -199,6 +199,9 @@
       "week": "هفته",
       "day": "روز",
       "list": "لیست"
+    },
+    "incomplete_task": {
+      "applicable_tasks": "تسک های قابل اجرا"
     }
   },
   "login_info": {

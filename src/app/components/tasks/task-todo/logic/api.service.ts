@@ -27,7 +27,6 @@ export class ApiService {
 
   getTodoList(taskId: number): Observable<TodoInterface[]> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
-    this.headers.headers = this.headers.headers.set('From', 'app_application');
 
     return this.http.get<TodoInterface[]>(`${this.API_URL}/todo/?taskId=${taskId}`, this.headers);
   }
@@ -42,6 +41,12 @@ export class ApiService {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     return this.http.patch<TodoInterface>(`${this.API_URL}/todo`, todo, this.headers);
+  }
+
+  changePriority(todo: TodoInterface[]): Observable<TodoInterface> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+
+    return this.http.patch<TodoInterface>(`${this.API_URL}/todo/changePriority`, todo, this.headers);
   }
 
   deleteTodo(todoInfo: TodoTaskInterface) {

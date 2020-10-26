@@ -1,15 +1,18 @@
 import {Subject} from 'rxjs/internal/Subject';
 import {interval} from 'rxjs';
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnDestroy, OnInit} from '@angular/core';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../../services/loading-indicator.service';
 import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../status/logic/api.service';
+import {ApiService as TasksApiService} from '../../../tasks/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../message/service/message.service';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {ApproveComponent} from '../../../approve/approve.component';
 import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../../login/services/refresh-login.service';
 import {ChangeStatusService} from '../../../status/services/change-status.service';
 import {UserStatusInterface} from '../../../status/logic/status-interface';
@@ -17,8 +20,9 @@ import {WindowManagerService} from '../../../../services/window-manager.service'
 import {ChangeStatusComponent} from '../../../status/change-status/change-status.component';
 import {ServiceItemsInterface} from '../../logic/service-items.interface';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
-import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../../services/loading-indicator.service';
 import {StatusChangeResultInterface} from '../../../status/logic/result-interface';
+import {TaskIncompleteTaskComponent} from '../../../tasks/task-incomplete-task/task-incomplete-task.component';
+import {ResultIncompleteTaskInterface} from '../../../tasks/logic/board-interface';
 
 export interface TimeSpan {
   hours: number;
@@ -52,6 +56,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
   constructor(public dialog: MatDialog,
               private injector: Injector,
               private apiService: ApiService,
+              private tasksApiService: TasksApiService,
               private userInfoService: UserInfoService,
               private changeStatusService: ChangeStatusService,
               private refreshLoginService: RefreshLoginService,
@@ -106,12 +111,17 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
             );
           }
 
-          this.openSoftPhone();
+          this.openSoftPhone().then(() => {
+            this.openIncompleteTasks();
+          });
         })
       );
     } else {
-      this.openSoftPhone();
+      this.openSoftPhone().then(() => {
+        this.openIncompleteTasks();
+      });
     }
+
 
     interval(1000).subscribe(() => {
       if (!this.changeDetector['destroyed']) {
@@ -126,6 +136,35 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     });
 
     this.changeDetector.detectChanges();
+  }
+
+  openIncompleteTasks() {
+    this.loggedInUser.services.map(userService => {
+
+      const serviceName = userService.name.replace(' ', '_').toLowerCase();
+
+      if (serviceName === 'project_service') {
+
+        const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();
+
+        if (service) {
+          if (this.loginData && this.loginData.token_type) {
+
+            this.tasksApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+            this._subscription.add(
+              this.tasksApiService.incompleteTasks(this.loggedInUser.email).subscribe((resp: ResultIncompleteTaskInterface) => {
+                if (resp.result === 1 && resp.contents.length !== 0) {
+
+                  this.openDialogIncompleteTasks(resp.contents);
+                }
+              }, (error: HttpErrorResponse) => {
+              })
+            );
+          }
+        }
+      }
+    });
   }
 
   changeStatus() {
@@ -168,19 +207,36 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
   }
 
   openSoftPhone() {
-    setTimeout(() => {
-      this.loggedInUser.services.map(userService => {
-        const serviceName = userService.name.replace(' ', '_').toLowerCase();
+    return new Promise((resolve) => {
+      setTimeout(() => {
 
-        if (serviceName === 'softphones_service') {
-          const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();
+        this.loggedInUser.services.map(userService => {
+          const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
-          if (service) {
-            this.openService(service);
+          if (serviceName === 'softphones_service') {
+            const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();
+            if (service) {
+              this.openService(service);
+              resolve();
+            }
+          } else {
+            resolve();
           }
-        }
-      });
-    }, 2000);
+        });
+      }, 2000);
+    });
+  }
+
+  openDialogIncompleteTasks(taskList) {
+    const dialogRef = this.dialog.open(TaskIncompleteTaskComponent, {
+      data: taskList,
+      autoFocus: false,
+      width: '500px',
+      height: '300px',
+      panelClass: 'status-dialog'
+    });
+
+    this.windowManagerService.dialogOnTop(dialogRef.id);
   }
 
   openService(service: ServiceItemsInterface) {

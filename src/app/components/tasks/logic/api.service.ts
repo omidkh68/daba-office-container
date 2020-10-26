@@ -3,7 +3,7 @@ import {AppConfig} from '../../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {TaskInterface} from './task-interface';
-import {ResultInterface} from './board-interface';
+import {ResultIncompleteTaskInterface, ResultInterface} from './board-interface';
 import {FilterInterface} from './filter-interface';
 import {TaskDurationInterface} from './task-duration-interface';
 import {ActivityInterface} from '../task-activity/logic/activity-interface';
@@ -14,7 +14,7 @@ import {ActivityInterface} from '../task-activity/logic/activity-interface';
 export class ApiService {
   public accessToken = '';
   private API_URL = AppConfig.CONTAINER_URL + '/project';
-  // private API_URL = AppConfig.API_URL;
+  //private API_URL = AppConfig.API_URL;
 
   /**
    * @type {HttpHeaders}
@@ -31,7 +31,6 @@ export class ApiService {
 
   boards(email: string): Observable<ResultInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
-    this.headers.headers = this.headers.headers.set('From', 'app_application');
 
     return this.http.get<ResultInterface>(`${this.API_URL}/boards/?email=${email}&page=-1`, this.headers);
   }
@@ -100,5 +99,12 @@ export class ApiService {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     return this.http.get<ActivityInterface[]>(`${this.API_URL}/boards/task/getActivities?taskId=${taskId}`, this.headers);
+  }
+
+  incompleteTasks(email: string): Observable<ResultIncompleteTaskInterface> {
+    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
+    this.headers.headers = this.headers.headers.set('From', 'app_application');
+
+    return this.http.get<ResultIncompleteTaskInterface>(`${this.API_URL}/boards/getIncompleteTasks/?email=${email}`, this.headers);
   }
 }

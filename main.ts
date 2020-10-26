@@ -23,7 +23,6 @@ function createWindow(): BrowserWindow {
     maximizable: true,
     center: true,
     autoHideMenuBar: true,
-    icon: join(__dirname, 'assets/icons/favicon.256x256.png'),
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,

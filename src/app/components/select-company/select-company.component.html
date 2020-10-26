@@ -9,7 +9,7 @@
               class="full-width">
       <mat-list-item (click)="goToHome(company.id)" *ngFor="let company of companies; let i = index"
                      [dir]="rtlDirection ? 'rtl' : 'ltr'"
-                     [ngClass]="i !== companies.length - 1 ? 'margin-b-full' : ''"
+                     [ngClass]="{'margin-b-full': i !== companies.length - 1}"
                      class="company-item pos-rel cursor-pointer height-70 mat-elevation-z3 bg-white round-corner transition overflow-hide">
         <div class="padding-full display-flex flex-space-between full-height align-items-center full-width">
           <span class="company-name transition">{{company.name}}</span>

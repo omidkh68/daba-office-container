@@ -5,6 +5,7 @@ export interface TodoInterface {
   isChecked?: number;
   text: string;
   creationDate?: string;
+  priority?: string;
 }
 
 export interface TodoTaskInterface {
