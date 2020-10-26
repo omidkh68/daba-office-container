@@ -54,7 +54,7 @@
             </a>
           </span>
 
-          <a (click)="descriptionTask(element.description)" *ngIf="element.description.length"
+          <a (click)="descriptionTask(element)" *ngIf="element.description.length"
              class="padding-mini-r-l  line-height-30 font-9-em overflow-hide text-weight-normal no-box-shadow cursor-pointer">
             <span class="padding-mini-r-l text-blue">{{'tasks.task_detail.overview_description' | translate}}</span>
           </a>
