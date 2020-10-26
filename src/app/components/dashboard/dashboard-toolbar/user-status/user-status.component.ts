@@ -109,11 +109,13 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
                 }
               })
             );
+
+            setTimeout(() =>{
+              this.openIncompleteTasks();
+            }, 2000);
           }
 
-          this.openSoftPhone().then(() => {
-            this.openIncompleteTasks();
-          });
+          this.openSoftPhone();
         })
       );
     } else {
