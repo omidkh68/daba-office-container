@@ -539,6 +539,7 @@ file-preview-container {
     position: relative;
     background: none;
     overflow: hidden;
+    width: 250px;
 
     &::before {
       @extend %before-light-bg;

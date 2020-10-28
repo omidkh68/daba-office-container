@@ -72,7 +72,6 @@ export class LoginFormComponent implements OnInit {
       resolve(true);
     });
   }
-  // todo: remove comment by ebi
 
   login() {
     this.form.disable();
@@ -89,8 +88,8 @@ export class LoginFormComponent implements OnInit {
           if (this.dialogData) {
             this.dialogRef.close();
           } else {
-            // this.router.navigateByUrl(`/home/selectCompany`);
-            this.router.navigateByUrl(`/`);
+            this.router.navigateByUrl(`/selectCompany`);
+            // this.router.navigateByUrl(`/`);
           }
         } else {
           this.showErrorLogin();

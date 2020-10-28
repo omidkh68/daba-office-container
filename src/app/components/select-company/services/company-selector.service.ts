@@ -6,11 +6,23 @@ import {CompanyInterface} from '../logic/company-interface';
   providedIn: 'root'
 })
 export class CompanySelectorService {
-  private _companyList: Array<CompanyInterface> | null = null;
+  private _companyList: Array<CompanyInterface> = null;
   private companyList = new BehaviorSubject(this._companyList);
   public currentCompanyList = this.companyList.asObservable();
 
-  changeCompanyList(companyList: Array<CompanyInterface> | null) {
+  private _selectedCompany: CompanyInterface = null;
+  private selectedCompany = new BehaviorSubject(this._selectedCompany);
+  // public currentSelectedCompany = this.selectedCompany.asObservable();
+
+  changeCompanyList(companyList: Array<CompanyInterface>) {
     this.companyList.next(companyList);
+  }
+
+  changeSelectedCompany(selectedCompany: CompanyInterface) {
+    this.selectedCompany.next(selectedCompany);
+  }
+
+  get currentCompany() {
+    return this.selectedCompany.getValue();
   }
 }

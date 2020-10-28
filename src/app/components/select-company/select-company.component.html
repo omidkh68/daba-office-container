@@ -7,7 +7,7 @@
 
     <mat-list [@listAnimation]="companies.length"
               class="full-width">
-      <mat-list-item (click)="goToHome(company.id)" *ngFor="let company of companies; let i = index"
+      <mat-list-item (click)="goHome(company)" *ngFor="let company of companies; let i = index"
                      [dir]="rtlDirection ? 'rtl' : 'ltr'"
                      [ngClass]="{'margin-b-full': i !== companies.length - 1}"
                      class="company-item pos-rel cursor-pointer height-70 mat-elevation-z3 bg-white round-corner transition overflow-hide">
@@ -23,7 +23,7 @@
       </mat-list-item>
     </mat-list>
 
-    <div class="pos-abs bottom-full-reverse-2">
+    <div class="pos-abs bottom-full-reverse-2" [ngClass]="showBackLink ? '' : 'display-none'">
       <a (click)="goToLogin()" class="display-flex text-white align-items-center cursor-pointer">
         <mat-icon>{{rtlDirection ? 'keyboard_arrow_right' : 'keyboard_arrow_left'}}</mat-icon>
 

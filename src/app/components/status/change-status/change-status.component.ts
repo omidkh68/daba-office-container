@@ -67,7 +67,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
           this.form.patchValue({
             status: this.currentUserStatus.status_detail
-          })
+          });
         })
       );
     });

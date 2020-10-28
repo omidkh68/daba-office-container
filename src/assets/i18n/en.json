@@ -201,7 +201,7 @@
       "list": "List"
     },
     "incomplete_task": {
-      "applicable_tasks": "Applicable tasks"
+      "incomplete_tasks": "Incomplete Tasks"
     }
   },
   "login_info": {

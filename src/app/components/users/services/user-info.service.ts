@@ -65,6 +65,6 @@ export class UserInfoService {
 
     const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
 
-    this.electronService.fs.writeFileSync(loginDataPath, null);
+    this.electronService.fs.writeFileSync(loginDataPath, '');
   }
 }

@@ -1,7 +1,6 @@
 import {Subject} from 'rxjs/internal/Subject';
 import {interval} from 'rxjs';
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnDestroy, OnInit} from '@angular/core';
-import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../../services/loading-indicator.service';
 import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../status/logic/api.service';
@@ -20,6 +19,7 @@ import {WindowManagerService} from '../../../../services/window-manager.service'
 import {ChangeStatusComponent} from '../../../status/change-status/change-status.component';
 import {ServiceItemsInterface} from '../../logic/service-items.interface';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
+import {LoadingIndicatorInterface} from '../../../../services/loading-indicator.service';
 import {StatusChangeResultInterface} from '../../../status/logic/result-interface';
 import {TaskIncompleteTaskComponent} from '../../../tasks/task-incomplete-task/task-incomplete-task.component';
 import {ResultIncompleteTaskInterface} from '../../../tasks/logic/board-interface';
@@ -56,15 +56,14 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
   constructor(public dialog: MatDialog,
               private injector: Injector,
               private apiService: ApiService,
+              private messageService: MessageService,
               private tasksApiService: TasksApiService,
               private userInfoService: UserInfoService,
+              private changeDetector: ChangeDetectorRef,
+              private translateService: TranslateService,
               private changeStatusService: ChangeStatusService,
               private refreshLoginService: RefreshLoginService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private translateService: TranslateService,
-              private changeDetector: ChangeDetectorRef,
-              private windowManagerService: WindowManagerService,
-              private messageService: MessageService) {
+              private windowManagerService: WindowManagerService) {
     super(injector, userInfoService);
   }
 
@@ -110,9 +109,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
               })
             );
 
-            setTimeout(() =>{
-              this.openIncompleteTasks();
-            }, 2000);
+            setTimeout(() => this.openIncompleteTasks(), 2000);
           }
 
           this.openSoftPhone();
@@ -122,15 +119,12 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
       this.openSoftPhone();
     }
 
-
     interval(1000).subscribe(() => {
       if (!this.changeDetector['destroyed']) {
         this.changeDetector.detectChanges();
       }
 
-      const currentTime = this.userCurrentStatus && this.userCurrentStatus.end_time === null ?
-        this.userCurrentStatus.start_time :
-        moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+      const currentTime = this.userCurrentStatus && this.userCurrentStatus.end_time === null ? this.userCurrentStatus.start_time : moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
       this.getElapsedTime(currentTime);
     });
@@ -140,22 +134,18 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
 
   openIncompleteTasks() {
     this.loggedInUser.services.map(userService => {
-
       const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
       if (serviceName === 'project_service') {
-
         const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();
 
         if (service) {
           if (this.loginData && this.loginData.token_type) {
-
             this.tasksApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
             this._subscription.add(
               this.tasksApiService.incompleteTasks(this.loggedInUser.email).subscribe((resp: ResultIncompleteTaskInterface) => {
                 if (resp.result === 1 && resp.contents.length !== 0) {
-
                   this.openDialogIncompleteTasks(resp.contents);
                 }
               }, (error: HttpErrorResponse) => {
@@ -186,7 +176,6 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
 
     let hours = 0;
     let minutes = 0;
-    let seconds = 0;
 
     if (totalSeconds >= 3600) {
       hours = Math.floor(totalSeconds / 3600);
@@ -198,26 +187,25 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
       totalSeconds -= 60 * minutes;
     }
 
-    seconds = totalSeconds;
-
     this.currentTimer = {
       hours: hours,
       minutes: minutes,
-      seconds: seconds
+      seconds: totalSeconds
     };
   }
 
   openSoftPhone() {
     return new Promise((resolve) => {
       setTimeout(() => {
-
         this.loggedInUser.services.map(userService => {
           const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
           if (serviceName === 'softphones_service') {
             const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();
+
             if (service) {
               this.openService(service);
+
               resolve();
             }
           } else {
@@ -254,6 +242,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     }
 
     this.destroyed$.next();
+
     this.destroyed$.complete();
   }
 }

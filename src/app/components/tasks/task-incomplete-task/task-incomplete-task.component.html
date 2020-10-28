@@ -2,7 +2,7 @@
      [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <div class="height-full-minus-45 full-width">
     <h1 class="margin-b-full-plus-half text-gray-800 font-full-em text-weight-500 margin-b-full line-height-10">
-      {{'tasks.incomplete_task.applicable_tasks' | translate}}
+      {{'tasks.incomplete_task.incomplete_tasks' | translate}}
     </h1>
 
     <div [ngClass]="rtlDirection ? 'left-3' : 'right-3'"
@@ -16,20 +16,19 @@
     </div>
 
     <mat-list class="incomplete-task full-width height-220 overflow-x-hide overflow-y-auto">
-
       <mat-list-item *ngFor="let task of taskList; let i = index"
                      [dir]="rtlDirection ? 'rtl' : 'ltr'"
                      [ngClass]="i !== taskList.length - 1 ? 'margin-b-full' : ''"
                      class="incomplete-task-item pos-rel height-55 mat-elevation-z1 bg-white round-corner transition overflow-hide">
-
-        <div class="padding-l-half padding-r-half display-flex flex-space-between full-height align-items-center full-width">
-
+        <div
+          class="padding-l-half padding-r-half display-flex flex-space-between full-height align-items-center full-width">
           <span class="width-25 height-25 round-corner-all mat-elevation-z1 pos-rel"
                 [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                 matTooltip="{{'tasks.boards.task_percentage' | translate}}"
                 [matTooltipPosition]="rtlDirection ? 'left' : 'right'">
 
-            <span class="font-6-em text-gray-800 pos-abs left-0 right-0 top-0 bottom-0 margin-auto text-center line-height-25 text-weight-500">
+            <span
+              class="font-6-em text-gray-800 pos-abs left-0 right-0 top-0 bottom-0 margin-auto text-center line-height-25 text-weight-500">
               {{task.percentage}}
             </span>
 
@@ -42,22 +41,20 @@
             </mat-progress-spinner>
           </span>
 
-          <span class="company-name transition font-8-em overflow-hide white-space-nowrap title-task full-width flex-grow-1">{{task.taskName}}</span>
+          <span
+            class="company-name transition font-8-em overflow-hide white-space-nowrap title-task full-width flex-grow-1">{{task.taskName}}</span>
 
           <div class="overflow-hide width-25 full-height cursor-pointer"
-                (click)="changeStatus(task)">
-            <mat-icon class="arrow transition font-full-plus-half-em full-height full-width text-green-500 line-height-55 transform-origin-50 text-center"
-                      [ngClass]="rtlDirection ? 'rotate-180' : ''">
+               (click)="changeStatus(task)">
+            <mat-icon
+              class="arrow transition font-full-plus-half-em full-height full-width text-green-500 line-height-55 transform-origin-50 text-center"
+              [ngClass]="rtlDirection ? 'rotate-180' : ''">
               play_arrow
             </mat-icon>
           </div>
-
         </div>
-
       </mat-list-item>
-
     </mat-list>
-
   </div>
 
   <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
@@ -93,7 +90,6 @@
                  repeatCount="indefinite"></animate>
         </rect>
       </svg>
-
     <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
   </div>
 </div>

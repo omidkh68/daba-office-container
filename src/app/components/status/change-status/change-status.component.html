@@ -52,7 +52,8 @@
     </div>
 
     <div class="height-30 full-width">
-      <button [disabled]="!form.valid" class="green-gradient text-white full-width font-9-em" mat-raised-button
+      <button [disabled]="!form.valid || (loggedInUser.user_status.status_detail.id === form.get('status').value.id)"
+              class="green-gradient text-white full-width font-9-em" mat-raised-button
               type="submit">
         {{'status.apply_status' | translate}}
       </button>
