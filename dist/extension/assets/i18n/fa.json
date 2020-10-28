@@ -1,0 +1,353 @@
+{
+  "global": {
+    "search": "جستجو...",
+    "name": "نام",
+    "descriptions": "توضیحات",
+    "name_error": "لطفا نام را وارد نمایید",
+    "family": "نام خانوادگی",
+    "family_error": "لطفا نام خانوادگی را وارد نمایید",
+    "extension": "شماره",
+    "extension_placeholder": "شماره تلفن",
+    "extension_error": "لطفا شماره را وارد نمایید",
+    "submit": "ثبت",
+    "dismiss": "انصراف",
+    "hide": "بستن",
+    "active": "فعال",
+    "deactivate": "غیر فعال",
+    "settings": "تنظیمات",
+    "filter": "فیلتر",
+    "reset_filter": "حذف فیلتر",
+    "no_result": "موردی نیست",
+    "minutes": "دقیقه",
+    "hours": "ساعت",
+    "pagination": {
+      "item_per_page": "تعداد در هر صفحه",
+      "from": "از"
+    },
+    "from_date": "از تاریخ",
+    "to_date": "تا تاریخ",
+    "date_error": "لطغا تاریخ را انتخاب نمایید",
+    "confirm": "تأیید",
+    "loading": "در حال بارگزاری ...",
+    "reconnecting": "در حال اتصال ...",
+    "online": "شما متصل به شبکه هستید",
+    "offline": "اتصال قطع می باشد! شما متصل به شبکه نمی باشید",
+    "email": "ایمیل",
+    "email_error": "لطفا ایمل را وارد نمایید",
+    "password": "پسورد",
+    "password_error": "لطفا پسورد را وارد نمایید",
+    "items": "مورد",
+    "done": "تأیید",
+    "enter": "ورود"
+  },
+  "dashboard": {
+    "dashboard_toolbar": {
+      "service_list": "سرویس ها",
+      "reminder": "یادآوری ها",
+      "active_clocks": "ساعات جهانی",
+      "exist_app": "خروج از حساب کاربری"
+    }
+  },
+  "status": {
+    "stop_status": "متوقف کردن این وضعیت",
+    "apply_status": "اعمال وضعیت",
+    "status_description": "توضیح وضعیت",
+    "status_description_error": "توضیح وضعیت را وارد نمایید",
+    "status_success": "وضعیت مربوطه با موفقیت اعمال گردید",
+    "start_working": "شروع کار",
+    "start_working_time": "آیا میخواهید ساعت کاری خود را شروع کنید؟",
+    "close_app_stop_working": "ساعت کاری شما به اتمام رسید، روز خوبی داشته باشید"
+  },
+  "soft_phone": {
+    "main": {
+      "status": "وضعیت",
+      "address_book": "دفتر تلفن",
+      "dial_pad": "شماره گیر",
+      "call_logs": "گزارش تماس",
+      "public_room": "کنفرانس ها",
+      "no_permission": "دسترسی شما بدرستی تعریف نشده، لطفا با مسئول مربوطه هماهنگ نمایید",
+      "back_to_call": "برگشتن به تماس",
+      "you_are_in_call": "عملیات امکان پذیر نیست، در حال تماس هستید"
+    },
+    "call_pop_up": {
+      "hang_up": "قطع تماس",
+      "unknown_number": "شماره ناشناس",
+      "calling": "در حال تماس ...",
+      "available_users": "افراد حاضر"
+    },
+    "call_to_action": {
+      "timezone": "وقت محلی",
+      "call": "تماس",
+      "message": "پیام",
+      "voice": "صوتی"
+    },
+    "soft_phone_contacts": {
+      "new_contact": "مخاطب جدید",
+      "add_new_contact": "افزودن مخاطب جدید"
+    },
+    "incoming_call": {
+      "accept": "قبول تماس",
+      "decline": "رد تماس",
+      "unknown_caller": "شماره ناشناس",
+      "want_to_call_with_you": "در حال تماس با شماست،",
+      "do_you_accept": "آیا قبول می کنید؟"
+    },
+    "transfer_call": "انتقال تماس",
+    "conferences": {
+      "conference_list": "کنفرانس ها"
+    },
+    "call_logs": {
+      "missed_call": "جواب ندادم",
+      "rejected": "رد تماس کرد",
+      "not_answered": "جواب داده نشد",
+      "busy": "مشغول بود",
+      "answered": "برقرار شد"
+    }
+  },
+  "tasks": {
+    "main": {
+      "add_new_task": "افزودن تسک",
+      "boards": "برد",
+      "calendar": "تقویم"
+    },
+    "form": {
+      "task_name": "نام تسک",
+      "task_name_error": "لطفا نام تسک را وارد نمایید",
+      "task_status": "وضعیت تسک",
+      "task_status_error": "لطفا وضعیت تسک را مشخص نمایید",
+      "task_project": "پروژه",
+      "task_project_error": "لطفا پروژه را مشخص نمایید",
+      "assign_to": "مسئول انجام تسک",
+      "task_calendar": "تقویم تسک ها",
+      "task_calendar_hours": "محاسبه ساعت کاری",
+      "assign_to_error": "لطفا مسئول را مشخص نمایید",
+      "task_durationHours": "مدت زمان کل(ساعت)",
+      "task_durationHours_error": "لطفا مدت انجام را مشخص نمایید",
+      "task_durationMinutes": "مدت زمان کل(دقیقه)",
+      "start_at": "تاریخ شروع",
+      "start_at_error": "لطفا تاریخ شروع را انتخاب نمایید",
+      "stop_at": "تاریخ اتمام",
+      "stop_at_error": "لطفا تاریخ اتمام را انتخاب نمایید",
+      "start_time": "ساعت شروع تسک",
+      "start_time_error": "لطفا ساعت شروع را انتخاب نمایید",
+      "stop_time": "ساعت اتمام تسک",
+      "stop_time_error": "لطفا ساعت اتمام را انتخاب نمایید",
+      "task_description": "توضیح تسک",
+      "trackable_by_mobile": "قابل ردیابی با موبایل",
+      "task_admin_start": "شروع کننده تسک",
+      "task_admin_stop": "متوقف کننده تسک"
+    },
+    "activity": {
+      "activity_list": "لیست فعالیت ها",
+      "task_completion_percentage": "درصد تکمیل بودن تسک",
+      "completed": "تکمیل شده",
+      "not_completed": "تکمیل نشده"
+    },
+    "boards": {
+      "task_percentage": "درصد پیشبرد",
+      "todo_count": "تعداد لیست انجام کار",
+      "todo": "آماده انجام",
+      "in_progress": "در حال انجام",
+      "done": "به اتمام رسیده",
+      "overdue": "زمان انجام تسک به تأخیر خورده است"
+    },
+    "task_stop": {
+      "stop_description": "توضیح توقف تسک",
+      "description": "توضیح تسک",
+      "description_error": "لطفا توضیح تسک را وارد نمایید"
+    },
+    "task_detail": {
+      "overview": "اطلاعات کلی",
+      "overview_description": "نمایش توضیحات",
+      "reports": "گزارشات",
+      "delete_title": "حذف تسک",
+      "delete_text": "آیا از حذف این تسک اطمینان دارید؟"
+    },
+    "task_todo": {
+      "todo_list": "لیست انجام کار",
+      "add_an_item": "یک مورد اضافه کن",
+      "delete_item": "حذف آیتم",
+      "delete_text": "آیا از حذف این آیتم اطمینان دارید؟"
+    },
+    "task_files": {
+      "file_manager": "مدیریت فایل",
+      "drop_files_here": "'فایل رو بکش و بنداز اینجا'",
+      "or": "یا",
+      "click_here": "روی دکمه بزن"
+    },
+    "task_filter": {
+      "all": "همه",
+      "tasks_filter": "فیلتر تسک ها",
+      "tasks_filter_calendar": "فیلتر ساعات کاری",
+      "tasks_filter_calendar_hours": "مجموع ساعات کاری",
+      "filter_types": "نوع فیلتر",
+      "by_create_date": "بر اساس تاریخ ایجاد تسک",
+      "by_project": "بر اساس نام پروژه",
+      "by_user": "بر اساس کاربر مورد نظر",
+      "by_start_date": "بر اساس تاریخ شروع تسک",
+      "by_stop_date": "بر اساس تاریخ اتمام تسک",
+      "by_user_start_date": "بر اساس تاریخ شروع کاربر",
+      "by_user_stop_date": "بر اساس تاریخ اتمام کاربر",
+      "by_started_task": "بر اساس تسک های شروع شده",
+      "by_postponed": "بر اساس تسک های به تعویق افتاده",
+      "in_progress_tasks": "تسک های در حال انجام",
+      "show_disabled_task": "فقط تسک های غیر فعال"
+    },
+    "calendar": {
+      "month": "ماه",
+      "today": "امروز",
+      "week": "هفته",
+      "day": "روز",
+      "list": "لیست"
+    }
+  },
+  "login_info": {
+    "username": "نام کاربری",
+    "username_error": "نام کاربری را وارد نمایید",
+    "password": "گذرواژه",
+    "password_error": "گذرواژه را وارد نمایید",
+    "login": "ورود",
+    "login_successfully": "با موفقیت وارد شدید",
+    "login_failed": "تأیید هویت انجام نشد، لطفا مجدد تلاش نمایید",
+    "refresh_login": "ممکن است توکن اعتبار سنجی شما به اتمام رسیده باشد، لطفا مجدد وارد سیستم شوید"
+  },
+  "conference": {
+    "add": "ایجاد و یا پیوستن به اتاق کنفرانس",
+    "conf_name": "نام اتاق کنفرانس",
+    "conf_name_error": "لطفا نام اتاق کنفرانس را وارد نمایید",
+    "copy_address": "کپی از نام اتاق کنفرانس",
+    "added_to_clipboard": "به clipboard اضافه شد",
+    "conf_address": "آدرس کنفرانس",
+    "conf_address_error": "لطفا آدرس را وارد نمایید",
+    "create_or_join_conference": "ایجاد و یا پیوستن کنفرانس",
+    "exist_from_conf": "خروج از کنفرانس",
+    "for_create_conf_fill_inputs": "برای ایجاد و یا پیوستن به کنفرانس اطلاعات را پر نمایید"
+  },
+  "profileSettings": {
+    "dark_mode": "حالت تیره",
+    "light_mode": "حالت روشن",
+    "profile_settings": "تنظیمات پروفایل",
+    "profile_information": "اطلاعات کاربری",
+    "profile_wallpaper": "تصویر پس زمینه",
+    "edit_user_photo": "ویرایش عکس کابری",
+    "insert_picture": "برای افزودن عکس کلیک کنید",
+    "background_image": "تصویر پس زمینه",
+    "pictures": "تصاویر",
+    "gradients": "طیف های رنگی",
+    "solid_colors": "رنگ های ساده",
+    "drag_drop_text1": "عکس دلخواه خود را در اینجا رها کنید",
+    "drag_drop_text3": "انتخاب فایل پس زمینه",
+    "timezone": "وقت محلی",
+    "timezone_error": "لطفا وقت محلی خود را انتخاب کنید",
+    "name_family": "نام و نام خانوادگی",
+    "profile_update": "اطلاعات پروفایل بروزرسانی شد",
+    "error_upload": "مشکل در آپلود عکس",
+    "choose_wallpaper": "از تصاویر پس زمینه زیر انتخاب کنید:",
+    "change_lang_warning_note": "نکته:",
+    "change_lang_warning_text": "با تغییر زبان، برنامه شما سریعا دوباره بارگذاری خواهد شد."
+  },
+  "events_handler": {
+    "main": {
+      "notification_event_title" : "رویداد جدید",
+      "notification_event_from" : "از طرف: ",
+      "notification_reminder_title" : "یادآور جدید",
+      "notification_reminder_decs" : "از طرف: ",
+      "google_calendar_title": "تقویم گوگل",
+      "container_calendar_title": "تقویم رویداد",
+      "add_new_event": "افزودن رویداد",
+      "add_new_reminder": "افزودن یادآور",
+      "see_more": "مشاهده بیشتر",
+      "event_count": "تعداد رویدادها",
+      "reminder_count": "تعداد",
+      "event_title": "رویداد",
+      "add_event_title": "اضافه کردن رویداد",
+      "update_event_title": "ویرایش رویداد",
+      "events_title": "رویدادها",
+      "reminder_title": "یادآور",
+      "reminders_title": "یادآوری ها"
+    },
+    "event_detail": {
+      "delete_title": "حذف رویداد",
+      "delete_text": "آیا از حذف این رویداد اطمینان دارید؟"
+    },
+    "reminder_detail": {
+      "delete_title": "حذف یادآور",
+      "delete_text": "آیا از حذف این یادآور اطمینان دارید؟"
+    },
+    "form": {
+      "event_name": "نام رویداد",
+      "event_name_error": "لطفا نام رویداد را وارد کنید",
+      "event_desc_error": "لطفا توضیحات رویداد را وارد کنید",
+      "start_at": "تاریخ شروع رویداد",
+      "start_at_error": "لطفا تاریخ شروع را انتخاب نمایید",
+      "stop_at": "تاریخ اتمام",
+      "stop_at_error": "لطفا تاریخ اتمام را انتخاب نمایید",
+      "start_time": "ساعت شروع رویداد",
+      "start_time_error": "لطفا ساعت شروع را انتخاب نمایید",
+      "stop_time": "ساعت اتمام رویداد",
+      "stop_time_error": "لطفا ساعت اتمام را انتخاب نمایید",
+      "start_stop_compare": "تاریخ شروع بزرگتر از تاریخ پایان است",
+      "event_description": "توضیح رویداد",
+      "reminder_description": "توضیح یادآور",
+      "assign_to": "کابران مشترک شده",
+      "action_type": "نوع اکشن",
+      "action_job_type": "نوع اکشن جاب",
+      "users": "کاربران",
+      "no_users": "کاربری برای این رویداد مشترک نشده است",
+      "assign_to_error": "لطفا کاربران مهمان را مشخص کنید",
+      "user_phone": "شماره همراه",
+      "user_email": "ایمیل",
+      "all_day": "تمام روز",
+      "reminder_type": "نوع یادآور",
+      "reminder_status": "وضعیت یادآور",
+      "add_event_successful": "رویداد با موفقیت اضافه شد",
+      "delete_event_successful": "رویداد با موفقیت حذف شد",
+      "delete_event_error": "خطا در حذف رویداد",
+      "update_event_successful": "رویداد با موفقیت ویرایش شد",
+      "update_event_error": "خطا در ویرایش رویداد",
+      "add_reminder_successful": "یادآور با موفقیت اضافه شد",
+      "add_reminder_error": "خطا در ثبت یادآور",
+      "delete_reminder_successful": "یادآور با موفقیت حذف شد",
+      "delete_reminder_error": "خطا در حذف یادآور",
+      "update_reminder_successful": "یادآور با موفقیت ویرایش شد",
+      "update_reminder_error": "خطا در ویرایش یادآور"
+    }
+  },
+  "learning": {
+    "title": "لیست اتاق های کنفرانس",
+    "add_new_room": "ساخت اتاق کنفرانس",
+    "welcome_banner": "به سیستم مدیریت آموزش خوش آمدید",
+    "meeting_name": "نام اتاق کنفرانس",
+    "meeting_name_error": "لطفا نام اتاق کنفرانس را وارد نمایید",
+    "room_pass": "رمز عبور اتاق",
+    "room_pass_error": "لطفا حداقل ۳ کاراکتر وارد نمایید",
+    "room_moderator_pass": "رمز عبور مدیریت",
+    "room_moderator_pass_error": "لطفا حداقل ۳ کاراکتر وارد نمایید",
+    "webcam_only_moderator": "وبکم تنها برای مدیریت",
+    "record_meeting": "ضبط   کنفرانس",
+    "mute_on_start": "بی صدا در زمان شروع",
+    "disable_user_webcam": "غیر فعال کردن وبکم کاربر",
+    "disable_user_mic": "غیر فعال کردن میکروفن کاربر",
+    "disable_private_chat": "غیر فعال کردن چت خصوصی",
+    "disable_public_chat": "غیر فعال کردن چت عمومی",
+    "join_room": "اتصال به اتاق",
+    "room_password": "برای اتصال به اتاق، لطفا رمز عبور را وارد نمایید:",
+    "wrong_password": "رمز عبور اشتباه است، لطفا مجددا تلاش نمایید",
+    "no_room": "اتاقی موجود نیست",
+    "exit_room": "خروج از اتاق",
+    "confirm_exit_room": "آیا اطمینان از خروج دارید؟",
+    "delete_room": "حذف اتاق کنفرانس",
+    "delete_room_error": "اتاق مورد نظر یافت نشد و یا قبلا حذف شده است",
+    "delete_room_success": "اتاق حذف شد",
+    "confirm_delete_room": "آیا از حذف این اتاق اطمینان دارید؟"
+  },
+  "conference_collaboration": {
+    "audio_only": "کنفرانس صوتی",
+    "audio_video": "کنفرانس صوتی / تصویری",
+    "training": "کنفرانس آموزشی"
+  },
+  "select_company": {
+    "title": "شرکت مورد نظر خود را انتخاب نمایید",
+    "back_to_login": "برگشت به صفحه ورود"
+  }
+}
