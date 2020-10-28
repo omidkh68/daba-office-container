@@ -23,7 +23,6 @@ export interface EssentialTagsInterface {
 export class SoftPhoneService extends LoginDataClass {
   allUsersSoftphone: Array<SoftphoneUserInterface> = [];
   loggedInUserSoftphone: SoftphoneUserInterface;
-
   debugMode: boolean = false;
   oSipStack;
   oSipSessionRegister;

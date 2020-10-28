@@ -107,13 +107,13 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
       } else {
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
         this.api.checkLogin().subscribe((resp: CheckLoginInterface) => {
-          // if (resp.success === true) {
+          if (resp.success === true) {
             const successfulMessage = this.getTranslate('login_info.login_successfully');
 
             this.messageService.showMessage(successfulMessage, 'success');
 
             resolve(resp.data);
-          // }
+          }
         }, () => {
           this.router.navigateByUrl(`/login`);
 
