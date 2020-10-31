@@ -30,7 +30,7 @@ import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
 import {DatetimeService} from './dashboard-toolbar/time-area/service/datetime.service';
 import {TaskIncompleteTaskComponent} from '../tasks/task-incomplete-task/task-incomplete-task.component';
-
+import {NotificationAreaComponent} from "./dashboard-toolbar/notification-area/notification-area.component";
 const defaultLangStorage = localStorage.getItem('defaultLang');
 const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
@@ -46,6 +46,7 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
     UserStatusComponent,
     ScreenshotComponent,
     ProfileMenuComponent,
+    NotificationAreaComponent,
     ChangeStatusComponent,
     TimeAreaClockComponent,
     ProfileSettingComponent,

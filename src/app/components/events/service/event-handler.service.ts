@@ -23,6 +23,10 @@ export class EventHandlerService {
   private reminders = new BehaviorSubject(this._reminders);
   public currentRemindersList = this.reminders.asObservable();
 
+  private _test: EventHandlerInterface;
+  private test = new BehaviorSubject(this._test);
+  public currentTest = this.test.asObservable();
+
   private _day: Date | null;
   private day = new BehaviorSubject(this._day);
   public currentDate = this.day.asObservable();
@@ -37,6 +41,10 @@ export class EventHandlerService {
 
   public moveEventItems(eventItems: EventHandlerInterface | null) {
     this.eventItems.next(eventItems);
+  }
+
+  public testItems(test: EventHandlerInterface) {
+    this.test.next(test);
   }
 
   public moveReminders(reminders: Array<ReminderInterface> | null) {

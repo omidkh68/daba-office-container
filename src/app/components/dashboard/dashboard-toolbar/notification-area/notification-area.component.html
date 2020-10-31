@@ -1,0 +1,22 @@
+<div matBadge="15" matBadgeColor="warn" [dir]="rtlDirection ? 'rtl' : 'ltr'"
+     [matMenuTriggerFor]="notification"
+     [ngClass]="rtlDirection ? 'margin-l-auto' : 'margin-r-auto'"
+     class="box pos-rel mat-elevation-z1 width-40 text-center round-corner height-40 overflow-hide cursor-pointer">
+  <mat-icon class="text-dark-mode-color">message</mat-icon>
+</div>
+
+<mat-menu class="toolbar-menu box-menu-profile padding-r-l" #notification="matMenu" xPosition="before"
+          yPosition="above">
+  <h6 mat-subheader
+      class="service-title padding-tiny-t-b no-margin text-weight-normal font-full-rem text-dark-mode-color">
+    {{'global.notification' | translate}}
+  </h6>
+
+  <button *ngFor="let item of arrayItem" mat-menu-item
+          class="font-7-rem padding-r-l text-dark-mode-color display-flex align-items-center">
+    {{item.name}}
+    <span class="font-full-plus-two-tenth-em wrap-text margin-r-l">
+      {{item.startDate}}
+    </span>
+  </button>
+</mat-menu>

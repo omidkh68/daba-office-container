@@ -60,6 +60,7 @@ export class EventHandlerSocketService {
                             });
                             let data = {events : events , reminders: reminders};
                             this.eventHandlerService.moveEventsReminders(data);
+
                             resolve(data);
                         }
                     }else{
@@ -84,10 +85,14 @@ export class EventHandlerSocketService {
                 this.connectedStatus.next(true);
 
                 this.stompClient.subscribe('/calendar', (message) => {
-
                     let checkNotify = JSON.parse(message.body);
-                    let notification: Notification;
-                    if(Array.isArray(checkNotify)){
+                  console.log("ppppppppppp" , checkNotify);
+                  let notification: Notification;
+
+                  this.eventHandlerService.moveEventItems(checkNotify);
+                  // this.eventHandlerService.testItems(checkNotify);
+
+                  if(Array.isArray(checkNotify)){
                         // receive new reminder
                         checkNotify = checkNotify[0];
                         if (!this.electronService.window.isFocused()) {
@@ -111,6 +116,8 @@ export class EventHandlerSocketService {
                                         data: this.loggedInUsers
                                     });
                                 }
+
+
                                 this.getEventsByEmail(this.loggedInUsers);
                             })
                         }

@@ -30,10 +30,19 @@
                    class="box-holder pos-rel"></app-user-status>
   <!-- /Change User Status -->
 
+  <!-- Notification Area -->
+  <app-notification-area  matBadge="{{numberItem}}" matBadgeColor="warn" [loggedInUser]="loggedInUser"
+                    [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
+                    [rtlDirection]="rtlDirection"
+                    class="box-holder"></app-notification-area>
+  <!-- /Notification Area -->
+
+  <!-- Time Area -->
   <app-time-area [loggedInUser]="loggedInUser"
                  [ngClass]="rtlDirection ? 'margin-r-auto' : 'margin-l-auto'"
                  [rtlDirection]="rtlDirection"
                  class="box-holder"></app-time-area>
+  <!-- /Time Area -->
 
   <!-- Profile Menu -->
   <app-profile-menu [loggedInUser]="loggedInUser"
