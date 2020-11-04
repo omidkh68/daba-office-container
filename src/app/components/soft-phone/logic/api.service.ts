@@ -7,12 +7,15 @@ import {
   ResultConfApiInterface,
   ResultConfOnlineExtensionApiInterface
 } from './result-api.interface';
+import {CompanyInterface} from '../../select-company/logic/company-interface';
+import {CompanySelectorService} from '../../select-company/services/company-selector.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   public accessToken = '';
+  private currentCompany: CompanyInterface;
   private API_URL = AppConfig.CONTAINER_URL + '/pbx';
 
   /**
@@ -25,36 +28,57 @@ export class ApiService {
     })
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private companySelectorService: CompanySelectorService) {
   }
 
   getExtensionList(): Observable<ResultApiInterface> {
+    this.currentCompany = this.companySelectorService.currentCompany;
+
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensions`, this.headers);
+    const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
+
+    return this.http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensions${compId}`, this.headers);
   }
 
   getExtensionStatus(): Observable<ResultApiInterface> {
+    this.currentCompany = this.companySelectorService.currentCompany;
+
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensionStatus`, this.headers);
+    const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
+
+    return this.http.get<ResultApiInterface>(`${this.API_URL}/extension.php?action=extensionStatus${compId}`, this.headers);
   }
 
   getCdr(extension_no: string): Observable<any> {
+    this.currentCompany = this.companySelectorService.currentCompany;
+
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get(`${this.API_URL}/cdr.php?action=cdr&extensionNo=${extension_no}`, this.headers);
+    const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
+
+    return this.http.get(`${this.API_URL}/cdr.php?action=cdr&extensionNo=${extension_no}${compId}`, this.headers);
   }
 
   getConferenceList(): Observable<ResultConfApiInterface> {
+    this.currentCompany = this.companySelectorService.currentCompany;
+
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get<ResultConfApiInterface>(`${this.API_URL}/extension.php?action=conferenceList`, this.headers);
+    const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
+
+    return this.http.get<ResultConfApiInterface>(`${this.API_URL}/extension.php?action=conferenceList${compId}`, this.headers);
   }
 
   getConferenceOnlineUser(confNumber: string): Observable<ResultConfOnlineExtensionApiInterface> {
+    this.currentCompany = this.companySelectorService.currentCompany;
+
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get<ResultConfOnlineExtensionApiInterface>(`${this.API_URL}/extension.php?action=conferenceOnlineUser&phoneNumber=${confNumber}`, this.headers);
+    const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
+
+    return this.http.get<ResultConfOnlineExtensionApiInterface>(`${this.API_URL}/extension.php?action=conferenceOnlineUser&phoneNumber=${confNumber}${compId}`, this.headers);
   }
 }

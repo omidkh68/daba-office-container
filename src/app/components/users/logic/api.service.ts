@@ -12,7 +12,7 @@ import {CompanySelectorService} from '../../select-company/services/company-sele
 })
 export class ApiService {
   public accessToken: string = '';
-  private currentCompany: CompanyInterface;
+  private currentCompany: CompanyInterface = null;
   private API_URL = AppConfig.CONTAINER_URL;
 
   /**
@@ -38,7 +38,9 @@ export class ApiService {
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get<CheckLoginInterface>(`${this.API_URL}/checkLogin?comp_id=${this.currentCompany.id}`, this.headers);
+    const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
+
+    return this.http.get<CheckLoginInterface>(`${this.API_URL}/checkLogin${compId}`, this.headers);
   }
 
   logout(): Observable<any> {
@@ -46,7 +48,9 @@ export class ApiService {
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.post(`${this.API_URL}/logout`, null, this.headers);
+    const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
+
+    return this.http.post(`${this.API_URL}/logout${compId}`, null, this.headers);
   }
 
   getHRUsers(): Observable<any> {
@@ -54,7 +58,9 @@ export class ApiService {
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get(`${this.API_URL}/hr/users/subset`, this.headers);
+    const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
+
+    return this.http.get(`${this.API_URL}/hr/users/subset${compId}`, this.headers);
   }
 
   getUserCompanies() {

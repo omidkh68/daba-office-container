@@ -137,13 +137,13 @@ export class EventHandlerSocketService {
                 });
 
                 this.stompClient.subscribe('/actionEvent', (message) => {
-                    console.log("actionCalendar" , message);
+                    // console.log("actionCalendar" , message);
                 });
                 this.stompClient.subscribe('/actionReminder', (message) => {
-                    console.log("actionReminder" , message);
+                    // console.log("actionReminder" , message);
                 })
             }, (error) => {
-                console.log(error);
+                // console.log(error);
                 reject();
                 this.errorCallBack(error);
             });
@@ -155,7 +155,7 @@ export class EventHandlerSocketService {
     }
 
     errorCallBack(e) {
-        setTimeout(() => this.initializeWebSocketConnection(), 200);
+        // setTimeout(() => this.initializeWebSocketConnection(), 200);
     }
 
     sendMessage(message) {

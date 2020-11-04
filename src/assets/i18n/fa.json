@@ -38,7 +38,8 @@
     "password_error": "لطفا پسورد را وارد نمایید",
     "items": "مورد",
     "done": "تأیید",
-    "enter": "ورود"
+    "enter": "ورود",
+    "default": "پیشفرض"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -351,6 +352,9 @@
   },
   "select_company": {
     "title": "شرکت مورد نظر خود را انتخاب نمایید",
-    "back_to_login": "برگشت به صفحه ورود"
+    "current_company": "شرکت فعلی",
+    "back_to_login": "برگشت به صفحه ورود",
+    "your_default_company": "شرکت فعلی شما",
+    "is": "می باشد"
   }
 }

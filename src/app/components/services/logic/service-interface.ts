@@ -1,5 +1,5 @@
 export interface ServiceInterface {
-  service_id: number;
+  id: number;
   type: number;
   name: string;
   name_fa: string;

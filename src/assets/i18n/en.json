@@ -38,7 +38,8 @@
     "password_error": "Please enter Password",
     "items": "Items",
     "done": "Done",
-    "enter": "Enter"
+    "enter": "Enter",
+    "default": "Current"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -351,6 +352,8 @@
   },
   "select_company": {
     "title": "Choose company",
-    "back_to_login": "Back to login"
+    "current_company": "Current company",
+    "back_to_login": "Back to login",
+    "your_default_company": "Your current company is"
   }
 }

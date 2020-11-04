@@ -41,7 +41,7 @@ export class CanShowLogin extends LoginDataClass implements CanActivate, OnDestr
         catchError(e => {
           console.log(e);
 
-          return of(false);
+          return of(true);
         })
       );
     } else {

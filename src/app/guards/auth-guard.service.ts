@@ -131,6 +131,8 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     this.viewDirection.changeDirection(data.userInfo.lang === 'fa');
 
     this.changeStatusService.changeUserStatus(data.userInfo.user_status);
+
+    this.companySelectorService.changeCompanyList(data.userInfo.companies);
   }
 
   getTranslate(word) {
