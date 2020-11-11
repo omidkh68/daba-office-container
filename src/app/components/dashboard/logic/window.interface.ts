@@ -1,5 +1,5 @@
-import {ServiceItemsInterface} from './service-items.interface';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ServiceInterface} from '../../services/logic/service-interface';
 
 export interface WindowInterface {
   isActive: boolean;
@@ -11,5 +11,5 @@ export interface WindowInterface {
   maximizable: boolean;
   minimizable: boolean;
   isDraggable: boolean;
-  windowService: ServiceItemsInterface;
+  windowService: ServiceInterface;
 }

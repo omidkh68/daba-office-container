@@ -1,9 +1,9 @@
 import {Component, Inject, Optional} from '@angular/core';
-import {POPOVER_DATA} from '../../popover.service';
 import {PopoverRef} from '../../popover-ref';
-import {ServiceItemsInterface} from '../../../dashboard/logic/service-items.interface';
-import {EventHandlerService} from '../../../events/service/event-handler.service';
+import {POPOVER_DATA} from '../../popover.service';
 import {DatetimeService} from '../../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
+import {ServiceInterface} from '../../../services/logic/service-interface';
+import {EventHandlerService} from '../../../events/service/event-handler.service';
 
 @Component({
   selector: 'app-popover-content',
@@ -30,8 +30,8 @@ export class PopoverContnetComponent {
       }
       let eventItems = event && event.startDate !== undefined ? event : null;
 
-      let service: ServiceItemsInterface[] = this.data.serviceList.filter(obj => {
-        return obj.serviceTitle == 'events_calendar'
+      let service: ServiceInterface[] = this.data.serviceList.filter(obj => {
+        return obj.service_name == 'events_calendar'
       });
 
       this.eventHandlerService.moveEvents(this.data.events);

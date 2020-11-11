@@ -65,9 +65,11 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
         this.userStatusService.currentUserStatus.subscribe(status => {
           this.currentUserStatus = status;
 
-          this.form.patchValue({
-            status: this.currentUserStatus.status_detail
-          });
+          if (this.currentUserStatus) {
+            this.form.patchValue({
+              status: this.currentUserStatus.status_detail
+            });
+          }
         })
       );
     });
@@ -158,6 +160,11 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
       const formValue = Object.assign({}, this.form.value);
 
       formValue.status = formValue.status.id;
+
+      if (!formValue.description.length) {
+        delete(formValue.is_description);
+        delete(formValue.description);
+      }
 
       this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 

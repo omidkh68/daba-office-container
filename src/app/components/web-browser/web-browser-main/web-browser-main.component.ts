@@ -5,6 +5,7 @@ import {ElectronService} from '../../../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {fetchFavicons} from '@meltwater/fetch-favicon'
 
 @Component({
   selector: 'app-web-browser-main',
@@ -60,6 +61,10 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
 
       this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
         this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+
+        console.log(this.webFrame.nativeElement.getTitle());
+
+        console.log(fetchFavicons(this.currentUrl));
 
         this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'webBrowser'});
       });

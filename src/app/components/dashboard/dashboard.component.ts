@@ -13,7 +13,6 @@ import {ServiceInterface} from '../services/logic/service-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
-import {ServiceItemsInterface} from './logic/service-items.interface';
 import {WallpaperSelectorService} from '../../services/wallpaper-selector.service';
 import {ApiService as StatusApiService} from '../status/logic/api.service';
 
@@ -25,7 +24,7 @@ import {ApiService as StatusApiService} from '../status/logic/api.service';
 export class DashboardComponent extends LoginDataClass implements OnInit, OnDestroy {
   rtlDirection: boolean;
   windowManager: Array<WindowInterface>;
-  serviceList: ServiceItemsInterface[] = [];
+  serviceList: ServiceInterface[] = [];
   wallpaper: string;
 
   private _subscription: Subscription = new Subscription();
@@ -56,15 +55,8 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
         this.serviceList = [];
 
         this.loggedInUser.services.map((item: ServiceInterface) => {
-          let serviceTitle = item.name.split(' ').join('_').toLowerCase();
-
-          const service: ServiceItemsInterface = {
-            ...item,
-            serviceTitle: serviceTitle,
-          };
-
           if (item.show_in_container) {
-            this.serviceList.push(service);
+            this.serviceList.push(item);
           }
         });
 

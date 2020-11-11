@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, Inject, ViewChild, ViewContainerRef} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {ServiceInterface} from '../services/logic/service-interface';
 import {LazyComponentService} from '../../services/lazy-component.service';
-import {ServiceItemsInterface} from '../dashboard/logic/service-items.interface';
 
 @Component({
   selector: 'app-tasks',
@@ -14,7 +14,7 @@ export class TasksComponent implements AfterViewInit {
   height: number = 0;
 
   constructor(private lazyComponentService: LazyComponentService,
-              @Inject(MAT_DIALOG_DATA) public data: ServiceItemsInterface) {
+              @Inject(MAT_DIALOG_DATA) public data: ServiceInterface) {
   }
 
   async ngAfterViewInit() {

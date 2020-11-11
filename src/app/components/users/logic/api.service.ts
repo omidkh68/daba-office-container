@@ -60,7 +60,7 @@ export class ApiService {
 
     const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
 
-    return this.http.get(`${this.API_URL}/hr/users/subset${compId}`, this.headers);
+    return this.http.get(`${this.API_URL}/users/subset${compId}`, this.headers);
   }
 
   getUserCompanies() {

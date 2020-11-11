@@ -7,4 +7,5 @@ export interface ServiceInterface {
   show_in_container: number;
   width: number;
   height: number;
+  service_name: string;
 }

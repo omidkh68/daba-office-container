@@ -11,13 +11,13 @@ import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {ApproveComponent} from '../../../approve/approve.component';
 import {TranslateService} from '@ngx-translate/core';
+import {ServiceInterface} from '../../../services/logic/service-interface';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../../login/services/refresh-login.service';
 import {ChangeStatusService} from '../../../status/services/change-status.service';
 import {UserStatusInterface} from '../../../status/logic/status-interface';
 import {WindowManagerService} from '../../../../services/window-manager.service';
 import {ChangeStatusComponent} from '../../../status/change-status/change-status.component';
-import {ServiceItemsInterface} from '../../logic/service-items.interface';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 import {LoadingIndicatorInterface} from '../../../../services/loading-indicator.service';
 import {StatusChangeResultInterface} from '../../../status/logic/result-interface';
@@ -44,7 +44,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
   rtlDirection: boolean;
 
   @Input()
-  serviceList: Array<ServiceItemsInterface>;
+  serviceList: Array<ServiceInterface>;
 
   userCurrentStatus: UserStatusInterface | null = null;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'userStatusDashboard'};
@@ -137,7 +137,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
       const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
       if (serviceName === 'project_service') {
-        const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();
+        const service = this.serviceList.filter(service => service.service_name === serviceName).pop();
 
         if (service) {
           if (this.loginData && this.loginData.token_type) {
@@ -201,7 +201,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
           const serviceName = userService.name.replace(' ', '_').toLowerCase();
 
           if (serviceName === 'softphones_service') {
-            const service = this.serviceList.filter(service => service.serviceTitle === serviceName).pop();
+            const service = this.serviceList.filter(service => service.service_name === serviceName).pop();
 
             if (service) {
               this.openService(service);
@@ -228,7 +228,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     this.windowManagerService.dialogOnTop(dialogRef.id);
   }
 
-  openService(service: ServiceItemsInterface) {
+  openService(service: ServiceInterface) {
     this.windowManagerService.openWindowState(service);
   }
 
