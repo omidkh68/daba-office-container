@@ -57,7 +57,8 @@
     "status_success": "وضعیت مربوطه با موفقیت اعمال گردید",
     "start_working": "شروع کار",
     "start_working_time": "آیا میخواهید ساعت کاری خود را شروع کنید؟",
-    "close_app_stop_working": "ساعت کاری شما به اتمام رسید، روز خوبی داشته باشید"
+    "close_app_stop_working": "ساعت کاری شما به اتمام رسید، روز خوبی داشته باشید",
+    "cant_stop_working": "زمان کاری متوقف نشد"
   },
   "soft_phone": {
     "main": {
@@ -103,6 +104,9 @@
       "not_answered": "جواب داده نشد",
       "busy": "مشغول بود",
       "answered": "برقرار شد"
+    },
+    "settings": {
+      "extension_settings": "تنظیمات داخلی"
     }
   },
   "tasks": {
@@ -356,5 +360,10 @@
     "back_to_login": "برگشت به صفحه ورود",
     "your_default_company": "شرکت فعلی شما",
     "is": "می باشد"
+  },
+  "web_browser": {
+    "reload_page": "بارگذاری مجدد این صفحه",
+    "forward": "رفتن به صفحه بعدی",
+    "back": "بازگشت به صفحه قبلی"
   }
 }

@@ -1,5 +1,4 @@
 import {app, BrowserWindow, ipcMain, Menu, screen, webFrame} from 'electron';
-// import {autoUpdater} from 'electron-updater';
 import {join} from 'path';
 import {format} from 'url';
 
@@ -63,15 +62,10 @@ function createWindow(): BrowserWindow {
     win = null;
   });
 
-  /*mainWindow.once('ready-to-show', () => {
-        autoUpdater.checkForUpdatesAndNotify();
-    });*/
-
   return win;
 }
 
 try {
-
   app.allowRendererProcessReuse = true;
 
   app.on('ready', () => setTimeout(createWindow, 400));
@@ -117,19 +111,6 @@ try {
   ipcMain.on('app_version', (event) => {
     event.sender.send('app_version', {version: app.getVersion()});
   });
-
-  /*ipcMain.on('restart_app', () => {
-      autoUpdater.quitAndInstall();
-  });*/
-
-  /*autoUpdater.on('update-available', () => {
-      mainWindow.webContents.send('update_available');
-  });
-
-  autoUpdater.on('update-downloaded', () => {
-      mainWindow.webContents.send('update_downloaded');
-  });*/
-
 } catch (e) {
   // Catch Error
   // throw e;

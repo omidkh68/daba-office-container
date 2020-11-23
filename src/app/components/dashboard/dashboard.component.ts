@@ -14,6 +14,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {WallpaperSelectorService} from '../../services/wallpaper-selector.service';
+import {StatusChangeResultInterface} from '../status/logic/result-interface';
 import {ApiService as StatusApiService} from '../status/logic/api.service';
 
 @Component({
@@ -74,63 +75,71 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit(): void {
-    if (AppConfig.production) { // if environment in production mode change status when user want to close app
+    this.stopWorkingBeforeCloseApp();
+  }
 
-      /*this.window.onbeforeunload = (event) => {
-        event.preventDefault();
-
-        setTimeout(() => event.returnValue = true, 5000);
-        /!*event.returnValue = false;
-
-        event.returnValue = true;
-        return true;*!/
-      };*/
-
-      /*this.window.onbeforeunload = (event) => {
+  stopWorkingBeforeCloseApp() {
+    // if environment in production mode change status when user want to close app
+    if (AppConfig.production) {
+      this.window.onbeforeunload = async (event) => {
         event.returnValue = false;
 
-        this.softPhoneService.sipHangUp();
+        await this.softPhoneService.sipHangUp();
 
-        const stopWorkingStatus = {
-          user_id: this.loggedInUser.id,
-          status: 2 // this means stop working status will emit
-        };
+        const resultOfStatus = await this.changeStatus();
 
-        this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+        setTimeout(() => {
+          this.electronService.remote.app.quit();
+          this.electronService.remote.app.exit(0);
 
-        console.log('process: ', this.electronService.remote.process);
-
-        this._subscription.add(
-          this.statusApiService.userChangeStatus(stopWorkingStatus).subscribe((resp: StatusChangeResultInterface) => {
-            if (resp.success === true) {
-              new Notification(`Office Container`, {
-                body: this.getTranslate('status.close_app_stop_working'),
-                icon: 'assets/profileImg/' + this.loggedInUser.email + '.jpg',
-                dir: 'auto'
-              });
-
-              // this.electronService.remote.app.exit();
-
-              event.returnValue = true;
-
-              // setTimeout(() => {
-                // if (this.electronService.remote.process.platform !== 'darwin') {
-                  /!*this.electronService.remote.app.quit();
-                  setTimeout(() => this.electronService.remote.getCurrentWindow().destroy(), 500);
-                  setTimeout(() => this.electronService.remote.app.quit(), 800);*!/
-                // }
-              // }, 500);
-            }
-          }, () => {
-            // if (this.electronService.remote.process.platform !== 'darwin') {
-              /!*this.electronService.remote.app.quit();
-              setTimeout(() => this.electronService.remote.getCurrentWindow().destroy(), 500);
-              setTimeout(() => this.electronService.remote.app.quit(), 800);*!/
-            // }
-          })
-        );
-      };*/
+          event.returnValue = true;
+        }, 200);
+      };
     }
+  }
+
+  changeStatus() {
+    return new Promise((resolve) => {
+      const stopWorkingStatus = {
+        user_id: this.loggedInUser.id,
+        status: 2 // this means stop working status will emit
+      };
+
+      this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+      this._subscription.add(
+        this.statusApiService.userChangeStatus(stopWorkingStatus).subscribe((resp: StatusChangeResultInterface) => {
+          if (resp.success === true) {
+            new Notification(`Office Container`, {
+              body: this.getTranslate('status.close_app_stop_working'),
+              icon: 'assets/profileImg/' + this.loggedInUser.email + '.jpg',
+              dir: 'auto',
+              requireInteraction: true
+            });
+
+            resolve(true);
+          } else {
+            new Notification(`Office Container`, {
+              body: this.getTranslate('status.cant_stop_working'),
+              icon: 'assets/profileImg/' + this.loggedInUser.email + '.jpg',
+              dir: 'auto',
+              requireInteraction: true
+            });
+
+            resolve(false);
+          }
+        }, () => {
+          new Notification(`Office Container`, {
+            body: this.getTranslate('status.cant_stop_working'),
+            icon: 'assets/profileImg/' + this.loggedInUser.email + '.jpg',
+            dir: 'auto',
+            requireInteraction: true
+          });
+
+          resolve(false);
+        })
+      );
+    });
   }
 
   getTranslate(word) {

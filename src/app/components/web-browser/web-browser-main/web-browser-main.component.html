@@ -1,46 +1,107 @@
 <div class="full-width full-height bg-white pos-rel">
-  <div class="height-50 address-bar-container display-flex flex-space-between">
-    <a (click)="reloadWebView()" [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-       class="reload-btn round-corner-all no-padding display-flex flex-center cursor-pointer bg-white">
-      <mat-icon>refresh</mat-icon>
-    </a>
+  <div class="display-flex full-width height-35 bg-white padding-r-l">
+    <ul class="full-width no-list-style no-margin no-padding display-flex">
+      <li *ngFor="let address of addresses; let i = index;"
+          (click)="selectTab(address, i)"
+          [ngClass]="{'active-tab': selectCurrentTab === i}"
+          [matTooltip]="address.title.length ? address.title : null"
+          [matTooltipPosition]="'below'"
+          class="address-tab full-height display-flex align-items-end cursor-pointer pos-rel">
+          <span
+            class="address-title display-flex full-width align-items-center padding-mini-r-l round-corner-top flex-space-between">
+            <img *ngIf="address.favicon" [src]="address.favicon" alt="" class="width-15 height-15 margin-r-half">
 
-    <input #addressBar (focus)="addressBar.select()"
-           (keyup)="enterAddress($event)"
-           [value]="currentUrl"
-           class="no-box-shadow btn-rounded full-height padding-r-l font-9-em"
-           placeholder="Type a URL"
-           type="text">
+            <span class="text-eclipse padding-r-full font-8-em">{{address.title.length ? address.title : '...'}}</span>
+
+            <a (click)="closeTab(i)" [ngClass]="{'active': selectCurrentTab === i}" class="close-tab">
+              <mat-icon
+                class="width-18 height-18 font-full-plus-two-tenth-em line-height-20 display-flex align-items-center">
+                close
+              </mat-icon>
+            </a>
+          </span>
+      </li>
+      <li class="width-30 flex-center">
+        <a (click)="addTab()" class="full-width full-height flex-center cursor-pointer">
+          <mat-icon class="width-20 height-20 font-full-plus-three-tenth-em line-height-20">add</mat-icon>
+        </a>
+      </li>
+    </ul>
   </div>
 
-  <webview #webFrame class="webView-frame full-width height-full-minus-50"></webview>
+  <div class="height-full-minus-35 display-flex flex-space-between flex-direction-column">
+    <div *ngFor="let address of addresses; let i = index"
+         class="show-current-tab full-height full-width"
+         [ngClass]="{'active': selectCurrentTab === i}">
+      <div class="address-bar-container display-flex full-width height-55">
+        <button (click)="backwardWebView(i)" type="button"
+                [disabled]="(address.url && address.contentReady && !address.webFrame.nativeElement.canGoBack()) || !address.contentReady"
+                [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                matTooltip="{{'web_browser.back' | translate}}"
+                [matTooltipPosition]="'below'"
+                class="reload-btn round-corner-all no-padding display-flex flex-center cursor-pointer bg-white">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
 
-  <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'webBrowser'"
-       class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
-    <div class="text-center">
-      <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"
-           width="24px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" y="0px">
+        <button (click)="forwardWebView(i)"
+                [disabled]="(address.url && address.contentReady && !address.webFrame.nativeElement.canGoForward()) || !address.contentReady"
+                [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                matTooltip="{{'web_browser.forward' | translate}}"
+                [matTooltipPosition]="'below'"
+                class="reload-btn round-corner-all no-padding display-flex flex-center cursor-pointer bg-white">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+
+        <button (click)="reloadWebView(i)"
+                [disabled]="address.url && !address.contentReady"
+                [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                matTooltip="{{'web_browser.reload_page' | translate}}"
+                [matTooltipPosition]="'below'"
+                class="reload-btn round-corner-all no-padding display-flex flex-center cursor-pointer bg-white">
+          <mat-icon>refresh</mat-icon>
+        </button>
+
+        <input #addressBar (focus)="addressBar.select()"
+               (keyup)="enterAddress($event, i)"
+               [value]="address.url"
+               [ngClass]="{'disableUrl': address.disabled}"
+               class="no-box-shadow btn-rounded padding-r-l font-9-em"
+               placeholder="Type a URL"
+               type="text" [disabled]="address.disabled">
+      </div>
+
+      <div class="full-width height-full-minus-55 pos-rel">
+        <webview #webFrame class="webView-frame full-width full-height"></webview>
+
+        <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'webBrowser'"
+             class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
+          <div class="text-center">
+            <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"
+                 width="24px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" y="0px">
         <rect fill="#333" height="5" width="4" x="0" y="13">
           <animate attributeName="height" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
                    values="5;21;5"></animate>
           <animate attributeName="y" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"
                    values="13; 5; 13"></animate>
         </rect>
-        <rect fill="#333" height="5" width="4" x="10" y="13">
+              <rect fill="#333" height="5" width="4" x="10" y="13">
           <animate attributeName="height" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
                    values="5;21;5"></animate>
-          <animate attributeName="y" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
-                   values="13; 5; 13"></animate>
+                <animate attributeName="y" attributeType="XML" begin="0.15s" dur="0.6s" repeatCount="indefinite"
+                         values="13; 5; 13"></animate>
         </rect>
-        <rect fill="#333" height="5" width="4" x="20" y="13">
+              <rect fill="#333" height="5" width="4" x="20" y="13">
           <animate attributeName="height" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
                    values="5;21;5"></animate>
-          <animate attributeName="y" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
-                   values="13; 5; 13"></animate>
+                <animate attributeName="y" attributeType="XML" begin="0.3s" dur="0.6s" repeatCount="indefinite"
+                         values="13; 5; 13"></animate>
         </rect>
       </svg>
 
-      <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
+            <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

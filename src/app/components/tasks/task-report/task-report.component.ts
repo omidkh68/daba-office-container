@@ -93,7 +93,6 @@ export class TaskReportComponent implements OnInit, OnDestroy {
 
         if (resp.result === 1) {
           this.taskReports = resp.contents;
-          console.log('nnnnnnnn', this.taskReports);
 
           this.taskReports.map(report => {
             if (report.adminIdStartTask) {

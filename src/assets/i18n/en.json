@@ -57,7 +57,8 @@
     "status_success": "Status applied successfully",
     "start_working": "Start Working?",
     "start_working_time": "Do you want to start your working?",
-    "close_app_stop_working": "Your working hours are over, have a good day"
+    "close_app_stop_working": "Your working hours are over, have a good day",
+    "cant_stop_working": "Stop working not completed"
   },
   "soft_phone": {
     "main": {
@@ -103,6 +104,9 @@
       "not_answered": "Not Answered",
       "busy": "Was Busy",
       "answered": "Answered"
+    },
+    "settings": {
+      "extension_settings": "Extension settings"
     }
   },
   "tasks": {
@@ -355,5 +359,10 @@
     "current_company": "Current company",
     "back_to_login": "Back to login",
     "your_default_company": "Your current company is"
+  },
+  "web_browser": {
+    "reload_page": "Reload this page",
+    "forward": "Click to go forward",
+    "back": "Click to go back"
   }
 }

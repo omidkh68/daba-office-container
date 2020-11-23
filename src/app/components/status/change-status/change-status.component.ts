@@ -12,6 +12,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {ChangeStatusService} from '../services/change-status.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {StatusDetailInterface, UserStatusInterface} from '../logic/status-interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {StatusChangeResultInterface, StatusListResultInterface} from '../logic/result-interface';
@@ -24,7 +25,7 @@ import {StatusChangeResultInterface, StatusListResultInterface} from '../logic/r
 export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnDestroy {
   rtlDirection: boolean;
   form: FormGroup;
-  currentUserStatus: UserStatusInterface | string;
+  currentUserStatus: UserStatusInterface | null;
   statusList: Array<StatusDetailInterface> = [];
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'userStatus'};
 
@@ -35,11 +36,11 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
               private fb: FormBuilder,
               private injector: Injector,
               private translate: TranslateService,
-              private viewDirection: ViewDirectionService,
               private userApiService: UserApiService,
               private messageService: MessageService,
-              private statusApiService: StatusApiService,
               private userInfoService: UserInfoService,
+              private statusApiService: StatusApiService,
+              private viewDirection: ViewDirectionService,
               private userStatusService: ChangeStatusService,
               private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService) {
@@ -59,19 +60,15 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     await this.createForm().then(() => {
       this.form.markAllAsTouched();
 
-      setTimeout(() => this.checkFormValidation(), 1000);
+      setTimeout(() => this.checkFormValidation(), 200);
 
-      this._subscription.add(
-        this.userStatusService.currentUserStatus.subscribe(status => {
-          this.currentUserStatus = status;
+      this.currentUserStatus = this.userStatusService.currentStatus;
 
-          if (this.currentUserStatus) {
-            this.form.patchValue({
-              status: this.currentUserStatus.status_detail
-            });
-          }
-        })
-      );
+      if (this.currentUserStatus) {
+        this.form.patchValue({
+          status: this.currentUserStatus.status_detail
+        });
+      }
     });
   }
 
@@ -176,6 +173,10 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
           if (resp.success) {
             this.userStatusService.changeUserStatus(resp.data);
+
+            const userInfo: UserContainerInterface = {...this.loggedInUser, user_status: resp.data};
+
+            this.userInfoService.changeUserInfo(userInfo);
 
             this.getTranslate('status.status_success').then((msg: string) => {
               this.messageService.showMessage(msg);

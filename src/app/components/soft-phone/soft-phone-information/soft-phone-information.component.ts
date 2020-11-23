@@ -143,7 +143,7 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.softPhoneUsers.currentValue) {
+    if (changes.softPhoneUsers && changes.softPhoneUsers.currentValue) {
       this.globalTimer = timer(
         this.timerDueTime, this.timerPeriod
       );

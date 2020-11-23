@@ -13,4 +13,8 @@ export class ChangeStatusService {
   changeUserStatus(newUserStatus: UserStatusInterface | null) {
     this.userStatus.next(newUserStatus);
   }
+
+  get currentStatus(): UserStatusInterface {
+    return this.userStatus.getValue();
+  }
 }

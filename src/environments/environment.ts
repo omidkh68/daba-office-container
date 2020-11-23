@@ -17,5 +17,6 @@ export const AppConfig = {
   //EVENT_HANDLER_URL : 'http://192.168.110.156:8080/eventhandler-0.0.1'
   EVENT_HANDLER_URL : 'http://94.139.172.74:8080/eventhandler-0.0.1',
   LMS_API: 'http://192.168.110.156:8080/bbb-0.0.1-SNAPSHOT',
-  EVENT_HANDLER_WS : 'http://94.139.172.74:8080/eventhandler-0.0.1/api'
+  EVENT_HANDLER_WS : 'http://94.139.172.74:8080/eventhandler-0.0.1/api',
+  PBX_LOGIN_EXTENSION: 'http://wrtc.dabacenter.ir'
 };

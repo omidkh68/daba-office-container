@@ -68,6 +68,12 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
   }
 
   ngOnInit(): void {
+    this.checkToStartWorking();
+
+    // this.openWebBrowser(); // todo: remove this in production
+  }
+
+  checkToStartWorking() {
     this._subscription.add(
       this.changeStatusService.currentUserStatus.subscribe(status => this.userCurrentStatus = status)
     );
@@ -96,8 +102,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
             this._subscription.add(
               this.apiService.userChangeStatus({
                 user_id: this.loggedInUser.id,
-                status: 1,
-                description: ''
+                status: 1
               }).subscribe((resp: StatusChangeResultInterface) => {
                 if (resp.success) {
                   this.changeStatusService.changeUserStatus(resp.data);
@@ -133,29 +138,23 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
   }
 
   openIncompleteTasks() {
-    this.loggedInUser.services.map(userService => {
-      const serviceName = userService.name.replace(' ', '_').toLowerCase();
+    const service = this.loggedInUser.services.filter(service => service.service_name === 'project').pop();
 
-      if (serviceName === 'project_service') {
-        const service = this.serviceList.filter(service => service.service_name === serviceName).pop();
+    if (service) {
+      if (this.loginData && this.loginData.token_type) {
+        this.tasksApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-        if (service) {
-          if (this.loginData && this.loginData.token_type) {
-            this.tasksApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-            this._subscription.add(
-              this.tasksApiService.incompleteTasks(this.loggedInUser.email).subscribe((resp: ResultIncompleteTaskInterface) => {
-                if (resp.result === 1 && resp.contents.length !== 0) {
-                  this.openDialogIncompleteTasks(resp.contents);
-                }
-              }, (error: HttpErrorResponse) => {
-                this.refreshLoginService.openLoginDialog(error);
-              })
-            );
-          }
-        }
+        this._subscription.add(
+          this.tasksApiService.incompleteTasks(this.loggedInUser.email).subscribe((resp: ResultIncompleteTaskInterface) => {
+            if (resp.result === 1 && resp.contents.length !== 0) {
+              this.openDialogIncompleteTasks(resp.contents);
+            }
+          }, (error: HttpErrorResponse) => {
+            this.refreshLoginService.openLoginDialog(error);
+          })
+        );
       }
-    });
+    }
   }
 
   changeStatus() {
@@ -195,25 +194,21 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
   }
 
   openSoftPhone() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        this.loggedInUser.services.map(userService => {
-          const serviceName = userService.name.replace(' ', '_').toLowerCase();
+    setTimeout(() => {
+      const service = this.loggedInUser.services.filter(service => service.service_name === 'pbx').pop();
 
-          if (serviceName === 'softphones_service') {
-            const service = this.serviceList.filter(service => service.service_name === serviceName).pop();
+      if (service) {
+        this.openService(service);
+      }
+    }, 2000);
+  }
 
-            if (service) {
-              this.openService(service);
+  openWebBrowser() {
+    const service = this.loggedInUser.services.filter(service => service.service_name === 'web_browser').pop();
 
-              resolve();
-            }
-          } else {
-            resolve();
-          }
-        });
-      }, 2000);
-    });
+    if (service) {
+      this.openService(service);
+    }
   }
 
   openDialogIncompleteTasks(taskList) {

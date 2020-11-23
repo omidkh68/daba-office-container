@@ -1,12 +1,16 @@
 import {Component, Input, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
 import {ApiService} from '../../../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../message/service/message.service';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {CompanyInterface} from '../../../select-company/logic/company-interface';
 import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
 import {CheckLoginInterface} from '../../../login/logic/check-login.interface';
 import {ChangeStatusService} from '../../../status/services/change-status.service';
+import {RefreshBoardService} from '../../../tasks/services/refresh-board.service';
+import {RefreshLoginService} from '../../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
@@ -29,11 +33,14 @@ export class CompanySelectorComponent implements OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private apiService: ApiService,
+  constructor(private router: Router,
+              private apiService: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
+              private refreshLoginService: RefreshLoginService,
+              private refreshBoardService: RefreshBoardService,
               private changeStatusService: ChangeStatusService,
               private windowManagerService: WindowManagerService,
               private companySelectorService: CompanySelectorService) {
@@ -75,6 +82,8 @@ export class CompanySelectorComponent implements OnDestroy {
 
             this.messageService.showMessage(titleMessage)
           });
+        }, (error: HttpErrorResponse) => {
+          this.refreshLoginService.openLoginDialog(error);
         })
       )
     }, 500);

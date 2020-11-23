@@ -179,14 +179,14 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
         {
           name: this.getTranslate('soft_phone.main.call_logs'),
           icon: 'settings_phone'
-        },/*
-        {
-          name: this.getTranslate('global.settings'),
-          icon: 'settings'
-        },*/
+        },
         {
           name: this.getTranslate('soft_phone.main.public_room'),
           icon: 'group'
+        },
+        {
+          name: this.getTranslate('global.settings'),
+          icon: 'settings'
         }
       ];
     }, 200);
