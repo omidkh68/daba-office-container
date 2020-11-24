@@ -169,8 +169,6 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
     if (this.extensionStatusSubscription) {
       this.extensionStatusSubscription.unsubscribe();
     }
-
-    alert('destroy');
   }
 }
 
