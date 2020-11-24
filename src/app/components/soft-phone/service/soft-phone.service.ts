@@ -187,6 +187,8 @@ export class SoftPhoneService extends LoginDataClass {
 
           resolve(true);
         } else {
+          this.messageService.showMessage(`Your extension is not ready, please call service owner`, 'error', 10000);
+
           reject(false);
         }
       })

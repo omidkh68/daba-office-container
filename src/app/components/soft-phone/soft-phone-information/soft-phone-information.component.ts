@@ -148,7 +148,11 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
         this.timerDueTime, this.timerPeriod
       );
 
-      this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getExtensionStatus());
+      this.globalTimerSubscription = this.globalTimer.subscribe(() => {
+        if (this.globalTimer) {
+          this.getExtensionStatus();
+        }
+      });
     }
   }
 
@@ -161,6 +165,12 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
       this.globalTimerSubscription.unsubscribe();
       this.globalTimer = null;
     }
+
+    if (this.extensionStatusSubscription) {
+      this.extensionStatusSubscription.unsubscribe();
+    }
+
+    alert('destroy');
   }
 }
 
