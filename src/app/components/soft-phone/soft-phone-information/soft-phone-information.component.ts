@@ -194,8 +194,6 @@ export class MyFilterPipe implements PipeTransform {
     if (!items || !filter) {
       return items;
     }
-    // filter items array, items which match and return true will be
-    // kept, false will be filtered out
     return items.filter((item: SoftphoneUserInterface) => item.username !== filter.email);
   }
 }
