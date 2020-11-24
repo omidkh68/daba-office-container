@@ -57,6 +57,7 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
   filterArgs = null;
   callPopUpMinimizeStatus: boolean = false;
   softphoneConnectedStatus: boolean = false;
+  currentIp: string = '';
 
   private extensionStatusSubscription: Subscription = new Subscription();
   private softphoneConnectedStatusSubscription: Subscription = new Subscription();
@@ -83,6 +84,14 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
 
     this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
       if (resp.success) {
+
+        if (this.currentIp && this.currentIp != resp.meta.ip) {
+          this.softPhoneService.sipUnRegister();
+          setTimeout(() => {
+            this.softPhoneService.sipRegister();
+          }, 500);
+        }
+        this.currentIp = resp.meta.ip;
         if (this.softPhoneUsers && this.softPhoneUsers.length) {
           const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
 
