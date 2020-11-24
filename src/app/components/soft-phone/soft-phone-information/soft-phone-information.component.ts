@@ -85,7 +85,7 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
     this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
       if (resp.success) {
 
-        if(this.currentIp && this.currentIp != resp.meta.ip){
+        if (this.currentIp && this.currentIp != resp.meta.ip) {
           this.softPhoneService.sipUnRegister();
           setTimeout(() => {
             this.softPhoneService.sipRegister();
