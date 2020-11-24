@@ -358,7 +358,8 @@
     "title": "Choose company",
     "current_company": "Current company",
     "back_to_login": "Back to login",
-    "your_default_company": "Your current company is"
+    "your_default_company": "Your current company is",
+    "is": "is"
   },
   "web_browser": {
     "reload_page": "Reload this page",

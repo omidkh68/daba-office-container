@@ -128,7 +128,7 @@ export class SoftPhoneService extends LoginDataClass {
     this.connectedCall.next(status);
   }
 
-  public getSoftphoneConnectedStatus() {
+  get getSoftphoneConnectedStatus() {
     return this.softphoneConnected.getValue();
   }
 
@@ -622,7 +622,7 @@ export class SoftPhoneService extends LoginDataClass {
 
         switch (description) {
           case 'forbidden': {
-            this.messageService.showMessage(`Rejected by ${incomingExtensionTo ? incomingExtensionTo.extension_name : ''}`);
+            this.messageService.showMessage(`${incomingExtensionTo ? 'Rejected by ' + incomingExtensionTo.extension_name : 'Your softphone not ready, please call service owner'}`);
             break;
           }
 

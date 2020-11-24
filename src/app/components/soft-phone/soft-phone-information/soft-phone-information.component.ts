@@ -11,7 +11,6 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {timer} from 'rxjs';
-import * as lodash from 'lodash';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
@@ -87,18 +86,28 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
         if (this.softPhoneUsers && this.softPhoneUsers.length) {
           const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
 
-          const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, extensionList);
+          // const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, extensionList);
+          const extensionsList: Array<ExtensionInterface> = [];
 
-          this.softPhoneService.changeSoftPhoneUsers(extensionsList);
+          this.softPhoneUsers.map((softphoneUser: ExtensionInterface) => {
+            const findExtStatus = extensionList.filter((ext: ExtensionInterface) => ext.username === softphoneUser.username).pop();
+
+            if (findExtStatus) {
+              extensionsList.push(findExtStatus);
+            }
+          });
+
+          // this.softPhoneService.changeSoftPhoneUsers(extensionsList);
 
           if (this.softphoneConnectedStatusSubscription) {
             this.softphoneConnectedStatusSubscription.unsubscribe();
           }
 
-          this.softphoneConnectedStatusSubscription = this.softPhoneService.currentSoftphoneConnected.subscribe(status => {
+          this.softphoneConnectedStatusSubscription = this.softPhoneService.currentSoftphoneConnected.subscribe(async status => {
             if (status) {
-              this.softphoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus();
-              extensionsList.map(item => {
+              this.softphoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus;
+
+              await extensionsList.map(item => {
                 if (item.username === this.loggedInUser.email) {
                   this.loggedInUserExtension = {
                     user: this.loggedInUser,
@@ -168,6 +177,10 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
 
     if (this.extensionStatusSubscription) {
       this.extensionStatusSubscription.unsubscribe();
+    }
+
+    if (this.softphoneConnectedStatusSubscription) {
+      this.softphoneConnectedStatusSubscription.unsubscribe();
     }
   }
 }
