@@ -64,6 +64,12 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
       this.currentUserStatus = this.userStatusService.currentStatus;
 
+      let userInfo: UserContainerInterface = this.loggedInUser;
+
+      userInfo = {...userInfo, user_status: this.currentUserStatus};
+
+      this.userInfoService.changeUserInfo(userInfo);
+
       if (this.currentUserStatus) {
         this.form.patchValue({
           status: this.currentUserStatus.status_detail

@@ -102,7 +102,7 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
     return new Promise((resolve) => {
       const stopWorkingStatus = {
         user_id: this.loggedInUser.id,
-        status: 2 // this means stop working status will emit
+        status: 2 // this means stop working status will emit.
       };
 
       if (!this.loginData) {
