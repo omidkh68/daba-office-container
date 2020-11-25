@@ -75,6 +75,14 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
 
   ngOnInit(): void {
     this.filterArgs = {email: this.loggedInUser.email};
+
+    this._subscription.add(
+      this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
+        if (connectedCall) {
+          this.clearTimer();
+        }
+      })
+    );
   }
 
   getExtensionStatus() {
@@ -84,14 +92,16 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
 
     this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
       if (resp.success) {
-
         if (this.currentIp && this.currentIp != resp.meta.ip) {
           this.softPhoneService.sipUnRegister();
+
           setTimeout(() => {
             this.softPhoneService.sipRegister();
           }, 500);
         }
+
         this.currentIp = resp.meta.ip;
+
         if (this.softPhoneUsers && this.softPhoneUsers.length) {
           const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
 
@@ -105,8 +115,6 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
               extensionsList.push(findExtStatus);
             }
           });
-
-          // this.softPhoneService.changeSoftPhoneUsers(extensionsList);
 
           if (this.softphoneConnectedStatusSubscription) {
             this.softphoneConnectedStatusSubscription.unsubscribe();
@@ -162,15 +170,26 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.softPhoneUsers && changes.softPhoneUsers.currentValue) {
-      this.globalTimer = timer(
-        this.timerDueTime, this.timerPeriod
-      );
+      this.startTimer();
+    }
+  }
 
-      this.globalTimerSubscription = this.globalTimer.subscribe(() => {
-        if (this.globalTimer) {
-          this.getExtensionStatus();
-        }
-      });
+  startTimer() {
+    this.globalTimer = timer(
+      this.timerDueTime, this.timerPeriod
+    );
+
+    this.globalTimerSubscription = this.globalTimer.subscribe(() => {
+      if (this.globalTimer) {
+        this.getExtensionStatus();
+      }
+    });
+  }
+
+  clearTimer() {
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+      this.globalTimer = null;
     }
   }
 
@@ -179,10 +198,7 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
       this._subscription.unsubscribe();
     }
 
-    if (this.globalTimerSubscription) {
-      this.globalTimerSubscription.unsubscribe();
-      this.globalTimer = null;
-    }
+    this.clearTimer();
 
     if (this.extensionStatusSubscription) {
       this.extensionStatusSubscription.unsubscribe();

@@ -105,6 +105,10 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
         status: 2 // this means stop working status will emit
       };
 
+      if (!this.loginData) {
+        resolve(false);
+      }
+
       this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
