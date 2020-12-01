@@ -16,8 +16,9 @@ import {ResultIncompleteTaskInterface, ResultInterface} from './board-interface'
 export class ApiService {
   public accessToken = '';
   private currentCompany: CompanyInterface = null;
-  private API_URL = AppConfig.CONTAINER_URL + '/project';
-  // private API_URL = AppConfig.API_URL;
+  // private API_URL = AppConfig.CONTAINER_URL + '/project';
+  private API_URL = AppConfig.API_URL;
+  // todo remove by ebi
 
   /**
    * @type {HttpHeaders}
@@ -25,9 +26,11 @@ export class ApiService {
   private headers = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json; charset=UTF-8'
+      'Accept': 'application/json; charset=UTF-8',
+      'from': 'app_application'
     })
   };
+  // todo remove by ebi
 
   constructor(private http: HttpClient,
               private companySelectorService: CompanySelectorService) {
