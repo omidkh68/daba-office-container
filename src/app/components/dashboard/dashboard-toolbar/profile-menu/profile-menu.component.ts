@@ -60,6 +60,7 @@ export class ProfileMenuComponent extends LoginDataClass implements OnInit, OnDe
     this.userInfoService.changeLoginData(null);
 
     this.softPhoneService.sipHangUp();
+    this.softPhoneService.sipUnRegister();
 
     this.windowManagerService.closeAllServices().then(() => {
       setTimeout(() => this.router.navigateByUrl(`/login`), 500);

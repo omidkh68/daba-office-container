@@ -34,8 +34,6 @@ export class SoftPhoneSettingsComponent extends LoginDataClass {
 
     let url = AppConfig.PBX_LOGIN_EXTENSION + `/login.php?action=loginbytoken&comp_id=${currentCompany.id}&token=${this.loginData.access_token}`;
 
-    console.log(url);
-
     const service: ServiceInterface = this.windowManagerService.serviceList.filter(service => service.service_name === 'web_browser').pop();
 
     this.windowManagerService.openWindowState(service).then(() => {

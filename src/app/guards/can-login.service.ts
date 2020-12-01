@@ -7,6 +7,7 @@ import {CanActivate} from '@angular/router';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../services/loginData.class';
 import {UserInfoService} from '../components/users/services/user-info.service';
+import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,7 @@ export class CanShowLogin extends LoginDataClass implements CanActivate, OnDestr
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       return this.api.checkLogin().pipe(
-        map((resp: any) => {
+        map((resp: CheckLoginInterface) => {
           return !(resp.success === true);
         }),
         catchError(e => {

@@ -75,7 +75,9 @@
       "hang_up": "Hang Up",
       "unknown_number": "Unknown Caller",
       "calling": "Calling ...",
-      "available_users": "Available Users"
+      "available_users": "Available Users",
+      "left_the_conf": "left the conference",
+      "joined_the_conf": "joined the conference"
     },
     "call_to_action": {
       "timezone": "Local Time",
@@ -359,7 +361,9 @@
     "current_company": "Current company",
     "back_to_login": "Back to login",
     "your_default_company": "Your current company is",
-    "is": "is"
+    "is": "is",
+    "change_company": "Change company",
+    "change_company_description": "By change current company, all your services will closed, are you sure?"
   },
   "web_browser": {
     "reload_page": "Reload this page",

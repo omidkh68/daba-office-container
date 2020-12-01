@@ -90,7 +90,7 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
       this.extensionStatusSubscription.unsubscribe();
     }
 
-    this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
+    this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe(async (resp: ResultApiInterface) => {
       if (resp.success) {
         if (this.currentIp && this.currentIp != resp.meta.ip) {
           this.softPhoneService.sipUnRegister();
@@ -108,12 +108,25 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
           // const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, extensionList);
           const extensionsList: Array<ExtensionInterface> = [];
 
-          this.softPhoneUsers.map((softphoneUser: ExtensionInterface) => {
+          await this.softPhoneUsers.map((softphoneUser: ExtensionInterface) => {
             const findExtStatus = extensionList.filter((ext: ExtensionInterface) => ext.username === softphoneUser.username).pop();
 
             if (findExtStatus) {
               extensionsList.push(findExtStatus);
             }
+          });
+
+          this.softPhoneUsers = extensionsList.sort((first: ExtensionInterface, second: ExtensionInterface) => {
+            const a = first.is_online;
+            const b = second.is_online;
+
+            let comparison = 0;
+            if (a > b) {
+              comparison = -1;
+            } else if (a < b) {
+              comparison = 1;
+            }
+            return comparison;
           });
 
           if (this.softphoneConnectedStatusSubscription) {
@@ -129,7 +142,7 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
                   this.loggedInUserExtension = {
                     user: this.loggedInUser,
                     extension: item
-                  }
+                  };
                 }
               });
             }

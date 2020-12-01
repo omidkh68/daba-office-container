@@ -131,7 +131,7 @@ export class SoftPhoneService extends LoginDataClass {
     this.connectedCall.next(status);
   }
 
-  get getSoftphoneConnectedStatus() {
+  get getSoftphoneConnectedStatus(): boolean {
     return this.softphoneConnected.getValue();
   }
 
@@ -976,25 +976,6 @@ export class SoftPhoneService extends LoginDataClass {
 
     };
   });
-
-  checkIpAddressVPN() {
-    this.window.addEventListener('online', () => {
-      console.log('Online');
-    });
-
-    this.window.addEventListener('offline', () => {
-      console.log('Offline');
-    });
-    /*    this.getConnectionStatus().then(
-            ips => {
-              let tempIps = ips;
-              if(this.ipAddresses.length && JSON.stringify(tempIps) != JSON.stringify(this.ipAddresses)){
-                console.log("register / unregister");
-              }
-              this.ipAddresses = ips;
-            },
-        );*/
-  }
 
   getTranslate(word) {
     return this.translateService.instant(word);

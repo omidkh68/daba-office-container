@@ -23,6 +23,11 @@ export interface DialPadKeysInterface {
   num: string;
 }
 
+export interface JoinedOrLeftTheConfInterface {
+  extension: ConferenceOnlineExtensionInterface;
+  status: string;
+}
+
 @Component({
   selector: 'app-soft-phone-call-pop-up',
   templateUrl: './soft-phone-call-pop-up.component.html',
@@ -43,7 +48,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   second: number = 0;
   muteStatus: boolean = false;
   connectedStatus: boolean = false;
-  extensionList: Array<ConferenceOnlineExtensionInterface> | null = null;
+  extensionList: Array<ConferenceOnlineExtensionInterface> = [];
   keys: Array<KeysInterface> = [];
   activeExtensionList: boolean = false;
   activeDialPad: boolean = false;
@@ -51,6 +56,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   timerPeriod: number = 5000;
   globalTimer = null;
   globalTimerSubscription: Subscription;
+  userJoinOrLeftTheConf: JoinedOrLeftTheConfInterface | null = null;
 
   dialPadKeys: Array<DialPadKeysInterface> = [
     {num: '1'}, {num: '2'}, {num: '3'},
@@ -184,10 +190,58 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     this._subscription.add(
       this.apiService.getConferenceOnlineUser(this.data.extension_no).subscribe((resp: ResultConfOnlineExtensionApiInterface) => {
         if (resp.success) {
-          this.extensionList = resp.data;
+          this.joinOrLeftToConf(this.extensionList, resp.data).then(() => {
+            this.extensionList = resp.data;
+          });
         }
       })
     );
+  }
+
+  joinOrLeftToConf(arr1: Array<ConferenceOnlineExtensionInterface>, arr2: Array<ConferenceOnlineExtensionInterface>) {
+    return new Promise((resolve) => {
+      let diffArr1 = arr1.filter(this.arrayComparer(arr2));
+      let diffArr2 = arr2.filter(this.arrayComparer(arr1));
+
+      let getDiff = diffArr1.concat(diffArr2);
+
+      if (getDiff.length && getDiff.length === 1) {
+        let status = '';
+        // left the conf
+        if (diffArr1.length === 1 && diffArr2.length === 0) {
+          status = 'left';
+        }
+        // join the conf
+        else if (diffArr1.length === 0 && diffArr2.length === 1) {
+          status = 'join';
+        }
+
+        const joinedOrLeftExtension: ConferenceOnlineExtensionInterface = getDiff.pop();
+
+        if (joinedOrLeftExtension.username !== this.loggedInUser.email) {
+          this.userJoinOrLeftTheConf = {
+            extension: joinedOrLeftExtension,
+            status: status
+          };
+        } else {
+          this.userJoinOrLeftTheConf = null;
+        }
+
+        resolve(true);
+      } else {
+        this.userJoinOrLeftTheConf = null;
+
+        resolve(true);
+      }
+    });
+  }
+
+  arrayComparer(arrayParam: Array<ConferenceOnlineExtensionInterface>){
+    return (current: ConferenceOnlineExtensionInterface) => {
+      return arrayParam.filter((other: ConferenceOnlineExtensionInterface) => {
+        return other.extension_no == current.extension_no && other.extension_no == current.extension_no
+      }).length == 0;
+    }
   }
 
   hangUp() {

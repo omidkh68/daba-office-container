@@ -64,6 +64,10 @@
   color: #4ec060;
 }
 
+.width-ninety-percent {
+  width: 90% !important;
+}
+
 .blink-effect {
   @include transition(all .4s);
 

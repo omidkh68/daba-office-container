@@ -75,7 +75,9 @@
       "hang_up": "قطع تماس",
       "unknown_number": "شماره ناشناس",
       "calling": "در حال تماس ...",
-      "available_users": "افراد حاضر"
+      "available_users": "افراد حاضر",
+      "left_the_conf": "کنفرانس را ترک کرد",
+      "joined_the_conf": "به کنفرانس وارد شد"
     },
     "call_to_action": {
       "timezone": "وقت محلی",
@@ -359,7 +361,9 @@
     "current_company": "شرکت فعلی",
     "back_to_login": "برگشت به صفحه ورود",
     "your_default_company": "شرکت فعلی شما",
-    "is": "می باشد"
+    "is": "می باشد",
+    "change_company": "تغییر شرکت",
+    "change_company_description": "با تغییر شرکت، تمامی سرویس های شما بسته خواهد شد، آیا از این کار اطمینان دارید؟"
   },
   "web_browser": {
     "reload_page": "بارگذاری مجدد این صفحه",

@@ -12,11 +12,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoginResultInterface} from '../logic/login.interface';
 
-export interface LangInterface {
-  id: string;
-  name: string;
-}
-
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html'
@@ -28,10 +23,6 @@ export class LoginFormComponent implements OnInit {
   rtlDirection: boolean;
   form: FormGroup;
   hide: boolean = true;
-  languages: LangInterface[] = [
-    {id: 'en', name: 'English'},
-    {id: 'fa', name: 'پارسی'}
-  ];
   dialogData = null;
   dialogRef = null;
 
@@ -65,8 +56,8 @@ export class LoginFormComponent implements OnInit {
       this.form = this.fb.group({
         username: new FormControl(''),
         password: new FormControl(''),
-        // username: new FormControl('khosrojerdi@dabacenter.ir'),
-        // password: new FormControl('123456')
+        /*username: new FormControl('khosrojerdi@dabacenter.ir'),
+        password: new FormControl('123456')*/
       });
 
       resolve(true);

@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, Injector, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../logic/api.service';
+import {FormControl} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
@@ -16,7 +17,6 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
-import {FormControl} from '@angular/forms';
 
 export interface TabInterface {
   icon: string;
@@ -224,5 +224,7 @@ export class SoftPhoneMainComponent extends LoginDataClass implements AfterViewI
     }
 
     this.softPhoneService.sipHangUp();
+
+    this.softPhoneService.sipUnRegister();
   }
 }

@@ -85,6 +85,7 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
         event.returnValue = false;
 
         await this.softPhoneService.sipHangUp();
+        await this.softPhoneService.sipUnRegister();
 
         const resultOfStatus = await this.changeStatus();
 

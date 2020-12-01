@@ -15,6 +15,10 @@ import {WindowManagerService} from '../../../../services/window-manager.service'
 import {ViewDirectionService} from '../../../../services/view-direction.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 import {CompanySelectorService} from '../../../select-company/services/company-selector.service';
+import {ApproveComponent} from '../../../approve/approve.component';
+import {MatDialog} from '@angular/material/dialog';
+import {of} from 'rxjs/internal/observable/of';
+import {catchError, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-company-selector',
@@ -33,7 +37,8 @@ export class CompanySelectorComponent implements OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private router: Router,
+  constructor(public dialog: MatDialog,
+              private router: Router,
               private apiService: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
@@ -58,35 +63,59 @@ export class CompanySelectorComponent implements OnDestroy {
       return;
     }
 
-    this.companySelectorService.changeSelectedCompany(company);
+    const dialogRef = this.dialog.open(ApproveComponent, {
+      data: {
+        title: this.getTranslate('select_company.change_company'),
+        message: this.getTranslate('select_company.change_company_description'),
+        action: 'success'
+      },
+      autoFocus: false,
+      width: '70vh',
+      maxWidth: '350px',
+      panelClass: 'approve-detail-dialog',
+      height: '160px'
+    });
 
-    setTimeout(() => {
-      this._subscription.add(
-        this.apiService.checkLogin().subscribe((resp: CheckLoginInterface) => {
-          this.windowManagerService.closeAllServices().then(() => {
-            this.userInfoService.changeUserInfo(resp.data);
+    this.windowManagerService.dialogOnTop(dialogRef.id);
 
-            this.viewDirection.changeDirection(resp.data.lang === 'fa');
+    this._subscription.add(
+      dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.companySelectorService.changeSelectedCompany(company);
 
-            this.changeStatusService.changeUserStatus(resp.data.user_status);
+            setTimeout(() => {
+              this._subscription.add(
+                this.apiService.checkLogin().subscribe((resp: CheckLoginInterface) => {
+                  this.windowManagerService.closeAllServices().then(() => {
+                    setTimeout(() => {
+                      this.userInfoService.changeUserInfo(resp.data);
 
-            this.companySelectorService.changeCompanyList(resp.data.companies);
+                      this.viewDirection.changeDirection(resp.data.lang === 'fa');
 
-            let translateTitle = 'select_company.your_default_company';
+                      this.changeStatusService.changeUserStatus(resp.data.user_status);
 
-            let titleMessage = this.getTranslate(translateTitle) + ' (' + company.name + ')';
+                      this.companySelectorService.changeCompanyList(resp.data.companies);
 
-            if (this.rtlDirection) {
-              titleMessage += ' ' + this.getTranslate('select_company.is');
-            }
+                      let translateTitle = 'select_company.your_default_company';
 
-            this.messageService.showMessage(titleMessage)
-          });
-        }, (error: HttpErrorResponse) => {
-          this.refreshLoginService.openLoginDialog(error);
-        })
+                      let titleMessage = this.getTranslate(translateTitle) + ' (' + company.name + ')';
+
+                      if (this.rtlDirection) {
+                        titleMessage += ' ' + this.getTranslate('select_company.is');
+                      }
+
+                      this.messageService.showMessage(titleMessage)
+                    }, 1000);
+                  });
+                }, (error: HttpErrorResponse) => {
+                  this.refreshLoginService.openLoginDialog(error);
+                })
+              )
+            }, 500);
+          }
+        }
       )
-    }, 500);
+    );
   }
 
   getTranslate(word) {
