@@ -6,19 +6,17 @@ import {UserInfoService} from '../components/users/services/user-info.service';
   providedIn: 'root'
 })
 export class WallpaperSelectorService {
-  currentWallpaper;
-
-  protected preWallpaper;
-  private _wallpaper;
+  private _wallpaper: string = this.userInfoService.getUserInfo && this.userInfoService.getUserInfo.background_image ? this.userInfoService.getUserInfo.background_image : './assets/images/wallpapers/7.jpg';
+  private wallpaper = new BehaviorSubject(this._wallpaper);
+  public currentWallpaper = this.wallpaper.asObservable();
 
   constructor(private userInfoService: UserInfoService) {
-    this.preWallpaper = this.userInfoService.getUserInfo.background_image !== null ? 'url(' + this.userInfoService.getUserInfo.background_image + ')' : 'url(./assets/images/wallpapers/18.jpg)';
-    this._wallpaper = new BehaviorSubject(this.preWallpaper);
-    this.currentWallpaper = this._wallpaper.asObservable();
   }
 
   changeWallpaper(newWallpaper) {
-    this._wallpaper.next(newWallpaper);
+    if (newWallpaper !== '') {
+      this.wallpaper.next(newWallpaper);
+    }
   }
 }
 

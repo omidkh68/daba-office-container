@@ -20,6 +20,7 @@
     "no_result": "موردی نیست",
     "minutes": "دقیقه",
     "hours": "ساعت",
+    "notification": "اعلان ها",
     "pagination": {
       "item_per_page": "تعداد در هر صفحه",
       "from": "از"
@@ -169,6 +170,9 @@
       "reports": "گزارشات",
       "delete_title": "حذف تسک",
       "delete_text": "آیا از حذف این تسک اطمینان دارید؟"
+    },
+    "task_report": {
+      "total_time": "میزان ساعت کارکرد"
     },
     "task_todo": {
       "todo_list": "لیست انجام کار",

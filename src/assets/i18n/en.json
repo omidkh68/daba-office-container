@@ -20,6 +20,7 @@
     "no_result": "No Result",
     "minutes": "Minutes",
     "hours": "Hours",
+    "notification": "Notification",
     "pagination": {
       "item_per_page": "Item per page",
       "from": "from"
@@ -169,6 +170,9 @@
       "reports": "Reports",
       "delete_title": "Delete Task",
       "delete_text": "Are you sure want to delete this task?"
+    },
+    "task_report": {
+      "total_time": "Total Working Time"
     },
     "task_todo": {
       "todo_list": "Todo List",

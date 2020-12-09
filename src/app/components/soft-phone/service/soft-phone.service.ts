@@ -34,7 +34,6 @@ export class SoftPhoneService extends LoginDataClass {
   oConfigCall;
   ringtone;
   ringbacktone;
-  ipAddresses: any = [];
 
   private _users: Array<SoftphoneUserInterface> | null;
   private users = new BehaviorSubject(this._users);

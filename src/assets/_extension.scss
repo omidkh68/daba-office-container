@@ -88,6 +88,12 @@ textarea{height: 60px !important;max-height: 100px !important;resize: none !impo
 .no-text-shadow{@include no-text-shadow()}
 
 .no-border{border: none !important}
+.no-border-t-b{border-top: none !important; border-bottom: none !important}
+.no-border-t{border-top: none !important}
+.no-border-b{border-bottom: none !important}
+.no-border-r-l{border-right: none !important; border-left: none !important}
+.no-border-r{border-right: none !important}
+.no-border-l{border-left: none !important}
 
 .overflow-hide{overflow: hidden !important}
 .overflow-visible{overflow: visible !important}

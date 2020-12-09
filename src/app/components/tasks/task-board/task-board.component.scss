@@ -1,6 +1,9 @@
 @import '../../../../assets/mixin';
 
 .board-container {
+  border: solid 1px #DDD;
+  background: #f8f8f8;
+
   .task-container {
     align-self: start;
   }
@@ -9,6 +12,8 @@
 .grid-height {
   height: calc(100% - 40px);
 }
+
+.line-height-22 {line-height: 22px !important}
 
 .task-count {
   @include radius-all;

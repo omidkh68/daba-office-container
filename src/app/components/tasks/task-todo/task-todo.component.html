@@ -8,14 +8,13 @@
     </span>
   </h1>
 
-  <div class="todo-content-container padding-full padding-b-half">
+  <div class="todo-content-container padding-full padding-b-half height-full-minus-45">
     <form [formGroup]="form" class="full-height">
 
-      <div *ngIf="todoList.length" class="todo-list-container padding-b-full overflow-y-auto overflow-x-hide">
+      <div *ngIf="todoList.length" class="todo-list-container padding-b-full overflow-y-auto overflow-x-hide height-full-minus-80">
         <div class="no-padding"
                   cdkDropList
                   [cdkDropListData]="todoList"
-                  class="example-list"
                   (cdkDropListDropped)="changeTodo($event)">
           <mat-card *ngFor="let todoItem of todoList"
                          (click)="checkTodo(todoItem)"
@@ -68,7 +67,7 @@
         </div>
       </div>
 
-      <div class="enter-todo-container margin-t-full">
+      <div class="margin-t-full height-45 pos-rel top-half">
         <div formGroupName="todo">
           <mat-form-field appearance="outline" class="full-width height-45 font-9-em" color="primary">
             <input matInput formControlName="text"

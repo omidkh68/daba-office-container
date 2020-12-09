@@ -28,7 +28,7 @@ import {FullCalendarComponent} from '@fullcalendar/angular';
   styleUrls: ['./task-calendar-rate.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDestroy, DoCheck {
+export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('calendar') calendarComponent: FullCalendarComponent; // the #calendar in the template
   @ViewChild('drawer') drawer: any; // the #calendar in the template
 
@@ -145,9 +145,9 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
     }
   }
 
-  ngDoCheck(): void {
-    this.containerHeight = document.getElementById('rate-container').offsetHeight;
-  }
+  // ngDoCheck(): void {
+  //   this.containerHeight = document.getElementById('rate-container').offsetHeight;
+  // }
 
   ngAfterViewChecked() {
     let weekdayContainer = document.getElementsByClassName('holiday-date');

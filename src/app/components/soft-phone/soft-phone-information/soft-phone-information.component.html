@@ -5,7 +5,7 @@
            [src]="'assets/profileImg/'+ (loggedInUser ? loggedInUser.email : '0') +'.jpg'"
            class="mat-elevation-z2 my-profile-img"
            matListAvatar
-           onerror="this.src='assets/profileImg/0.jpg'">
+           (error)="$event.target.src='assets/profileImg/0.jpg'">
       <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser ? loggedInUser.name : ''}} </h3>
 
       <div [dir]="rtlDirection ? 'ltr' : 'rtl'" class="font-8-rem">
@@ -29,8 +29,9 @@
                      class="highlight cursor-pointer full-height">
         <img [alt]="user.name" [ngClass]="{'active': user.is_online}"
              [src]="'assets/profileImg/'+ user.username +'.jpg'"
+             (error)="$event.target.src='assets/profileImg/0.jpg'"
              class="online-user mat-elevation-z2 width-35 height-35 transition"
-             matListAvatar onerror="this.src='assets/profileImg/0.jpg'">
+             matListAvatar>
 
         <h3 class="font-7-rem text-weight-bold no-margin" matLine>{{user.extension_name}}</h3>
 

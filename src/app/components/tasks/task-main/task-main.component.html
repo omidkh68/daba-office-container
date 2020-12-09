@@ -39,7 +39,7 @@
        class="content-container padding-t-b full-width">
     <ng-container [ngSwitch]="activeTab">
       <!-- boards container -->
-      <div *ngSwitchCase="0" class="full-height">
+      <div *ngSwitchCase="0" class="full-height padding-mini-r-l">
         <app-task-board (pushTaskEssentialInfo)="getTaskEssentialInfo($event)"
                         (triggerBottomSheet)="openButtonSheet($event)"
                         [filterBoards]="filteredBoardsData"

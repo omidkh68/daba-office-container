@@ -11,8 +11,10 @@ import {ElectronService} from '../../services/electron.service';
 import {SoftPhoneService} from '../soft-phone/service/soft-phone.service';
 import {ServiceInterface} from '../services/logic/service-interface';
 import {TranslateService} from '@ngx-translate/core';
+import {CompanyInterface} from '../select-company/logic/company-interface';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
+import {CompanySelectorService} from '../select-company/services/company-selector.service';
 import {WallpaperSelectorService} from '../../services/wallpaper-selector.service';
 import {StatusChangeResultInterface} from '../status/logic/result-interface';
 import {ApiService as StatusApiService} from '../status/logic/api.service';
@@ -34,15 +36,16 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
               public dialog: MatDialog,
               private api: ApiService,
               private injector: Injector,
-              private viewDirection: ViewDirectionService,
               private messageService: MessageService,
               private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private statusApiService: StatusApiService,
               private softPhoneService: SoftPhoneService,
               private translateService: TranslateService,
+              private viewDirection: ViewDirectionService,
+              private windowManagerService: WindowManagerService,
               private wallPaperSelector: WallpaperSelectorService,
-              private windowManagerService: WindowManagerService) {
+              private companySelectorService: CompanySelectorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -101,12 +104,14 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
 
   changeStatus() {
     return new Promise((resolve) => {
+      const currentCompany: CompanyInterface = this.companySelectorService.currentCompany;
+
       const stopWorkingStatus = {
         user_id: this.loggedInUser.id,
         status: 2 // this means stop working status will emit.
       };
 
-      if (!this.loginData) {
+      if (!this.loginData && !currentCompany) {
         resolve(false);
       }
 
@@ -141,7 +146,8 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
             requireInteraction: true
           });
 
-          resolve(false);
+          this.electronService.remote.app.quit();
+          this.electronService.remote.app.exit(0);
         })
       );
     });

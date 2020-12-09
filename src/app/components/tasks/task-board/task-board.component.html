@@ -3,13 +3,13 @@
     *ngFor="let board of boards"
     [colspan]="board.cols"
     [rowspan]="board.rows"
-    class="board-container">
+    class="board-container round-corner no-round-corner-bottom-left no-round-corner-bottom-right">
     <div
-      class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l display-flex flex-space-between">
-      <span class="font-9-em">{{board.name | translate}}</span>
+      class="board-name pos-abs top-0 right-0 full-width line-height-25 padding-mini-t-b padding-r-l display-flex flex-space-between">
+      <span class="font-full-em">{{board.name | translate}}</span>
 
       <span [ngClass]="board.id"
-            class="task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500">
+            class="task-count width-25 height-25 line-height-22 font-7-em text-center text-weight-500">
         {{board.tasks.length}}
       </span>
     </div>
@@ -17,7 +17,7 @@
 </mat-grid-list>
 <mat-grid-list *ngIf="boards.length" class="grid-height" cols="3" gutterSize="10" rowHeight="fit">
   <mat-grid-tile
-    class="board-container"
+    class="board-container round-corner no-round-corner-top-left no-round-corner-top-right"
     *ngFor="let board of boards"
     [colspan]="board.cols"
     [rowspan]="board.rows">
@@ -36,7 +36,7 @@
         </span>
       </div>
 
-      <mat-card class="margin-b-full bg-white card-hover"
+      <mat-card class="margin-b-full bg-white card-hover mat-elevation-z2"
                 [ngClass]="{'overdue-task': task.overdue}"
                 [cdkDragData]="task"
                 matTooltip="{{task.overdue ? ('tasks.boards.overdue' | translate) : null}}"
@@ -68,7 +68,7 @@
 
         <mat-card-footer class="padding-mini-t-b padding-r-l height-45 display-flex flex-space-between">
           <img [src]="'assets/profileImg/'+task.assignTo.email+'.jpg'"
-               onerror="this.src='assets/profileImg/0.jpg'"
+               (error)="$event.target.src='assets/profileImg/0.jpg'"
                class="width-25 height-25 round-corner-all mat-elevation-z1"
                [matTooltip]="task.assignTo.name + ' ' + task.assignTo.family"
                [matTooltipPosition]="rtlDirection ? 'left' : 'right'"

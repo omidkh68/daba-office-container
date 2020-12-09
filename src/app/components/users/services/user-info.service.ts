@@ -11,7 +11,7 @@ import {ElectronService} from '../../../services/electron.service';
 export class UserInfoService {
   body = document.querySelector('html');
 
-  private _userInfo: UserContainerInterface;
+  private _userInfo: UserContainerInterface | null = null;
   private userInfo = new BehaviorSubject(this._userInfo);
   public currentUserInfo = this.userInfo.asObservable();
   private _loginData: LoginInterface | null = null;
@@ -24,7 +24,7 @@ export class UserInfoService {
   constructor(private electronService: ElectronService) {
   }
 
-  get getUserInfo(): UserContainerInterface {
+  get getUserInfo(): UserContainerInterface | null {
     return this.userInfo.getValue();
   }
 

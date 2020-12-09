@@ -123,11 +123,11 @@
             ],
             "assets": [
               "src/assets",
-              "src/favicon.ico",
-              "src/favicon.png",
-              "src/favicon.icns",
-              "src/favicon.256x256.png",
-              "src/favicon.512x512.png"
+              "src/assets/icons/favicon.ico",
+              "src/assets/icons/favicon.png",
+              "src/assets/icons/favicon.icns",
+              "src/assets/icons/favicon.256x256.png",
+              "src/assets/icons/favicon.512x512.png"
             ],
             "customWebpackConfig": {
               "path": "./angular.webpack.js",

@@ -3,7 +3,7 @@
   <img [alt]="loggedInUser.name ? loggedInUser.name : ''" [matMenuTriggerFor]="profileMenu"
        [src]="loggedInUser && loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'"
        class="full-width full-height cursor-pointer"
-       onerror="this.src='assets/profileImg/0.jpg'">
+       (error)="$event.target.src='assets/profileImg/0.jpg'">
 </div>
 <mat-menu class="toolbar-menu box-menu-profile padding-r-l" #profileMenu="matMenu" xPosition="before" yPosition="above">
   <ng-container *ngIf="loggedInUser">

@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Injector,
   Input,
   OnChanges,
   OnDestroy,
@@ -14,6 +15,8 @@ import {timer} from 'rxjs';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
+import {LoginDataClass} from '../../../services/loginData.class';
+import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -23,6 +26,7 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 
@@ -36,18 +40,14 @@ export interface LoggedInUserExtensionInterface {
   templateUrl: './soft-phone-information.component.html',
   styleUrls: ['./soft-phone-information.component.scss']
 })
-export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestroy {
+export class SoftPhoneInformationComponent extends LoginDataClass implements OnInit, OnChanges, OnDestroy {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
   @Input()
   rtlDirection: boolean;
 
-  @Input()
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
-
-  @Input()
-  loggedInUser: UserContainerInterface;
 
   timerDueTime: number = 0;
   timerPeriod: number = 15000;
@@ -63,11 +63,17 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
   private softphoneConnectedStatusSubscription: Subscription = new Subscription();
   private _subscription: Subscription = new Subscription();
 
-  constructor(private apiService: ApiService,
+  constructor(private api: ApiService,
+              private injector: Injector,
+              private apiService: ApiService,
               private messageService: MessageService,
+              private userInfoService: UserInfoService,
               private softPhoneService: SoftPhoneService,
               private translateService: TranslateService,
-              private refreshLoginService: RefreshLoginService) {
+              private refreshLoginService: RefreshLoginService,
+              private loadingIndicatorService: LoadingIndicatorService) {
+    super(injector, userInfoService);
+
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
@@ -81,6 +87,39 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
         if (connectedCall) {
           this.clearTimer();
         }
+      })
+    );
+
+    this.getEssentialData();
+  }
+
+  async getEssentialData() {
+    await this.getExtensions();
+    await this.startTimer();
+  }
+
+  getExtensions(): void {
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
+
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+    this._subscription.add(
+      this.api.getExtensionList().subscribe((resp: ResultApiInterface) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
+        if (resp.success) {
+          const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
+
+          this.softPhoneService.changeExtensionList(extensionList).then(() => {
+            this.softPhoneUsers = extensionList;
+
+            this.softPhoneService.sipRegister();
+          });
+        }
+      }, (error: HttpErrorResponse) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }
@@ -128,6 +167,8 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
             }
             return comparison;
           });
+
+          this.softPhoneService.changeSoftPhoneUsers(this.softPhoneUsers);
 
           if (this.softphoneConnectedStatusSubscription) {
             this.softphoneConnectedStatusSubscription.unsubscribe();
@@ -182,12 +223,16 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.softPhoneUsers && changes.softPhoneUsers.currentValue) {
+    /*if (changes.softPhoneUsers && changes.softPhoneUsers.currentValue) {
       this.startTimer();
-    }
+    }*/
   }
 
   startTimer() {
+    if (this.globalTimer) {
+      this.globalTimer = null;
+    }
+
     this.globalTimer = timer(
       this.timerDueTime, this.timerPeriod
     );
