@@ -328,15 +328,12 @@ export class SoftPhoneService extends LoginDataClass {
       }
 
       this.oSipSessionCall.hangup({events_listener: {events: '*', listener: this.onSipEventSession}});
-
       this.oSipSessionCall = null;
-
-      this.changeOnCallUser(null);
-
-      this.changeConnectedCall(false);
-
-      this.changeMinimizeCallPopUp(false);
     }
+
+    this.changeOnCallUser(null);
+    this.changeConnectedCall(false);
+    this.changeMinimizeCallPopUp(false);
   };
 
   sipToggleMute = () => {

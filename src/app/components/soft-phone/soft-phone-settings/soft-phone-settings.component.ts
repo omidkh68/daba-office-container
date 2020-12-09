@@ -18,6 +18,9 @@ export class SoftPhoneSettingsComponent extends LoginDataClass {
   @Input()
   rtlDirection: boolean;
 
+  @Input()
+  tabId: number = 4;
+
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 

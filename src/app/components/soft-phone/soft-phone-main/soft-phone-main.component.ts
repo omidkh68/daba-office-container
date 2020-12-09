@@ -34,7 +34,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
 
   rtlDirection: boolean;
   loadingIndicator: LoadingIndicatorInterface = null;
-  activeTab = new FormControl(0);
+  // activeTab = new FormControl(0);
+  activeTab: number = 0;
   tabs: Array<TabInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
@@ -69,7 +70,8 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
     );
 
     this._subscription.add(
-      this.softPhoneService.currentActiveTab.subscribe(tab => this.activeTab.setValue(tab))
+      // this.softPhoneService.currentActiveTab.subscribe(tab => this.activeTab.setValue(tab))
+      this.softPhoneService.currentActiveTab.subscribe(tab => this.activeTab = tab)
     );
 
     /*this._subscription.add(
@@ -186,7 +188,9 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   tabChange(event: MatTabChangeEvent) {
-    this.activeTab.setValue(event.index);
+    console.log(event.index);
+    // this.activeTab.setValue(event.index.toString());
+    this.activeTab = event.index;
   }
 
   openButtonSheet(bottomSheetConfig: SoftPhoneBottomSheetInterface) {

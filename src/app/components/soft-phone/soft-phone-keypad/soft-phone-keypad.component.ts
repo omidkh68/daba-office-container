@@ -27,6 +27,9 @@ export class SoftPhoneKeypadComponent {
   rtlDirection: boolean;
 
   @Input()
+  tabId: number = 1;
+
+  @Input()
   fromPopUp: boolean = false;
 
   @Input()

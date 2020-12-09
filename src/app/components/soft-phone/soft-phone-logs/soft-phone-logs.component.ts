@@ -37,6 +37,9 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
   rtlDirection: boolean;
 
   @Input()
+  tabId: number = 2;
+
+  @Input()
   softPhoneUsers: Array<SoftphoneUserInterface>;
 
   @Input()

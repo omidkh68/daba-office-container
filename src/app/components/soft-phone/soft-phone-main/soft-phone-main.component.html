@@ -5,59 +5,47 @@
   </a>
   <div [ngClass]="callPopUpMinimizeStatus ? 'height-full-minus-80' : 'height-full-minus-45'"
        class="soft-phone-container full-width pos-rel">
-    <ng-container [ngSwitch]="activeTab.value">
-      <ng-template [ngSwitchCase]="0">
-        <!-- Show soft phone information -->
-        <app-soft-phone-information (triggerBottomSheet)="openButtonSheet($event)"
-                                    [rtlDirection]="rtlDirection"></app-soft-phone-information>
-        <!-- /Show soft phone information -->
-      </ng-template>
+    <!-- Show soft phone information -->
+    <app-soft-phone-information [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+                                [rtlDirection]="rtlDirection"></app-soft-phone-information>
+    <!-- /Show soft phone information -->
 
-      <!--<ng-template [ngSwitchCase]="1">
-        &lt;!&ndash; Show Soft phone contacts &ndash;&gt;
-        <app-soft-phone-contacts (triggerBottomSheet)="openButtonSheet($event)"
-                                 [loggedInUser]="loggedInUser"
-                                 [rtlDirection]="rtlDirection"
-                                 [softPhoneUsers]="softPhoneUsers"></app-soft-phone-contacts>
-        &lt;!&ndash; /Show Soft phone contacts &ndash;&gt;
-      </ng-template>-->
-
-      <ng-template [ngSwitchCase]="1">
-        <!-- Show soft phone keypad -->
-        <app-soft-phone-keypad (triggerBottomSheet)="openButtonSheet($event)"
+    <!--<ng-template [ngSwitchCase]="1">
+      &lt;!&ndash; Show Soft phone contacts &ndash;&gt;
+      <app-soft-phone-contacts (triggerBottomSheet)="openButtonSheet($event)"
+                               [loggedInUser]="loggedInUser"
                                [rtlDirection]="rtlDirection"
-                               [softPhoneUsers]="softPhoneUsers"></app-soft-phone-keypad>
-        <!-- /Show soft phone keypad -->
-      </ng-template>
+                               [softPhoneUsers]="softPhoneUsers"></app-soft-phone-contacts>
+      &lt;!&ndash; /Show Soft phone contacts &ndash;&gt;
+    </ng-template>-->
 
-      <ng-template [ngSwitchCase]="2">
-        <!-- Show soft phone logs -->
-        <app-soft-phone-logs (triggerBottomSheet)="openButtonSheet($event)"
-                             [loggedInUser]="loggedInUser"
-                             [rtlDirection]="rtlDirection"
-                             [softPhoneUsers]="softPhoneUsers"></app-soft-phone-logs>
-        <!-- /Show soft phone logs -->
-      </ng-template>
+    <!-- Show soft phone keypad -->
+    <app-soft-phone-keypad [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+                           [rtlDirection]="rtlDirection"
+                           [softPhoneUsers]="softPhoneUsers"></app-soft-phone-keypad>
+    <!-- /Show soft phone keypad -->
 
-      <ng-template [ngSwitchCase]="3">
-        <!-- Show soft phone conference -->
-        <app-soft-phone-conference (triggerBottomSheet)="openButtonSheet($event)"
-                                   [rtlDirection]="rtlDirection"
-                                   [softPhoneUsers]="softPhoneUsers"></app-soft-phone-conference>
-        <!-- /Show soft phone conference -->
-      </ng-template>
+    <!-- Show soft phone logs -->
+    <app-soft-phone-logs [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+                         [loggedInUser]="loggedInUser"
+                         [rtlDirection]="rtlDirection"
+                         [softPhoneUsers]="softPhoneUsers"></app-soft-phone-logs>
+    <!-- /Show soft phone logs -->
 
-      <ng-template [ngSwitchCase]="4">
-        <!-- Show soft phone settings -->
-        <app-soft-phone-settings (triggerBottomSheet)="openButtonSheet($event)"
-                                 [rtlDirection]="rtlDirection"></app-soft-phone-settings>
-        <!-- /Show soft phone settings -->
-      </ng-template>
-    </ng-container>
+    <!-- Show soft phone conference -->
+    <app-soft-phone-conference [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+                               [rtlDirection]="rtlDirection"
+                               [softPhoneUsers]="softPhoneUsers"></app-soft-phone-conference>
+    <!-- /Show soft phone conference -->
+
+    <!-- Show soft phone settings -->
+    <app-soft-phone-settings [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+                             [rtlDirection]="rtlDirection"></app-soft-phone-settings>
+    <!-- /Show soft phone settings -->
   </div>
 
   <div class="soft-phone-toolbar clear-both full-width height-45 z-index-1">
-    <mat-tab-group (selectedTabChange)="tabChange($event)" [selectedIndex]="activeTab.value"
+    <mat-tab-group (selectedTabChange)="tabChange($event)" [(selectedIndex)]="activeTab"
                    class="full-height soft-phone-tab" color="primary">
       <mat-tab *ngFor="let tab of tabs;" class="full-height">
         <ng-template class="full-height" mat-tab-label>

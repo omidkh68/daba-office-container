@@ -47,6 +47,9 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   @Input()
   rtlDirection: boolean;
 
+  @Input()
+  tabId: number = 0;
+
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
 
   timerDueTime: number = 0;
@@ -77,18 +80,18 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
+
+    this._subscription.add(
+        this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
+          if (connectedCall) {
+            this.clearTimer();
+          }
+        })
+    );
   }
 
   ngOnInit(): void {
     this.filterArgs = {email: this.loggedInUser.email};
-
-    this._subscription.add(
-      this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
-        if (connectedCall) {
-          this.clearTimer();
-        }
-      })
-    );
 
     this.getEssentialData();
   }

@@ -25,6 +25,9 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
   rtlDirection: boolean;
 
   @Input()
+  tabId: number = 3;
+
+  @Input()
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
 
   @Output()
