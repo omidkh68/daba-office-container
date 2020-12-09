@@ -1,7 +1,7 @@
 import {Component, Injector, OnDestroy} from '@angular/core';
 import {timer} from 'rxjs';
 import * as moment from 'moment';
-import * as lodash from 'lodash';
+import * as _ from 'lodash';
 import {AppConfig} from '../../../environments/environment';
 import {ApiService} from './logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -85,7 +85,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
       this.timerDueTime, this.timerPeriod
     );
 
-    this.randomHours = lodash.sampleSize(this.availableHours, 5);
+    this.randomHours = _.sampleSize(this.availableHours, 5);
 
     this.globalTimerSubscription = this.globalTimer.subscribe(
       () => {
@@ -102,7 +102,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
 
               const checkTime = moment(serverDate).format('HH');
 
-              const findTime: AvailableHoursInterface = lodash.find(this.randomHours, item => item.time === checkTime);
+              const findTime: AvailableHoursInterface = _.find(this.randomHours, item => item.time === checkTime);
 
               if (findTime && findTime.status === false) {
                 findTime.status = true;

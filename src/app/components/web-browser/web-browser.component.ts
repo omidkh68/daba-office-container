@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, Inject, ViewChild, ViewContainerRef} from '@angular/core';
-import {LazyComponentService} from '../../services/lazy-component.service';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {ServiceItemsInterface} from '../dashboard/logic/service-items.interface';
+import {ServiceInterface} from '../services/logic/service-interface';
+import {LazyComponentService} from '../../services/lazy-component.service';
 
 @Component({
   selector: 'app-conference',
@@ -11,7 +11,7 @@ export class WebBrowserComponent implements AfterViewInit {
   @ViewChild('container', {read: ViewContainerRef}) container;
 
   constructor(private lazyComponentService: LazyComponentService,
-              @Inject(MAT_DIALOG_DATA) public data: ServiceItemsInterface) {
+              @Inject(MAT_DIALOG_DATA) public data: ServiceInterface) {
   }
 
   async ngAfterViewInit() {

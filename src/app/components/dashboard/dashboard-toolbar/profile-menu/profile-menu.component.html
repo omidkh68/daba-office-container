@@ -1,9 +1,9 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'"
      class="box mat-elevation-z1 pos-rel text-center round-corner width-40 height-40 overflow-hide">
-  <img [alt]="loggedInUser ? loggedInUser.name : ''" [matMenuTriggerFor]="profileMenu"
+  <img [alt]="loggedInUser.name ? loggedInUser.name : ''" [matMenuTriggerFor]="profileMenu"
        [src]="loggedInUser && loggedInUser.profile_image ? loggedInUser.profile_image : 'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'"
        class="full-width full-height cursor-pointer"
-       onerror="this.src='assets/profileImg/0.jpg'">
+       (error)="$event.target.src='assets/profileImg/0.jpg'">
 </div>
 <mat-menu class="toolbar-menu box-menu-profile padding-r-l" #profileMenu="matMenu" xPosition="before" yPosition="above">
   <ng-container *ngIf="loggedInUser">
@@ -13,11 +13,12 @@
       </mat-icon>
 
       <span class="display-flex flex-direction-column">
-      <span matLine>{{loggedInUser ? loggedInUser.name : ''}}</span>
+      <span matLine>{{loggedInUser.name ? loggedInUser.name : ''}}</span>
 
-      <span matLine class="font-8-em">{{loggedInUser ? loggedInUser.role.title : ''}}</span>
+      <span matLine class="font-8-em">{{loggedInUser.role ? loggedInUser.role.title : ''}}</span>
     </span>
     </h4>
+
     <button mat-menu-item (click)="showProfileSetting()" class="font-7-rem padding-mini-r-l">
       <mat-icon class="text-dark-mode-color">settings</mat-icon>
       <span class="text-dark-mode-color">{{'profileSettings.profile_settings' | translate}}</span>
@@ -26,5 +27,7 @@
       <mat-icon class="text-dark-mode-color">power_settings_new</mat-icon>
       <span class="text-dark-mode-color">{{'dashboard.dashboard_toolbar.exist_app' | translate}}</span>
     </button>
+
+    <span class="padding-r-l font-8-em text-gray-600">&copy; Enoox - v{{version}}</span>
   </ng-container>
 </mat-menu>

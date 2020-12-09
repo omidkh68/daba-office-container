@@ -1,5 +1,12 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height">
-  <div class="full-width full-height overflow-y-auto overflow-x-hide">
+  <div class="padding-full height-40 border-bottom line-height">
+    <span class="text-pink-600">
+      {{'tasks.task_report.total_time' | translate}}:
+    </span>
+    <span class="margin-r-l text-gray-700">{{total}}</span>
+  </div>
+
+  <div class="full-width full-height overflow-y-auto overflow-x-hide height-full-minus-40">
     <table [dataSource]="dataSource" class="full-width" mat-table>
       <!-- Name Column -->
       <ng-container matColumnDef="taskDateStart">
@@ -54,7 +61,7 @@
             </a>
           </span>
 
-          <a (click)="descriptionTask(element.description)" *ngIf="element.description.length"
+          <a (click)="descriptionTask(element)" *ngIf="element.description.length"
              class="padding-mini-r-l  line-height-30 font-9-em overflow-hide text-weight-normal no-box-shadow cursor-pointer">
             <span class="padding-mini-r-l text-blue">{{'tasks.task_detail.overview_description' | translate}}</span>
           </a>

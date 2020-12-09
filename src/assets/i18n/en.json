@@ -20,6 +20,7 @@
     "no_result": "No Result",
     "minutes": "Minutes",
     "hours": "Hours",
+    "notification": "Notification",
     "pagination": {
       "item_per_page": "Item per page",
       "from": "from"
@@ -38,7 +39,8 @@
     "password_error": "Please enter Password",
     "items": "Items",
     "done": "Done",
-    "enter": "Enter"
+    "enter": "Enter",
+    "default": "Current"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -56,7 +58,8 @@
     "status_success": "Status applied successfully",
     "start_working": "Start Working?",
     "start_working_time": "Do you want to start your working?",
-    "close_app_stop_working": "Your working hours are over, have a good day"
+    "close_app_stop_working": "Your working hours are over, have a good day",
+    "cant_stop_working": "Stop working not completed"
   },
   "soft_phone": {
     "main": {
@@ -73,7 +76,9 @@
       "hang_up": "Hang Up",
       "unknown_number": "Unknown Caller",
       "calling": "Calling ...",
-      "available_users": "Available Users"
+      "available_users": "Available Users",
+      "left_the_conf": "left the conference",
+      "joined_the_conf": "joined the conference"
     },
     "call_to_action": {
       "timezone": "Local Time",
@@ -102,6 +107,9 @@
       "not_answered": "Not Answered",
       "busy": "Was Busy",
       "answered": "Answered"
+    },
+    "settings": {
+      "extension_settings": "Extension settings"
     }
   },
   "tasks": {
@@ -163,6 +171,9 @@
       "delete_title": "Delete Task",
       "delete_text": "Are you sure want to delete this task?"
     },
+    "task_report": {
+      "total_time": "Total Working Time"
+    },
     "task_todo": {
       "todo_list": "Todo List",
       "add_an_item": "Add an item",
@@ -199,6 +210,9 @@
       "week": "Week",
       "day": "Day",
       "list": "List"
+    },
+    "incomplete_task": {
+      "incomplete_tasks": "Incomplete Tasks"
     }
   },
   "login_info": {
@@ -348,6 +362,16 @@
   },
   "select_company": {
     "title": "Choose company",
-    "back_to_login": "Back to login"
+    "current_company": "Current company",
+    "back_to_login": "Back to login",
+    "your_default_company": "Your current company is",
+    "is": "is",
+    "change_company": "Change company",
+    "change_company_description": "By change current company, all your services will closed, are you sure?"
+  },
+  "web_browser": {
+    "reload_page": "Reload this page",
+    "forward": "Click to go forward",
+    "back": "Click to go back"
   }
 }

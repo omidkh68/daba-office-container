@@ -13,9 +13,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {PopoverService} from '../../popover-widget/popover.service';
 import {EventApiService} from '../../events/logic/api.service';
+import {ServiceInterface} from '../../services/logic/service-interface';
 import {EventHandlerService} from '../../events/service/event-handler.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {ServiceItemsInterface} from '../logic/service-items.interface';
 import {EventHandlerInterface, EventsReminderInterface} from '../../events/logic/event-handler.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {PopoverContnetComponent} from '../../popover-widget/popover/popover-content/popover-content.component';
@@ -35,7 +35,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
   rtlDirection: boolean;
 
   @Input()
-  serviceList: ServiceItemsInterface[] = [];
+  serviceList: Array<ServiceInterface> = [];
 
   @ViewChild('myCalendar', {}) calendar: MatCalendar<Date>;
   @ViewChild('picker') picker;
@@ -59,7 +59,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
 
   ngOnInit(): void {
     this.eventHandlerSocketService.initializeWebSocketConnection().then(result => {
-      console.log('socket status: ', result);
+      // console.log('socket status: ', result);
     });
     this.getEvents();
   }
@@ -88,8 +88,8 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
     }
     let eventItems = event && event.startDate !== undefined ? event : null;
 
-    let service: ServiceItemsInterface[] = this.serviceList.filter(obj => {
-      return obj.serviceTitle == 'events_calendar'
+    let service: Array<ServiceInterface> = this.serviceList.filter(obj => {
+      return obj.service_name == 'events_calendar'
     });
 
     this.eventHandlerService.moveEventItems(eventItems);

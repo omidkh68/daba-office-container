@@ -165,11 +165,8 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     }
   ];
 
-  /*code1*/
   files: any[] = [];
-  /*code2*/
   imageSrc;
-  /*code1*/
   sellersPermitFile: any;
   wallpaperUrl: string = '';
 
@@ -203,24 +200,20 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.environment = this.electronService.remote.screen.getPrimaryDisplay().workAreaSize;
   }
 
-  /*code1*/
   onFileDropped(files) {
-    // this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
     this.prepareFilesList(files);
 
-    /*code2*/
     const file: File = files[0];
+
     this.sellersPermitFile = file;
     this.handleInputChange(file); //turn into base64
-    /*code2*/
   }
 
   fileBrowseHandler(files) {
     this.prepareFilesList(files.target.files);
-    // this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
 
-    /*code2*/
     let fileList: FileList = files.target.files;
+
     if (fileList.length > 0) {
       const file: File = fileList[0];
       this.sellersPermitFile = file;
@@ -228,7 +221,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     } else {
       alert('No file selected');
     }
-    /*code2*/
   }
 
   deleteFile(index: number) {
@@ -277,9 +269,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  /*code1*/
-
-  /*code2*/
   handleInputChange(files) {
     let file = files;
     let pattern = /image-*/;
@@ -294,7 +283,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
   _handleReaderLoaded(e) {
     let reader = e.target;
-    // let base64result = reader.result.substr(reader.result.indexOf(',') + 1);
     let base64result = reader.result;
 
     this.imageSrc = base64result;
@@ -303,8 +291,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.showProgress = true;
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
   }
-
-  /*code2*/
 
   onSubmit(img) {
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
@@ -331,7 +317,9 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
 
           this.userInfoService.changeUserInfo(temp);
 
-          this.changeWallpaper('url(' + resp.data.background_image + ')');
+          this.changeWallpaper(resp.data.background_image);
+
+          this.dialogRef.close();
         }
       }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'wallpaper'});
@@ -344,7 +332,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     );
   }
 
-  /*WallpaperPhysical to base46*/
   changeWallpaperPhysical(value) {
     this.http.get(value, {responseType: 'blob'})
       .pipe(
@@ -371,8 +358,6 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       };
     });
   }
-
-  /*end of WallpaperPhysical to base46*/
 
   changeWallpaper(value) {
     this.wallPaperSelector.changeWallpaper(value);

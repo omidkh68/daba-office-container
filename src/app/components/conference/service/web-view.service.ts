@@ -9,9 +9,6 @@ export class WebViewService {
   private refreshWebView = new BehaviorSubject(this._refreshWebView);
   public currentRefreshWebView = this.refreshWebView.asObservable();
 
-  constructor() {
-  }
-
   changeRefreshWebView(status: boolean) {
     this.refreshWebView.next(status);
 

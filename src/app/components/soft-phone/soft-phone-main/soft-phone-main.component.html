@@ -9,9 +9,7 @@
       <ng-template [ngSwitchCase]="0">
         <!-- Show soft phone information -->
         <app-soft-phone-information (triggerBottomSheet)="openButtonSheet($event)"
-                                    [loggedInUser]="loggedInUser"
-                                    [rtlDirection]="rtlDirection"
-                                    [softPhoneUsers]="softPhoneUsers"></app-soft-phone-information>
+                                    [rtlDirection]="rtlDirection"></app-soft-phone-information>
         <!-- /Show soft phone information -->
       </ng-template>
 
@@ -45,8 +43,15 @@
         <!-- Show soft phone conference -->
         <app-soft-phone-conference (triggerBottomSheet)="openButtonSheet($event)"
                                    [rtlDirection]="rtlDirection"
-                                   [softPhoneUsers]=softPhoneUsers></app-soft-phone-conference>
+                                   [softPhoneUsers]="softPhoneUsers"></app-soft-phone-conference>
         <!-- /Show soft phone conference -->
+      </ng-template>
+
+      <ng-template [ngSwitchCase]="4">
+        <!-- Show soft phone settings -->
+        <app-soft-phone-settings (triggerBottomSheet)="openButtonSheet($event)"
+                                 [rtlDirection]="rtlDirection"></app-soft-phone-settings>
+        <!-- /Show soft phone settings -->
       </ng-template>
     </ng-container>
   </div>

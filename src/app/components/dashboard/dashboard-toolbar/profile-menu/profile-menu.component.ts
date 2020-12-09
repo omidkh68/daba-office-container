@@ -1,4 +1,4 @@
-import {Component, Inject, Injector, Input, OnDestroy} from '@angular/core';
+import {Component, Inject, Injector, Input, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../users/logic/api.service';
@@ -15,12 +15,14 @@ import {ProfileSettingComponent} from '../../../profile-setting/profile-setting.
   selector: 'app-profile-menu',
   templateUrl: './profile-menu.component.html'
 })
-export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
+export class ProfileMenuComponent extends LoginDataClass implements OnInit, OnDestroy {
   @Input()
   rtlDirection: boolean;
 
   @Input()
   loggedInUser: UserContainerInterface;
+
+  version: string = '';
 
   private _subscription: Subscription = new Subscription();
 
@@ -34,6 +36,10 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
               private softPhoneService: SoftPhoneService,
               private windowManagerService: WindowManagerService) {
     super(injector, userInfoService);
+  }
+
+  ngOnInit(): void {
+    this.version = this.electronService.remote.app.getVersion();
   }
 
   logout() {
@@ -54,6 +60,7 @@ export class ProfileMenuComponent extends LoginDataClass implements OnDestroy {
     this.userInfoService.changeLoginData(null);
 
     this.softPhoneService.sipHangUp();
+    this.softPhoneService.sipUnRegister();
 
     this.windowManagerService.closeAllServices().then(() => {
       setTimeout(() => this.router.navigateByUrl(`/login`), 500);

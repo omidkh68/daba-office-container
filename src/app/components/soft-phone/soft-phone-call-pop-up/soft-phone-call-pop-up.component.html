@@ -12,12 +12,13 @@
     <ul (click)="activeExtensionList = !activeExtensionList"
         class="list-style-none no-padding no-margin cursor-pointer">
       <ng-container *ngFor="let ext of extensionList; let i = index">
-        <li *ngIf="i < 3" [ngStyle]="{'right.px': rtlDirection ? i + '2' : 'inherit', 'left.px' : rtlDirection ? 'inherit' : i + '2'}"
+        <li *ngIf="i < 3"
+            [ngStyle]="{'right.px': rtlDirection ? i + '2' : 'inherit', 'left.px' : rtlDirection ? 'inherit' : i + '2'}"
             class="pos-abs display-flex align-items-center">
           <img [alt]="ext.extension_name" [src]="'assets/profileImg/'+ (ext.username ? ext.username : '0') +'.jpg'"
                class="mat-elevation-z3 width-30 height-30 round-corner-all"
                matListAvatar
-               onerror="this.src='assets/profileImg/0.jpg'">
+               (error)="$event.target.src='assets/profileImg/0.jpg'">
         </li>
       </ng-container>
     </ul>
@@ -31,7 +32,7 @@
     <img [alt]="data.name" [src]="'assets/profileImg/'+ (data.username ? data.username : '0') +'.jpg'"
          class="full-width round-corner-all"
          matListAvatar
-         onerror="this.src='assets/profileImg/0.jpg'">
+         (error)="$event.target.src='assets/profileImg/0.jpg'">
   </div>
 
   <h2
@@ -64,6 +65,26 @@
             mat-raised-button>
       <mat-icon>call_end</mat-icon>
     </button>
+
+    <div *ngIf="!activeExtensionList"
+         [ngClass]="userJoinOrLeftTheConf ? 'bottom-0' : 'bottom-full-2-percent-reverse'"
+         class="pos-abs width-ninety-percent height-50 bg-white mat-elevation-z3 left-0 right-0 margin-auto z-index-99 round-corner transition">
+      <div *ngIf="userJoinOrLeftTheConf"
+           class="full-width full-height display-flex align-items-center justify-content-start padding-r-l">
+        <img [src]="'assets/profileImg/'+ userJoinOrLeftTheConf.extension.username +'.jpg'"
+             [alt]="userJoinOrLeftTheConf.extension.extension_name"
+             (error)="$event.target.src='assets/profileImg/0.jpg'"
+             class="mat-elevation-z2 width-30 height-30 online-user round-corner-all" matListAvatar>
+
+        <h3 class="mat-line font-7-rem text-weight-bold no-margin padding-mini-r-l" matLine>
+          {{userJoinOrLeftTheConf.extension.extension_name}}
+        </h3>
+
+        <span class="font-8-em text-weight-bold white-space-no-wrap">
+          {{(userJoinOrLeftTheConf.status === 'left' ? 'soft_phone.call_pop_up.left_the_conf' : 'soft_phone.call_pop_up.joined_the_conf') | translate}}
+        </span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -85,8 +106,8 @@
   <mat-list class="full-width height-full-minus-45 overflow-x-hide overflow-y-auto">
     <mat-list-item *ngFor="let user of extensionList"
                    class="highlight cursor-pointer padding-r-l">
-      <img [src]="'assets/profileImg/'+ user.username +'.jpg'" [alt]="user.name"
-           onerror="this.src='assets/profileImg/0.jpg'"
+      <img [src]="'assets/profileImg/'+ user.username +'.jpg'" [alt]="user.extension_name"
+           (error)="$event.target.src='assets/profileImg/0.jpg'"
            class="mat-elevation-z2 width-35 height-35 online-user" matListAvatar>
 
       <h3 class="font-7-rem text-weight-bold no-margin" matLine> {{user.extension_name}} </h3>

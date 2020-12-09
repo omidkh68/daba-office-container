@@ -1,15 +1,11 @@
-.todo-content-container {
-  height: calc(100% - 60px);
-}
-
 .text-line-through {
   text-decoration: line-through;
 }
 
-.todo-list-container {
-  max-height: calc(100% - 45px - 1em);
-}
-
 .border-bottom:not(:last-child) {
   border-bottom: solid 1px #DDD;
+}
+
+.flex-grow-1 {
+  flex-grow: 1 !important;
 }

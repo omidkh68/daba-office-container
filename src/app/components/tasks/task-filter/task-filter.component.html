@@ -56,7 +56,7 @@
                  [src]="'assets/profileImg/'+form.get('userImg').value+'.jpg'"
                  class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
                  matPrefix
-                 onerror="this.src='assets/profileImg/0.jpg'">
+                 (error)="$event.target.src='assets/profileImg/0.jpg'">
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
             <mat-select formControlName="adminId" tabIndex="4">
               <mat-option *ngFor="let user of usersList" [value]="user.adminId" class="font-full-em">
@@ -65,7 +65,7 @@
                        [src]="'assets/profileImg/'+user.email+'.jpg'"
                        class="width-20 height-20 round-corner-all pos-rel"
                        matPrefix
-                       onerror="this.src='assets/profileImg/0.jpg'">
+                       (error)="$event.target.src='assets/profileImg/0.jpg'">
                   <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
                 </div>
               </mat-option>

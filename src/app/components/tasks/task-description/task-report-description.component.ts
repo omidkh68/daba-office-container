@@ -53,10 +53,10 @@ export class TaskReportDescriptionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.taskDescription = this.data.description;
+    this.taskDescription = this.data.element.description;
     this.NameDescription = this.data.task.taskName;
-    this.taskPercentage = this.data.task.percentage;
-    this.DateStop = this.data.task.taskDateStop;
+    this.taskPercentage = this.data.element.percentage;
+    this.DateStop = this.data.element.taskDateStop;
   }
 
   close() {
@@ -68,4 +68,5 @@ export class TaskReportDescriptionComponent implements OnInit, OnDestroy {
       this._subscription.unsubscribe();
     }
   }
+
 }

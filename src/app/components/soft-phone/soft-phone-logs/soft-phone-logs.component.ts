@@ -9,8 +9,10 @@ import {CdrResultInterface} from '../logic/cdr-result.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {CompanySelectorService} from '../../select-company/services/company-selector.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
+import {CompanyInterface} from '../../select-company/logic/company-interface';
 
 export interface CdrExtensionListInterface {
   src: string;
@@ -50,6 +52,7 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService,
               private softPhoneService: SoftPhoneService,
               private refreshLoginService: RefreshLoginService,
+              private companySelectorService: CompanySelectorService,
               private loadingIndicatorService: LoadingIndicatorService) {
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
@@ -77,20 +80,23 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
   }
 
   getCdr() {
+    const currentCompany: CompanyInterface = this.companySelectorService.currentCompany;
+
     this._subscription.add(
       this.api.getCdr(this.loggedInUserExtension).subscribe((resp: CdrResultInterface) => {
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
         if (resp.success && resp.data.length) {
-          this.cdrList = resp.data;
+          this.cdrList = resp.data; // todo: replace list with data in production
 
           this.cdrList.map(item => {
             let cdrExtensionItem: CdrExtensionListInterface = null;
             let findUser: SoftphoneUserInterface = null;
+            let src = item.src.replace(`-${currentCompany.subdomain}`, '');
 
             if (this.loggedInUserExtension === item.dst) {
-              findUser = this.softPhoneUsers.filter(user => user.extension_no === item.src).pop();
+              findUser = this.softPhoneUsers.filter(user => user.extension_no === src).pop();
 
               let desc = '';
               let color = '';
@@ -119,7 +125,7 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
               }
 
               cdrExtensionItem = {
-                src: item.src,
+                src: src,
                 dst: item.dst,
                 icon: item.disposition === 'NO ANSWER' ? 'phone_missed' : 'phone_callback',
                 date: item.calldate,
@@ -127,7 +133,7 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
                 desc: desc
               };
 
-            } else if (this.loggedInUserExtension === item.src) {
+            } else if (this.loggedInUserExtension === src) {
               findUser = this.softPhoneUsers.filter(user => user.extension_no === item.dst).pop();
 
               let desc = '';
@@ -158,7 +164,7 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
 
               cdrExtensionItem = {
                 src: item.dst,
-                dst: item.src,
+                dst: src,
                 icon: 'phone_forwarded',
                 date: item.calldate,
                 color: color,

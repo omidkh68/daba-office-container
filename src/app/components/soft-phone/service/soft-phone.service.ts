@@ -6,9 +6,11 @@ import {MessageService} from '../../message/service/message.service';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
+import {CompanyInterface} from '../../select-company/logic/company-interface';
 import {IncomingInterface} from '../logic/incoming.interface';
 import {ExtensionInterface} from '../logic/extension.interface';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {CompanySelectorService} from '../../select-company/services/company-selector.service';
 
 export interface EssentialTagsInterface {
   audioRemote: ElementRef;
@@ -23,7 +25,6 @@ export interface EssentialTagsInterface {
 export class SoftPhoneService extends LoginDataClass {
   allUsersSoftphone: Array<SoftphoneUserInterface> = [];
   loggedInUserSoftphone: SoftphoneUserInterface;
-
   debugMode: boolean = false;
   oSipStack;
   oSipSessionRegister;
@@ -33,7 +34,6 @@ export class SoftPhoneService extends LoginDataClass {
   oConfigCall;
   ringtone;
   ringbacktone;
-  ipAddresses: any = [];
 
   private _users: Array<SoftphoneUserInterface> | null;
   private users = new BehaviorSubject(this._users);
@@ -84,7 +84,8 @@ export class SoftPhoneService extends LoginDataClass {
   constructor(@Inject('windowObject') private window, private injector: Injector,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
-              private translateService: TranslateService) {
+              private translateService: TranslateService,
+              private companySelectorService: CompanySelectorService) {
     super(injector, userInfoService);
   }
 
@@ -129,7 +130,7 @@ export class SoftPhoneService extends LoginDataClass {
     this.connectedCall.next(status);
   }
 
-  public getSoftphoneConnectedStatus() {
+  get getSoftphoneConnectedStatus(): boolean {
     return this.softphoneConnected.getValue();
   }
 
@@ -188,6 +189,8 @@ export class SoftPhoneService extends LoginDataClass {
 
           resolve(true);
         } else {
+          this.messageService.showMessage(`Your extension is not ready, please call service owner`, 'error', 10000);
+
           reject(false);
         }
       })
@@ -209,13 +212,15 @@ export class SoftPhoneService extends LoginDataClass {
         // update debug level to be sure new values will be used if the user haven't updated the page
         SIPml.setDebugLevel('info');
 
+        const defaultCompany: CompanyInterface = this.companySelectorService.currentCompany;
+
         // create SIP stack
         this.oSipStack = new SIPml.Stack({
           realm: AppConfig.REALM,
-          impi: `${this.loggedInUserSoftphone.extension_no}-wrtc`, // todo
-          impu: `sip:${this.loggedInUserSoftphone.extension_no}-wrtc@${AppConfig.REALM}`, // todo
+          impi: `${this.loggedInUserSoftphone.extension_no}-${defaultCompany.subdomain}`, // todo
+          impu: `sip:${this.loggedInUserSoftphone.extension_no}-${defaultCompany.subdomain}@${AppConfig.REALM}`, // todo
           password: this.loggedInUserSoftphone.extension_no,
-          display_name: `${this.loggedInUserSoftphone.extension_no}-wrtc`, // todo
+          display_name: `${this.loggedInUserSoftphone.extension_no}-${defaultCompany.subdomain}`, // todo
           websocket_proxy_url: AppConfig.WEBSOCKET_PROXY_URL,
           outbound_proxy_url: null,
           ice_servers: null,
@@ -621,7 +626,7 @@ export class SoftPhoneService extends LoginDataClass {
 
         switch (description) {
           case 'forbidden': {
-            this.messageService.showMessage(`Rejected by ${incomingExtensionTo ? incomingExtensionTo.extension_name : ''}`);
+            this.messageService.showMessage(`${incomingExtensionTo ? 'Rejected by ' + incomingExtensionTo.extension_name : 'Your softphone not ready, please call service owner'}`);
             break;
           }
 
@@ -970,25 +975,6 @@ export class SoftPhoneService extends LoginDataClass {
 
     };
   });
-
-  checkIpAddressVPN() {
-    this.window.addEventListener('online', () => {
-      console.log('Online');
-    });
-
-    this.window.addEventListener('offline', () => {
-      console.log('Offline');
-    });
-    /*    this.getConnectionStatus().then(
-            ips => {
-              let tempIps = ips;
-              if(this.ipAddresses.length && JSON.stringify(tempIps) != JSON.stringify(this.ipAddresses)){
-                console.log("register / unregister");
-              }
-              this.ipAddresses = ips;
-            },
-        );*/
-  }
 
   getTranslate(word) {
     return this.translateService.instant(word);

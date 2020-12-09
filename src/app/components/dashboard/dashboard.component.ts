@@ -11,10 +11,12 @@ import {ElectronService} from '../../services/electron.service';
 import {SoftPhoneService} from '../soft-phone/service/soft-phone.service';
 import {ServiceInterface} from '../services/logic/service-interface';
 import {TranslateService} from '@ngx-translate/core';
+import {CompanyInterface} from '../select-company/logic/company-interface';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
-import {ServiceItemsInterface} from './logic/service-items.interface';
+import {CompanySelectorService} from '../select-company/services/company-selector.service';
 import {WallpaperSelectorService} from '../../services/wallpaper-selector.service';
+import {StatusChangeResultInterface} from '../status/logic/result-interface';
 import {ApiService as StatusApiService} from '../status/logic/api.service';
 
 @Component({
@@ -25,7 +27,7 @@ import {ApiService as StatusApiService} from '../status/logic/api.service';
 export class DashboardComponent extends LoginDataClass implements OnInit, OnDestroy {
   rtlDirection: boolean;
   windowManager: Array<WindowInterface>;
-  serviceList: ServiceItemsInterface[] = [];
+  serviceList: ServiceInterface[] = [];
   wallpaper: string;
 
   private _subscription: Subscription = new Subscription();
@@ -34,15 +36,16 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
               public dialog: MatDialog,
               private api: ApiService,
               private injector: Injector,
-              private viewDirection: ViewDirectionService,
               private messageService: MessageService,
               private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private statusApiService: StatusApiService,
               private softPhoneService: SoftPhoneService,
               private translateService: TranslateService,
+              private viewDirection: ViewDirectionService,
+              private windowManagerService: WindowManagerService,
               private wallPaperSelector: WallpaperSelectorService,
-              private windowManagerService: WindowManagerService) {
+              private companySelectorService: CompanySelectorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -56,15 +59,8 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
         this.serviceList = [];
 
         this.loggedInUser.services.map((item: ServiceInterface) => {
-          let serviceTitle = item.name.split(' ').join('_').toLowerCase();
-
-          const service: ServiceItemsInterface = {
-            ...item,
-            serviceTitle: serviceTitle,
-          };
-
           if (item.show_in_container) {
-            this.serviceList.push(service);
+            this.serviceList.push(item);
           }
         });
 
@@ -82,63 +78,79 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit(): void {
-    if (AppConfig.production) { // if environment in production mode change status when user want to close app
+    this.stopWorkingBeforeCloseApp();
+  }
 
-      /*this.window.onbeforeunload = (event) => {
-        event.preventDefault();
-
-        setTimeout(() => event.returnValue = true, 5000);
-        /!*event.returnValue = false;
-
-        event.returnValue = true;
-        return true;*!/
-      };*/
-
-      /*this.window.onbeforeunload = (event) => {
+  stopWorkingBeforeCloseApp() {
+    // if environment in production mode change status when user want to close app
+    if (AppConfig.production) {
+      this.window.onbeforeunload = async (event) => {
         event.returnValue = false;
 
-        this.softPhoneService.sipHangUp();
+        await this.softPhoneService.sipHangUp();
+        await this.softPhoneService.sipUnRegister();
 
-        const stopWorkingStatus = {
-          user_id: this.loggedInUser.id,
-          status: 2 // this means stop working status will emit
-        };
+        const resultOfStatus = await this.changeStatus();
 
-        this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+        setTimeout(() => {
+          this.electronService.remote.app.quit();
+          this.electronService.remote.app.exit(0);
 
-        console.log('process: ', this.electronService.remote.process);
-
-        this._subscription.add(
-          this.statusApiService.userChangeStatus(stopWorkingStatus).subscribe((resp: StatusChangeResultInterface) => {
-            if (resp.success === true) {
-              new Notification(`Office Container`, {
-                body: this.getTranslate('status.close_app_stop_working'),
-                icon: 'assets/profileImg/' + this.loggedInUser.email + '.jpg',
-                dir: 'auto'
-              });
-
-              // this.electronService.remote.app.exit();
-
-              event.returnValue = true;
-
-              // setTimeout(() => {
-                // if (this.electronService.remote.process.platform !== 'darwin') {
-                  /!*this.electronService.remote.app.quit();
-                  setTimeout(() => this.electronService.remote.getCurrentWindow().destroy(), 500);
-                  setTimeout(() => this.electronService.remote.app.quit(), 800);*!/
-                // }
-              // }, 500);
-            }
-          }, () => {
-            // if (this.electronService.remote.process.platform !== 'darwin') {
-              /!*this.electronService.remote.app.quit();
-              setTimeout(() => this.electronService.remote.getCurrentWindow().destroy(), 500);
-              setTimeout(() => this.electronService.remote.app.quit(), 800);*!/
-            // }
-          })
-        );
-      };*/
+          event.returnValue = true;
+        }, 200);
+      };
     }
+  }
+
+  changeStatus() {
+    return new Promise((resolve) => {
+      const currentCompany: CompanyInterface = this.companySelectorService.currentCompany;
+
+      const stopWorkingStatus = {
+        user_id: this.loggedInUser.id,
+        status: 2 // this means stop working status will emit.
+      };
+
+      if (!this.loginData && !currentCompany) {
+        resolve(false);
+      }
+
+      this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+      this._subscription.add(
+        this.statusApiService.userChangeStatus(stopWorkingStatus).subscribe((resp: StatusChangeResultInterface) => {
+          if (resp.success === true) {
+            new Notification(`Office Container`, {
+              body: this.getTranslate('status.close_app_stop_working'),
+              icon: 'assets/profileImg/' + this.loggedInUser.email + '.jpg',
+              dir: 'auto',
+              requireInteraction: true
+            });
+
+            resolve(true);
+          } else {
+            new Notification(`Office Container`, {
+              body: this.getTranslate('status.cant_stop_working'),
+              icon: 'assets/profileImg/' + this.loggedInUser.email + '.jpg',
+              dir: 'auto',
+              requireInteraction: true
+            });
+
+            resolve(false);
+          }
+        }, () => {
+          new Notification(`Office Container`, {
+            body: this.getTranslate('status.cant_stop_working'),
+            icon: 'assets/profileImg/' + this.loggedInUser.email + '.jpg',
+            dir: 'auto',
+            requireInteraction: true
+          });
+
+          this.electronService.remote.app.quit();
+          this.electronService.remote.app.exit(0);
+        })
+      );
+    });
   }
 
   getTranslate(word) {

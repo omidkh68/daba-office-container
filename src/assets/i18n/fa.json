@@ -20,6 +20,7 @@
     "no_result": "موردی نیست",
     "minutes": "دقیقه",
     "hours": "ساعت",
+    "notification": "اعلان ها",
     "pagination": {
       "item_per_page": "تعداد در هر صفحه",
       "from": "از"
@@ -38,7 +39,8 @@
     "password_error": "لطفا پسورد را وارد نمایید",
     "items": "مورد",
     "done": "تأیید",
-    "enter": "ورود"
+    "enter": "ورود",
+    "default": "پیشفرض"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -56,7 +58,8 @@
     "status_success": "وضعیت مربوطه با موفقیت اعمال گردید",
     "start_working": "شروع کار",
     "start_working_time": "آیا میخواهید ساعت کاری خود را شروع کنید؟",
-    "close_app_stop_working": "ساعت کاری شما به اتمام رسید، روز خوبی داشته باشید"
+    "close_app_stop_working": "ساعت کاری شما به اتمام رسید، روز خوبی داشته باشید",
+    "cant_stop_working": "زمان کاری متوقف نشد"
   },
   "soft_phone": {
     "main": {
@@ -73,7 +76,9 @@
       "hang_up": "قطع تماس",
       "unknown_number": "شماره ناشناس",
       "calling": "در حال تماس ...",
-      "available_users": "افراد حاضر"
+      "available_users": "افراد حاضر",
+      "left_the_conf": "کنفرانس را ترک کرد",
+      "joined_the_conf": "به کنفرانس وارد شد"
     },
     "call_to_action": {
       "timezone": "وقت محلی",
@@ -102,6 +107,9 @@
       "not_answered": "جواب داده نشد",
       "busy": "مشغول بود",
       "answered": "برقرار شد"
+    },
+    "settings": {
+      "extension_settings": "تنظیمات داخلی"
     }
   },
   "tasks": {
@@ -163,6 +171,9 @@
       "delete_title": "حذف تسک",
       "delete_text": "آیا از حذف این تسک اطمینان دارید؟"
     },
+    "task_report": {
+      "total_time": "میزان ساعت کارکرد"
+    },
     "task_todo": {
       "todo_list": "لیست انجام کار",
       "add_an_item": "یک مورد اضافه کن",
@@ -199,6 +210,9 @@
       "week": "هفته",
       "day": "روز",
       "list": "لیست"
+    },
+    "incomplete_task": {
+      "incomplete_tasks": "تسک های ناتمام"
     }
   },
   "login_info": {
@@ -348,6 +362,16 @@
   },
   "select_company": {
     "title": "شرکت مورد نظر خود را انتخاب نمایید",
-    "back_to_login": "برگشت به صفحه ورود"
+    "current_company": "شرکت فعلی",
+    "back_to_login": "برگشت به صفحه ورود",
+    "your_default_company": "شرکت فعلی شما",
+    "is": "می باشد",
+    "change_company": "تغییر شرکت",
+    "change_company_description": "با تغییر شرکت، تمامی سرویس های شما بسته خواهد شد، آیا از این کار اطمینان دارید؟"
+  },
+  "web_browser": {
+    "reload_page": "بارگذاری مجدد این صفحه",
+    "forward": "رفتن به صفحه بعدی",
+    "back": "بازگشت به صفحه قبلی"
   }
 }

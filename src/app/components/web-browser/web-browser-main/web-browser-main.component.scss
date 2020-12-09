@@ -1,12 +1,64 @@
 .address-bar-container {
-  border-bottom: solid 1px rgba(220, 220, 220, .93);
+  border-top: solid 1px #DDD;
+  border-bottom: solid 1px #DDD;
   background-color: #f1f1f1;
   padding: .65em .75em;
 
   input {
     background-color: #FFF;
     border: solid 1px #DDD;
-    width: calc(100% - 40px);
+    width: calc(100% - 120px);
+    
+    &.disableUrl {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.address-tab {
+  min-width: 50px;
+
+  &.active-tab {
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      right: 0;
+      width: 100%;
+      height: 3px;
+      background-color: #f57c00;
+    }
+
+    .address-title {
+      background-color: #f1f1f1;
+      border-width: 1px 1px 0 1px;
+      border-style: solid;
+      border-color: #DDD;
+    }
+  }
+
+  .close-tab {
+    display: none;
+    visibility: hidden;
+
+    &.active {
+      display: block;
+      visibility: visible;
+    }
+  }
+}
+
+.address-title {
+  height: 90%;
+
+  img {
+    object-fit: cover;
+  }
+
+  .text-eclipse {
+    max-width: calc(50px + 1em);
   }
 }
 
@@ -17,5 +69,15 @@
 
   .mat-icon {
     transform: scale(.8);
+  }
+}
+
+.show-current-tab {
+  display: none;
+  visibility: hidden;
+
+  &.active {
+    display: block;
+    visibility: visible;
   }
 }

@@ -5,7 +5,7 @@
            [src]="'assets/profileImg/'+ loggedInUser ? loggedInUser.email : '0' +'.jpg'"
            class="mat-elevation-z2"
            matListAvatar
-           onerror="this.src='assets/profileImg/0.jpg'">
+           (error)="$event.target.src='assets/profileImg/0.jpg'">
       <h3 class="font-8-rem text-weight-bold" matLine> {{loggedInUser ? loggedInUser.name : ''}} </h3>
 
       <div class="font-8-rem">

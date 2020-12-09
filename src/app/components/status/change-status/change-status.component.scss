@@ -32,7 +32,7 @@
   }
 }
 
-.status-lunch_break {
+.status-lunch_time {
   @include transition(all .4s);
 
   &:hover, &.active-status {

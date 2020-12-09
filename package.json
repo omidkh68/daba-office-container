@@ -1,7 +1,7 @@
 {
   "name": "office-container",
   "description": "Office Container Developed by Angular 9 with Electron (Typescript + SASS + Hot Reload)",
-  "version": "0.12.1",
+  "version": "0.13.3",
   "author": "Omid Khosrojerdi, Husin Sajjadi, Abolfazl Ebrahimik",
   "repository": {
     "type": "git",
@@ -51,9 +51,9 @@
     "@fullcalendar/angular": "^4.4.5-beta",
     "@fullcalendar/core": "^4.4.1",
     "@fullcalendar/daygrid": "^4.4.0",
-    "@fullcalendar/timegrid": "4.4.0",
     "@fullcalendar/google-calendar": "^4.4.0",
     "@fullcalendar/interaction": "^4.4.0",
+    "@fullcalendar/timegrid": "4.4.0",
     "@ngx-translate/core": "12.1.2",
     "@ngx-translate/http-loader": "4.0.0",
     "@swimlane/ngx-charts": "14.0.0",

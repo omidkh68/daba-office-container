@@ -1,11 +1,12 @@
-<div [attr.data-bg]="wallpaper"
-     [style.background]="wallpaper"
-     class="dashboard-container full-width full-height wallpaper">
+<div [ngStyle]="{'background-image': 'url(' + wallpaper + ')'}"
+     class="dashboard-container full-width full-height wallpaper pos-rel">
 
   <app-soft-phone-incoming-call [rtlDirection]="rtlDirection"></app-soft-phone-incoming-call>
 
   <div class="dashboard-app-boundary height-full-minus-70 padding-full">
-    <app-dashboard-datepicker [loggedInUser]="loggedInUser" [serviceList]="serviceList" [rtlDirection]="rtlDirection"></app-dashboard-datepicker>
+    <app-dashboard-datepicker [loggedInUser]="loggedInUser"
+                              [serviceList]="serviceList"
+                              [rtlDirection]="rtlDirection"></app-dashboard-datepicker>
   </div>
 
   <app-screenshot></app-screenshot>

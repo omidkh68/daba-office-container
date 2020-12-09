@@ -15,6 +15,7 @@ import {SoftPhoneCallToActionComponent} from './soft-phone-call-to-action/soft-p
 import {SoftPhoneTransferCallComponent} from './soft-phone-transfer-call/soft-phone-transfer-call.component';
 import {SoftPhoneContactDetailComponent} from './soft-phone-contacts/soft-phone-contact-detail/soft-phone-contact-detail.component';
 import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-information/soft-phone-information.component';
+import { SoftPhoneSettingsComponent } from './soft-phone-settings/soft-phone-settings.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-informat
     SoftPhoneLogsComponent,
     SoftPhoneKeypadComponent,
     SoftPhoneWindowComponent,
+    SoftPhoneSettingsComponent,
     SoftPhoneContactsComponent,
     SoftPhoneCallPopUpComponent,
     SoftPhoneConferenceComponent,

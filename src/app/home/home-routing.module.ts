@@ -16,8 +16,7 @@ const routes: Routes = [
       }/*,
       {
         path: 'selectCompany',
-        loadChildren: () => import('../components/select-company/select-company.module').then(m => m.SelectCompanyModule),
-        canActivate: [AuthGuardService]
+        loadChildren: () => import('../components/select-company/select-company.module').then(m => m.SelectCompanyModule)
       }*/
     ]
   }

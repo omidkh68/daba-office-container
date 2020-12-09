@@ -12,6 +12,10 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'selectCompany',
+    loadChildren: () => import('./components/select-company/select-company.module').then(m => m.SelectCompanyModule)
+  },
+  {
     path: 'login',
     canActivate: [CanShowLogin],
     component: LoginComponent

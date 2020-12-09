@@ -4,11 +4,11 @@ import {TasksComponent} from '../components/tasks/tasks.component';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {ElectronService} from './electron.service';
 import {WindowInterface} from '../components/dashboard/logic/window.interface';
+import {ServiceInterface} from '../components/services/logic/service-interface';
 import {SoftPhoneComponent} from '../components/soft-phone/soft-phone.component';
 import {AdminPanelComponent} from '../components/admin-panel/admin-panel.component';
 import {ConferenceComponent} from '../components/conference/conference.component';
 import {WebBrowserComponent} from '../components/web-browser/web-browser.component';
-import {ServiceItemsInterface} from '../components/dashboard/logic/service-items.interface';
 import {EventsHandlerComponent} from '../components/events/events-handler.component';
 import {LearningSystemComponent} from '../components/learning-system/learning-system.component';
 import {ConferencesCollaborationComponent} from '../components/conferences-collaboration/conferences-collaboration.component';
@@ -23,7 +23,7 @@ export class WindowManagerService {
   private windows = new BehaviorSubject(this._defaultWindows);
   public windowsList = this.windows.asObservable();
 
-  private _services: Array<ServiceItemsInterface> | null = null;
+  private _services: Array<ServiceInterface> | null = null;
   private services = new BehaviorSubject(this._services);
 
   constructor(public dialog: MatDialog,
@@ -36,15 +36,15 @@ export class WindowManagerService {
     return this.windows.getValue();
   }
 
-  get serviceList(): Array<ServiceItemsInterface> {
+  get serviceList(): Array<ServiceInterface> {
     return this.services.getValue();
   }
 
-  changeServices(services: Array<ServiceItemsInterface> | null) {
+  changeServices(services: Array<ServiceInterface> | null) {
     this.services.next(services);
   }
 
-  openWindowState(service: ServiceItemsInterface) {
+  openWindowState(service: ServiceInterface) {
     return new Promise((resolve) => {
       let component: any = null;
       let maximizable: boolean = true;
@@ -52,19 +52,19 @@ export class WindowManagerService {
       let windowHeight = service && service.height ? service.height : 0;
 
       try {
-        switch (service.serviceTitle) {
-          case 'project_service': {
+        switch (service.service_name) {
+          case 'project': {
             component = TasksComponent;
             break;
           }
 
-          case 'softphones_service': {
+          case 'pbx': {
             component = SoftPhoneComponent;
             maximizable = false;
             break;
           }
 
-          case 'conference_service': {
+          case 'conference': {
             component = ConferenceComponent;
             break;
           }
@@ -84,18 +84,18 @@ export class WindowManagerService {
             break;
           }
 
-          case 'learning_service': {
+          case 'learning': {
             component = LearningSystemComponent;
             break;
           }
 
-          case 'conferences_&_collaboration_services': {
+          case 'conferences_collaboration': {
             component = ConferencesCollaborationComponent;
             break;
           }
         }
 
-        const findIndex = this.windowListArray.findIndex(windowItem => windowItem.windowService.serviceTitle === service.serviceTitle);
+        const findIndex = this.windowListArray.findIndex(windowItem => windowItem.windowService.service_name === service.service_name);
 
         if (findIndex === -1) {
           const dialogRef = this.dialog.open(component, {
@@ -163,8 +163,8 @@ export class WindowManagerService {
     });
   }
 
-  minimizeWindow(service: ServiceItemsInterface) {
-    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+  minimizeWindow(service: ServiceInterface) {
+    const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
 
     windowInstance.isMinimized = true;
     windowInstance.isMaximized = false;
@@ -173,8 +173,8 @@ export class WindowManagerService {
     windowInstance.windowRef.addPanelClass('minimized');
   }
 
-  maximizeWindow(service: ServiceItemsInterface) {
-    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+  maximizeWindow(service: ServiceInterface) {
+    const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
 
     windowInstance.isMinimized = false;
     windowInstance.isMaximized = true;
@@ -185,8 +185,8 @@ export class WindowManagerService {
     this.activeWindow(service);
   }
 
-  restoreWindow(service: ServiceItemsInterface) {
-    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+  restoreWindow(service: ServiceInterface) {
+    const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
 
     windowInstance.isMinimized = false;
     windowInstance.isMaximized = false;
@@ -197,8 +197,8 @@ export class WindowManagerService {
     this.activeWindow(service);
   }
 
-  activeWindow(service: ServiceItemsInterface) {
-    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
+  activeWindow(service: ServiceInterface) {
+    const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
 
     let priority = this.getMaxZIndex();
 
@@ -225,9 +225,9 @@ export class WindowManagerService {
     this.windows.next(this.windowListArray);
   }
 
-  closeWindow(service: ServiceItemsInterface) {
-    const windowInstance = this.windowListArray.filter(window => window.windowService.serviceTitle === service.serviceTitle).pop();
-    const findIndex = this.windowListArray.findIndex(window => window.windowService.serviceTitle === service.serviceTitle);
+  closeWindow(service: ServiceInterface) {
+    const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
+    const findIndex = this.windowListArray.findIndex(window => window.windowService.service_name === service.service_name);
 
     this.windowListArray.splice(findIndex, 1);
 

@@ -1,8 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../../soft-phone/service/soft-phone.service';
+import {ServiceInterface} from '../../services/logic/service-interface';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
 
 @Component({
   selector: 'app-conferences-collaboration-main',
@@ -11,7 +11,7 @@ import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interfa
 })
 export class ConferencesCollaborationMainComponent {
   @Input()
-  windowData: ServiceItemsInterface;
+  windowData: ServiceInterface;
 
   rtlDirection: boolean;
 
@@ -23,9 +23,9 @@ export class ConferencesCollaborationMainComponent {
   openService(serviceName: string) {
     // setTimeout(() => this.windowManagerService.minimizeWindow(this.windowData), 500);
 
-    const services: Array<ServiceItemsInterface> = this.windowManagerService.serviceList;
+    const services: Array<ServiceInterface> = this.windowManagerService.serviceList;
 
-    const findService = services.filter(item => item.serviceTitle.includes(serviceName));
+    const findService = services.filter(item => item.service_name.includes(serviceName));
 
     if (findService.length) {
       setTimeout(() => {

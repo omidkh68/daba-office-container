@@ -32,6 +32,7 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
 
   conferenceList: Array<SoftphoneConferenceInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
+  softPhoneConnectedStatus: boolean = false;
 
   private _subscription: Subscription = new Subscription();
 
@@ -52,6 +53,8 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
 
   ngOnInit(): void {
     this.getConferenceList();
+
+    this.softPhoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus;
   }
 
   getConferenceList() {
@@ -87,18 +90,20 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
   }
 
   openSheet(user: SoftphoneConferenceInterface) {
-    if (this.callPopUpMinimizeStatus) {
-      this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
+    if (this.softPhoneConnectedStatus) {
+      if (this.callPopUpMinimizeStatus) {
+        this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
 
-      return;
+        return;
+      }
+
+      this.triggerBottomSheet.emit({
+        component: SoftPhoneCallToActionComponent,
+        height: '200px',
+        width: '98%',
+        data: {...user, type: 'conference'}
+      });
     }
-
-    this.triggerBottomSheet.emit({
-      component: SoftPhoneCallToActionComponent,
-      height: '200px',
-      width: '98%',
-      data: {...user, type: 'conference'}
-    });
   }
 
   getTranslate(word) {

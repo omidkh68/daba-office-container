@@ -16,7 +16,7 @@
            [src]="'assets/profileImg/'+ data.username +'.jpg'"
            class="online-user mat-elevation-z2 width-50 height-50 round-corner-all margin-auto"
            matListAvatar
-           onerror="this.src='assets/profileImg/0.jpg'">
+           (error)="$event.target.src='assets/profileImg/0.jpg'">
 
       <p class="font-8-rem" matLine>
           <span> <b>{{'soft_phone.call_to_action.timezone' | translate}}</b>

@@ -14,8 +14,8 @@ export class LoginComponent implements OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private viewDirection: ViewDirectionService,
-              private electronService: ElectronService) {
+  constructor(private electronService: ElectronService,
+              private viewDirection: ViewDirectionService) {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );

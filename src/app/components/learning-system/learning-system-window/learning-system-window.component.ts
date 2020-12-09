@@ -2,10 +2,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {WindowInterface} from '../../dashboard/logic/window.interface';
 import {WebViewService} from '../service/web-view.service';
+import {RefreshInterface} from '../logic/refresh.interface';
+import {ServiceInterface} from '../../services/logic/service-interface';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
-import {RefreshInterface} from '../logic/refresh.interface';
 
 @Component({
   selector: 'app-learning-system-window',
@@ -14,7 +14,7 @@ import {RefreshInterface} from '../logic/refresh.interface';
 export class LearningSystemWindowComponent implements OnInit, OnDestroy {
   rtlDirection: boolean;
   windowInstance: WindowInterface;
-  data: ServiceItemsInterface;
+  data: ServiceInterface;
   showReload: RefreshInterface;
 
   private _subscription: Subscription = new Subscription();
@@ -34,7 +34,7 @@ export class LearningSystemWindowComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.windowManagerService.windowsList.subscribe(window => {
-        this.windowInstance = window.filter(item => item.windowService.serviceTitle === this.data.serviceTitle).pop();
+        this.windowInstance = window.filter(item => item.windowService.service_name === this.data.service_name).pop();
       })
     );
   }

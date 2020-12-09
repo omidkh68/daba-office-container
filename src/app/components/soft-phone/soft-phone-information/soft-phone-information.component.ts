@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Injector,
   Input,
   OnChanges,
   OnDestroy,
@@ -11,10 +12,11 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {timer} from 'rxjs';
-import * as lodash from 'lodash';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
+import {LoginDataClass} from '../../../services/loginData.class';
+import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -24,6 +26,7 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
 
@@ -37,18 +40,14 @@ export interface LoggedInUserExtensionInterface {
   templateUrl: './soft-phone-information.component.html',
   styleUrls: ['./soft-phone-information.component.scss']
 })
-export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestroy {
+export class SoftPhoneInformationComponent extends LoginDataClass implements OnInit, OnChanges, OnDestroy {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
   @Input()
   rtlDirection: boolean;
 
-  @Input()
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
-
-  @Input()
-  loggedInUser: UserContainerInterface;
 
   timerDueTime: number = 0;
   timerPeriod: number = 15000;
@@ -58,16 +57,23 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
   filterArgs = null;
   callPopUpMinimizeStatus: boolean = false;
   softphoneConnectedStatus: boolean = false;
+  currentIp: string = '';
 
   private extensionStatusSubscription: Subscription = new Subscription();
   private softphoneConnectedStatusSubscription: Subscription = new Subscription();
   private _subscription: Subscription = new Subscription();
 
-  constructor(private apiService: ApiService,
+  constructor(private api: ApiService,
+              private injector: Injector,
+              private apiService: ApiService,
               private messageService: MessageService,
+              private userInfoService: UserInfoService,
               private softPhoneService: SoftPhoneService,
               private translateService: TranslateService,
-              private refreshLoginService: RefreshLoginService) {
+              private refreshLoginService: RefreshLoginService,
+              private loadingIndicatorService: LoadingIndicatorService) {
+    super(injector, userInfoService);
+
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
@@ -75,6 +81,47 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
 
   ngOnInit(): void {
     this.filterArgs = {email: this.loggedInUser.email};
+
+    this._subscription.add(
+      this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
+        if (connectedCall) {
+          this.clearTimer();
+        }
+      })
+    );
+
+    this.getEssentialData();
+  }
+
+  async getEssentialData() {
+    await this.getExtensions();
+    await this.startTimer();
+  }
+
+  getExtensions(): void {
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
+
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+    this._subscription.add(
+      this.api.getExtensionList().subscribe((resp: ResultApiInterface) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
+        if (resp.success) {
+          const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
+
+          this.softPhoneService.changeExtensionList(extensionList).then(() => {
+            this.softPhoneUsers = extensionList;
+
+            this.softPhoneService.sipRegister();
+          });
+        }
+      }, (error: HttpErrorResponse) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
+        this.refreshLoginService.openLoginDialog(error);
+      })
+    );
   }
 
   getExtensionStatus() {
@@ -82,28 +129,61 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
       this.extensionStatusSubscription.unsubscribe();
     }
 
-    this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
+    this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe(async (resp: ResultApiInterface) => {
       if (resp.success) {
+        if (this.currentIp && this.currentIp != resp.meta.ip) {
+          this.softPhoneService.sipUnRegister();
+
+          setTimeout(() => {
+            this.softPhoneService.sipRegister();
+          }, 500);
+        }
+
+        this.currentIp = resp.meta.ip;
+
         if (this.softPhoneUsers && this.softPhoneUsers.length) {
           const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
 
-          const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, extensionList);
+          // const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, extensionList);
+          const extensionsList: Array<ExtensionInterface> = [];
 
-          this.softPhoneService.changeSoftPhoneUsers(extensionsList);
+          await this.softPhoneUsers.map((softphoneUser: ExtensionInterface) => {
+            const findExtStatus = extensionList.filter((ext: ExtensionInterface) => ext.username === softphoneUser.username).pop();
+
+            if (findExtStatus) {
+              extensionsList.push(findExtStatus);
+            }
+          });
+
+          this.softPhoneUsers = extensionsList.sort((first: ExtensionInterface, second: ExtensionInterface) => {
+            const a = first.is_online;
+            const b = second.is_online;
+
+            let comparison = 0;
+            if (a > b) {
+              comparison = -1;
+            } else if (a < b) {
+              comparison = 1;
+            }
+            return comparison;
+          });
+
+          this.softPhoneService.changeSoftPhoneUsers(this.softPhoneUsers);
 
           if (this.softphoneConnectedStatusSubscription) {
             this.softphoneConnectedStatusSubscription.unsubscribe();
           }
 
-          this.softphoneConnectedStatusSubscription = this.softPhoneService.currentSoftphoneConnected.subscribe(status => {
+          this.softphoneConnectedStatusSubscription = this.softPhoneService.currentSoftphoneConnected.subscribe(async status => {
             if (status) {
-              this.softphoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus();
-              extensionsList.map(item => {
+              this.softphoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus;
+
+              await extensionsList.map(item => {
                 if (item.username === this.loggedInUser.email) {
                   this.loggedInUserExtension = {
                     user: this.loggedInUser,
                     extension: item
-                  }
+                  };
                 }
               });
             }
@@ -143,12 +223,31 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.softPhoneUsers.currentValue) {
-      this.globalTimer = timer(
-        this.timerDueTime, this.timerPeriod
-      );
+    /*if (changes.softPhoneUsers && changes.softPhoneUsers.currentValue) {
+      this.startTimer();
+    }*/
+  }
 
-      this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getExtensionStatus());
+  startTimer() {
+    if (this.globalTimer) {
+      this.globalTimer = null;
+    }
+
+    this.globalTimer = timer(
+      this.timerDueTime, this.timerPeriod
+    );
+
+    this.globalTimerSubscription = this.globalTimer.subscribe(() => {
+      if (this.globalTimer) {
+        this.getExtensionStatus();
+      }
+    });
+  }
+
+  clearTimer() {
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+      this.globalTimer = null;
     }
   }
 
@@ -157,9 +256,14 @@ export class SoftPhoneInformationComponent implements OnInit, OnChanges, OnDestr
       this._subscription.unsubscribe();
     }
 
-    if (this.globalTimerSubscription) {
-      this.globalTimerSubscription.unsubscribe();
-      this.globalTimer = null;
+    this.clearTimer();
+
+    if (this.extensionStatusSubscription) {
+      this.extensionStatusSubscription.unsubscribe();
+    }
+
+    if (this.softphoneConnectedStatusSubscription) {
+      this.softphoneConnectedStatusSubscription.unsubscribe();
     }
   }
 }
@@ -173,8 +277,6 @@ export class MyFilterPipe implements PipeTransform {
     if (!items || !filter) {
       return items;
     }
-    // filter items array, items which match and return true will be
-    // kept, false will be filtered out
     return items.filter((item: SoftphoneUserInterface) => item.username !== filter.email);
   }
 }

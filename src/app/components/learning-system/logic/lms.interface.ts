@@ -32,6 +32,25 @@ export interface ServerInterface {
   serverUrl: string;
 }
 
+export interface RoomUserIdInterface {
+  user_id: number;
+  room_id: number;
+}
+
+export interface UserInterface {
+  id: number;
+  userName: string;
+  userId: string;
+  createDate: string;
+  site: string;
+  siteId: string;
+}
+
+export interface RoomUserInterface {
+  id: RoomUserIdInterface;
+  user: UserInterface;
+}
+
 export interface RoomInterface {
   id: number;
   roomName: string;
@@ -41,7 +60,7 @@ export interface RoomInterface {
   endTime: string;
   createDate: string;
   userCreator: string;
-  users: Array<string>;
+  users: Array<RoomUserInterface>;
 }
 
 export interface JoinInterface {
@@ -59,21 +78,3 @@ export interface JoinResultInterface {
   result: string;
   systemError: string;
 }
-
-/*
-
-{
-  "isMuteOnStart": "false",
-  "isPrivateChatDisable": "false",
-  "isPublicChatDisable": "false",
-  "isRecord": "false",
-  "isUserMicDisable": "false",
-  "isUserWebCamDisable": "false",
-  "isWebCamModeratorOnly": "false",
-  "meetingID": "Omid_Daba",
-  "moderatorPassword": "123456",
-  "moderatorWelcomeMsg": "Welcome",
-  "userName": "Omid",
-  "viewerPassword": "123",
-  "welcomeText": "Welcome 2"
-}*/

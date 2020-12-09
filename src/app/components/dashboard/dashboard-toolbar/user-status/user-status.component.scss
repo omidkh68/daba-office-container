@@ -31,13 +31,13 @@
     }
   }
 
-  &.status-lunch_break {
+  &.status-lunch_time {
     @include transition(all .4s);
 
-    animation: blink-status-lunch_break 1s infinite linear;
+    animation: blink-status-lunch_time 1s infinite linear;
 
     .mat-icon {
-      animation: blink-status-lunch_break 1s infinite linear;
+      animation: blink-status-lunch_time 1s infinite linear;
     }
   }
 
@@ -138,7 +138,7 @@
   }
 }
 
-@keyframes blink-status-lunch_break {
+@keyframes blink-status-lunch_time {
   0% {
     color: #888;
     box-shadow: none;

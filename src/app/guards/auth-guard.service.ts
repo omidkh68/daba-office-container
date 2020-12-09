@@ -13,6 +13,8 @@ import {ChangeStatusService} from '../components/status/services/change-status.s
 import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
 import {ViewDirectionService} from '../services/view-direction.service';
 import {UserContainerInterface} from '../components/users/logic/user-container.interface';
+import {CompanySelectorService} from '../components/select-company/services/company-selector.service';
+import {WallpaperSelectorService} from '../services/wallpaper-selector.service';
 
 export interface DataInterface {
   loginData: LoginInterface,
@@ -26,15 +28,17 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
   private _subscription: Subscription = new Subscription();
 
   constructor(@Inject('windowObject') private window,
-              private api: ApiService,
               private router: Router,
+              private api: ApiService,
               private injector: Injector,
               private translate: TranslateService,
-              private viewDirection: ViewDirectionService,
-              private electronService: ElectronService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
-              private changeStatusService: ChangeStatusService) {
+              private electronService: ElectronService,
+              private viewDirection: ViewDirectionService,
+              private changeStatusService: ChangeStatusService,
+              private companySelectorService: CompanySelectorService,
+              private wallpaperSelectorService: WallpaperSelectorService) {
     super(injector, userInfoService);
   }
 
@@ -67,6 +71,11 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
           reject(false);
         } else {
           this.userInfoService.changeLoginData(loginData);
+
+          if (loginData.company) {
+            this.companySelectorService.changeSelectedCompany(loginData.company);
+          }
+
           resolve(loginData);
         }
       }).catch(() => reject(false));
@@ -124,6 +133,12 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     this.viewDirection.changeDirection(data.userInfo.lang === 'fa');
 
     this.changeStatusService.changeUserStatus(data.userInfo.user_status);
+
+    this.companySelectorService.changeCompanyList(data.userInfo.companies);
+
+    console.log(data.userInfo);
+
+    this.wallpaperSelectorService.changeWallpaper(data.userInfo.background_image ? data.userInfo.background_image : '');
   }
 
   getTranslate(word) {

@@ -1,8 +1,9 @@
 import {Component, Input, ViewEncapsulation} from '@angular/core';
 import {WindowInterface} from '../logic/window.interface';
-// import {UserInterface} from '../../users/logic/user-interface';
-import {ServiceItemsInterface} from '../logic/service-items.interface';
+import {CompanyInterface} from '../../select-company/logic/company-interface';
+import {ServiceInterface} from '../../services/logic/service-interface';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {CompanySelectorService} from '../../select-company/services/company-selector.service';
 
 @Component({
   selector: 'app-dashboard-toolbar',
@@ -21,8 +22,11 @@ export class DashboardToolbarComponent {
   loggedInUser: UserContainerInterface;
 
   @Input()
-  serviceList: Array<ServiceItemsInterface>;
+  serviceList: Array<ServiceInterface>;
 
-  constructor() {
+  companies: Array<CompanyInterface> = null;
+
+  constructor(private companySelectorService: CompanySelectorService) {
+    this.companies = this.companySelectorService.currentCompanies;
   }
 }

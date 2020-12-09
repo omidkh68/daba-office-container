@@ -1,6 +1,7 @@
 @import 'assets/extension';
 @import 'assets/fonts/iranSans/iranSans';
 @import 'assets/fonts/roboto/roboto';
+@import 'assets/fonts/material-icon-font/material-icons';
 @import 'assets/grid';
 
 :host {
@@ -539,6 +540,7 @@ file-preview-container {
     position: relative;
     background: none;
     overflow: hidden;
+    width: 250px;
 
     &::before {
       @extend %before-light-bg;

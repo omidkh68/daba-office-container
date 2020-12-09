@@ -1,6 +1,7 @@
 import {RoleInterface} from './role.interface';
 import {ServiceInterface} from '../../services/logic/service-interface';
 import {UserStatusInterface} from '../../status/logic/status-interface';
+import {CompanyInterface} from '../../select-company/logic/company-interface';
 
 export interface UserContainerInterface {
   id: number;
@@ -18,4 +19,5 @@ export interface UserContainerInterface {
   background_image: string | null;
   editable?: boolean;
   phoneNumber?: string;
+  companies: Array<CompanyInterface>;
 }

@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {WindowInterface} from '../../dashboard/logic/window.interface';
-import {ServiceItemsInterface} from '../../dashboard/logic/service-items.interface';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {WebViewService} from '../service/web-view.service';
+import {WindowInterface} from '../../dashboard/logic/window.interface';
+import {ServiceInterface} from '../../services/logic/service-interface';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {WebViewService} from '../service/web-view.service';
 
 @Component({
   selector: 'app-admin-panel-window',
@@ -13,7 +13,7 @@ import {WebViewService} from '../service/web-view.service';
 export class AdminPanelWindowComponent implements OnInit, OnDestroy {
   rtlDirection: boolean;
   windowInstance: WindowInterface;
-  data: ServiceItemsInterface;
+  data: ServiceInterface;
 
   private _subscription: Subscription = new Subscription();
 
@@ -28,7 +28,7 @@ export class AdminPanelWindowComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._subscription.add(
       this.windowManagerService.windowsList.subscribe(window => {
-        this.windowInstance = window.filter(item => item.windowService.serviceTitle === this.data.serviceTitle).pop();
+        this.windowInstance = window.filter(item => item.windowService.service_name === this.data.service_name).pop();
       })
     );
   }
