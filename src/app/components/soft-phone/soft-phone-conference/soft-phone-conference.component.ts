@@ -57,7 +57,14 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
   ngOnInit(): void {
     this.getConferenceList();
 
-    this.softPhoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus;
+    this._subscription.add(
+        this.softPhoneService.currentSoftphoneConnected.subscribe((status: boolean) => {
+
+          this.softPhoneConnectedStatus = status;
+
+        })
+    )
+    //this.softPhoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus;
   }
 
   getConferenceList() {
@@ -93,6 +100,9 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
   }
 
   openSheet(user: SoftphoneConferenceInterface) {
+
+    console.log(this.softPhoneConnectedStatus);
+
     if (this.softPhoneConnectedStatus) {
       if (this.callPopUpMinimizeStatus) {
         this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));

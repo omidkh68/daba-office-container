@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Injector, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {CdrInterface} from '../logic/cdr.interface';
@@ -13,6 +13,8 @@ import {CompanySelectorService} from '../../select-company/services/company-sele
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
+import {LoginDataClass} from "../../../services/loginData.class";
+import {UserInfoService} from "../../users/services/user-info.service";
 
 export interface CdrExtensionListInterface {
   src: string;
@@ -29,7 +31,7 @@ export interface CdrExtensionListInterface {
   templateUrl: './soft-phone-logs.component.html',
   styleUrls: ['./soft-phone-logs.component.scss']
 })
-export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
+export class SoftPhoneLogsComponent extends LoginDataClass implements OnInit, OnDestroy {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
@@ -42,9 +44,6 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
   @Input()
   softPhoneUsers: Array<SoftphoneUserInterface>;
 
-  @Input()
-  loggedInUser: UserContainerInterface;
-
   loggedInUserExtension: string = '';
   cdrList: Array<CdrInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
@@ -53,10 +52,13 @@ export class SoftPhoneLogsComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private injector: Injector,
+              private userInfoService: UserInfoService,
               private softPhoneService: SoftPhoneService,
               private refreshLoginService: RefreshLoginService,
               private companySelectorService: CompanySelectorService,
               private loadingIndicatorService: LoadingIndicatorService) {
+    super(injector, userInfoService);
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );

@@ -1,5 +1,5 @@
 <div *ngIf="tabId && tabId === 3" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-width full-height">
-  <div mat-subheader>{{'soft_phone.conferences.conference_list' | translate}}</div>
+  <div class="pos-rel" mat-subheader>{{'soft_phone.conferences.conference_list' | translate}}</div>
 
   <mat-list class="full-width">
     <mat-list-item (click)="openSheet(room)"

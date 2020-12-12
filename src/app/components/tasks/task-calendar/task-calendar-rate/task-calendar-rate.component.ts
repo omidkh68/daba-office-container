@@ -149,13 +149,13 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
   //   this.containerHeight = document.getElementById('rate-container').offsetHeight;
   // }
 
-  ngAfterViewChecked() {
-    let weekdayContainer = document.getElementsByClassName('holiday-date');
-
-    if (!weekdayContainer.length) {
-      this.taskCalendarService.setHolidayHighlight(this.holidays);
-    }
-  }
+  // ngAfterViewChecked() {
+  //   let weekdayContainer = document.getElementsByClassName('holiday-date');
+  //
+  //   if (!weekdayContainer.length) {
+  //     this.taskCalendarService.setHolidayHighlight(this.holidays);
+  //   }
+  // }
 
   getTranslate(word) {
     return this.translateService.instant(word);
