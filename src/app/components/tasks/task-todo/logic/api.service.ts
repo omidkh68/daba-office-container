@@ -21,7 +21,7 @@ export class ApiService {
   private headers = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json; charset=UTF-8'
+      'Accept': 'application/json; charset=UTF-8',
     })
   };
 
@@ -57,16 +57,6 @@ export class ApiService {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     return this.http.patch<TodoInterface>(`${this.API_URL}/todo${compId}`, todo, this.headers);
-  }
-
-  changePriority(todo: TodoInterface[]): Observable<TodoInterface> {
-    this.currentCompany = this.companySelectorService.currentCompany;
-
-    const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
-
-    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
-
-    return this.http.patch<TodoInterface>(`${this.API_URL}/todo/changePriority${compId}`, todo, this.headers);
   }
 
   deleteTodo(todoInfo: TodoTaskInterface) {

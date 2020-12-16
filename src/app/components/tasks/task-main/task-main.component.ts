@@ -20,6 +20,7 @@ import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.c
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskCalendarFilterComponent} from '../task-calendar/task-calendar-filter/task-calendar-filter.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];
@@ -56,6 +57,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
               private viewDirection: ViewDirectionService,
               private currentTaskService: CurrentTaskService,
               private windowManagerService: WindowManagerService,
+              private buttonSheetDataService: ButtonSheetDataService,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
@@ -91,6 +93,17 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       email: this.loggedInUser.email,
       status: 0
     };
+
+    this._subscription.add(
+      this.buttonSheetDataService.currentButtonSheetData.subscribe((data: TaskBottomSheetInterface) => {
+          if (data !== null) {
+            data.bottomSheetRef = this.bottomSheet;
+
+            this.bottomSheet.toggleBottomSheet(data);
+          }
+        }
+      )
+    );
   }
 
   changeMainTabLanguage() {
@@ -229,9 +242,9 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   }
 
   openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {
-    bottomSheetConfig.bottomSheetRef = this.bottomSheet;
+    // bottomSheetConfig.bottomSheetRef = this.bottomSheet;
 
-    this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
+    // this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
   }
 
   getTranslate(word) {

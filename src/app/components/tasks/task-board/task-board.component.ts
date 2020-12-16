@@ -32,6 +32,8 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
+import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo';
 
 @Component({
   selector: 'app-task-board',
@@ -78,6 +80,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
               private refreshLoginService: RefreshLoginService,
               private refreshBoardService: RefreshBoardService,
               private windowManagerService: WindowManagerService,
+              private buttonSheetDataService: ButtonSheetDataService,
+              private taskEssentialInfoService: TaskEssentialInfoService,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
@@ -221,42 +225,30 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   showTaskDetail(task, boardStatus) {
+    /*this.triggerBottomSheet.emit({
+          component: TaskDetailComponent,
+          height: '98%',
+          width: '95%',
+          data: data
+        });*/
+
     const data: TaskDataInterface = {
       action: 'detail',
       usersList: this.usersList,
       projectsList: this.projectsList,
       task: task,
-      boardStatus: boardStatus
+      boardStatus: boardStatus,
+      boardsList: this.boards
     };
 
-    this.triggerBottomSheet.emit({
+    const finalData = {
       component: TaskDetailComponent,
       height: '98%',
       width: '95%',
       data: data
-    });
-  }
-
-  getBoards() {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
-
-    if (this.loginData && this.loginData.token_type) {
-      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-      this._subscription.add(
-        this.api.boards(this.loggedInUser.email).subscribe((resp: ResultInterface) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-          if (resp.result === 1) {
-            this.putTasksToAllBoards(resp);
-          }
-        }, (error: HttpErrorResponse) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-          this.refreshLoginService.openLoginDialog(error);
-        })
-      );
     }
+
+    this.buttonSheetDataService.changeButtonSheetData(finalData);
   }
 
   putTasksToAllBoards(info) {
@@ -337,6 +329,36 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this.currentTaskService.changeCurrentTask(this.myTasks);
 
     this.myTasks = [];
+  }
+
+  getBoards() {
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+
+    if (this.loginData && this.loginData.token_type) {
+      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+      this._subscription.add(
+        this.api.boards(this.loggedInUser.email).subscribe((resp: ResultInterface) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          if (resp.result === 1) {
+
+            const data = {
+              'usersList': resp.content.users.list,
+              'projectsList': resp.content.projects.list
+            }
+
+            this.taskEssentialInfoService.changeUsersProjectsList(data)
+
+            this.putTasksToAllBoards(resp);
+          }
+        }, (error: HttpErrorResponse) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.refreshLoginService.openLoginDialog(error);
+        })
+      );
+    }
   }
 
   getColor(percentage: number) {

@@ -1,26 +1,24 @@
 <mat-grid-list *ngIf="boards.length" [dir]="rtlDirection ? 'rtl' : 'ltr'" cols="3" gutterSize="10" rowHeight="40px">
-  <mat-grid-tile
-    *ngFor="let board of boards"
-    [colspan]="board.cols"
-    [rowspan]="board.rows"
-    class="board-container">
+  <mat-grid-tile class="board-container"
+                 *ngFor="let board of boards"
+                 [colspan]="board.cols"
+                 [rowspan]="board.rows">
     <div
       class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l display-flex flex-space-between">
       <span class="font-9-em">{{board.name | translate}}</span>
 
-      <span [ngClass]="board.id"
-            class="task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500">
+      <span class="task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500"
+            [ngClass]="board.id">
         {{board.tasks.length}}
       </span>
     </div>
   </mat-grid-tile>
 </mat-grid-list>
 <mat-grid-list *ngIf="boards.length" class="grid-height" cols="3" gutterSize="10" rowHeight="fit">
-  <mat-grid-tile
-    class="board-container"
-    *ngFor="let board of boards"
-    [colspan]="board.cols"
-    [rowspan]="board.rows">
+  <mat-grid-tile class="board-container"
+                 *ngFor="let board of boards"
+                 [colspan]="board.cols"
+                 [rowspan]="board.rows">
     <div class="task-container full-height full-width padding-full overflow-x-hide overflow-y-auto"
          id="{{board.id}}"
          cdkDropList
