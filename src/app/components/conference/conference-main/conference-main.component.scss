@@ -5,3 +5,14 @@
     height: 0 !important;
   }
 }
+
+.copy-clipboard-container {
+  &.bottom-7-em {
+    bottom: .7em;
+  }
+
+  button {
+    min-width: 25px !important;
+    width: 25px !important;
+  }
+}

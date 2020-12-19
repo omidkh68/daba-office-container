@@ -188,8 +188,6 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   tabChange(event: MatTabChangeEvent) {
-    console.log(event.index);
-    // this.activeTab.setValue(event.index.toString());
     this.activeTab = event.index;
   }
 

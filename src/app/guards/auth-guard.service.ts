@@ -136,8 +136,6 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
 
     this.companySelectorService.changeCompanyList(data.userInfo.companies);
 
-    console.log(data.userInfo);
-
     this.wallpaperSelectorService.changeWallpaper(data.userInfo.background_image ? data.userInfo.background_image : '');
   }
 

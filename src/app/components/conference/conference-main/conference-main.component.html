@@ -11,17 +11,21 @@
              class="webView-frame full-width full-height"></webview>
   </div>
 
-  <div *ngIf="showFrame" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="copy-clipboard-container pos-abs bottom-half">
-    <button (click)="exitOfConference()" class="red-gradient mat-elevation-z1 padding-mini-r-l margin-mini-r-l text-white line-height-20 font-7-em overflow-hide text-weight-normal"
-            mat-raised-button>
-      <mat-icon class="width-18 height-18 line-height-18 font-8-rem">close</mat-icon>
-      <span class="padding-mini-r-l">{{'conference.exist_from_conf' | translate}}</span>
-    </button>
-
-    <button (click)="copyInClipBoard()" [cdkCopyToClipboard]="confAddress" class="white-gradient mat-elevation-z1 padding-mini-r-l text-gray-700 line-height-20 font-7-em overflow-hide text-weight-normal"
+  <div *ngIf="showFrame" [dir]="rtlDirection ? 'rtl' : 'ltr'"
+       [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
+       class="copy-clipboard-container pos-abs bottom-7-em display-flex">
+    <button (click)="copyInClipBoard()" [cdkCopyToClipboard]="confAddress"
+            class="white-gradient mat-elevation-z1 padding-mini-r-l margin-mini-r-l text-gray-700 line-height-20 font-7-em overflow-hide text-weight-normal flex-center"
             mat-raised-button>
       <mat-icon class="text-green-600 width-18 height-18 line-height-18 font-8-rem">content_copy</mat-icon>
-      <span class="padding-mini-r-l">{{'conference.copy_address' | translate}}</span>
+      <!--<span class="padding-mini-r-l">{{'conference.copy_address' | translate}}</span>-->
+    </button>
+
+    <button (click)="exitOfConference()"
+            class="red-gradient mat-elevation-z1 padding-mini-r-l text-white line-height-20 font-7-em overflow-hide text-weight-normal flex-center"
+            mat-raised-button>
+      <mat-icon class="width-18 height-18 line-height-18 font-8-rem">close</mat-icon>
+      <!--<span class="padding-mini-r-l">{{'conference.exist_from_conf' | translate}}</span>-->
     </button>
   </div>
 

@@ -285,7 +285,6 @@ export class WindowManagerService {
   }
 
   dialogOnTop(dialogId: string) {
-      //debugger;
     setTimeout(() => {
       let maxWindowZIndex = (this.getMaxZIndex() + 500).toString();
 
@@ -317,6 +316,6 @@ export class WindowManagerService {
           element.parentElement.parentElement.style.zIndex = maxZIndex;
         }
       }
-    },0)
+    }, 0);
   }
 }

@@ -351,9 +351,9 @@ textarea{height: 60px !important;max-height: 100px !important;resize: none !impo
 .flex-space-between{justify-content: space-between !important}
 .flex-space-around{justify-content: space-around !important}
 .flex-spacer{-webkit-box-flex: 1 !important;flex-grow: 1 !important}
-.flex-center {display: flex;align-items: center;justify-content: center}
-.flex-center-y {display: flex;align-items: center;justify-content: inherit}
-.flex-center-x {display: flex;align-items: inherit;justify-content: center}
+.flex-center {display: flex !important;align-items: center;justify-content: center}
+.flex-center-y {display: flex !important;align-items: center;justify-content: inherit}
+.flex-center-x {display: flex !important;align-items: inherit;justify-content: center}
 .flex-wrap {flex-wrap: wrap !important}
 
 .center-block{display: block;float: none !important;margin-left: auto !important;margin-right: auto !important}

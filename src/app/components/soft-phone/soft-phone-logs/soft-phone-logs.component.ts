@@ -1,20 +1,19 @@
-import {Component, EventEmitter, Injector, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Injector, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {CdrInterface} from '../logic/cdr.interface';
+import {LoginDataClass} from '../../../services/loginData.class';
+import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
+import {CompanyInterface} from '../../select-company/logic/company-interface';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ExtensionInterface} from '../logic/extension.interface';
 import {CdrResultInterface} from '../logic/cdr-result.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {CompanySelectorService} from '../../select-company/services/company-selector.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
-import {CompanyInterface} from '../../select-company/logic/company-interface';
-import {LoginDataClass} from "../../../services/loginData.class";
-import {UserInfoService} from "../../users/services/user-info.service";
 
 export interface CdrExtensionListInterface {
   src: string;
@@ -31,7 +30,7 @@ export interface CdrExtensionListInterface {
   templateUrl: './soft-phone-logs.component.html',
   styleUrls: ['./soft-phone-logs.component.scss']
 })
-export class SoftPhoneLogsComponent extends LoginDataClass implements OnInit, OnDestroy {
+export class SoftPhoneLogsComponent extends LoginDataClass implements OnChanges, OnDestroy {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
@@ -59,6 +58,7 @@ export class SoftPhoneLogsComponent extends LoginDataClass implements OnInit, On
               private companySelectorService: CompanySelectorService,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
+
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
@@ -72,19 +72,15 @@ export class SoftPhoneLogsComponent extends LoginDataClass implements OnInit, On
         }
       })
     );
-
-    this._subscription.add(
-      this.softPhoneService.currentActiveTab.subscribe(tab => tab === 2 ? this.getCdr() : null)
-    );
-  }
-
-  ngOnInit(): void {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
-
-    setTimeout(() => this.getCdr());
   }
 
   getCdr() {
+    this.cdrExtensionList = [];
+
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
+
+    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
     const currentCompany: CompanyInterface = this.companySelectorService.currentCompany;
 
     this._subscription.add(
@@ -93,7 +89,7 @@ export class SoftPhoneLogsComponent extends LoginDataClass implements OnInit, On
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
         if (resp.success && resp.data.length) {
-          this.cdrList = resp.data; // todo: replace list with data in production
+          this.cdrList = resp.data;
 
           this.cdrList.map(item => {
             let cdrExtensionItem: CdrExtensionListInterface = null;
@@ -192,6 +188,12 @@ export class SoftPhoneLogsComponent extends LoginDataClass implements OnInit, On
         this.refreshLoginService.openLoginDialog(error);
       })
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.tabId && changes.tabId.currentValue && changes.tabId.currentValue === 2) {
+      setTimeout(() => this.getCdr());
+    }
   }
 
   ngOnDestroy(): void {

@@ -58,13 +58,17 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
 
         this.serviceList = [];
 
+        const windowServices: Array<ServiceInterface> = [];
+
         this.loggedInUser.services.map((item: ServiceInterface) => {
           if (item.show_in_container) {
             this.serviceList.push(item);
           }
+
+          windowServices.push(item);
         });
 
-        this.windowManagerService.changeServices(this.serviceList);
+        this.windowManagerService.changeServices(windowServices);
       })
     );
 

@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Injector, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Injector,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
@@ -20,7 +30,7 @@ import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-
   templateUrl: './soft-phone-conference.component.html',
   styleUrls: ['./soft-phone-conference.component.scss']
 })
-export class SoftPhoneConferenceComponent extends LoginDataClass implements OnInit, OnDestroy {
+export class SoftPhoneConferenceComponent extends LoginDataClass implements OnInit, OnChanges, OnDestroy {
   @Input()
   rtlDirection: boolean;
 
@@ -55,19 +65,14 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
   }
 
   ngOnInit(): void {
-    this.getConferenceList();
-
     this._subscription.add(
-        this.softPhoneService.currentSoftphoneConnected.subscribe((status: boolean) => {
-
-          this.softPhoneConnectedStatus = status;
-
-        })
-    )
-    //this.softPhoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus;
+      this.softPhoneService.currentSoftphoneConnected.subscribe((status: boolean) => this.softPhoneConnectedStatus = status)
+    );
   }
 
   getConferenceList() {
+    this.conferenceList = [];
+
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
 
     this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
@@ -100,9 +105,6 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
   }
 
   openSheet(user: SoftphoneConferenceInterface) {
-
-    console.log(this.softPhoneConnectedStatus);
-
     if (this.softPhoneConnectedStatus) {
       if (this.callPopUpMinimizeStatus) {
         this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
@@ -121,6 +123,12 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
 
   getTranslate(word) {
     return this.translateService.instant(word);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.tabId && changes.tabId.currentValue && changes.tabId.currentValue === 3) {
+      this.getConferenceList();
+    }
   }
 
   ngOnDestroy(): void {

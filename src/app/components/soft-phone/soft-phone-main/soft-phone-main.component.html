@@ -6,7 +6,9 @@
   <div [ngClass]="callPopUpMinimizeStatus ? 'height-full-minus-80' : 'height-full-minus-45'"
        class="soft-phone-container full-width pos-rel">
     <!-- Show soft phone information -->
-    <app-soft-phone-information [ngClass]="activeTab == 0 ? 'z-index-1' : ''" [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+    <app-soft-phone-information [ngClass]="{'z-index-1': activeTab === 0}"
+                                [tabId]="activeTab"
+                                (triggerBottomSheet)="openButtonSheet($event)"
                                 [rtlDirection]="rtlDirection"></app-soft-phone-information>
     <!-- /Show soft phone information -->
 
@@ -20,25 +22,33 @@
     </ng-template>-->
 
     <!-- Show soft phone keypad -->
-    <app-soft-phone-keypad [ngClass]="activeTab == 1 ? 'z-index-1' : ''"  [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+    <app-soft-phone-keypad [ngClass]="{'z-index-1': activeTab === 1}"
+                           [tabId]="activeTab"
+                           (triggerBottomSheet)="openButtonSheet($event)"
                            [rtlDirection]="rtlDirection"
                            [softPhoneUsers]="softPhoneUsers"></app-soft-phone-keypad>
     <!-- /Show soft phone keypad -->
 
     <!-- Show soft phone logs -->
-    <app-soft-phone-logs [ngClass]="activeTab == 2 ? 'z-index-1' : ''"  [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+    <app-soft-phone-logs [ngClass]="{'z-index-1': activeTab === 2}"
+                         [tabId]="activeTab"
+                         (triggerBottomSheet)="openButtonSheet($event)"
                          [rtlDirection]="rtlDirection"
                          [softPhoneUsers]="softPhoneUsers"></app-soft-phone-logs>
     <!-- /Show soft phone logs -->
 
     <!-- Show soft phone conference -->
-    <app-soft-phone-conference [ngClass]="activeTab == 3 ? 'z-index-1' : ''"  [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+    <app-soft-phone-conference [ngClass]="{'z-index-1': activeTab === 3}"
+                               [tabId]="activeTab"
+                               (triggerBottomSheet)="openButtonSheet($event)"
                                [rtlDirection]="rtlDirection"
                                [softPhoneUsers]="softPhoneUsers"></app-soft-phone-conference>
     <!-- /Show soft phone conference -->
 
     <!-- Show soft phone settings -->
-    <app-soft-phone-settings [ngClass]="activeTab == 4 ? 'z-index-1' : ''"  [tabId]="activeTab" (triggerBottomSheet)="openButtonSheet($event)"
+    <app-soft-phone-settings [ngClass]="{'z-index-1': activeTab === 4}"
+                             [tabId]="activeTab"
+                             (triggerBottomSheet)="openButtonSheet($event)"
                              [rtlDirection]="rtlDirection"></app-soft-phone-settings>
     <!-- /Show soft phone settings -->
   </div>

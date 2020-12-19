@@ -194,6 +194,8 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
         }
       }
     }, (error: HttpErrorResponse) => {
+      this.clearTimer();
+
       this.refreshLoginService.openLoginDialog(error);
     });
   }
@@ -225,12 +227,6 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    /*if (changes.softPhoneUsers && changes.softPhoneUsers.currentValue) {
-      this.startTimer();
-    }*/
-  }
-
   startTimer() {
     if (this.globalTimer) {
       this.globalTimer = null;
@@ -239,6 +235,10 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     this.globalTimer = timer(
       this.timerDueTime, this.timerPeriod
     );
+
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+    }
 
     this.globalTimerSubscription = this.globalTimer.subscribe(() => {
       if (this.globalTimer) {
@@ -251,6 +251,16 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     if (this.globalTimerSubscription) {
       this.globalTimerSubscription.unsubscribe();
       this.globalTimer = null;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.tabId && changes.tabId.currentValue === 0) {
+      this.clearTimer();
+
+      setTimeout(() => this.startTimer(), 200);
+    } else {
+      this.clearTimer();
     }
   }
 
