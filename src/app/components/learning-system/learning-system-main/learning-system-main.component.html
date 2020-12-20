@@ -71,7 +71,7 @@
     </ng-template>
   </div>
 
-  <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'learningSystem'"
+  <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'learningSystem' && !showFrame"
        class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
     <div class="text-center">
       <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"

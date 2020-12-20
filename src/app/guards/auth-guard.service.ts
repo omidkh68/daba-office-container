@@ -14,6 +14,7 @@ import {CheckLoginInterface} from '../components/login/logic/check-login.interfa
 import {ViewDirectionService} from '../services/view-direction.service';
 import {UserContainerInterface} from '../components/users/logic/user-container.interface';
 import {CompanySelectorService} from '../components/select-company/services/company-selector.service';
+import {WallpaperSelectorService} from '../services/wallpaper-selector.service';
 
 export interface DataInterface {
   loginData: LoginInterface,
@@ -36,7 +37,8 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
               private electronService: ElectronService,
               private viewDirection: ViewDirectionService,
               private changeStatusService: ChangeStatusService,
-              private companySelectorService: CompanySelectorService) {
+              private companySelectorService: CompanySelectorService,
+              private wallpaperSelectorService: WallpaperSelectorService) {
     super(injector, userInfoService);
   }
 
@@ -133,6 +135,8 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     this.changeStatusService.changeUserStatus(data.userInfo.user_status);
 
     this.companySelectorService.changeCompanyList(data.userInfo.companies);
+
+    this.wallpaperSelectorService.changeWallpaper(data.userInfo.background_image ? data.userInfo.background_image : '');
   }
 
   getTranslate(word) {

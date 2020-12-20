@@ -74,7 +74,7 @@ export class EventHandlerSocketService {
 
     public initializeWebSocketConnection() {
         return new Promise((resolve, reject) => {
-            const serverUrl = AppConfig.EVENT_HANDLER_WS;
+            const serverUrl = AppConfig.EVENT_HANDLER_URL + '/api';
             const ws = new SockJS(serverUrl);
             this.stompClient = Stomp.over(ws);
             this.stompClient.debug = () => {};

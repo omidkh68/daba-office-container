@@ -34,7 +34,6 @@ export class SoftPhoneService extends LoginDataClass {
   oConfigCall;
   ringtone;
   ringbacktone;
-  ipAddresses: any = [];
 
   private _users: Array<SoftphoneUserInterface> | null;
   private users = new BehaviorSubject(this._users);
@@ -329,13 +328,10 @@ export class SoftPhoneService extends LoginDataClass {
       }
 
       this.oSipSessionCall.hangup({events_listener: {events: '*', listener: this.onSipEventSession}});
-
       this.oSipSessionCall = null;
 
       this.changeOnCallUser(null);
-
       this.changeConnectedCall(false);
-
       this.changeMinimizeCallPopUp(false);
     }
   };

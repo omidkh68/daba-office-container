@@ -269,10 +269,10 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     }
 
     onSelect(event) {
-        setTimeout(() => {
-            this.eventTemp = this.events_reminders.events.filter((item: EventHandlerInterface) => {
-                return new Date(item.startDate).toLocaleDateString() == event._d.toLocaleDateString();
-            });
+        this.eventTemp = this.events_reminders.events.filter((item: EventHandlerInterface) => {
+            return new Date(item.startDate).toLocaleDateString() == event._d.toLocaleDateString();
+        });
+        //setTimeout(() => {
             if (this.eventTemp.length) {
                 this.popoverService.open(PopoverContnetComponent, this.popoverTarget, {
                     data: {
@@ -294,7 +294,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
                 this.currentDate = event._d;
                 this.loadBottomSheet(event);
             }
-        })
+        //},0)
 
     }
 

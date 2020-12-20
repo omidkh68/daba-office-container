@@ -116,12 +116,11 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
             rtlDirection: this.rtlDirection
           }
         }).afterClosed();
-
         this.windowManagerService.dialogOnTop('popover');
       } else {
         this.showEventHandlerWindow(event);
       }
-    })
+    },0)
   }
 
   dateClass() {

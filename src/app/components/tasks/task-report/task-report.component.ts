@@ -10,9 +10,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatTableDataSource} from '@angular/material/table';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
-import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {TaskReportDescriptionComponent} from '../task-description/task-report-description.component';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 export interface TaskReportInterface {
   taskSheetId: number;
@@ -26,6 +26,7 @@ export interface TaskReportInterface {
 
 @Component({
   selector: 'app-task-report',
+  styleUrls: ['./task-report.component.scss'],
   templateUrl: './task-report.component.html'
 })
 export class TaskReportComponent implements OnInit, OnDestroy {
@@ -52,6 +53,7 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<TaskReportInterface>(this.taskReports);
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'project-report-report'};
   dataChange = false;
+  total;
 
   private _subscription: Subscription = new Subscription();
 
@@ -93,6 +95,29 @@ export class TaskReportComponent implements OnInit, OnDestroy {
 
         if (resp.result === 1) {
           this.taskReports = resp.contents;
+
+          let totalTime = 0;
+
+          this.taskReports.map(item => {
+            if (item.taskDateStop !== '0000-00-00 00:00:00') {
+              let timeStart = new Date(item.taskDateStart);
+              let timeEnd = new Date(item.taskDateStop);
+              let diff = Math.abs(timeEnd.getTime() - timeStart.getTime());
+              totalTime = totalTime + diff;
+            }
+          });
+
+          let ms = totalTime % 1000;
+          totalTime = (totalTime - ms) / 1000;
+          let secs = totalTime % 60;
+          totalTime = (totalTime - secs) / 60;
+          let mins = totalTime % 60;
+          let hrs = (totalTime - mins) / 60;
+          let hr = hrs > 10 ? hrs : '0' + hrs;
+          let min = mins > 10 ? mins : '0' + mins;
+          let sec = secs > 10 ? secs : '0' + secs;
+
+          this.total = hr + ':' + min + ':' + sec;
 
           this.taskReports.map(report => {
             if (report.adminIdStartTask) {

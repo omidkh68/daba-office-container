@@ -169,12 +169,12 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewChecked() {
-    let weekdayContainer = document.getElementsByClassName('holiday-date');
-    if (!weekdayContainer.length) {
-      this.taskCalendarService.setHolidayHighlight(this.holidays);
-    }
-  }
+  // ngAfterViewChecked() {
+  //   let weekdayContainer = document.getElementsByClassName('holiday-date');
+  //   if (!weekdayContainer.length) {
+  //     this.taskCalendarService.setHolidayHighlight(this.holidays);
+  //   }
+  // }
 
   ngOnDestroy(): void {
     if (this._subscription) {

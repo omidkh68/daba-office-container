@@ -48,7 +48,7 @@ export class SoftPhoneCallToActionComponent implements OnInit, OnDestroy {
     this.notificationService.changeCurrentNotification(user);*/
 
     this.softPhoneService.changeOnCallUser(data);
-    this.softPhoneService.sipHangUp();
+    // this.softPhoneService.sipHangUp();
   }
 
   closeBottomSheet() {

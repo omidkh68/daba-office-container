@@ -1,11 +1,13 @@
 import {Component, Input, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../../message/service/message.service';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {CompanyInterface} from '../../../select-company/logic/company-interface';
 import {TranslateService} from '@ngx-translate/core';
+import {ApproveComponent} from '../../../approve/approve.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CheckLoginInterface} from '../../../login/logic/check-login.interface';
 import {ChangeStatusService} from '../../../status/services/change-status.service';
@@ -15,10 +17,6 @@ import {WindowManagerService} from '../../../../services/window-manager.service'
 import {ViewDirectionService} from '../../../../services/view-direction.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 import {CompanySelectorService} from '../../../select-company/services/company-selector.service';
-import {ApproveComponent} from '../../../approve/approve.component';
-import {MatDialog} from '@angular/material/dialog';
-import {of} from 'rxjs/internal/observable/of';
-import {catchError, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-company-selector',
