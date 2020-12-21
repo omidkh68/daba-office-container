@@ -3,8 +3,10 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {ElectronService} from '../../../services/electron.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
+import {CompanyInterface} from '../../select-company/logic/company-interface';
 import {NotificationService} from '../../../services/notification.service';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
+import {CompanySelectorService} from '../../select-company/services/company-selector.service';
 
 @Component({
   selector: 'app-soft-phone-incoming-call',
@@ -25,7 +27,8 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
   constructor(private electronService: ElectronService,
               private translateService: TranslateService,
               private softPhoneService: SoftPhoneService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private companySelectorService: CompanySelectorService) {
     this._subscription.add(
       this.softPhoneService.currentSoftPhoneUsers.subscribe(softPhoneUsers => this.softPhoneUsers = softPhoneUsers)
     );
@@ -40,7 +43,9 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
 
             this.currentPhoneNumber = this.incomingData.o_event.o_session.o_uri_from.s_user_name;
 
-            this.currentPhoneNumber = this.currentPhoneNumber.replace('-wrtc', '');
+            const defaultCompany: CompanyInterface = this.companySelectorService.currentCompany;
+
+            this.currentPhoneNumber = this.currentPhoneNumber.replace(`-${defaultCompany.subdomain}`, '');
 
             let callerID = '';
 
@@ -58,7 +63,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
                 callerID = this.getTranslate('soft_phone.incoming_call.unknown_caller');
               }
 
-              if (!this.electronService.window.isFocused()) {
+              if (!this.electronService.browserWindow.isFocused()) {
                 const notification: Notification = new Notification(`${callerID} ${translateIncomingCall}`, {
                   body: this.getTranslate('soft_phone.incoming_call.do_you_accept'),
                   icon: 'assets/profileImg/' + currentUser.username + '.jpg',
@@ -78,7 +83,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
       this.notificationService.currentNotification.subscribe(notification => {
         if (notification) {
           notification.onclick = () => {
-            this.electronService.window.show();
+            this.electronService.browserWindow.show();
           };
 
           notification.onclose = () => {

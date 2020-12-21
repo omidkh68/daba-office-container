@@ -90,7 +90,7 @@ export class EventHandlerSocketService {
                     if(Array.isArray(checkNotify)){
                         // receive new reminder
                         checkNotify = checkNotify[0];
-                        if (!this.electronService.window.isFocused()) {
+                        if (!this.electronService.browserWindow.isFocused()) {
                             notification = new Notification(this.getTranslate('events_handler.main.notification_reminder_title'), {
                                 body: checkNotify.description + " " + checkNotify.startReminder,//this.getTranslate('events_handler.main.notification_reminder_from'),
                                 icon: '',
@@ -103,7 +103,7 @@ export class EventHandlerSocketService {
                         if(checkNotify.users && checkNotify.users.length){
                             checkNotify.users.forEach((item) => {
                                 //if(item.email == this.loggedInUsers.email){
-                                if (!this.electronService.window.isFocused()) {
+                                if (!this.electronService.browserWindow.isFocused()) {
                                     notification = new Notification(this.getTranslate('events_handler.main.notification_event_title'), {
                                         body: this.getTranslate('events_handler.main.notification_event_from') + " " + checkNotify.createUser.name,
                                         icon: 'assets/profileImg/' + checkNotify.createUser.email + '.jpg',
@@ -116,14 +116,14 @@ export class EventHandlerSocketService {
                         }
                     }
 
-                    if (!this.electronService.window.isFocused()) {
+                    if (!this.electronService.browserWindow.isFocused()) {
                         this.notificationService.changeCurrentNotification(notification);
 
                         this._subscription.add(
                             this.notificationService.currentNotification.subscribe(notification => {
                                 if (notification) {
                                     notification.onclick = () => {
-                                        this.electronService.window.show();
+                                        this.electronService.browserWindow.show();
                                     };
 
                                     notification.onclose = () => {

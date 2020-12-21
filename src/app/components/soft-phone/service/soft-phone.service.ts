@@ -214,13 +214,12 @@ export class SoftPhoneService extends LoginDataClass {
 
         const defaultCompany: CompanyInterface = this.companySelectorService.currentCompany;
 
-        // create SIP stack
-        this.oSipStack = new SIPml.Stack({
+        const config = {
           realm: AppConfig.REALM,
-          impi: `${this.loggedInUserSoftphone.extension_no}-${defaultCompany.subdomain}`, // todo
-          impu: `sip:${this.loggedInUserSoftphone.extension_no}-${defaultCompany.subdomain}@${AppConfig.REALM}`, // todo
+          impi: `${this.loggedInUserSoftphone.extension_no}-${defaultCompany.subdomain}`,
+          impu: `sip:${this.loggedInUserSoftphone.extension_no}-${defaultCompany.subdomain}@${AppConfig.REALM}`,
           password: this.loggedInUserSoftphone.extension_no,
-          display_name: `${this.loggedInUserSoftphone.extension_no}-${defaultCompany.subdomain}`, // todo
+          display_name: `${this.loggedInUserSoftphone.extension_no}-${defaultCompany.subdomain}`,
           websocket_proxy_url: AppConfig.WEBSOCKET_PROXY_URL,
           outbound_proxy_url: null,
           ice_servers: null,
@@ -234,7 +233,10 @@ export class SoftPhoneService extends LoginDataClass {
             {name: 'User-Agent', value: 'IM-client/OMA1.0 sipML5-v1.2016.03.04'},
             {name: 'Organization', value: 'Enoox Container'}
           ]
-        });
+        };
+
+        // create SIP stack
+        this.oSipStack = new SIPml.Stack(config);
 
         if (this.oSipStack.start() != 0) {
           if (this.debugMode) {
@@ -501,7 +503,6 @@ export class SoftPhoneService extends LoginDataClass {
   };
 
   onSipEventSession = (e) => {
-
     const type = e.type.toLowerCase();
     const description = e.description.toLowerCase();
     let extensionNumberFrom: string = '';
@@ -509,10 +510,12 @@ export class SoftPhoneService extends LoginDataClass {
     let incomingExtensionTo: ExtensionInterface;
     let incomingExtensionFrom: ExtensionInterface;
 
+    const defaultCompany: CompanyInterface = this.companySelectorService.currentCompany;
+
     if (e.o_event && e.o_event.o_session) {
       try {
-        extensionNumberFrom = e.o_event.o_session.o_uri_from ? e.o_event.o_session.o_uri_from.s_user_name.replace('-wrtc', '') : '-';
-        extensionNumberTo = e.o_event.o_session.o_uri_to ? e.o_event.o_session.o_uri_to.s_user_name.replace('-wrtc', '') : '-';
+        extensionNumberFrom = e.o_event.o_session.o_uri_from ? e.o_event.o_session.o_uri_from.s_user_name.replace(`-${defaultCompany.subdomain}`, '') : '-';
+        extensionNumberTo = e.o_event.o_session.o_uri_to ? e.o_event.o_session.o_uri_to.s_user_name.replace(`-${defaultCompany.subdomain}`, '') : '-';
 
         incomingExtensionFrom = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberFrom).pop();
         incomingExtensionTo = this.extensionList.getValue().filter((ext: ExtensionInterface) => ext.extension_no === extensionNumberTo).pop();

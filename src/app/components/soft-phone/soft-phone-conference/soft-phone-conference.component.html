@@ -1,18 +1,20 @@
-<div *ngIf="tabId && tabId === 3" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-width full-height">
-  <div class="pos-rel" mat-subheader>{{'soft_phone.conferences.conference_list' | translate}}</div>
+<ng-container *ngIf="tabId === 3">
+  <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-width full-height">
+    <div class="pos-rel" mat-subheader>{{'soft_phone.conferences.conference_list' | translate}}</div>
 
-  <mat-list class="full-width">
-    <mat-list-item (click)="openSheet(room)"
-                   *ngFor="let room of conferenceList"
-                   class="highlight cursor-pointer padding-r-l height-50 margin-b-half">
-      <mat-icon mat-list-icon>group</mat-icon>
+    <mat-list class="full-width">
+      <mat-list-item (click)="openSheet(room)"
+                     *ngFor="let room of conferenceList"
+                     class="highlight cursor-pointer padding-r-l height-50 margin-b-half">
+        <mat-icon mat-list-icon>group</mat-icon>
 
-      <h3 class="font-7-rem text-weight-bold" matLine> {{room.extension_name}} </h3>
+        <h3 class="font-7-rem text-weight-bold" matLine> {{room.extension_name}} </h3>
 
-      <div *ngIf="room.password.length"
-           class="pos-rel text-gray-500 height-30 line-height-35 round-corner-all text-center">
-        <mat-icon class="font-full-plus-two-tenth-em">lock</mat-icon>
-      </div>
-    </mat-list-item>
-  </mat-list>
-</div>
+        <div *ngIf="room.password.length"
+             class="pos-rel text-gray-500 height-30 line-height-35 round-corner-all text-center">
+          <mat-icon class="font-full-plus-two-tenth-em">lock</mat-icon>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</ng-container>

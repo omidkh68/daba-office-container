@@ -2,15 +2,10 @@ import {Injectable} from '@angular/core';
 import {
   BrowserWindow,
   desktopCapturer,
-  ipcMain,
   ipcRenderer,
-  Notification,
   remote,
-  screen,
-  session,
-  shell,
-  systemPreferences,
-  webFrame
+  webFrame,
+  screen as ElectronScreen
 } from 'electron';
 import * as fs from 'fs';
 import * as os from 'os';
@@ -21,39 +16,29 @@ import * as path from 'path';
 })
 export class ElectronService {
   ipcRenderer: typeof ipcRenderer;
-  ipcMain: typeof ipcMain;
   webFrame: typeof webFrame;
   remote: typeof remote;
-  shell: typeof shell;
-  screen;
   desktopCapturer: typeof desktopCapturer;
   fs: typeof fs;
   os: typeof os;
   path: typeof path;
-  notification: typeof Notification;
-  systemPreferences: typeof systemPreferences;
-  window: BrowserWindow;
-  session: typeof session;
+  browserWindow: BrowserWindow;
+  electronScreen;
 
   constructor() {
     // Conditional imports
     if (this.isElectron) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
-      this.ipcMain = window.require('electron').ipcMain;
       this.webFrame = window.require('electron').webFrame;
       this.remote = window.require('electron').remote;
-      this.fs = window.require('fs');
       this.desktopCapturer = window.require('electron').desktopCapturer;
-      this.shell = window.require('electron').shell;
-      this.screen = screen;
+      this.fs = window.require('fs');
       this.os = os;
       this.path = path;
-      this.notification = Notification;
-      this.systemPreferences = window.require('electron').remote.systemPreferences;
-      this.window = window.require('electron').remote.getCurrentWindow();
-      this.session = window.require('electron').remote.session;
+      this.browserWindow = window.require('electron').remote.getCurrentWindow();
+      this.electronScreen = ElectronScreen;
 
-      this.window.center();
+      this.browserWindow.center();
     }
   }
 

@@ -27,7 +27,7 @@ export class WindowManagerService {
   private services = new BehaviorSubject(this._services);
 
   constructor(public dialog: MatDialog,
-              private electron: ElectronService,
+              private electronService: ElectronService,
               @Inject('windowObject') private window: Window) {
     window.addEventListener('resize', this.fixPositionByTransform.bind(this))
   }
@@ -146,8 +146,8 @@ export class WindowManagerService {
   fixPositionByTransform(event) {
     event.preventDefault();
     this.windowListArray.map((windowInstance: any) => {
-      let temp = this.electron;
-      let displays = this.electron.remote.screen.getAllDisplays();
+      let temp = this.electronService;
+      let displays = this.electronService.remote.screen.getAllDisplays();
       let externalDisplay = displays.find((display) => {
         return display.bounds.x !== 0 || display.bounds.y !== 0
       });
@@ -156,7 +156,7 @@ export class WindowManagerService {
       });
       if (externalDisplay) {
         const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;
-        const temp_size = temp.window.getBounds().width - primaryDisplay.bounds.width;
+        const temp_size = temp.browserWindow.getBounds().width - primaryDisplay.bounds.width;
         const size = temp_size / 2;
         element.style.transform = 'translate3d(' + size + 'px, ' + 0 + 'px, 0px)';
       }

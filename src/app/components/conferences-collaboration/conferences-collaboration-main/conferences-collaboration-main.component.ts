@@ -27,8 +27,6 @@ export class ConferencesCollaborationMainComponent {
 
     const findService = services.filter(item => item.service_name.includes(serviceName));
 
-    console.log(findService);
-
     if (findService.length) {
       setTimeout(() => {
         this.windowManagerService.openWindowState(findService[0]).then(() => {

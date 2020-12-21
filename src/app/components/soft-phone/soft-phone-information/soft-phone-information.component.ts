@@ -163,11 +163,13 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
             const b = second.is_online;
 
             let comparison = 0;
+
             if (a > b) {
               comparison = -1;
             } else if (a < b) {
               comparison = 1;
             }
+
             return comparison;
           });
 

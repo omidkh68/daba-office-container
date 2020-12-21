@@ -46,7 +46,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
 
   constructor(private api: ApiService,
               private injector: Injector,
-              private electron: ElectronService,
+              private electronService: ElectronService,
               private changeStatusService: ChangeStatusService,
               private currentTaskService: CurrentTaskService,
               private userInfoService: UserInfoService) {
@@ -129,7 +129,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
       fetchWindowIcons: true
     };
 
-    this.electron.desktopCapturer.getSources(options).then(async sources => {
+    this.electronService.desktopCapturer.getSources(options).then(async sources => {
       let screenshots: Array<string> = [];
 
       await sources.map(source => {
@@ -159,7 +159,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
   }
 
   determineScreenShot() {
-    const screenSize = this.electron.screen.getPrimaryDisplay().workAreaSize;
+    const screenSize = this.electronService.electronScreen.getPrimaryDisplay().workAreaSize;
     const maxDimension = Math.max(screenSize.width, screenSize.height);
 
     return {

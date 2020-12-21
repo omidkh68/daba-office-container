@@ -150,8 +150,7 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
             requireInteraction: true
           });
 
-          this.electronService.remote.app.quit();
-          this.electronService.remote.app.exit(0);
+          resolve(false);
         })
       );
     });
@@ -165,5 +164,9 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
+
+    this.window.onbeforeunload = async (event) => {
+      event.returnValue = true;
+    };
   }
 }

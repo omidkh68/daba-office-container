@@ -1,28 +1,28 @@
-<ng-container *ngIf="tabId && tabId === 2">
-<div *ngIf="tabId && tabId == '2'" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-height flex-center">
-  <mat-list *ngIf="cdrExtensionList.length; else noItem;"
-            class="cdr-mat-list full-width full-height overflow-x-hide overflow-y-auto">
-    <mat-list-item *ngFor="let cdr of cdrExtensionList"
-                   class="highlight cursor-pointer height-45 padding-tiny-t-b padding-mini-r-l">
-      <mat-icon [class]="cdr.color" mat-list-icon>
-        {{cdr.icon}}
-      </mat-icon>
+<ng-container *ngIf="tabId === 2">
+  <div *ngIf="tabId && tabId == '2'" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-height flex-center">
+    <mat-list *ngIf="cdrExtensionList.length; else noItem;"
+              class="cdr-mat-list full-width full-height overflow-x-hide overflow-y-auto">
+      <mat-list-item *ngFor="let cdr of cdrExtensionList"
+                     class="highlight cursor-pointer height-45 padding-tiny-t-b padding-mini-r-l">
+        <mat-icon [class]="cdr.color" mat-list-icon>
+          {{cdr.icon}}
+        </mat-icon>
 
-      <h3 class="font-7-rem text-weight-bold line-height-20" matLine>
-        {{cdr.user ? cdr.user.extension_name + ' -' : ''}} {{cdr.src}}
-      </h3>
+        <h3 class="font-7-rem text-weight-bold line-height-20" matLine>
+          {{cdr.user ? cdr.user.extension_name + ' -' : ''}} {{cdr.src}}
+        </h3>
 
-      <p class="font-7-em text-gray-600 line-height-15" matLine>{{cdr.date | jalali:rtlDirection}}</p>
+        <p class="font-7-em text-gray-600 line-height-15" matLine>{{cdr.date | jalali:rtlDirection}}</p>
 
-      <div
-        class="user-soft-phone-status white-space-nowrap pos-rel text-gray-500 round-corner-all transition font-7-em">
-        {{cdr.desc | translate}}
-      </div>
-    </mat-list-item>
-  </mat-list>
+        <div
+          class="user-soft-phone-status white-space-nowrap pos-rel text-gray-500 round-corner-all transition font-7-em">
+          {{cdr.desc | translate}}
+        </div>
+      </mat-list-item>
+    </mat-list>
 
-  <ng-template #noItem>
-    {{'global.no_result' | translate}}
-  </ng-template>
-</div>
+    <ng-template #noItem>
+      {{'global.no_result' | translate}}
+    </ng-template>
+  </div>
 </ng-container>
