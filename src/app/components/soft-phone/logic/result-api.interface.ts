@@ -24,3 +24,8 @@ export interface ResultConfOnlineExtensionApiInterface {
   result: number;
   meta: any;
 }
+
+export interface ResultMuteUnMuteApiInterface {
+  data: any;
+  success: boolean;
+}

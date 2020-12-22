@@ -112,7 +112,16 @@
 
       <h3 class="font-7-rem text-weight-bold no-margin" matLine> {{user.extension_name}} </h3>
 
-      <div class="pos-rel online-extension height-30 font-8-em display-flex flex-center-y">{{user.extension_no}}</div>
+      <div [ngClass]="user.is_mute == '1' ? 'flex-direction-column' : 'height-40'"
+           class="pos-rel online-extension font-8-em display-flex flex-center-y">
+        <span>{{user.extension_no}}</span>
+
+        <span *ngIf="user.is_mute == '1'">
+          <mat-icon class="width-20 height-20 text-gray-500 font-full-plus-half-em">
+            {{user.is_mute == '1' ? 'mic_off' : ''}}
+          </mat-icon>
+        </span>
+      </div>
     </mat-list-item>
   </mat-list>
 </div>

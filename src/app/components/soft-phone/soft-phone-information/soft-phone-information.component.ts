@@ -20,8 +20,8 @@ import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
-import {ExtensionInterface} from '../logic/extension.interface';
-import {ResultApiInterface} from '../logic/result-api.interface';
+import {ExtensionInterface, MuteUnMuteInterface} from '../logic/extension.interface';
+import {ResultApiInterface, ResultMuteUnMuteApiInterface} from '../logic/result-api.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
@@ -82,11 +82,11 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     );
 
     this._subscription.add(
-        this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
-          if (connectedCall) {
-            this.clearTimer();
-          }
-        })
+      this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
+        if (connectedCall) {
+          this.clearTimer();
+        }
+      })
     );
   }
 
@@ -98,33 +98,40 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
 
   async getEssentialData() {
     await this.getExtensions();
+    await this.setDefaultUnMuteExtension();
     await this.startTimer();
   }
 
-  getExtensions(): void {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
+  getExtensions() {
+    return new Promise((resolve) => {
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
 
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-    this._subscription.add(
-      this.api.getExtensionList().subscribe((resp: ResultApiInterface) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+      this._subscription.add(
+        this.api.getExtensionList().subscribe((resp: ResultApiInterface) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
-        if (resp.success) {
-          const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
+          if (resp.success) {
+            const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
 
-          this.softPhoneService.changeExtensionList(extensionList).then(() => {
-            this.softPhoneUsers = extensionList;
+            this.softPhoneService.changeExtensionList(extensionList).then(() => {
+              this.softPhoneUsers = extensionList;
 
-            this.softPhoneService.sipRegister();
-          });
-        }
-      }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+              this.softPhoneService.sipRegister();
+            });
 
-        this.refreshLoginService.openLoginDialog(error);
-      })
-    );
+            resolve(true);
+          }
+        }, (error: HttpErrorResponse) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
+
+          this.refreshLoginService.openLoginDialog(error);
+
+          resolve(true);
+        })
+      );
+    });
   }
 
   getExtensionStatus() {
@@ -199,6 +206,35 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
       this.clearTimer();
 
       this.refreshLoginService.openLoginDialog(error);
+    });
+  }
+
+  setDefaultUnMuteExtension() {
+    return new Promise((resolve) => {
+      const muteInfo: MuteUnMuteInterface = {
+        extension_no: `${this.loggedInUser.extension_no}`,
+        is_mute: 0
+      };
+
+      this.apiService.muteUnMute(muteInfo);
+
+      resolve(true);
+
+      /*this._subscription.add(
+        this.apiService.muteUnMute(muteInfo).subscribe((resp: ResultMuteUnMuteApiInterface) => {
+          if (resp.success) {
+
+          } else {
+
+          }
+
+          resolve(true);
+        }, (error: HttpErrorResponse) => {
+          this.refreshLoginService.openLoginDialog(error);
+
+          resolve(true);
+        })
+      );*/
     });
   }
 

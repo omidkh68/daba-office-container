@@ -10,8 +10,8 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneTransferCallComponent} from '../soft-phone-transfer-call/soft-phone-transfer-call.component';
-import {ConferenceOnlineExtensionInterface} from '../logic/extension.interface';
-import {ResultConfOnlineExtensionApiInterface} from '../logic/result-api.interface';
+import {ConferenceOnlineExtensionInterface, MuteUnMuteInterface} from '../logic/extension.interface';
+import {ResultConfOnlineExtensionApiInterface, ResultMuteUnMuteApiInterface} from '../logic/result-api.interface';
 
 export interface KeysInterface {
   type: string;
@@ -150,7 +150,18 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   callEvent(key: KeysInterface) {
     switch (key.type) {
       case 'mute_unmute': {
-        this.muteStatus = this.softPhoneService.sipToggleMute();
+        const muteInfo: MuteUnMuteInterface = {
+          is_mute: this.muteStatus ? 0 : 1,
+          extension_no: `${this.loggedInUser.extension_no}`
+        };
+
+        this._subscription.add(
+          this.apiService.muteUnMute(muteInfo).subscribe((resp: ResultMuteUnMuteApiInterface) => {
+            if (resp.success) {
+              this.muteStatus = this.softPhoneService.sipToggleMute();
+            }
+          })
+        );
 
         break;
       }
@@ -236,7 +247,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     });
   }
 
-  arrayComparer(arrayParam: Array<ConferenceOnlineExtensionInterface>){
+  arrayComparer(arrayParam: Array<ConferenceOnlineExtensionInterface>) {
     return (current: ConferenceOnlineExtensionInterface) => {
       return arrayParam.filter((other: ConferenceOnlineExtensionInterface) => {
         return other.extension_no == current.extension_no && other.extension_no == current.extension_no

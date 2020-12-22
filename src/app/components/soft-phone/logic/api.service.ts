@@ -5,9 +5,10 @@ import {Observable} from 'rxjs/internal/Observable';
 import {
   ResultApiInterface,
   ResultConfApiInterface,
-  ResultConfOnlineExtensionApiInterface
+  ResultConfOnlineExtensionApiInterface, ResultMuteUnMuteApiInterface
 } from './result-api.interface';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
+import {MuteUnMuteInterface} from './extension.interface';
 import {CompanySelectorService} from '../../select-company/services/company-selector.service';
 
 @Injectable({
@@ -82,18 +83,13 @@ export class ApiService {
     return this.http.get<ResultConfOnlineExtensionApiInterface>(`${this.API_URL}/extension.php?action=conferenceOnlineUser&phoneNumber=${confNumber}${compId}`, this.headers);
   }
 
-  muteUnMute(extension: string) {
+  muteUnMute(muteInfo: MuteUnMuteInterface): Observable<ResultMuteUnMuteApiInterface> {
     this.currentCompany = this.companySelectorService.currentCompany;
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
 
-    const data = {
-      extension_no: extension,
-      comp_id: compId
-    };
-
-    return this.http.post(`${this.API_URL}/extension.php?action=editMute`, data, this.headers);
+    return this.http.post<ResultMuteUnMuteApiInterface>(`${this.API_URL}/extension.php?action=editMute${compId}`, muteInfo, this.headers);
   }
 }

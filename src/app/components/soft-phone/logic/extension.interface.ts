@@ -6,10 +6,16 @@ export interface ExtensionInterface {
   caller_id_number?: string;
   extension_type?: string;
   is_online?: number;
+  is_mute?: number;
 }
 
 export interface ConferenceOnlineExtensionInterface extends ExtensionInterface {
   extension_id: string;
   chanel: string;
   is_webrtc: number;
+}
+
+export interface MuteUnMuteInterface {
+  extension_no: string;
+  is_mute: number;
 }
