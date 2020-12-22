@@ -10,4 +10,5 @@ export interface TaskDataInterface {
   projectsList: ProjectInterface[];
   boardStatus?: string;
   boardsList?: BoardInterface[];
+  breadcrumbList?: any;
 }

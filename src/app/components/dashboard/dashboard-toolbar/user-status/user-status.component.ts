@@ -146,8 +146,8 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
 
         this._subscription.add(
           this.tasksApiService.incompleteTasks(this.loggedInUser.email).subscribe((resp: ResultIncompleteTaskInterface) => {
-            if (resp.result === 1 && resp.contents.length !== 0) {
-              this.openDialogIncompleteTasks(resp.contents);
+            if (resp.result === 1 && resp.content.length !== 0) {
+              this.openDialogIncompleteTasks(resp.content);
             }
           }, (error: HttpErrorResponse) => {
             this.refreshLoginService.openLoginDialog(error);

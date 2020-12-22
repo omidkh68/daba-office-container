@@ -40,5 +40,11 @@ export interface ResultInterface {
 export interface ResultIncompleteTaskInterface {
   result: number;
   message: string;
-  contents: TaskInterface[];
+  content: TaskInterface[];
+}
+
+export interface ResultTaskInterface {
+  result: number;
+  message: string;
+  content: TaskInterface;
 }

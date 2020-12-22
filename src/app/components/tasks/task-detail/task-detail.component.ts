@@ -18,6 +18,10 @@ import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {TaskDataInterface} from '../logic/task-data-interface';
+import {ResultInterface} from '../logic/board-interface';
+import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
+import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -27,8 +31,12 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
   rtlDirection: boolean;
   editable: boolean = false;
   task: TaskInterface = null;
+  breadcrumbList: TaskInterface[] = [];
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
+
+  projectsListNew: ProjectInterface[] = [];
+  usersListNew: UserInterface[] = [];
   form: FormGroup;
   viewModeTypes = 'info';
   bottomSheetData: TaskBottomSheetInterface;
@@ -47,6 +55,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
               private refreshLoginService: RefreshLoginService,
               private refreshBoardService: RefreshBoardService,
               private windowManagerService: WindowManagerService,
+              private buttonSheetDataService: ButtonSheetDataService,
+              private taskEssentialInfoService: TaskEssentialInfoService,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
@@ -60,6 +70,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     this.usersList = this.data.usersList;
     this.projectsList = this.data.projectsList;
     this.task = this.data.task;
+    this.breadcrumbList = this.data.breadcrumbList
   }
 
   ngAfterViewInit(): void {
@@ -128,14 +139,14 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     this.form.disable();
     this.editable = false;
 
-    const startDate = this.task.startAt.split(' ');
-    const stopDate = this.task.stopAt.split(' ');
+    const startDate = this.task.startAt ? this.task.startAt.split(' ') : null;
+    const stopDate = this.task.stopAt ? this.task.stopAt.split(' ') : null;
 
-    const startTimeTmp = startDate[1].split(':');
-    const stopTimeTmp = stopDate[1].split(':');
+    const startTimeTmp = startDate ? startDate[1].split(':') : null;
+    const stopTimeTmp = stopDate ? stopDate[1].split(':') : null;
 
-    const startTime = startTimeTmp[0] + ':' + startTimeTmp[1];
-    const stopTime = stopTimeTmp[0] + ':' + stopTimeTmp[1];
+    const startTime = startTimeTmp ? startTimeTmp[0] + ':' + startTimeTmp[1] : null;
+    const stopTime = stopTimeTmp ? stopTimeTmp[0] + ':' + stopTimeTmp[1] : null;
 
     const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
     const selectedAssignTo = this.usersList.filter(user => user.email === this.task.assignTo.email).pop();
@@ -253,6 +264,86 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         this.refreshLoginService.openLoginDialog(error);
       })
     );
+  }
+
+  openTask(task) {
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+
+    this.getBoardData().then(() => {
+      this.getBreadcrumbData(task.taskId).then(() => {
+        this.bottomSheetData.bottomSheetRef.close();
+
+        this.usersListNew.map(user => {
+          if (task.assignTo === user.adminId) {
+            task.assignTo = user
+          }
+        })
+
+        this.projectsListNew.map(project => {
+          if (task.project === project.projectId) {
+            task.project = project
+          }
+        })
+
+        setTimeout(() => {
+          const data: TaskDataInterface = {
+            action: 'detail',
+            usersList: this.usersListNew,
+            projectsList: this.projectsListNew,
+            task: task,
+            boardStatus: task.boardStatus,
+            breadcrumbList: this.breadcrumbList
+          };
+
+          const finalData = {
+            component: TaskDetailComponent,
+            height: '98%',
+            width: '95%',
+            data: data
+          };
+
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.buttonSheetDataService.changeButtonSheetData(finalData);
+        }, 500)
+      })
+
+    })
+  }
+
+  getBoardData() {
+    return new Promise((resolve) => {
+
+      this._subscription.add(
+        this.taskEssentialInfoService.currentUsersProjectsList.subscribe((data) => {
+
+            this.usersListNew = data.usersList;
+            this.projectsListNew = data.projectsList;
+
+            resolve(true);
+          }
+        )
+      );
+    });
+  }
+
+  getBreadcrumbData(taskId) {
+    return new Promise((resolve) => {
+
+      this._subscription.add(
+        this.api.getBreadcrumb(taskId).subscribe((resp: any) => {
+          if (resp.result === 1) {
+
+            this.breadcrumbList = resp.content;
+            resolve(true);
+          }
+        }, (error: HttpErrorResponse) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.refreshLoginService.openLoginDialog(error);
+        })
+      );
+    });
   }
 
   getTranslate(word) {
