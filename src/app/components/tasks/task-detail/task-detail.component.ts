@@ -12,15 +12,14 @@ import {ApproveComponent} from '../../approve/approve.component';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
+import {TaskDataInterface} from '../logic/task-data-interface';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import {TaskDataInterface} from '../logic/task-data-interface';
-import {ResultInterface} from '../logic/board-interface';
 import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo';
 
 @Component({
@@ -277,13 +276,13 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
           if (task.assignTo === user.adminId) {
             task.assignTo = user
           }
-        })
+        });
 
         this.projectsListNew.map(project => {
           if (task.project === project.projectId) {
             task.project = project
           }
-        })
+        });
 
         setTimeout(() => {
           const data: TaskDataInterface = {

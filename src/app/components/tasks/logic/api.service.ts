@@ -17,8 +17,8 @@ import {TodoInterface} from '../task-todo/logic/todo-interface';
 export class ApiService {
   public accessToken = '';
   private currentCompany: CompanyInterface = null;
-  private API_URL = AppConfig.CONTAINER_URL + '/project';
-  // private API_URL = AppConfig.API_URL;
+  // private API_URL = AppConfig.CONTAINER_URL + '/project';
+  private API_URL = AppConfig.API_URL;
 
   /**
    * @type {HttpHeaders}
@@ -27,6 +27,7 @@ export class ApiService {
     headers: new HttpHeaders({
       'Content-Type': 'application/json; charset=UTF-8',
       'Accept': 'application/json; charset=UTF-8',
+      'from': 'app_application'
     })
   };
 

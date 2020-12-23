@@ -8,18 +8,18 @@
     </span>
   </h1>
 
-  <div class="todo-content-container padding-full padding-b-half">
+  <div class="todo-content-container height-full-minus-45 padding-full padding-b-half">
     <form [formGroup]="form" class="full-height">
 
-      <div *ngIf="tasks.length" class="todo-list-container padding-b-full overflow-y-auto overflow-x-hide">
+      <div *ngIf="tasks.length" class="todo-list-container overflow-y-auto overflow-x-hide">
         <div class="no-padding example-list"
-                  cdkDropList
-                  [cdkDropListData]="tasks"
-                  (cdkDropListDropped)="changeTodo($event)">
+             cdkDropList
+             [cdkDropListData]="tasks"
+             (cdkDropListDropped)="changeTodo($event)">
           <mat-card *ngFor="let task of tasks"
-                         class="height-auto cursor-pointer border-bottom no-padding bg-grey no-box-shadow"
-                         cdkDragLockAxis="y"
-                         cdkDrag>
+                    class="height-auto cursor-pointer border-bottom no-padding bg-grey no-box-shadow"
+                    cdkDragLockAxis="y"
+                    cdkDrag>
 
             <mat-card-content class="text-gray-600 display-flex flex-space-between">
 
@@ -65,24 +65,24 @@
                   [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                   class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
                   (click)="$event.stopPropagation(); updateTask(task)">
-                  <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-green-600">edit</mat-icon>
+                  <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-green-600">edit
+                  </mat-icon>
                 </button>
 
                 <button
                   type="button"
                   class="display-block cursor-pointer width-18 height-18 text-center no-padding no-border no-bg"
                   (click)="$event.stopPropagation(); deleteTask(task)">
-                  <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-red-600">close</mat-icon>
+                  <mat-icon class="no-padding width-18 height-18 line-height-15 font-full-rem text-red-600">close
+                  </mat-icon>
                 </button>
               </div>
-
             </mat-card-content>
-
           </mat-card>
         </div>
       </div>
 
-      <div class="enter-todo-container margin-t-full">
+      <div class="enter-todo-container">
         <div>
           <mat-form-field appearance="outline" class="full-width height-45 font-9-em" color="primary">
             <input matInput
@@ -100,9 +100,7 @@
           </mat-form-field>
         </div>
       </div>
-
       <!--end of btn submit-->
-
     </form>
   </div>
 
