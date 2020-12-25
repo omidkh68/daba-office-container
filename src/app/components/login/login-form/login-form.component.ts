@@ -7,7 +7,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {ElectronService} from '../../../services/electron.service';
+import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoginResultInterface} from '../logic/login.interface';
@@ -92,11 +92,15 @@ export class LoginFormComponent implements OnInit {
   }
 
   createFile(data) {
-    const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+    if (this.electronService.isElectron) {
+      const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 
-    const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+      const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
 
-    this.electronService.fs.writeFileSync(loginDataPath, JSON.stringify(data));
+      this.electronService.fs.writeFileSync(loginDataPath, JSON.stringify(data));
+    } else {
+      localStorage.setItem('loginData', JSON.stringify(data));
+    }
   }
 
   showErrorLogin() {

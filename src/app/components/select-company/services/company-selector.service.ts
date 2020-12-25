@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {AppConfig} from '../../../../environments/environment';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {ElectronService} from '../../../core/services';
 import {CompanyInterface} from '../logic/company-interface';
-import {ElectronService} from '../../../services/electron.service';
 
 @Injectable({
   providedIn: 'root'
@@ -40,18 +40,29 @@ export class CompanySelectorService {
 
   changeCompanyFromLoggedInDataFile(company: CompanyInterface) {
     return new Promise((resolve) => {
-      const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+      let loginData;
+      let loginDataPath;
 
-      const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+      if (this.electronService.isElectron) {
+        const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 
-      const loginData = this.electronService.fs.readFileSync(loginDataPath, 'utf8');
+        loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+
+        loginData = this.electronService.fs.readFileSync(loginDataPath, 'utf8');
+      } else {
+        loginData = localStorage.getItem('loginData');
+      }
 
       if (loginData) {
         let data = JSON.parse(loginData);
 
         data = {...data, company: company};
 
-        this.electronService.fs.writeFileSync(loginDataPath, JSON.stringify(data));
+        if (this.electronService.isElectron) {
+          this.electronService.fs.writeFileSync(loginDataPath, JSON.stringify(data));
+        } else {
+          localStorage.setItem('loginData', JSON.stringify(data));
+        }
 
         resolve(true);
       }

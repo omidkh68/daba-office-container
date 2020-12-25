@@ -1,1 +1,6 @@
-<webview #webFrame class="full-width full-height"></webview>
+<ng-container *ngIf="electronService.isElectron; else iframe">
+  <webview #webFrame class="full-width full-height"></webview>
+</ng-container>
+<ng-template #iframe>
+  <iframe #webFrame class="full-width full-height no-border"></iframe>
+</ng-template>

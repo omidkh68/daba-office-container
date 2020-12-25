@@ -1,4 +1,4 @@
-export const AppConfig = {
+export const AppConfig: any = {
   production: false,
   environment: 'LOCAL',
   API_URL: 'http://localhost:3000/api',

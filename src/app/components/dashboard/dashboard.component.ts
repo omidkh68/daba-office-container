@@ -7,7 +7,6 @@ import {MessageService} from '../message/service/message.service';
 import {LoginDataClass} from '../../services/loginData.class';
 import {WindowInterface} from './logic/window.interface';
 import {UserInfoService} from '../users/services/user-info.service';
-import {ElectronService} from '../../services/electron.service';
 import {SoftPhoneService} from '../soft-phone/service/soft-phone.service';
 import {ServiceInterface} from '../services/logic/service-interface';
 import {TranslateService} from '@ngx-translate/core';
@@ -18,6 +17,7 @@ import {CompanySelectorService} from '../select-company/services/company-selecto
 import {WallpaperSelectorService} from '../../services/wallpaper-selector.service';
 import {StatusChangeResultInterface} from '../status/logic/result-interface';
 import {ApiService as StatusApiService} from '../status/logic/api.service';
+import {ElectronService} from '../../core/services';
 
 @Component({
   selector: 'app-dashboard',
@@ -62,7 +62,13 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
 
         this.loggedInUser.services.map((item: ServiceInterface) => {
           if (item.show_in_container) {
-            this.serviceList.push(item);
+            if (item.service_name === 'web_browser') {
+              if (this.electronService.isElectron) {
+                this.serviceList.push(item);
+              }
+            } else {
+              this.serviceList.push(item);
+            }
           }
 
           windowServices.push(item);

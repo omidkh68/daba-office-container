@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {ElectronService} from '../../../services/electron.service';
+import {ElectronService} from '../../../core/services';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
@@ -63,7 +63,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
                 callerID = this.getTranslate('soft_phone.incoming_call.unknown_caller');
               }
 
-              if (!this.electronService.browserWindow.isFocused()) {
+              if (this.electronService.isElectron && !this.electronService.remote.getCurrentWindow().isFocused()) {
                 const notification: Notification = new Notification(`${callerID} ${translateIncomingCall}`, {
                   body: this.getTranslate('soft_phone.incoming_call.do_you_accept'),
                   icon: 'assets/profileImg/' + currentUser.username + '.jpg',
@@ -83,7 +83,9 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
       this.notificationService.currentNotification.subscribe(notification => {
         if (notification) {
           notification.onclick = () => {
-            this.electronService.browserWindow.show();
+            if (this.electronService.isElectron) {
+              this.electronService.remote.getCurrentWindow().show();
+            }
           };
 
           notification.onclose = () => {

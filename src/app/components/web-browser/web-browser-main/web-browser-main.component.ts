@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChildren
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {AddressService} from '../service/address.service';
-import {ElectronService} from '../../../services/electron.service';
+import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
 import {AddressInterface} from '../logic/address.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';

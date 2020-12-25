@@ -1,11 +1,12 @@
 import {Component, Inject, Injector, Input, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
+import * as PackageJson  from '../../../../../../package.json';
 import {ApiService} from '../../../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
-import {ElectronService} from '../../../../services/electron.service';
+import {ElectronService} from '../../../../core/services';
 import {SoftPhoneService} from '../../../soft-phone/service/soft-phone.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
 import {UserContainerInterface} from '../../../users/logic/user-container.interface';
@@ -39,7 +40,11 @@ export class ProfileMenuComponent extends LoginDataClass implements OnInit, OnDe
   }
 
   ngOnInit(): void {
-    this.version = this.electronService.remote.app.getVersion();
+    if (this.electronService.isElectron) {
+      this.version = this.electronService.remote.app.getVersion();
+    } else {
+      this.version = PackageJson.version;
+    }
   }
 
   logout() {

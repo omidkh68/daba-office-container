@@ -5,7 +5,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {WebViewService} from '../service/web-view.service';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {ElectronService} from '../../../services/electron.service';
+import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
@@ -47,7 +47,17 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
         this.reloadWebView = status;
 
         if (this.reloadWebView && this.webFrame) {
-          this.webFrame.nativeElement.reloadIgnoringCache();
+          if (this.electronService.isElectron) {
+            this.webFrame.nativeElement.reloadIgnoringCache();
+          } else {
+            const src = this.webFrame.nativeElement.getAttribute('src');
+
+            this.webFrame.nativeElement.setAttribute('src', '');
+
+            setTimeout(() => {
+              this.webFrame.nativeElement.setAttribute('src', src);
+            }, 500);
+          }
         }
       })
     );
@@ -59,15 +69,17 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
 
       this.webFrame.nativeElement.setAttribute('src', address);
 
-      this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-        this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+      if (this.electronService.isElectron) {
+        this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
+          this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
 
-        this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'adminPanel'});
-      });
+          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'adminPanel'});
+        });
 
-      this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'adminPanel'});
-      });
+        this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'adminPanel'});
+        });
+      }
     }
   }
 

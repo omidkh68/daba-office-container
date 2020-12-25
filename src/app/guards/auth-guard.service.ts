@@ -6,8 +6,8 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginInterface} from '../components/login/logic/login.interface';
 import {LoginDataClass} from '../services/loginData.class';
 import {MessageService} from '../components/message/service/message.service';
+import {ElectronService} from '../core/services';
 import {UserInfoService} from '../components/users/services/user-info.service';
-import {ElectronService} from '../services/electron.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ChangeStatusService} from '../components/status/services/change-status.service';
 import {CheckLoginInterface} from '../components/login/logic/check-login.interface';
@@ -85,11 +85,17 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
   getLoginDataFile(): Promise<LoginInterface | boolean> {
     return new Promise((resolve, reject) => {
       try {
-        const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+        let loginData;
 
-        const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+        if (this.electronService.isElectron) {
+          const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 
-        const loginData = this.electronService.fs.readFileSync(loginDataPath, 'utf8');
+          const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+
+          loginData = this.electronService.fs.readFileSync(loginDataPath, 'utf8');
+        } else {
+          loginData = localStorage.getItem('loginData');
+        }
 
         if (!loginData) {
           reject(false);

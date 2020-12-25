@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
+import {AppConfig} from '../../../../environments/environment';
 import {LoginInterface} from '../../login/logic/login.interface';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+import {ElectronService} from '../../../core/services';
 import {UserContainerInterface} from '../logic/user-container.interface';
-import {AppConfig} from '../../../../environments/environment';
-import {ElectronService} from '../../../services/electron.service';
 
 @Injectable({
   providedIn: 'root'
@@ -61,10 +61,14 @@ export class UserInfoService {
   }
 
   removeLoginDataFileContent() {
-    const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+    if (this.electronService.isElectron) {
+      const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 
-    const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+      const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
 
-    this.electronService.fs.writeFileSync(loginDataPath, '');
+      this.electronService.fs.writeFileSync(loginDataPath, '');
+    } else {
+      localStorage.removeItem('loginData');
+    }
   }
 }

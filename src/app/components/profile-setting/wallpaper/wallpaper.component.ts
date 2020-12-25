@@ -1,13 +1,12 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {switchMap} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/internal/Observable';
-import {Subscription} from 'rxjs/internal/Subscription';
+import {Observable, Subscription} from 'rxjs';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ElectronService} from '../../../services/electron.service';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
@@ -177,10 +176,10 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
               private http: HttpClient,
               private injector: Injector,
               private translate: TranslateService,
-              private viewDirection: ViewDirectionService,
               private messageService: MessageService,
               private electronService: ElectronService,
               private userInfoService: UserInfoService,
+              private viewDirection: ViewDirectionService,
               private refreshLoginService: RefreshLoginService,
               private wallPaperSelector: WallpaperSelectorService,
               private profileSettingService: ProfileSettingService,

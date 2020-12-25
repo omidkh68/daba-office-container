@@ -35,19 +35,19 @@ export class SoftPhoneService extends LoginDataClass {
   ringtone;
   ringbacktone;
 
-  private _users: Array<SoftphoneUserInterface> | null;
+  private _users: Array<SoftphoneUserInterface> | null = null;
   private users = new BehaviorSubject(this._users);
   public currentSoftPhoneUsers = this.users.asObservable();
 
-  private _extensionList: Array<ExtensionInterface> | null;
+  private _extensionList: Array<ExtensionInterface> | null = null;
   private extensionList = new BehaviorSubject(this._extensionList);
   public currentExtensionList = this.extensionList.asObservable();
 
-  private _incomingCall: IncomingInterface | null;
+  private _incomingCall: IncomingInterface | null = null;
   private incomingCallStatus = new BehaviorSubject(this._incomingCall);
   public currentIncomingCallStatus = this.incomingCallStatus.asObservable();
 
-  private _onCallUser: SoftphoneUserInterface | null;
+  private _onCallUser: SoftphoneUserInterface | null = null;
   private onCallUser = new BehaviorSubject(this._onCallUser);
   public currentOnCallUser = this.onCallUser.asObservable();
 

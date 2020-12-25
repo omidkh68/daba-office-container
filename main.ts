@@ -24,6 +24,8 @@ function createWindow(): BrowserWindow {
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,  // false if you want to run 2e2 test with Spectron
+      enableRemoteModule: true, // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular),
       webviewTag: true,
       allowRunningInsecureContent: true
     },
@@ -41,6 +43,7 @@ function createWindow(): BrowserWindow {
     require('devtron').install();
 
     win.webContents.openDevTools();
+
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
@@ -78,7 +81,7 @@ try {
     webContents.on('did-finish-load', () => {
       webFrame.setZoomLevel(1);
       webFrame.setVisualZoomLevelLimits(1, 1);
-      webFrame.setLayoutZoomLevelLimits(0, 0);
+      // webFrame.setLayoutZoomLevelLimits(0, 0);
     });
   }
 

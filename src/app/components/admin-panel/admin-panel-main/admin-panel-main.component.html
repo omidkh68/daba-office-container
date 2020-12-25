@@ -1,5 +1,10 @@
 <div class="full-width full-height bg-white pos-rel">
-  <webview #webFrame class="webView-frame full-width full-height"></webview>
+  <ng-container *ngIf="electronService.isElectron; else iframe">
+    <webview #webFrame class="webView-frame full-width full-height"></webview>
+  </ng-container>
+  <ng-template #iframe>
+    <iframe #webFrame class="webView-frame full-width full-height no-border"></iframe>
+  </ng-template>
 
   <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'adminPanel'"
        class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">

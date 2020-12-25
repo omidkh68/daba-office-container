@@ -6,7 +6,7 @@ import {TaskInterface} from '../logic/task-interface';
   providedIn: 'root'
 })
 export class CurrentTaskService {
-  private _task: Array<TaskInterface> | null;
+  private _task: Array<TaskInterface> | null = null;
   private task = new BehaviorSubject(this._task);
   public currentTask = this.task.asObservable();
 

@@ -1,6 +1,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {ElectronService} from '../../services/electron.service';
+import {ElectronService} from '../../core/services';
+import * as PackageJson  from '../../../../package.json';
 import {ViewDirectionService} from '../../services/view-direction.service';
 
 @Component({
@@ -21,7 +22,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
 
-    this.version = this.electronService.remote.app.getVersion();
+    if (this.electronService.isElectron) {
+      this.version = this.electronService.remote.app.getVersion();
+    } else {
+      this.version = PackageJson.version;
+    }
   }
 
   ngOnInit(): void {

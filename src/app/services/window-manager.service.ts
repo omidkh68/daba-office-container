@@ -2,8 +2,8 @@ import {Inject, Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {TasksComponent} from '../components/tasks/tasks.component';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {ElectronService} from './electron.service';
 import {WindowInterface} from '../components/dashboard/logic/window.interface';
+import {ElectronService} from '../core/services';
 import {ServiceInterface} from '../components/services/logic/service-interface';
 import {SoftPhoneComponent} from '../components/soft-phone/soft-phone.component';
 import {AdminPanelComponent} from '../components/admin-panel/admin-panel.component';
@@ -26,10 +26,12 @@ export class WindowManagerService {
   private _services: Array<ServiceInterface> | null = null;
   private services = new BehaviorSubject(this._services);
 
-  constructor(public dialog: MatDialog,
-              private electronService: ElectronService,
-              @Inject('windowObject') private window: Window) {
-    window.addEventListener('resize', this.fixPositionByTransform.bind(this))
+  constructor(@Inject('windowObject') private window: Window,
+              public dialog: MatDialog,
+              private electronService: ElectronService) {
+    if (this.electronService.isElectron) {
+      window.addEventListener('resize', this.fixPositionByTransform.bind(this))
+    }
   }
 
   get windowListArray(): Array<WindowInterface> {
@@ -146,7 +148,6 @@ export class WindowManagerService {
   fixPositionByTransform(event) {
     event.preventDefault();
     this.windowListArray.map((windowInstance: any) => {
-      let temp = this.electronService;
       let displays = this.electronService.remote.screen.getAllDisplays();
       let externalDisplay = displays.find((display) => {
         return display.bounds.x !== 0 || display.bounds.y !== 0
@@ -156,7 +157,7 @@ export class WindowManagerService {
       });
       if (externalDisplay) {
         const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;
-        const temp_size = temp.browserWindow.getBounds().width - primaryDisplay.bounds.width;
+        const temp_size = this.electronService.remote.getCurrentWindow().getBounds().width - primaryDisplay.bounds.width;
         const size = temp_size / 2;
         element.style.transform = 'translate3d(' + size + 'px, ' + 0 + 'px, 0px)';
       }

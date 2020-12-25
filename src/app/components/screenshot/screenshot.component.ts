@@ -8,7 +8,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../tasks/logic/task-interface';
 import {LoginDataClass} from '../../services/loginData.class';
 import {UserInfoService} from '../users/services/user-info.service';
-import {ElectronService} from '../../services/electron.service';
+import {ElectronService} from '../../core/services';
 import {CurrentTaskService} from '../tasks/services/current-task.service';
 import {ScreenshotInterface} from './logic/screenshot-interface';
 import {ChangeStatusService} from '../status/services/change-status.service';

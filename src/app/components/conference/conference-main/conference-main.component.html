@@ -7,8 +7,15 @@
       </button>
     </div>
 
-    <webview #webFrame [ngClass]="{'showFrame': !showFrame}"
-             class="webView-frame full-width full-height"></webview>
+    <ng-container *ngIf="electronService.isElectron; else iframe">
+      <webview #webFrame [ngClass]="{'showFrame': !showFrame}"
+               class="webView-frame full-width full-height"></webview>
+    </ng-container>
+    <ng-template #iframe>
+      <iframe #webFrame [ngClass]="{'showFrame': !showFrame}"
+              class="webView-frame full-width full-height no-border"></iframe>
+    </ng-template>
+
   </div>
 
   <div *ngIf="showFrame" [dir]="rtlDirection ? 'rtl' : 'ltr'"

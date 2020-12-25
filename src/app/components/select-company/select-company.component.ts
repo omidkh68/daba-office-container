@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../services/loginData.class';
 import {LoginInterface} from '../login/logic/login.interface';
 import {UserInfoService} from '../users/services/user-info.service';
-import {ElectronService} from '../../services/electron.service';
+import {ElectronService} from '../../core/services';
 import {CompanyInterface} from './logic/company-interface';
 import {RefreshLoginService} from '../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
@@ -91,11 +91,18 @@ export class SelectCompanyComponent extends LoginDataClass implements OnInit {
   getLoginDataAndWriteCompanyInfo(company: CompanyInterface): Promise<LoginInterface | boolean> {
     return new Promise((resolve, reject) => {
       try {
-        const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
+        let loginData;
+        let loginDataPath;
 
-        const loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+        if (this.electronService.isElectron) {
+          const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 
-        const loginData = this.electronService.fs.readFileSync(loginDataPath, 'utf8');
+          loginDataPath = this.electronService.path.join(homeDirectory, 'loginData.txt');
+
+          loginData = this.electronService.fs.readFileSync(loginDataPath, 'utf8');
+        } else {
+          loginData = localStorage.getItem('loginData');
+        }
 
         if (!loginData) {
           reject(false);
@@ -104,7 +111,11 @@ export class SelectCompanyComponent extends LoginDataClass implements OnInit {
 
           data = {...data, company: company};
 
-          this.electronService.fs.writeFileSync(loginDataPath, JSON.stringify(data));
+          if (this.electronService.isElectron) {
+            this.electronService.fs.writeFileSync(loginDataPath, JSON.stringify(data));
+          } else {
+            localStorage.setItem('loginData', JSON.stringify(data));
+          }
 
           resolve(true);
         }

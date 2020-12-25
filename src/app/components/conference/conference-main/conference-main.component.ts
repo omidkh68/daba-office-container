@@ -6,7 +6,7 @@ import {WebViewService} from '../service/web-view.service';
 import {MessageService} from '../../message/service/message.service';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
-import {ElectronService} from '../../../services/electron.service';
+import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
 import {ConferenceInterface} from '../logic/conference.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
@@ -55,9 +55,16 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
         this.reloadWebView = status;
 
         if (this.reloadWebView && this.webFrame) {
-          try {
+          if (this.electronService.isElectron) {
             this.webFrame.nativeElement.reloadIgnoringCache();
-          } catch (e) {
+          } else {
+            const src = this.webFrame.nativeElement.getAttribute('src');
+
+            this.webFrame.nativeElement.setAttribute('src', '');
+
+            setTimeout(() => {
+              this.webFrame.nativeElement.setAttribute('src', src);
+            }, 500);
           }
         }
       })
@@ -83,9 +90,9 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
 
           const address = `${AppConfig.CONF_URL}?username=${resp.username}&confname=${resp.confname}&lang=${this.rtlDirection ? 'fa' : 'en'}&darkMode=${this.loggedInUser.dark_mode}`;
 
-          if (this.webFrame) {
-            this.webFrame.nativeElement.setAttribute('src', address);
+          this.webFrame.nativeElement.setAttribute('src', address);
 
+          if (this.electronService.isElectron) {
             this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
 
               this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
@@ -96,9 +103,11 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
             this.webFrame.nativeElement.addEventListener('did-stop-loading', () => {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'videoConference'});
             });
-
-            setTimeout(() => this.showFrame = true);
+          } else {
+            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'videoConference'});
           }
+
+          setTimeout(() => this.showFrame = true);
         }
       })
     );
