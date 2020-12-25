@@ -54,38 +54,20 @@
 }
 
 .breadcrumb {
-  display: -webkit-box;
-  display: flex;
   flex-wrap: wrap;
-  padding: .75rem 0;
-  margin-bottom: 0;
-  font-size: .9375rem;
-  list-style: none;
   background-color: transparent;
-  border-radius: 0;
 
   .breadcrumb-item {
-    white-space: nowrap;
-    font-size: .9375rem;
-    display: -webkit-box;
-    display: flex;
-    cursor: pointer;
-
     &.active {
-      cursor: default;
       color: #e4a786 !important;
     }
   }
 
-  .breadcrumb-item+.breadcrumb-item {
-    padding-left: .5rem;
-  }
-
   .breadcrumb-item+.breadcrumb-item::before {
     display: inline-block;
-    padding-right: .5rem;
     color: #e65100;
     content: "/";
+    padding: 0 .25rem;
   }
 }
 // end breadcrumb

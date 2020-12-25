@@ -183,6 +183,18 @@
         </div>
       </div>
 
+      <!--<div class="display-flex margin-b-full margin-r-l-reverse">
+        <div class="full-width padding-mini-r-l">
+          <mat-form-field class="stopAtDatePicker full-width font-9-em">
+            <mat-label>{{'tasks.form.stop_at' | translate}}</mat-label>
+            <input [dpDayPicker]="datePicker"
+                   attachTo="body"
+                   formControlName="stopAt"
+                   theme="dp-material" matInput placeholder="" readonly>
+          </mat-form-field>
+        </div>
+      </div>-->
+
       <div class="display-flex margin-b-full margin-r-l-reverse">
         <div class="full-width padding-mini-r-l">
           <mat-form-field class="full-width height-80 font-9-em">
@@ -208,7 +220,7 @@
           <mat-slide-toggle
             [color]="'primary'"
             formControlName="status">
-            {{form.get('status').value ? ('global.active' | translate) : ('global.deactivate' | translate)}}
+            {{(form.get('status').value ? 'global.active' : 'global.deactivate') | translate}}
           </mat-slide-toggle>
         </div>
       </div>

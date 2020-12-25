@@ -9,6 +9,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+// import {IDatePickerConfig} from 'ng2-jalali-date-picker';
 
 @Component({
   selector: 'app-task-form',
@@ -63,6 +64,7 @@ export class TaskFormComponent implements OnChanges, OnInit, OnDestroy {
     '23:00', '23:15', '23:30', '23:45'
   ];
   boardsList = [];
+  // datePicker: IDatePickerConfig;
 
   private _subscription: Subscription = new Subscription();
 
@@ -82,6 +84,11 @@ export class TaskFormComponent implements OnChanges, OnInit, OnDestroy {
     } else {
       this.selectCurrentTime();
     }
+
+    /*this.datePicker = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      firstDayOfWeek: 'sa',
+    };*/
 
     setTimeout(() => {
       this.boardsList = [

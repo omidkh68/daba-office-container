@@ -172,12 +172,12 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         this.drawer.open();
     }
 
-    ngAfterViewChecked() {
+    /*ngAfterViewChecked() {
         let weekdayContainer = document.getElementsByClassName("holiday-date");
         if (!weekdayContainer.length) {
             this.taskCalendarService.setHolidayHighlight(this.holidays);
         }
-    }
+    }*/
 
     changeViewMode(mode) {
         this.viewModeTypes = mode;

@@ -240,10 +240,10 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
           if (resp.data.lang !== null) {
             this.defaultLang = resp.data.lang;
 
-            if (hasReload) {
+            /*if (hasReload) {
               this.electronService.remote.app.relaunch();
               this.electronService.remote.app.exit(0);
-            }
+            }*/
 
             this.viewDirection.changeDirection(resp.data.lang === 'fa');
           }

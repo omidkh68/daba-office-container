@@ -55,6 +55,7 @@ html, body {
     h5,
     h6,
     p,
+    button,
     span {
       margin: 0;
       font-family: $font-name;
@@ -78,6 +79,7 @@ html, body {
     h5,
     h6,
     p,
+    button,
     span {
       margin: 0;
       font-family: $font-name;
@@ -877,4 +879,17 @@ file-preview-container {
   position: absolute;
   font-size: 9px;
   bottom: -3px;
+}
+
+.dp-material {
+  width: 100% !important;
+
+  .dp-calendar-nav-container {
+    border: none !important;
+  }
+
+  .dp-open + div {
+    top: 10px !important;
+    left: inherit !important;
+  }
 }
