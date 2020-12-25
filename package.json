@@ -64,7 +64,7 @@
     "@typescript-eslint/eslint-plugin": "2.27.0",
     "@typescript-eslint/parser": "2.27.0",
     "chai": "4.2.0",
-    "codelyzer": "5.2.2",
+    "codelyzer": "6.0.1",
     "compact-timezone-list": "1.0.6",
     "conventional-changelog-cli": "2.0.32",
     "core-js": "3.6.5",
