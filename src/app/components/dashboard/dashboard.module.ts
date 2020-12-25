@@ -88,8 +88,8 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
       // useValue: JALALI_MOMENT_FORMATS
     },
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
-  ],
-  entryComponents: [PopoverContnetComponent]
+  ]/*,
+  entryComponents: [PopoverContnetComponent]*/
 })
 export class DashboardModule {
 }
