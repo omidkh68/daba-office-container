@@ -1,4 +1,4 @@
-import {ComponentFactory, ComponentFactoryResolver, NgModule} from '@angular/core';
+import {ComponentFactory, ComponentFactoryResolver, CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {SharedModule} from '../../shared/shared.module';
 import {TranslateModule} from '@ngx-translate/core';
@@ -80,7 +80,8 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
       // useValue: JALALI_MOMENT_FORMATS
     },
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TasksModule {
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {

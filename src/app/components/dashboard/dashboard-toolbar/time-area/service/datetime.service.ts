@@ -4,10 +4,6 @@ import * as moment from 'jalali-moment';
 import {TimezonesInterface} from '../timezones.interface';
 import {TimezonesList} from '../logic/timezones';
 
-@Pipe({
-  name: 'jalali'
-})
-
 @Injectable({
   providedIn: 'root',
 })

@@ -1,5 +1,5 @@
 <ng-container *ngIf="tabId === 2">
-  <div *ngIf="tabId && tabId == '2'" [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-height flex-center">
+  <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="full-height flex-center">
     <mat-list *ngIf="cdrExtensionList.length; else noItem;"
               class="cdr-mat-list full-width full-height overflow-x-hide overflow-y-auto">
       <mat-list-item *ngFor="let cdr of cdrExtensionList"

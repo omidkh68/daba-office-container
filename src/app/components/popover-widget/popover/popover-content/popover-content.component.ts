@@ -10,12 +10,10 @@ import {EventHandlerService} from '../../../events/service/event-handler.service
   templateUrl: './popover-content.component.html'
 })
 export class PopoverContnetComponent {
-  constructor(
-    private eventHandlerService: EventHandlerService,
-    private dateTimeService: DatetimeService,
-    private popoverRef: PopoverRef<string>,
-    @Optional() @Inject(POPOVER_DATA) public data?: any
-  ) {
+  constructor(public dateTimeService: DatetimeService,
+              private eventHandlerService: EventHandlerService,
+              private popoverRef: PopoverRef<string>,
+              @Optional() @Inject(POPOVER_DATA) public data?: any) {
   }
 
   showEventHandlerWindow(event = null, $event = null) {

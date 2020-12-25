@@ -1,4 +1,4 @@
-<ng-container *ngIf="electronService.isElectron; else iframe">
+<ng-container *ngIf="isElectron; else iframe">
   <webview #webFrame class="full-width full-height"></webview>
 </ng-container>
 <ng-template #iframe>

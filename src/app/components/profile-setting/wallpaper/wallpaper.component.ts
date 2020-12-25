@@ -257,7 +257,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.uploadFilesSimulator(0);
   }
 
-  formatBytes(bytes, decimals) {
+  formatBytes(bytes, decimals = 0) {
     if (bytes === 0) {
       return '0 Bytes';
     }

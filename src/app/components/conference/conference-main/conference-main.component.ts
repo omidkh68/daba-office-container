@@ -113,6 +113,10 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
     );
   }
 
+  get isElectron() {
+    return this.electronService.isElectron;
+  }
+
   copyInClipBoard() {
     const message = this.getTranslate('conference.added_to_clipboard');
     this.messageService.showMessage(message)

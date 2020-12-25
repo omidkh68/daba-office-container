@@ -28,7 +28,6 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '../../shared/jalali-moment-date-adapter';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
-import {DatetimeService} from './dashboard-toolbar/time-area/service/datetime.service';
 import {TaskIncompleteTaskComponent} from '../tasks/task-incomplete-task/task-incomplete-task.component';
 
 const defaultLangStorage = localStorage.getItem('defaultLang');
@@ -37,7 +36,6 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
 @NgModule({
   declarations: [
     DndDirective,
-    DatetimeService,
     ProgressComponent,
     MainMenuComponent,
     TimeAreaComponent,

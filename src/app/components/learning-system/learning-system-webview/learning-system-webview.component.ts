@@ -78,6 +78,10 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
     }
   }
 
+  get isElectron() {
+    return this.electronService.isElectron;
+  }
+
   ngOnDestroy(): void {
     this.webViewService.changeRefreshWebView({doRefresh: false, visible: false});
 

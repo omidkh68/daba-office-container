@@ -7,7 +7,7 @@
       </button>
     </div>
 
-    <ng-container *ngIf="electronService.isElectron; else iframe">
+    <ng-container *ngIf="isElectron; else iframe">
       <webview #webFrame [ngClass]="{'showFrame': !showFrame}"
                class="webView-frame full-width full-height"></webview>
     </ng-container>

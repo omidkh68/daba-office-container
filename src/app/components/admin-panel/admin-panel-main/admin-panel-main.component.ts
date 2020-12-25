@@ -83,6 +83,10 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
     }
   }
 
+  get isElectron() {
+    return this.electronService.isElectron;
+  }
+
   getTranslate(word) {
     return this.translateService.instant(word);
   }
