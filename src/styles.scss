@@ -984,4 +984,21 @@ file-preview-container {
     flex-direction: column;
     height: calc(100% - 80px);
   }
+  dp-month-calendar{
+    height: 100%;
+    .dp-month-calendar-container{
+      height: 100%;
+    }
+    .dp-months-row{
+      flex: 0 0 calc((100% + 30px) / 3);
+    }
+    .dp-calendar-month{
+      width: 25%;
+      height: 100%;
+      border: solid 1px #f6f6f6 !important;
+      &:hover{
+        border-radius: 5px !important;
+      }
+    }
+  }
 }
