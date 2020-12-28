@@ -1,26 +1,23 @@
 import {
   AfterViewInit,
   Component,
-  DoCheck,
   Input,
-  OnChanges,
   OnDestroy,
-  SimpleChanges,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import * as moment from 'moment';
+import * as jalaliMoment from 'jalali-moment';
 import {FormGroup} from '@angular/forms';
 import {ApiService} from '../../logic/api.service';
-import dayGridPlugin from '@fullcalendar/daygrid';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UtilsService} from '../../../../services/utils.service';
-import timeGridPlugin from '@fullcalendar/timegrid';
 import {UserInterface} from '../../../users/logic/user-interface';
 import {LoginInterface} from '../../../login/logic/login.interface';
 import {TranslateService} from '@ngx-translate/core';
-import {TaskCalendarService} from '../services/task-calendar.service';
+import {TaskCalendarRateInterface, TaskCalendarService} from '../services/task-calendar.service';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
-import {FullCalendarComponent} from '@fullcalendar/angular';
+import {EventHandlerService} from "../../../events/service/event-handler.service";
 
 @Component({
   selector: 'app-task-calendar-rate',
@@ -28,9 +25,9 @@ import {FullCalendarComponent} from '@fullcalendar/angular';
   styleUrls: ['./task-calendar-rate.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDestroy {
-  @ViewChild('calendar') calendarComponent: FullCalendarComponent; // the #calendar in the template
+export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   @ViewChild('drawer') drawer: any; // the #calendar in the template
+  @ViewChild('dateCalendar') datePickerDirective: any;
 
   @Input()
   usersList: any;
@@ -38,33 +35,21 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
   @Input()
   loginData: LoginInterface;
 
-  @Input()
-  calendarDifferentEvents: any;
+  calendarEvents: any;
 
-  @Input()
   sumTime: any;
-
-  @Input()
-  dateStart: any;
-
-  @Input()
   userSelected: UserInterface;
-
-  @Input()
-  holidays: [];
 
   rtlDirection: boolean;
   containerHeight = 300;
-  calendarPlugins = [dayGridPlugin, timeGridPlugin];
   form: FormGroup;
-  buttonLabels = {};
   header = {};
-  slotLabelFormat = [{
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  }];
-  views = {};
+  datePickerConfig: any = {
+    dayBtnCssClassCallback: (event) => {
+      this.dayBtnCssClassCallback(event)
+    }
+  };
+
 
   private isVisible: boolean = false;
   private _subscription: Subscription = new Subscription();
@@ -72,14 +57,34 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
   constructor(private api: ApiService,
               private utilService: UtilsService,
               private translateService: TranslateService,
+              private eventHandlerService: EventHandlerService,
               private taskCalendarService: TaskCalendarService,
               private viewDirectionService: ViewDirectionService) {
     this._subscription.add(
       this.viewDirectionService.currentDirection.subscribe(direction => {
         this.rtlDirection = direction;
-
         this.setupCalendar();
       })
+    );
+
+    this._subscription.add(
+        this.eventHandlerService.currentCalendarRate.subscribe((resp:TaskCalendarRateInterface) => {
+          if(resp){
+            this.calendarEvents = resp.calendarEvent;
+            this.sumTime = resp.sumTime;
+            this.userSelected = resp.userSelected;
+            this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
+            this.isVisible = true;
+            setTimeout(() => {
+              this.drawer.open();
+              let goToDate =
+                  this.rtlDirection ? jalaliMoment(new Date(resp.filterData.dateStart)) :
+                      moment(new Date(resp.filterData.dateStart));
+              this.datePickerDirective.api.moveCalendarTo(goToDate);
+              document.querySelector('.custom-full-calendar').classList.add('margin-r-full');
+            },1000)
+          }
+        })
     );
   }
 
@@ -87,75 +92,33 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnChanges, OnDe
     this.setupCalendar();
   }
 
-  setupCalendar() {
-    const element = document.querySelector('#rate-container') as HTMLElement;
+  dayBtnCssClassCallback(event) {
+    if(this.calendarEvents){
+      setTimeout(() => {
+        let date =
+            this.rtlDirection ?
+                event.locale('fa').format('YYYY/M/D') :
+                event.locale('en').format('DD-MM-YYYY');
 
+        let element: HTMLElement = document.querySelector('.dp-calendar-day[data-date="' + date + '"]');
+        if (element) {
+          this.calendarEvents.map(item => {
+            if (item.start.toLocaleDateString() == event._d.toLocaleDateString()) {
+              element.insertAdjacentHTML('beforeend', "<div class='custom-event-box'>" + item.title + "</div>");
+            }
+          })
+        }
+      })
+    }
+  }
+
+  setupCalendar() {
+    this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
+    const element = document.querySelector('#rate-container') as HTMLElement;
     if (element) {
       this.containerHeight = element.offsetHeight;
     }
-
-    this.views = {
-      dayGridMonthCustom: {
-        type: 'dayGridMonth',
-        buttonText: this.getTranslate('tasks.calendar.month')
-      }
-    };
-
-    this.buttonLabels = {
-      today: this.getTranslate('tasks.calendar.today'),
-      month: this.getTranslate('tasks.calendar.month'),
-      week: this.getTranslate('tasks.calendar.week'),
-      day: this.getTranslate('tasks.calendar.day'),
-      list: this.getTranslate('tasks.calendar.list')
-    };
-
-    if (this.rtlDirection) {
-      this.header = {
-        left: 'title',
-        center: '',
-        right: 'prev,next today'
-      };
-    } else {
-      this.header = {
-        left: 'today prev,next',
-        center: '',
-        right: 'title'
-      };
-    }
   }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.calendarComponent) {
-      let calendarApi = this.calendarComponent.getApi();
-
-      if (this.dateStart) {
-        //let month = this.dateStart.getMonth() + 1;
-
-        //month = this.utilService.pad(month, 2, null);
-
-        //calendarApi.gotoDate(this.dateStart._d.getFullYear() + '-' + month + '-' + this.dateStart._d.getDate());
-        calendarApi.gotoDate(this.dateStart);
-
-        this.drawer.open();
-
-        document.querySelector('#full_calendar').classList.add('margin-r-full');
-      }
-
-      this.isVisible = true;
-    }
-  }
-
-  // ngDoCheck(): void {
-  //   this.containerHeight = document.getElementById('rate-container').offsetHeight;
-  // }
-
-  // ngAfterViewChecked() {
-  //   let weekdayContainer = document.getElementsByClassName('holiday-date');
-  //
-  //   if (!weekdayContainer.length) {
-  //     this.taskCalendarService.setHolidayHighlight(this.holidays);
-  //   }
-  // }
 
   getTranslate(word) {
     return this.translateService.instant(word);

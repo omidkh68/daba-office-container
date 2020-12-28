@@ -8,6 +8,7 @@ export interface EventHandlerInterface {
     actionTypeJobModel: ActionTypeJobInterface;
     description: string;
     endDate: string;
+    start: Date;
     endDateDisplay: string;
     eTime?: string;
     name: string;

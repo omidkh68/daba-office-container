@@ -21,6 +21,8 @@ import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomShe
 import {TaskCalendarFilterComponent} from '../task-calendar/task-calendar-filter/task-calendar-filter.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
+import {EventHandlerService} from "../../events/service/event-handler.service";
+import {TaskCalendarRateInterface} from "../task-calendar/services/task-calendar.service";
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];
@@ -45,7 +47,6 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   filteredBoardsData: any;
   tabs = [];
   checksTab: string;
-  calendarParameters = {};
   currentTasks: Array<TaskInterface> | null = null;
 
   private _subscription: Subscription = new Subscription();
@@ -56,6 +57,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
               private userInfoService: UserInfoService,
               private viewDirection: ViewDirectionService,
               private currentTaskService: CurrentTaskService,
+              private eventHandlerService: EventHandlerService,
               private windowManagerService: WindowManagerService,
               private buttonSheetDataService: ButtonSheetDataService,
               private loadingIndicatorService: LoadingIndicatorService) {
@@ -183,9 +185,9 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     this.windowManagerService.dialogOnTop(dialogRef.id);
 
     this._subscription.add(
-      dialogRef.afterClosed().subscribe(resp => {
+      dialogRef.afterClosed().subscribe((resp: TaskCalendarRateInterface) => {
         if (resp) {
-          this.calendarParameters = resp;
+          this.eventHandlerService.moveCalendarRate(resp);
         }
       })
     );
@@ -211,11 +213,10 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       dialogRef.afterClosed().subscribe(resp => {
         if (resp && resp.result === 1) {
           this.filterData = Object.assign({}, resp.filterData);
-
           this.filteredBoardsData = {
             resp: resp
           };
-
+          this.eventHandlerService.moveEventsTask(resp);
           this.doResetFilter = true;
         }
       })
