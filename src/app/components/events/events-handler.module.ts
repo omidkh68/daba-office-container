@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {SharedModule} from '../../shared/shared.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {FullCalendarModule} from '@fullcalendar/angular';
 import {EventsHandlerComponent} from './events-handler.component';
 import {EventsHandlerMainComponent} from './events-handler-main/events-handler-main.component';
 import {EventsHandlerWindowComponent} from './events-handler-window/events-handler-window.component';
@@ -15,6 +14,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '../../shared/jalali-moment-date-adapter';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
+import {DpDatePickerModule} from "ng2-jalali-date-picker";
 
 const defaultLangStorage = localStorage.getItem('defaultLang');
 const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
@@ -32,7 +32,7 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
     CommonModule,
     SharedModule,
     NgxChartsModule,
-    FullCalendarModule,
+    DpDatePickerModule,
     TranslateModule.forChild({}),
     A11yModule
   ],

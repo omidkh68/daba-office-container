@@ -46,49 +46,9 @@
             <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
             <span class="padding-mini-r-l">{{'events_handler.main.add_event_title' | translate}}</span>
         </button>
-        <full-calendar [events]="calendarEvents" #calendar [allDaySlot]="false" [buttonText]="buttonLabels"
-                       [dir]="rtlDirection ? 'rtl' : 'ltr'"
-                       [displayEventTime]="false"
-                       [editable]="false"
-                       [eventLimit]="2"
-                       [firstDay]="1"
-                       (eventClick)="loadBottomSheetFromFullCalendar($event)"
-                       (dateClick)="loadBottomSheet($event)"
-                       (eventRender)="eventRender($event)"
-                       [eventLimitText]="''"
-                       [handleWindowResize]="true"
-                       [header]="header"
-                       [customButtons]="customButtons"
-                       [locale]="rtlDirection ? 'fa' : 'en'"
-                       [plugins]="calendarPlugins"
-                       [slotLabelFormat]="slotLabelFormat"
-                       [views]="views"
-                       class="float-right full-height"
-                       defaultView="dayGridMonth"
-                       id="full_calendar">
-        </full-calendar>
+        <dp-day-calendar (onSelect)="onSelect($event)" *ngIf="showCalendar" [dir]="rtlDirection ? 'rtl' : 'ltr'" [config]="datePickerConfig" class="custom-full-calendar" theme="dp-material"></dp-day-calendar>
     </div>
     <div *ngIf="viewModeTypes=='google'" class="padding-full" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
-        <full-calendar
-                       [dir]="rtlDirection ? 'rtl' : 'ltr'"
-                       [displayEventTime]="false"
-                       [editable]="false"
-                       [buttonText]="buttonLabels"
-                       [eventLimit]="2"
-                       (eventClick)="nothing($event)"
-                       [firstDay]="1"
-                       [eventLimitText]="''"
-                       [handleWindowResize]="true"
-                       [header]="header"
-                       [locale]="rtlDirection ? 'fa' : 'en'"
-                       [events]="googleCalendarEvents"
-                       [plugins]="calendarGooglePlugins"
-                       [googleCalendarApiKey] = "'AIzaSyDRh5gMFmnP207A3zG0c4E8CKCyYObVhSU'"
-                       [slotLabelFormat]="slotLabelFormat"
-                       [views]="views"
-                       class="float-right full-height"
-                       defaultView="dayGridMonth"
-                       id="full_calendar_google">
-        </full-calendar>
+        Hi :)
     </div>
 </mat-drawer-container>
