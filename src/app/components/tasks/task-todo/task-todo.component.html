@@ -10,8 +10,7 @@
 
   <div class="todo-content-container height-full-minus-45 padding-full padding-b-half">
     <form [formGroup]="form" class="full-height">
-
-      <div *ngIf="tasks.length" class="todo-list-container overflow-y-auto overflow-x-hide">
+      <div *ngIf="tasks.length" class="todo-list-container height-full-minus-50 overflow-y-auto overflow-x-hide">
         <div class="no-padding example-list"
              cdkDropList
              [cdkDropListData]="tasks"
@@ -82,8 +81,8 @@
         </div>
       </div>
 
-      <div class="enter-todo-container">
-        <div>
+      <div class="enter-todo-container height-45">
+        <div class="full-height">
           <mat-form-field appearance="outline" class="full-width height-45 font-9-em" color="primary">
             <input matInput
                    formControlName="taskName"

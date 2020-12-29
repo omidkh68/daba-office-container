@@ -33,7 +33,7 @@ function createWindow(): BrowserWindow {
 
   win.webContents.on('devtools-opened', function () {
     if (!serve) {
-      // win.webContents.closeDevTools(); todo: remove
+      win.webContents.closeDevTools();
     }
   });
 
@@ -50,9 +50,9 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
 
   } else {
-    // win.setMenu(null); todo: remove
+    win.setMenu(null);
 
-    // Menu.setApplicationMenu(null); todo: remove
+    Menu.setApplicationMenu(null);
 
     win.loadURL(format({
       pathname: join(__dirname, 'dist/index.html'),

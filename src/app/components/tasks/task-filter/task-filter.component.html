@@ -79,16 +79,20 @@
       </div>
 
       <div class="display-flex margin-r-l-reverse margin-b-full">
-        <div class="half-width padding-r-l">
-          <mat-form-field class="full-width font-9-em">
+        <div class="dpDateStartPicker half-width padding-r-l">
+          <mat-form-field class="dpDatePicker full-width font-9-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'global.from_date' | translate}}</mat-label>
-            <input (click)="picker1.open()" (dateChange)="dateToGregorian('dateStart', $event)" (focus)="picker1.open()"
+            <!--<input (click)="picker1.open()" (dateChange)="dateToGregorian('dateStart', $event)" (focus)="picker1.open()"
                    [matDatepicker]="picker1" formControlName="dateStart"
                    matInput
                    readonly tabindex="5">
-            <mat-datepicker #picker1></mat-datepicker>
+            <mat-datepicker #picker1></mat-datepicker>-->
+            <input [dpDayPicker]="datePicker"
+                   formControlName="dateStart"
+                   tabindex="5"
+                   theme="dp-material" matInput placeholder="" readonly>
 
-            <button (click)="form.get('dateStart').setValue('')" *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
+            <button (click)="form.get('dateStart').setValue(''); $event.stopPropagation();" *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
                     [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
                     aria-label="Clear"
                     class="close-icon pos-rel top-half" mat-button mat-icon-button matSuffix
@@ -102,16 +106,20 @@
           </mat-form-field>
         </div>
 
-        <div class="half-width padding-r-l">
-          <mat-form-field class="full-width font-9-em">
+        <div class="dpDateStopPicker half-width padding-r-l">
+          <mat-form-field class="dpDatePicker full-width font-9-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'global.to_date' | translate}}</mat-label>
-            <input (click)="picker2.open()" (dateChange)="dateToGregorian('dateStop', $event)" (focus)="picker2.open()"
+            <!--<input (click)="picker2.open()" (dateChange)="dateToGregorian('dateStop', $event)" (focus)="picker2.open()"
                    [matDatepicker]="picker2" formControlName="dateStop"
                    matInput
                    readonly tabindex="6">
-            <mat-datepicker #picker2></mat-datepicker>
+            <mat-datepicker #picker2></mat-datepicker>-->
+            <input [dpDayPicker]="datePicker"
+                   formControlName="dateStop"
+                   tabindex="6"
+                   theme="dp-material" matInput placeholder="" readonly>
 
-            <button (click)="form.get('dateStop').setValue('')" *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
+            <button (click)="form.get('dateStop').setValue(''); $event.stopPropagation();" *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
                     [ngClass]="rtlDirection ? 'float-left' : 'float-right'"
                     aria-label="Clear"
                     class="close-icon pos-rel top-half" mat-button mat-icon-button matSuffix

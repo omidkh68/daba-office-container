@@ -6,17 +6,20 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import * as jalaliMoment from 'jalali-moment';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
 
 @Component({
   templateUrl: './task-add.component.html'
 })
 export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestroy {
+  rtlDirection: boolean = false;
   editable: boolean = false;
   form: FormGroup;
   projectsList: ProjectInterface[] = [];
@@ -24,19 +27,24 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: TaskDataInterface,
+              public dialogRef: MatDialogRef<TaskAddComponent>,
+              private api: ApiService,
               private fb: FormBuilder,
               private injector: Injector,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
+              private viewDirection: ViewDirectionService,
               private refreshLoginService: RefreshLoginService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              public dialogRef: MatDialogRef<TaskAddComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: TaskDataInterface) {
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this.usersList = this.data.usersList;
     this.projectsList = this.data.projectsList;
+
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
   }
 
   ngOnInit(): void {
@@ -100,16 +108,27 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
 
   submit() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
-    // this.form.disable();
 
-    const formInstance = Object.assign(this.form.value);
+    const formInstance = {...this.form.value};
 
     this.form.disable();
 
+    let taskStartDate = '';
+    let taskStopDate = '';
+
+    if (this.rtlDirection) {
+      taskStartDate = jalaliMoment.from(formInstance.startAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+      taskStopDate = jalaliMoment.from(formInstance.stopAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+
+    } else {
+      taskStartDate = formInstance.startAt;
+      taskStopDate = formInstance.stopAt;
+    }
+
     const formValue = {
       ...formInstance,
-      startAt: formInstance.startAt + ' ' + formInstance.startTime + ':00',
-      stopAt: formInstance.stopAt + ' ' + formInstance.stopTime + ':00'
+      startAt: taskStartDate + ' ' + formInstance.startTime + ':00',
+      stopAt: taskStopDate + ' ' + formInstance.stopTime + ':00'
     };
 
     delete (formValue.taskId);

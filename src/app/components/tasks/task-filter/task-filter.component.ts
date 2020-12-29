@@ -1,4 +1,4 @@
-import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import * as moment from 'moment';
 import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -9,9 +9,11 @@ import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FilterInterface} from '../logic/filter-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
+import * as jalaliMoment from 'jalali-moment';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
+import {IDatePickerConfig} from 'ng2-jalali-date-picker';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
@@ -28,7 +30,7 @@ export interface filterType {
   selector: 'app-task-filter',
   templateUrl: './task-filter.component.html'
 })
-export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDestroy {
+export class TaskFilterComponent extends LoginDataClass implements OnInit, AfterViewInit, OnDestroy {
   rtlDirection: boolean;
   filterData: FilterInterface = {
     userId: 0,
@@ -93,6 +95,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
       textName: 'tasks.task_filter.by_postponed'
     }
   ];
+  datePicker: IDatePickerConfig = null;
 
   private _subscription: Subscription = new Subscription();
 
@@ -110,7 +113,13 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
     super(injector, userInfoService);
 
     this._subscription.add(
-      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+      this.viewDirection.currentDirection.subscribe(direction => {
+        this.rtlDirection = direction;
+
+        if (this.form) {
+          this.setupDatepickers();
+        }
+      })
     );
 
     this.usersList = this.data.usersList;
@@ -128,7 +137,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
         adminId: this.filterData.adminId ? this.filterData.adminId : 0,
         email: this.filterData.email ? this.filterData.email : this.loggedInUser.email,
         userImg: this.filterData.userImg ? this.filterData.userImg : '0',
-        type: this.filterData.type ? this.filterData.type : '',
+        type: this.filterData.type ? this.filterData.type : null,
         status: this.filterData.status ? this.filterData.status : 0,
         percentageStatus: this.filterData.percentageStatus ? this.filterData.percentageStatus : false
       });
@@ -169,6 +178,19 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
         });
       }
     }, 500);
+  }
+
+  ngAfterViewInit(): void {
+    this.setupDatepickers();
+  }
+
+  setupDatepickers() {
+    this.datePicker = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      firstDayOfWeek: 'sa',
+      format: 'YYYY/MM/DD',
+      drops: 'up'
+    };
   }
 
   createForm() {
@@ -290,7 +312,12 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, OnDes
   submit() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-    const formValue: FilterInterface = Object.assign({}, this.form.value);
+    const formValue: FilterInterface = {...this.form.value};
+
+    if (this.rtlDirection) {
+      formValue.dateStart = jalaliMoment.from(formValue.dateStart, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+      formValue.dateStop = jalaliMoment.from(formValue.dateStop, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+    }
 
     this.filterData = Object.assign({}, this.form.value);
 

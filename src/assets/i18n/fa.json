@@ -258,7 +258,7 @@
     "error_upload": "مشکل در آپلود عکس",
     "choose_wallpaper": "از تصاویر پس زمینه زیر انتخاب کنید:",
     "change_lang_warning_note": "نکته:",
-    "change_lang_warning_text": "با تغییر زبان، برنامه شما سریعا دوباره بارگذاری خواهد شد."
+    "change_lang_warning_text": "با تغییر زبان، سرویس های باز شده شما بسته خواهند شد."
   },
   "events_handler": {
     "main": {

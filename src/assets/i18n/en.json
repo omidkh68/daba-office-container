@@ -258,7 +258,7 @@
     "error_upload": "Problem uploading photos",
     "choose_wallpaper": "Choose from wallpapers below:",
     "change_lang_warning_note": "Note:",
-    "change_lang_warning_text": "By change your language, your app will relaunch immediately."
+    "change_lang_warning_text": "By change your language, all opened services will be closed."
   },
   "events_handler": {
     "main": {

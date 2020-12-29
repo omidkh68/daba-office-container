@@ -8,9 +8,10 @@ import {TaskMainComponent} from './task-main/task-main.component';
 import {TaskStopComponent} from './task-stop/task-stop.component';
 import {TaskTodoComponent} from './task-todo/task-todo.component';
 import {TaskFormComponent} from './task-form/task-form.component';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
+// import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import {TaskBoardComponent} from './task-board/task-board.component';
+import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 import {TaskFilterComponent} from './task-filter/task-filter.component';
 import {TaskDetailComponent} from './task-detail/task-detail.component';
 import {TaskReportComponent} from './task-report/task-report.component';
@@ -22,14 +23,13 @@ import {TaskBottomSheetComponent} from './task-bottom-sheet/task-bottom-sheet.co
 import {TaskCalendarRateComponent} from './task-calendar/task-calendar-rate/task-calendar-rate.component';
 import {TaskCalendarFilterComponent} from './task-calendar/task-calendar-filter/task-calendar-filter.component';
 import {TaskCalendarWeekdayComponent} from './task-calendar/task-calendar-weekday/task-calendar-weekday.component';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '../../shared/jalali-moment-date-adapter';
-import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
+// import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+// import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '../../shared/jalali-moment-date-adapter';
+// import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
 import {TaskReportDescriptionComponent} from './task-description/task-report-description.component';
-// import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 
-const defaultLangStorage = localStorage.getItem('defaultLang');
-const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
+// const defaultLangStorage = localStorage.getItem('defaultLang');
+// const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
 @NgModule({
   declarations: [
@@ -56,11 +56,11 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
     CommonModule,
     SharedModule,
     NgxChartsModule,
-    // DpDatePickerModule,
+    DpDatePickerModule,
     FullCalendarModule,
     TranslateModule.forChild()
   ],
-  providers: [
+  /*providers: [
     {
       provide: DateAdapter,
       useClass: defaultLang === 'fa' ? JalaliMomentDateAdapter : MomentDateAdapter,
@@ -80,7 +80,7 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
       // useValue: JALALI_MOMENT_FORMATS
     },
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
-  ],
+  ],*/
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TasksModule {

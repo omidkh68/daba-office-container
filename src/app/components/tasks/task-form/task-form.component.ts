@@ -1,5 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import * as moment from 'moment';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
@@ -7,16 +16,16 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {TaskDataInterface} from '../logic/task-data-interface';
+import {IDatePickerConfig} from 'ng2-jalali-date-picker';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-// import {IDatePickerConfig} from 'ng2-jalali-date-picker';
 
 @Component({
   selector: 'app-task-form',
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss']
 })
-export class TaskFormComponent implements OnChanges, OnInit, OnDestroy {
+export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDestroy {
   @Input()
   form: FormGroup;
 
@@ -64,14 +73,21 @@ export class TaskFormComponent implements OnChanges, OnInit, OnDestroy {
     '23:00', '23:15', '23:30', '23:45'
   ];
   boardsList = [];
-  // datePicker: IDatePickerConfig;
+  datePicker: IDatePickerConfig = null;
+  // datePicker2: IDatePickerConfig = null;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private translate: TranslateService,
               private viewDirection: ViewDirectionService) {
     this._subscription.add(
-      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+      this.viewDirection.currentDirection.subscribe(direction => {
+        this.rtlDirection = direction;
+
+        this.setupDatepickers();
+
+        this.setupTaskStatusWords();
+      })
     );
   }
 
@@ -85,11 +101,22 @@ export class TaskFormComponent implements OnChanges, OnInit, OnDestroy {
       this.selectCurrentTime();
     }
 
-    /*this.datePicker = {
+    this.setupTaskStatusWords();
+  }
+
+  ngAfterViewInit(): void {
+    this.setupDatepickers();
+  }
+
+  setupDatepickers() {
+    this.datePicker = {
       locale: this.rtlDirection ? 'fa' : 'en',
       firstDayOfWeek: 'sa',
-    };*/
+      format: this.rtlDirection ? 'YYYY/MM/DD' : 'YYYY/MM/DD'
+    };
+  }
 
+  setupTaskStatusWords() {
     setTimeout(() => {
       this.boardsList = [
         {
@@ -179,9 +206,9 @@ export class TaskFormComponent implements OnChanges, OnInit, OnDestroy {
     this.formOutput.emit(this.form);
   }
 
-  dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
+  /*dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
     this.form.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
-  }
+  }*/
 
   getTranslate(word) {
     return this.translate.instant(word);

@@ -1,10 +1,9 @@
 <div class="display-flex flex-space-between align-items-center full-height">
-  <!--<div>Version: {{version}}</div>-->
   <div *ngIf="currentTasks" class="display-flex flex-space-between height-30 align-items-center">
     <button (click)="showTask(task)" *ngFor="let task of currentTasks"
             [disabled]="!taskEssentialInfo"
             [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-            class="blink-effect white-gradient text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal"
+            class="blink-effect white-gradient line-height-30 font-9-em overflow-hide text-weight-normal"
             mat-raised-button>
       <mat-icon [ngClass]="{'rotate-180': rtlDirection}"
                 class="width-20 height-20 font-full-plus-two-tenth-rem">play_arrow
@@ -12,11 +11,4 @@
       <span class="padding-mini-r-l">{{task.taskName}}</span>
     </button>
   </div>
-
-  <!--<div id="notification" *ngIf="notification">
-    <p id="message" *ngIf="!message.length"></p>
-    <button id="close-button" (click)="closeNotification()">Close</button>
-
-    <button id="restart-button" *ngIf="restartBtn" (click)="restartApp()">Restart</button>
-  </div>-->
 </div>
