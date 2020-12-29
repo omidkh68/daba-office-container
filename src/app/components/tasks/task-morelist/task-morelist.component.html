@@ -1,0 +1,15 @@
+<section [dir]="data.rtlDirection ? 'rtl' : 'ltr'" class="padding-b-half">
+  <div class="padding-full custom-badge display-flex flex-space-between">
+    <span>{{'events_handler.main.event_count' | translate}}</span>
+    <b class="round-corner-all text-white">{{filterData.eventTemp.length}}</b>
+  </div>
+  <mat-nav-list class="event-list">
+    <mat-list-item (click)="closeDialog(item , $event)"
+       *ngFor="let item of filterData.eventTemp; last as last"
+       mat-list-item class="padding-mini-r-l">
+      <img matListAvatar src="{{item.imageurl}}" alt="...">
+      <h5 class="font-9-em" mat-line>{{item.title}}</h5>
+      <mat-divider *ngIf="!last" [inset]="true" class="no-margin full-width"></mat-divider>
+    </mat-list-item>
+  </mat-nav-list>
+</section>

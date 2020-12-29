@@ -115,13 +115,12 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
 
             this.sumTime = resp.content[1][0].timeSum;
 
-            this.calendarDifferentEvents = calendarEvent;
-
             let parameter = {
               sumTime: this.sumTime,
               calendarEvent: calendarEvent,
               dateStart: formValue.dateStart,
-              userSelected: this.userSelected
+              userSelected: this.userSelected,
+              filterData: formValue
             };
             this.dialogRef.close(parameter);
           } else {

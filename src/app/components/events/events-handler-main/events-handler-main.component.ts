@@ -13,10 +13,6 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDialog} from "@angular/material/dialog";
 import {ViewDirectionService} from "../../../services/view-direction.service";
 import {TranslateService} from "@ngx-translate/core";
-import {FullCalendarComponent} from "@fullcalendar/angular";
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import {ApiService} from "../../tasks/logic/api.service";
 import {TaskCalendarService} from "../../tasks/task-calendar/services/task-calendar.service";
 import {LoginDataClass} from "../../../services/loginData.class";
@@ -40,7 +36,6 @@ import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/servi
 })
 export class EventsHandlerMainComponent extends LoginDataClass implements AfterViewInit, OnDestroy, OnInit {
 
-    @ViewChild('calendar') calendarComponent: FullCalendarComponent;
     @ViewChild('drawer') drawer: any; // the #calendar in the template
     @ViewChild('bottomSheet', {static: false}) bottomSheet: any;
     @ViewChild('myCalendar', {}) calendar: MatCalendar<Date>;
@@ -59,45 +54,11 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     eventItems: EventHandlerInterface = null;
     eventTemp: any = [];
     popoverTarget: any;
-    calendarPlugins = [dayGridPlugin , interactionPlugin];
-    calendarGooglePlugins = [dayGridPlugin , googleCalendarPlugin];
-    buttonLabels = {};
-    views = {};
-    header = {};
-    customButtons = {};
-    slotLabelFormat = [{
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    }];
+    showCalendar: boolean = false;
     currentDate: Date;
-    googleCalendarEvents = {
-        googleCalendarId: 'en.ir#holiday@group.v.calendar.google.com',
-        className: 'gcal-event' // an option!
+    datePickerConfig: any = {
+        dayBtnCssClassCallback : (event) => {this.dayBtnCssClassCallback(event)}
     };
-/*    colorArray = [
-        '#f44336',
-        '#e91e63',
-        '#9c27b0',
-        '#673ab7',
-        '#3f51b5',
-        '#2196f3',
-        '#03a9f4',
-        '#00bcd4',
-        '#009688',
-        '#4caf50',
-        '#8bc34a',
-        '#cddc39',
-        '#dbc00d',
-        '#ffc107',
-        '#ff9800',
-        '#ff5722',
-        '#795548',
-        '#9e9e9e',
-        '#ff9800',
-        '#607d8b',
-        '#444444',
-    ]; */
     colorArray = [
         '#4caf50'
     ];
@@ -119,6 +80,33 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         super(injector, userInfoService);
     }
 
+    dayBtnCssClassCallback(event){
+        setTimeout(() => {
+            let date =
+                this.rtlDirection ?
+                    event.locale('fa').format('YYYY/M/D') :
+                    event.locale('en').format('DD-MM-YYYY');
+
+            let element: HTMLElement = document.querySelector('.dp-calendar-day[data-date="'+date+'"]');
+
+            if(element){
+                let count = 0;
+                this.calendarEvents.map(item => {
+                    if(item.start.toLocaleDateString() == event._d.toLocaleDateString()){
+                        if(count < 1){
+                            element.insertAdjacentHTML('beforeend' , "<div class='custom-event-box'>"+item.name+"</div>");
+                        }
+                        count++;
+                    }
+                });
+                if(count > 1){
+                    element.insertAdjacentHTML('beforeend' , "<div class='custom-event-count'>+"+count+"</div>");
+                }
+            }
+        })
+
+    }
+
     ngOnInit(): void {
 
         this.getEvents();
@@ -137,8 +125,6 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
                 setTimeout(() => {
                     this.calendar.updateTodaysDate();
                     this.prepareFullCalendar();
-                    let calendarApi = this.calendarComponent.getApi();
-                    calendarApi.refetchEvents();
                 }, 1000)
             })
         );
@@ -167,53 +153,16 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     }
 
     ngAfterViewInit(): void {
-
         this.prepareFullCalendar();
         this.drawer.open();
     }
-
-    /*ngAfterViewChecked() {
-        let weekdayContainer = document.getElementsByClassName("holiday-date");
-        if (!weekdayContainer.length) {
-            this.taskCalendarService.setHolidayHighlight(this.holidays);
-        }
-    }*/
 
     changeViewMode(mode) {
         this.viewModeTypes = mode;
     }
 
     setupCalendar() {
-        this.views = {
-            dayGridMonthCustom: {
-                type: 'dayGridMonth',
-                buttonText: this.getTranslate('tasks.calendar.month')
-            }
-        };
-
-        this.getTranslateWords().then((words: ButtonLabelsInterface) => {
-            this.buttonLabels = {
-                today: words.today,
-                month: words.month,
-                week: words.week,
-                day: words.day,
-                list: words.list
-            };
-        });
-
-        if (this.rtlDirection) {
-            this.header = {
-                left: '',
-                center: 'title',
-                right: 'prev,next,today'
-            };
-        } else {
-            this.header = {
-                left: 'today,prev,next',
-                center: 'title',
-                right: ''
-            };
-        }
+        this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
     }
 
     getTranslateWords() {
@@ -253,15 +202,10 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
                 item.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
             });
             this.calendarEvents = this.events_reminders.events;
+            this.showCalendar = true;
+            //this.calendarComponent.options.events = this.calendarEvents;
         }
         this.setupCalendar();
-    }
-
-    eventRender(event: any) {
-        let tag = event.el.getElementsByClassName('fc-title');
-        let myClass = this.rtlDirection ? 'left-0' : 'right-0';
-        tag[0].insertAdjacentHTML('beforeBegin',
-            '<span class="display-block custom-time-calendar '+ myClass +'">'+this.dateTimeService.formatTime(event.event._def.extendedProps.startDate)+'</span>');
     }
 
     getPosition(event) {
@@ -269,31 +213,32 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     }
 
     onSelect(event) {
+        let date = event.date && typeof event.date != 'function' ? event.date._d : event._d;
         this.eventTemp = this.events_reminders.events.filter((item: EventHandlerInterface) => {
-            return new Date(item.startDate).toLocaleDateString() == event._d.toLocaleDateString();
+            return new Date(item.startDate).toLocaleDateString() == date.toLocaleDateString();
         });
         //setTimeout(() => {
-            if (this.eventTemp.length) {
-                this.popoverService.open(PopoverContnetComponent, this.popoverTarget, {
-                    data: {
-                        eventTemp: this.eventTemp,
-                        events: this.events_reminders.events,
-                        serviceList: null,
-                        windowManagerService: null,
-                        rtlDirection: this.rtlDirection
+        if (this.eventTemp.length) {
+            this.popoverService.open(PopoverContnetComponent, this.popoverTarget, {
+                data: {
+                    eventTemp: this.eventTemp,
+                    events: this.events_reminders.events,
+                    serviceList: null,
+                    windowManagerService: null,
+                    rtlDirection: this.rtlDirection
+                }
+            })
+                .afterClosed()
+                .subscribe(result => {
+                    if (result) {
+                        this.loadBottomSheet(result);
                     }
-                })
-                    .afterClosed()
-                    .subscribe(result => {
-                        if (result) {
-                            this.loadBottomSheet(result);
-                        }
-                    });
-                this.windowManagerService.dialogOnTop('popover');
-            } else {
-                this.currentDate = event._d;
-                this.loadBottomSheet(event);
-            }
+                });
+            this.windowManagerService.dialogOnTop('popover');
+        } else {
+            this.currentDate = date;
+            this.loadBottomSheet(event);
+        }
         //},0)
 
     }
@@ -314,7 +259,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
 
         let curdate = event && event.date && event.date.constructor === Date ? event.date : this.currentDate;
         this.currentDate = curdate ? curdate : new Date();
-        let eventItems = event?.startDate !== undefined ? event : null;
+        let eventItems = event.startDate !== undefined ? event : null;
         let data: EventHandlerDataInterface = {
             action: 'add',
             eventItems: eventItems,

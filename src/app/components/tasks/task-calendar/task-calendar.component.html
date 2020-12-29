@@ -30,12 +30,7 @@
     <!-- calendar container -->
     <div *ngIf="viewModeTypes == 'calendar_task_rate'" class="full-height">
       <app-task-calendar-rate
-        [calendarDifferentEvents]="calendarParameters.calendarEvent"
-        [dateStart]="calendarParameters.dateStart"
-        [holidays]="holidays"
         [loginData]="loginData"
-        [sumTime]="calendarParameters.sumTime"
-        [userSelected]="calendarParameters.userSelected"
         [usersList]="usersList"></app-task-calendar-rate>
     </div>
   </ng-container>
