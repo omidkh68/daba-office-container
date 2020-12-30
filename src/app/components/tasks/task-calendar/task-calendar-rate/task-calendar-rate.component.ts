@@ -27,7 +27,6 @@ import {EventHandlerService} from "../../../events/service/event-handler.service
 export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   @ViewChild('drawer') drawer: any; // the #calendar in the template
   @ViewChild('dateCalendar') datePickerDirective: any;
-  @ViewChild('rateContainer', {static: false}) rateContainer: ElementRef;
 
   @Input()
   usersList: any;
@@ -62,10 +61,7 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
               private taskCalendarService: TaskCalendarService,
               private viewDirectionService: ViewDirectionService) {
     this._subscription.add(
-      this.viewDirectionService.currentDirection.subscribe(direction => {
-        this.rtlDirection = direction;
-        this.setupCalendar();
-      })
+      this.viewDirectionService.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
 
     this._subscription.add(
@@ -115,10 +111,6 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
 
   setupCalendar() {
     this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
-
-    if (this.rateContainer) {
-      this.containerHeight = this.rateContainer.nativeElement.offsetHeight;
-    }
   }
 
   getTranslate(word) {

@@ -12,7 +12,7 @@ import {LoadingIndicatorService} from '../../../../services/loading-indicator.se
 import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
 // import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {IDatePickerConfig} from 'ng2-jalali-date-picker';
+import {IDatePickerConfig, IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../../login/services/refresh-login.service';
 
@@ -32,7 +32,7 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
   usersList: UserInterface[];
   userSelected: UserInterface;
   form: FormGroup;
-  datePicker: IDatePickerConfig = null;
+  datePicker: IDatePickerDirectiveConfig;
 
   private _subscription: Subscription = new Subscription();
 

@@ -86,17 +86,6 @@ export class TaskCalendarService {
       });
     });
     return myArray;
-
-/*    taskList.map((task: any) => {
-      task.title = task.taskName;
-      task.start = new Date(task.startAt);
-      task.end = new Date(task.stopAt);
-      task.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
-      task.usersList = resp.content.users.list;
-      task.projectsList = resp.content.projects.list;
-      task.imageurl = 'assets/profileImg/' + task.assignTo.email + '.jpg';
-    });
-    return taskList;*/
   }
 }
 export interface CalendarItemInterface{

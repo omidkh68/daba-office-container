@@ -90,6 +90,7 @@
             <input [dpDayPicker]="datePicker"
                    formControlName="dateStart"
                    tabindex="5"
+                   autocomplete="off"
                    theme="dp-material" matInput placeholder="" readonly>
 
             <button (click)="form.get('dateStart').setValue(''); $event.stopPropagation();" *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"

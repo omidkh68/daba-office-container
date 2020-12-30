@@ -13,7 +13,7 @@ import * as jalaliMoment from 'jalali-moment';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
-import {IDatePickerConfig} from 'ng2-jalali-date-picker';
+import {IDatePickerConfig, IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
@@ -95,7 +95,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
       textName: 'tasks.task_filter.by_postponed'
     }
   ];
-  datePicker: IDatePickerConfig = null;
+  datePicker: IDatePickerDirectiveConfig = null;
 
   private _subscription: Subscription = new Subscription();
 

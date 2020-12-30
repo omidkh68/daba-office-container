@@ -91,8 +91,10 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       this.eventHandlerService.currentEventsTaskList.subscribe((resp: any) => {
         if (resp) {
           this.calendarEvents = this.taskCalendarService.prepareTaskItems(resp);
+          debugger;
           let goToDate =
-            this.rtlDirection ? jalaliMoment(new Date(resp.filterData.dateStart)) :
+            // this.rtlDirection ? jalaliMoment(new Date(resp.filterData.dateStart)) :
+            this.rtlDirection ? jalaliMoment.from(resp.filterData.dateStart, 'fa', 'YYYY/MM/DD') :
               moment(new Date(resp.filterData.dateStart));
           setTimeout(() => {
             this.datePickerDirective.api.moveCalendarTo(goToDate);
