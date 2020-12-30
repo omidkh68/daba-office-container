@@ -95,10 +95,10 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
     // if environment in production mode change status when user want to close app
     if (AppConfig.production) {
       this.window.onbeforeunload = async (event) => {
-        // event.returnValue = false;
-
         await this.softPhoneService.sipHangUp();
         await this.softPhoneService.sipUnRegister();
+
+        event.returnValue = true;
 
         // todo: remove when app ready in opmtimize performance
         /*const resultOfStatus = await this.changeStatus();
