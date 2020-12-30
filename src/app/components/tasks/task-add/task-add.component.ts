@@ -123,13 +123,6 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
       formValue.stopAt = moment(formValue.stopAt, 'YYYY/MM/DD').format('YYYY-MM-DD');
     }
 
-    if (this.rtlDirection) {
-      formValue.startAt = jalaliMoment.from(formValue.startAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
-      formValue.stopAt = jalaliMoment.from(formValue.stopAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
-    } else {
-
-    }
-
     const finalFormValue = {
       ...formValue,
       startAt: formValue.startAt + ' ' + formValue.startTime + ':00',

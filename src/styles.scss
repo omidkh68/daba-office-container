@@ -941,6 +941,7 @@ file-preview-container {
   margin-top: 45px;
 
   .dp-current-day, .dp-selected {
+    color: #000;
     border-radius: 5px !important;
     background: #f0f0f0 !important;
   }
@@ -1047,30 +1048,34 @@ file-preview-container {
       }
     }
   }
-}
 
-[dir="rtl"] {
-  .dp-calendar-nav-container {
-    display: flex;
-    flex-direction: row-reverse;
-  }
-
-  dp-date-picker.dp-material {
-    right: 0 !important;
-  }
-
-  dp-calendar-nav {
-    .dp-nav-btns-container {
-      display: flex !important;
-      flex-direction: row-reverse !important;
+  &[dir="rtl"] {
+    .dp-calendar-nav-container {
+      display: flex;
+      flex-direction: row-reverse;
     }
 
-    .dp-calendar-nav-left::before {
-      transform: rotate(45deg);
+    dp-date-picker.dp-material {
+      right: 0 !important;
     }
 
-    .dp-calendar-nav-right::before {
-      transform: rotate(-135deg);
+    dp-calendar-nav {
+      .dp-nav-btns-container {
+        display: flex !important;
+        flex-direction: row-reverse !important;
+      }
+
+      .dp-calendar-nav-left::before {
+        transform: rotate(45deg);
+      }
+
+      .dp-calendar-nav-right::before {
+        transform: rotate(-135deg);
+      }
+    }
+
+    .custom-event-box {
+      text-align: right;
     }
   }
 }
