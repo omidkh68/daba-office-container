@@ -60,8 +60,6 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
             this.calendarEvents = resp.calendarEvent;
             this.sumTime = resp.sumTime;
             this.userSelected = resp.userSelected;
-            this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
-            this.isVisible = true;
             setTimeout(() => {
               this.drawer.open();
               let goToDate =
@@ -69,6 +67,8 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
                       moment(new Date(resp.filterData.dateStart));
               this.datePickerDirective.api.moveCalendarTo(goToDate);
               document.querySelector('.custom-full-calendar').classList.add('margin-r-full');
+              this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
+              this.isVisible = true;
             },1000)
           }
         })
