@@ -24,7 +24,6 @@ import {WindowManagerService} from '../../../../services/window-manager.service'
 import {TaskMorelistComponent} from '../../task-morelist/task-morelist.component';
 import {TaskBottomSheetInterface} from '../../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
-
 @Component({
   selector: 'app-task-calendar-weekday',
   templateUrl: './task-calendar-weekday.component.html',
@@ -69,7 +68,10 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
         }
       })
     );
+  }
 
+  ngAfterViewInit() {
+    this.getCalendarItemsData();
   }
 
   dayBtnCssClassCallback(event) {
@@ -102,10 +104,6 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
         }
       }
     });
-  }
-
-  ngAfterViewInit() {
-    this.getCalendarItemsData();
   }
 
   getCalendarItemsData() {

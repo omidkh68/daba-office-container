@@ -4,7 +4,7 @@
     <b class="round-corner-all text-white">{{filterData.eventTemp.length}}</b>
   </div>
   <mat-nav-list class="event-list">
-    <mat-list-item (click)="closeDialog(item , $event)"
+    <mat-list-item (click)="closeDialog(item)"
                    *ngFor="let item of filterData.eventTemp; last as last"
                    mat-list-item class="padding-mini-r-l">
       <img matListAvatar [src]="item.imageurl" alt="...">

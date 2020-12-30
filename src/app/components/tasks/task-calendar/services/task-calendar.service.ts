@@ -1,27 +1,13 @@
 import {Injectable} from '@angular/core';
-import {TaskInterface} from "../../logic/task-interface";
-import {UserInterface} from "../../../users/logic/user-interface";
-import {SoftphoneUserInterface} from "../../../soft-phone/logic/softphone-user.interface";
-import {BehaviorSubject} from "rxjs";
-import {ProjectInterface} from "../../../projects/logic/project-interface";
+import {UserInterface} from '../../../users/logic/user-interface';
+import {SoftphoneUserInterface} from '../../../soft-phone/logic/softphone-user.interface';
+import {BehaviorSubject} from 'rxjs';
+import {ProjectInterface} from '../../../projects/logic/project-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskCalendarService {
-
-  private _users: Array<SoftphoneUserInterface> | null = null;
-  private users = new BehaviorSubject(this._users);
-  public currentSoftPhoneUsers = this.users.asObservable();
-
-  private _holidays: Array<String>;
-  public get holidays() {
-    return this._holidays;
-  }
-  public set holidays(theHolidays: Array<String>) {
-    this._holidays = theHolidays;
-  }
-
   colorArray = [
     '#f44336',
     '#e91e63',
@@ -46,20 +32,17 @@ export class TaskCalendarService {
     '#444444',
   ];
 
-  setHolidayHighlight(holidays) {
-    const mm: Array<string> = holidays;
+  private _users: Array<SoftphoneUserInterface> | null = null;
+  private users = new BehaviorSubject(this._users);
+  public currentSoftPhoneUsers = this.users.asObservable();
+  private _holidays: Array<String>;
 
-    setTimeout(() => {
-      let activeList = Array.prototype.slice.call(document.getElementsByClassName('fc-day'));
+  public get holidays() {
+    return this._holidays;
+  }
 
-      activeList.forEach((entry: any) => {
-        let variable: string = entry.getAttribute('data-date');
-
-        if (mm.includes(variable)) {
-          entry.classList.add('holiday-date');
-        }
-      });
-    }, 500);
+  public set holidays(theHolidays: Array<String>) {
+    this._holidays = theHolidays;
   }
 
   getDaysArray(start, end) {
@@ -69,7 +52,7 @@ export class TaskCalendarService {
     return arr;
   }
 
-  prepareTaskItems(resp: any){
+  prepareTaskItems(resp: any) {
     let taskList = resp.content.boards.list;
     let myArray = [];
     taskList.map((task: any) => {
@@ -96,12 +79,14 @@ export class TaskCalendarService {
     return myArray;
   }
 }
-export interface CalendarItemInterface{
+
+export interface CalendarItemInterface {
   end: Date,
   start: Date,
   title: string
 }
-export interface TaskCalendarRateInterface{
+
+export interface TaskCalendarRateInterface {
   calendarEvent: CalendarItemInterface[],
   dateStart: string,
   sumTime: string,
@@ -109,7 +94,7 @@ export interface TaskCalendarRateInterface{
   filterData: any
 }
 
-export interface CalendarItemsInterface{
+export interface CalendarItemsInterface {
   title: string,
   color: string,
   imageurl: string,
