@@ -35,21 +35,11 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   loginData: LoginInterface;
 
   calendarEvents: any;
-
   sumTime: any;
   userSelected: UserInterface;
-
   rtlDirection: boolean;
-  containerHeight = 300;
   form: FormGroup;
-  header = {};
-  datePickerConfig: any = {
-    firstDayOfWeek: 'sa',
-    dayBtnCssClassCallback: (event) => {
-      this.dayBtnCssClassCallback(event)
-    }
-  };
-
+  datePickerConfig: any = null;
 
   private isVisible: boolean = false;
   private _subscription: Subscription = new Subscription();
@@ -110,7 +100,13 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   }
 
   setupCalendar() {
-    this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
+    this.datePickerConfig = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      firstDayOfWeek: 'sa',
+      dayBtnCssClassCallback: (event) => {
+        this.dayBtnCssClassCallback(event)
+      }
+    };
   }
 
   getTranslate(word) {

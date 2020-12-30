@@ -12,9 +12,9 @@
                         <mat-button-toggle class="active overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'container'">
                             <span>{{'events_handler.main.container_calendar_title' | translate}}</span>
                         </mat-button-toggle>
-                        <mat-button-toggle class="overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'google'">
+                        <!--<mat-button-toggle class="overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'google'">
                             <span>{{'events_handler.main.google_calendar_title' | translate}}</span>
-                        </mat-button-toggle>
+                        </mat-button-toggle>-->
                     </mat-button-toggle-group>
                 </div>
 
@@ -48,7 +48,7 @@
         </button>
         <dp-day-calendar (onSelect)="onSelect($event)" *ngIf="showCalendar" [dir]="rtlDirection ? 'rtl' : 'ltr'" [config]="datePickerConfig" class="custom-full-calendar" theme="dp-material"></dp-day-calendar>
     </div>
-    <div *ngIf="viewModeTypes=='google'" class="padding-full" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
+    <!--<div *ngIf="viewModeTypes=='google'" class="padding-full" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
         Hi :)
-    </div>
+    </div>-->
 </mat-drawer-container>

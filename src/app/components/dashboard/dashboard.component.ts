@@ -100,14 +100,15 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
         await this.softPhoneService.sipHangUp();
         await this.softPhoneService.sipUnRegister();
 
-        const resultOfStatus = await this.changeStatus();
+        // todo: remove when app ready in opmtimize performance
+        /*const resultOfStatus = await this.changeStatus();
 
         setTimeout(() => {
           this.electronService.remote.app.quit();
           this.electronService.remote.app.exit(0);
 
           event.returnValue = true;
-        }, 200);
+        }, 200);*/
       };
     }
   }

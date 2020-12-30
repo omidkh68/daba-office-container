@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 
@@ -6,22 +6,17 @@ import {FilterTaskInterface} from '../logic/filter-task-interface';
   selector: 'app-task-morelist',
   templateUrl: './task-morelist.component.html'
 })
-export class TaskMorelistComponent implements OnInit {
+export class TaskMorelistComponent {
   rtlDirection: boolean;
   filterData: any;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: FilterTaskInterface,
               public dialogRef: MatDialogRef<TaskMorelistComponent>) {
 
     this.filterData = this.data;
   }
 
-
-  closeDialog(item , event){
+  closeDialog(item) {
     this.dialogRef.close(item);
   }
-
-  ngOnInit(): void {
-    console.log(this.filterData);
-  }
-
 }

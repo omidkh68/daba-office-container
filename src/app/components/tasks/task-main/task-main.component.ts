@@ -47,6 +47,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   filteredBoardsData: any;
   tabs = [];
   checksTab: string;
+  calendarParameters = {};
   currentTasks: Array<TaskInterface> | null = null;
 
   private _subscription: Subscription = new Subscription();
@@ -247,9 +248,9 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   }
 
   openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {
-    // bottomSheetConfig.bottomSheetRef = this.bottomSheet;
+    bottomSheetConfig.bottomSheetRef = this.bottomSheet;
 
-    // this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
+    this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
   }
 
   getTranslate(word) {

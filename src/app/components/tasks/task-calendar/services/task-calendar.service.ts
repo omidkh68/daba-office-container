@@ -1,20 +1,10 @@
 import {Injectable} from '@angular/core';
-import {TaskInterface} from "../../logic/task-interface";
-import {UserInterface} from "../../../users/logic/user-interface";
+import {UserInterface} from '../../../users/logic/user-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskCalendarService {
-
-  private _holidays: Array<String>;
-  public get holidays() {
-    return this._holidays;
-  }
-  public set holidays(theHolidays: Array<String>) {
-    this._holidays = theHolidays;
-  }
-
   colorArray = [
     '#f44336',
     '#e91e63',
@@ -39,6 +29,16 @@ export class TaskCalendarService {
     '#444444',
   ];
 
+  private _holidays: Array<String>;
+
+  public get holidays() {
+    return this._holidays;
+  }
+
+  public set holidays(theHolidays: Array<String>) {
+    this._holidays = theHolidays;
+  }
+
   setHolidayHighlight(holidays) {
     const mm: Array<string> = holidays;
 
@@ -62,7 +62,7 @@ export class TaskCalendarService {
     return arr;
   }
 
-  prepareTaskItems(resp: any){
+  prepareTaskItems(resp: any) {
     let taskList = resp.content.boards.list;
     let myArray = [];
     taskList.map((task: any) => {
@@ -88,12 +88,14 @@ export class TaskCalendarService {
     return myArray;
   }
 }
-export interface CalendarItemInterface{
+
+export interface CalendarItemInterface {
   end: Date,
   start: Date,
   title: string
 }
-export interface TaskCalendarRateInterface{
+
+export interface TaskCalendarRateInterface {
   calendarEvent: CalendarItemInterface[],
   dateStart: string,
   sumTime: string,

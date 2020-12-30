@@ -17,8 +17,8 @@ import {ResultIncompleteTaskInterface, ResultInterface, ResultTaskInterface} fro
 export class ApiService {
   public accessToken = '';
   private currentCompany: CompanyInterface = null;
-  // private API_URL = AppConfig.CONTAINER_URL + '/project';
-  private API_URL = AppConfig.API_URL;
+  private API_URL = AppConfig.CONTAINER_URL + '/project';
+  // private API_URL = AppConfig.API_URL;
 
   /**
    * @type {HttpHeaders}

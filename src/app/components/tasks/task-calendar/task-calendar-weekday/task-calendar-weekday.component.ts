@@ -68,11 +68,7 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
 
   usersList: UserInterface[] = [];
   showCalendar: boolean = false;
-  datePickerConfig: any = {
-    dayBtnCssClassCallback: (event) => {
-      this.dayBtnCssClassCallback(event)
-    }
-  };
+  datePickerConfig: any = null;
 
   private _subscription: Subscription = new Subscription();
 
@@ -104,6 +100,33 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
     );
   }
 
+  ngAfterViewInit(): void {
+    this.setupCalendar();
+  }
+
+  setupCalendar() {
+    this.datePickerConfig = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      dayBtnCssClassCallback: (event) => {
+        this.dayBtnCssClassCallback(event)
+      }
+    };
+
+    this.getTranslateWords().then((words: ButtonLabelsInterface) => {
+      this.buttonLabels = {
+        today: words.today,
+        month: words.month,
+        week: words.week,
+        day: words.day,
+        list: words.list
+      };
+    });
+
+    setTimeout(() => {
+      this.showCalendar = true;
+    }, 1000);
+  }
+
   dayBtnCssClassCallback(event) {
     setTimeout(() => {
       let date =
@@ -130,28 +153,6 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
         }
       }
     });
-  }
-
-  ngAfterViewInit(): void {
-    this.setupCalendar();
-  }
-
-  setupCalendar() {
-    this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
-
-    this.getTranslateWords().then((words: ButtonLabelsInterface) => {
-      this.buttonLabels = {
-        today: words.today,
-        month: words.month,
-        week: words.week,
-        day: words.day,
-        list: words.list
-      };
-    });
-
-    setTimeout(() => {
-      this.showCalendar = true;
-    }, 1000);
   }
 
   getTranslateWords() {
@@ -197,7 +198,6 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       this._subscription.add(
         dialogRef.afterClosed().subscribe(eventItem => {
           if (eventItem) {
-            console.log(eventItem);
             this.loadTaskDetails(eventItem);
           }
         })

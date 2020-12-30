@@ -5,9 +5,9 @@
   </div>
   <mat-nav-list class="event-list">
     <mat-list-item (click)="closeDialog(item , $event)"
-       *ngFor="let item of filterData.eventTemp; last as last"
-       mat-list-item class="padding-mini-r-l">
-      <img matListAvatar src="{{item.imageurl}}" alt="...">
+                   *ngFor="let item of filterData.eventTemp; last as last"
+                   mat-list-item class="padding-mini-r-l">
+      <img matListAvatar [src]="item.imageurl" alt="...">
       <h5 class="font-9-em" mat-line>{{item.title}}</h5>
       <mat-divider *ngIf="!last" [inset]="true" class="no-margin full-width"></mat-divider>
     </mat-list-item>
