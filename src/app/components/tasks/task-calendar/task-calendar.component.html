@@ -17,7 +17,7 @@
 
   <ng-container class="full-height">
     <!-- boards container -->
-    <div *ngIf="viewModeTypes == 'calendar_task'" class="full-height">
+    <div *ngIf="viewModeTypes == 'calendar_task'" class="full-height mat-elevation-z3">
       <app-task-calendar-weekday
         (triggerBottomSheet)="openButtonSheet($event)"
         [calendarEvents]="calendarEvents"
@@ -28,7 +28,7 @@
     <!--/ end of boards container -->
 
     <!-- calendar container -->
-    <div *ngIf="viewModeTypes == 'calendar_task_rate'" class="full-height">
+    <div *ngIf="viewModeTypes == 'calendar_task_rate'" class="full-height mat-elevation-z3">
       <app-task-calendar-rate
         [loginData]="loginData"
         [usersList]="usersList"></app-task-calendar-rate>

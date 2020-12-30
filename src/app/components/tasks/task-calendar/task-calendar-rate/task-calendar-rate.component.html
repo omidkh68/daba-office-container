@@ -1,5 +1,4 @@
-<mat-drawer-container autosize class="full-width rate-calendar display-flex flex-space-between padding-tiny-t-b"
-                      id="rate-container">
+<mat-drawer-container #rateContainer autosize class="full-width rate-calendar display-flex flex-space-between">
   <mat-drawer #drawer [disableClose]="true" class="round-corner mat-elevation-z1 padding-tiny-r-l" mode="side">
     <div *ngIf="userSelected && userSelected.email" class="padding-half">
       <!--            <mat-icon class="cursor-pointer" (click)="drawer.toggle()" aria-hidden="false">close</mat-icon>-->
@@ -26,19 +25,19 @@
         <mat-icon class="width-20 height-20 line-height-20 font-full-plus-half-em">av_timer</mat-icon>
 
         <span [ngClass]="rtlDirection ? 'padding-r-half' : 'padding-l-half'">
-          {{'tasks.task_filter.tasks_filter_calendar_hours' | translate}}: {{sumTime}}
+          {{'tasks.task_filter.tasks_filter_calendar_hours' | translate}}:
+          <span class="text-weight-bold text-green-500">{{sumTime}}</span>
         </span>
       </div>
     </div>
   </mat-drawer>
   <div [dir]="rtlDirection ? 'rtl' : 'ltr'" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'"
-       class="padding-mini-r-l full-height">
+       class="full-height">
 
-    <dp-day-calendar
-        #dateCalendar
-        [dir]="rtlDirection ? 'rtl' : 'ltr'"
-        [config]="datePickerConfig"
-        class="custom-full-calendar no-margin full-height"
-        theme="dp-material"></dp-day-calendar>
+    <dp-day-calendar #dateCalendar
+                     [dir]="rtlDirection ? 'rtl' : 'ltr'"
+                     [config]="datePickerConfig"
+                     class="custom-full-calendar no-margin full-height" theme="dp-material">
+    </dp-day-calendar>
   </div>
 </mat-drawer-container>

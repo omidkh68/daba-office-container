@@ -179,7 +179,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       data: data,
       autoFocus: false,
       width: '500px',
-      height: '250px'
+      height: '450px'
     });
 
     this.windowManagerService.dialogOnTop(dialogRef.id);

@@ -7,6 +7,7 @@ import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
+import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
@@ -46,8 +47,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
   constructor(public dialog: MatDialog,
               private fb: FormBuilder,
-              private api: ApiService,
               private injector: Injector,
+              private apiService: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private translateService: TranslateService,
@@ -213,10 +214,10 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         if (result) {
           this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-          this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+          this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
           this._subscription.add(
-            this.api.deleteTask(this.task).subscribe((resp: any) => {
+            this.apiService.deleteTask(this.task).subscribe((resp: any) => {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
               if (resp.result) {
@@ -244,30 +245,24 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     const formValue = {...this.form.value};
-    let taskStartDate = '';
-    let taskStopDate = '';
 
     if (this.rtlDirection) {
-      taskStartDate = jalaliMoment(formValue.startAt).locale('en').format('YYYY-MM-DD');
-      taskStopDate = jalaliMoment(formValue.stopAt).locale('en').format('YYYY-MM-DD');
+      formValue.startAt = jalaliMoment.from(formValue.startAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+      formValue.stopAt = jalaliMoment.from(formValue.stopAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
     } else {
-      taskStartDate = formValue.startAt;
-      taskStopDate = formValue.stopAt;
+      formValue.startAt = moment(formValue.startAt, 'YYYY/MM/DD').format('YYYY-MM-DD');
+      formValue.stopAt = moment(formValue.stopAt, 'YYYY/MM/DD').format('YYYY-MM-DD');
     }
 
-    formValue.startAt_tmp = taskStartDate + ' ' + formValue.startTime + ':00';
-    formValue.stopAt_tmp = taskStopDate + ' ' + formValue.stopTime + ':00';
+    formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
+    formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this.form.disable();
 
-    console.log(formValue);
-
-    return;
-
-    /*this._subscription.add(
-      this.api.updateTask(formValue).subscribe((resp: any) => {
+    this._subscription.add(
+      this.apiService.updateTask(formValue).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result) {
@@ -286,7 +281,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
         this.refreshLoginService.openLoginDialog(error);
       })
-    );*/
+    );
   }
 
   openTask(task) {
@@ -352,7 +347,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
   getBreadcrumbData(taskId) {
     return new Promise((resolve) => {
       this._subscription.add(
-        this.api.getBreadcrumb(taskId).subscribe((resp: any) => {
+        this.apiService.getBreadcrumb(taskId).subscribe((resp: any) => {
           if (resp.result === 1) {
 
             this.breadcrumbList = resp.content;

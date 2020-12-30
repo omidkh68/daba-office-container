@@ -6,6 +6,7 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
@@ -109,34 +110,38 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
   submit() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-    const formInstance = {...this.form.value};
+    let formValue = {...this.form.value};
 
     this.form.disable();
 
-    let taskStartDate = '';
-    let taskStopDate = '';
-
     if (this.rtlDirection) {
-      taskStartDate = jalaliMoment.from(formInstance.startAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
-      taskStopDate = jalaliMoment.from(formInstance.stopAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+      formValue.startAt = jalaliMoment.from(formValue.startAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+      formValue.stopAt = jalaliMoment.from(formValue.stopAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
 
     } else {
-      taskStartDate = formInstance.startAt;
-      taskStopDate = formInstance.stopAt;
+      formValue.startAt = moment(formValue.startAt, 'YYYY/MM/DD').format('YYYY-MM-DD');
+      formValue.stopAt = moment(formValue.stopAt, 'YYYY/MM/DD').format('YYYY-MM-DD');
     }
 
-    const formValue = {
-      ...formInstance,
-      startAt: taskStartDate + ' ' + formInstance.startTime + ':00',
-      stopAt: taskStopDate + ' ' + formInstance.stopTime + ':00'
+    if (this.rtlDirection) {
+      formValue.startAt = jalaliMoment.from(formValue.startAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+      formValue.stopAt = jalaliMoment.from(formValue.stopAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+    } else {
+
+    }
+
+    const finalFormValue = {
+      ...formValue,
+      startAt: formValue.startAt + ' ' + formValue.startTime + ':00',
+      stopAt: formValue.stopAt + ' ' + formValue.stopTime + ':00'
     };
 
-    delete (formValue.taskId);
+    delete (finalFormValue.taskId);
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
-      this.api.createTask(formValue).subscribe((resp: any) => {
+      this.api.createTask(finalFormValue).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {

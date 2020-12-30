@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  Component,
+  Component, ElementRef,
   Input,
   OnDestroy,
   ViewChild,
@@ -22,12 +22,12 @@ import {EventHandlerService} from "../../../events/service/event-handler.service
 @Component({
   selector: 'app-task-calendar-rate',
   templateUrl: './task-calendar-rate.component.html',
-  styleUrls: ['./task-calendar-rate.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   @ViewChild('drawer') drawer: any; // the #calendar in the template
   @ViewChild('dateCalendar') datePickerDirective: any;
+  @ViewChild('rateContainer', {static: false}) rateContainer: ElementRef;
 
   @Input()
   usersList: any;
@@ -45,6 +45,7 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   form: FormGroup;
   header = {};
   datePickerConfig: any = {
+    firstDayOfWeek: 'sa',
     dayBtnCssClassCallback: (event) => {
       this.dayBtnCssClassCallback(event)
     }
@@ -114,9 +115,9 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
 
   setupCalendar() {
     this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
-    const element = document.querySelector('#rate-container') as HTMLElement;
-    if (element) {
-      this.containerHeight = element.offsetHeight;
+
+    if (this.rateContainer) {
+      this.containerHeight = this.rateContainer.nativeElement.offsetHeight;
     }
   }
 

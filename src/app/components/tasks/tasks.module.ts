@@ -9,7 +9,6 @@ import {TaskStopComponent} from './task-stop/task-stop.component';
 import {TaskTodoComponent} from './task-todo/task-todo.component';
 import {TaskFormComponent} from './task-form/task-form.component';
 // import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {FullCalendarModule} from '@fullcalendar/angular';
 import {TaskBoardComponent} from './task-board/task-board.component';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 import {TaskFilterComponent} from './task-filter/task-filter.component';

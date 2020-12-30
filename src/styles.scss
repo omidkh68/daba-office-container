@@ -111,11 +111,9 @@ a {
 }
 
 .window-dialog {
+  @include transition(width, height .05s);
+
   position: relative;
-  -webkit-transition: width, height .05s;
-  -moz-transition: width, height .05s;
-  -o-transition: width, height .05s;
-  transition: width, height .05s;
   max-width: inherit !important;
 }
 
@@ -703,10 +701,10 @@ file-preview-container {
 }
 
 .seconds {
+  @include transition(transform .1s cubic-bezier(.17, .67, .83, 1.93));
   height: 40%;
   background-color: #c01f20;
   transform: rotate(0deg);
-  transition: transform .1s cubic-bezier(.17, .67, .83, 1.93);
   z-index: 10;
 }
 
@@ -878,11 +876,16 @@ file-preview-container {
 
 //simulate full calendar
 .custom-full-calendar {
-  .dp-material {
+  &.dp-material {
     width: 100% !important;
+
+    dp-calendar-nav {
+      height: 40px !important;
+    }
 
     .dp-calendar-nav-container {
       border: none !important;
+      height: 40px !important;
     }
 
     .dp-open + div {
@@ -894,28 +897,30 @@ file-preview-container {
   height: 100%;
 
   img {
-    width: 25px;
-    height: 25px;
-    margin: 0 4px;
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
     border-radius: 100%;
   }
 
   .custom-event-box {
     position: absolute;
     top: 20px;
+    left: 0;
+    right: 0;
     background: #4caf50;
     width: 94%;
-    margin: 2%;
+    margin: auto;
     border-radius: 5px;
-    height: 35px;
+    height: 30px;
     color: #fff;
     display: flex;
     justify-content: center;
     font-size: 11px;
     padding: 0 2px;
-    text-align: center;
+    text-align: left;
     align-items: center;
-    line-height: 14px;
+    line-height: 12px;
     overflow: hidden;
   }
 
@@ -941,7 +946,22 @@ file-preview-container {
   }
 
   .dp-calendar-day {
+    position: relative;
+    justify-content: start !important;
     border: solid 1px #f6f6f6 !important;
+    padding: .25em .5em !important;
+
+    &.dp-selected:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 90%;
+      height: 90%;
+      margin: auto;
+    }
   }
 
   .dp-calendar-weekday {
@@ -960,12 +980,14 @@ file-preview-container {
   .dp-nav-header-btn {
     width: inherit !important;
     font-size: 16px !important;
-    padding: 5px 20px !important;
+    padding: 5px !important;
     height: auto !important;
     border-radius: 5px !important;
   }
 
   .dp-calendar-day, .dp-calendar-weekday {
+    @include transition(all .4s);
+
     width: 14.286% !important;
     height: 100% !important;
     display: inline-flex;
@@ -983,21 +1005,23 @@ file-preview-container {
   }
 
   .dp-calendar-week {
-    flex: 0 0 calc(100% / 6);
-  }
-
-  .dp-calendar-nav-container {
-    height: 50px !important;
+    // flex: 0 0 calc(100% / 6);
+    height: calc(100% / 3 - 25px);
   }
 
   .dp-calendar-wrapper {
     padding: 0 !important;
     display: flex;
     flex-direction: column;
-    height: calc(100% - 80px);
+    height: calc(100% - 40px);
+
+    .dp-weekdays {
+      margin: 0 !important;
+    }
   }
 
   dp-month-calendar {
+    width: 100%;
     height: 100%;
 
     .dp-month-calendar-container {
@@ -1005,17 +1029,48 @@ file-preview-container {
     }
 
     .dp-months-row {
-      flex: 0 0 calc((100% + 30px) / 3);
+      // flex: 0 0 calc((100% + 30px) / 3);
+      height: calc(100% / 3);
     }
 
     .dp-calendar-month {
+      @include transition(all .4s);
+
       width: 25%;
       height: 100%;
       border: solid 1px #f6f6f6 !important;
+      font-size: 1em !important;
 
-      &:hover {
+      &:hover, &.dp-current-month {
+        background: #f0f0f0 !important;
         border-radius: 5px !important;
       }
+    }
+  }
+}
+
+[dir="rtl"] {
+  .dp-calendar-nav-container {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  dp-date-picker.dp-material {
+    right: 0 !important;
+  }
+
+  dp-calendar-nav {
+    .dp-nav-btns-container {
+      display: flex !important;
+      flex-direction: row-reverse !important;
+    }
+
+    .dp-calendar-nav-left::before {
+      transform: rotate(45deg);
+    }
+
+    .dp-calendar-nav-right::before {
+      transform: rotate(-135deg);
     }
   }
 }

@@ -12,7 +12,7 @@
                  class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
                  matPrefix>
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
-            <mat-select formControlName="adminId" tabIndex="4">
+            <mat-select formControlName="adminId" tabIndex="1">
               <mat-option (onSelectionChange)="updateImage($event , user)" *ngFor="let user of usersList"
                           [value]="user.adminId"
                           class="font-full-em">
@@ -34,15 +34,19 @@
         </div>
       </div>
       <div class="display-flex margin-r-l-reverse">
-        <div class="half-width padding-r-l">
-          <mat-form-field class="full-width font-8-em">
+        <div class="dpDateStartPicker half-width padding-r-l">
+          <mat-form-field class="dpDatePicker full-width font-8-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'global.from_date' | translate}}</mat-label>
 
-            <input (click)="picker1.open()" (dateChange)="dateToGregorian('dateStart', $event)" (focus)="picker1.open()"
+            <!--<input (click)="picker1.open()" (dateChange)="dateToGregorian('dateStart', $event)" (focus)="picker1.open()"
                    [matDatepicker]="picker1"
                    formControlName="dateStart" matInput
-                   readonly tabindex="5">
-            <mat-datepicker #picker1></mat-datepicker>
+                   readonly tabindex="2">
+            <mat-datepicker #picker1></mat-datepicker>-->
+            <input [dpDayPicker]="datePicker"
+                   formControlName="dateStart"
+                   tabindex="2"
+                   theme="dp-material" matInput placeholder="" readonly>
 
             <button (click)="form.get('dateStart').setValue('')"
                     *ngIf="form.get('dateStart').touched && form.get('dateStart').value.length"
@@ -61,14 +65,18 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="half-width padding-r-l">
-          <mat-form-field class="full-width font-8-em">
+        <div class="dpDateStopPicker half-width padding-r-l">
+          <mat-form-field class="dpDatePicker full-width font-8-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'global.to_date' | translate}}</mat-label>
-            <input (click)="picker2.open()" (dateChange)="dateToGregorian('dateStop', $event)" (focus)="picker2.open()"
+            <!--<input (click)="picker2.open()" (dateChange)="dateToGregorian('dateStop', $event)" (focus)="picker2.open()"
                    [matDatepicker]="picker2" formControlName="dateStop"
                    matInput
-                   readonly tabindex="6">
-            <mat-datepicker #picker2></mat-datepicker>
+                   readonly tabindex="3">
+            <mat-datepicker #picker2></mat-datepicker>-->
+            <input [dpDayPicker]="datePicker"
+                   formControlName="dateStop"
+                   tabindex="6"
+                   theme="dp-material" matInput placeholder="" readonly>
 
             <button (click)="form.get('dateStop').setValue('')"
                     *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"
