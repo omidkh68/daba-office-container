@@ -88,7 +88,7 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit(): void {
-    this.stopWorkingBeforeCloseApp();
+    //this.stopWorkingBeforeCloseApp();
   }
 
   stopWorkingBeforeCloseApp() {
