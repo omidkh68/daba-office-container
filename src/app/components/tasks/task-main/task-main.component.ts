@@ -47,6 +47,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   filteredBoardsData: any;
   tabs = [];
   checksTab: string;
+  calendarParameters = {};
   currentTasks: Array<TaskInterface> | null = null;
 
   private _subscription: Subscription = new Subscription();
