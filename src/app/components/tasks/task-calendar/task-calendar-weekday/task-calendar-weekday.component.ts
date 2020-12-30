@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
-  Input,
   OnDestroy,
   Output,
   ViewChild,
@@ -18,21 +17,13 @@ import {PopoverService} from '../../../popover-widget/popover.service';
 import {TranslateService} from '@ngx-translate/core';
 import {TaskDataInterface} from '../../logic/task-data-interface';
 import {TaskDetailComponent} from '../../task-detail/task-detail.component';
-import {TaskCalendarService} from '../services/task-calendar.service';
+import {CalendarItemsInterface, TaskCalendarService} from '../services/task-calendar.service';
 import {EventHandlerService} from '../../../events/service/event-handler.service';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
-import {EventHandlerInterface} from '../../../events/logic/event-handler.interface';
 import {TaskMorelistComponent} from '../../task-morelist/task-morelist.component';
 import {TaskBottomSheetInterface} from '../../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
-export interface ButtonLabelsInterface {
-  today: string;
-  month: string;
-  week: string;
-  day: string;
-  list: string;
-}
 
 @Component({
   selector: 'app-task-calendar-weekday',
@@ -43,31 +34,13 @@ export interface ButtonLabelsInterface {
 export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
   @ViewChild('dateCalendar') datePickerDirective: any;
 
-  @Input()
-  calendarEvents: any;
-
-  @Input()
-  loginData: any;
-
-  @Input()
-  holidays: [];
-
   @Output()
   triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
 
+  calendarEvents: Array<CalendarItemsInterface> = null;
   rtlDirection: boolean;
-  buttonLabels: ButtonLabelsInterface = {
-    today: '',
-    month: '',
-    week: '',
-    day: '',
-    list: ''
-  };
   tasks: TaskInterface[] = [];
-  options: any;
-
   usersList: UserInterface[] = [];
-  showCalendar: boolean = false;
   datePickerConfig: any = null;
 
   private _subscription: Subscription = new Subscription();
@@ -87,47 +60,23 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       this.eventHandlerService.currentEventsTaskList.subscribe((resp: any) => {
         if (resp) {
           this.calendarEvents = this.taskCalendarService.prepareTaskItems(resp);
-          debugger;
           let goToDate =
-            // this.rtlDirection ? jalaliMoment(new Date(resp.filterData.dateStart)) :
             this.rtlDirection ? jalaliMoment.from(resp.filterData.dateStart, 'fa', 'YYYY/MM/DD') :
               moment(new Date(resp.filterData.dateStart));
           setTimeout(() => {
             this.datePickerDirective.api.moveCalendarTo(goToDate);
-          }, 500)
+          })
         }
       })
     );
-  }
 
-  ngAfterViewInit(): void {
-    this.setupCalendar();
-  }
-
-  setupCalendar() {
-    this.datePickerConfig = {
-      locale: this.rtlDirection ? 'fa' : 'en',
-      dayBtnCssClassCallback: (event) => {
-        this.dayBtnCssClassCallback(event)
-      }
-    };
-
-    this.getTranslateWords().then((words: ButtonLabelsInterface) => {
-      this.buttonLabels = {
-        today: words.today,
-        month: words.month,
-        week: words.week,
-        day: words.day,
-        list: words.list
-      };
-    });
-
-    setTimeout(() => {
-      this.showCalendar = true;
-    }, 1000);
   }
 
   dayBtnCssClassCallback(event) {
+    if (!this.calendarEvents) {
+      return;
+    }
+
     setTimeout(() => {
       let date =
         this.rtlDirection ?
@@ -140,7 +89,7 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
         let count = 0;
 
         this.calendarEvents.map(item => {
-          if (item.start.toLocaleDateString() == event._d.toLocaleDateString()) {
+            if (item.start.toLocaleDateString() == event._d.toLocaleDateString()) {
             if (count < 1) {
               element.insertAdjacentHTML('beforeend', '<div data-objects=\'' + JSON.stringify(item) + '\' style=\'background: ' + item.color + ' !important;\' class=\'custom-event-box\'><img src=\'' + item.imageurl + '\'>' + item.title + '</div>');
             }
@@ -155,28 +104,38 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  getTranslateWords() {
-    return new Promise(async (resolve) => {
-      const translate: ButtonLabelsInterface = {
-        today: '',
-        month: '',
-        week: '',
-        day: '',
-        list: ''
-      };
-
-      await this.getTranslate('tasks.calendar.today').then((word: string) => translate.today = word);
-      await this.getTranslate('tasks.calendar.month').then((word: string) => translate.month = word);
-      await this.getTranslate('tasks.calendar.week').then((word: string) => translate.week = word);
-      await this.getTranslate('tasks.calendar.day').then((word: string) => translate.day = word);
-      await this.getTranslate('tasks.calendar.list').then((word: string) => translate.list = word);
-
-      resolve(translate);
-    });
+  ngAfterViewInit() {
+    this.getCalendarItemsData();
   }
 
+  getCalendarItemsData() {
+    this._subscription.add(
+        this.eventHandlerService.currentCalendarItems.subscribe((resp: Array<CalendarItemsInterface>) => {
+          if (resp) {
+            this.calendarEvents = resp;
+
+            this.setupCalendar();
+          }
+        })
+    );
+  }
+
+  setupCalendar(): void {
+    let goToDate = this.rtlDirection ? jalaliMoment(new Date()) : moment(new Date());
+    this.datePickerDirective.api.moveCalendarTo(goToDate);
+
+    this.datePickerConfig = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      dayBtnCssClassCallback: (event) => {
+        this.dayBtnCssClassCallback(event)
+      }
+    };
+  }
+
+
+
   eventClick(event: any) {
-    let eventTemp = this.calendarEvents.filter((item: EventHandlerInterface) => {
+    let eventTemp = this.calendarEvents.filter((item: CalendarItemsInterface) => {
       return item.start.toLocaleDateString() == event.date._d.toLocaleDateString();
     });
 
@@ -198,6 +157,7 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       this._subscription.add(
         dialogRef.afterClosed().subscribe(eventItem => {
           if (eventItem) {
+            console.log(eventItem);
             this.loadTaskDetails(eventItem);
           }
         })
@@ -233,14 +193,6 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       height: '98%',
       width: '98%',
       data: data
-    });
-  }
-
-  getTranslate(word) {
-    return new Promise((resolve) => {
-      const translate = this.translateService.instant(word);
-
-      resolve(translate);
     });
   }
 

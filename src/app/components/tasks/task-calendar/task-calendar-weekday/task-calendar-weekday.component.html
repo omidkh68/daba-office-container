@@ -3,7 +3,6 @@
   <dp-day-calendar
           #dateCalendar
           (onSelect)="eventClick($event)"
-          *ngIf="showCalendar"
           [dir]="rtlDirection ? 'rtl' : 'ltr'"
           [config]="datePickerConfig"
           class="custom-full-calendar no-margin mat-elevation-z3"

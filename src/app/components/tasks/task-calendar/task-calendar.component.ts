@@ -23,6 +23,7 @@ import {LoadingIndicatorService} from '../../../services/loading-indicator.servi
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskCalendarService} from './services/task-calendar.service';
+import {EventHandlerService} from "../../events/service/event-handler.service";
 
 @Component({
   selector: 'app-task-calendar',
@@ -64,6 +65,7 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
               private userInfoService: UserInfoService,
               private refreshLoginService: RefreshLoginService,
               private taskCalendarService: TaskCalendarService,
+              private eventHandlerService: EventHandlerService,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
   }
@@ -91,26 +93,22 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
       this._subscription.add(
-        this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
+            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
-          this.loadingIndicatorService.changeLoadingStatus({
-            status: false,
-            serviceName: 'project'
-          });
+            if (resp.result === 1) {
+              this.usersList = resp.content.users.list;
+              this.projectsList = resp.content.projects.list;
+              this.tasks = resp.content.boards.list;
+              this.taskCalendarService.holidays = resp.content.boards.holidays;
+              this.calendarEvents = this.taskCalendarService.prepareTaskItems(resp);
+              this.eventHandlerService.moveCalendarItem(this.calendarEvents)
+            }
+          }, (error: HttpErrorResponse) => {
+            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
-          if (resp.result === 1) {
-            this.usersList = resp.content.users.list;
-            this.projectsList = resp.content.projects.list;
-            this.tasks = resp.content.boards.list;
-            this.taskCalendarService.holidays = resp.content.boards.holidays;
-            this.calendarEvents = this.taskCalendarService.prepareTaskItems(resp);
-          }
-        }, (error: HttpErrorResponse) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-          this.refreshLoginService.openLoginDialog(error);
-        })
+            this.refreshLoginService.openLoginDialog(error);
+          })
       );
     }
   }

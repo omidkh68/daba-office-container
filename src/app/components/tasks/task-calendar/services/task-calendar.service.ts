@@ -1,10 +1,27 @@
 import {Injectable} from '@angular/core';
-import {UserInterface} from '../../../users/logic/user-interface';
+import {TaskInterface} from "../../logic/task-interface";
+import {UserInterface} from "../../../users/logic/user-interface";
+import {SoftphoneUserInterface} from "../../../soft-phone/logic/softphone-user.interface";
+import {BehaviorSubject} from "rxjs";
+import {ProjectInterface} from "../../../projects/logic/project-interface";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskCalendarService {
+
+  private _users: Array<SoftphoneUserInterface> | null = null;
+  private users = new BehaviorSubject(this._users);
+  public currentSoftPhoneUsers = this.users.asObservable();
+
+  private _holidays: Array<String>;
+  public get holidays() {
+    return this._holidays;
+  }
+  public set holidays(theHolidays: Array<String>) {
+    this._holidays = theHolidays;
+  }
+
   colorArray = [
     '#f44336',
     '#e91e63',
@@ -29,16 +46,6 @@ export class TaskCalendarService {
     '#444444',
   ];
 
-  private _holidays: Array<String>;
-
-  public get holidays() {
-    return this._holidays;
-  }
-
-  public set holidays(theHolidays: Array<String>) {
-    this._holidays = theHolidays;
-  }
-
   setHolidayHighlight(holidays) {
     const mm: Array<string> = holidays;
 
@@ -62,7 +69,7 @@ export class TaskCalendarService {
     return arr;
   }
 
-  prepareTaskItems(resp: any) {
+  prepareTaskItems(resp: any){
     let taskList = resp.content.boards.list;
     let myArray = [];
     taskList.map((task: any) => {
@@ -81,6 +88,7 @@ export class TaskCalendarService {
         let newObj = Object.assign(obj, task);
 
         let checkDae = item.getFullYear() + '-' + ('0' + (item.getMonth() + 1)).slice(-2) + '-' + ('0' + item.getDate()).slice(-2);
+
         if (!this._holidays.includes(checkDae))
           myArray.push(newObj);
       });
@@ -88,17 +96,25 @@ export class TaskCalendarService {
     return myArray;
   }
 }
-
-export interface CalendarItemInterface {
+export interface CalendarItemInterface{
   end: Date,
   start: Date,
   title: string
 }
-
-export interface TaskCalendarRateInterface {
+export interface TaskCalendarRateInterface{
   calendarEvent: CalendarItemInterface[],
   dateStart: string,
   sumTime: string,
   userSelected: UserInterface,
   filterData: any
+}
+
+export interface CalendarItemsInterface{
+  title: string,
+  color: string,
+  imageurl: string,
+  start: Date,
+  end: Date,
+  usersList: UserInterface[],
+  projectsList: ProjectInterface[]
 }

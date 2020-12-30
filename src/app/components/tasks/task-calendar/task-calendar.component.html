@@ -19,10 +19,7 @@
     <!-- boards container -->
     <div *ngIf="viewModeTypes == 'calendar_task'" class="full-height mat-elevation-z3">
       <app-task-calendar-weekday
-        (triggerBottomSheet)="openButtonSheet($event)"
-        [calendarEvents]="calendarEvents"
-        [holidays]="holidays"
-        [loginData]="loginData"></app-task-calendar-weekday>
+        (triggerBottomSheet)="openButtonSheet($event)"></app-task-calendar-weekday>
       <app-task-bottom-sheet #bottomSheet></app-task-bottom-sheet>
     </div>
     <!--/ end of boards container -->

@@ -876,6 +876,9 @@ file-preview-container {
 
 //simulate full calendar
 .custom-full-calendar {
+  .holiday{
+    color: #F44336 !important;
+  }
   &.dp-material {
     width: 100% !important;
 
