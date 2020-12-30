@@ -3,7 +3,7 @@
     <webview #webFrame class="webView-frame full-width full-height"></webview>
   </ng-container>
   <ng-template #iframe>
-    <iframe #webFrame class="webView-frame full-width full-height no-border"></iframe>
+    <iframe #webFrame allow="camera;microphone" class="webView-frame full-width full-height no-border"></iframe>
   </ng-template>
 
   <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'adminPanel'"
