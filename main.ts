@@ -56,11 +56,12 @@ function createWindow(): BrowserWindow {
 
     // win.loadURL('https://webcontainer.dabacenter.ir');
 
-    win.loadURL(format({
+    /*win.loadURL(format({
       pathname: join(__dirname, 'dist/index.html'),
       protocol: 'file:',
       slashes: true
-    }));
+    }));*/
+    win.loadURL('https://webcontainer.dabacenter.ir');
   }
 
   win.on('closed', () => {

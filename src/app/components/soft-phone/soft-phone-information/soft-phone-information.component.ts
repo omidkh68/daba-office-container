@@ -303,7 +303,6 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     }
 
     if (changes.activePermissionRequest && changes.activePermissionRequest.currentValue === 'granted') {
-      debugger;
       this.getEssentialData();
     }
   }
