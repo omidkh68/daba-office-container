@@ -70,16 +70,17 @@
 
   <app-soft-phone-bottom-sheet #bottomSheet></app-soft-phone-bottom-sheet>
 
-  <div [ngClass]="activePermissionRequest && activePermissionRequest != 'granted' ? 'bottom-0' : 'bottom-full-reverse-percent'"
-       [dir]="rtlDirection ? 'rtl' : 'ltr'"
-       class="show-extension-list pos-abs full-height z-index-9999 left-0 right-0 margin-auto round-corner-top bg-white transition overflow-hide">
+  <div
+    [ngClass]="activePermissionRequest && activePermissionRequest != 'granted' ? 'bottom-0' : 'bottom-full-reverse-percent'"
+    [dir]="rtlDirection ? 'rtl' : 'ltr'"
+    class="show-extension-list pos-abs full-height z-index-9999 left-0 right-0 margin-auto round-corner-top bg-white transition overflow-hide">
     <h3 class="full-width height-45 line-height-45 padding-r-l no-margin">
       {{'soft_phone.call_pop_up.permission_access' | translate}}
     </h3>
 
     <button
-            [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
-            class="pos-abs top-half cursor-pointer no-bg no-border no-box-shadow width-30 height-30">
+      [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
+      class="pos-abs top-half cursor-pointer no-bg no-border no-box-shadow width-30 height-30">
       <mat-icon class="text-grey-500 line-height-30">close</mat-icon>
     </button>
 

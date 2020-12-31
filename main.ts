@@ -33,7 +33,7 @@ function createWindow(): BrowserWindow {
 
   win.webContents.on('devtools-opened', function () {
     if (!serve) {
-      // win.webContents.closeDevTools();
+      win.webContents.closeDevTools();
     }
   });
 
@@ -50,18 +50,17 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
 
   } else {
-    // win.setMenu(null);
+    win.setMenu(null);
 
-    // Menu.setApplicationMenu(null);
+    Menu.setApplicationMenu(null);
 
-    // win.loadURL('https://webcontainer.dabacenter.ir');
+    win.loadURL('https://webcontainer.dabacenter.ir');
 
     /*win.loadURL(format({
       pathname: join(__dirname, 'dist/index.html'),
       protocol: 'file:',
       slashes: true
     }));*/
-    win.loadURL('https://webcontainer.dabacenter.ir');
   }
 
   win.on('closed', () => {

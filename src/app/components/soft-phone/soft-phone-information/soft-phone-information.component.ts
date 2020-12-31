@@ -11,7 +11,7 @@ import {
   PipeTransform,
   SimpleChanges
 } from '@angular/core';
-import {timer} from 'rxjs';
+import {of, timer} from 'rxjs';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
@@ -19,9 +19,9 @@ import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
-import {HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ExtensionInterface, MuteUnMuteInterface} from '../logic/extension.interface';
-import {ResultApiInterface, ResultMuteUnMuteApiInterface} from '../logic/result-api.interface';
+import {ResultApiInterface} from '../logic/result-api.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
@@ -29,6 +29,7 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
+import {catchError, map} from 'rxjs/operators';
 
 export interface LoggedInUserExtensionInterface {
   user: UserContainerInterface,
@@ -70,6 +71,7 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private http: HttpClient,
               private injector: Injector,
               private apiService: ApiService,
               private messageService: MessageService,

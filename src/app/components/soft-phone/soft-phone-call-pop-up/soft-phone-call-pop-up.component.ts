@@ -84,6 +84,8 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.data = this.bottomSheetData.data;
 
+    console.log('bottomsheet data: ', this.data);
+
     this.keys = [
       {type: 'mute_unmute', num: 'mic', changeIcon: 'mic_off'},
     ];
@@ -130,11 +132,14 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
             this.callTimer = (this.hour < 10 ? '0' + this.hour : this.hour) + ':' + (this.minute < 10 ? '0' + this.minute : this.minute) + ':' + (this.second < 10 ? '0' + this.second : this.second);
           });
 
-          this.globalTimer = timer(
-            this.timerDueTime, this.timerPeriod
-          );
+          // get conference online users every 5 secs when conf_id exist in bottomSheet Data
+          if (this.data.conf_id) {
+            this.globalTimer = timer(
+              this.timerDueTime, this.timerPeriod
+            );
 
-          this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getConferenceOnlineUser());
+            this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getConferenceOnlineUser());
+          }
         } else {
           if (this.globalTimerSubscription) {
             this.globalTimerSubscription.unsubscribe();

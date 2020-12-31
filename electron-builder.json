@@ -29,7 +29,12 @@
     "icon": "dist/assets/icons",
     "target": [
       "dmg"
-    ]
+    ],
+    "entitlements": "build/entitlements.mac.plist",
+    "extendInfo": {
+      "NSCameraUsageDescription": "This app requires camera access to record video.",
+      "NSMicrophoneUsageDescription": "This app requires microphone access to record audio."
+    }
   },
   "linux": {
     "icon": "dist/assets/icons",
