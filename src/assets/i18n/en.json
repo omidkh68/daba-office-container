@@ -80,6 +80,7 @@
       "left_the_conf": "left the conference",
       "joined_the_conf": "joined the conference",
       "request_permission_title": "Please grant access to microphone to use softphone",
+      "request_permission_title_denied": "Please grant access to microphone to use softphone from your browser settings",
       "permission_access": "Permission access",
       "get_permission": "Get Permission"
     },

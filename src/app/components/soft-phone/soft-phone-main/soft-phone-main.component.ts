@@ -39,7 +39,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   tabs: Array<TabInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
-  activePermissionRequest: boolean = false;
+  activePermissionRequest: string = "prompt";
 
   private _subscription: Subscription = new Subscription();
 
@@ -119,7 +119,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    this.activePermissionRequest = true;
+    this.microphonePremissionRequest();
   }
 
   ngAfterViewInit(): void {
@@ -131,6 +131,18 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
     });
 
     this.changeMainTabLanguage();
+  }
+
+  microphonePremissionRequest() {
+    navigator.permissions.query({name: 'microphone'})
+      .then((permission) => {
+        this.activePermissionRequest = permission.state;
+        if (this.activePermissionRequest != 'granted') {
+          this.getPermissionAccess();
+        }
+      }).catch((error) => {
+      this.activePermissionRequest = null;
+    })
   }
 
   changeMainTabLanguage() {
@@ -187,7 +199,15 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   getPermissionAccess() {
-
+    navigator.getUserMedia({audio: true}, () => {
+      this.activePermissionRequest = 'granted';
+    }, (err) => {
+      if (err.message == "Permission dismissed") {
+        this.activePermissionRequest = 'prompt';
+      } else {
+        this.activePermissionRequest = 'denied';
+      }
+    })
   }
 
   getTranslate(word) {

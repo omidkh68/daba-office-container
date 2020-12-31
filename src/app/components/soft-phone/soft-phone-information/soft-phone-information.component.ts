@@ -48,6 +48,9 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   rtlDirection: boolean;
 
   @Input()
+  activePermissionRequest: string;
+
+  @Input()
   tabId: number = 0;
 
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
@@ -92,8 +95,6 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
 
   ngOnInit(): void {
     this.filterArgs = {email: this.loggedInUser.email};
-
-    this.getEssentialData();
   }
 
   async getEssentialData() {
@@ -293,12 +294,17 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.tabId && changes.tabId.currentValue === 0) {
+    if (changes.tabId && changes.tabId.currentValue === 0 && this.activePermissionRequest === 'granted') {
       this.clearTimer();
 
       setTimeout(() => this.startTimer(), 200);
     } else {
       this.clearTimer();
+    }
+
+    if (changes.activePermissionRequest && changes.activePermissionRequest.currentValue === 'granted') {
+      debugger;
+      this.getEssentialData();
     }
   }
 
