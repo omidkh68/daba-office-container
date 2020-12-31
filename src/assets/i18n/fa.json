@@ -78,7 +78,10 @@
       "calling": "در حال تماس ...",
       "available_users": "افراد حاضر",
       "left_the_conf": "کنفرانس را ترک کرد",
-      "joined_the_conf": "به کنفرانس وارد شد"
+      "joined_the_conf": "به کنفرانس وارد شد",
+      "request_permission_title": "لطفا اجازه دسترسی به میکروفون را برای استفاده از سیستم تلفنی بدهید",
+      "permission_access": "اجازه دسترسی",
+      "get_permission": "گرفتن دسترسی"
     },
     "call_to_action": {
       "timezone": "وقت محلی",

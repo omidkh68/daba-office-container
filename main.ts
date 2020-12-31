@@ -27,13 +27,13 @@ function createWindow(): BrowserWindow {
       contextIsolation: false,  // false if you want to run 2e2 test with Spectron
       enableRemoteModule: true, // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular),
       webviewTag: true,
-      allowRunningInsecureContent: true
+      allowRunningInsecureContent: !serve
     },
   });
 
   win.webContents.on('devtools-opened', function () {
     if (!serve) {
-      win.webContents.closeDevTools();
+      // win.webContents.closeDevTools();
     }
   });
 
@@ -50,9 +50,11 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
 
   } else {
-    win.setMenu(null);
+    // win.setMenu(null);
 
-    Menu.setApplicationMenu(null);
+    // Menu.setApplicationMenu(null);
+
+    // win.loadURL('https://webcontainer.dabacenter.ir');
 
     win.loadURL(format({
       pathname: join(__dirname, 'dist/index.html'),

@@ -39,6 +39,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   tabs: Array<TabInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
+  activePermissionRequest: boolean = false;
 
   private _subscription: Subscription = new Subscription();
 
@@ -118,31 +119,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    /*this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
-
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-    this._subscription.add(
-      this.api.getExtensionList().subscribe((resp: ResultApiInterface) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
-
-        if (resp.success) {
-          const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
-
-          this.softPhoneService.changeSoftPhoneUsers(extensionList);
-
-          this.softPhoneService.changeExtensionList(extensionList).then(() => {
-            this.softPhoneUsers = extensionList;
-
-            this.softPhoneService.sipRegister();
-          });
-        }
-      }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
-
-        this.refreshLoginService.openLoginDialog(error);
-      })
-    );*/
+    this.activePermissionRequest = true;
   }
 
   ngAfterViewInit(): void {
@@ -207,6 +184,10 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
 
   maximizeCallPopUp() {
     this.softPhoneService.changeMinimizeCallPopUp(false);
+  }
+
+  getPermissionAccess() {
+
   }
 
   getTranslate(word) {
