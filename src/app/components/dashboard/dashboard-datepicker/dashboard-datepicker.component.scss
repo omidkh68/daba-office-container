@@ -41,3 +41,86 @@
     }
   }
 }
+
+.dateCalendar-transparent{
+  .event-point{
+    width: 6px;
+    height: 6px;
+    background: #ff9800;
+    border-radius: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    transform: translateX(12px);
+  }
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: #ffffffab !important;
+  .event-list{
+    .mat-subheader{
+      padding-left: 5px !important;
+    }
+  }
+  .dp-calendar-weekday{
+    color: #222222 !important;
+    &:last-child{
+      color: red !important
+    }
+  }
+  .dp-weekdays{
+    border-bottom: solid 1px #ffffff4a;
+  }
+  .dp-calendar-day{
+    background: none !important;
+  }
+  .dp-calendar-wrapper{
+    padding: 0 !important;
+    margin-top: 15px !important;
+  }
+  .dp-day-calendar-container{
+    padding: 0 !important;
+    background: none !important;
+  }
+  .dp-calendar-nav-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:none !important
+  }
+  .dp-nav-header,.dp-nav-btns-container{
+    position: initial !important;
+    top: initial !important;
+    left: initial !important;
+    transform: initial !important;
+    -webkit-transform: initial !important;
+    .dp-calendar-nav-container-left{
+      position: absolute;
+      left: 0;
+      display: flex;
+    }
+    .dp-calendar-nav-container-right{
+      position: absolute;
+      right: 0;
+      display: flex;
+    }
+    button{
+      background: none !important;
+    }
+  }
+  .dp-nav-header-btn{
+    background: none !important;
+  }
+}
+.dateCalendar-transparent-today{
+  position: absolute;
+  bottom: 25px;
+  width: calc(100% - 60px);
+  left: 30px;
+  background: #fff;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+}

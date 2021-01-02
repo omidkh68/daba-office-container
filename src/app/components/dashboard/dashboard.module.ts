@@ -29,7 +29,7 @@ import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '../../sh
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
 import {TaskIncompleteTaskComponent} from '../tasks/task-incomplete-task/task-incomplete-task.component';
-
+import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 const defaultLangStorage = localStorage.getItem('defaultLang');
 const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
@@ -60,6 +60,7 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
     CommonModule,
     SharedModule,
     PopoverModule,
+    DpDatePickerModule,
     ImageCropperModule,
     RouterModule.forChild([
       {path: '', component: DashboardComponent},

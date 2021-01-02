@@ -208,16 +208,16 @@
       "in_progress_tasks": "تسک های در حال انجام",
       "show_disabled_task": "فقط تسک های غیر فعال"
     },
-    "calendar": {
-      "month": "ماه",
-      "today": "امروز",
-      "week": "هفته",
-      "day": "روز",
-      "list": "لیست"
-    },
     "incomplete_task": {
       "incomplete_tasks": "تسک های ناتمام"
     }
+  },
+  "calendar": {
+    "month": "ماه",
+    "today": "امروز",
+    "week": "هفته",
+    "day": "روز",
+    "list": "لیست"
   },
   "login_info": {
     "username": "نام کاربری",

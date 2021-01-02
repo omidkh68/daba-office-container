@@ -208,16 +208,16 @@
       "in_progress_tasks": "In Progress tasks",
       "show_disabled_task": "Only Disabled tasks"
     },
-    "calendar": {
-      "month": "Month",
-      "today": "Today",
-      "week": "Week",
-      "day": "Day",
-      "list": "List"
-    },
     "incomplete_task": {
       "incomplete_tasks": "Incomplete Tasks"
     }
+  },
+  "calendar": {
+    "month": "Month",
+    "today": "Today",
+    "week": "Week",
+    "day": "Day",
+    "list": "List"
   },
   "login_info": {
     "username": "username",

@@ -8,7 +8,9 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {MatCalendar, MatCalendarCellCssClasses} from '@angular/material/datepicker';
+import {MatCalendarCellCssClasses} from '@angular/material/datepicker';
+import * as moment from 'moment';
+import * as jalaliMoment from 'jalali-moment';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {PopoverService} from '../../popover-widget/popover.service';
@@ -17,7 +19,7 @@ import {ServiceInterface} from '../../services/logic/service-interface';
 import {EventHandlerService} from '../../events/service/event-handler.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {EventHandlerInterface, EventsReminderInterface} from '../../events/logic/event-handler.interface';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {EventHandlerEmailDate, UserContainerInterface} from '../../users/logic/user-container.interface';
 import {PopoverContnetComponent} from '../../popover-widget/popover/popover-content/popover-content.component';
 import {EventHandlerSocketService} from '../../events/service/event-handler-socket.service';
 
@@ -37,14 +39,15 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
   @Input()
   serviceList: Array<ServiceInterface> = [];
 
-  @ViewChild('myCalendar', {}) calendar: MatCalendar<Date>;
   @ViewChild('picker') picker;
   @ViewChild('insideElement') insideElement;
+  @ViewChild('dateCalendar') datePickerDirective: any;
 
   popoverTarget: any;
   eventTemp: any = [];
   result: any;
   events_reminders: EventsReminderInterface = {events: [], reminders: []};
+  datePickerConfig: any = null;
 
   private _subscription: Subscription = new Subscription();
 
@@ -71,11 +74,47 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
           this.events_reminders.events = events_reminder.events;
           this.events_reminders.reminders = events_reminder.reminders;
         }
-        setTimeout(() => {
-          this.calendar.updateTodaysDate();
-        }, 1000)
       })
     );
+    this.setupCalendar();
+  }
+
+  setupCalendar(): void {
+    this.datePickerConfig = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      dayBtnCssClassCallback: (event) => {
+        this.dayBtnCssClassCallback(event)
+      }
+    };
+  }
+
+  dayBtnCssClassCallback(event) {
+    if (!this.events_reminders.events.length) {
+      return;
+    }
+    console.log(event);
+
+    setTimeout(() => {
+      let date =
+        this.rtlDirection ?
+          event.locale('fa').format('YYYY/M/D') :
+          event.locale('en').format('DD-MM-YYYY');
+
+      let element: HTMLElement = document.querySelector('.dateCalendar-transparent .dp-calendar-day[data-date="' + date + '"]');
+
+      if (element) {
+        let count = 0;
+
+        this.events_reminders.events.map(item => {
+          if (new Date(item.startDate).toLocaleDateString() == event._d.toLocaleDateString()) {
+            if (count < 1) {
+              element.insertAdjacentHTML('beforeend', '<div data-objects=\'' + JSON.stringify(item) + '\' class=\'event-point\'></div>');
+            }
+            count++;
+          }
+        });
+      }
+    });
   }
 
   showEventHandlerWindow(event = null, $event = null) {
@@ -120,7 +159,7 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
       } else {
         this.showEventHandlerWindow(event);
       }
-    },0)
+    }, 0)
   }
 
   dateClass() {
@@ -134,10 +173,16 @@ export class DashboardDatepickerComponent implements OnInit, OnDestroy, AfterVie
   }
 
   getEvents() {
-    this.eventHandlerSocketService.getEventsByEmail(this.loggedInUser).then((result: any) => {
+    let eventhandlerModel: EventHandlerEmailDate = {
+      email : this.loggedInUser.email,
+      date : moment(new Date()).format("YYYY-MM-DD")
+    };
+    this.eventHandlerSocketService.getEventsByEmail(eventhandlerModel , this.loggedInUser).then((result: any) => {
       this._subscription.add(
         this.events_reminders = result
       );
+      let goToDate = this.rtlDirection ? jalaliMoment(new Date()) : moment(new Date());
+      this.datePickerDirective.api.moveCalendarTo(goToDate);
     })
   }
 
