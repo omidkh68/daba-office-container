@@ -184,7 +184,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     formValue['name'] = this.form.get('name').value;
     formValue['timezone'] = this.form.get('timezone').value.timezone;
 
-    if (this.form.get('c_password').value !== null) {
+    if (this.form.get('c_password').value !== null && this.form.get('c_password').value.length) {
       formValue['c_password'] = this.form.get('c_password').value;
     }
 

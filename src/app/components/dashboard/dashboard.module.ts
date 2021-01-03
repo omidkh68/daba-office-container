@@ -22,14 +22,13 @@ import {CompanySelectorComponent} from './dashboard-toolbar/company-selector/com
 import {DashboardToolbarComponent} from './dashboard-toolbar/dashboard-toolbar.component';
 import {ShowImageCropperComponent} from '../profile-setting/show-image-cropper/show-image-cropper.component';
 import {WindowAppContainerComponent} from './dashboard-toolbar/window-app-container/window-app-container.component';
-import {DashboardDatepickerComponent} from './dashboard-datepicker/dashboard-datepicker.component';
 import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-call/soft-phone-incoming-call.component';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '../../shared/jalali-moment-date-adapter';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
 import {TaskIncompleteTaskComponent} from '../tasks/task-incomplete-task/task-incomplete-task.component';
-import {DpDatePickerModule} from 'ng2-jalali-date-picker';
+
 const defaultLangStorage = localStorage.getItem('defaultLang');
 const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
@@ -53,14 +52,12 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
     ShowImageCropperComponent,
     TaskIncompleteTaskComponent,
     WindowAppContainerComponent,
-    DashboardDatepickerComponent,
     SoftPhoneIncomingCallComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     PopoverModule,
-    DpDatePickerModule,
     ImageCropperModule,
     RouterModule.forChild([
       {path: '', component: DashboardComponent},

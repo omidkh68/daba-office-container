@@ -1,54 +1,48 @@
 <mat-drawer-container autosize class="event-main-datepicker" [dir]="rtlDirection ? 'rtl' : 'ltr'">
-    <mat-drawer #drawer mode="side" [disableClose]="true">
-        <div class="text-white full-height">
-            <div class="datepicker-container-main padding-full full-height round-corner"
-                 [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
-                 [dir]="rtlDirection ? 'rtl' : 'ltr'">
-                <div class="switch-container height-45 padding-mini-t-b">
-                    <mat-button-toggle-group #viewMode="matButtonToggleGroup"
-                                             (change)="changeViewMode(viewMode.value)"
-                                             [value]="viewModeTypes"
-                                             class="full-width mat-button-custom height-30 line-height-15 round-corner-all">
-                        <mat-button-toggle class="active overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'container'">
-                            <span>{{'events_handler.main.container_calendar_title' | translate}}</span>
-                        </mat-button-toggle>
-                        <!--<mat-button-toggle class="overflow-hide half-width font-7-rem line-height-15 height-30" [value]="'google'">
-                            <span>{{'events_handler.main.google_calendar_title' | translate}}</span>
-                        </mat-button-toggle>-->
-                    </mat-button-toggle-group>
-                </div>
-
-                <div *ngIf="viewModeTypes == 'google'">
-                    <mat-calendar></mat-calendar>
-                </div>
-
-                <div *ngIf="viewModeTypes == 'container'" class="height-full-minus-45 display-flex flex-direction-column flex-space-between">
-                    <mat-calendar class="height-280" #myCalendar [dateClass]="dateClass()" (click)="getPosition($event)" (selectedChange)="onSelect($event)"></mat-calendar>
-                    <mat-list *ngIf="events_reminders && events_reminders.reminders.length" class="event-list height-full-minus-280" style="height: calc(100% - 280px);">
-                        <div class="height-45" mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}} <b class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}: {{events_reminders.reminders.length}}</b></div>
-                        <div class="height-full-minus-45 overflow-y-auto">
-                            <mat-list-item *ngFor="let item of events_reminders.reminders">
-                                <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
-                                <div mat-line class="font-8-em">{{item.description}}</div>
-                                <div mat-line class="font-8-rem">{{item.startReminder | jalali:rtlDirection}}</div>
-                            </mat-list-item>
-                        </div>
-                    </mat-list>
-                </div>
-            </div>
+  <mat-drawer #drawer mode="side" [disableClose]="true">
+    <div class="text-white full-height dateCalendar-nontransparent overflow-hide">
+      <div class="datepicker-container-main full-height round-corner"
+           [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
+           [dir]="rtlDirection ? 'rtl' : 'ltr'">
+        <div class="switch-container padding-full">
+          <mat-button-toggle-group #viewMode="matButtonToggleGroup"
+                                   (change)="changeViewMode(viewMode.value)"
+                                   [value]="viewModeTypes"
+                                   class="full-width mat-button-custom height-30 line-height-15 round-corner-all">
+            <mat-button-toggle class="active overflow-hide half-width font-7-rem line-height-15 height-30"
+                               [value]="'container'">
+              <span>{{'events_handler.main.container_calendar_title' | translate}}</span>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
         </div>
-    </mat-drawer>
-    <div *ngIf="viewModeTypes=='container'" class="padding-full full-height" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
-        <button mat-raised-button
-                tabindex="15"
-                (click)="loadBottomSheet($event)"
-                class="width-145 right-15 pos-abs green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
-            <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
-            <span class="padding-mini-r-l">{{'events_handler.main.add_event_title' | translate}}</span>
-        </button>
-        <dp-day-calendar (onSelect)="onSelect($event)" *ngIf="showCalendar" [dir]="rtlDirection ? 'rtl' : 'ltr'" [config]="datePickerConfig" class="custom-full-calendar" theme="dp-material"></dp-day-calendar>
+
+        <div *ngIf="viewModeTypes == 'google'">
+        </div>
+
+        <div id="calendar-internal" *ngIf="viewModeTypes == 'container'"
+             class="full-height display-flex flex-direction-column flex-space-between">
+          <app-events-handler-calendar
+                  class="full-height"
+                  [indexID]="'calendar-internal'"
+                  [loggedInUser]="loggedInUser"
+                  [serviceList]="null"
+                  [rtlDirection]="rtlDirection">
+          </app-events-handler-calendar>
+        </div>
+      </div>
     </div>
-    <!--<div *ngIf="viewModeTypes=='google'" class="padding-full" [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
-        Hi :)
-    </div>-->
+  </mat-drawer>
+  <div *ngIf="viewModeTypes=='container'" class="padding-full full-height main-calendar"
+       [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'">
+    <button mat-raised-button
+            tabindex="15"
+            (click)="setCurrentDate();loadBottomSheet()"
+            class="width-145 right-15 pos-abs green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal">
+      <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
+      <span class="padding-mini-r-l">{{'events_handler.main.add_event_title' | translate}}</span>
+    </button>
+    <dp-day-calendar #dateCalendar (onSelect)="eventClick($event)" [dir]="rtlDirection ? 'rtl' : 'ltr'"
+                     [config]="datePickerConfig" class="custom-full-calendar custom-full-calendar-event-handler"
+                     theme="dp-material"></dp-day-calendar>
+  </div>
 </mat-drawer-container>

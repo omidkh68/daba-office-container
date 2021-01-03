@@ -153,7 +153,8 @@
       "activity_list": "Activity List",
       "task_completion_percentage": "Task Completion Percentage",
       "completed": "Completed",
-      "not_completed": "Not Completed"
+      "not_completed": "Not Completed",
+      "task_count" : "Tasks Count"
     },
     "boards": {
       "task_percentage": "Task Percentage",

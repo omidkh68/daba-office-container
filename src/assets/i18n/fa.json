@@ -153,7 +153,8 @@
       "activity_list": "لیست فعالیت ها",
       "task_completion_percentage": "درصد تکمیل بودن تسک",
       "completed": "تکمیل شده",
-      "not_completed": "تکمیل نشده"
+      "not_completed": "تکمیل نشده",
+      "task_count" : "تعداد تسک ها"
     },
     "boards": {
       "task_percentage": "درصد پیشبرد",
