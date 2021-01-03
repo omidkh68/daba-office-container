@@ -20,7 +20,6 @@ import {EventHandlerEmailDate, UserContainerInterface} from "../../users/logic/u
   templateUrl: './events-handler-calendar.component.html'
 })
 export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterViewInit {
-
   @ViewChild('picker') picker;
   @ViewChild('insideElement') insideElement;
   @ViewChild('dateCalendar') datePickerDirective: any;
@@ -53,15 +52,6 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
               private eventHandlerService: EventHandlerService,
               private eventHandlerSocketService: EventHandlerSocketService,
               private windowManagerService: WindowManagerService) {
-  }
-
-  ngOnInit(): void {
-    this.eventHandlerSocketService.initializeWebSocketConnection().then(result => {
-      // console.log('socket status: ', result);
-    });
-  }
-
-  ngAfterViewInit(): void {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => {
         this.rtlDirection = direction;
@@ -77,16 +67,30 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
         }
       })
     );
+  }
+
+  ngOnInit(): void {
+    this.eventHandlerSocketService.initializeWebSocketConnection().then(result => {
+      // console.log('socket status: ', result);
+    });
+  }
+
+  ngAfterViewInit(): void {
     this.getEvents();
   }
 
   setupCalendar(): void {
-    this.datePickerConfig = {
-      locale: this.rtlDirection ? 'fa' : 'en',
-      dayBtnCssClassCallback: (event) => {
-        this.dayBtnCssClassCallback(event)
-      }
-    };
+
+    setTimeout(() => {
+      this.datePickerConfig = {
+        locale: this.rtlDirection ? 'fa' : 'en',
+        dayBtnCssClassCallback: (event) => {
+          this.dayBtnCssClassCallback(event)
+        }
+      };
+      let goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(new Date())) : moment(this.datetimeService.getDateByTimezoneReturnDate(new Date()));
+      this.datePickerDirective.api.moveCalendarTo(goToDate);
+    })
   }
 
   dayBtnCssClassCallback(event) {
