@@ -43,13 +43,11 @@
   </div>
 
   <div *ngIf="viewModeTypes === 'info'; else reportView" class="full-width height-full-minus-45">
-
     <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'"
          class="task-form-container full-height overflow-hide pos-rel">
-
       <nav *ngIf="breadcrumbList && breadcrumbList.length > 1"
            [dir]="rtlDirection ? 'rtl' : 'ltr'"
-           class="breadcrumb-container padding-r-l padding-t-half padding-b-half">
+           class="breadcrumb-container height-35 padding-r-l padding-t-half padding-b-half">
 
         <ol class="breadcrumb breadcrumb-scroll no-margin no-list-style no-radius no-padding display-flex">
           <li *ngFor="let breadcrumb of breadcrumbList; let last = last"
@@ -61,7 +59,8 @@
         </ol>
       </nav>
 
-      <div class="full-height padding-full">
+      <div [ngClass]="breadcrumbList && breadcrumbList.length > 1 ? 'height-full-minus-35' : 'full-height'"
+           class="padding-full">
         <app-task-form
           (cancel)="cancelBtn($event)"
           (formOutput)="updateForm($event)"
