@@ -21,3 +21,7 @@ export interface UserContainerInterface {
   phoneNumber?: string;
   companies: Array<CompanyInterface>;
 }
+export interface EventHandlerEmailDate {
+  email?: string
+  date?: string;
+}

@@ -59,9 +59,7 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       this.eventHandlerService.currentEventsTaskList.subscribe((resp: any) => {
         if (resp) {
           this.calendarEvents = this.taskCalendarService.prepareTaskItems(resp);
-          let goToDate =
-            this.rtlDirection ? jalaliMoment.from(resp.filterData.dateStart, 'fa', 'YYYY/MM/DD') :
-              moment(new Date(resp.filterData.dateStart));
+          let goToDate = this.rtlDirection ? jalaliMoment.from(resp.filterData.dateStart, 'fa', 'YYYY/MM/DD') : moment(new Date(resp.filterData.dateStart));
           setTimeout(() => {
             this.datePickerDirective.api.moveCalendarTo(goToDate);
           })
@@ -85,13 +83,13 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
           event.locale('fa').format('YYYY/M/D') :
           event.locale('en').format('DD-MM-YYYY');
 
-      let element: HTMLElement = document.querySelector('.dp-calendar-day[data-date="' + date + '"]');
+      let element: HTMLElement = document.querySelector('.weekday-calendar .dp-calendar-day[data-date="' + date + '"]');
 
       if (element) {
         let count = 0;
 
         this.calendarEvents.map(item => {
-            if (item.start.toLocaleDateString() == event._d.toLocaleDateString()) {
+          if (item.start.toLocaleDateString() == event._d.toLocaleDateString()) {
             if (count < 1) {
               element.insertAdjacentHTML('beforeend', '<div data-objects=\'' + JSON.stringify(item) + '\' style=\'background: ' + item.color + ' !important;\' class=\'custom-event-box\'><img src=\'' + item.imageurl + '\'>' + item.title + '</div>');
             }
@@ -108,20 +106,21 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
 
   getCalendarItemsData() {
     this._subscription.add(
-        this.eventHandlerService.currentCalendarItems.subscribe((resp: Array<CalendarItemsInterface>) => {
-          if (resp) {
-            this.calendarEvents = resp;
+      this.eventHandlerService.currentCalendarItems.subscribe((resp: Array<CalendarItemsInterface>) => {
+        if (resp) {
+          this.calendarEvents = resp;
 
-            this.setupCalendar();
-          }
-        })
+          this.setupCalendar();
+        }
+      })
     );
   }
 
   setupCalendar(): void {
     let goToDate = this.rtlDirection ? jalaliMoment(new Date()) : moment(new Date());
-    this.datePickerDirective.api.moveCalendarTo(goToDate);
-
+    setTimeout(() => {
+      this.datePickerDirective.api.moveCalendarTo(goToDate);
+    });
     this.datePickerConfig = {
       locale: this.rtlDirection ? 'fa' : 'en',
       dayBtnCssClassCallback: (event) => {
@@ -129,7 +128,6 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       }
     };
   }
-
 
 
   eventClick(event: any) {
@@ -146,8 +144,8 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       const dialogRef = this.dialog.open(TaskMorelistComponent, {
         data: data,
         autoFocus: false,
-        width: '250px',
-        height: '250px'
+        width: '400px',
+        height: '300px'
       });
 
       this.windowManagerService.dialogOnTop(dialogRef.id);
@@ -165,7 +163,7 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
           event.date.locale('fa').format('YYYY/M/D') :
           event.date.locale('en').format('DD-MM-YYYY');
 
-      let element: HTMLElement = document.querySelector('.dp-calendar-day[data-date="' + date + '"] .custom-event-box');
+      let element: HTMLElement = document.querySelector('.weekday-calendar .dp-calendar-day[data-date="' + date + '"] .custom-event-box');
 
       if (element && element.dataset) {
         let objects = JSON.parse(element.dataset.objects);

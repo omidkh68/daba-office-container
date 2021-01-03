@@ -23,7 +23,6 @@ import {DashboardToolbarComponent} from './dashboard-toolbar/dashboard-toolbar.c
 import {ShowImageCropperComponent} from '../profile-setting/show-image-cropper/show-image-cropper.component';
 import {TaskIncompleteTaskComponent} from '../tasks/task-incomplete-task/task-incomplete-task.component';
 import {WindowAppContainerComponent} from './dashboard-toolbar/window-app-container/window-app-container.component';
-import {DashboardDatepickerComponent} from './dashboard-datepicker/dashboard-datepicker.component';
 import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-call/soft-phone-incoming-call.component';
 
 @NgModule({
@@ -46,7 +45,6 @@ import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-
     ShowImageCropperComponent,
     TaskIncompleteTaskComponent,
     WindowAppContainerComponent,
-    DashboardDatepickerComponent,
     SoftPhoneIncomingCallComponent
   ],
   imports: [

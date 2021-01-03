@@ -35,7 +35,6 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
   form: FormGroup;
   rtlDirection: boolean;
   usersList: UserContainerInterface[] = [];
-  usersListDone: UserEventHandlerInterface[] = [];
   displayedColumns: string[] = ['select', 'name', 'symbol'];
   dataSource = null;
   selection = new SelectionModel<UserContainerInterface>(true, []);
@@ -345,10 +344,10 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
   }
 
   refreshEvents() {
-    this.eventHandlerSocketService.getEventsByEmail(this.loggedInUser).then((result: any) => {
-      this._subscription.add();
-      this.bottomSheetData.bottomSheetRef.close();
-    })
+    /*    this.eventHandlerSocketService.getEventsByEmail(this.loggedInUser).then((result: any) => {
+          this._subscription.add();
+          this.bottomSheetData.bottomSheetRef.close();
+        })*/
   }
 
   selectCurrentTime() {

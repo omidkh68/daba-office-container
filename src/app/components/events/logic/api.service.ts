@@ -5,6 +5,7 @@ import {AppConfig} from '../../../../environments/environment';
 import {ActionTypeInterface} from './action-type.interface';
 import {AddReminderInterface, EventHandlerInterface} from './event-handler.interface';
 import {ReminderTypeInterface} from './event-reminder.interface';
+import {EventHandlerEmailDate} from "../../users/logic/user-container.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -46,8 +47,8 @@ export class EventApiService {
     return this.http.get<ReminderTypeInterface>(`${this.API_URL}/statusReminderType/getAllStatusType`);
   }
 
-  getEventByEmail(email: string): Observable<EventHandlerInterface> {
-    return this.http.post<EventHandlerInterface>(`${this.API_URL}/getEventByEmail/?email=${email}`, null);
+  getEventByEmail(eventHandlerModfel: EventHandlerEmailDate): Observable<EventHandlerInterface> {
+    return this.http.post<EventHandlerInterface>(`${this.API_URL}/getEventByEmail/?date=${eventHandlerModfel.date}&email=${eventHandlerModfel.email}`, null);
   }
 
   deleteEventById(id: number): Observable<any> {

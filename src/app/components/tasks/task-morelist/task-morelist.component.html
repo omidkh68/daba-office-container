@@ -1,15 +1,37 @@
-<section [dir]="data.rtlDirection ? 'rtl' : 'ltr'" class="padding-b-half">
+<section [dir]="data.rtlDirection ? 'rtl' : 'ltr'" class="padding-b-half full-height">
   <div class="padding-full custom-badge display-flex flex-space-between">
-    <span>{{'events_handler.main.event_count' | translate}}</span>
-    <b class="round-corner-all text-white">{{filterData.eventTemp.length}}</b>
+    <div>
+      <span *ngIf="filterData.eventTemp[0].name">
+        {{'events_handler.main.event_count' | translate}}
+      </span>
+      <span *ngIf="filterData.eventTemp[0].title">
+        {{'tasks.activity.task_count' | translate}}
+      </span>
+      <b class="round-corner-all text-white">{{filterData.eventTemp.length}}</b>
+    </div>
+    <mat-icon (click)="dialogRef.close()" aria-hidden="false">close</mat-icon>
   </div>
-  <mat-nav-list class="event-list">
+  <mat-nav-list class="event-list overflow-y-auto"
+                [ngClass]="filterData.eventTemp[0].name ? 'height-full-minus-90' : 'full-height'">
     <mat-list-item (click)="closeDialog(item)"
                    *ngFor="let item of filterData.eventTemp; last as last"
                    mat-list-item class="padding-mini-r-l">
-      <img matListAvatar [src]="item.imageurl" alt="...">
-      <h5 class="font-9-em" mat-line>{{item.title}}</h5>
-      <mat-divider *ngIf="!last" [inset]="true" class="no-margin full-width"></mat-divider>
+      <img matListAvatar class="width-30 height-30" (error)="alternativeImage($event)" [src]="item.imageurl" alt="...">
+      <h5 class="font-9-em" mat-line>{{item.title ? item.title : item.name}}</h5>
+      <!--*ngIf="!last"-->
+      <mat-divider [inset]="true" class="no-margin full-width"></mat-divider>
     </mat-list-item>
   </mat-nav-list>
+
+  <div *ngIf="filterData.eventTemp[0].name">
+    <mat-nav-list (click)="addDialog()">
+      <mat-list-item class="padding-l-half padding-r-half" *ngIf="filterData.eventTemp[0].name">
+        <mat-icon aria-hidden="false">add</mat-icon>
+        <h5 class="font-9-em" mat-line>
+          {{'events_handler.main.add_new_event' | translate}}
+        </h5>
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
+
 </section>

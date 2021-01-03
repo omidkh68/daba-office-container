@@ -1,131 +1,113 @@
-.fc-col-header, .fc-daygrid-body { width: 100% !important; }
-.fc-daygrid-body { table { width: 100% !important; } }
-/* fullcalendar*/
-.fc {
-  .fc-scrollgrid-section{
-    height: 100% !important;
-    .fc-scroller-harness,table{
-      height: 100% !important;
+.dateCalendar-nontransparent {
+  dp-day-calendar {
+    width: 100%;
+
+    .dp-selected {
+      color: initial !important;
     }
   }
-  .fc-daygrid-body{
-    height: 100% !important;
-  }
-  .fc-scroller{
-    height: 100% !important;
-  }
 
-  font-family: inherit !important;
-}
-.height-280{
-  height: 280px;
-}
-.calendar-switcher {
-  width: fit-content;
-}
-
-.fc-day-number {
-  padding: 5px !important;
-}
-
-.fc-view {
-  .fc-event, .fc-event-dot {
-    border: none !important;
-    margin: 3px 10px !important;
-    border-radius: 5px !important;
-    color: #fff !important;
-    padding: 3px 9px !important;
-    font-size: 13px !important;
-    cursor: pointer;
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-  }
-}
-
-
-.ca-rtl {
-  .fc-toolbar, .fc-content, .fc-button-group {
-    direction: rtl !important;
-  }
-}
-
-.ca-ltr {
-  .fc-toolbar, .fc-content, .fc-button-group {
-    direction: ltr !important;
-  }
-}
-
-.fc {
-  th {
+  .event-point {
+    width: 6px;
+    height: 6px;
+    background: #ff9800;
+    border-radius: 100%;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
     text-align: center;
-    padding: 5px !important;
+    bottom: 2px;
   }
-}
 
-.fc-button {
-  background: none;
-  color: #333333;
-  border: none;
-  margin: 0 !important;
-}
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: #ffffffab !important;
 
-.fc-button-primary:not(:disabled):active, .fc-button-primary:not(:disabled).fc-button-active {
-  border-radius: 4px !important;
-  background-image: linear-gradient(-20deg, #3949ab 0%, #4fc3f7 100%) !important;
-}
-
-.fc-button-primary:hover {
-  color: #3949ab;
-  background: none;
-  border: none;
-}
-
-.fc-button-primary:disabled {
-  color: #fff !important;
-  background: #ccc;
-}
-
-.fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus {
-  box-shadow: none !important;
-  background: none !important;
-  color: #3949ab !important;
-}
-
-.fc-day-grid-event {
-  .fc-content {
-    white-space: normal !important;
-    display: flex;
-
-    .fc-title {
-      font-size: 11px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: left;
-      line-height: 20px;
+  .event-list {
+    .mat-subheader {
       padding-left: 5px !important;
-      padding-right: 5px !important;
-      padding-bottom: 5px !important;
-    }
-
-    .fc-time {
-      display: none;
     }
   }
-}
 
-a.fc-more {
-  margin: 3px 9px;
-  font-size: 0.85em;
-  cursor: pointer;
-  text-decoration: none;
-  background: #eee;
-  border-radius: 100%;
-  width: 25px;
-  line-height: 25px;
-  display: block;
-  text-align: center;
-  border: solid 1px #e6e6e6;
-  font-weight: bold;
-  direction: ltr;
-  color: #656565;
+  .dp-calendar-weekday {
+    color: #222222 !important;
+
+    &:last-child {
+      color: red !important
+    }
+  }
+
+  .dp-weekdays {
+    border-bottom: solid 1px #ffffff4a;
+  }
+
+  .dp-calendar-day {
+    background: none !important;
+    position: relative;
+  }
+
+  .dp-calendar-wrapper {
+    padding: 0 !important;
+    margin-top: 15px !important;
+  }
+
+  .dp-day-calendar-container {
+    padding: 0 !important;
+    background: none !important;
+  }
+
+  .dp-calendar-nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none !important
+  }
+
+  .dp-nav-header, .dp-nav-btns-container {
+    position: initial !important;
+    top: initial !important;
+    left: initial !important;
+    transform: initial !important;
+    -webkit-transform: initial !important;
+
+    .dp-calendar-nav-container-left {
+      position: absolute;
+      left: 0;
+      display: flex;
+    }
+
+    .dp-calendar-nav-container-right {
+      position: absolute;
+      right: 0;
+      display: flex;
+    }
+
+    button {
+      background: none !important;
+    }
+  }
+
+  .dp-nav-header-btn {
+    background: none !important;
+  }
+
+  .dp-months-row {
+    height: calc(100% / 3);
+  }
+
+  dp-month-calendar {
+    display: block;
+    width: 100%;
+
+    .dp-calendar-month, .dp-month-calendar-container {
+      background: none !important;
+    }
+  }
+
+  .dp-calendar-month {
+    width: 25%;
+  }
 }
