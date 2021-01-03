@@ -16,6 +16,7 @@ import {SoftPhoneTransferCallComponent} from './soft-phone-transfer-call/soft-ph
 import {SoftPhoneContactDetailComponent} from './soft-phone-contacts/soft-phone-contact-detail/soft-phone-contact-detail.component';
 import {MyFilterPipe, SoftPhoneInformationComponent} from './soft-phone-information/soft-phone-information.component';
 import { SoftPhoneSettingsComponent } from './soft-phone-settings/soft-phone-settings.component';
+import {A11yModule} from "@angular/cdk/a11y";
 
 @NgModule({
   declarations: [
@@ -36,11 +37,12 @@ import { SoftPhoneSettingsComponent } from './soft-phone-settings/soft-phone-set
     SoftPhoneCallToActionComponent,
     SoftPhoneContactDetailComponent
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    TranslateModule.forChild(),
-  ]
+    imports: [
+        CommonModule,
+        SharedModule,
+        TranslateModule.forChild(),
+        A11yModule,
+    ]
 })
 export class SoftPhoneModule {
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {

@@ -1,13 +1,15 @@
 import {DatetimeInterface} from '../logic/datetime.interface';
-import {Injectable, Pipe} from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import * as moment from 'jalali-moment';
 import {TimezonesInterface} from '../timezones.interface';
 import {TimezonesList} from '../logic/timezones';
+import {LoginDataClass} from "../../../../../services/loginData.class";
+import {UserInfoService} from "../../../../users/services/user-info.service";
 
 @Injectable({
   providedIn: 'root',
 })
-export class DatetimeService {
+export class DatetimeService extends LoginDataClass {
   public timezones: TimezonesInterface[] = TimezonesList;
 
   private weekDaysFa = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
@@ -18,6 +20,10 @@ export class DatetimeService {
   private todayGregorian = moment().locale('en').format('D') + ' ' + moment().locale('en').format('MMMM') + ' ' + moment().locale('en').format('YYYY');
   private todayJalaliDayName = this.weekDaysFa[new Date().getDay() + 1];
   private todayGregorianDayName = this.weekDaysEn[new Date().getDay()];
+
+  constructor(private injector: Injector, private userInfoService: UserInfoService) {
+    super(injector, userInfoService);
+  }
 
   changeDatetimeLabel(rtlDirection: boolean) {
     if (rtlDirection) {
@@ -39,8 +45,8 @@ export class DatetimeService {
 
   formatTime(date, gmt: boolean = false) {
     let d = new Date(date),
-        hour = '' + (gmt ? d.getUTCHours().toString() : d.getHours().toString()),
-        min = '' + gmt ? d.getUTCMinutes().toString() : d.getMinutes().toString();
+      hour = '' + (gmt ? d.getUTCHours().toString() : d.getHours().toString()),
+      min = '' + gmt ? d.getUTCMinutes().toString() : d.getMinutes().toString();
 
     if (hour.length < 2) hour = '0' + hour;
 
@@ -51,9 +57,9 @@ export class DatetimeService {
 
   formatDate(date, gmt: boolean = false) {
     let d = new Date(date),
-        month = '' + (gmt ? d.getUTCMonth() + 1 : d.getMonth() + 1),
-        day = '' + gmt ? d.getUTCDate().toString() : d.getDate().toString(),
-        year = gmt ? d.getUTCFullYear() : d.getFullYear();
+      month = '' + (gmt ? d.getMonth() + 1 : d.getMonth() + 1),
+      day = '' + gmt ? d.getDate().toString() : d.getDate().toString(),
+      year = gmt ? d.getFullYear() : d.getFullYear();
 
     if (month.length < 2) month = '0' + month;
 
@@ -72,5 +78,18 @@ export class DatetimeService {
     let _date = new Date(date).toLocaleString('en-US', {timeZone: timezone});
 
     return this.formatDate(_date) + ' ' + this.formatTime(_date);
+  }
+
+  getDateByTimezoneReturnDate(date: string | Date) {
+    let _date = '';
+    if (typeof date == 'string') {
+      _date = new Date(date).toLocaleString('en-US', {timeZone: this.loggedInUser.timezone});
+    } else if (typeof date == 'object') {
+      _date = date.toLocaleString('en-US', {timeZone: this.loggedInUser.timezone});
+    } else {
+      _date = new Date().toLocaleString('en-US', {timeZone: this.loggedInUser.timezone});
+    }
+
+    return new Date(_date);
   }
 }

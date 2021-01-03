@@ -52,7 +52,8 @@
 
       <!-- calendar container -->
       <div *ngSwitchCase="1" class="full-height">
-        <app-task-calendar (onTabLoaded)="doSomething($event)" [calendarParameters]="calendarParameters"
+        <app-task-calendar (onTabLoaded)="doSomething($event)"
+                           [calendarParameters]="calendarParameters"
                            [rtlDirection]="rtlDirection"></app-task-calendar>
       </div>
       <!--/ end of calendar container -->

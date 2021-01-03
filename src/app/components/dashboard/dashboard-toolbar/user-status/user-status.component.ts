@@ -69,8 +69,6 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
 
   ngOnInit(): void {
     this.checkToStartWorking();
-
-    // this.openWebBrowser(); // todo: remove this in production
   }
 
   checkToStartWorking() {
@@ -201,14 +199,6 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
         this.openService(service);
       }
     }, 2000);
-  }
-
-  openWebBrowser() {
-    const service = this.loggedInUser.services.filter(service => service.service_name === 'web_browser').pop();
-
-    if (service) {
-      this.openService(service);
-    }
   }
 
   openDialogIncompleteTasks(taskList) {

@@ -6,11 +6,12 @@ import {EventHandlerService} from './event-handler.service';
 import {EventHandlerInterface} from '../logic/event-handler.interface';
 import {ReminderInterface} from '../logic/event-reminder.interface';
 import {Subscription} from 'rxjs';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
+import {EventHandlerEmailDate, UserContainerInterface} from '../../users/logic/user-container.interface';
 import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
 import {NotificationService} from '../../../services/notification.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ElectronService} from '../../../core/services';
+import * as moment from 'moment';
 
 declare var SockJS;
 declare var Stomp;
@@ -33,10 +34,10 @@ export class EventHandlerSocketService {
               private eventHandlerService: EventHandlerService) {
   }
 
-  public getEventsByEmail(user: UserContainerInterface) {
+  public getEventsByEmail(eventHandlerModel: EventHandlerEmailDate, user: UserContainerInterface) {
     this.loggedInUsers = user;
     return new Promise((resolve, reject) => {
-      this.eventApi.getEventByEmail(user.email).subscribe((resp: any) => {
+      this.eventApi.getEventByEmail(eventHandlerModel).subscribe((resp: any) => {
         let events = [];
         let reminders = [];
         if (resp.status == 200) {
@@ -111,7 +112,11 @@ export class EventHandlerSocketService {
                     data: this.loggedInUsers
                   });
                 }
-                this.getEventsByEmail(this.loggedInUsers);
+                let eventhandlerModel: EventHandlerEmailDate = {
+                  email : this.loggedInUsers.email,
+                  date : moment(new Date()).format("YYYY-MM-DD")
+                };
+                this.getEventsByEmail(eventhandlerModel , this.loggedInUsers);
               })
             }
           }

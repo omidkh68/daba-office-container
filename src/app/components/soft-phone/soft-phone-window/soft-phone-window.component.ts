@@ -50,11 +50,13 @@ export class SoftPhoneWindowComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    this.softPhoneService.sipHangUp();
+    this.softPhoneService.changeCloseSoftphone(true).then(() => {
+      this.softPhoneService.sipHangUp();
 
-    this.softPhoneService.sipUnRegister();
+      this.softPhoneService.sipUnRegister();
 
-    this.windowManagerService.closeWindow(this.data);
+      this.windowManagerService.closeWindow(this.data);
+    });
   }
 
   centerWindow() {

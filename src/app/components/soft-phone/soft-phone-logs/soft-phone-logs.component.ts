@@ -72,6 +72,14 @@ export class SoftPhoneLogsComponent extends LoginDataClass implements OnChanges,
         }
       })
     );
+
+    this._subscription.add(
+      this.softPhoneService.currentCloseSoftphone.subscribe(status => {
+        if (status) {
+          this.ngOnDestroy();
+        }
+      })
+    );
   }
 
   getCdr() {

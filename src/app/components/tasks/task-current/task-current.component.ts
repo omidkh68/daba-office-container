@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
@@ -16,7 +16,7 @@ import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomShe
   templateUrl: './task-current.component.html',
   styleUrls: ['./task-current.component.scss']
 })
-export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
+export class TaskCurrentComponent implements OnChanges, OnDestroy {
   @Output()
   triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
 
@@ -33,7 +33,6 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
   usersList: UserInterface[] = [];
   user: UserContainerInterface;
   currentTasks: Array<TaskInterface> | null = null;
-  version;
   message: string = '';
   notification: boolean = false;
 
@@ -48,29 +47,6 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.user = user)
     );
-  }
-
-  ngOnInit(): void {
-    /*this.electronService.ipcRenderer.send('app_version');
-
-    this.electronService.ipcRenderer.on('app_version', (event, arg) => {
-      this.electronService.ipcRenderer.removeAllListeners('app_version');
-
-      this.version = arg.version;
-    });
-
-    this.electronService.ipcRenderer.on('update_available', () => {
-      this.electronService.ipcRenderer.removeAllListeners('update_available');
-      this.message = 'A new update is available. Downloading now...';
-      this.notification = true;
-    });
-
-    this.electronService.ipcRenderer.on('update_downloaded', () => {
-      this.electronService.ipcRenderer.removeAllListeners('update_downloaded');
-      this.message = 'Update Downloaded. It will be installed on restart. Restart Now?';
-      this.restartBtn = true;
-      this.notification = true;
-    });*/
   }
 
   showTask(task: TaskInterface) {
@@ -96,14 +72,6 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
       this.projectsList = changes.taskEssentialInfo.currentValue.projectsList;
     }
   }
-
-  /*closeNotification() {
-    this.notification = false;
-  }*/
-
-  /*restartApp() {
-    this.electronService.ipcRenderer.send('restart_app');
-  }*/
 
   ngOnDestroy(): void {
     if (this._subscription) {

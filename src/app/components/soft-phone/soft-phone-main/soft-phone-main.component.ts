@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {MatTabChangeEvent} from '@angular/material/tabs';
@@ -13,7 +13,6 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
-import {ExtensionInterface} from '../logic/extension.interface';
 
 export interface TabInterface {
   icon: string;
@@ -39,10 +38,12 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   tabs: Array<TabInterface> = [];
   callPopUpMinimizeStatus: boolean = false;
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
+  activePermissionRequest: string = 'prompt';
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private translate: TranslateService,
+              private electronService: ElectronService,
               private userInfoService: UserInfoService,
               private softPhoneService: SoftPhoneService,
               private viewDirection: ViewDirectionService,
@@ -118,31 +119,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    /*this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
-
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-    this._subscription.add(
-      this.api.getExtensionList().subscribe((resp: ResultApiInterface) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
-
-        if (resp.success) {
-          const extensionList = resp.data.filter(item => item.extension_type === '2' && item.username.length > 10);
-
-          this.softPhoneService.changeSoftPhoneUsers(extensionList);
-
-          this.softPhoneService.changeExtensionList(extensionList).then(() => {
-            this.softPhoneUsers = extensionList;
-
-            this.softPhoneService.sipRegister();
-          });
-        }
-      }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
-
-        this.refreshLoginService.openLoginDialog(error);
-      })
-    );*/
+    this.microphonePremissionRequest();
   }
 
   ngAfterViewInit(): void {
@@ -154,6 +131,18 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
     });
 
     this.changeMainTabLanguage();
+  }
+
+  microphonePremissionRequest() {
+    navigator.permissions.query({name: 'microphone'})
+      .then((permission) => {
+        this.activePermissionRequest = permission.state;
+        if (this.activePermissionRequest != 'granted') {
+          this.getPermissionAccess();
+        }
+      }).catch((error) => {
+      this.activePermissionRequest = null;
+    })
   }
 
   changeMainTabLanguage() {
@@ -207,6 +196,42 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
 
   maximizeCallPopUp() {
     this.softPhoneService.changeMinimizeCallPopUp(false);
+  }
+
+  /*async askForMediaAccess(): Promise<boolean> {
+    try {
+      if (!this.electronService.isElectron) {
+        return true;
+      }
+
+      const status = await this.electronService.systemPreferences.getMediaAccessStatus("microphone");
+      console.log("Current microphone access status:", status);
+
+      if (status === "not-determined") {
+        const success = await this.electronService.systemPreferences.askForMediaAccess("microphone");
+        console.log("Result of microphone access:", success.valueOf() ? "granted" : "denied");
+        return success.valueOf();
+      }
+
+      return status === "granted";
+    } catch (error) {
+      console.log("Could not get microphone permission:", error.message);
+    }
+    return false;
+  }*/
+
+  getPermissionAccess() {
+    // this.askForMediaAccess();
+
+    navigator.getUserMedia({audio: true}, () => {
+      this.activePermissionRequest = 'granted';
+    }, (err) => {
+      if (err.message == 'Permission dismissed') {
+        this.activePermissionRequest = 'prompt';
+      } else {
+        this.activePermissionRequest = 'denied';
+      }
+    })
   }
 
   getTranslate(word) {

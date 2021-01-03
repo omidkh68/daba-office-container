@@ -1,11 +1,13 @@
-<form (submit)="submit()" *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="form" class="full-height">
-  <div class="height-full-minus-45 full-width">
+<form (submit)="submit()" *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="form"
+      autocomplete="off"
+      class="full-height">
+  <div class="height-full-minus-30 full-width">
     <h1 *ngIf="data.action !== 'detail'"
         class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
       {{'tasks.main.add_new_task' | translate}}
     </h1>
 
-    <div class="padding-mini-r-l">
+    <div class="full-height padding-mini-r-l overflow-y-auto overflow-x-hide">
       <div class="display-flex margin-r-l-reverse">
         <div class="full-width padding-mini-r-l">
           <mat-form-field class="full-width font-9-em">
@@ -38,7 +40,7 @@
         </div>
         <div class="half-width no-padding-r-l pos-rel display-flex align-items-end">
           <div [ngClass]="rtlDirection ? 'right-six-tenth' : 'left-six-tenth'"
-               class="font-9-em pos-abs top-full-plus-half">
+               class="font-9-em pos-abs top-full-plus-three-tenth">
             {{'tasks.boards.task_percentage' | translate}}
             <span>{{form.get('percentage').value}}</span> ٪
           </div>
@@ -123,15 +125,15 @@
       </div>
 
       <div class="display-flex margin-r-l-reverse">
-        <div class="quarter-width padding-mini-r-l">
-          <mat-form-field class="full-width font-9-em">
+        <div class="dpDateStartPicker quarter-width padding-mini-r-l">
+          <mat-form-field class="dpDatePicker full-width font-9-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'tasks.form.start_at' | translate}}</mat-label>
-            <input (click)="picker1.open()" (dateChange)="dateToGregorian('startAt', $event)" (focus)="picker1.open()"
-                   [matDatepicker]="picker1"
-                   formControlName="startAt" matInput
-                   placeholder="{{'tasks.form.start_at' | translate}}"
-                   readonly tabindex="8">
-            <mat-datepicker #picker1></mat-datepicker>
+            <input [dpDayPicker]="datePicker"
+                   formControlName="startAt"
+                   attachTo=".dpDateStartPicker"
+                   autocomplete="off"
+                   tabindex="8"
+                   theme="dp-material" matInput placeholder="" readonly>
 
             <mat-error *ngIf="!form.get('startAt').valid && form.get('startAt').touched">
               {{'tasks.form.start_at_error' | translate}}
@@ -153,14 +155,15 @@
           </mat-form-field>
         </div>
 
-        <div class="quarter-width padding-mini-r-l">
-          <mat-form-field class="full-width font-9-em">
+        <div class="dpDateStopPicker quarter-width padding-mini-r-l">
+          <mat-form-field class="dpDatePicker full-width font-9-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'tasks.form.stop_at' | translate}}</mat-label>
-            <input (click)="picker2.open()" (dateChange)="dateToGregorian('stopAt', $event)" (focus)="picker2.open()"
-                   [matDatepicker]="picker2" formControlName="stopAt"
-                   matInput
-                   readonly tabindex="10">
-            <mat-datepicker #picker2></mat-datepicker>
+            <input [dpDayPicker]="datePicker"
+                   autocomplete="off"
+                   formControlName="stopAt"
+                   attachTo=".dpDateStopPicker"
+                   tabindex="10"
+                   theme="dp-material" matInput placeholder="" readonly>
 
             <mat-error *ngIf="!form.get('stopAt').valid && form.get('stopAt').touched">
               {{'tasks.form.stop_at_error' | translate}}
@@ -183,18 +186,6 @@
         </div>
       </div>
 
-      <!--<div class="display-flex margin-b-full margin-r-l-reverse">
-        <div class="full-width padding-mini-r-l">
-          <mat-form-field class="stopAtDatePicker full-width font-9-em">
-            <mat-label>{{'tasks.form.stop_at' | translate}}</mat-label>
-            <input [dpDayPicker]="datePicker"
-                   attachTo="body"
-                   formControlName="stopAt"
-                   theme="dp-material" matInput placeholder="" readonly>
-          </mat-form-field>
-        </div>
-      </div>-->
-
       <div class="display-flex margin-b-full margin-r-l-reverse">
         <div class="full-width padding-mini-r-l">
           <mat-form-field class="full-width height-80 font-9-em">
@@ -209,7 +200,7 @@
         <div class="full-width padding-mini-r-l">
           <mat-slide-toggle
             [color]="'primary'"
-            formControlName="trackable">
+            formControlName="trackable" tabIndex="13">
             {{'tasks.form.trackable_by_mobile' | translate}}
           </mat-slide-toggle>
         </div>
@@ -219,7 +210,7 @@
         <div class="full-width padding-mini-r-l">
           <mat-slide-toggle
             [color]="'primary'"
-            formControlName="status">
+            formControlName="status" tabIndex="14">
             {{(form.get('status').value ? 'global.active' : 'global.deactivate') | translate}}
           </mat-slide-toggle>
         </div>
@@ -227,20 +218,19 @@
     </div>
   </div>
 
-  <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
+  <div class="height-30 display-flex justify-content-end">
     <button (click)="cancelBtn()"
-            [disabled]="form.disabled"
             *ngIf="editable || data.action !== 'detail'"
-            class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal"
-            type="button">
+            class="display-flex full-height no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal"
+            type="button" tabindex="15">
       <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
     </button>
 
     <button *ngIf="editable"
             [disabled]="!form.valid"
-            class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+            class="display-flex full-height green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
             mat-raised-button
-            tabindex="13"
+            tabindex="16"
             type="submit">
       <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
       <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>

@@ -1,0 +1,55 @@
+<div [dir]="rtlDirection ? 'rtl' : 'ltr'"
+     [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
+     class="box-dark width-240 dateCalendar-transparent padding-full pos-rel">
+  <dp-day-calendar
+    #dateCalendar
+    (onSelect)="eventClick($event)"
+    [dir]="rtlDirection ? 'rtl' : 'ltr'"
+    [config]="datePickerConfig"
+    theme="dp-material">
+  </dp-day-calendar>
+
+
+  <div class="padding-t-full full-height" *ngIf="events_reminders && events_reminders.reminders.length">
+
+    <div *ngIf="serviceList">
+      <mat-list class="event-list">
+        <div mat-subheader class="padding-l-tiny">{{'dashboard.dashboard_toolbar.reminder' | translate}}
+          <b class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}
+            : {{events_reminders.reminders.length}}
+          </b>
+        </div>
+        <div>
+          <mat-list-item *ngFor="let item of events_reminders.reminders.slice(0, 3)">
+            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
+            <div class="font-8-em" mat-line>{{item.description}}</div>
+            <div class="font-8-rem" mat-line>{{item.startReminder | jalali}}</div>
+          </mat-list-item>
+        </div>
+      </mat-list>
+      <button (click)="showEventHandlerWindow(null,true)"
+              class="custom-flat-button full-width padding-mini-r-l line-height-30 font-9-em overflow-hide text-weight-normal"
+              mat-raised-button>
+        <span class="padding-mini-r-l">{{'events_handler.main.see_more' | translate}}</span>
+      </button>
+    </div>
+
+    <div *ngIf="!serviceList" class="height-full-minus-45 display-flex flex-direction-column flex-space-between">
+      <mat-list *ngIf="events_reminders && events_reminders.reminders.length" class="event-list height-full-minus-280"
+                style="height: calc(100% - 280px);">
+        <div class="height-45" mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}} <b
+                class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}
+          : {{events_reminders.reminders.length}}</b></div>
+        <div class="height-full-minus-45 overflow-y-auto">
+          <mat-list-item *ngFor="let item of events_reminders.reminders">
+            <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>
+            <div mat-line class="font-8-em">{{item.description}}</div>
+            <div mat-line class="font-8-rem">{{item.startReminder | jalali:rtlDirection}}</div>
+          </mat-list-item>
+        </div>
+      </mat-list>
+    </div>
+
+
+  </div>
+</div>
