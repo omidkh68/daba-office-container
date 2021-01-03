@@ -13,24 +13,24 @@ import {
 } from '@angular/core';
 import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
-import {Subscription} from 'rxjs/internal/Subscription';
 import {MatDialog} from '@angular/material/dialog';
-import {ViewDirectionService} from '../../../services/view-direction.service';
-import {TranslateService} from '@ngx-translate/core';
 import {ApiService} from '../../tasks/logic/api.service';
-import {TaskCalendarService} from '../../tasks/task-calendar/services/task-calendar.service';
+import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
-import {UserInfoService} from '../../users/services/user-info.service';
-import {EventHandlerBottomSheetInterface, EventHandlerDataInterface} from '../logic/event-handler-data.interface';
-import {EventHandlerDetailComponent} from '../event-handler-detail/event-handler-detail.component';
-import {EventHandlerService} from '../service/event-handler.service';
-import {EventHandlerInterface, EventsReminderInterface} from '../logic/event-handler.interface';
 import {PopoverService} from '../../popover-widget/popover.service';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
+import {TranslateService} from '@ngx-translate/core';
+import {TaskCalendarService} from '../../tasks/task-calendar/services/task-calendar.service';
+import {EventHandlerService} from '../service/event-handler.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
+import {TaskMorelistComponent} from '../../tasks/task-morelist/task-morelist.component';
+import {EventHandlerEmailDate} from '../../users/logic/user-container.interface';
 import {EventHandlerSocketService} from '../service/event-handler-socket.service';
-import {TaskMorelistComponent} from "../../tasks/task-morelist/task-morelist.component";
-import {EventHandlerEmailDate} from "../../users/logic/user-container.interface";
-import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
+import {EventHandlerDetailComponent} from '../event-handler-detail/event-handler-detail.component';
+import {EventHandlerInterface, EventsReminderInterface} from '../logic/event-handler.interface';
+import {EventHandlerBottomSheetInterface, EventHandlerDataInterface} from '../logic/event-handler-data.interface';
 
 @Component({
   selector: 'app-events-handler-main',
@@ -173,7 +173,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
   getEvents() {
     let eventhandlerModel: EventHandlerEmailDate = {
       email: this.loggedInUser.email,
-      date: moment(this.datetimeService.getDateByTimezoneReturnDate(new Date())).format("YYYY-MM-DD")
+      date: moment(this.datetimeService.getDateByTimezoneReturnDate(new Date())).format('YYYY-MM-DD')
     };
     this.eventHandlerSocketService.getEventsByEmail(eventhandlerModel, this.loggedInUser).then((result: any) => {
       this._subscription.add(
