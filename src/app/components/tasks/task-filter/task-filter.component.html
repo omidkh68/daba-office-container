@@ -1,6 +1,6 @@
 <div *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'"
      class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
-  <form (submit)="submit()" [formGroup]="form" class="full-height">
+  <form (submit)="submit()" [formGroup]="form" class="full-height" autocomplete="off">
     <div class="height-full-minus-30 full-width">
       <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
         {{'tasks.task_filter.tasks_filter' | translate}}
@@ -82,11 +82,6 @@
         <div class="dpDateStartPicker half-width padding-r-l">
           <mat-form-field class="dpDatePicker full-width font-9-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'global.from_date' | translate}}</mat-label>
-            <!--<input (click)="picker1.open()" (dateChange)="dateToGregorian('dateStart', $event)" (focus)="picker1.open()"
-                   [matDatepicker]="picker1" formControlName="dateStart"
-                   matInput
-                   readonly tabindex="5">
-            <mat-datepicker #picker1></mat-datepicker>-->
             <input [dpDayPicker]="datePicker"
                    formControlName="dateStart"
                    tabindex="5"
@@ -110,14 +105,10 @@
         <div class="dpDateStopPicker half-width padding-r-l">
           <mat-form-field class="dpDatePicker full-width font-9-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'global.to_date' | translate}}</mat-label>
-            <!--<input (click)="picker2.open()" (dateChange)="dateToGregorian('dateStop', $event)" (focus)="picker2.open()"
-                   [matDatepicker]="picker2" formControlName="dateStop"
-                   matInput
-                   readonly tabindex="6">
-            <mat-datepicker #picker2></mat-datepicker>-->
             <input [dpDayPicker]="datePicker"
                    formControlName="dateStop"
                    tabindex="6"
+                   autocomplete="off"
                    theme="dp-material" matInput placeholder="" readonly>
 
             <button (click)="form.get('dateStop').setValue(''); $event.stopPropagation();" *ngIf="form.get('dateStop').touched && form.get('dateStop').value.length"

@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {MatTabChangeEvent} from '@angular/material/tabs';
@@ -12,7 +13,6 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 import {SoftPhoneCallPopUpComponent} from '../soft-phone-call-pop-up/soft-phone-call-pop-up.component';
 import {SoftPhoneBottomSheetComponent} from '../soft-phone-bottom-sheet/soft-phone-bottom-sheet.component';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
-import {ElectronService} from '../../../core/services';
 
 export interface TabInterface {
   icon: string;

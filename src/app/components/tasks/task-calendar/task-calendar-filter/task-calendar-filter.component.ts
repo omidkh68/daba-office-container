@@ -1,5 +1,7 @@
 import {AfterViewInit, Component, Inject, Injector, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import * as moment from 'moment';
+import * as jalaliMoment from 'jalali-moment';
 import {ApiService} from '../../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../../users/logic/user-interface';
@@ -7,14 +9,11 @@ import {LoginInterface} from '../../../login/logic/login.interface';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
-import {TaskDurationInterface} from '../../logic/task-duration-interface';
-import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
-import * as moment from 'moment';
-import * as jalaliMoment from 'jalali-moment';
-// import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {IDatePickerConfig, IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../../login/services/refresh-login.service';
+import {TaskDurationInterface} from '../../logic/task-duration-interface';
+import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
+import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 
 @Component({
   selector: 'app-task-calendar-filter',
@@ -96,10 +95,6 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
       this.userSelected = user;
     }
   }
-
-  /*dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.form.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
-  }*/
 
   closeDialog(toggle) {
     this.dialogRef.close(toggle);

@@ -55,6 +55,14 @@ export class SoftPhoneKeypadComponent {
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
+
+    this._subscription.add(
+      this.softPhoneService.currentCloseSoftphone.subscribe(status => {
+        if (status) {
+          this.ngOnDestroy();
+        }
+      })
+    );
   }
 
   keyPress(event, key: KeysInterface) {

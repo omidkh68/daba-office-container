@@ -84,8 +84,6 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.data = this.bottomSheetData.data;
 
-    console.log('bottomsheet data: ', this.data);
-
     this.keys = [
       {type: 'mute_unmute', num: 'mic', changeIcon: 'mic_off'},
     ];

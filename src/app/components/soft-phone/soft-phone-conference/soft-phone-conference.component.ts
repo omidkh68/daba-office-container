@@ -62,6 +62,14 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => this.callPopUpMinimizeStatus = status)
     );
+
+    this._subscription.add(
+      this.softPhoneService.currentCloseSoftphone.subscribe(status => {
+        if (status) {
+          this.ngOnDestroy();
+        }
+      })
+    );
   }
 
   ngOnInit(): void {

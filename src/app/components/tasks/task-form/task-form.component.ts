@@ -16,9 +16,8 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {TaskDataInterface} from '../logic/task-data-interface';
-import {IDatePickerConfig} from 'ng2-jalali-date-picker';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 
 @Component({
   selector: 'app-task-form',
@@ -73,8 +72,7 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
     '23:00', '23:15', '23:30', '23:45'
   ];
   boardsList = [];
-  datePicker: IDatePickerConfig = null;
-  // datePicker2: IDatePickerConfig = null;
+  datePicker: IDatePickerDirectiveConfig = null;
 
   private _subscription: Subscription = new Subscription();
 
@@ -205,10 +203,6 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
   submit() {
     this.formOutput.emit(this.form);
   }
-
-  /*dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.form.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
-  }*/
 
   getTranslate(word) {
     return this.translate.instant(word);

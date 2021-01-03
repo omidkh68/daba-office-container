@@ -155,7 +155,6 @@ export class TaskCalendarWeekdayComponent implements AfterViewInit, OnDestroy {
       this._subscription.add(
         dialogRef.afterClosed().subscribe(eventItem => {
           if (eventItem) {
-            console.log(eventItem);
             this.loadTaskDetails(eventItem);
           }
         })

@@ -1,4 +1,6 @@
-<form (submit)="submit()" *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="form" class="full-height">
+<form (submit)="submit()" *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="form"
+      autocomplete="off"
+      class="full-height">
   <div class="height-full-minus-30 full-width">
     <h1 *ngIf="data.action !== 'detail'"
         class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
@@ -126,15 +128,10 @@
         <div class="dpDateStartPicker quarter-width padding-mini-r-l">
           <mat-form-field class="dpDatePicker full-width font-9-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'tasks.form.start_at' | translate}}</mat-label>
-            <!--<input (click)="picker1.open()" (dateChange)="dateToGregorian('startAt', $event)" (focus)="picker1.open()"
-                   [matDatepicker]="picker1"
-                   formControlName="startAt" matInput
-                   placeholder="{{'tasks.form.start_at' | translate}}"
-                   readonly tabindex="8">
-            <mat-datepicker #picker1></mat-datepicker>-->
             <input [dpDayPicker]="datePicker"
                    formControlName="startAt"
                    attachTo=".dpDateStartPicker"
+                   autocomplete="off"
                    tabindex="8"
                    theme="dp-material" matInput placeholder="" readonly>
 
@@ -161,12 +158,8 @@
         <div class="dpDateStopPicker quarter-width padding-mini-r-l">
           <mat-form-field class="dpDatePicker full-width font-9-em" [dir]="rtlDirection ? 'rtl' : 'ltr'">
             <mat-label>{{'tasks.form.stop_at' | translate}}</mat-label>
-            <!--<input (click)="picker2.open()" (dateChange)="dateToGregorian('stopAt', $event)" (focus)="picker2.open()"
-                   [matDatepicker]="picker2" formControlName="stopAt"
-                   matInput
-                   readonly tabindex="10">
-            <mat-datepicker #picker2></mat-datepicker>-->
             <input [dpDayPicker]="datePicker"
+                   autocomplete="off"
                    formControlName="stopAt"
                    attachTo=".dpDateStopPicker"
                    tabindex="10"
@@ -192,18 +185,6 @@
           </mat-form-field>
         </div>
       </div>
-
-      <!--<div class="display-flex margin-b-full margin-r-l-reverse">
-        <div class="full-width padding-mini-r-l">
-          <mat-form-field class="stopAtDatePicker full-width font-9-em">
-            <mat-label>{{'tasks.form.stop_at' | translate}}</mat-label>
-            <input [dpDayPicker]="datePicker"
-                   attachTo="body"
-                   formControlName="stopAt"
-                   theme="dp-material" matInput placeholder="" readonly>
-          </mat-form-field>
-        </div>
-      </div>-->
 
       <div class="display-flex margin-b-full margin-r-l-reverse">
         <div class="full-width padding-mini-r-l">

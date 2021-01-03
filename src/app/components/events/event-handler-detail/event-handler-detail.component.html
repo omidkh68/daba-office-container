@@ -29,7 +29,7 @@
     <div
       [ngClass]="[rtlDirection ? 'float-right' : 'float-left' , data.eventItems ? 'event-form-container' : 'full-width']"
       class="full-height padding-full overflow-hide pos-rel">
-      <form
+      <form autocomplete="off"
         *ngIf="(form && data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email) || (form && !data.eventItems)"
         [formGroup]="form" (submit)="submit()" class="full-height"
         [dir]="rtlDirection ? 'rtl' : 'ltr'">

@@ -5,8 +5,8 @@
       <span class="text-gray-700">{{'events_handler.main.add_new_reminder' | translate}}</span>
     </h1>
   </div>
-  <form (submit)="submitReminder()" *ngIf="reminderForm" [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="reminderForm"
-        class="full-height">
+  <form (submit)="submitReminder()" *ngIf="reminderForm" [dir]="rtlDirection ? 'rtl' : 'ltr'"
+        [formGroup]="reminderForm" autocomplete="off" class="full-height">
     <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
       <div class="display-flex margin-r-l-reverse">
         <div class="half-width padding-r-l">

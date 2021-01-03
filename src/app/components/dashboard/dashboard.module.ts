@@ -21,17 +21,10 @@ import {ProfileSettingComponent} from '../profile-setting/profile-setting.compon
 import {CompanySelectorComponent} from './dashboard-toolbar/company-selector/company-selector.component';
 import {DashboardToolbarComponent} from './dashboard-toolbar/dashboard-toolbar.component';
 import {ShowImageCropperComponent} from '../profile-setting/show-image-cropper/show-image-cropper.component';
+import {TaskIncompleteTaskComponent} from '../tasks/task-incomplete-task/task-incomplete-task.component';
 import {WindowAppContainerComponent} from './dashboard-toolbar/window-app-container/window-app-container.component';
 import {DashboardDatepickerComponent} from './dashboard-datepicker/dashboard-datepicker.component';
 import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-call/soft-phone-incoming-call.component';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {JalaliMomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '../../shared/jalali-moment-date-adapter';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {JALALI_MOMENT_FORMATS, MOMENT_FORMATS} from '../../shared/jalali_moment_formats';
-import {TaskIncompleteTaskComponent} from '../tasks/task-incomplete-task/task-incomplete-task.component';
-
-const defaultLangStorage = localStorage.getItem('defaultLang');
-const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ? 'fa' : 'en-GB';
 
 @NgModule({
   declarations: [
@@ -65,29 +58,7 @@ const defaultLang = defaultLangStorage !== null && defaultLangStorage === 'fa' ?
       {path: '', component: DashboardComponent},
     ]),
     TranslateModule.forChild()
-  ],
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: defaultLang === 'fa' ? JalaliMomentDateAdapter : MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE]
-    },
-    {provide: MAT_DATE_LOCALE, useValue: defaultLang === 'fa' ? defaultLang : 'en-GB'}, // en-GB  fr
-    {
-      provide: MAT_DATE_FORMATS,
-      useFactory: locale => {
-        if (locale === (defaultLang === 'fa')) {
-          return JALALI_MOMENT_FORMATS;
-        } else {
-          return MOMENT_FORMATS;
-        }
-      },
-      deps: [MAT_DATE_LOCALE],
-      // useValue: JALALI_MOMENT_FORMATS
-    },
-    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
-  ]/*,
-  entryComponents: [PopoverContnetComponent]*/
+  ]
 })
 export class DashboardModule {
 }

@@ -29,7 +29,6 @@ import {UserContainerInterface} from '../../users/logic/user-container.interface
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
 import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-phone-call-to-action.component';
-import {catchError, map} from 'rxjs/operators';
 
 export interface LoggedInUserExtensionInterface {
   user: UserContainerInterface,
@@ -90,6 +89,14 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
       this.softPhoneService.currentConnectedCall.subscribe(connectedCall => {
         if (connectedCall) {
           this.clearTimer();
+        }
+      })
+    );
+
+    this._subscription.add(
+      this.softPhoneService.currentCloseSoftphone.subscribe(status => {
+        if (status) {
+          this.ngOnDestroy();
         }
       })
     );
