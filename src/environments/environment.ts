@@ -13,3 +13,4 @@ export const AppConfig: any = {
   EVENT_HANDLER_URL : 'http://94.139.172.74:8080/eventhandler-0.0.1',
   LMS_API: 'http://94.139.172.74:8080/bbb-0.0.1-SNAPSHOT'
 };
+// todo: remove by ebi

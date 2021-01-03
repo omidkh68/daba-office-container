@@ -18,9 +18,9 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
+import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo';
+import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -247,7 +247,12 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result) {
-          this.bottomSheetData.bottomSheetRef.close();
+
+          if (resp.content.parentTaskId === 0) {
+            this.bottomSheetData.bottomSheetRef.close();
+          } else {
+            this.editableForm();
+          }
 
           this.messageService.showMessage(resp.message);
 
@@ -312,17 +317,11 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
   getBoardData() {
     return new Promise((resolve) => {
+      this.usersListNew = this.taskEssentialInfoService.getUsersProjectsList.usersList;
 
-      this._subscription.add(
-        this.taskEssentialInfoService.currentUsersProjectsList.subscribe((data) => {
+      this.projectsListNew = this.taskEssentialInfoService.getUsersProjectsList.projectsList;
 
-            this.usersListNew = data.usersList;
-            this.projectsListNew = data.projectsList;
-
-            resolve(true);
-          }
-        )
-      );
+      resolve(true);
     });
   }
 

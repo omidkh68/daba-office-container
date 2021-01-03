@@ -10,6 +10,8 @@ import {CurrentTaskService} from '../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
+import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 
 @Component({
   selector: 'app-task-current',
@@ -40,6 +42,8 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private userInfoService: UserInfoService,
+              private buttonSheetDataService: ButtonSheetDataService,
+              private taskEssentialInfoService: TaskEssentialInfoService,
               private currentTaskService: CurrentTaskService) {
     this._subscription.add(
       this.currentTaskService.currentTask.subscribe(currentTasks => this.currentTasks = currentTasks)
@@ -74,7 +78,41 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   showTask(task: TaskInterface) {
-    const data: TaskDataInterface = {
+    /*this._subscription.add(
+      this.taskEssentialInfoService.currentUsersProjectsList.subscribe((data) => {
+          this.usersList = data.usersList;
+          this.projectsList = data.projectsList;
+        }
+      )
+    );*/
+
+    this.usersList = this.taskEssentialInfoService.getUsersProjectsList.usersList;
+
+    this.projectsList = this.taskEssentialInfoService.getUsersProjectsList.projectsList;
+
+    setTimeout(() => {
+      const data: TaskDataInterface = {
+        action: 'detail',
+        usersList: this.usersList,
+        projectsList: this.projectsList,
+        task: task,
+        boardStatus: task.boardStatus,
+        breadcrumbList: null
+      };
+
+      const finalData = {
+        component: TaskDetailComponent,
+        height: '98%',
+        width: '95%',
+        data: data
+      };
+
+
+      this.buttonSheetDataService.changeButtonSheetData(finalData);
+    }, 500)
+
+
+    /*const data: TaskDataInterface = {
       action: 'detail',
       usersList: this.usersList,
       projectsList: this.projectsList,
@@ -87,7 +125,7 @@ export class TaskCurrentComponent implements OnInit, OnChanges, OnDestroy {
       height: '98%',
       width: '95%',
       data: data
-    });
+    });*/
   }
 
   ngOnChanges(changes: SimpleChanges): void {

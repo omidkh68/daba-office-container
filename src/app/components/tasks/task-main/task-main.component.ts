@@ -20,7 +20,7 @@ import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.c
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskCalendarFilterComponent} from '../task-calendar/task-calendar-filter/task-calendar-filter.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
+import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 import {EventHandlerService} from "../../events/service/event-handler.service";
 import {TaskCalendarRateInterface} from "../task-calendar/services/task-calendar.service";
 
@@ -48,6 +48,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   tabs = [];
   checksTab: string;
   currentTasks: Array<TaskInterface> | null = null;
+  projectsList: ProjectInterface[] = [];
+  usersList: UserInterface[] = [];
 
   private _subscription: Subscription = new Subscription();
 
@@ -244,7 +246,6 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
   openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {
     // bottomSheetConfig.bottomSheetRef = this.bottomSheet;
-
     // this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
   }
 

@@ -64,7 +64,8 @@
     <app-task-current (pushTaskToBoard)="getTaskToBoardData($event)"
                       (triggerBottomSheet)="openButtonSheet($event)"
                       [rtlDirection]="rtlDirection"
-                      [taskEssentialInfo]="taskEssentialInfo"></app-task-current>
+                      [taskEssentialInfo]="taskEssentialInfo">
+    </app-task-current>
   </div>
 
   <app-task-bottom-sheet #bottomSheet></app-task-bottom-sheet>

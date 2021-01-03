@@ -21,6 +21,10 @@ export class TaskEssentialInfoService {
   constructor() {
   }
 
+  get getUsersProjectsList() {
+    return this.usersProjectsList.getValue();
+  }
+
   changeUsersProjectsList(usersProjectsList) {
     this.usersProjectsList.next(usersProjectsList);
   }

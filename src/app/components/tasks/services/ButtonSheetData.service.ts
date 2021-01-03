@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
-import {TaskBottomSheetInterface} from '../components/tasks/task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 
 @Injectable({
   providedIn: 'root'

@@ -1,11 +1,5 @@
 export interface TodoInterface {
-  todoId?: number;
-  taskId?: number;
-  email?: string;
-  isChecked?: number;
-  text: string;
-  creationDate?: string;
-  priority?: string;
+  result: number;
 }
 
 export interface TodoTaskInterface {
