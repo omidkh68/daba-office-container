@@ -1,29 +1,31 @@
-import {Component, HostListener, Injector, OnDestroy, OnInit} from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {LoginDataClass} from '../../../services/loginData.class';
-import {MatDialog} from '@angular/material/dialog';
-import {UserInfoService} from '../../users/services/user-info.service';
-import {ApiService} from '../../users/logic/api.service';
-import {EventApiService} from '../../events/logic/api.service';
-import {EventHandlerBottomSheetInterface, EventHandlerDataInterface} from '../logic/event-handler-data.interface';
-import {ViewDirectionService} from '../../../services/view-direction.service';
-import {ActionTypeInterface, ActionTypeJobInterface, UserEventHandlerInterface} from '../logic/action-type.interface';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
-import {EventsHandlerAddReminderComponent} from '../events-handler-add-reminder/events-handler-add-reminder.component';
 import {hours} from '../../../shared/utils';
+import * as jalaliMoment from 'jalali-moment';
+import {MatDialog} from '@angular/material/dialog';
+import {TranslateService} from '@ngx-translate/core';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {SelectionModel} from '@angular/cdk/collections';
+import {ApiService} from '../../users/logic/api.service';
+import {MatTableDataSource} from '@angular/material/table';
+import {EventApiService} from '../../events/logic/api.service';
+import {ApproveComponent} from '../../approve/approve.component';
+import {LoginDataClass} from '../../../services/loginData.class';
+import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MessageService} from '../../message/service/message.service';
 import {EventHandlerService} from '../service/event-handler.service';
-import {TranslateService} from '@ngx-translate/core';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {ApproveComponent} from '../../approve/approve.component';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {EventHandlerSocketService} from '../service/event-handler-socket.service';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, HostListener, Injector, OnDestroy, OnInit} from '@angular/core';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material/table';
+import {EventHandlerBottomSheetInterface, EventHandlerDataInterface} from '../logic/event-handler-data.interface';
+import {ActionTypeInterface, ActionTypeJobInterface, UserEventHandlerInterface} from '../logic/action-type.interface';
+import {EventsHandlerAddReminderComponent} from '../events-handler-add-reminder/events-handler-add-reminder.component';
 
 @Component({
   styleUrls: ['./event-handler-detail.component.scss'],
@@ -44,25 +46,30 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
   data: EventHandlerDataInterface;
   hours = hours;
   socket = null;
+  datePicker: IDatePickerDirectiveConfig = null;
+
   private _subscription: Subscription = new Subscription();
 
-  constructor(public dialog: MatDialog,
-              public dateTimeService: DatetimeService,
-              private api: ApiService,
-              private eventApi: EventApiService,
+  constructor(private api: ApiService,
               private fb: FormBuilder,
+              public dialog: MatDialog,
+              private injector: Injector,
+              private eventApi: EventApiService,
+              private messageService: MessageService,
+              public dateTimeService: DatetimeService,
+              private userInfoService: UserInfoService,
+              private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
               private eventHandlerService: EventHandlerService,
-              private injector: Injector,
-              private eventHandlerSocketService: EventHandlerSocketService,
-              private translateService: TranslateService,
-              private messageService: MessageService,
               private windowManagerService: WindowManagerService,
-              private userInfoService: UserInfoService) {
+              private eventHandlerSocketService: EventHandlerSocketService) {
 
     super(injector, userInfoService);
     this._subscription.add(
-      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+      this.viewDirection.currentDirection.subscribe(direction => {
+        this.rtlDirection = direction;
+        this.setupDatepickers();
+      })
     );
     this._subscription.add(
       this.eventHandlerService.currentEventItems.subscribe(eventItems => {
@@ -111,12 +118,6 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
           this.form.patchValue({
             users: this.data.eventItems ? this.data.eventItems.users : []
           });
-          /*                    if (this.data.eventItems) {
-                                  if (this.data.eventItems.users.length) {
-                                      let cars1IDs = new Set(this.data.eventItems.users.map(({email}) => email));
-                                      this.usersList = this.usersList.filter(({email}) => !cars1IDs.has(email));
-                                  }
-                              }*/
         }
       })
     );
@@ -141,6 +142,14 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
         }
       })
     );
+  }
+
+  setupDatepickers() {
+    this.datePicker = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      firstDayOfWeek: 'sa',
+      format: this.rtlDirection ? 'YYYY/MM/DD' : 'YYYY/MM/DD'
+    };
   }
 
   drop(event: CdkDragDrop<UserContainerInterface[]>) {
@@ -286,10 +295,14 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
   }
 
   submit() {
-    let formValue = this.form.value;
+    let formValue = {...this.form.value};
     formValue.creatorUser = this.loggedInUser;
-    formValue.startDate = this.dateTimeService.convertToGMT(this.form.value.startDate, this.form.value.startTime);
-    formValue.endDate = this.dateTimeService.convertToGMT(this.form.value.endDate, this.form.value.endTime);
+    if (this.rtlDirection) {
+      formValue.startDate = jalaliMoment.from(this.form.value.startDate, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD') + " " + this.form.value.startTime + ":00";
+    } else {
+      formValue.startDate = moment(this.form.value.startDate, 'YYYY/MM/DD').format('YYYY-MM-DD') + " " + this.form.value.startTime + ":00";
+    }
+
     formValue.users = this.selection.selected;
     delete formValue.actionType.actionTypeJobModels;
     delete formValue.actionType.actionDescription;
@@ -365,15 +378,20 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     } else if (curMinute >= 45) {
       selectedMinute = '45';
     }
-
     const totalCurrentTime = curHour + ':' + selectedMinute;
     return totalCurrentTime;
   }
 
   createForm() {
     return new Promise((resolve) => {
-      let sdate = this.data.eventItems ? this.dateTimeService.formatDate(this.data.eventItems?.startDate) : this.dateTimeService.formatDate(this.data.currentDate.toLocaleDateString());
-      let edate = this.data.eventItems ? this.dateTimeService.formatDate(this.data.eventItems?.endDate) : this.dateTimeService.formatDate(this.data.currentDate.toLocaleDateString());
+
+      let sdateFinal = this.data.eventItems ? new Date(this.data.eventItems?.startDate) : this.data.currentDate;
+      let edateFinal = this.data.eventItems ? new Date(this.data.eventItems?.endDate) : this.data.currentDate;
+
+      let sdate = jalaliMoment.from(this.dateTimeService.formatDate(sdateFinal), 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
+      let edate = jalaliMoment.from(this.dateTimeService.formatDate(edateFinal), 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
+
+
       let stime = this.data.eventItems ? this.dateTimeService.formatTime(this.data.eventItems?.startDate) : this.selectCurrentTime();
       let etime = this.data.eventItems ? this.dateTimeService.formatTime(this.data.eventItems?.endDate) : this.selectCurrentTime();
 

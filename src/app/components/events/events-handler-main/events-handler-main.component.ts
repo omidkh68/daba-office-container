@@ -79,6 +79,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => {
         this.rtlDirection = direction;
+        this.setupCalendar();
       })
     );
 

@@ -6,6 +6,8 @@
     (onSelect)="eventClick($event)"
     [dir]="rtlDirection ? 'rtl' : 'ltr'"
     [config]="datePickerConfig"
+    (onLeftNav)="onNavigationClick($event)"
+    (onRightNav)="onNavigationClick($event)"
     theme="dp-material">
   </dp-day-calendar>
 
@@ -37,9 +39,10 @@
     <div *ngIf="!serviceList" class="height-full-minus-45 display-flex flex-direction-column flex-space-between">
       <mat-list *ngIf="events_reminders && events_reminders.reminders.length" class="event-list height-full-minus-280"
                 style="height: calc(100% - 280px);">
-        <div class="height-45" mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}} <b
-                class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}
-          : {{events_reminders.reminders.length}}</b></div>
+        <div class="height-45" mat-subheader>{{'dashboard.dashboard_toolbar.reminder' | translate}}
+          <b class="font-7-rem padding-full">{{'events_handler.main.reminder_count' | translate}}
+            : {{events_reminders.reminders.length}}</b>
+        </div>
         <div class="height-full-minus-45 overflow-y-auto">
           <mat-list-item *ngFor="let item of events_reminders.reminders">
             <mat-icon class="font-full-plus-three-tenth-em" mat-list-icon>access_alarm</mat-icon>

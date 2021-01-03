@@ -1,19 +1,19 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild,} from '@angular/core';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {EventHandlerEmailDate, UserContainerInterface} from "../../users/logic/user-container.interface";
-import {ServiceInterface} from "../../services/logic/service-interface";
-import {EventHandlerInterface, EventsReminderInterface} from "../logic/event-handler.interface";
-import {MatDialog} from "@angular/material/dialog";
-import {EventApiService} from "../logic/api.service";
-import {ViewDirectionService} from "../../../services/view-direction.service";
-import {PopoverService} from "../../popover-widget/popover.service";
-import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
-import {EventHandlerService} from "../service/event-handler.service";
-import {EventHandlerSocketService} from "../service/event-handler-socket.service";
-import {WindowManagerService} from "../../../services/window-manager.service";
-import {TaskMorelistComponent} from "../../tasks/task-morelist/task-morelist.component";
 import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
+import {MatDialog} from "@angular/material/dialog";
+import {EventApiService} from "../logic/api.service";
+import {Subscription} from 'rxjs/internal/Subscription';
+import {PopoverService} from "../../popover-widget/popover.service";
+import {EventHandlerService} from "../service/event-handler.service";
+import {ServiceInterface} from "../../services/logic/service-interface";
+import {WindowManagerService} from "../../../services/window-manager.service";
+import {ViewDirectionService} from "../../../services/view-direction.service";
+import {EventHandlerSocketService} from "../service/event-handler-socket.service";
+import {TaskMorelistComponent} from "../../tasks/task-morelist/task-morelist.component";
+import {EventHandlerInterface, EventsReminderInterface} from "../logic/event-handler.interface";
+import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild,} from '@angular/core';
+import {EventHandlerEmailDate, UserContainerInterface} from "../../users/logic/user-container.interface";
 
 @Component({
   selector: 'app-events-handler-calendar',
@@ -175,16 +175,26 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
 
   }
 
-  getEvents() {
+  onNavigationClick(event) {
+    this.getEvents(event.to._d);
+  }
+
+  getEvents(date: Date = null) {
+    this.events_reminders.reminders = [];
+    let finalDate = moment(this.datetimeService.getDateByTimezoneReturnDate(new Date())).format("YYYY-MM-DD");
+    let goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(new Date())) : moment(this.datetimeService.getDateByTimezoneReturnDate(new Date()));
+
+    if (date) {
+      finalDate = moment(this.datetimeService.getDateByTimezoneReturnDate(date)).format("YYYY-MM-DD");
+      goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(date)) : moment(this.datetimeService.getDateByTimezoneReturnDate(date));
+    }
+
     let eventhandlerModel: EventHandlerEmailDate = {
       email: this.loggedInUser.email,
-      date: moment(this.datetimeService.getDateByTimezoneReturnDate(new Date())).format("YYYY-MM-DD")
+      date: finalDate
     };
     this.eventHandlerSocketService.getEventsByEmail(eventhandlerModel, this.loggedInUser).then((result: any) => {
-      this._subscription.add(
-        this.events_reminders = result
-      );
-      let goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(new Date())) : moment(this.datetimeService.getDateByTimezoneReturnDate(new Date()));
+      this.events_reminders = result;
       setTimeout(() => {
         this.datePickerDirective.api.moveCalendarTo(goToDate);
       })
