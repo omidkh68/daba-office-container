@@ -53,7 +53,7 @@
       <!--end of image cropper-->
 
       <div class="full-width display-inline-block margin-t-full">
-        <form *ngIf="form" [formGroup]="form">
+        <form *ngIf="form" [formGroup]="form" autocomplete="off">
           <!--form-->
           <div class="display-flex margin-r-l-reverse margin-b-half">
             <div class="full-width padding-r-l">
@@ -62,6 +62,8 @@
                 <input class="full-width"
                        formControlName="name"
                        matInput
+                       type="text"
+                       autocomplete="off"
                        placeholder="{{'profileSettings.name_family' | translate}}"
                        required>
                 <mat-error>{{'global.name_error' | translate}}</mat-error>
@@ -76,6 +78,7 @@
                 <input class="full-width text-left"
                        formControlName="email"
                        matInput
+                       autocomplete="off"
                        placeholder="{{'global.email' | translate}}"
                        required
                        type="email">
@@ -90,6 +93,7 @@
                 <input class="full-width"
                        formControlName="c_password"
                        matInput
+                       autocomplete="off"
                        placeholder="{{'login_info.password' | translate}}"
                        type="password">
                 <mat-error>{{'login_info.password_error' | translate}}</mat-error>
@@ -104,6 +108,7 @@
                 <input class="full-width"
                        formControlName="extension_no"
                        matInput
+                       autocomplete="off"
                        placeholder="{{'global.extension_placeholder' | translate}}"
                        type="tel">
                 <mat-error

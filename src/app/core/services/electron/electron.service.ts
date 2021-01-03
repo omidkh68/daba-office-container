@@ -5,6 +5,7 @@ import {
   BrowserWindow,
   ipcRenderer,
   desktopCapturer,
+  systemPreferences,
   webFrame,
   remote,
   screen
@@ -28,6 +29,7 @@ export class ElectronService {
   desktopCapturer: typeof desktopCapturer;
   browserWindow: BrowserWindow;
   electronScreen: typeof screen;
+  systemPreferences: typeof systemPreferences;
 
   constructor() {
     // Conditional imports
@@ -38,6 +40,7 @@ export class ElectronService {
       this.browserWindow = window.require('electron').remote.getCurrentWindow();
       this.remote = window.require('electron').remote;
       this.electronScreen = window.require('electron').screen;
+      this.systemPreferences = window.require('electron').systemPreferences;
 
       this.childProcess = window.require('child_process');
       this.fs = window.require('fs');

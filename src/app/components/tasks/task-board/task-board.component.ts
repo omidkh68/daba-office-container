@@ -104,21 +104,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
   ngOnInit(): void {
     this.rowHeight = '100%';
-
-    /*this.socket.on('update-data', (data: any) => {
-      this.getBoards();
-    });*/
-
-    // this.setupSocket();
   }
-
-  /*setupSocket() {
-    this.socket = this.socketService.setupSocketConnection('boards');
-    this.socket.emit('getBoards');
-    this.socket.on('getBoards', data => {
-      console.log(data);
-    });
-  }*/
 
   changeStatus(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
@@ -201,6 +187,9 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       this.showTaskStopModal(newTask);
     } else if (prevContainer === 'todo' && newContainer === 'done') {
       this.showTaskStopModal(newTask);
+    } else if (prevContainer === 'done' && newContainer === 'todo') {
+      const editedTask: TaskInterface = {...newTask, percentage: 0, boardStatus: 'todo'};
+      this.showTaskStopModal(editedTask);
     }
   }
 
@@ -218,7 +207,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          // this.socket.emit('updatedata', result);
+          this.getBoards();
         }
       })
     );
@@ -246,7 +235,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       height: '98%',
       width: '95%',
       data: data
-    }
+    };
 
     this.buttonSheetDataService.changeButtonSheetData(finalData);
   }
@@ -346,7 +335,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
             const data = {
               'usersList': resp.content.users.list,
               'projectsList': resp.content.projects.list
-            }
+            };
 
             this.taskEssentialInfoService.changeUsersProjectsList(data)
 
@@ -377,7 +366,6 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.refreshData) {
-      // this.socket.emit('updatedata');
       this.getBoards();
     }
 
@@ -391,8 +379,6 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       this.pushTaskToBoard = changes.pushTaskToBoard.currentValue;
 
       this.assignNewTaskToBoard(this.pushTaskToBoard.task, this.pushTaskToBoard.prevContainer, this.pushTaskToBoard.newContainer);
-
-      // this.socket.emit('updatedata');
     }
   }
 

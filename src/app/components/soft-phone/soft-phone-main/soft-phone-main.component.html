@@ -7,6 +7,7 @@
        class="soft-phone-container full-width pos-rel">
     <!-- Show soft phone information -->
     <app-soft-phone-information [ngClass]="{'z-index-1': activeTab === 0}"
+                                [activePermissionRequest]="activePermissionRequest"
                                 [tabId]="activeTab"
                                 (triggerBottomSheet)="openButtonSheet($event)"
                                 [rtlDirection]="rtlDirection"></app-soft-phone-information>
@@ -68,6 +69,37 @@
   </div>
 
   <app-soft-phone-bottom-sheet #bottomSheet></app-soft-phone-bottom-sheet>
+
+  <div
+    [ngClass]="activePermissionRequest && activePermissionRequest != 'granted' ? 'bottom-0' : 'bottom-full-reverse-percent'"
+    [dir]="rtlDirection ? 'rtl' : 'ltr'"
+    class="show-extension-list pos-abs full-height z-index-9999 left-0 right-0 margin-auto round-corner-top bg-white transition overflow-hide">
+    <h3 class="full-width height-45 line-height-45 padding-r-l no-margin">
+      {{'soft_phone.call_pop_up.permission_access' | translate}}
+    </h3>
+
+    <button
+      [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
+      class="pos-abs top-half cursor-pointer no-bg no-border no-box-shadow width-30 height-30">
+      <mat-icon class="text-grey-500 line-height-30">close</mat-icon>
+    </button>
+
+    <div class="height-full-minus-45 flex-center flex-direction-column">
+      <div class="padding-full">
+        <h3 class="no-margin">{{'soft_phone.call_pop_up.request_permission_title' | translate}}</h3>
+
+        <button *ngIf="activePermissionRequest == 'prompt'" (click)="getPermissionAccess()"
+                mat-raised-button
+                class="green-gradient full-width text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l">
+          {{'soft_phone.call_pop_up.get_permission' | translate}}
+        </button>
+
+        <p class="margin-t-full-3 text-amber-900" *ngIf="activePermissionRequest == 'denied'">
+          {{'soft_phone.call_pop_up.request_permission_title_denied' | translate}}
+        </p>
+      </div>
+    </div>
+  </div>
 
   <div *ngIf="loadingIndicator && loadingIndicator.status && loadingIndicator.serviceName === 'pbx'"
        class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">

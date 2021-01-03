@@ -12,7 +12,7 @@
                class="webView-frame full-width full-height"></webview>
     </ng-container>
     <ng-template #iframe>
-      <iframe #webFrame [ngClass]="{'showFrame': !showFrame}"
+      <iframe #webFrame allow="camera;microphone" [ngClass]="{'showFrame': !showFrame}"
               class="webView-frame full-width full-height no-border"></iframe>
     </ng-template>
 

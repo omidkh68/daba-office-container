@@ -11,7 +11,7 @@ import {
   PipeTransform,
   SimpleChanges
 } from '@angular/core';
-import {timer} from 'rxjs';
+import {of, timer} from 'rxjs';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
@@ -19,9 +19,9 @@ import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
-import {HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ExtensionInterface, MuteUnMuteInterface} from '../logic/extension.interface';
-import {ResultApiInterface, ResultMuteUnMuteApiInterface} from '../logic/result-api.interface';
+import {ResultApiInterface} from '../logic/result-api.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
@@ -48,6 +48,9 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   rtlDirection: boolean;
 
   @Input()
+  activePermissionRequest: string;
+
+  @Input()
   tabId: number = 0;
 
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
@@ -67,6 +70,7 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private http: HttpClient,
               private injector: Injector,
               private apiService: ApiService,
               private messageService: MessageService,
@@ -88,12 +92,18 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
         }
       })
     );
+
+    this._subscription.add(
+      this.softPhoneService.currentCloseSoftphone.subscribe(status => {
+        if (status) {
+          this.ngOnDestroy();
+        }
+      })
+    );
   }
 
   ngOnInit(): void {
     this.filterArgs = {email: this.loggedInUser.email};
-
-    this.getEssentialData();
   }
 
   async getEssentialData() {
@@ -293,12 +303,16 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.tabId && changes.tabId.currentValue === 0) {
+    if (changes.tabId && changes.tabId.currentValue === 0 && this.activePermissionRequest === 'granted') {
       this.clearTimer();
 
       setTimeout(() => this.startTimer(), 200);
     } else {
       this.clearTimer();
+    }
+
+    if (changes.activePermissionRequest && changes.activePermissionRequest.currentValue === 'granted') {
+      this.getEssentialData();
     }
   }
 

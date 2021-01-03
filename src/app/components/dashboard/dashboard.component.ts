@@ -88,26 +88,27 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit(): void {
-    this.stopWorkingBeforeCloseApp();
+    //this.stopWorkingBeforeCloseApp();
   }
 
   stopWorkingBeforeCloseApp() {
     // if environment in production mode change status when user want to close app
     if (AppConfig.production) {
       this.window.onbeforeunload = async (event) => {
-        event.returnValue = false;
-
         await this.softPhoneService.sipHangUp();
         await this.softPhoneService.sipUnRegister();
 
-        const resultOfStatus = await this.changeStatus();
+        event.returnValue = true;
+
+        // todo: remove when app ready in opmtimize performance
+        /*const resultOfStatus = await this.changeStatus();
 
         setTimeout(() => {
           this.electronService.remote.app.quit();
           this.electronService.remote.app.exit(0);
 
           event.returnValue = true;
-        }, 200);
+        }, 200);*/
       };
     }
   }

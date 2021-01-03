@@ -1,20 +1,13 @@
 import {Injectable} from '@angular/core';
-import {TaskInterface} from "../../logic/task-interface";
-import {UserInterface} from "../../../users/logic/user-interface";
+import {UserInterface} from '../../../users/logic/user-interface';
+import {SoftphoneUserInterface} from '../../../soft-phone/logic/softphone-user.interface';
+import {BehaviorSubject} from 'rxjs';
+import {ProjectInterface} from '../../../projects/logic/project-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskCalendarService {
-
-  private _holidays: Array<String>;
-  public get holidays() {
-    return this._holidays;
-  }
-  public set holidays(theHolidays: Array<String>) {
-    this._holidays = theHolidays;
-  }
-
   colorArray = [
     '#f44336',
     '#e91e63',
@@ -39,20 +32,17 @@ export class TaskCalendarService {
     '#444444',
   ];
 
-  setHolidayHighlight(holidays) {
-    const mm: Array<string> = holidays;
+  private _users: Array<SoftphoneUserInterface> | null = null;
+  private users = new BehaviorSubject(this._users);
+  public currentSoftPhoneUsers = this.users.asObservable();
+  private _holidays: Array<String>;
 
-    setTimeout(() => {
-      let activeList = Array.prototype.slice.call(document.getElementsByClassName('fc-day'));
+  public get holidays() {
+    return this._holidays;
+  }
 
-      activeList.forEach((entry: any) => {
-        let variable: string = entry.getAttribute('data-date');
-
-        if (mm.includes(variable)) {
-          entry.classList.add('holiday-date');
-        }
-      });
-    }, 500);
+  public set holidays(theHolidays: Array<String>) {
+    this._holidays = theHolidays;
   }
 
   getDaysArray(start, end) {
@@ -62,7 +52,7 @@ export class TaskCalendarService {
     return arr;
   }
 
-  prepareTaskItems(resp: any){
+  prepareTaskItems(resp: any) {
     let taskList = resp.content.boards.list;
     let myArray = [];
     taskList.map((task: any) => {
@@ -81,33 +71,35 @@ export class TaskCalendarService {
         let newObj = Object.assign(obj, task);
 
         let checkDae = item.getFullYear() + '-' + ('0' + (item.getMonth() + 1)).slice(-2) + '-' + ('0' + item.getDate()).slice(-2);
+
         if (!this._holidays.includes(checkDae))
           myArray.push(newObj);
       });
     });
     return myArray;
-
-/*    taskList.map((task: any) => {
-      task.title = task.taskName;
-      task.start = new Date(task.startAt);
-      task.end = new Date(task.stopAt);
-      task.color = this.colorArray[Math.floor(Math.random() * this.colorArray.length)];
-      task.usersList = resp.content.users.list;
-      task.projectsList = resp.content.projects.list;
-      task.imageurl = 'assets/profileImg/' + task.assignTo.email + '.jpg';
-    });
-    return taskList;*/
   }
 }
-export interface CalendarItemInterface{
+
+export interface CalendarItemInterface {
   end: Date,
   start: Date,
   title: string
 }
-export interface TaskCalendarRateInterface{
+
+export interface TaskCalendarRateInterface {
   calendarEvent: CalendarItemInterface[],
   dateStart: string,
   sumTime: string,
   userSelected: UserInterface,
   filterData: any
+}
+
+export interface CalendarItemsInterface {
+  title: string,
+  color: string,
+  imageurl: string,
+  start: Date,
+  end: Date,
+  usersList: UserInterface[],
+  projectsList: ProjectInterface[]
 }

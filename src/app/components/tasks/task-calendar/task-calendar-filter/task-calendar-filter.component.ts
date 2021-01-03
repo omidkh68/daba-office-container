@@ -1,5 +1,7 @@
-import {Component, Inject, Injector, Input, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, Injector, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import * as moment from 'moment';
+import * as jalaliMoment from 'jalali-moment';
 import {ApiService} from '../../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../../users/logic/user-interface';
@@ -7,16 +9,17 @@ import {LoginInterface} from '../../../login/logic/login.interface';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {RefreshLoginService} from '../../../login/services/refresh-login.service';
 import {TaskDurationInterface} from '../../logic/task-duration-interface';
 import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
-import * as moment from 'moment';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 
 @Component({
   selector: 'app-task-calendar-filter',
   templateUrl: './task-calendar-filter.component.html'
 })
-export class TaskCalendarFilterComponent extends LoginDataClass implements OnInit, OnDestroy {
+export class TaskCalendarFilterComponent extends LoginDataClass implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   sumTime: any;
 
@@ -28,14 +31,15 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
   usersList: UserInterface[];
   userSelected: UserInterface;
   form: FormGroup;
-  calendarDifferentEvents: any;
+  datePicker: IDatePickerDirectiveConfig;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              private api: ApiService,
               private injector: Injector,
+              private apiService: ApiService,
               private userInfoService: UserInfoService,
+              private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
               private dialogRef: MatDialogRef<TaskCalendarFilterComponent>) {
     super(injector, userInfoService);
@@ -59,6 +63,19 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
     });
   }
 
+  ngAfterViewInit(): void {
+    this.setupDatepickers();
+  }
+
+  setupDatepickers() {
+    this.datePicker = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      firstDayOfWeek: 'sa',
+      format: 'YYYY/MM/DD',
+      drops: 'up'
+    };
+  }
+
   createForm() {
     return new Promise((resolve) => {
       this.form = new FormGroup({
@@ -79,10 +96,6 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
     }
   }
 
-  dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.form.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
-  }
-
   closeDialog(toggle) {
     this.dialogRef.close(toggle);
   }
@@ -90,14 +103,22 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
   submit() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-    const formValue: TaskDurationInterface = Object.assign({}, this.form.value);
+    let formValue: TaskDurationInterface = {...this.form.value};
 
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    if (this.rtlDirection) {
+      formValue.dateStart = jalaliMoment.from(formValue.dateStart, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+      formValue.dateStop = jalaliMoment.from(formValue.dateStop, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+    } else {
+      formValue.dateStart = moment(formValue.dateStart, 'YYYY/MM/DD').format('YYYY-MM-DD');
+      formValue.dateStop = moment(formValue.dateStop, 'YYYY/MM/DD').format('YYYY-MM-DD');
+    }
+
+    this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this.form.disable();
 
     this._subscription.add(
-      this.api.boardsCalendarDurationTask(formValue).subscribe((resp: any) => {
+      this.apiService.boardsCalendarDurationTask(formValue).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
         try {
           if (resp.result === 1) {
@@ -129,10 +150,12 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
         } catch (e) {
           console.log(e);
         }
-      }, () => {
+      }, (error: HttpErrorResponse) => {
         this.form.enable();
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+        this.refreshLoginService.openLoginDialog(error);
       })
     );
   }

@@ -1,12 +1,11 @@
 <mat-drawer-container [dir]="rtlDirection ? 'rtl' : 'ltr'"
-                      [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'" autosize class="rate-calendar">
+                      [ngClass]="rtlDirection ? 'ca-rtl' : 'ca-ltr'" autosize class="weekday-calendar">
   <dp-day-calendar
-          #dateCalendar
-          (onSelect)="eventClick($event)"
-          *ngIf="showCalendar"
-          [dir]="rtlDirection ? 'rtl' : 'ltr'"
-          [config]="datePickerConfig"
-          class="custom-full-calendar no-margin"
-          theme="dp-material"></dp-day-calendar>
+    #dateCalendar
+    (onSelect)="eventClick($event)"
+    [dir]="rtlDirection ? 'rtl' : 'ltr'"
+    [config]="datePickerConfig"
+    class="custom-full-calendar no-margin mat-elevation-z3"
+    theme="dp-material"></dp-day-calendar>
 
 </mat-drawer-container>

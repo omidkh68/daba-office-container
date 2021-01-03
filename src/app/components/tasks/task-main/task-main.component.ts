@@ -14,10 +14,13 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {CurrentTaskService} from '../services/current-task.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
+import {EventHandlerService} from "../../events/service/event-handler.service";
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
+import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {TaskCalendarRateInterface} from "../task-calendar/services/task-calendar.service";
 import {TaskCalendarFilterComponent} from '../task-calendar/task-calendar-filter/task-calendar-filter.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
@@ -47,6 +50,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   filteredBoardsData: any;
   tabs = [];
   checksTab: string;
+  calendarParameters = {};
   currentTasks: Array<TaskInterface> | null = null;
   projectsList: ProjectInterface[] = [];
   usersList: UserInterface[] = [];
@@ -181,7 +185,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       data: data,
       autoFocus: false,
       width: '500px',
-      height: '250px'
+      height: '450px'
     });
 
     this.windowManagerService.dialogOnTop(dialogRef.id);
@@ -206,7 +210,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       data: data,
       autoFocus: false,
       width: '500px',
-      height: '350px'
+      height: '450px'
     });
 
     this.windowManagerService.dialogOnTop(dialogRef.id);
@@ -214,7 +218,10 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(resp => {
         if (resp && resp.result === 1) {
-          this.filterData = Object.assign({}, resp.filterData);
+          this.filterData = null;
+
+          this.filterData = {...resp.filterData};
+
           this.filteredBoardsData = {
             resp: resp
           };
@@ -237,6 +244,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
   resetFilter() {
     this.refreshBoardData = true;
+    this.filterData = null;
 
     setTimeout(() => {
       this.refreshBoardData = false;

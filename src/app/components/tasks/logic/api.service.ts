@@ -3,13 +3,13 @@ import {AppConfig} from '../../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {TaskInterface} from './task-interface';
+import {TodoInterface} from '../task-todo/logic/todo-interface';
 import {FilterInterface} from './filter-interface';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
 import {ActivityInterface} from '../task-activity/logic/activity-interface';
 import {TaskDurationInterface} from './task-duration-interface';
 import {CompanySelectorService} from '../../select-company/services/company-selector.service';
 import {ResultIncompleteTaskInterface, ResultInterface, ResultTaskInterface} from './board-interface';
-import {TodoInterface} from '../task-todo/logic/todo-interface';
 
 @Injectable({
   providedIn: 'root'

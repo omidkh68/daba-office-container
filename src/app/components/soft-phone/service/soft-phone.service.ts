@@ -67,6 +67,10 @@ export class SoftPhoneService extends LoginDataClass {
   private activeTab = new BehaviorSubject(this._activeTab);
   public currentActiveTab = this.activeTab.asObservable();
 
+  private _closeSoftphone: boolean = false;
+  private closeSoftphone = new BehaviorSubject(this._closeSoftphone);
+  public currentCloseSoftphone = this.closeSoftphone.asObservable();
+
   private audioRemoteTag: BehaviorSubject<EssentialTagsInterface> = new BehaviorSubject(null);
 
   /*videoRemote;
@@ -163,6 +167,18 @@ export class SoftPhoneService extends LoginDataClass {
     this.activeTab.next(tab);
   }
 
+  changeCloseSoftphone(status: boolean) {
+    return new Promise((resolve) => {
+      this.closeSoftphone.next(status);
+
+      if (status) {
+        setTimeout(() => this.closeSoftphone.next(false));
+      }
+
+      resolve(true);
+    });
+  }
+
   combineUsersSoftPhoneInformation() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -173,18 +189,6 @@ export class SoftPhoneService extends LoginDataClass {
 
           this.allUsersSoftphone = [];
 
-          /*this.allUsers.map((user: UserContainerInterface) => {
-            const findExtension = this.extensionList.getValue().filter(ext => ext.username === user.email).pop();
-
-            if (findExtension) {
-              this.allUsersSoftphone.push({
-                ...user,
-                ...findExtension
-              })
-            }
-          });*/
-
-          // this.changeSoftPhoneUsers(this.allUsersSoftphone);
           this.changeSoftPhoneUsers(this.extensionList.getValue());
 
           resolve(true);

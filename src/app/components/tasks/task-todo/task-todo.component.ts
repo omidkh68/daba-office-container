@@ -17,6 +17,7 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {ResultInterface, ResultTaskInterface} from '../logic/board-interface';
 import {TaskInterface} from '../logic/task-interface';
+import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
@@ -52,9 +53,6 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   edit: boolean = false;
   user: UserContainerInterface;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'todo'};
-  todoList: TodoInterface[] = [];
-  private _subscription: Subscription = new Subscription();
-
   tasks: TaskInterface[] = [];
   bottomSheetData = null;
   // usersList: UserInterface[] | null = [];
@@ -62,6 +60,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   // projectsList: ProjectInterface[] | null = [];
   projectsList: any = [];
   breadcrumbList: ProjectInterface[] = [];
+
+  private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
               private fb: FormBuilder,
@@ -126,7 +126,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       taskDateStop: '0000-00-00 00:00:00',
       assigner: new FormControl(this.loggedInUser.email),
       trackable: new FormControl(0),
-      parentTaskId: new FormControl(null),
+      parentTaskId: new FormControl(0),
     });
   }
 

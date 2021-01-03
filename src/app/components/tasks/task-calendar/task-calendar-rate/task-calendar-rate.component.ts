@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  Component,
+  Component, ElementRef,
   Input,
   OnDestroy,
   ViewChild,
@@ -22,7 +22,6 @@ import {EventHandlerService} from "../../../events/service/event-handler.service
 @Component({
   selector: 'app-task-calendar-rate',
   templateUrl: './task-calendar-rate.component.html',
-  styleUrls: ['./task-calendar-rate.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
@@ -36,20 +35,11 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   loginData: LoginInterface;
 
   calendarEvents: any;
-
   sumTime: any;
   userSelected: UserInterface;
-
   rtlDirection: boolean;
-  containerHeight = 300;
   form: FormGroup;
-  header = {};
-  datePickerConfig: any = {
-    dayBtnCssClassCallback: (event) => {
-      this.dayBtnCssClassCallback(event)
-    }
-  };
-
+  datePickerConfig: any = null;
 
   private isVisible: boolean = false;
   private _subscription: Subscription = new Subscription();
@@ -61,10 +51,7 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
               private taskCalendarService: TaskCalendarService,
               private viewDirectionService: ViewDirectionService) {
     this._subscription.add(
-      this.viewDirectionService.currentDirection.subscribe(direction => {
-        this.rtlDirection = direction;
-        this.setupCalendar();
-      })
+      this.viewDirectionService.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
 
     this._subscription.add(
@@ -73,8 +60,6 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
             this.calendarEvents = resp.calendarEvent;
             this.sumTime = resp.sumTime;
             this.userSelected = resp.userSelected;
-            this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
-            this.isVisible = true;
             setTimeout(() => {
               this.drawer.open();
               let goToDate =
@@ -82,6 +67,8 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
                       moment(new Date(resp.filterData.dateStart));
               this.datePickerDirective.api.moveCalendarTo(goToDate);
               document.querySelector('.custom-full-calendar').classList.add('margin-r-full');
+              this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
+              this.isVisible = true;
             },1000)
           }
         })
@@ -113,11 +100,13 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   }
 
   setupCalendar() {
-    this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
-    const element = document.querySelector('#rate-container') as HTMLElement;
-    if (element) {
-      this.containerHeight = element.offsetHeight;
-    }
+    this.datePickerConfig = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      firstDayOfWeek: 'sa',
+      dayBtnCssClassCallback: (event) => {
+        this.dayBtnCssClassCallback(event)
+      }
+    };
   }
 
   getTranslate(word) {

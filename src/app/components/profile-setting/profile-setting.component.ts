@@ -184,8 +184,9 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     formValue['name'] = this.form.get('name').value;
     formValue['timezone'] = this.form.get('timezone').value.timezone;
 
-    if (this.form.get('c_password').value !== null) {
+    if (this.form.get('c_password').value !== null && this.form.get('c_password').value.length) {
       formValue['c_password'] = this.form.get('c_password').value;
+      formValue['password'] = this.form.get('c_password').value;
     }
 
     if (this.form.get('extension_no').value !== null) {
@@ -240,16 +241,9 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
           if (resp.data.lang !== null) {
             this.defaultLang = resp.data.lang;
 
-            this.viewDirection.changeDirection(resp.data.lang === 'fa');
-
-            if (hasReload) {
-              if (this.electronService.isElectron) {
-                this.electronService.remote.app.relaunch();
-                this.electronService.remote.app.exit(0);
-              } else {
-                location.reload();
-              }
-            }
+            this.windowManagerService.closeAllServices().then(() => {
+              this.viewDirection.changeDirection(resp.data.lang === 'fa');
+            });
           }
 
           if (resp.data.dark_mode !== null) {

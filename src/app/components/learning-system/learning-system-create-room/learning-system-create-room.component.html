@@ -1,5 +1,6 @@
 <div *ngIf="form" class="pos-abs left-0 right-0 top-0 bottom-0 padding-full z-index-99">
-  <form (submit)="submit()" *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="form" class="full-height">
+  <form (submit)="submit()" *ngIf="form" [dir]="rtlDirection ? 'rtl' : 'ltr'" [formGroup]="form"
+        class="full-height" autocomplete="off">
     <div class="height-full-minus-45 overflow-x-hide overflow-y-auto full-width">
       <h1 class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
         {{'learning.add_new_room' | translate}}

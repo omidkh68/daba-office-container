@@ -2,7 +2,10 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {ReminderInterface} from '../logic/event-reminder.interface';
 import {EventHandlerInterface, EventsReminderInterface} from '../logic/event-handler.interface';
-import {TaskCalendarRateInterface} from "../../tasks/task-calendar/services/task-calendar.service";
+import {
+  CalendarItemsInterface,
+  TaskCalendarRateInterface
+} from "../../tasks/task-calendar/services/task-calendar.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +18,10 @@ export class EventHandlerService {
   private _eventsTask: Array<any> | null = null;
   private eventsTask = new BehaviorSubject(this._eventsTask);
   public currentEventsTaskList = this.eventsTask.asObservable();
+
+  private _calendarItems: Array<CalendarItemsInterface> | null = null;
+  private calendarItems = new BehaviorSubject(this._calendarItems);
+  public currentCalendarItems = this.calendarItems.asObservable();
 
   private _calendarRate: TaskCalendarRateInterface| null = null;
   private calendarRate = new BehaviorSubject(this._calendarRate);
@@ -36,6 +43,10 @@ export class EventHandlerService {
   private day = new BehaviorSubject(this._day);
   public currentDate = this.day.asObservable();
 
+  get calendarItemsData() {
+    return this.calendarItems.getValue();
+  }
+
   public moveEventsReminders(eventReminders: EventsReminderInterface | null) {
     this.event_reminder.next(eventReminders);
   }
@@ -46,6 +57,10 @@ export class EventHandlerService {
 
   public moveCalendarRate(calendarRate: TaskCalendarRateInterface | null) {
     this.calendarRate.next(calendarRate);
+  }
+
+  public moveCalendarItem(calendarItem: Array<CalendarItemsInterface> | null) {
+    this.calendarItems.next(calendarItem);
   }
 
   public moveEvents(events: Array<EventHandlerInterface> | null) {

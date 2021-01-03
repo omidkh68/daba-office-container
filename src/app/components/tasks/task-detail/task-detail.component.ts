@@ -7,6 +7,8 @@ import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
+import * as moment from 'moment';
+import * as jalaliMoment from 'jalali-moment';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {ProjectInterface} from '../../projects/logic/project-interface';
@@ -45,8 +47,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
   constructor(public dialog: MatDialog,
               private fb: FormBuilder,
-              private api: ApiService,
               private injector: Injector,
+              private apiService: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private translateService: TranslateService,
@@ -60,7 +62,13 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     super(injector, userInfoService);
 
     this._subscription.add(
-      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+      this.viewDirection.currentDirection.subscribe(direction => {
+        this.rtlDirection = direction;
+
+        if (this.form) {
+          this.formPatchValue();
+        }
+      })
     );
   }
 
@@ -150,6 +158,9 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
     const selectedAssignTo = this.usersList.filter(user => user.email === this.task.assignTo.email).pop();
 
+    const taskStartDate = jalaliMoment.from(startDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+    const taskStopDate = jalaliMoment.from(stopDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+
     this.form.patchValue({
       taskId: this.task.taskId,
       taskName: this.task.taskName,
@@ -157,9 +168,9 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
       assignTo: selectedAssignTo,
       taskDurationHours: this.task.taskDurationHours,
       taskDurationMinutes: this.task.taskDurationMinutes,
-      startAt: startDate[0],
+      startAt: taskStartDate,
       startTime: startTime,
-      stopAt: stopDate[0],
+      stopAt: taskStopDate,
       stopTime: stopTime,
       project: selectedProject,
       taskDesc: this.task.taskDesc,
@@ -174,7 +185,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
   }
 
   editableForm() {
-    this.editable = !this.editable;
+    this.editable = true;
 
     if (this.editable) {
       this.form.enable();
@@ -203,10 +214,10 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         if (result) {
           this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-          this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+          this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
           this._subscription.add(
-            this.api.deleteTask(this.task).subscribe((resp: any) => {
+            this.apiService.deleteTask(this.task).subscribe((resp: any) => {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
               if (resp.result) {
@@ -233,17 +244,25 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
   submit() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-    const formValue = Object.assign({}, this.form.value);
+    const formValue = {...this.form.value};
+
+    if (this.rtlDirection) {
+      formValue.startAt = jalaliMoment.from(formValue.startAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+      formValue.stopAt = jalaliMoment.from(formValue.stopAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
+    } else {
+      formValue.startAt = moment(formValue.startAt, 'YYYY/MM/DD').format('YYYY-MM-DD');
+      formValue.stopAt = moment(formValue.stopAt, 'YYYY/MM/DD').format('YYYY-MM-DD');
+    }
 
     formValue.startAt = formValue.startAt + ' ' + formValue.startTime + ':00';
     formValue.stopAt = formValue.stopAt + ' ' + formValue.stopTime + ':00';
 
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this.form.disable();
 
     this._subscription.add(
-      this.api.updateTask(formValue).subscribe((resp: any) => {
+      this.apiService.updateTask(formValue).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result) {
@@ -327,9 +346,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
   getBreadcrumbData(taskId) {
     return new Promise((resolve) => {
-
       this._subscription.add(
-        this.api.getBreadcrumb(taskId).subscribe((resp: any) => {
+        this.apiService.getBreadcrumb(taskId).subscribe((resp: any) => {
           if (resp.result === 1) {
 
             this.breadcrumbList = resp.content;
