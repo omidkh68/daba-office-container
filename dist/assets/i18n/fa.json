@@ -29,7 +29,7 @@
     "to_date": "تا تاریخ",
     "date_error": "لطغا تاریخ را انتخاب نمایید",
     "confirm": "تأیید",
-    "loading": "در حال بارگزاری ...",
+    "loading": "در حال بارگذاری ...",
     "reconnecting": "در حال اتصال ...",
     "online": "شما متصل به شبکه هستید",
     "offline": "اتصال قطع می باشد! شما متصل به شبکه نمی باشید",
@@ -153,7 +153,8 @@
       "activity_list": "لیست فعالیت ها",
       "task_completion_percentage": "درصد تکمیل بودن تسک",
       "completed": "تکمیل شده",
-      "not_completed": "تکمیل نشده"
+      "not_completed": "تکمیل نشده",
+      "task_count" : "تعداد تسک ها"
     },
     "boards": {
       "task_percentage": "درصد پیشبرد",
@@ -208,16 +209,16 @@
       "in_progress_tasks": "تسک های در حال انجام",
       "show_disabled_task": "فقط تسک های غیر فعال"
     },
-    "calendar": {
-      "month": "ماه",
-      "today": "امروز",
-      "week": "هفته",
-      "day": "روز",
-      "list": "لیست"
-    },
     "incomplete_task": {
       "incomplete_tasks": "تسک های ناتمام"
     }
+  },
+  "calendar": {
+    "month": "ماه",
+    "today": "امروز",
+    "week": "هفته",
+    "day": "روز",
+    "list": "لیست"
   },
   "login_info": {
     "username": "نام کاربری",

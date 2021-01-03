@@ -17,7 +17,7 @@ $depths: 50 100 200 300 400 500 600 700 800 900 A100 A200 A400 A700;
   }
 }
 
-$units: 10 15 18 20 23 25 30 35 40 45 50 55 60 65 70 80 90 100 110 120 135 150 160 170 180 200 230 250 300 350 400 450 500 550 800;
+$units: 10 15 18 20 23 25 30 35 40 45 50 55 60 65 70 80 90 100 110 120 135 150 160 170 180 200 230 240 250 300 350 400 450 500 550 800;
 @each $unit in $units{
   .width-#{""+$unit}{width: $unit+px !important}
   .height-#{""+$unit}{height: $unit+px !important}
@@ -25,9 +25,11 @@ $units: 10 15 18 20 23 25 30 35 40 45 50 55 60 65 70 80 90 100 110 120 135 150 1
 }
 
 *{
-  -webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;
-
   &, &::before, &::after{-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box}
+}
+
+*:not(input) {
+  -webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;
 }
 
 a{text-decoration: none !important}
@@ -284,6 +286,7 @@ textarea{height: 60px !important;max-height: 100px !important;resize: none !impo
 .top-nine-tenth{top: .9em !important}
 .top-full-reverse{top: -1em !important}
 .top-full-reverse-percent{top: -100% !important}
+.top-full-plus-three-tenth{top: 1.3em !important}
 .top-full-plus-half{top: 1.5em !important}
 .top-full-plus-half-reverse{top: -1.5em !important}
 .top-half{top: .5em !important}

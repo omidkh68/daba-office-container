@@ -153,7 +153,8 @@
       "activity_list": "Activity List",
       "task_completion_percentage": "Task Completion Percentage",
       "completed": "Completed",
-      "not_completed": "Not Completed"
+      "not_completed": "Not Completed",
+      "task_count" : "Tasks Count"
     },
     "boards": {
       "task_percentage": "Task Percentage",
@@ -208,16 +209,16 @@
       "in_progress_tasks": "In Progress tasks",
       "show_disabled_task": "Only Disabled tasks"
     },
-    "calendar": {
-      "month": "Month",
-      "today": "Today",
-      "week": "Week",
-      "day": "Day",
-      "list": "List"
-    },
     "incomplete_task": {
       "incomplete_tasks": "Incomplete Tasks"
     }
+  },
+  "calendar": {
+    "month": "Month",
+    "today": "Today",
+    "week": "Week",
+    "day": "Day",
+    "list": "List"
   },
   "login_info": {
     "username": "username",
