@@ -20,9 +20,9 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
+import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo';
+import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -158,8 +158,20 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
     const selectedAssignTo = this.usersList.filter(user => user.email === this.task.assignTo.email).pop();
 
-    const taskStartDate = jalaliMoment.from(startDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
-    const taskStopDate = jalaliMoment.from(stopDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+    let taskStartDate;
+    let taskStopDate;
+
+    if (startDate[0] !== 'Invalid') {
+      taskStartDate = jalaliMoment.from(startDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+    } else {
+      taskStartDate = null;
+    }
+
+    if (stopDate[0] !== 'Invalid') {
+      taskStopDate = jalaliMoment.from(stopDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+    } else {
+      taskStopDate = null;
+    }
 
     this.form.patchValue({
       taskId: this.task.taskId,
@@ -266,7 +278,14 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result) {
-          this.bottomSheetData.bottomSheetRef.close();
+
+          if (resp.content.parentTaskId === 0) {
+            this.bottomSheetData.bottomSheetRef.close();
+          } else {
+            this.editableForm();
+
+            this.editable = false;
+          }
 
           this.messageService.showMessage(resp.message);
 
@@ -331,16 +350,11 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
   getBoardData() {
     return new Promise((resolve) => {
-      this._subscription.add(
-        this.taskEssentialInfoService.currentUsersProjectsList.subscribe((data) => {
+      this.usersListNew = this.taskEssentialInfoService.getUsersProjectsList.usersList;
 
-            this.usersListNew = data.usersList;
-            this.projectsListNew = data.projectsList;
+      this.projectsListNew = this.taskEssentialInfoService.getUsersProjectsList.projectsList;
 
-            resolve(true);
-          }
-        )
-      );
+      resolve(true);
     });
   }
 

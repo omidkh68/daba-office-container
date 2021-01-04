@@ -32,8 +32,8 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
-import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo';
+import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
+import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
 
 @Component({
   selector: 'app-task-board',

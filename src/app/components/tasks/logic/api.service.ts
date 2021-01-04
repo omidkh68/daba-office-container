@@ -26,8 +26,7 @@ export class ApiService {
   private headers = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json; charset=UTF-8',
-      'from': 'app_application'
+      'Accept': 'application/json; charset=UTF-8'
     })
   };
 
@@ -172,7 +171,7 @@ export class ApiService {
 
     const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
 
-    return this.http.get<ResultInterface>(`${this.API_URL}/boards/getBreadcrumb/?taskId=${taskId}&page=-1${compId}`, this.headers);
+    return this.http.get<ResultInterface>(`${this.API_URL}/boards/getBreadcrumb/?taskId=${taskId}${compId}`, this.headers);
   }
 
   getSubsetTask(email: string, taskId: number): Observable<ResultInterface> {
@@ -182,10 +181,10 @@ export class ApiService {
 
     const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
 
-    return this.http.get<ResultInterface>(`${this.API_URL}/boards/getSubsetTask/?taskId=${taskId}&email=${email}&page=-1${compId}`, this.headers);
+    return this.http.get<ResultInterface>(`${this.API_URL}/boards/getSubsetTask/?taskId=${taskId}&email=${email}${compId}`, this.headers);
   }
 
-  changePriority(todo: TodoInterface[]): Observable<TodoInterface> {
+  changePriority(todo: TaskInterface[]): Observable<TodoInterface> {
     this.currentCompany = this.companySelectorService.currentCompany;
 
     const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
