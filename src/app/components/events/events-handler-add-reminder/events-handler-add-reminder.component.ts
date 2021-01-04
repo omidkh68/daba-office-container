@@ -1,16 +1,19 @@
-import {Component, Inject, OnDestroy, OnInit,} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {EventHandlerInterface} from '../logic/event-handler.interface';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {EventApiService} from '../logic/api.service';
-import {ReminderTypeInterface} from '../logic/event-reminder.interface';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import * as moment from 'moment';
 import {hours} from '../../../shared/utils';
-import {MessageService} from '../../message/service/message.service';
+import * as jalaliMoment from 'jalali-moment';
 import {TranslateService} from '@ngx-translate/core';
+import {EventApiService} from '../logic/api.service';
+import {Subscription} from 'rxjs/internal/Subscription';
+import {IDatePickerDirectiveConfig} from "ng2-jalali-date-picker";
+import {Component, Inject, OnDestroy, OnInit,} from '@angular/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {MessageService} from '../../message/service/message.service';
 import {EventHandlerService} from '../service/event-handler.service';
+import {EventHandlerInterface} from '../logic/event-handler.interface';
+import {ReminderTypeInterface} from '../logic/event-reminder.interface';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
 
 @Component({
   selector: 'app-events-handler-add-reminder',
@@ -24,6 +27,7 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
   reminderTypeList: ReminderTypeInterface[] = [];
   statusList: ReminderTypeInterface[] = [];
   hours = hours;
+  datePicker: IDatePickerDirectiveConfig = null;
 
   private _subscription: Subscription = new Subscription();
 
@@ -32,6 +36,7 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
               public dialog: MatDialog,
               private eventApi: EventApiService,
               private messageService: MessageService,
+              public dateTimeService: DatetimeService,
               private translateService: TranslateService,
               private eventHandlerService: EventHandlerService,
               public dialogRef: MatDialogRef<EventsHandlerAddReminderComponent>) {
@@ -57,7 +62,16 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
     this.createReminderForm().then(() => {
       this.editableReminder = true;
       this.reminderForm.enable();
+      this.setupDatepickers();
     });
+  }
+
+  setupDatepickers() {
+    this.datePicker = {
+      locale: this.rtlDirection ? 'fa' : 'en',
+      firstDayOfWeek: 'sa',
+      format: this.rtlDirection ? 'YYYY/MM/DD' : 'YYYY/MM/DD'
+    };
   }
 
   selectCurrentTime() {
@@ -82,11 +96,14 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
 
   createReminderForm() {
     return new Promise((resolve) => {
+
+      let sdate = jalaliMoment.from(this.dateTimeService.formatDate(new Date()), 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
+
       this.reminderForm = this.fb.group({
         reminderType: new FormControl(null, Validators.required),
         status: new FormControl(null, Validators.required),
         // endReminder: new FormControl('0000-00-00'),
-        startReminder: new FormControl('0000-00-00', Validators.required),
+        startReminder: new FormControl(sdate, Validators.required),
         startTime: new FormControl(this.selectCurrentTime(), Validators.required),
         endTime: new FormControl(this.selectCurrentTime(), Validators.required),
         description: new FormControl('', Validators.required)
@@ -97,14 +114,13 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
 
   submitReminder() {
     let formValue = {reminders: [this.reminderForm.value], id: this.data.eventItems.id};
-    formValue.reminders[0].startReminder = formValue.reminders[0].startReminder + ' ' + formValue.reminders[0].startTime + ':00';
-    /*formValue.reminders[0].endReminder = formValue.reminders[0].endReminder + " " + formValue.reminders[0].endTime + ":00";
-    if(formValue.reminders[0].startReminder > formValue.reminders[0].endReminder){
-        this.reminderForm.controls['startReminder'].setErrors({'incorrect': true});
-        this.reminderForm.enable();
-        return;
+
+    if (this.rtlDirection) {
+      formValue.reminders[0].startReminder = jalaliMoment.from(formValue.reminders[0].startReminder, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD') + " " + formValue.reminders[0].startTime + ":00";
+    } else {
+      formValue.reminders[0].startReminder = moment(formValue.reminders[0].startReminder, 'YYYY/MM/DD').format('YYYY-MM-DD') + " " + formValue.reminders[0].startTime + ":00";
     }
-    delete formValue.reminders[0].endReminder;*/
+
     this._subscription.add(
       this.eventApi.addNewReminder(formValue).subscribe((resp: any) => {
         if (resp.result == 'successful') {

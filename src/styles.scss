@@ -1188,6 +1188,13 @@ file-preview-container {
 }
 
 .dateCalendar-transparent {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: #ffffffed !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
   dp-day-calendar {
     width: 100%;
 
@@ -1209,11 +1216,6 @@ file-preview-container {
     text-align: center;
     bottom: 2px;
   }
-
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  background: #ffffffab !important;
 
   .event-list {
     .mat-subheader {

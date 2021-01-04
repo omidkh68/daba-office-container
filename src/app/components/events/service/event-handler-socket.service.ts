@@ -1,17 +1,17 @@
+import * as moment from 'moment';
+import {Subscription} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {AppConfig} from '../../../../environments/environment';
 import {Subject} from 'rxjs/internal/Subject';
 import {EventApiService} from '../logic/api.service';
-import {EventHandlerService} from './event-handler.service';
-import {EventHandlerInterface} from '../logic/event-handler.interface';
-import {ReminderInterface} from '../logic/event-reminder.interface';
-import {Subscription} from 'rxjs';
-import {EventHandlerEmailDate, UserContainerInterface} from '../../users/logic/user-container.interface';
-import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
-import {NotificationService} from '../../../services/notification.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ElectronService} from '../../../core/services';
-import * as moment from 'moment';
+import {EventHandlerService} from './event-handler.service';
+import {AppConfig} from '../../../../environments/environment';
+import {ReminderInterface} from '../logic/event-reminder.interface';
+import {EventHandlerInterface} from '../logic/event-handler.interface';
+import {NotificationService} from '../../../services/notification.service';
+import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
+import {EventHandlerEmailDate, UserContainerInterface} from '../../users/logic/user-container.interface';
 
 declare var SockJS;
 declare var Stomp;
@@ -91,54 +91,61 @@ export class EventHandlerSocketService {
           if (Array.isArray(checkNotify)) {
             // receive new reminder
             checkNotify = checkNotify[0];
-            if (!this.electronService.remote.getCurrentWindow().isFocused()) {
-              notification = new Notification(this.getTranslate('events_handler.main.notification_reminder_title'), {
-                body: checkNotify.description + ' ' + checkNotify.startReminder,//this.getTranslate('events_handler.main.notification_reminder_from'),
-                icon: '',
-                dir: 'auto',
-                data: this.loggedInUsers
-              });
+            if (this.electronService.isElectron) {
+              if (!this.electronService.remote.getCurrentWindow().isFocused()) {
+                notification = new Notification(this.getTranslate('events_handler.main.notification_reminder_title'), {
+                  body: checkNotify.description + ' ' + checkNotify.startReminder,//this.getTranslate('events_handler.main.notification_reminder_from'),
+                  icon: '',
+                  dir: 'auto',
+                  data: this.loggedInUsers
+                });
+              }
             }
           } else {
             // receive new event
             if (checkNotify.users && checkNotify.users.length) {
               checkNotify.users.forEach((item) => {
                 //if(item.email == this.loggedInUsers.email){
-                if (!this.electronService.remote.getCurrentWindow().isFocused()) {
-                  notification = new Notification(this.getTranslate('events_handler.main.notification_event_title'), {
-                    body: this.getTranslate('events_handler.main.notification_event_from') + ' ' + checkNotify.createUser.name,
-                    icon: 'assets/profileImg/' + checkNotify.createUser.email + '.jpg',
-                    dir: 'auto',
-                    data: this.loggedInUsers
-                  });
+                if (this.electronService.isElectron) {
+                  if (!this.electronService.remote.getCurrentWindow().isFocused()) {
+                    notification = new Notification(this.getTranslate('events_handler.main.notification_event_title'), {
+                      body: this.getTranslate('events_handler.main.notification_event_from') + ' ' + checkNotify.createUser.name,
+                      icon: 'assets/profileImg/' + checkNotify.createUser.email + '.jpg',
+                      dir: 'auto',
+                      data: this.loggedInUsers
+                    });
+                  }
                 }
                 let eventhandlerModel: EventHandlerEmailDate = {
-                  email : this.loggedInUsers.email,
-                  date : moment(new Date()).format("YYYY-MM-DD")
+                  email: this.loggedInUsers.email,
+                  date: moment(new Date()).format("YYYY-MM-DD")
                 };
-                this.getEventsByEmail(eventhandlerModel , this.loggedInUsers);
+                this.getEventsByEmail(eventhandlerModel, this.loggedInUsers);
               })
             }
           }
 
-          if (!this.electronService.remote.getCurrentWindow().isFocused()) {
-            this.notificationService.changeCurrentNotification(notification);
+          if (this.electronService.isElectron) {
+            if (!this.electronService.remote.getCurrentWindow().isFocused()) {
+              this.notificationService.changeCurrentNotification(notification);
 
-            this._subscription.add(
-              this.notificationService.currentNotification.subscribe(notification => {
-                if (notification) {
-                  notification.onclick = () => {
-                    this.electronService.remote.getCurrentWindow().show();
-                  };
+              this._subscription.add(
+                this.notificationService.currentNotification.subscribe(notification => {
+                  if (notification) {
+                    notification.onclick = () => {
+                      if (this.electronService.isElectron) {
+                        this.electronService.remote.getCurrentWindow().show();
+                      }
+                    };
 
-                  notification.onclose = () => {
-                    //this.decline_call();
-                  };
-                }
-              })
-            );
+                    notification.onclose = () => {
+                      //this.decline_call();
+                    };
+                  }
+                })
+              );
+            }
           }
-
         });
 
         this.stompClient.subscribe('/actionEvent', (message) => {
