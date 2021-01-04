@@ -158,8 +158,20 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     const selectedProject = this.projectsList.filter(project => project.projectId === this.task.project.projectId).pop();
     const selectedAssignTo = this.usersList.filter(user => user.email === this.task.assignTo.email).pop();
 
-    const taskStartDate = jalaliMoment.from(startDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
-    const taskStopDate = jalaliMoment.from(stopDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+    let taskStartDate;
+    let taskStopDate;
+
+    if (startDate[0] !== 'Invalid') {
+      taskStartDate = jalaliMoment.from(startDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+    } else {
+      taskStartDate = null;
+    }
+
+    if (stopDate[0] !== 'Invalid') {
+      taskStopDate = jalaliMoment.from(stopDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+    } else {
+      taskStopDate = null;
+    }
 
     this.form.patchValue({
       taskId: this.task.taskId,
@@ -271,6 +283,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
             this.bottomSheetData.bottomSheetRef.close();
           } else {
             this.editableForm();
+
+            this.editable = false;
           }
 
           this.messageService.showMessage(resp.message);

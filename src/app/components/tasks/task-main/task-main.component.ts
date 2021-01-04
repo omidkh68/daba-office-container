@@ -17,15 +17,12 @@ import {TaskFilterComponent} from '../task-filter/task-filter.component';
 import {EventHandlerService} from "../../events/service/event-handler.service";
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {ButtonSheetDataService} from '../../../services/ButtonSheetData.service';
+import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskCalendarRateInterface} from "../task-calendar/services/task-calendar.service";
 import {TaskCalendarFilterComponent} from '../task-calendar/task-calendar-filter/task-calendar-filter.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
-import {EventHandlerService} from "../../events/service/event-handler.service";
-import {TaskCalendarRateInterface} from "../task-calendar/services/task-calendar.service";
 
 export interface TaskEssentialInfo {
   projectsList: ProjectInterface[];

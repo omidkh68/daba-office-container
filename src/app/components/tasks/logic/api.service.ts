@@ -29,7 +29,6 @@ export class ApiService {
       'Accept': 'application/json; charset=UTF-8'
     })
   };
-  // todo: remove by ebi
 
   constructor(private http: HttpClient,
               private companySelectorService: CompanySelectorService) {

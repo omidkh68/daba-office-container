@@ -17,7 +17,6 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {ResultInterface, ResultTaskInterface} from '../logic/board-interface';
 import {TaskInterface} from '../logic/task-interface';
-import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
