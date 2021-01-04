@@ -1,16 +1,16 @@
 import * as moment from 'moment';
-import {Subscription} from 'rxjs';
-import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/internal/Subject';
-import {EventApiService} from '../logic/api.service';
-import {TranslateService} from '@ngx-translate/core';
-import {ElectronService} from '../../../core/services';
-import {EventHandlerService} from './event-handler.service';
 import {AppConfig} from '../../../../environments/environment';
-import {ReminderInterface} from '../logic/event-reminder.interface';
-import {EventHandlerInterface} from '../logic/event-handler.interface';
-import {NotificationService} from '../../../services/notification.service';
+import {Injectable} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {EventApiService} from '../logic/api.service';
+import {ElectronService} from '../../../core/services';
 import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
+import {TranslateService} from '@ngx-translate/core';
+import {ReminderInterface} from '../logic/event-reminder.interface';
+import {NotificationService} from '../../../services/notification.service';
+import {EventHandlerService} from './event-handler.service';
+import {EventHandlerInterface} from '../logic/event-handler.interface';
 import {EventHandlerEmailDate, UserContainerInterface} from '../../users/logic/user-container.interface';
 
 declare var SockJS;
@@ -118,7 +118,7 @@ export class EventHandlerSocketService {
                 }
                 let eventhandlerModel: EventHandlerEmailDate = {
                   email: this.loggedInUsers.email,
-                  date: moment(new Date()).format("YYYY-MM-DD")
+                  date: moment(new Date()).format('YYYY-MM-DD')
                 };
                 this.getEventsByEmail(eventhandlerModel, this.loggedInUsers);
               })

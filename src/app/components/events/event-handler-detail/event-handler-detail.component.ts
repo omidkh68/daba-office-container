@@ -7,11 +7,10 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ApiService} from '../../users/logic/api.service';
 import {MatTableDataSource} from '@angular/material/table';
-import {EventApiService} from '../../events/logic/api.service';
+import {EventApiService} from '../logic/api.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MessageService} from '../../message/service/message.service';
 import {EventHandlerService} from '../service/event-handler.service';
 import {UserInfoService} from '../../users/services/user-info.service';
@@ -32,7 +31,6 @@ import {EventsHandlerAddReminderComponent} from '../events-handler-add-reminder/
   templateUrl: './event-handler-detail.component.html'
 })
 export class EventHandlerDetailComponent extends LoginDataClass implements OnInit, OnDestroy {
-
   editable: boolean = false;
   form: FormGroup;
   rtlDirection: boolean;
@@ -47,23 +45,21 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
   hours = hours;
   socket = null;
   datePicker: IDatePickerDirectiveConfig = null;
-
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
+  constructor(public dialog: MatDialog,
+              public dateTimeService: DatetimeService,
+              private api: ApiService,
               private fb: FormBuilder,
-              public dialog: MatDialog,
               private injector: Injector,
               private eventApi: EventApiService,
               private messageService: MessageService,
-              public dateTimeService: DatetimeService,
               private userInfoService: UserInfoService,
               private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
               private eventHandlerService: EventHandlerService,
               private windowManagerService: WindowManagerService,
               private eventHandlerSocketService: EventHandlerSocketService) {
-
     super(injector, userInfoService);
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => {
@@ -126,14 +122,19 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
       this.eventApi.getAllActionType().subscribe((resp: any) => {
         if (resp.status == 200) {
           this.actionTypeList = resp.content;
+
           if (this.data.eventItems) {
             this.actionTypeJobList = this.data.eventItems.actionType.actionTypeJobModels;
+
             const item = this.actionTypeList.filter((item: ActionTypeInterface) => item.id === this.data.eventItems.actionType.id).pop();
+
             this.form.patchValue({
               actionType: item
             });
+
             if (this.data.eventItems.actionTypeJobModel) {
               const item = this.actionTypeJobList.filter((item: ActionTypeInterface) => item.id === this.data.eventItems.actionTypeJobModel?.id).pop();
+
               this.form.patchValue({
                 actionTypeJobModel: item
               });
@@ -197,7 +198,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
 
   editUser(user: UserEventHandlerInterface, $event, type: string = '') {
     $event.stopPropagation();
-    user.editable = type == 'close' || type == 'submit' ? false : true;
+    user.editable = !(type == 'close' || type == 'submit');
     user.phoneNumber = type == 'submit' && user.phoneNumberTemp ? user.phoneNumberTemp : user.phoneNumber;
   }
 
@@ -298,9 +299,9 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     let formValue = {...this.form.value};
     formValue.creatorUser = this.loggedInUser;
     if (this.rtlDirection) {
-      formValue.startDate = jalaliMoment.from(this.form.value.startDate, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD') + " " + this.form.value.startTime + ":00";
+      formValue.startDate = jalaliMoment.from(this.form.value.startDate, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD') + ' ' + this.form.value.startTime + ':00';
     } else {
-      formValue.startDate = moment(this.form.value.startDate, 'YYYY/MM/DD').format('YYYY-MM-DD') + " " + this.form.value.startTime + ":00";
+      formValue.startDate = moment(this.form.value.startDate, 'YYYY/MM/DD').format('YYYY-MM-DD') + ' ' + this.form.value.startTime + ':00';
     }
 
     formValue.users = this.selection.selected;
@@ -342,6 +343,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
 
   cancelBtn(event) {
     this.form.disable();
+
     this.editable = false;
 
     if (event) {
@@ -378,13 +380,11 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     } else if (curMinute >= 45) {
       selectedMinute = '45';
     }
-    const totalCurrentTime = curHour + ':' + selectedMinute;
-    return totalCurrentTime;
+    return curHour + ':' + selectedMinute;
   }
 
   createForm() {
     return new Promise((resolve) => {
-
       let sdateFinal = this.data.eventItems ? new Date(this.data.eventItems?.startDate) : this.data.currentDate;
       let edateFinal = this.data.eventItems ? new Date(this.data.eventItems?.endDate) : this.data.currentDate;
 
@@ -412,10 +412,6 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     });
   }
 
-  dateToGregorian(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.form.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
-  }
-
   openAddReminderDialog() {
     let data: any = {
       action: 'add',
@@ -429,6 +425,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
       width: '30%',
       height: '330px'
     });
+
     this.windowManagerService.dialogOnTop(dialogRef.id);
   }
 

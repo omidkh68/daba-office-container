@@ -137,6 +137,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     if (!this.events_reminders.events.length) {
       return;
     }
+
     setTimeout(() => {
       let date =
         this.rtlDirection ?
@@ -176,21 +177,23 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
       email: this.loggedInUser.email,
       date: moment(this.datetimeService.getDateByTimezoneReturnDate(new Date())).format('YYYY-MM-DD')
     };
+
     this.eventHandlerSocketService.getEventsByEmail(eventhandlerModel, this.loggedInUser).then((result: any) => {
       this._subscription.add(
         this.events_reminders = result
       );
+
       let goToDate = this.rtlDirection ?
         jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(new Date())) :
         moment(this.datetimeService.getDateByTimezoneReturnDate(new Date()));
+
       setTimeout(() => {
         this.datePickerDirective.api.moveCalendarTo(goToDate);
-      })
-    })
+      });
+    });
   }
 
   eventClick(event) {
-
     let eventTemp = this.events_reminders.events.filter((item: EventHandlerInterface) => {
       return new Date(item.startDate).toLocaleDateString() == event.date._d.toLocaleDateString();
     });
@@ -225,6 +228,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     } else {
       setTimeout(() => {
         this.currentDate = event.date._d;
+
         this.loadBottomSheet();
       }, 500)
     }
@@ -241,7 +245,9 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
       currentDate: this.currentDate,
       events: this.events_reminders.events
     };
+
     let width = '50%';
+
     if (eventItems && eventItems.creatorUser.email == this.loggedInUser.email)
       width = '80%';
 
@@ -252,8 +258,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         width: width,
         data: data
       });
-    })
-
+    });
   }
 
   getTranslate(word) {

@@ -1,19 +1,19 @@
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild,} from '@angular/core';
 import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
-import {MatDialog} from "@angular/material/dialog";
-import {EventApiService} from "../logic/api.service";
+import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {PopoverService} from "../../popover-widget/popover.service";
-import {EventHandlerService} from "../service/event-handler.service";
-import {ServiceInterface} from "../../services/logic/service-interface";
-import {WindowManagerService} from "../../../services/window-manager.service";
-import {ViewDirectionService} from "../../../services/view-direction.service";
-import {EventHandlerSocketService} from "../service/event-handler-socket.service";
-import {TaskMorelistComponent} from "../../tasks/task-morelist/task-morelist.component";
-import {EventHandlerInterface, EventsReminderInterface} from "../logic/event-handler.interface";
-import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild,} from '@angular/core';
-import {EventHandlerEmailDate, UserContainerInterface} from "../../users/logic/user-container.interface";
+import {PopoverService} from '../../popover-widget/popover.service';
+import {EventApiService} from '../logic/api.service';
+import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
+import {ServiceInterface} from '../../services/logic/service-interface';
+import {EventHandlerService} from '../service/event-handler.service';
+import {WindowManagerService} from '../../../services/window-manager.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
+import {TaskMorelistComponent} from '../../tasks/task-morelist/task-morelist.component';
+import {EventHandlerSocketService} from '../service/event-handler-socket.service';
+import {EventHandlerEmailDate, UserContainerInterface} from '../../users/logic/user-container.interface';
+import {EventHandlerInterface, EventsReminderInterface} from '../logic/event-handler.interface';
 
 @Component({
   selector: 'app-events-handler-calendar',
@@ -80,7 +80,6 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
   }
 
   setupCalendar(): void {
-
     setTimeout(() => {
       this.datePickerConfig = {
         locale: this.rtlDirection ? 'fa' : 'en',
@@ -88,7 +87,9 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
           this.dayBtnCssClassCallback(event)
         }
       };
+
       let goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(new Date())) : moment(this.datetimeService.getDateByTimezoneReturnDate(new Date()));
+
       this.datePickerDirective.api.moveCalendarTo(goToDate);
     })
   }
@@ -97,6 +98,7 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
     if (!this.events_reminders.events.length) {
       return;
     }
+
     setTimeout(() => {
       let date =
         this.rtlDirection ?
@@ -161,7 +163,6 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
   }
 
   showEventHandlerWindow(eventItems: EventHandlerInterface = null, openWindow: boolean = false) {
-
     if (openWindow) {
       this.eventHandlerService.moveDay(null);
     } else {
@@ -176,7 +177,6 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
       });
       this.windowManagerService.openWindowState(service[0])
     }
-
   }
 
   onNavigationClick(event) {
@@ -185,11 +185,11 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
 
   getEvents(date: Date = null) {
     this.events_reminders.reminders = [];
-    let finalDate = moment(this.datetimeService.getDateByTimezoneReturnDate(new Date())).format("YYYY-MM-DD");
+    let finalDate = moment(this.datetimeService.getDateByTimezoneReturnDate(new Date())).format('YYYY-MM-DD');
     let goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(new Date())) : moment(this.datetimeService.getDateByTimezoneReturnDate(new Date()));
 
     if (date) {
-      finalDate = moment(this.datetimeService.getDateByTimezoneReturnDate(date)).format("YYYY-MM-DD");
+      finalDate = moment(this.datetimeService.getDateByTimezoneReturnDate(date)).format('YYYY-MM-DD');
       goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(date)) : moment(this.datetimeService.getDateByTimezoneReturnDate(date));
     }
 

@@ -1,19 +1,18 @@
-import * as moment from 'moment';
-import {hours} from '../../../shared/utils';
-import * as jalaliMoment from 'jalali-moment';
-import {TranslateService} from '@ngx-translate/core';
-import {EventApiService} from '../logic/api.service';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {IDatePickerDirectiveConfig} from "ng2-jalali-date-picker";
 import {Component, Inject, OnDestroy, OnInit,} from '@angular/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {hours} from '../../../shared/utils';
+import * as moment from 'moment';
+import * as jalaliMoment from 'jalali-moment';
+import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
+import {EventApiService} from '../logic/api.service';
+import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
+import {TranslateService} from '@ngx-translate/core';
 import {EventHandlerService} from '../service/event-handler.service';
 import {EventHandlerInterface} from '../logic/event-handler.interface';
 import {ReminderTypeInterface} from '../logic/event-reminder.interface';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DatetimeService} from "../../dashboard/dashboard-toolbar/time-area/service/datetime.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-events-handler-add-reminder',
@@ -90,8 +89,7 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
       selectedMinute = '45';
     }
 
-    const totalCurrentTime = curHour + ':' + selectedMinute;
-    return totalCurrentTime;
+    return curHour + ':' + selectedMinute;
   }
 
   createReminderForm() {
@@ -116,9 +114,9 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
     let formValue = {reminders: [this.reminderForm.value], id: this.data.eventItems.id};
 
     if (this.rtlDirection) {
-      formValue.reminders[0].startReminder = jalaliMoment.from(formValue.reminders[0].startReminder, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD') + " " + formValue.reminders[0].startTime + ":00";
+      formValue.reminders[0].startReminder = jalaliMoment.from(formValue.reminders[0].startReminder, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD') + ' ' + formValue.reminders[0].startTime + ':00';
     } else {
-      formValue.reminders[0].startReminder = moment(formValue.reminders[0].startReminder, 'YYYY/MM/DD').format('YYYY-MM-DD') + " " + formValue.reminders[0].startTime + ":00";
+      formValue.reminders[0].startReminder = moment(formValue.reminders[0].startReminder, 'YYYY/MM/DD').format('YYYY-MM-DD') + ' ' + formValue.reminders[0].startTime + ':00';
     }
 
     this._subscription.add(
@@ -137,10 +135,6 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
 
   cancelReminderBtn() {
     this.dialogRef.close(true);
-  }
-
-  dateToGregorianReminder(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.reminderForm.get(type).setValue(moment(event.value['_d']).format('YYYY-MM-DD'));
   }
 
   getTranslate(word) {

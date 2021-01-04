@@ -15,7 +15,8 @@
               "lodash",
               "jalali-moment",
               "rxjs/internal/observable/of",
-              "rxjs/internal/Subscription"
+              "rxjs/internal/Subscription",
+              "rxjs/internal/Subject"
             ],
             "outputPath": "dist",
             "index": "src/index.html",

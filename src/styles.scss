@@ -44,7 +44,7 @@ html, body {
     $font-name: 'Roboto';
 
     $custom-typography: mat-typography-config(
-            $font-family: $font-name
+      $font-family: $font-name
     );
 
     &,
@@ -68,7 +68,7 @@ html, body {
     $font-name: 'IranSans';
 
     $custom-typography: mat-typography-config(
-            $font-family: $font-name
+      $font-family: $font-name
     );
 
     &,
