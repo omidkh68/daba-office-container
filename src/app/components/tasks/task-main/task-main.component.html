@@ -27,7 +27,8 @@
         <span class="padding-mini-r-l">{{'global.filter' | translate}}</span>
       </button>
 
-      <button (click)="addNewTask()" *ngIf="!activeTab" [disabled]="!taskEssentialInfo" class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal"
+      <button (click)="addNewTask()" *ngIf="!activeTab" [disabled]="!taskEssentialInfo"
+              class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal"
               mat-raised-button>
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
         <span class="padding-mini-r-l">{{'tasks.main.add_new_task' | translate}}</span>

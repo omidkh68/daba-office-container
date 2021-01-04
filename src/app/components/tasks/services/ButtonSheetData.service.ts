@@ -6,7 +6,6 @@ import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomShe
   providedIn: 'root'
 })
 export class ButtonSheetDataService {
-
   private _defaultButtonSheetData: TaskBottomSheetInterface | null = null;
 
   private buttonSheetData = new BehaviorSubject(this._defaultButtonSheetData);

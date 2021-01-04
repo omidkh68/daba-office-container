@@ -1,30 +1,30 @@
-import * as moment from 'moment';
+import {Component, HostListener, Injector, OnDestroy, OnInit} from '@angular/core';
 import {hours} from '../../../shared/utils';
+import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
 import {MatDialog} from '@angular/material/dialog';
-import {TranslateService} from '@ngx-translate/core';
+import {ApiService} from '../../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {SelectionModel} from '@angular/cdk/collections';
-import {ApiService} from '../../users/logic/api.service';
-import {MatTableDataSource} from '@angular/material/table';
-import {EventApiService} from '../logic/api.service';
-import {ApproveComponent} from '../../approve/approve.component';
 import {LoginDataClass} from '../../../services/loginData.class';
-import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 import {MessageService} from '../../message/service/message.service';
-import {EventHandlerService} from '../service/event-handler.service';
+import {EventApiService} from '../logic/api.service';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
+import {ApproveComponent} from '../../approve/approve.component';
+import {TranslateService} from '@ngx-translate/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {EventHandlerService} from '../service/event-handler.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {EventHandlerSocketService} from '../service/event-handler-socket.service';
+import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
+import {EventsHandlerAddReminderComponent} from '../events-handler-add-reminder/events-handler-add-reminder.component';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Component, HostListener, Injector, OnDestroy, OnInit} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
 import {EventHandlerBottomSheetInterface, EventHandlerDataInterface} from '../logic/event-handler-data.interface';
 import {ActionTypeInterface, ActionTypeJobInterface, UserEventHandlerInterface} from '../logic/action-type.interface';
-import {EventsHandlerAddReminderComponent} from '../events-handler-add-reminder/events-handler-add-reminder.component';
 
 @Component({
   styleUrls: ['./event-handler-detail.component.scss'],

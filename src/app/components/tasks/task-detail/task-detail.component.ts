@@ -343,9 +343,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
           this.buttonSheetDataService.changeButtonSheetData(finalData);
         }, 500)
-      })
-
-    })
+      });
+    });
   }
 
   getBoardData() {
@@ -363,8 +362,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
       this._subscription.add(
         this.apiService.getBreadcrumb(taskId).subscribe((resp: any) => {
           if (resp.result === 1) {
-
             this.breadcrumbList = resp.content;
+
             resolve(true);
           }
         }, (error: HttpErrorResponse) => {

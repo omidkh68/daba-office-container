@@ -30,9 +30,9 @@ import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
+import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
 
 @Component({
@@ -214,13 +214,6 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   showTaskDetail(task, boardStatus) {
-    /*this.triggerBottomSheet.emit({
-          component: TaskDetailComponent,
-          height: '98%',
-          width: '95%',
-          data: data
-        });*/
-
     const data: TaskDataInterface = {
       action: 'detail',
       usersList: this.usersList,
