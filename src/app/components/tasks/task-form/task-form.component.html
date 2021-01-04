@@ -74,7 +74,7 @@
         <div class="half-width padding-mini-r-l">
           <mat-form-field class="full-width font-9-em">
             <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                 [srcset]="'assets/profileImg/'+form.get('email').value +'.jpg'"
+                 [src]="'assets/profileImg/'+form.get('email').value +'.jpg'"
                  class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
                  matPrefix>
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>

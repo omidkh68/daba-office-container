@@ -7,6 +7,12 @@
       class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l display-flex flex-space-between">
       <span class="font-9-em">{{board.name | translate}}</span>
 
+      <!--<a [ngClass]="rtlDirection ? 'margin-l-full margin-r-auto' : 'margin-r-full margin-l-auto'"
+         (click)="toggleSearch()"
+         class="cursor-pointer">
+        <mat-icon class="text-blue-700">search</mat-icon>
+      </a>-->
+
       <span class="task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500"
             [ngClass]="board.id">
         {{board.tasks.length}}
@@ -65,15 +71,26 @@
         </mat-card-content>
 
         <mat-card-footer class="padding-mini-t-b padding-r-l height-45 display-flex flex-space-between">
-          <img [src]="'assets/profileImg/'+task.assignTo.email+'.jpg'"
-               onerror="this.src='assets/profileImg/0.jpg'"
-               class="width-25 height-25 round-corner-all mat-elevation-z1"
-               [matTooltip]="task.assignTo.name + ' ' + task.assignTo.family"
-               [matTooltipPosition]="rtlDirection ? 'left' : 'right'"
-               [alt]="task.assignTo.name + ' ' + task.assignTo.family">
+          <span class="display-flex align-items-center">
+            <img [src]="'assets/profileImg/'+task.assignTo.email+'.jpg'"
+                 onerror="this.src='assets/profileImg/0.jpg'"
+                 class="display-block width-25 height-25 round-corner-all mat-elevation-z1"
+                 [alt]="task.assignTo.name + ' ' + task.assignTo.family">
+            <span class="display-block full-height line-height-25 padding-mini-r-l text-eclipse width-150">
+              {{task.assignTo.name + ' ' + task.assignTo.family}}
+            </span>
+          </span>
 
-          <span [ngClass]="rtlDirection ? 'margin-r-full margin-l-auto' : 'margin-l-full margin-r-auto'"
-                class="width-25 height-25 round-corner-all mat-elevation-z1 pos-rel"
+          <span [ngClass]="rtlDirection ? 'margin-l-full margin-r-auto' : 'margin-r-full margin-l-auto'"
+                class="display-flex padding-tiny-t-b" matTooltip="{{'tasks.boards.todo_count' | translate}}"
+                [matTooltipPosition]="rtlDirection ? 'right' : 'left'">
+            <mat-icon class="width-18 height-18 font-full-plus-three-tenth-em line-height-20 margin-mini-r-l">
+              rule
+            </mat-icon>
+            {{task.todoCount}}
+          </span>
+
+          <span class="width-25 height-25 round-corner-all mat-elevation-z1 pos-rel"
                 matTooltip="{{'tasks.boards.task_percentage' | translate}}"
                 [matTooltipPosition]="rtlDirection ? 'left' : 'right'">
             <span
@@ -87,14 +104,6 @@
               [value]="task.percentage"
               color="accent">
             </mat-progress-spinner>
-          </span>
-
-          <span class="display-flex padding-tiny-t-b" matTooltip="{{'tasks.boards.todo_count' | translate}}"
-                [matTooltipPosition]="rtlDirection ? 'right' : 'left'">
-            <mat-icon class="width-18 height-18 font-full-plus-three-tenth-em line-height-20 margin-mini-r-l">
-              rule
-            </mat-icon>
-            {{task.todoCount}}
           </span>
         </mat-card-footer>
       </mat-card>

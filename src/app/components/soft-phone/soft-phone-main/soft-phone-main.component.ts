@@ -231,7 +231,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       } else {
         this.activePermissionRequest = 'denied';
       }
-    })
+    });
   }
 
   getTranslate(word) {

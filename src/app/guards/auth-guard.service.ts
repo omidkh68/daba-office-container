@@ -25,6 +25,8 @@ export interface DataInterface {
   providedIn: 'root'
 })
 export class AuthGuardService extends LoginDataClass implements CanActivate, OnDestroy {
+  rtlDirection: boolean;
+
   private _subscription: Subscription = new Subscription();
 
   constructor(@Inject('windowObject') private window,
@@ -40,6 +42,10 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
               private companySelectorService: CompanySelectorService,
               private wallpaperSelectorService: WallpaperSelectorService) {
     super(injector, userInfoService);
+
+    this._subscription.add(
+      this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
+    );
   }
 
   canActivate(): Promise<boolean> {
@@ -116,10 +122,6 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
         this.api.checkLogin().subscribe((resp: CheckLoginInterface) => {
           if (resp.success === true) {
-            const successfulMessage = this.getTranslate('login_info.login_successfully');
-
-            this.messageService.showMessage(successfulMessage, 'success');
-
             resolve(resp.data);
           }
         }, () => {
@@ -131,22 +133,32 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     });
   }
 
-  setUserData(data: DataInterface) {
-    this.userInfoService.changeLoginData(data.loginData);
+  async setUserData(data: DataInterface) {
+    await this.userInfoService.changeLoginData(data.loginData);
 
-    this.userInfoService.changeUserInfo(data.userInfo);
+    await this.userInfoService.changeUserInfo(data.userInfo);
 
-    this.viewDirection.changeDirection(data.userInfo.lang === 'fa');
+    await this.viewDirection.changeDirection(data.userInfo.lang === 'fa');
 
-    this.changeStatusService.changeUserStatus(data.userInfo.user_status);
+    await this.changeStatusService.changeUserStatus(data.userInfo.user_status);
 
-    this.companySelectorService.changeCompanyList(data.userInfo.companies);
+    await this.companySelectorService.changeCompanyList(data.userInfo.companies);
 
-    this.wallpaperSelectorService.changeWallpaper(data.userInfo.background_image ? data.userInfo.background_image : '');
+    await this.wallpaperSelectorService.changeWallpaper(data.userInfo.background_image ? data.userInfo.background_image : '');
+
+    setTimeout(() => {
+      this.getTranslate(data.userInfo.lang, 'login_info.login_successfully').then((successfulMessage: string) => {
+        this.messageService.showMessage(successfulMessage, 'success');
+      });
+    });
   }
 
-  getTranslate(word) {
-    return this.translate.instant(word);
+  getTranslate(lang, word) {
+    return new Promise((resolve) => {
+      const translatedWord = this.translate.instant(word);
+
+      resolve(translatedWord);
+    });
   }
 
   ngOnDestroy() {

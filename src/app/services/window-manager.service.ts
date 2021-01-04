@@ -317,6 +317,6 @@ export class WindowManagerService {
           element.parentElement.parentElement.style.zIndex = maxZIndex;
         }
       }
-    }, 0);
+    }, 200);
   }
 }

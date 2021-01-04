@@ -77,47 +77,49 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     );
 
     if (this.userCurrentStatus === null || (this.userCurrentStatus && this.userCurrentStatus.end_time !== null)) {
-      const dialogRef = this.dialog.open(ApproveComponent, {
-        data: {
-          title: this.getTranslate('status.start_working'),
-          message: this.getTranslate('status.start_working_time'),
-          action: 'success'
-        },
-        autoFocus: false,
-        width: '70vh',
-        maxWidth: '350px',
-        panelClass: 'approve-detail-dialog',
-        height: '160px'
+      setTimeout(() => {
+        const dialogRef = this.dialog.open(ApproveComponent, {
+          data: {
+            title: this.getTranslate('status.start_working'),
+            message: this.getTranslate('status.start_working_time'),
+            action: 'success'
+          },
+          autoFocus: false,
+          width: '70vh',
+          maxWidth: '350px',
+          panelClass: 'approve-detail-dialog',
+          height: '160px'
+        });
+
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+
+        this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+
+        this._subscription.add(
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              this._subscription.add(
+                this.apiService.userChangeStatus({
+                  user_id: this.loggedInUser.id,
+                  status: 1
+                }).subscribe((resp: StatusChangeResultInterface) => {
+                  if (resp.success) {
+                    this.changeStatusService.changeUserStatus(resp.data);
+
+                    this.messageService.showMessage(this.getTranslate('status.status_success'));
+                  } else {
+                    this.messageService.showMessage(this.getTranslate('status.status_description_error'));
+                  }
+                })
+              );
+
+              setTimeout(() => this.openIncompleteTasks(), 2000);
+            }
+
+            this.openSoftPhone();
+          })
+        );
       });
-
-      this.windowManagerService.dialogOnTop(dialogRef.id);
-
-      this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-      this._subscription.add(
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            this._subscription.add(
-              this.apiService.userChangeStatus({
-                user_id: this.loggedInUser.id,
-                status: 1
-              }).subscribe((resp: StatusChangeResultInterface) => {
-                if (resp.success) {
-                  this.changeStatusService.changeUserStatus(resp.data);
-
-                  this.messageService.showMessage(this.getTranslate('status.status_success'));
-                } else {
-                  this.messageService.showMessage(this.getTranslate('status.status_description_error'));
-                }
-              })
-            );
-
-            setTimeout(() => this.openIncompleteTasks(), 2000);
-          }
-
-          this.openSoftPhone();
-        })
-      );
     } else {
       this.openSoftPhone();
     }
