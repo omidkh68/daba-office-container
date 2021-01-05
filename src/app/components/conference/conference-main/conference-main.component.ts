@@ -55,7 +55,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
         this.reloadWebView = status;
 
         if (this.reloadWebView && this.webFrame) {
-          if (this.electronService.isElectron) {
+          if (this.isElectron) {
             this.webFrame.nativeElement.reloadIgnoringCache();
           } else {
             const src = this.webFrame.nativeElement.getAttribute('src');
@@ -92,7 +92,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
 
           this.webFrame.nativeElement.setAttribute('src', address);
 
-          if (this.electronService.isElectron) {
+          if (this.isElectron) {
             this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
 
               this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
@@ -124,7 +124,10 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
 
   exitOfConference() {
     this.webFrame.nativeElement.setAttribute('src', '');
-    this.webFrame.nativeElement.stop();
+
+    if (this.isElectron) {
+      this.webFrame.nativeElement.stop();
+    }
 
     this.showFrame = false;
   }

@@ -7,6 +7,7 @@ import {MessageService} from '../message/service/message.service';
 import {LoginDataClass} from '../../services/loginData.class';
 import {WindowInterface} from './logic/window.interface';
 import {UserInfoService} from '../users/services/user-info.service';
+import {ElectronService} from '../../core/services';
 import {SoftPhoneService} from '../soft-phone/service/soft-phone.service';
 import {ServiceInterface} from '../services/logic/service-interface';
 import {TranslateService} from '@ngx-translate/core';
@@ -17,7 +18,6 @@ import {CompanySelectorService} from '../select-company/services/company-selecto
 import {WallpaperSelectorService} from '../../services/wallpaper-selector.service';
 import {StatusChangeResultInterface} from '../status/logic/result-interface';
 import {ApiService as StatusApiService} from '../status/logic/api.service';
-import {ElectronService} from '../../core/services';
 
 @Component({
   selector: 'app-dashboard',
