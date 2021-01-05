@@ -42,15 +42,17 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
         this.reloadWebView = status;
 
         if (this.reloadWebView && this.reloadWebView.doRefresh && this.webFrame) {
-          if (this.electronService.isElectron) {
+          if (this.isElectron) {
             this.webFrame.nativeElement.reloadIgnoringCache();
           } else {
             const src = this.webFrame.nativeElement.getAttribute('src');
 
             this.webFrame.nativeElement.setAttribute('src', '');
 
+            const rndTime = Date.now();
+
             setTimeout(() => {
-              this.webFrame.nativeElement.setAttribute('src', src);
+              this.webFrame.nativeElement.setAttribute('src', src + `&var=${rndTime}`);
             }, 500);
           }
         }
@@ -60,9 +62,11 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
 
   ngAfterViewInit(): void {
     if (this.webFrame) {
-      this.webFrame.nativeElement.setAttribute('src', this.frameUrl);
+      const rndTime = Date.now();
 
-      if (this.electronService.isElectron) {
+      this.webFrame.nativeElement.setAttribute('src', this.frameUrl + `&var=${rndTime}`);
+
+      if (this.isElectron) {
         this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
           this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
 

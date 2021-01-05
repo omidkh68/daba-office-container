@@ -20,14 +20,14 @@
         <span class="font-8-rem line-height-25">{{'global.reset_filter' | translate}}</span>
       </button>
 
-      <button (click)="showFilter()" [disabled]="!taskEssentialInfo" [ngClass]="{'margin-r-l': !activeTab}"
+      <button (click)="showFilter()" [disabled]="!taskEssentialInfo || disableButton" [ngClass]="{'margin-r-l': !activeTab}"
               class="white-gradient padding-mini-r-l text-gray-800 line-height-30 font-9-em overflow-hide text-weight-normal"
               mat-raised-button>
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">filter_list</mat-icon>
         <span class="padding-mini-r-l">{{'global.filter' | translate}}</span>
       </button>
 
-      <button (click)="addNewTask()" *ngIf="!activeTab" [disabled]="!taskEssentialInfo"
+      <button (click)="addNewTask()" *ngIf="!activeTab" [disabled]="!taskEssentialInfo || disableButton"
               class="green-gradient padding-mini-r-l text-white line-height-30 font-9-em overflow-hide text-weight-normal"
               mat-raised-button>
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">add</mat-icon>
@@ -43,6 +43,7 @@
       <div *ngSwitchCase="0" class="full-height padding-mini-r-l">
         <app-task-board (pushTaskEssentialInfo)="getTaskEssentialInfo($event)"
                         (triggerBottomSheet)="openButtonSheet($event)"
+                        (resetFilter)="makeFilterReset($event)"
                         [filterBoards]="filteredBoardsData"
                         [pushTaskToBoard]="pushTaskToBoard"
                         [refreshData]="refreshBoardData"

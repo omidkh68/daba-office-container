@@ -40,7 +40,12 @@
     "items": "Items",
     "done": "Done",
     "enter": "Enter",
-    "default": "Current"
+    "default": "Current",
+    "close_app": "Close",
+    "minimize_app": "Minimize window",
+    "maximize_app": "Maximize window",
+    "restore_app": "Restore window",
+    "bring_to_front_app": "Bring to front"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -162,7 +167,8 @@
       "todo": "Todo",
       "in_progress": "In Progress",
       "done": "Done",
-      "overdue": "Task date is overdue"
+      "overdue": "Task date is overdue",
+      "search_in": "Search between"
     },
     "task_stop": {
       "stop_description": "Explain about task stopped",

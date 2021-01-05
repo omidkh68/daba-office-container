@@ -62,8 +62,10 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
 
             this.webFrame.nativeElement.setAttribute('src', '');
 
+            const rndTime = Date.now();
+
             setTimeout(() => {
-              this.webFrame.nativeElement.setAttribute('src', src);
+              this.webFrame.nativeElement.setAttribute('src', src + '&var=' + rndTime);
             }, 500);
           }
         }
@@ -88,7 +90,9 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
 
           this.confAddress = resp.confname;
 
-          const address = `${AppConfig.CONF_URL}?username=${resp.username}&confname=${resp.confname}&lang=${this.rtlDirection ? 'fa' : 'en'}&darkMode=${this.loggedInUser.dark_mode}`;
+          const rndTime = Date.now();
+
+          const address = `${AppConfig.CONF_URL}?username=${resp.username}&confname=${resp.confname}&lang=${this.rtlDirection ? 'fa' : 'en'}&darkMode=${this.loggedInUser.dark_mode}&var=${rndTime}`;
 
           this.webFrame.nativeElement.setAttribute('src', address);
 

@@ -109,8 +109,10 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
   setupDatepickers() {
     this.datePicker = {
       locale: this.rtlDirection ? 'fa' : 'en',
-      firstDayOfWeek: 'sa',
-      format: this.rtlDirection ? 'YYYY/MM/DD' : 'YYYY/MM/DD'
+      firstDayOfWeek: this.rtlDirection ? 'sa' : 'mo',
+      format: 'YYYY/MM/DD',
+      closeOnSelect: true,
+      closeOnSelectDelay: 150
     };
   }
 

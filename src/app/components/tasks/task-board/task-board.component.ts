@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Injector,
   Input,
@@ -7,7 +8,11 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  Pipe,
+  PipeTransform,
+  QueryList,
+  SimpleChanges,
+  ViewChildren
 } from '@angular/core';
 import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
@@ -41,11 +46,16 @@ import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.serv
   styleUrls: ['./task-board.component.scss']
 })
 export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDestroy, OnChanges {
+  @ViewChildren('searchBox') searchBoxes: QueryList<ElementRef>;
+
   @Output()
   triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
 
   @Output()
   pushTaskEssentialInfo = new EventEmitter();
+
+  @Output()
+  resetFilter = new EventEmitter<boolean>();
 
   @Input()
   pushTaskToBoard;
@@ -67,6 +77,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   usersList: UserInterface[] = [];
   projectsList: ProjectInterface[] = [];
   currentTasks: Array<TaskInterface> | null = null;
+  filterArgs = null;
+  showFilterArgs = null;
 
   private _subscription: Subscription = new Subscription();
 
@@ -93,17 +105,39 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       this.refreshBoardService.currentDoRefresh.subscribe(doRefresh => {
         if (doRefresh) {
           this.getBoards();
+
+          this.doResetFilter();
         }
       })
     );
 
     this._subscription.add(
-      this.userInfoService.currentLoginData.subscribe(() => this.getBoards())
+      this.userInfoService.currentLoginData.subscribe(() => {
+        this.getBoards();
+
+        this.doResetFilter();
+      })
     );
   }
 
   ngOnInit(): void {
     this.rowHeight = '100%';
+
+    this.resetColumnFilter();
+  }
+
+  resetColumnFilter() {
+    this.filterArgs = {
+      todo: null,
+      inProgress: null,
+      done: null
+    };
+
+    this.showFilterArgs = {
+      todo: false,
+      inProgress: false,
+      done: false
+    };
   }
 
   changeStatus(event: CdkDragDrop<string[]>) {
@@ -191,6 +225,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       const editedTask: TaskInterface = {...newTask, percentage: 0, boardStatus: 'todo'};
       this.showTaskStopModal(editedTask);
     }
+
+    this.resetColumnFilter();
   }
 
   showTaskStopModal(task) {
@@ -208,6 +244,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.getBoards();
+
+          this.doResetFilter();
         }
       })
     );
@@ -311,6 +349,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this.currentTaskService.changeCurrentTask(this.myTasks);
 
     this.myTasks = [];
+
+    this.resetColumnFilter();
   }
 
   getBoards() {
@@ -333,6 +373,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
             this.taskEssentialInfoService.changeUsersProjectsList(data)
 
             this.putTasksToAllBoards(resp);
+
+            this.resetColumnFilter();
           }
         }, (error: HttpErrorResponse) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
@@ -357,9 +399,25 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     }
   }
 
+  doResetFilter() {
+    this.resetFilter.emit(true);
+  }
+
+  focusSearchBox(boardId) {
+    this.searchBoxes.toArray().map((searchBox: ElementRef) => {
+      const el = searchBox.nativeElement;
+
+      if (el.getAttribute('aria-label') === boardId) {
+        setTimeout(() => el.focus(), 0);
+      }
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.refreshData) {
       this.getBoards();
+
+      this.doResetFilter();
     }
 
     if (changes.filterBoards && !changes.filterBoards.firstChange) {
@@ -379,5 +437,43 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
+  }
+}
+
+@Pipe({
+  name: 'myFilter',
+  pure: false
+})
+export class MyFilterPipe implements PipeTransform {
+  transform(items: TaskInterface[], filter: string): TaskInterface[] {
+    if (!items || !filter) {
+      return items;
+    }
+
+    return items.filter((task: TaskInterface) => {
+      if (task.taskName.toLowerCase().includes(filter.toLowerCase())) {
+        return task;
+      }
+
+      if (task.project.projectName.toLowerCase().includes(filter.toLowerCase())) {
+        return task;
+      }
+
+      if (task.assigner.toLowerCase().includes(filter.toLowerCase())) {
+        return task;
+      }
+
+      if (task.assignTo.name.toLowerCase().includes(filter.toLowerCase())) {
+        return task;
+      }
+
+      if (task.assignTo.family.toLowerCase().includes(filter.toLowerCase())) {
+        return task;
+      }
+
+      if (task.assignTo.email.toLowerCase().includes(filter.toLowerCase())) {
+        return task;
+      }
+    });
   }
 }

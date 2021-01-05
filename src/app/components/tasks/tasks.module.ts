@@ -8,7 +8,7 @@ import {TaskMainComponent} from './task-main/task-main.component';
 import {TaskStopComponent} from './task-stop/task-stop.component';
 import {TaskTodoComponent} from './task-todo/task-todo.component';
 import {TaskFormComponent} from './task-form/task-form.component';
-import {TaskBoardComponent} from './task-board/task-board.component';
+import {MyFilterPipe, TaskBoardComponent} from './task-board/task-board.component';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 import {TaskFilterComponent} from './task-filter/task-filter.component';
 import {TaskDetailComponent} from './task-detail/task-detail.component';
@@ -26,6 +26,7 @@ import {TaskReportDescriptionComponent} from './task-description/task-report-des
 
 @NgModule({
   declarations: [
+    MyFilterPipe,
     TaskAddComponent,
     TaskStopComponent,
     TaskMainComponent,

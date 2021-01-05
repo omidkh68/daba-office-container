@@ -40,7 +40,12 @@
     "items": "مورد",
     "done": "تأیید",
     "enter": "ورود",
-    "default": "پیشفرض"
+    "default": "پیشفرض",
+    "close_app": "بستن",
+    "minimize_app": "کوچک کردن پنجره",
+    "maximize_app": "بزرگ کردن پنجره",
+    "restore_app": "حالت عادی پنجره",
+    "bring_to_front_app": "بازیابی پنجره"
   },
   "dashboard": {
     "dashboard_toolbar": {
@@ -162,7 +167,8 @@
       "todo": "آماده انجام",
       "in_progress": "در حال انجام",
       "done": "به اتمام رسیده",
-      "overdue": "زمان انجام تسک به تأخیر خورده است"
+      "overdue": "زمان انجام تسک به تأخیر خورده است",
+      "search_in": "جستجو بین"
     },
     "task_stop": {
       "stop_description": "توضیح توقف تسک",

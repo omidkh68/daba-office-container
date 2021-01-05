@@ -56,6 +56,7 @@ html, body {
     h6,
     p,
     button,
+    input,
     span {
       margin: 0;
       font-family: $font-name;
@@ -80,6 +81,7 @@ html, body {
     h6,
     p,
     button,
+    input,
     span {
       margin: 0;
       font-family: $font-name;
@@ -601,6 +603,10 @@ file-preview-container {
     &:first-child, .app-open:first-child {
       margin-left: 0 !important;
     }
+
+    .app-open:only-of-type {
+      margin: 0 !important;
+    }
   }
 }
 
@@ -612,6 +618,10 @@ file-preview-container {
 
     &:first-child, .app-open:first-child {
       margin-right: 0 !important;
+    }
+
+    .app-open:only-of-type {
+      margin: 0 !important;
     }
   }
 }

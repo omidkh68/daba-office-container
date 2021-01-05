@@ -41,6 +41,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   taskEssentialInfo: TaskEssentialInfo;
   pushTaskToBoard;
   doResetFilter: boolean = false;
+  disableButton: boolean = false;
   activeTab: number = 0;
   refreshBoardData: boolean = false;
   filterData: FilterInterface = null;
@@ -129,6 +130,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   }
 
   addNewTask() {
+    this.disableButton = true;
+
     let data: TaskDataInterface = {
       action: 'add',
       usersList: this.taskEssentialInfo.usersList,
@@ -146,6 +149,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
+        this.disableButton = false;
+
         if (result) {
           this.refreshBoardData = true;
 
@@ -189,6 +194,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe((resp: TaskCalendarRateInterface) => {
+        this.disableButton = false;
+
         if (resp) {
           this.eventHandlerService.moveCalendarRate(resp);
         }
@@ -214,6 +221,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(resp => {
+        this.disableButton = false;
+
         if (resp && resp.result === 1) {
           this.filterData = null;
 
@@ -230,6 +239,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   }
 
   showFilter() {
+    this.disableButton = true;
+
     if (this.checksTab === undefined || this.checksTab == 'calendar_task' || !this.activeTab) {
       this.showTaskFilter();
     } else if (this.checksTab == 'calendar_task_rate' && this.activeTab) {
@@ -247,6 +258,12 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       this.refreshBoardData = false;
       this.doResetFilter = false;
     }, 200);
+  }
+
+  makeFilterReset(event) {
+    if (event) {
+      this.resetFilter();
+    }
   }
 
   openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {

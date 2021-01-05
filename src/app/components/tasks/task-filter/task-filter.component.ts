@@ -185,9 +185,10 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
   setupDatepickers() {
     this.datePicker = {
       locale: this.rtlDirection ? 'fa' : 'en',
-      firstDayOfWeek: 'sa',
+      firstDayOfWeek: this.rtlDirection ? 'sa' : 'mo',
       format: 'YYYY/MM/DD',
-      drops: 'up'
+      closeOnSelect: true,
+      closeOnSelectDelay: 150
     };
   }
 

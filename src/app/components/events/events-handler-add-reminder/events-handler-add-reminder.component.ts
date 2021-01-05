@@ -68,8 +68,10 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
   setupDatepickers() {
     this.datePicker = {
       locale: this.rtlDirection ? 'fa' : 'en',
-      firstDayOfWeek: 'sa',
-      format: this.rtlDirection ? 'YYYY/MM/DD' : 'YYYY/MM/DD'
+      firstDayOfWeek: this.rtlDirection ? 'sa' : 'mo',
+      format: this.rtlDirection ? 'YYYY/MM/DD' : 'YYYY/MM/DD',
+      closeOnSelect: true,
+      closeOnSelectDelay: 150
     };
   }
 

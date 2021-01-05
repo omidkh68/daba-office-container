@@ -1,22 +1,42 @@
 <mat-grid-list *ngIf="boards.length" [dir]="rtlDirection ? 'rtl' : 'ltr'" cols="3" gutterSize="10" rowHeight="40px">
-  <mat-grid-tile class="board-container"
+  <mat-grid-tile class="board-container round-corner-top"
                  *ngFor="let board of boards"
                  [colspan]="board.cols"
                  [rowspan]="board.rows">
     <div
-      class="board-name pos-abs top-0 right-0 full-width padding-mini-t-b padding-r-l display-flex flex-space-between">
+      class="board-name pos-abs top-0 right-0 full-width full-height padding-mini-t-b padding-r-l display-flex flex-space-between align-items-center pos-rel">
       <span class="font-9-em">{{board.name | translate}}</span>
 
-      <!--<a [ngClass]="rtlDirection ? 'margin-l-full margin-r-auto' : 'margin-r-full margin-l-auto'"
-         (click)="toggleSearch()"
-         class="cursor-pointer">
+      <a (click)="showFilterArgs[board.id]=true; focusSearchBox(board.id)"
+         [ngClass]="rtlDirection ? 'margin-l-full margin-r-auto' : 'margin-r-full margin-l-auto'"
+         class="cursor-pointer full-height">
         <mat-icon class="text-blue-700">search</mat-icon>
-      </a>-->
+      </a>
 
       <span class="task-count width-25 height-25 line-height-20 font-7-em text-center text-weight-500"
             [ngClass]="board.id">
         {{board.tasks.length}}
       </span>
+
+      <div [ngClass]="showFilterArgs[board.id] ? 'display-flex' : 'display-none'"
+        class="full-width full-height flex-space-between align-items-center pos-abs top-0 bottom-0 left-0 right-0">
+        <mat-icon [ngClass]="rtlDirection ? 'right-half' : 'left-half'"
+                  class="pos-abs width-25 height-25 line-height-20 font-full-plus-two-tenth-em flex-center">
+          search
+        </mat-icon>
+
+        <input [(ngModel)]="filterArgs[board.id]"
+               (keydown)="$event.code === 'Escape' ? showFilterArgs[board.id] = false : null; $event.code === 'Escape' ? filterArgs[board.id] = null : ''"
+               #searchBox
+               [attr.aria-label]="board.id"
+               placeholder="{{'tasks.boards.search_in' | translate}} {{board.name | translate}}"
+               class="font-9-em full-width full-height no-border padding-r-l-two-plus-half no-margin round-corner-top">
+
+        <mat-icon (click)="filterArgs[board.id]=null; showFilterArgs[board.id]=false" [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
+                  class="pos-abs width-25 height-25 line-height-20 font-full-plus-two-tenth-em flex-center cursor-pointer">
+          close
+        </mat-icon>
+      </div>
     </div>
   </mat-grid-tile>
 </mat-grid-list>
@@ -26,8 +46,8 @@
                  [colspan]="board.cols"
                  [rowspan]="board.rows">
     <div class="task-container full-height full-width padding-full overflow-x-hide overflow-y-auto"
-         id="{{board.id}}"
          cdkDropList
+         [id]="board.id"
          (cdkDropListDropped)="changeStatus($event)"
          [cdkDropListData]="board.tasks"
          [cdkDropListConnectedTo]="connectedTo">
@@ -45,7 +65,7 @@
                 [cdkDragData]="task"
                 matTooltip="{{task.overdue ? ('tasks.boards.overdue' | translate) : null}}"
                 (click)="showTaskDetail(task, board.id)"
-                *ngFor="let task of board.tasks" cdkDrag>
+                *ngFor="let task of board.tasks | myFilter:filterArgs[board.id]" cdkDrag>
         <mat-card-header class="full-width">
           <mat-card-subtitle class="full-width height-30 text-gray-600 display-flex flex-space-between no-margin">
             <span class="display-flex">

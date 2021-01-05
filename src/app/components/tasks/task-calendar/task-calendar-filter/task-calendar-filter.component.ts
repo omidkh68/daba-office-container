@@ -70,9 +70,10 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
   setupDatepickers() {
     this.datePicker = {
       locale: this.rtlDirection ? 'fa' : 'en',
-      firstDayOfWeek: 'sa',
-      format: 'YYYY/MM/DD',
-      drops: 'up'
+      firstDayOfWeek: this.rtlDirection ? 'sa' : 'mo',
+      format: this.rtlDirection ? 'YYYY/MM/DD' : 'YYYY/MM/DD',
+      closeOnSelect: true,
+      closeOnSelectDelay: 150
     };
   }
 

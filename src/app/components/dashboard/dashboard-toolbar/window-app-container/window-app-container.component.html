@@ -3,10 +3,89 @@
      class="box mat-elevation-z1 pos-rel text-center round-corner height-40 overflow-hide">
   <button (click)="controlWindow(app)"
           *ngFor="let app of windowManager"
-          [matTooltip]="rtlDirection ? app.windowService.serviceNameFa : app.windowService.serviceNameEn"
+          (contextmenu)="onContextMenu($event, app)"
+          [matTooltip]="rtlDirection ? app.windowService.name_fa : app.windowService.name"
           [ngClass]="{'app-minimized': app.isMinimized}"
           class="app-open pos-rel no-bg no-border no-padding width-40 full-height cursor-pointer"
           matTooltipPosition="above">
     <mat-icon class="text-dark-mode-color">{{app.windowService.icon}}</mat-icon>
   </button>
+  <div style="visibility: hidden; position: fixed"
+       [style.left]="contextMenuPosition.x"
+       [style.top]="contextMenuPosition.y"
+       [matMenuTriggerFor]="contextMenu">
+  </div>
+  <mat-menu #contextMenu="matMenu">
+    <ng-template matMenuContent let-app="app" class="padding-r-l">
+      <h3
+        class="window-title full-width line-height-40 font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin padding-mini-r-l">
+        <mat-icon [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
+                  class="text-dark-mode-color pos-rel no-margin">{{app.windowService.icon}}</mat-icon>
+        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+          {{rtlDirection ? app.windowService.name_fa : app.windowService.name}}
+        </span>
+      </h3>
+
+      <mat-divider></mat-divider>
+
+      <button mat-menu-item (click)="maximize(app); $event.stopPropagation();"
+              *ngIf="app.maximizable && !app.isMaximized && !app.isMinimized"
+              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
+          crop_square
+        </mat-icon>
+        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+          {{'global.maximize_app' | translate}}
+        </span>
+      </button>
+
+      <button mat-menu-item (click)="minimize(app); $event.stopPropagation();"
+              *ngIf="!app.isMinimized"
+              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
+          minimize
+        </mat-icon>
+        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+          {{'global.minimize_app' | translate}}
+        </span>
+      </button>
+
+      <button mat-menu-item (click)="restore(app); $event.stopPropagation();"
+              *ngIf="app.isMaximized || app.isMinimized"
+              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
+          filter_none
+        </mat-icon>
+        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+          {{'global.restore_app' | translate}}
+        </span>
+      </button>
+
+      <button mat-menu-item (click)="active(app); $event.stopPropagation();"
+              *ngIf="!app.isActive && !app.isMinimized"
+              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="flex-center rotate-180 text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
+          system_update_alt
+        </mat-icon>
+        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+          {{'global.bring_to_front_app' | translate}}
+        </span>
+      </button>
+
+      <button mat-menu-item (click)="close(app); $event.stopPropagation();"
+              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
+          close
+        </mat-icon>
+        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+          {{'global.close_app' | translate}}
+        </span>
+      </button>
+    </ng-template>
+  </mat-menu>
 </div>

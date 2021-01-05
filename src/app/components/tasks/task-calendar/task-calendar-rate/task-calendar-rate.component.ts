@@ -102,7 +102,7 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   setupCalendar() {
     this.datePickerConfig = {
       locale: this.rtlDirection ? 'fa' : 'en',
-      firstDayOfWeek: 'sa',
+      firstDayOfWeek: this.rtlDirection ? 'sa' : 'mo',
       dayBtnCssClassCallback: (event) => {
         this.dayBtnCssClassCallback(event)
       }

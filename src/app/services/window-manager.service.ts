@@ -223,6 +223,14 @@ export class WindowManagerService {
 
     this.element.parentElement.parentElement.style.zIndex = windowInstance.priority.toString();
 
+    this.windows.next(
+      this.windowListArray.map((window: WindowInterface) => {
+        window.isActive = window.windowService.service_name === service.service_name;
+
+        return window;
+      })
+    );
+
     this.windows.next(this.windowListArray);
   }
 
@@ -317,6 +325,6 @@ export class WindowManagerService {
           element.parentElement.parentElement.style.zIndex = maxZIndex;
         }
       }
-    }, 200);
+    }, 50);
   }
 }

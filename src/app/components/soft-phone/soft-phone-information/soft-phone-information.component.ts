@@ -338,7 +338,7 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   pure: false
 })
 export class MyFilterPipe implements PipeTransform {
-  transform(items: any[], filter: any): any {
+  transform(items: SoftphoneUserInterface[], filter: any): any {
     if (!items || !filter) {
       return items;
     }
