@@ -144,34 +144,36 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   changeTodoPriority(todoList) {
-    let tempTodoList = todoList;
+    if (todoList.length > 1) {
+      let tempTodoList = todoList;
 
-    tempTodoList.map((todo, i) => {
+      tempTodoList.map((todo, i) => {
 
-      return todo.priority = i;
-    });
+        return todo.priority = i;
+      });
 
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
-    this.form.disable();
+      this.form.disable();
 
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
-    this._subscription.add(
-      this.api.changePriority(tempTodoList).subscribe((resp: TodoInterface) => {
+      this._subscription.add(
+        this.api.changePriority(tempTodoList).subscribe((resp: TodoInterface) => {
 
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
-        if (resp.result === 1) {
+          if (resp.result === 1) {
 
-          this.form.enable();
-        }
-      }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
+            this.form.enable();
+          }
+        }, (error: HttpErrorResponse) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
-        this.refreshLoginService.openLoginDialog(error);
-      })
-    );
+          this.refreshLoginService.openLoginDialog(error);
+        })
+      );
+    }
   }
 
   sortTodo() {
@@ -338,7 +340,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   addTask() {
-    if (this.form.get('taskName').value !== '') {
+    console.log(this.form.get('taskName').value.trim(this.form.get('taskName').value).length);
+
+    if (this.form.get('taskName').value.trim(this.form.get('taskName').value).length >= 1) {
 
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
@@ -422,7 +426,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   saveTask() {
-    if (this.form.get('taskName').value !== '') {
+    if (this.form.get('taskName').value.trim(this.form.get('taskName').value).length >= 1) {
 
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
