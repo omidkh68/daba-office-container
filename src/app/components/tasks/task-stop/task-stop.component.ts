@@ -24,16 +24,16 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: TaskInterface,
+              public dialogRef: MatDialogRef<TaskStopComponent>,
+              private api: ApiService,
               private fb: FormBuilder,
               private injector: Injector,
+              private messageService: MessageService,
+              private userInfoService: UserInfoService,
               private viewDirection: ViewDirectionService,
               private refreshLoginService: RefreshLoginService,
-              private messageService: MessageService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private userInfoService: UserInfoService,
-              public dialogRef: MatDialogRef<TaskStopComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: TaskInterface) {
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -82,8 +82,14 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
           this.dialogRef.close(true);
         } else {
           this.form.enable();
+
+          this.messageService.showMessage(resp.message);
         }
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message);
+        }
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         this.form.enable();

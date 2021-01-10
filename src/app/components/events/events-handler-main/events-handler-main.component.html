@@ -1,10 +1,10 @@
 <mat-drawer-container autosize class="event-main-datepicker" [dir]="rtlDirection ? 'rtl' : 'ltr'">
   <mat-drawer #drawer mode="side" [disableClose]="true">
     <div class="text-white full-height dateCalendar-nontransparent overflow-hide">
-      <div class="datepicker-container-main full-height round-corner"
-           [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
+      <div class="datepicker-container-main full-height"
+           [ngClass]="{'calendar-rtl': rtlDirection}"
            [dir]="rtlDirection ? 'rtl' : 'ltr'">
-        <div class="switch-container padding-full">
+        <!--<div class="switch-container padding-full">
           <mat-button-toggle-group #viewMode="matButtonToggleGroup"
                                    (change)="changeViewMode(viewMode.value)"
                                    [value]="viewModeTypes"
@@ -17,7 +17,7 @@
         </div>
 
         <div *ngIf="viewModeTypes == 'google'">
-        </div>
+        </div>-->
 
         <div id="calendar-internal" *ngIf="viewModeTypes == 'container'"
              class="full-height display-flex flex-direction-column flex-space-between">

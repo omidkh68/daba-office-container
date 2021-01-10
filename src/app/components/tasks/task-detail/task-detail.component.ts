@@ -15,6 +15,7 @@ import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {TaskDataInterface} from '../logic/task-data-interface';
+import {TaskStopComponent} from '../task-stop/task-stop.component';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
@@ -278,7 +279,6 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result) {
-
           if (resp.content.parentTaskId === 0) {
             this.bottomSheetData.bottomSheetRef.close();
           } else {
@@ -287,18 +287,55 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
             this.editable = false;
           }
 
+          if (this.task.boardStatus === 'inProgress' && (formValue.boardStatus === 'todo' || formValue.boardStatus === 'done')) {
+            this.showTaskStopModal(formValue);
+          } else if (this.task.boardStatus === 'todo' && formValue.boardStatus === 'done') {
+            this.showTaskStopModal(formValue);
+          } else if (this.task.boardStatus === 'done' && formValue.boardStatus === 'todo') {
+            const editedTask: TaskInterface = {...formValue, percentage: 0, boardStatus: 'todo'};
+            this.showTaskStopModal(editedTask);
+          }
+
           this.messageService.showMessage(resp.message);
 
           this.refreshBoardService.changeCurrentDoRefresh(true);
         } else {
           this.form.enable();
+
+          this.messageService.showMessage(resp.message);
         }
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message);
+        }
+
         this.form.enable();
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         this.refreshLoginService.openLoginDialog(error);
+      })
+    );
+  }
+
+  showTaskStopModal(task) {
+    const dialogRef = this.dialog.open(TaskStopComponent, {
+      data: task,
+      autoFocus: false,
+      width: '500px',
+      height: '310px',
+      disableClose: true
+    });
+
+    this.windowManagerService.dialogOnTop(dialogRef.id);
+
+    this._subscription.add(
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // this.getBoards();
+
+          // this.doResetFilter();
+        }
       })
     );
   }

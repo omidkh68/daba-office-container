@@ -801,7 +801,6 @@ file-preview-container {
 .datepicker-container-main {
   width: 100% !important;
   color: #333;
-  padding-top: 10px !important;
 }
 
 .holiday-date {
@@ -1172,38 +1171,10 @@ file-preview-container {
   }
 }
 
-.dark-mode {
-  .datepicker-container.box-dark {
-    background: rgba(30, 30, 30, 0.8) !important;
-    color: #fff;
-
-    th, td, b, span, div, button, mat-icon {
-      color: #fff !important;
-    }
-
-    .mat-calendar-arrow {
-      border-top-color: #fff !important;
-    }
-
-    .mat-calendar-body-today:not(.mat-calendar-body-selected) {
-      border: solid 1px #fff !important;
-    }
-  }
-}
-
-#calendar-internal {
-  .dateCalendar-transparent {
-    height: 100%;
-  }
-}
-
 .dateCalendar-transparent {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  background: #ffffffed !important;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, .95) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 
   dp-day-calendar {
     width: 100%;
@@ -1313,3 +1284,55 @@ file-preview-container {
     width: 25%;
   }
 }
+
+#calendar-internal {
+  .dateCalendar-transparent {
+    height: 100%;
+  }
+}
+
+#calendar-desktop {
+  .dateCalendar-transparent {
+    @include rounded(5px);
+  }
+}
+
+.dark-mode {
+  .datepicker-container.box-dark {
+    background: rgba(30, 30, 30, 0.8) !important;
+    color: #fff;
+
+    th, td, b, span, div, button, mat-icon {
+      color: #fff !important;
+    }
+
+    .mat-calendar-arrow {
+      border-top-color: #fff !important;
+    }
+
+    .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+      border: solid 1px #fff !important;
+    }
+  }
+
+  .dateCalendar-transparent {
+    background: rgba(30, 30, 30, 0.8) !important;
+
+    button {
+      color: #FFF;
+    }
+
+    .dp-calendar-weekday {
+      color: #ddd !important;
+    }
+
+    .dp-selected {
+      color: #F2C94C !important;
+    }
+
+    .dp-calendar-weekday:last-child {
+      color: orange !important;
+    }
+  }
+}
+

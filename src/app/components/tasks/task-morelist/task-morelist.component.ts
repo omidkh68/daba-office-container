@@ -44,6 +44,7 @@ export class TaskMorelistComponent {
       reminders: null,
       users: null
     };
+
     this.dialogRef.close(eventItems);
   }
 }

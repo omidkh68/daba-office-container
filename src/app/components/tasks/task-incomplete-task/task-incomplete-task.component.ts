@@ -1,16 +1,16 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {TranslateService} from '@ngx-translate/core';
-import {ViewDirectionService} from '../../../services/view-direction.service';
-import {HttpErrorResponse} from '@angular/common/http';
-import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {LoginDataClass} from '../../../services/loginData.class';
-import {UserInfoService} from '../../users/services/user-info.service';
 import {ApiService} from '../logic/api.service';
+import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
+import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
+import {UserInfoService} from '../../users/services/user-info.service';
+import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
+import {ViewDirectionService} from '../../../services/view-direction.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-task-incomplete-task',
@@ -18,22 +18,22 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
   styleUrls: ['./task-incomplete-task.component.scss']
 })
 export class TaskIncompleteTaskComponent extends LoginDataClass implements OnInit, OnDestroy {
-
   rtlDirection: boolean;
   taskList: Array<TaskInterface>;
-  private _subscription: Subscription = new Subscription();
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'IncompleteTasks'};
 
-  constructor(private translate: TranslateService,
-              private viewDirection: ViewDirectionService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private injector: Injector,
-              private api: ApiService,
-              private messageService: MessageService,
-              private refreshLoginService: RefreshLoginService,
-              private userInfoService: UserInfoService,
+  private _subscription: Subscription = new Subscription();
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               public dialogRef: MatDialogRef<TaskIncompleteTaskComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              private api: ApiService,
+              private injector: Injector,
+              private translate: TranslateService,
+              private messageService: MessageService,
+              private userInfoService: UserInfoService,
+              private viewDirection: ViewDirectionService,
+              private refreshLoginService: RefreshLoginService,
+              private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -56,11 +56,15 @@ export class TaskIncompleteTaskComponent extends LoginDataClass implements OnIni
         if (resp.result) {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'IncompleteTasks'});
 
-          this.messageService.showMessage(resp.message);
-
           this.closeDialog();
         }
+
+        this.messageService.showMessage(resp.message);
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message);
+        }
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'IncompleteTasks'});
 
         this.refreshLoginService.openLoginDialog(error);

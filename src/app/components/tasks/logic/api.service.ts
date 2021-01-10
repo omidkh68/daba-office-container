@@ -3,7 +3,6 @@ import {AppConfig} from '../../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {TaskInterface} from './task-interface';
-import {TodoInterface} from '../task-todo/logic/todo-interface';
 import {FilterInterface} from './filter-interface';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
 import {ActivityInterface} from '../task-activity/logic/activity-interface';
@@ -26,7 +25,8 @@ export class ApiService {
   private headers = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json; charset=UTF-8'
+      'Accept': 'application/json; charset=UTF-8'/*,
+      'from': 'app_application'*/
     })
   };
 
@@ -184,13 +184,13 @@ export class ApiService {
     return this.http.get<ResultInterface>(`${this.API_URL}/boards/getSubsetTask/?taskId=${taskId}&email=${email}${compId}`, this.headers);
   }
 
-  changePriority(todo: TaskInterface[]): Observable<TodoInterface> {
+  changePriority(todo: TaskInterface[]) {
     this.currentCompany = this.companySelectorService.currentCompany;
 
     const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.post<TodoInterface>(`${this.API_URL}/boards/changePriority${compId}`, todo, this.headers);
+    return this.http.post(`${this.API_URL}/boards/changePriority${compId}`, todo, this.headers);
   }
 }

@@ -15,7 +15,7 @@
        [style.top]="contextMenuPosition.y"
        [matMenuTriggerFor]="contextMenu">
   </div>
-  <mat-menu #contextMenu="matMenu">
+  <mat-menu #contextMenu="matMenu" class="toolbar-menu">
     <ng-template matMenuContent let-app="app" class="padding-r-l">
       <h3
         class="window-title full-width line-height-40 font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin padding-mini-r-l">
@@ -30,59 +30,61 @@
 
       <button mat-menu-item (click)="maximize(app); $event.stopPropagation();"
               *ngIf="app.maximizable && !app.isMaximized && !app.isMinimized"
-              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+              class="display-flex align-items-center text-dark-mode-color width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
           class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
           crop_square
         </mat-icon>
-        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+        <span
+          class="display-flex align-items-center text-dark-mode-color padding-mini-r-l full-width full-height font-9-em">
           {{'global.maximize_app' | translate}}
         </span>
       </button>
 
       <button mat-menu-item (click)="minimize(app); $event.stopPropagation();"
               *ngIf="!app.isMinimized"
-              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+              class="display-flex align-items-center text-dark-mode-color width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
           class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
           minimize
         </mat-icon>
-        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+        <span
+          class="display-flex align-items-center text-dark-mode-color padding-mini-r-l full-width full-height font-9-em">
           {{'global.minimize_app' | translate}}
         </span>
       </button>
 
       <button mat-menu-item (click)="restore(app); $event.stopPropagation();"
               *ngIf="app.isMaximized || app.isMinimized"
-              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+              class="display-flex align-items-center text-dark-mode-color width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
           class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
           filter_none
         </mat-icon>
-        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+        <span class="display-flex align-items-center text-dark-mode-color padding-mini-r-l full-width full-height font-9-em">
           {{'global.restore_app' | translate}}
         </span>
       </button>
 
       <button mat-menu-item (click)="active(app); $event.stopPropagation();"
               *ngIf="!app.isActive && !app.isMinimized"
-              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+              class="display-flex align-items-center text-dark-mode-color width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
           class="flex-center rotate-180 text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
           system_update_alt
         </mat-icon>
-        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+        <span class="display-flex align-items-center text-dark-mode-color padding-mini-r-l full-width full-height font-9-em">
           {{'global.bring_to_front_app' | translate}}
         </span>
       </button>
 
       <button mat-menu-item (click)="close(app); $event.stopPropagation();"
-              class="display-flex align-items-center width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+              class="display-flex align-items-center text-dark-mode-color width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
         <mat-icon
           class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
           close
         </mat-icon>
-        <span class="display-flex align-items-center padding-mini-r-l full-width full-height font-9-em">
+        <span class="display-flex align-items-center text-dark-mode-color padding-mini-r-l full-width full-height font-9-em">
           {{'global.close_app' | translate}}
         </span>
       </button>

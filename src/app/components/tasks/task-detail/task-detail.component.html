@@ -34,7 +34,7 @@
         <mat-icon class="line-height-30">delete</mat-icon>
       </button>
 
-      <button (click)="editableForm()" *ngIf="viewModeTypes === 'info'"
+      <button (click)="editableForm()" *ngIf="viewModeTypes === 'info' && !editable"
               class="no-border cursor-pointer no-bg text-center width-45 height-45 text-green-400 no-padding"
               type="button">
         <mat-icon class="line-height-30">edit</mat-icon>

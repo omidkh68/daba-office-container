@@ -5,7 +5,6 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FilterInterface} from '../logic/filter-interface';
 import {UserInfoService} from '../../users/services/user-info.service';
 import * as jalaliMoment from 'jalali-moment';
@@ -17,6 +16,7 @@ import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface filterType {
   index: number;
@@ -98,6 +98,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
   private _subscription: Subscription = new Subscription();
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: FilterTaskInterface,
+              public dialogRef: MatDialogRef<TaskFilterComponent>,
               private api: ApiService,
               private fb: FormBuilder,
               private injector: Injector,
@@ -106,7 +107,6 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
               private userInfoService: UserInfoService,
               private viewDirection: ViewDirectionService,
               private refreshLoginService: RefreshLoginService,
-              public dialogRef: MatDialogRef<TaskFilterComponent>,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
 
@@ -365,11 +365,11 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
               content: resp.content
             }
           );
-
-          this.messageService.showMessage(resp.message);
-        } else {
-          this.form.enable();
         }
+
+        this.form.enable();
+
+        this.messageService.showMessage(resp.message);
       }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 

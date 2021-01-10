@@ -1,31 +1,27 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ApiService} from '../logic/api.service.js';
+import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {TodoInterface} from './logic/todo-interface';
+import {TaskInterface} from '../logic/task-interface';
 import {LoginInterface} from '../../login/logic/login.interface';
 import {MessageService} from '../../message/service/message.service';
 import {ApproveComponent} from '../../approve/approve.component';
 import {TranslateService} from '@ngx-translate/core';
+import {ProjectInterface} from '../../projects/logic/project-interface';
 import {HttpErrorResponse} from '@angular/common/http';
+import {TaskDataInterface} from '../logic/task-data-interface';
+import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
-import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {ResultInterface, ResultTaskInterface} from '../logic/board-interface';
-import {TaskInterface} from '../logic/task-interface';
-import {ProjectInterface} from '../../projects/logic/project-interface';
-import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
-import {TaskDataInterface} from '../logic/task-data-interface';
-import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
-import * as moment from 'moment';
-import {UserInterface} from '../../users/logic/user-interface';
-import {PopoverConfig} from '../../popover-widget/popover-config';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {ResultInterface, ResultTaskInterface} from '../logic/board-interface';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   selector: 'app-task-todo',
@@ -54,9 +50,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'todo'};
   tasks: TaskInterface[] = [];
   bottomSheetData = null;
-  // usersList: UserInterface[] | null = [];
   usersList: any = [];
-  // projectsList: ProjectInterface[] | null = [];
   projectsList: any = [];
   breadcrumbList: ProjectInterface[] = [];
 
@@ -88,23 +82,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this.createForm();
 
-    // this.getTodoList();
-
     this.getTaskList();
   }
 
   createForm() {
-    /*this.form = this.fb.group({
-      todo: this.fb.group({
-        todoId: [0],
-        taskId: [0],
-        email: [''],
-        isChecked: [0],
-        text: [''],
-        creationDate: ['']
-      })
-    });*/
-
     this.form = this.fb.group({
       taskId: new FormControl(0),
       status: new FormControl(1),
@@ -158,15 +139,17 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
-      this.api.changePriority(tempTodoList).subscribe((resp: TodoInterface) => {
-
+      this.api.changePriority(tempTodoList).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
-        if (resp.result === 1) {
+        this.form.enable();
 
-          this.form.enable();
-        }
+        this.messageService.showMessage(resp.message);
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message);
+        }
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         this.refreshLoginService.openLoginDialog(error);
@@ -215,12 +198,14 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
             task.project = this.projectsList.filter(project => project.projectId === task.project).pop();
 
             return task;
-          })
-
-          this.form.enable();
+          });
 
           this.sortTodo();
         }
+
+        this.messageService.showMessage(resp.message);
+
+        this.form.enable();
       }, (error: HttpErrorResponse) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
@@ -261,7 +246,6 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this._subscription.add(
       this.api.taskChangeStatus(formValue.task, formValue.task.boardStatus).subscribe(async (resp: ResultTaskInterface) => {
-
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         if (resp.result) {
@@ -274,13 +258,17 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
             return task;
           });
 
-          this.messageService.showMessage(resp.message);
-
-          this.form.enable();
-
           this.sortTodo();
         }
+
+        this.form.enable();
+
+        this.messageService.showMessage(resp.message);
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message);
+        }
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         this.refreshLoginService.openLoginDialog(error);
@@ -314,19 +302,22 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
           this._subscription.add(
             this.api.deleteTask(task).subscribe((resp: ResultTaskInterface) => {
+              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
               if (resp.result === 1) {
-                this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
                 this.tasks = this.tasks.filter(newTask => newTask.taskId !== task.taskId);
-
-                this.messageService.showMessage(resp.message);
-
-                this.form.enable();
 
                 this.sortTodo();
               }
+
+              this.messageService.showMessage(resp.message);
+
+              this.form.enable();
             }, (error: HttpErrorResponse) => {
+              if (error.message) {
+                this.messageService.showMessage(error.message);
+              }
+
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
               this.refreshLoginService.openLoginDialog(error);
@@ -339,7 +330,6 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   addTask() {
     if (this.form.get('taskName').value !== '') {
-
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
       this.form.disable();
@@ -376,13 +366,17 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
             this.form.reset();
 
-            this.form.enable();
-
             this.sortTodo();
           }
 
+          this.form.enable();
+
           this.messageService.showMessage(resp.message);
         }, (error: HttpErrorResponse) => {
+          if (error.message) {
+            this.messageService.showMessage(error.message);
+          }
+
           this.form.enable();
 
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
@@ -395,8 +389,6 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   updateTask(task: TaskInterface) {
     this.edit = true;
-
-    // this.form.patchValue({...task});
 
     this.form.patchValue({
       taskId: task.taskId,
@@ -432,16 +424,16 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
       this._subscription.add(
         this.api.updateTask(this.form.value).subscribe((resp: ResultTaskInterface) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           if (resp.result === 1) {
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
             const newTask = resp.content;
 
             this.tasks = this.tasks.map(task => {
               if (task.taskId === newTask.taskId) {
                 task = Object.assign(task, newTask);
               }
+
               return task;
             });
 
@@ -449,13 +441,19 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
             this.edit = false;
 
-            this.form.enable();
-
             this.sortTodo();
           }
 
+          this.form.enable();
+
           this.messageService.showMessage(resp.message);
         }, (error: HttpErrorResponse) => {
+          if (error.message) {
+            this.messageService.showMessage(error.message);
+          }
+
+          this.form.enable();
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           this.refreshLoginService.openLoginDialog(error);
@@ -497,18 +495,23 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   getBreadcrumbData(taskId) {
     return new Promise((resolve) => {
-
       this._subscription.add(
         this.api.getBreadcrumb(taskId).subscribe((resp: any) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
+
           if (resp.result === 1) {
 
             this.breadcrumbList = resp.content;
 
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
             resolve(true);
           }
+
+          this.messageService.showMessage(resp.message);
         }, (error: HttpErrorResponse) => {
+          if (error.message) {
+            this.messageService.showMessage(error.message);
+          }
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           this.refreshLoginService.openLoginDialog(error);
@@ -526,229 +529,4 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       this._subscription.unsubscribe();
     }
   }
-
-  /*getTodoList() {
-  this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
-
-  this.form.disable();
-
-  this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-  this._subscription.add(
-    this.api.getTodoList(this.parentTaskData.taskId).subscribe((resp: any) => {
-      this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-      if (resp.result === 1) {
-        this.todoList = resp.contents;
-
-        this.form.enable();
-
-        this.sortTodo();
-      }
-    }, (error: HttpErrorResponse) => {
-      this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-      this.refreshLoginService.openLoginDialog(error);
-    })
-  );
-}*/
-
-  /*checkTodo(todoItem: TodoInterface) {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
-
-    this.form.disable();
-
-    const data = {
-      ...todoItem,
-      isChecked: todoItem.isChecked ? 0 : 1
-    };
-
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-    this._subscription.add(
-      this.api.updateTodo(data).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-        if (resp.result === 1) {
-          const newTodo: TodoInterface = resp.content;
-
-          this.todoList = this.todoList.map(item => {
-            if (item.todoId === newTodo.todoId) {
-              item = Object.assign({}, newTodo);
-            }
-
-            return item;
-          });
-
-          this.form.enable();
-
-          this.sortTodo();
-        }
-
-        this.messageService.showMessage(resp.message);
-      }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-        this.refreshLoginService.openLoginDialog(error);
-      })
-    );
-  }*/
-
-  /*updateTodo(todo: TodoInterface) {
-    this.edit = true;
-
-    this.form.get('todo').setValue(todo);
-  }*/
-
-  /*deleteTodo(todo: TodoInterface) {
-    this.form.disable();
-
-    const data = {
-      todoId: todo.todoId,
-      taskId: this.parentTaskData.taskId
-    };
-
-    const dialogRef = this.dialog.open(ApproveComponent, {
-      data: {
-        title: this.getTranslate('tasks.task_detail.delete_title'),
-        message: this.getTranslate('tasks.task_detail.delete_text')
-      },
-      autoFocus: false,
-      width: '70vh',
-      maxWidth: '350px',
-      panelClass: 'approve-detail-dialog',
-      height: '160px'
-    });
-
-    this.windowManagerService.dialogOnTop(dialogRef.id);
-
-    this._subscription.add(
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
-
-          this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-          this._subscription.add(
-            this.api.deleteTodo(data).subscribe((resp: any) => {
-              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-              if (resp.result === 1) {
-                this.todoList = this.todoList.filter((todoItem: TodoInterface) => todoItem.todoId !== todo.todoId);
-
-                this.form.enable();
-
-                // this.refreshBoardService.changeCurrentDoRefresh(true);
-              }
-
-              this.messageService.showMessage(resp.message);
-            }, (error: HttpErrorResponse) => {
-              this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-              this.refreshLoginService.openLoginDialog(error);
-            })
-          );
-        }
-      })
-    );
-  }*/
-
-  /*addTodo() {
-    if (this.form.get('todo').value.text !== '') {
-
-      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
-
-      this.form.disable();
-
-      const data = {
-        taskId: this.parentTaskData.taskId,
-        email: this.loggedInUser.email,
-        isChecked: 0,
-        text: this.form.get('todo').value.text
-      };
-
-      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-      this._subscription.add(
-        this.api.createTodo(data).subscribe((resp: any) => {
-
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-          if (resp.result === 1) {
-            this.todoList.push(resp.content);
-
-            const todoValue = this.form.get('todo').value;
-
-            this.form.get('todo').setValue({...todoValue, text: ''});
-
-            this.form.enable();
-
-            // this.refreshBoardService.changeCurrentDoRefresh(true);
-
-            this.sortTodo();
-          }
-
-          this.messageService.showMessage(resp.message);
-        }, (error: HttpErrorResponse) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-          this.refreshLoginService.openLoginDialog(error);
-        })
-      );
-    }
-  }*/
-
-  /*saveTodo() {
-    if (this.form.get('todo').value.text !== '') {
-
-      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
-
-      this.form.disable();
-
-      const data = {
-        todoId: this.form.get('todo').value.todoId,
-        taskId: this.parentTaskData.taskId,
-        email: this.loggedInUser.email,
-        isChecked: this.form.get('todo').value.isChecked,
-        text: this.form.get('todo').value.text
-      };
-
-      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-      this._subscription.add(
-        this.api.updateTodo(data).subscribe((resp: any) => {
-
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-          if (resp.result === 1) {
-            const newTodo: TodoInterface = resp.content;
-
-            this.todoList = this.todoList.map(item => {
-              if (item.todoId === newTodo.todoId) {
-                item = Object.assign({}, newTodo);
-              }
-
-              return item;
-            });
-
-            const todoValue = this.form.get('todo').value;
-
-            this.form.get('todo').setValue({...todoValue, text: ''});
-
-            this.edit = false;
-
-            this.form.enable();
-
-            this.sortTodo();
-          }
-
-          this.messageService.showMessage(resp.message);
-        }, (error: HttpErrorResponse) => {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
-
-          this.refreshLoginService.openLoginDialog(error);
-        })
-      );
-    }
-  }*/
 }

@@ -12,8 +12,9 @@
                class="webView-frame full-width full-height"></webview>
     </ng-container>
     <ng-template #iframe>
-      <iframe #webFrame allow="camera;microphone" [ngClass]="{'showFrame': !showFrame}"
-              class="webView-frame full-width full-height no-border"></iframe>
+      <iframe #webFrame allow="camera;microphone;fullscreen" [ngClass]="{'showFrame': !showFrame}"
+              sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-top-navigation"
+              class="webView-frame full-width full-height no-border" allowfullscreen></iframe>
     </ng-template>
 
   </div>

@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {TaskInterface} from '../logic/task-interface';
 import {LoginInterface} from '../../login/logic/login.interface';
+import {MessageService} from '../../message/service/message.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatTableDataSource} from '@angular/material/table';
@@ -57,13 +58,14 @@ export class TaskReportComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private api: ApiService,
-              public dialog: MatDialog,
+  constructor(public dialog: MatDialog,
+              private api: ApiService,
               private translate: TranslateService,
+              private messageService: MessageService,
+              private matPaginatorIntl: MatPaginatorIntl,
               private refreshLoginService: RefreshLoginService,
-              private loadingIndicatorService: LoadingIndicatorService,
               private windowManagerService: WindowManagerService,
-              private matPaginatorIntl: MatPaginatorIntl) {
+              private loadingIndicatorService: LoadingIndicatorService) {
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );
@@ -144,7 +146,13 @@ export class TaskReportComponent implements OnInit, OnDestroy {
           this.dataSource = new MatTableDataSource(this.taskReports);
           this.dataSource.paginator = this.paginator;
         }
+
+        this.messageService.showMessage(resp.message);
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message);
+        }
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-report'});
 
         this.refreshLoginService.openLoginDialog(error);
@@ -155,7 +163,6 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   getTranslate(word) {
     return this.translate.instant(word);
   }
-
 
   descriptionTask(element) {
     const dialogRef = this.dialog.open(TaskReportDescriptionComponent, {

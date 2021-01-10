@@ -1,5 +1,5 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'"
-     [ngClass]="rtlDirection ? 'float-right calendar-rtl' : 'float-left'"
+     [ngClass]="{'calendar-rtl': rtlDirection}"
      class="box-dark width-240 dateCalendar-transparent padding-full pos-rel">
   <dp-day-calendar
     #dateCalendar

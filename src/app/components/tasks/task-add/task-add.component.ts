@@ -143,8 +143,14 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
           this.dialogRef.close(true);
         } else {
           this.form.enable();
+
+          this.messageService.showMessage(resp.message);
         }
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message);
+        }
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         this.refreshLoginService.openLoginDialog(error);

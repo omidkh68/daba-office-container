@@ -1,4 +1,5 @@
 import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {Subscription} from 'rxjs/internal/Subscription';
 import {WindowInterface} from '../logic/window.interface';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
 import {ServiceInterface} from '../../services/logic/service-interface';
@@ -26,7 +27,11 @@ export class DashboardToolbarComponent {
 
   companies: Array<CompanyInterface> = null;
 
+  private subscription: Subscription = new Subscription();
+
   constructor(private companySelectorService: CompanySelectorService) {
-    this.companies = this.companySelectorService.currentCompanies;
+    this.subscription.add(
+      this.companySelectorService.currentCompanyList.subscribe(companies => this.companies = companies)
+    );
   }
 }

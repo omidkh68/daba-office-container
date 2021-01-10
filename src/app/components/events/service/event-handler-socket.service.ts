@@ -3,6 +3,7 @@ import {Subject} from 'rxjs/internal/Subject';
 import {AppConfig} from '../../../../environments/environment';
 import {Injectable} from '@angular/core';
 import {Subscription} from 'rxjs';
+import {MessageService} from '../../message/service/message.service';
 import {EventApiService} from '../logic/api.service';
 import {ElectronService} from '../../../core/services';
 import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
@@ -27,16 +28,17 @@ export class EventHandlerSocketService {
   private _subscription: Subscription = new Subscription();
 
   constructor(private eventApi: EventApiService,
+              private messageService: MessageService,
               private electronService: ElectronService,
-              private notificationService: NotificationService,
               private dateTimeservice: DatetimeService,
               private translateService: TranslateService,
+              private notificationService: NotificationService,
               private eventHandlerService: EventHandlerService) {
   }
 
   public getEventsByEmail(eventHandlerModel: EventHandlerEmailDate, user: UserContainerInterface) {
     this.loggedInUsers = user;
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.eventApi.getEventByEmail(eventHandlerModel).subscribe((resp: any) => {
         let events = [];
         let reminders = [];
@@ -63,9 +65,13 @@ export class EventHandlerSocketService {
               resolve(data);
             }
           } else {
+            this.messageService.showMessage(resp.error, 'error');
+
             resolve({events: [], reminders: []});
           }
         } else {
+          this.messageService.showMessage(resp.error, 'error');
+
           resolve({events: [], reminders: []});
         }
       })
