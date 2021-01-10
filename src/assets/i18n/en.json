@@ -20,6 +20,7 @@
     "no_result": "No Result",
     "minutes": "Minutes",
     "hours": "Hours",
+    "seconds": "Seconds",
     "notification": "Notification",
     "pagination": {
       "item_per_page": "Item per page",

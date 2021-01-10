@@ -3,7 +3,9 @@
     <span class="text-pink-600">
       {{'tasks.task_report.total_time' | translate}}:
     </span>
-    <span class="margin-r-l text-gray-700">{{total}}</span>
+    <span class="margin-r-l text-gray-700">
+      {{total.hours}} {{'global.hours' | translate}} - {{total.minutes}} {{'global.minutes' | translate}} - {{total.seconds}} {{'global.seconds' | translate}}
+    </span>
   </div>
 
   <div class="full-width height-full-minus-40 overflow-y-auto overflow-x-hide height-full-minus-40">

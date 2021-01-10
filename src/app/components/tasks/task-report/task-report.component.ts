@@ -115,11 +115,11 @@ export class TaskReportComponent implements OnInit, OnDestroy {
           totalTime = (totalTime - secs) / 60;
           let mins = totalTime % 60;
           let hrs = (totalTime - mins) / 60;
-          let hr = hrs > 10 ? hrs : '0' + hrs;
-          let min = mins > 10 ? mins : '0' + mins;
-          let sec = secs > 10 ? secs : '0' + secs;
+          let hr = hrs < 10 ? '0' + hrs : hrs;
+          let min = mins < 10 ? '0' + mins : mins;
+          let sec = secs < 10 ? '0' + secs : secs;
 
-          this.total = hr + ':' + min + ':' + sec;
+          this.total = {hours: hr, minutes: min, seconds: sec};
 
           this.taskReports.map(report => {
             if (report.adminIdStartTask) {
