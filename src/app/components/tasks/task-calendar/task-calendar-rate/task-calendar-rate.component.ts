@@ -66,7 +66,7 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
                   this.rtlDirection ? jalaliMoment(new Date(resp.filterData.dateStart)) :
                       moment(new Date(resp.filterData.dateStart));
               this.datePickerDirective.api.moveCalendarTo(goToDate);
-              document.querySelector('.custom-full-calendar').classList.add('margin-r-full');
+              document.querySelector('.rate-calendar .custom-full-calendar').classList.add('margin-r-full');
               this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
               this.isVisible = true;
             },1000)
@@ -87,7 +87,7 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
                 event.locale('fa').format('YYYY/M/D') :
                 event.locale('en').format('DD-MM-YYYY');
 
-        let element: HTMLElement = document.querySelector('.dp-calendar-day[data-date="' + date + '"]');
+        let element: HTMLElement = document.querySelector('.rate-calendar .dp-calendar-day[data-date="' + date + '"]');
         if (element) {
           this.calendarEvents.map(item => {
             if (item.start.toLocaleDateString() == event._d.toLocaleDateString()) {
