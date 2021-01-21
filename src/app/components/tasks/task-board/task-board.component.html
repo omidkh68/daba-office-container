@@ -63,6 +63,7 @@
       <mat-card class="margin-b-full bg-white card-hover"
                 [ngClass]="{'overdue-task': task.overdue}"
                 [cdkDragData]="task"
+                [cdkDragDisabled]="task.assignTo.email !== loggedInUser.email"
                 matTooltip="{{task.overdue ? ('tasks.boards.overdue' | translate) : null}}"
                 (click)="showTaskDetail(task, board.id)"
                 *ngFor="let task of board.tasks | myFilter:filterArgs[board.id]" cdkDrag>

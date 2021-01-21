@@ -19,9 +19,9 @@ import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
-import {ResultInterface, ResultTaskInterface} from '../logic/board-interface';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {ResultChangePriorityInterface, ResultInterface, ResultTaskInterface} from '../logic/board-interface';
 
 @Component({
   selector: 'app-task-todo',
@@ -58,7 +58,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   constructor(public dialog: MatDialog,
               private fb: FormBuilder,
-              private api: ApiService,
+              private apiService: ApiService,
               private messageService: MessageService,
               private translateService: TranslateService,
               private refreshLoginService: RefreshLoginService,
@@ -82,23 +82,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this.createForm();
 
-    // this.getTodoList();
-
     this.getTaskList();
   }
 
   createForm() {
-    /*this.form = this.fb.group({
-      todo: this.fb.group({
-        todoId: [0],
-        taskId: [0],
-        email: [''],
-        isChecked: [0],
-        text: [''],
-        creationDate: ['']
-      })
-    });*/
-
     this.form = this.fb.group({
       taskId: new FormControl(0),
       status: new FormControl(1),
@@ -150,10 +137,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
       this.form.disable();
 
-      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+      this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.api.changePriority(tempTodoList).subscribe((resp: any) => {
+        this.apiService.changePriority(tempTodoList).subscribe((resp: ResultChangePriorityInterface) => {
 
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
@@ -195,14 +182,14 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this.form.disable();
 
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this.usersList = this.taskEssentialInfoService.getUsersProjectsList.usersList;
 
     this.projectsList = this.taskEssentialInfoService.getUsersProjectsList.projectsList;
 
     this._subscription.add(
-      this.api.getSubsetTask(this.loggedInUser.email, this.parentTaskData.taskId).subscribe((resp: ResultInterface) => {
+      this.apiService.getSubsetTask(this.loggedInUser.email, this.parentTaskData.taskId).subscribe((resp: ResultInterface) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
         if (resp.result === 1) {
@@ -269,7 +256,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
     this._subscription.add(
-      this.api.taskChangeStatus(formValue.task, formValue.task.boardStatus).subscribe(async (resp: ResultTaskInterface) => {
+      this.apiService.taskChangeStatus(formValue.task, formValue.task.boardStatus).subscribe(async (resp: ResultTaskInterface) => {
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
@@ -318,17 +305,21 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       height: '160px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
-          this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+          this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
           this._subscription.add(
-            this.api.deleteTask(task).subscribe((resp: ResultTaskInterface) => {
+            this.apiService.deleteTask(task).subscribe((resp: ResultTaskInterface) => {
 
               if (resp.result === 1) {
                 this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
@@ -385,10 +376,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
         parentTaskId: this.parentTaskData.taskId
       };
 
-      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+      this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.api.createTask(formValue).subscribe((resp: ResultTaskInterface) => {
+        this.apiService.createTask(formValue).subscribe((resp: ResultTaskInterface) => {
 
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
@@ -453,10 +444,10 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
       this.form.disable();
 
-      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+      this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.api.updateTask(this.form.value).subscribe((resp: ResultTaskInterface) => {
+        this.apiService.updateTask(this.form.value).subscribe((resp: ResultTaskInterface) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           if (resp.result === 1) {
@@ -527,9 +518,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   getBreadcrumbData(taskId) {
     return new Promise((resolve) => {
-
       this._subscription.add(
-        this.api.getBreadcrumb(taskId).subscribe((resp: any) => {
+        this.apiService.getBreadcrumb(taskId).subscribe((resp: any) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           if (resp.result === 1) {

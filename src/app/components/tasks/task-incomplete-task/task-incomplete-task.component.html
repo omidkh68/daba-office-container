@@ -47,8 +47,7 @@
           <div class="overflow-hide width-25 full-height cursor-pointer"
                (click)="changeStatus(task)">
             <mat-icon
-              class="arrow transition font-full-plus-half-em full-height full-width text-green-500 line-height-55 transform-origin-50 text-center"
-              [ngClass]="rtlDirection ? 'rotate-180' : ''">
+              class="arrow transition font-full-plus-half-em full-height full-width text-green-500 line-height-55 transform-origin-50 text-center">
               play_arrow
             </mat-icon>
           </div>
@@ -66,7 +65,7 @@
   </div>
 </div>
 
-<div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'changeLang'"
+<div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'incompleteTasks'"
      class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-999">
   <div class="text-center">
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"

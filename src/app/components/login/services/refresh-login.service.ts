@@ -34,7 +34,11 @@ export class RefreshLoginService {
         data: {action: 'refresh-login'}
       });
 
-      this.windowManagerService.dialogOnTop(dialogRef.id);
+      this._subscription.add(
+        dialogRef.afterOpened().subscribe(() => {
+          this.windowManagerService.dialogOnTop(dialogRef.id);
+        })
+      );
 
       const message = this.getTranslate('login_info.refresh_login');
 

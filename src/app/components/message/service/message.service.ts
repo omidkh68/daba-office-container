@@ -36,7 +36,11 @@ export class MessageService implements OnDestroy {
       panelClass: type ? type : ''
     });
 
-    this.windowManagerService.dialogOnTop('snackBar');
+    this._subscription.add(
+      snackBar.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop('snackBar');
+      })
+    );
 
     setTimeout(() => snackBar.dismiss(), duration ? duration : this._durationInSeconds);
   }

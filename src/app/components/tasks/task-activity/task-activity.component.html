@@ -3,7 +3,7 @@
       class="margin-b-full padding-r-l full-width text-gray-800  font-full-em text-weight-500 no-margin height-35">
     {{'tasks.activity.task_completion_percentage' | translate}}
   </h1>
-  <div class="full-width padding-b-full-2 height-200" dir="ltr">
+  <div *ngIf="single.length" class="full-width padding-b-full-2 height-200" dir="ltr">
     <ngx-charts-pie-chart
       [doughnut]="isDoughnut"
       [gradient]="gradient"
@@ -11,8 +11,7 @@
       [legend]="showLegend"
       [results]="single"
       [scheme]="colorScheme"
-    >
-    </ngx-charts-pie-chart>
+    ></ngx-charts-pie-chart>
   </div>
 
   <h1 [ngClass]="rtlDirection ? 'text-right' : 'text-left'"

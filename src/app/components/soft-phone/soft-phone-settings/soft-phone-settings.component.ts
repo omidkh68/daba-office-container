@@ -1,7 +1,8 @@
-import {Component, EventEmitter, Injector, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Injector, Input, OnInit, Output} from '@angular/core';
 import {AppConfig} from '../../../../environments/environment';
 import {AddressService} from '../../web-browser/service/address.service';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {ElectronService} from '../../../core/services';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ServiceInterface} from '../../services/logic/service-interface';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
@@ -14,7 +15,7 @@ import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/so
   templateUrl: './soft-phone-settings.component.html',
   styleUrls: ['./soft-phone-settings.component.scss']
 })
-export class SoftPhoneSettingsComponent extends LoginDataClass {
+export class SoftPhoneSettingsComponent extends LoginDataClass implements OnInit {
   @Input()
   rtlDirection: boolean;
 
@@ -24,12 +25,23 @@ export class SoftPhoneSettingsComponent extends LoginDataClass {
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
+  url: string = '';
+
   constructor(private injector: Injector,
-              private userInfoService: UserInfoService,
               private addressService: AddressService,
+              private electronService: ElectronService,
+              private userInfoService: UserInfoService,
               private windowManagerService: WindowManagerService,
               private companySelectorService: CompanySelectorService) {
     super(injector, userInfoService);
+  }
+
+  ngOnInit(): void {
+    if (!this.isElectron) {
+      const currentCompany: CompanyInterface = this.companySelectorService.currentCompany;
+
+      this.url = AppConfig.PBX_LOGIN_EXTENSION + `/login.php?action=loginbytoken&comp_id=${currentCompany.id}&token=${this.loginData.access_token}`;
+    }
   }
 
   openSoftphoneExtension() {
@@ -50,5 +62,9 @@ export class SoftPhoneSettingsComponent extends LoginDataClass {
         });
       }, 500);
     });
+  }
+
+  get isElectron() {
+    return this.electronService.isElectron;
   }
 }

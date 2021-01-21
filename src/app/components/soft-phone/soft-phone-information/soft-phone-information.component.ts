@@ -11,7 +11,7 @@ import {
   PipeTransform,
   SimpleChanges
 } from '@angular/core';
-import {of, timer} from 'rxjs';
+import {timer} from 'rxjs';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
@@ -21,7 +21,7 @@ import {SoftPhoneService} from '../service/soft-phone.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ExtensionInterface, MuteUnMuteInterface} from '../logic/extension.interface';
-import {ResultApiInterface} from '../logic/result-api.interface';
+import {ResultApiInterface, ResultMuteUnMuteApiInterface} from '../logic/result-api.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {SoftphoneUserInterface} from '../logic/softphone-user.interface';
@@ -226,25 +226,19 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
         is_mute: 0
       };
 
-      this.apiService.muteUnMute(muteInfo);
-
-      resolve(true);
-
-      /*this._subscription.add(
+      this._subscription.add(
         this.apiService.muteUnMute(muteInfo).subscribe((resp: ResultMuteUnMuteApiInterface) => {
-          if (resp.success) {
-
-          } else {
-
-          }
-
           resolve(true);
         }, (error: HttpErrorResponse) => {
+          if (error.message) {
+            this.messageService.showMessage(error.message);
+          }
+
           this.refreshLoginService.openLoginDialog(error);
 
           resolve(true);
         })
-      );*/
+      );
     });
   }
 

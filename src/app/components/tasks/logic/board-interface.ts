@@ -1,6 +1,7 @@
 import {TaskInterface} from './task-interface';
-import {ProjectInterface} from '../../projects/logic/project-interface';
 import {UserInterface} from '../../users/logic/user-interface';
+import {ProjectInterface} from '../../projects/logic/project-interface';
+import {ActivityInterface} from '../task-activity/logic/activity-interface';
 
 export interface BoardInterface {
   id: string;
@@ -32,8 +33,8 @@ export interface ResultInterface {
   message: string;
   content: {
     boards: BoardsListResultInterface;
-    projects: ProjectsResultInterface;
-    users: UsersResultInterface;
+    projects?: ProjectsResultInterface;
+    users?: UsersResultInterface;
   };
 }
 
@@ -47,4 +48,44 @@ export interface ResultTaskInterface {
   result: number;
   message: string;
   content: TaskInterface;
+}
+
+export interface ResultFilterInterface {
+  result: number;
+  message: string;
+  content: {
+    boards: BoardsListResultInterface;
+    projects: ProjectsResultInterface;
+    users: UsersResultInterface;
+  };
+  recordCount: number;
+}
+
+export interface ResultChangePriorityInterface {
+  result: number;
+  message: string;
+}
+
+export interface TaskReportInterface {
+  taskSheetId: number;
+  taskDateStart: string;
+  taskDateStop: string;
+  percentage: number;
+  adminIdStartTask: string | number;
+  adminIdStopTask: string | number;
+  description: string;
+}
+
+export interface ResultTaskReportInterface {
+  contents: Array<TaskReportInterface>;
+  message: string;
+  recordCount: number;
+  result: number;
+}
+
+export interface ResultTaskActivitiesInterface {
+  contents: Array<ActivityInterface>;
+  message: string;
+  recordCount: number;
+  result: number;
 }

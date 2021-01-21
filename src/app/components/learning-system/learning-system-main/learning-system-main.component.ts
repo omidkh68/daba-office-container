@@ -86,7 +86,11 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
       height: '400px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
@@ -105,7 +109,11 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
       data: room
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(url => {
@@ -133,7 +141,11 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
       height: '160px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
@@ -161,7 +173,11 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
       height: '160px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {

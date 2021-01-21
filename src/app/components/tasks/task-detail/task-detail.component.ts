@@ -73,6 +73,10 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     );
   }
 
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
+    this.bottomSheetData.bottomSheetRef.close();
+  }
+
   ngOnInit(): void {
     this.data = this.bottomSheetData.data;
     this.usersList = this.data.usersList;
@@ -82,9 +86,11 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
   }
 
   ngAfterViewInit(): void {
-    this.createForm().then(() => {
+    this.createForm().then(async () => {
       if (this.data.action === 'detail') {
-        this.formPatchValue();
+        await this.formPatchValue();
+
+        await this.formValidationCheck();
       }
     });
   }
@@ -97,7 +103,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         percentage: new FormControl(0, Validators.required),
         assignTo: new FormControl({adminId: 0}, Validators.required),
         email: new FormControl('0'),
-        taskDurationHours: new FormControl(0, [Validators.required, Validators.pattern('^[0-9]+')]),
+        taskDurationHours: new FormControl(1, [Validators.required, Validators.pattern('^[0-9]+'), Validators.min(1), Validators.max(999)]),
         taskDurationMinutes: new FormControl(0, Validators.required),
         startAt: new FormControl('', Validators.required),
         stopAt: new FormControl('', Validators.required),
@@ -139,10 +145,6 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     }
   }
 
-  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
-    this.bottomSheetData.bottomSheetRef.close();
-  }
-
   formPatchValue() {
     this.form.disable();
     this.editable = false;
@@ -163,13 +165,13 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     let taskStopDate;
 
     if (startDate[0] !== 'Invalid') {
-      taskStartDate = jalaliMoment.from(startDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+      taskStartDate = jalaliMoment.from(startDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
     } else {
       taskStartDate = null;
     }
 
     if (stopDate[0] !== 'Invalid') {
-      taskStopDate = jalaliMoment.from(stopDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa': 'en').format('YYYY/MM/DD');
+      taskStopDate = jalaliMoment.from(stopDate[0], 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
     } else {
       taskStopDate = null;
     }
@@ -197,6 +199,85 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     });
   }
 
+  formValidationCheck() {
+    this._subscription.add(
+      this.form.get('taskName').valueChanges.subscribe((selectedValue: string) => {
+        const taskNameControl = this.form.get('taskName');
+
+        const taskName = selectedValue.trim();
+
+        if (taskName.length) {
+          taskNameControl.setErrors(null);
+        } else {
+          taskNameControl.setErrors({'incorrect': true});
+          taskNameControl.markAsTouched();
+        }
+      })
+    );
+
+    this._subscription.add(
+      this.form.get('assignTo').valueChanges.subscribe(selectedValue => {
+        const user = this.usersList.filter(user => user.adminId === selectedValue.adminId).pop();
+
+        if (user) {
+          this.form.get('email').setValue(user.email);
+        }
+      })
+    );
+
+    this._subscription.add(
+      this.form.get('startAt').valueChanges.subscribe(selectedValue => {
+        const startAtControl = this.form.get('startAt');
+        const stopAtControl = this.form.get('stopAt');
+        const stopAt = stopAtControl.value;
+
+        if (stopAt) {
+          let m = null;
+
+          if (this.rtlDirection) {
+            m = jalaliMoment(selectedValue, 'YYYY/MM/DD').isAfter(jalaliMoment(stopAt, 'YYYY/MM/DD'));
+          } else {
+            m = moment(selectedValue, 'YYYY/MM/DD').isAfter(moment(stopAt, 'YYYY/MM/DD'));
+          }
+
+          if (m) {
+            startAtControl.setErrors({'incorrect': true});
+            startAtControl.markAsTouched();
+          } else {
+            startAtControl.setErrors(null);
+            stopAtControl.setErrors(null);
+          }
+        }
+      })
+    );
+
+    this._subscription.add(
+      this.form.get('stopAt').valueChanges.subscribe(selectedValue => {
+        const stopAtControl = this.form.get('stopAt');
+        const startAtControl = this.form.get('startAt');
+        const startAt = startAtControl.value;
+
+        if (startAt) {
+          let m = null;
+
+          if (this.rtlDirection) {
+            m = jalaliMoment(selectedValue, 'YYYY/MM/DD').isBefore(jalaliMoment(startAt, 'YYYY/MM/DD'));
+          } else {
+            m = moment(selectedValue, 'YYYY/MM/DD').isBefore(moment(startAt, 'YYYY/MM/DD'));
+          }
+
+          if (m) {
+            stopAtControl.setErrors({'incorrect': true});
+            stopAtControl.markAsTouched();
+          } else {
+            stopAtControl.setErrors(null);
+            startAtControl.setErrors(null);
+          }
+        }
+      })
+    );
+  }
+
   editableForm() {
     this.editable = true;
 
@@ -220,7 +301,11 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
       height: '160px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
@@ -327,7 +412,11 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
       disableClose: true
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {

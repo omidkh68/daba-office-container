@@ -74,7 +74,11 @@ export class CompanySelectorComponent implements OnDestroy {
       height: '160px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {

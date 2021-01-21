@@ -228,7 +228,13 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
       panelClass: 'approve-detail-dialog',
       height: '160px'
     });
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
+
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -253,6 +259,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
   deleteEvent() {
     this.form.disable();
     this.editable = false;
+
     const dialogRef = this.dialog.open(ApproveComponent, {
       data: {
         title: this.getTranslate('events_handler.event_detail.delete_title'),
@@ -265,7 +272,12 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
       height: '160px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
+
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -428,7 +440,11 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
       height: '330px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
   }
 
   getTranslate(word) {

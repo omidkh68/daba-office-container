@@ -145,7 +145,11 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       height: '560px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
@@ -190,7 +194,11 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       height: '450px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe((resp: TaskCalendarRateInterface) => {
@@ -217,7 +225,11 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       height: '450px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(resp => {

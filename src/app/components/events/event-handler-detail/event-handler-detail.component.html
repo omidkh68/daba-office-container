@@ -14,7 +14,7 @@
       </button>
       <button *ngIf="data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" (click)="deleteEvent()"
               type="button"
-              class="no-border cursor-pointer no-bg text-center width-45 height-45 text-danger no-padding">
+              class="no-border cursor-pointer no-bg text-center width-45 height-45 text-red-500 no-padding">
         <mat-icon class="line-height-30">delete</mat-icon>
       </button>
       <button *ngIf="data.eventItems && data.eventItems.creatorUser.email == loggedInUser.email" (click)="enableForm()"
@@ -333,7 +333,7 @@
         <a mat-list-item *ngFor="let reminder of data.eventItems.reminders; last as last">
           <button *ngIf="data.eventItems" (click)="deleteReminder($event , reminder)"
                   type="button"
-                  class="no-border cursor-pointer no-bg text-center width-45 height-45 text-danger no-padding">
+                  class="no-border cursor-pointer no-bg text-center width-45 height-45 text-red-500 no-padding">
             <mat-icon class="line-height-30">delete</mat-icon>
           </button>
           <mat-icon class="padding-r-half" mat-list-icon>calendar_today</mat-icon>

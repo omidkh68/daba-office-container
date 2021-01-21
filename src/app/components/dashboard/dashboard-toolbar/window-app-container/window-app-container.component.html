@@ -41,6 +41,18 @@
         </span>
       </button>
 
+      <button mat-menu-item (click)="restore(app); $event.stopPropagation();"
+              *ngIf="app.isMaximized || app.isMinimized"
+              class="display-flex align-items-center text-dark-mode-color width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
+        <mat-icon
+          class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
+          filter_none
+        </mat-icon>
+        <span class="display-flex align-items-center text-dark-mode-color padding-mini-r-l full-width full-height font-9-em">
+          {{'global.restore_app' | translate}}
+        </span>
+      </button>
+
       <button mat-menu-item (click)="minimize(app); $event.stopPropagation();"
               *ngIf="!app.isMinimized"
               class="display-flex align-items-center text-dark-mode-color width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
@@ -51,18 +63,6 @@
         <span
           class="display-flex align-items-center text-dark-mode-color padding-mini-r-l full-width full-height font-9-em">
           {{'global.minimize_app' | translate}}
-        </span>
-      </button>
-
-      <button mat-menu-item (click)="restore(app); $event.stopPropagation();"
-              *ngIf="app.isMaximized || app.isMinimized"
-              class="display-flex align-items-center text-dark-mode-color width-200 text-center height-30 no-padding-t-b padding-mini-r-l no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
-        <mat-icon
-          class="flex-center text-dark-mode-color text-center font-9-em text-gray-600 text-weight-bold no-margin">
-          filter_none
-        </mat-icon>
-        <span class="display-flex align-items-center text-dark-mode-color padding-mini-r-l full-width full-height font-9-em">
-          {{'global.restore_app' | translate}}
         </span>
       </button>
 

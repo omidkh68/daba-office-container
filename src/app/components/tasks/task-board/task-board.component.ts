@@ -14,6 +14,7 @@ import {
   SimpleChanges,
   ViewChildren
 } from '@angular/core';
+import {timer} from 'rxjs';
 import * as moment from 'moment';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
@@ -24,7 +25,6 @@ import {TaskInterface} from '../logic/task-interface';
 import {BoardInterface, ResultInterface} from '../logic/board-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
-import {SocketioService} from '../../../services/socketio.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -80,12 +80,16 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   filterArgs = null;
   showFilterArgs = null;
 
+  timerDueTime: number = 0;
+  timerPeriod: number = 30000;
+  globalTimer = null;
+  globalTimerSubscription: Subscription;
+
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
-              private api: ApiService,
               private injector: Injector,
-              private socketService: SocketioService,
+              private apiService: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private currentTaskService: CurrentTaskService,
@@ -93,8 +97,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
               private refreshBoardService: RefreshBoardService,
               private windowManagerService: WindowManagerService,
               private buttonSheetDataService: ButtonSheetDataService,
-              private taskEssentialInfoService: TaskEssentialInfoService,
-              private loadingIndicatorService: LoadingIndicatorService) {
+              private loadingIndicatorService: LoadingIndicatorService,
+              private taskEssentialInfoService: TaskEssentialInfoService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -104,18 +108,26 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this._subscription.add(
       this.refreshBoardService.currentDoRefresh.subscribe(doRefresh => {
         if (doRefresh) {
-          this.getBoards();
+          /*this.getBoards();*/
 
           this.doResetFilter();
+
+          this.clearTimer();
+
+          setTimeout(() => this.startTimer(), 200);
         }
       })
     );
 
     this._subscription.add(
       this.userInfoService.currentLoginData.subscribe(() => {
-        this.getBoards();
+        /*this.getBoards();*/
 
         this.doResetFilter();
+
+        this.clearTimer();
+
+        setTimeout(() => this.startTimer(), 200);
       })
     );
   }
@@ -153,20 +165,26 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
       let taskData = event.item.data;
 
-      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+      this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.api.taskChangeStatus(taskData, event.container.id).subscribe(async (resp: any) => {
+        this.apiService.taskChangeStatus(taskData, event.container.id).subscribe(async (resp: any) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result) {
             const newTask = resp.content;
 
-            this.messageService.showMessage(resp.message);
-
             this.assignNewTaskToBoard(newTask, event.previousContainer.id, event.container.id);
           }
+
+          if (resp.message) {
+            this.messageService.showMessage(resp.message);
+          }
         }, (error: HttpErrorResponse) => {
+          if (error.message) {
+            this.messageService.showMessage(error.message, 'error');
+          }
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           this.refreshLoginService.openLoginDialog(error);
@@ -238,7 +256,11 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       disableClose: true
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
@@ -267,6 +289,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       width: '95%',
       data: data
     };
+
+    this.clearTimer();
 
     this.buttonSheetDataService.changeButtonSheetData(finalData);
   }
@@ -357,10 +381,10 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     if (this.loginData && this.loginData.token_type) {
-      this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+      this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.api.boards(this.loggedInUser.email).subscribe((resp: ResultInterface) => {
+        this.apiService.boards(this.loggedInUser.email).subscribe((resp: ResultInterface) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result === 1) {
@@ -413,17 +437,50 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     });
   }
 
+  startTimer() {
+    if (this.globalTimer) {
+      this.globalTimer = null;
+    }
+
+    this.globalTimer = timer(
+      this.timerDueTime, this.timerPeriod
+    );
+
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+    }
+
+    this.globalTimerSubscription = this.globalTimer.subscribe(() => {
+      if (this.globalTimer) {
+        this.getBoards();
+      }
+    });
+  }
+
+  clearTimer() {
+    if (this.globalTimerSubscription) {
+      this.globalTimerSubscription.unsubscribe();
+      this.globalTimer = null;
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.refreshData) {
-      this.getBoards();
+      // this.getBoards();
 
       this.doResetFilter();
+
+      this.clearTimer();
+
+      setTimeout(() => this.startTimer(), 200);
     }
 
     if (changes.filterBoards && !changes.filterBoards.firstChange) {
       this.filterBoards = changes.filterBoards.currentValue;
 
       this.putTasksToAllBoards(this.filterBoards.resp);
+
+      this.clearTimer();
     }
 
     if (changes.pushTaskToBoard && !changes.pushTaskToBoard.firstChange) {
@@ -437,6 +494,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
+
+    this.clearTimer();
   }
 }
 

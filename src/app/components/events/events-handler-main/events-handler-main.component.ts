@@ -14,7 +14,6 @@ import {
 import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
 import {MatDialog} from '@angular/material/dialog';
-import {ApiService} from '../../tasks/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {PopoverService} from '../../popover-widget/popover.service';
@@ -59,18 +58,17 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
-              private api: ApiService,
               private injector: Injector,
+              private elemRef: ElementRef,
+              private popoverService: PopoverService,
               private userInfoService: UserInfoService,
-              private eventHandlerSocketService: EventHandlerSocketService,
+              private datetimeService: DatetimeService,
+              private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
               private taskCalendarService: TaskCalendarService,
-              private datetimeService: DatetimeService,
               private eventHandlerService: EventHandlerService,
               private windowManagerService: WindowManagerService,
-              private popoverService: PopoverService,
-              private elemRef: ElementRef,
-              private translateService: TranslateService) {
+              private eventHandlerSocketService: EventHandlerSocketService) {
     super(injector, userInfoService);
   }
 
@@ -111,16 +109,6 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
             this.loadBottomSheet();
           }
         }
-      })
-    );
-
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
-
-    this._subscription.add(
-      this.api.getAllHolidays().subscribe((resp: any) => {
-        resp.content.forEach((element: any) => {
-          this.holidays.push(element.date)
-        })
       })
     );
   }
@@ -211,7 +199,11 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         height: '300px'
       });
 
-      this.windowManagerService.dialogOnTop(dialogRef.id);
+      this._subscription.add(
+        dialogRef.afterOpened().subscribe(() => {
+          this.windowManagerService.dialogOnTop(dialogRef.id);
+        })
+      );
 
       this._subscription.add(
         dialogRef.afterClosed().subscribe((eventItems: EventHandlerInterface) => {

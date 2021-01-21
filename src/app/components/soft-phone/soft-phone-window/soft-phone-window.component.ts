@@ -49,13 +49,15 @@ export class SoftPhoneWindowComponent implements OnInit, OnDestroy {
     this.windowManagerService.restoreWindow(this.data);
   }
 
-  close() {
-    this.softPhoneService.changeCloseSoftphone(true).then(() => {
-      this.softPhoneService.sipHangUp();
+  close(fromDestroy = false) {
+    this.softPhoneService.changeCloseSoftphone(true).then(async () => {
+      await this.softPhoneService.sipHangUp();
 
-      this.softPhoneService.sipUnRegister();
+      await this.softPhoneService.sipUnRegister();
 
-      this.windowManagerService.closeWindow(this.data);
+      if (!fromDestroy) {
+        await this.windowManagerService.closeWindow(this.data);
+      }
     });
   }
 
@@ -67,5 +69,7 @@ export class SoftPhoneWindowComponent implements OnInit, OnDestroy {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }
+
+    this.close(true);
   }
 }

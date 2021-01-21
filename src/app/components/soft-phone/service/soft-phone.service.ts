@@ -303,9 +303,14 @@ export class SoftPhoneService extends LoginDataClass {
       if (this.oSipSessionCall.call(number) != 0) {
         if (this.debugMode) {
           console.log('outgoing number : ', number);
-          this.oSipSessionCall = null;
           console.log('Failed to make call');
         }
+        this.oSipSessionCall = null;
+        console.log('on call != 0');
+
+        this.changeOnCallUser(null);
+        this.changeConnectedCall(false);
+        this.changeMinimizeCallPopUp(false);
         //btnCall.disabled = false;
         //btnHangUp.disabled = true;
         return;
@@ -335,11 +340,12 @@ export class SoftPhoneService extends LoginDataClass {
 
       this.oSipSessionCall.hangup({events_listener: {events: '*', listener: this.onSipEventSession}});
       this.oSipSessionCall = null;
-
-      this.changeOnCallUser(null);
-      this.changeConnectedCall(false);
-      this.changeMinimizeCallPopUp(false);
+      console.log('on hang up');
     }
+
+    this.changeOnCallUser(null);
+    this.changeConnectedCall(false);
+    this.changeMinimizeCallPopUp(false);
   };
 
   sipToggleMute = () => {
@@ -432,9 +438,24 @@ export class SoftPhoneService extends LoginDataClass {
       case 'failed_to_start':
       case 'failed_to_stop': {
         const bFailure = (e.type == 'failed_to_start') || (e.type == 'failed_to_stop');
+
         this.oSipStack = null;
         this.oSipSessionRegister = null;
+
+        console.log('on failed to stop');
+
         this.oSipSessionCall = null;
+
+        console.log(this.connectedCall.getValue());
+
+        /*this.changeOnCallUser(null);
+        this.changeConnectedCall(false);
+        this.changeMinimizeCallPopUp(false);
+
+        this.messageService.showMessage(`Error has been detected, Please call again`);
+
+        this.sipRegister();
+        */
 
         //uiOnConnectionEvent(false, false);
 
@@ -445,6 +466,7 @@ export class SoftPhoneService extends LoginDataClass {
         //divCallOptions.style.opacity = 0;
 
         //txtCallStatus.innerHTML = '';
+
         if (bFailure) {
 
         }
@@ -495,6 +517,10 @@ export class SoftPhoneService extends LoginDataClass {
         //divGlassPanel.style.visibility = 'hidden';
         if (e.type == 'm_permission_refused') {
           this.oSipSessionCall = null;
+          console.log('on m_permission_refused');
+          this.changeOnCallUser(null);
+          this.changeConnectedCall(false);
+          this.changeMinimizeCallPopUp(false);
           //uiCallTerminated('Media stream permission denied');
         }
         break;
@@ -668,6 +694,10 @@ export class SoftPhoneService extends LoginDataClass {
           //uiOnConnectionEvent(false, false);
 
           this.oSipSessionCall = null;
+          this.changeOnCallUser(null);
+          this.changeConnectedCall(false);
+          this.changeMinimizeCallPopUp(false);
+          console.log('on equal');
           this.oSipSessionRegister = null;
 
           if (this.debugMode) {
@@ -675,6 +705,11 @@ export class SoftPhoneService extends LoginDataClass {
           }
         } else if (e.session == this.oSipSessionCall) {
           this.oSipSessionCall = null;
+          console.log('on else if equal');
+          this.changeOnCallUser(null);
+          this.changeConnectedCall(false);
+          this.changeMinimizeCallPopUp(false);
+
           //uiCallTerminated(e.description);
         }
         break;

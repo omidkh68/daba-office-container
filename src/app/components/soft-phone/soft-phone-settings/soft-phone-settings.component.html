@@ -1,9 +1,17 @@
 <ng-container *ngIf="tabId && tabId === 4">
   <div class="full-height padding-full">
-    <button (click)="openSoftphoneExtension()"
+    <button *ngIf="isElectron; else webLink;" (click)="openSoftphoneExtension()"
             class="green-gradient full-width text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
             mat-raised-button type="submit">
       <span class="padding-mini-r-l">{{'soft_phone.settings.extension_settings' | translate}}</span>
     </button>
+
+    <ng-template #webLink>
+      <a [href]="url" target="_blank"
+         class="green-gradient full-width text-white font-8-rem margin-auto width-90 height-35 padding-mini-r-l"
+         mat-raised-button type="submit">
+        <span class="padding-mini-r-l">{{'soft_phone.settings.extension_settings' | translate}}</span>
+      </a>
+    </ng-template>
   </div>
 </ng-container>

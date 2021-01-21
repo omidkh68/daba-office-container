@@ -5,10 +5,15 @@ import {Observable} from 'rxjs/internal/Observable';
 import {TaskInterface} from './task-interface';
 import {FilterInterface} from './filter-interface';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
-import {ActivityInterface} from '../task-activity/logic/activity-interface';
 import {TaskDurationInterface} from './task-duration-interface';
 import {CompanySelectorService} from '../../select-company/services/company-selector.service';
-import {ResultIncompleteTaskInterface, ResultInterface, ResultTaskInterface} from './board-interface';
+import {
+  ResultChangePriorityInterface,
+  ResultFilterInterface,
+  ResultIncompleteTaskInterface,
+  ResultInterface, ResultTaskActivitiesInterface,
+  ResultTaskInterface, ResultTaskReportInterface
+} from './board-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +31,7 @@ export class ApiService {
     headers: new HttpHeaders({
       'Content-Type': 'application/json; charset=UTF-8',
       'Accept': 'application/json; charset=UTF-8'/*,
-      'from': 'app_application'*/
+      'from': 'app_application' // todo : remove this in production*/
     })
   };
 
@@ -54,24 +59,14 @@ export class ApiService {
     return this.http.get<ResultInterface>(`${this.API_URL}/boards/calendar/?email=${email}&page=-1${compId}`, this.headers);
   }
 
-  getAllHolidays(): Observable<any[]> {
-    this.currentCompany = this.companySelectorService.currentCompany;
-
-    this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
-
-    const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
-
-    return this.http.get<any[]>(`${this.API_URL}/boards/getAllHolidays${compId}`, this.headers);
-  }
-
-  getTaskReport(taskId: number): Observable<any> {
+  getTaskReport(taskId: number): Observable<ResultTaskReportInterface> {
     this.currentCompany = this.companySelectorService.currentCompany;
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
 
-    return this.http.get<any>(`${this.API_URL}/boards/getTaskReport?taskId=${taskId}${compId}`, this.headers);
+    return this.http.get<ResultTaskReportInterface>(`${this.API_URL}/boards/getTaskReport?taskId=${taskId}${compId}`, this.headers);
   }
 
   boardsCalendarDurationTask(task: TaskDurationInterface) {
@@ -104,14 +99,14 @@ export class ApiService {
     return this.http.post<ResultTaskInterface>(`${this.API_URL}/boards/changeStatus${compId}`, {task, boardStatus}, this.headers);
   }
 
-  filterTask(filters: FilterInterface): Observable<FilterInterface> {
+  filterTask(filters: FilterInterface): Observable<ResultFilterInterface> {
     this.currentCompany = this.companySelectorService.currentCompany;
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
 
-    return this.http.post<FilterInterface>(`${this.API_URL}/boards/filter${compId}`, filters, this.headers);
+    return this.http.post<ResultFilterInterface>(`${this.API_URL}/boards/filter${compId}`, filters, this.headers);
   }
 
   taskStop(taskInfo: any): Observable<TaskInterface> {
@@ -144,14 +139,14 @@ export class ApiService {
     return this.http.delete<ResultTaskInterface>(`${this.API_URL}/boards/task/?taskId=${task.taskId}${compId}`, this.headers);
   }
 
-  getActivities(taskId: number): Observable<ActivityInterface[]> {
+  getActivities(taskId: number): Observable<ResultTaskActivitiesInterface> {
     this.currentCompany = this.companySelectorService.currentCompany;
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     const compId = this.currentCompany ? `&comp_id=${this.currentCompany.id}` : '';
 
-    return this.http.get<ActivityInterface[]>(`${this.API_URL}/boards/task/getActivities?taskId=${taskId}${compId}`, this.headers);
+    return this.http.get<ResultTaskActivitiesInterface>(`${this.API_URL}/boards/task/getActivities?taskId=${taskId}${compId}`, this.headers);
   }
 
   incompleteTasks(email: string): Observable<ResultIncompleteTaskInterface> {
@@ -184,13 +179,13 @@ export class ApiService {
     return this.http.get<ResultInterface>(`${this.API_URL}/boards/getSubsetTask/?taskId=${taskId}&email=${email}${compId}`, this.headers);
   }
 
-  changePriority(todo: TaskInterface[]) {
+  changePriority(todo: TaskInterface[]): Observable<ResultChangePriorityInterface> {
     this.currentCompany = this.companySelectorService.currentCompany;
 
     const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.post(`${this.API_URL}/boards/changePriority${compId}`, todo, this.headers);
+    return this.http.post<ResultChangePriorityInterface>(`${this.API_URL}/boards/changePriority${compId}`, todo, this.headers);
   }
 }

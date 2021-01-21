@@ -14,4 +14,3 @@ export const AppConfig: any = {
   // LMS_API: 'https://94.139.172.74:8080/bbb-0.0.1-SNAPSHOT'
   LMS_API: 'https://onlinelms.dabacenter.ir/bbb-0.0.1-SNAPSHOT'
 };
-// todo: remove by ebi

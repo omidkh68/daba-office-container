@@ -14,7 +14,8 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {ResultFilterInterface} from '../logic/board-interface';
+import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
@@ -94,6 +95,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
     }
   ];
   datePicker: IDatePickerDirectiveConfig = null;
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'taskFilter'};
 
   private _subscription: Subscription = new Subscription();
 
@@ -120,9 +122,13 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
       })
     );
 
-    this.usersList = this.data.usersList;
-    this.projectsList = this.data.projectsList;
-    this.filterData = this.data.filterData;
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
+
+    this.usersList = [...this.data.usersList];
+    this.projectsList = [...this.data.projectsList];
+    this.filterData = {...this.data.filterData};
   }
 
   ngOnInit(): void {
@@ -220,7 +226,6 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
 
     this._subscription.add(
       this.form.valueChanges.subscribe((selectedValue: FilterInterface) => {
-
         const projectIdControl = this.form.get('projectId');
         const adminIdControl = this.form.get('adminId');
 
@@ -305,7 +310,8 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
   }
 
   submit() {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+    this.dialogRef.disableClose = true;
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'taskFilter'});
 
     const formValue: FilterInterface = {...this.form.value};
 
@@ -354,8 +360,8 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
     this.form.disable();
 
     this._subscription.add(
-      this.api.filterTask(formValue).subscribe((resp: any) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+      this.api.filterTask(formValue).subscribe((resp: ResultFilterInterface) => {
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'taskFilter'});
 
         if (resp.result === 1) {
           this.dialogRef.close(
@@ -365,13 +371,25 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
               content: resp.content
             }
           );
+        } else {
+          this.dialogRef.disableClose = false;
         }
 
         this.form.enable();
 
-        this.messageService.showMessage(resp.message);
+        if (resp.message) {
+          this.messageService.showMessage(resp.message);
+        }
       }, (error: HttpErrorResponse) => {
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        if (error.message) {
+          this.messageService.showMessage(error.message, 'error');
+
+          this.form.enable();
+
+          this.dialogRef.disableClose = false;
+        }
+
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'taskFilter'});
 
         this.refreshLoginService.openLoginDialog(error);
       })

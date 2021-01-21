@@ -20,7 +20,7 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 export class TaskIncompleteTaskComponent extends LoginDataClass implements OnInit, OnDestroy {
   rtlDirection: boolean;
   taskList: Array<TaskInterface>;
-  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'IncompleteTasks'};
+  loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'incompleteTasks'};
 
   private _subscription: Subscription = new Subscription();
 
@@ -39,6 +39,10 @@ export class TaskIncompleteTaskComponent extends LoginDataClass implements OnIni
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
+
+    this._subscription.add(
+      this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
+    );
   }
 
   ngOnInit(): void {
@@ -46,7 +50,7 @@ export class TaskIncompleteTaskComponent extends LoginDataClass implements OnIni
   }
 
   changeStatus(taskData) {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'IncompleteTasks'});
+    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'incompleteTasks'});
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
@@ -54,18 +58,20 @@ export class TaskIncompleteTaskComponent extends LoginDataClass implements OnIni
       this.api.taskChangeStatus(taskData, 'inProgress').subscribe(async (resp: any) => {
 
         if (resp.result) {
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'IncompleteTasks'});
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'incompleteTasks'});
 
           this.closeDialog();
         }
 
-        this.messageService.showMessage(resp.message);
+        if (resp.message) {
+          this.messageService.showMessage(resp.message);
+        }
       }, (error: HttpErrorResponse) => {
         if (error.message) {
-          this.messageService.showMessage(error.message);
+          this.messageService.showMessage(error.message, 'error');
         }
 
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'IncompleteTasks'});
+        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'incompleteTasks'});
 
         this.refreshLoginService.openLoginDialog(error);
       })

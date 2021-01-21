@@ -14,16 +14,7 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {TaskReportDescriptionComponent} from '../task-description/task-report-description.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-
-export interface TaskReportInterface {
-  taskSheetId: number;
-  taskDateStart: string;
-  taskDateStop: string;
-  percentage: number;
-  adminIdStartTask: string | number;
-  adminIdStopTask: string | number;
-  description: string;
-}
+import {ResultTaskReportInterface, TaskReportInterface} from '../logic/board-interface';
 
 @Component({
   selector: 'app-task-report',
@@ -92,7 +83,7 @@ export class TaskReportComponent implements OnInit, OnDestroy {
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
-      this.api.getTaskReport(this.task.taskId).subscribe((resp: any) => {
+      this.api.getTaskReport(this.task.taskId).subscribe((resp: ResultTaskReportInterface) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-report'});
 
         if (resp.result === 1) {
@@ -147,7 +138,9 @@ export class TaskReportComponent implements OnInit, OnDestroy {
           this.dataSource.paginator = this.paginator;
         }
 
-        this.messageService.showMessage(resp.message);
+        if (resp.message) {
+          this.messageService.showMessage(resp.message);
+        }
       }, (error: HttpErrorResponse) => {
         if (error.message) {
           this.messageService.showMessage(error.message);
@@ -175,7 +168,11 @@ export class TaskReportComponent implements OnInit, OnDestroy {
       height: '250px'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {

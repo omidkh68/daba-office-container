@@ -142,7 +142,11 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
         height: '300px'
       });
 
-      this.windowManagerService.dialogOnTop(dialogRef.id);
+      this._subscription.add(
+        dialogRef.afterOpened().subscribe(() => {
+          this.windowManagerService.dialogOnTop(dialogRef.id);
+        })
+      );
 
       this._subscription.add(
         dialogRef.afterClosed().subscribe((eventItems: EventHandlerInterface) => {

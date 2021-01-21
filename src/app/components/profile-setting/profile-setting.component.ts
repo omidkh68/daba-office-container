@@ -212,7 +212,11 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
         height: '160px'
       });
 
-      this.windowManagerService.dialogOnTop(dialogRef.id);
+      this._subscription.add(
+        dialogRef.afterOpened().subscribe(() => {
+          this.windowManagerService.dialogOnTop(dialogRef.id);
+        })
+      );
 
       this._subscription.add(
         dialogRef.afterClosed().subscribe(result => {
@@ -315,7 +319,11 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
       panelClass: 'status-dialog'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {

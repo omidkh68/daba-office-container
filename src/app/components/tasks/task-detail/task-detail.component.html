@@ -53,7 +53,7 @@
           <li *ngFor="let breadcrumb of breadcrumbList; let last = last"
               (click)=" !last ? openTask(breadcrumb) : null"
               [ngClass]="last ? 'active text-gray-500' : 'cursor-pointer'"
-              class="breadcrumb-item white-space-no-wrap font-8-em text-warning display-flex">
+              class="breadcrumb-item white-space-no-wrap font-8-em text-orange-400 display-flex">
             {{breadcrumb.taskName}}
           </li>
         </ol>

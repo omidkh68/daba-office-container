@@ -3,7 +3,7 @@
       class="full-height">
   <div class="height-full-minus-30 full-width">
     <h1 *ngIf="data.action !== 'detail'"
-        class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half">
+        class="margin-b-full text-gray-800 font-full-em text-weight-500 margin-b-half no-margin">
       {{'tasks.main.add_new_task' | translate}}
     </h1>
 
@@ -98,11 +98,11 @@
         </div>
       </div>
 
-      <div class="display-flex margin-b-full margin-r-l-reverse">
+      <div class="display-flex margin-b-half margin-r-l-reverse">
         <div class="half-width padding-mini-r-l">
           <mat-form-field class="full-width font-9-em">
             <input class="full-width" formControlName="taskDurationHours" matInput placeholder="{{'tasks.form.task_durationHours' | translate}}"
-                   required tabindex="6" type="number">
+                   required tabindex="6" type="number" min="1" max="999">
             <mat-label>
               {{'tasks.form.task_durationHours' | translate}}
             </mat-label>
@@ -186,7 +186,7 @@
         </div>
       </div>
 
-      <div class="display-flex margin-b-full margin-r-l-reverse">
+      <div class="display-flex margin-b-half margin-r-l-reverse">
         <div class="full-width padding-mini-r-l">
           <mat-form-field class="full-width height-80 font-9-em">
             <mat-label>{{'tasks.form.task_description' | translate}}</mat-label>

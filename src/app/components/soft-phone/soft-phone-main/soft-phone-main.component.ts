@@ -93,6 +93,21 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
         }
       })
     );*/
+  }
+
+  ngOnInit(): void {
+    this.microphonePremissionRequest();
+  }
+
+  ngAfterViewInit(): void {
+    this.softPhoneService.changeAudioRemoteTag({
+      audioRemote: this.audioRemote,
+      ringtone: this.ringtone,
+      ringbacktone: this.ringbacktone,
+      dtmfTone: this.dtmfTone
+    });
+
+    this.changeMainTabLanguage();
 
     this._subscription.add(
       this.softPhoneService.currentOnCallUser.subscribe(onCallUser => {
@@ -116,21 +131,6 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
         }
       })
     );
-  }
-
-  ngOnInit(): void {
-    this.microphonePremissionRequest();
-  }
-
-  ngAfterViewInit(): void {
-    this.softPhoneService.changeAudioRemoteTag({
-      audioRemote: this.audioRemote,
-      ringtone: this.ringtone,
-      ringbacktone: this.ringbacktone,
-      dtmfTone: this.dtmfTone
-    });
-
-    this.changeMainTabLanguage();
   }
 
   microphonePremissionRequest() {

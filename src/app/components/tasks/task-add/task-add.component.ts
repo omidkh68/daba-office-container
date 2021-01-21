@@ -54,15 +54,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
 
       this.form.enable();
 
-      this._subscription.add(
-        this.form.get('assignTo').valueChanges.subscribe(selectedValue => {
-          const user = this.usersList.filter(user => user.adminId === selectedValue.adminId).pop();
-
-          if (user) {
-            this.form.get('email').setValue(user.email);
-          }
-        })
-      );
+      this.formValidationCheck();
     });
   }
 
@@ -73,7 +65,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
         taskName: new FormControl('', Validators.required),
         percentage: new FormControl(0, Validators.required),
         assignTo: new FormControl('', Validators.required),
-        taskDurationHours: new FormControl(0, [Validators.required, Validators.pattern('^[0-9]+')]),
+        taskDurationHours: new FormControl(1, [Validators.required, Validators.pattern('^[0-9]+'), Validators.min(1), Validators.max(999)]),
         taskDurationMinutes: new FormControl(0, Validators.required),
         startAt: new FormControl('', Validators.required),
         stopAt: new FormControl('', Validators.required),
@@ -93,6 +85,85 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
     });
   }
 
+  formValidationCheck() {
+    this._subscription.add(
+      this.form.get('taskName').valueChanges.subscribe((selectedValue: string) => {
+        const taskNameControl = this.form.get('taskName');
+
+        const taskName = selectedValue.trim();
+
+        if (taskName.length) {
+          taskNameControl.setErrors(null);
+        } else {
+          taskNameControl.setErrors({'incorrect': true});
+          taskNameControl.markAsTouched();
+        }
+      })
+    );
+
+    this._subscription.add(
+      this.form.get('assignTo').valueChanges.subscribe(selectedValue => {
+        const user = this.usersList.filter(user => user.adminId === selectedValue.adminId).pop();
+
+        if (user) {
+          this.form.get('email').setValue(user.email);
+        }
+      })
+    );
+
+    this._subscription.add(
+      this.form.get('startAt').valueChanges.subscribe(selectedValue => {
+        const startAtControl = this.form.get('startAt');
+        const stopAtControl = this.form.get('stopAt');
+        const stopAt = stopAtControl.value;
+
+        if (stopAt) {
+          let m = null;
+
+          if (this.rtlDirection) {
+            m = jalaliMoment(selectedValue, 'YYYY/MM/DD').isAfter(jalaliMoment(stopAt, 'YYYY/MM/DD'));
+          } else {
+            m = moment(selectedValue, 'YYYY/MM/DD').isAfter(moment(stopAt, 'YYYY/MM/DD'));
+          }
+
+          if (m) {
+            startAtControl.setErrors({'incorrect': true});
+            startAtControl.markAsTouched();
+          } else {
+            startAtControl.setErrors(null);
+            stopAtControl.setErrors(null);
+          }
+        }
+      })
+    );
+
+    this._subscription.add(
+      this.form.get('stopAt').valueChanges.subscribe(selectedValue => {
+        const stopAtControl = this.form.get('stopAt');
+        const startAtControl = this.form.get('startAt');
+        const startAt = startAtControl.value;
+
+        if (startAt) {
+          let m = null;
+
+          if (this.rtlDirection) {
+            m = jalaliMoment(selectedValue, 'YYYY/MM/DD').isBefore(jalaliMoment(startAt, 'YYYY/MM/DD'));
+          } else {
+            m = moment(selectedValue, 'YYYY/MM/DD').isBefore(moment(startAt, 'YYYY/MM/DD'));
+          }
+
+          if (m) {
+            stopAtControl.setErrors({'incorrect': true});
+            stopAtControl.markAsTouched();
+          } else {
+            stopAtControl.setErrors(null);
+            startAtControl.setErrors(null);
+          }
+        }
+      })
+    );
+  }
+
   updateForm(event: FormGroup) {
     this.form = event;
 
@@ -110,6 +181,8 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
   submit() {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
+    this.dialogRef.disableClose = true;
+
     let formValue = {...this.form.value};
 
     this.form.disable();
@@ -125,6 +198,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
 
     const finalFormValue = {
       ...formValue,
+      taskName: formValue.taskName.trim(),
       startAt: formValue.startAt + ' ' + formValue.startTime + ':00',
       stopAt: formValue.stopAt + ' ' + formValue.stopTime + ':00'
     };
@@ -137,18 +211,24 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
       this.api.createTask(finalFormValue).subscribe((resp: any) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
-        if (resp.result === 1) {
-          this.messageService.showMessage(resp.message);
+        this.dialogRef.disableClose = false;
 
+        if (resp.result === 1) {
           this.dialogRef.close(true);
         } else {
           this.form.enable();
+        }
 
+        if (resp.message) {
           this.messageService.showMessage(resp.message);
         }
       }, (error: HttpErrorResponse) => {
         if (error.message) {
-          this.messageService.showMessage(error.message);
+          this.form.enable();
+
+          this.dialogRef.disableClose = false;
+
+          this.messageService.showMessage(error.message, 'error');
         }
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});

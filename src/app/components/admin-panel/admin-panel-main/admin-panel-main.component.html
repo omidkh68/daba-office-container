@@ -3,7 +3,7 @@
     <webview #webFrame class="webView-frame full-width full-height"></webview>
   </ng-container>
   <ng-template #iframe>
-    <iframe #webFrame allow="camera;microphone;fullscreen" allowfullscreen
+    <iframe #webFrame allow="camera;microphone;fullscreen" allowfullscreen loading="lazy"
             sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-top-navigation"
             class="webView-frame full-width full-height no-border"></iframe>
   </ng-template>
@@ -32,7 +32,6 @@
                    values="13; 5; 13"></animate>
         </rect>
       </svg>
-
       <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
     </div>
   </div>

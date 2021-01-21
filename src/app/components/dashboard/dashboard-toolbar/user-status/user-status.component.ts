@@ -91,7 +91,11 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
           height: '160px'
         });
 
-        this.windowManagerService.dialogOnTop(dialogRef.id);
+        this._subscription.add(
+          dialogRef.afterOpened().subscribe(() => {
+            this.windowManagerService.dialogOnTop(dialogRef.id);
+          })
+        );
 
         this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
@@ -165,7 +169,11 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
       panelClass: 'status-dialog'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
   }
 
   getElapsedTime(entry): void {
@@ -212,7 +220,11 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
       panelClass: 'status-dialog'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
   }
 
   openService(service: ServiceInterface) {

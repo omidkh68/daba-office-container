@@ -3,10 +3,12 @@ import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {LoginInterface} from '../../login/logic/login.interface';
+import {MessageService} from '../../message/service/message.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivityInterface} from './logic/activity-interface';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
+import {ResultTaskActivitiesInterface} from '../logic/board-interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
@@ -38,18 +40,17 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
+              private translate: TranslateService,
+              private messageService: MessageService,
               private refreshLoginService: RefreshLoginService,
-              private loadingIndicatorService: LoadingIndicatorService,
-              private translate: TranslateService) {
+              private loadingIndicatorService: LoadingIndicatorService) {
     this._subscription.add(
       this.loadingIndicatorService.currentLoadingStatus.subscribe(status => this.loadingIndicator = status)
     );
   }
 
   ngAfterViewInit(): void {
-    this.getActivities().then((activities: Array<ActivityInterface>) => {
-      setTimeout(() => this.activityList = activities);
-
+    this.getActivities().then(() => {
       this.single = [
         {
           name: this.getTranslate('tasks.activity.completed'),
@@ -70,13 +71,19 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.api.getActivities(this.task.taskId).subscribe((resp: any) => {
+        this.api.getActivities(this.task.taskId).subscribe((resp: ResultTaskActivitiesInterface) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-activity'});
 
           if (resp.result === 1) {
-            resolve(resp.contents);
+            this.activityList = resp.contents;
+
+            resolve(true);
           }
         }, (error: HttpErrorResponse) => {
+          if (error.message) {
+            this.messageService.showMessage(error.message);
+          }
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-activity'});
 
           this.refreshLoginService.openLoginDialog(error);

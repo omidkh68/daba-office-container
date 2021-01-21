@@ -9,7 +9,9 @@
       <div class="display-flex margin-r-l-reverse">
         <div class="full-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
-            <input class="full-width" formControlName="meetingID" matInput placeholder="{{'learning.meeting_name' | translate}}"
+            <input class="full-width" formControlName="meetingID" matInput
+                   autocomplete="off"
+                   placeholder="{{'learning.meeting_name' | translate}}"
                    required tabindex="1" type="text">
             <mat-label>
               {{'learning.meeting_name' | translate}}
@@ -25,8 +27,10 @@
       <div class="display-flex margin-r-l-reverse margin-b-full">
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
-            <input class="full-width" formControlName="viewerPassword" matInput placeholder="{{'learning.room_pass' | translate}}"
-                   required tabindex="1" type="password">
+            <input class="full-width" formControlName="viewerPassword" matInput
+                   autocomplete="off"
+                   placeholder="{{'learning.room_pass' | translate}}"
+                   required tabindex="2" type="password">
             <mat-label>
               {{'learning.room_pass' | translate}}
             </mat-label>
@@ -40,7 +44,8 @@
           <mat-form-field class="full-width font-9-em">
             <input class="full-width" formControlName="moderatorPassword" matInput
                    placeholder="{{'learning.room_moderator_pass' | translate}}"
-                   required tabindex="1" type="password">
+                   autocomplete="off"
+                   required tabindex="3" type="password">
             <mat-label>
               {{'learning.room_moderator_pass' | translate}}
             </mat-label>
@@ -56,6 +61,7 @@
         <div class="half-width padding-r-l">
           <mat-slide-toggle
             [color]="'primary'"
+            tabIndex="4"
             formControlName="isWebCamModeratorOnly">
             {{'learning.webcam_only_moderator' | translate}}
           </mat-slide-toggle>
@@ -63,6 +69,7 @@
         <div class="half-width padding-r-l">
           <mat-slide-toggle
             [color]="'primary'"
+            tabIndex="5"
             formControlName="isRecord">
             {{'learning.record_meeting' | translate}}
           </mat-slide-toggle>
@@ -73,6 +80,7 @@
         <div class="half-width padding-r-l">
           <mat-slide-toggle
             [color]="'primary'"
+            tabIndex="6"
             formControlName="isMuteOnStart">
             {{'learning.mute_on_start' | translate}}
           </mat-slide-toggle>
@@ -80,6 +88,7 @@
         <div class="half-width padding-r-l">
           <mat-slide-toggle
             [color]="'primary'"
+            tabIndex="7"
             formControlName="isUserWebCamDisable">
             {{'learning.disable_user_webcam' | translate}}
           </mat-slide-toggle>
@@ -90,6 +99,7 @@
         <div class="half-width padding-r-l">
           <mat-slide-toggle
             [color]="'primary'"
+            tabIndex="8"
             formControlName="isUserMicDisable">
             {{'learning.disable_user_mic' | translate}}
           </mat-slide-toggle>
@@ -97,6 +107,7 @@
         <div class="half-width padding-r-l">
           <mat-slide-toggle
             [color]="'primary'"
+            tabIndex="9"
             formControlName="isPrivateChatDisable">
             {{'learning.disable_private_chat' | translate}}
           </mat-slide-toggle>
@@ -107,6 +118,7 @@
         <div class="half-width padding-r-l">
           <mat-slide-toggle
             [color]="'primary'"
+            tabIndex="10"
             formControlName="isPublicChatDisable">
             {{'learning.disable_public_chat' | translate}}
           </mat-slide-toggle>
@@ -116,6 +128,7 @@
 
     <div class="height-45 display-flex justify-content-end full-width display-flex align-items-end justify-content-end">
       <button (click)="cancelBtn()"
+              tabindex="11"
               class="no-bg no-border cursor-pointer text-red-500 line-height-30 font-9-em overflow-hide text-weight-normal"
               type="button">
         <span class="padding-mini-r-l">{{'global.dismiss' | translate}}</span>
@@ -124,7 +137,7 @@
       <button [disabled]="!form.valid"
               class="green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
               mat-raised-button
-              tabindex="13"
+              tabindex="12"
               type="submit">
         <mat-icon class="width-20 height-20 font-full-plus-two-tenth-rem">check</mat-icon>
         <span class="padding-mini-r-l">{{'global.submit' | translate}}</span>
@@ -156,7 +169,6 @@
                    values="13; 5; 13"></animate>
         </rect>
       </svg>
-
       <span class="display-block font-8-em text-gray-700">{{'global.loading' | translate}}</span>
     </div>
   </div>

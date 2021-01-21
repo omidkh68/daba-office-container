@@ -80,7 +80,11 @@ export class ProfileMenuComponent extends LoginDataClass implements OnInit, OnDe
       panelClass: 'status-dialog'
     });
 
-    this.windowManagerService.dialogOnTop(dialogRef.id);
+    this._subscription.add(
+      dialogRef.afterOpened().subscribe(() => {
+        this.windowManagerService.dialogOnTop(dialogRef.id);
+      })
+    );
   }
 
   ngOnDestroy(): void {
