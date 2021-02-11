@@ -1,12 +1,16 @@
 <ng-container *ngIf="tabId === 1">
   <div class="full-height">
-    <div class="input-holder padding-mini-t-b text-center pos-rel height-50 line-height-50">
+    <div class="input-holder padding-mini-t-b text-center pos-rel height-50 pos-rel">
       <input (onValueChanged)="changeNumber($event)" [ngModel]="numeric"
-             [readOnly]="oldNumeric !== ''"
-             class="no-padding no-border no-bg font-full-plus-three-tenth-em full-width text-center" digitOnly
-             dir="ltr"
+             class="no-padding no-border no-bg font-full-plus-three-tenth-em full-width text-center height-40"
+             dir="ltr" digitOnly
              placeholder="{{'global.extension_placeholder' | translate}}"
              type="tel">
+
+      <span *ngIf="findContact"
+            class="full-width height-20 line-height-20 font-9-em pos-abs left-0 right-0 bottom-full-reverse text-blue-700 text-center">
+        {{findContact.extension_name}}
+      </span>
     </div>
 
     <div class="key-container">
@@ -15,7 +19,7 @@
                 *ngFor="let key of keys"
                 [colspan]="1"
                 [rowspan]="1">
-          <button (mousedown)="keyPress($event, key)"
+          <button (mousedown)="keyPress(key)"
                   class="key cursor-pointer no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 line-height-50 text-center round-corner-all"
                   mat-raised-button>
             {{key.num}}

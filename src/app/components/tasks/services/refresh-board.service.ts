@@ -5,11 +5,11 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
   providedIn: 'root'
 })
 export class RefreshBoardService {
-  private _doRefresh: boolean = false;
+  private _doRefresh = false;
   private doRefresh = new BehaviorSubject(this._doRefresh);
   public currentDoRefresh = this.doRefresh.asObservable();
 
-  changeCurrentDoRefresh(doRefresh: boolean) {
+  changeCurrentDoRefresh(doRefresh: boolean): void {
     this.doRefresh.next(doRefresh);
 
     if (doRefresh) {

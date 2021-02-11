@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
+import {TaskInterface} from '../logic/task-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -13,18 +14,18 @@ import {ProjectInterface} from '../../projects/logic/project-interface';
 import {TaskDataInterface} from '../logic/task-data-interface';
 import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
   templateUrl: './task-add.component.html'
 })
 export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestroy {
-  rtlDirection: boolean = false;
-  editable: boolean = false;
+  rtlDirection = false;
+  editable = false;
   form: FormGroup;
-  projectsList: ProjectInterface[] = [];
-  usersList: UserInterface[] = [];
+  projectsList: Array<ProjectInterface> = [];
+  usersList: Array<UserInterface> = [];
 
   private _subscription: Subscription = new Subscription();
 
@@ -58,7 +59,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
     });
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         taskId: new FormControl(0),
@@ -71,7 +72,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
         stopAt: new FormControl('', Validators.required),
         startTime: new FormControl('', Validators.required),
         stopTime: new FormControl('', Validators.required),
-        project: new FormControl({}, Validators.required),
+        project: new FormControl('', Validators.required),
         taskDesc: new FormControl(''),
         email: new FormControl('0'),
         boardStatus: new FormControl('', Validators.required),
@@ -81,11 +82,11 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
         trackable: new FormControl(0)
       });
 
-      resolve();
+      resolve(true);
     });
   }
 
-  formValidationCheck() {
+  formValidationCheck(): void {
     this._subscription.add(
       this.form.get('taskName').valueChanges.subscribe((selectedValue: string) => {
         const taskNameControl = this.form.get('taskName');
@@ -118,7 +119,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
         const stopAt = stopAtControl.value;
 
         if (stopAt) {
-          let m = null;
+          let m;
 
           if (this.rtlDirection) {
             m = jalaliMoment(selectedValue, 'YYYY/MM/DD').isAfter(jalaliMoment(stopAt, 'YYYY/MM/DD'));
@@ -144,7 +145,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
         const startAt = startAtControl.value;
 
         if (startAt) {
-          let m = null;
+          let m;
 
           if (this.rtlDirection) {
             m = jalaliMoment(selectedValue, 'YYYY/MM/DD').isBefore(jalaliMoment(startAt, 'YYYY/MM/DD'));
@@ -164,7 +165,7 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
     );
   }
 
-  updateForm(event: FormGroup) {
+  updateForm(event: FormGroup): void {
     this.form = event;
 
     setTimeout(() => {
@@ -172,18 +173,18 @@ export class TaskAddComponent extends LoginDataClass implements OnInit, OnDestro
     }, 500);
   }
 
-  cancelBtn(event) {
+  cancelBtn(event: boolean): void {
     if (event) {
       this.dialogRef.close(false);
     }
   }
 
-  submit() {
+  submit(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     this.dialogRef.disableClose = true;
 
-    let formValue = {...this.form.value};
+    const formValue: TaskInterface = {...this.form.value};
 
     this.form.disable();
 

@@ -21,7 +21,7 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
   task: TaskInterface;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
   loginData: LoginInterface;
@@ -29,10 +29,10 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
   activityList: Array<ActivityInterface> = [];
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'project-activity'};
   single = [];
-  gradient: boolean = false;
-  showLegend: boolean = false;
-  showLabels: boolean = true;
-  isDoughnut: boolean = false;
+  gradient = false;
+  showLegend = false;
+  showLabels = true;
+  isDoughnut = false;
   colorScheme = {
     domain: ['#4caf50', '#b71c1c']
   };
@@ -64,7 +64,7 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  getActivities() {
+  getActivities(): Promise<boolean> {
     return new Promise((resolve) => {
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project-activity'});
 
@@ -75,7 +75,7 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project-activity'});
 
           if (resp.result === 1) {
-            this.activityList = resp.contents;
+            this.createActivitiesStatements(resp.contents);
 
             resolve(true);
           }
@@ -92,7 +92,58 @@ export class TaskActivityComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  getTranslate(word) {
+  createActivitiesStatements(activities: Array<ActivityInterface>): void {
+    this.activityList = activities.map((activity: ActivityInterface) => {
+      const fullName = `${activity.user.name} ${activity.user.family}`;
+      let logTypeText = '';
+      let icon = '';
+
+      switch (activity.logType) {
+        case 1: {
+          logTypeText = this.getTranslate('tasks.activity.created');
+          icon = 'add';
+          break;
+        }
+        case 2: {
+          logTypeText = this.getTranslate('tasks.activity.edited');
+          icon = 'edit';
+          break;
+        }
+        case 3: {
+          logTypeText = this.getTranslate('tasks.activity.deleted');
+          icon = 'delete';
+          break;
+        }
+        case 4: {
+          logTypeText = this.getTranslate('tasks.activity.started');
+          icon = 'play_arrow';
+          break;
+        }
+        case 5: {
+          logTypeText = this.getTranslate('tasks.activity.stopped');
+          icon = 'stop';
+          break;
+        }
+        case 6: {
+          logTypeText = this.getTranslate('tasks.activity.done');
+          icon = 'done';
+          break;
+        }
+        case 7: {
+          logTypeText = this.getTranslate('tasks.activity.described');
+          icon = 'comment';
+          break;
+        }
+      }
+
+      activity.logText = `${fullName} ${logTypeText}`;
+      activity.icon = icon;
+
+      return activity;
+    });
+  }
+
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 

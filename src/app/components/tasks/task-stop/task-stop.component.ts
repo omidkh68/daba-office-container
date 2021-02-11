@@ -11,6 +11,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {ResultTaskStopInterface} from '../logic/board-interface';
 
 @Component({
   selector: 'app-task-stop',
@@ -20,15 +21,15 @@ import {LoadingIndicatorService} from '../../../services/loading-indicator.servi
 export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestroy {
   form: FormGroup;
   task: TaskInterface;
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: TaskInterface,
               public dialogRef: MatDialogRef<TaskStopComponent>,
-              private api: ApiService,
               private fb: FormBuilder,
               private injector: Injector,
+              private apiService: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private viewDirection: ViewDirectionService,
@@ -48,11 +49,11 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
       this.form.patchValue({
         taskId: this.task.taskId,
         percentage: this.task.percentage
-      })
+      });
     });
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         taskId: new FormControl(0),
@@ -65,15 +66,15 @@ export class TaskStopComponent extends LoginDataClass implements OnInit, OnDestr
     });
   }
 
-  submit() {
+  submit(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     this.form.disable();
 
-    this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
+    this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
-      this.api.taskStop(this.form.value).subscribe((resp: any) => {
+      this.apiService.taskStop(this.form.value).subscribe((resp: ResultTaskStopInterface) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
         if (resp.result === 1) {

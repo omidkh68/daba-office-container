@@ -2,14 +2,11 @@ import {RoleInterface} from '../../tasks/logic/role-interface';
 
 export interface UserInterface {
   adminId: number;
-  username?: string;
-  password?: string;
-  name: string;
-  family: string;
-  email?: string;
-  status?: string;
-  permission?: string;
-  darkMode?: number;
-  role?: RoleInterface;
   creationDate?: string;
+  darkMode?: number;
+  email?: string;
+  family: string;
+  name: string;
+  role?: RoleInterface;
+  username?: string;
 }

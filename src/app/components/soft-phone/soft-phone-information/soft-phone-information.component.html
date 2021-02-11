@@ -28,7 +28,7 @@
                        *ngFor="let user of softPhoneUsers | myFilter:filterArgs"
                        [ngClass]="rtlDirection ? 'padding-r-half padding-l-tiny' : 'padding-l-half padding-r-tiny'"
                        class="highlight cursor-pointer full-height">
-          <img (error)="$event.target.src='assets/profileImg/0.jpg'" [alt]="user.name"
+          <img (error)="$event.target.src='assets/profileImg/0.jpg'" [alt]="user.username"
                [ngClass]="{'active': user.is_online}"
                [src]="'assets/profileImg/'+ user.username +'.jpg'"
                class="online-user mat-elevation-z2 width-35 height-35 transition"

@@ -13,14 +13,14 @@ export class ConferencesCollaborationMainComponent {
   @Input()
   windowData: ServiceInterface;
 
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   constructor(private userInfoService: UserInfoService,
               private softPhoneService: SoftPhoneService,
               private windowManagerService: WindowManagerService) {
   }
 
-  openService(serviceName: string) {
+  openService(serviceName: string): void {
     // setTimeout(() => this.windowManagerService.minimizeWindow(this.windowData), 500);
 
     const services: Array<ServiceInterface> = this.windowManagerService.serviceList;

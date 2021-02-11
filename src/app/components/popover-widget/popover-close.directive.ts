@@ -1,5 +1,4 @@
 import {Directive, HostListener, Input, Optional} from '@angular/core';
-
 import {PopoverRef} from './popover-ref';
 
 /**
@@ -11,9 +10,7 @@ import {PopoverRef} from './popover-ref';
 export class PopoverCloseDirective<T = any> {
   @Input('p1PopoverClose') popoverResult: T;
 
-  constructor(
-    @Optional() private popoverRef: PopoverRef<T>
-  ) {
+  constructor(@Optional() private popoverRef: PopoverRef<T>) {
   }
 
   @HostListener('click') onClick(): void {

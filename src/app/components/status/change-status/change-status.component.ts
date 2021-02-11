@@ -1,11 +1,11 @@
-import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService as UserApiService} from '../../users/logic/api.service';
 import {ApiService as StatusApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
 import {LoginDataClass} from '../../../services/loginData.class';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -23,7 +23,7 @@ import {StatusChangeResultInterface, StatusListResultInterface} from '../logic/r
   styleUrls: ['./change-status.component.scss']
 })
 export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnDestroy {
-  rtlDirection: boolean;
+  rtlDirection = false;
   form: FormGroup;
   currentUserStatus: UserStatusInterface | null;
   statusList: Array<StatusDetailInterface> = [];
@@ -31,8 +31,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data,
-              public dialogRef: MatDialogRef<ChangeStatusComponent>,
+  constructor(public dialogRef: MatDialogRef<ChangeStatusComponent>,
               private fb: FormBuilder,
               private injector: Injector,
               private translate: TranslateService,
@@ -55,7 +54,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     );
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<any> {
     await this.getStatuses();
     await this.createForm().then(() => {
       this.form.markAllAsTouched();
@@ -78,10 +77,10 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     });
   }
 
-  getStatuses() {
-    this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'userStatus'});
-
+  getStatuses(): Promise<boolean> {
     return new Promise((resolve, reject) => {
+      this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'userStatus'});
+
       this.statusApiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
@@ -104,7 +103,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     });
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         user_id: new FormControl(this.loggedInUser.id, Validators.required),
@@ -117,7 +116,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     });
   }
 
-  checkFormValidation() {
+  checkFormValidation(): void {
     this._subscription.add(
       this.form.valueChanges.subscribe(selectedValue => {
         const descriptionControl = this.form.get('description');
@@ -136,7 +135,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     );
   }
 
-  activeStatus(status: StatusDetailInterface) {
+  activeStatus(status: StatusDetailInterface): void {
     if (status.is_description) {
       this.dialogRef.updateSize('500px', '490px');
 
@@ -148,11 +147,11 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     this.form.get('status').setValue(status);
   }
 
-  closeDialog() {
+  closeDialog(): void {
     this.dialogRef.close();
   }
 
-  submit() {
+  submit(): void {
     if (this.form.valid) {
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'userStatus'});
 
@@ -197,6 +196,10 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
             this.form.enable();
           }
         }, (error: HttpErrorResponse) => {
+          if (error.message) {
+            this.messageService.showMessage(error.message, 'error');
+          }
+
           this.dialogRef.disableClose = false;
 
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'userStatus'});
@@ -211,7 +214,7 @@ export class ChangeStatusComponent extends LoginDataClass implements OnInit, OnD
     }
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): Promise<string> {
     return new Promise((resolve) => resolve(this.translate.instant(word)));
   }
 

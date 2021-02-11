@@ -10,8 +10,8 @@ export class TimeAreaDigitalClockComponent implements OnChanges, OnDestroy {
   @Input()
   timezone: string;
 
-  timerDueTime: number = 0;
-  timerPeriod: number = 1000;
+  timerDueTime = 0;
+  timerPeriod = 1000;
   time: string;
   globalTimer = null;
   globalTimerSubscription: Subscription;
@@ -26,7 +26,7 @@ export class TimeAreaDigitalClockComponent implements OnChanges, OnDestroy {
     }
   }
 
-  getTime() {
+  getTime(): void {
     this.time = new Date().toLocaleTimeString('en-US', {
       timeZone: this.timezone && this.timezone.length ? this.timezone : 'UTC',
       hour12: false,

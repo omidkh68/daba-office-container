@@ -19,12 +19,12 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
   templateUrl: './events-handler-add-reminder.component.html'
 })
 export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
-  rtlDirection: boolean;
+  rtlDirection = false;
   eventItems: EventHandlerInterface;
   reminderForm: FormGroup;
-  editableReminder: boolean = false;
-  reminderTypeList: ReminderTypeInterface[] = [];
-  statusList: ReminderTypeInterface[] = [];
+  editableReminder = false;
+  reminderTypeList: Array<ReminderTypeInterface> = [];
+  statusList: Array<ReminderTypeInterface> = [];
   hours = hours;
   datePicker: IDatePickerDirectiveConfig = null;
 
@@ -97,7 +97,7 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
   createReminderForm() {
     return new Promise((resolve) => {
 
-      let sdate = jalaliMoment.from(this.dateTimeService.formatDate(new Date()), 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
+      const sdate = jalaliMoment.from(this.dateTimeService.formatDate(new Date()), 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
 
       this.reminderForm = this.fb.group({
         reminderType: new FormControl(null, Validators.required),
@@ -113,7 +113,7 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
   }
 
   submitReminder() {
-    let formValue = {reminders: [this.reminderForm.value], id: this.data.eventItems.id};
+    const formValue = {reminders: [this.reminderForm.value], id: this.data.eventItems.id};
 
     if (this.rtlDirection) {
       formValue.reminders[0].startReminder = jalaliMoment.from(formValue.reminders[0].startReminder, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD') + ' ' + formValue.reminders[0].startTime + ':00';
@@ -139,11 +139,11 @@ export class EventsHandlerAddReminderComponent implements OnInit, OnDestroy {
     this.dialogRef.close(true);
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }

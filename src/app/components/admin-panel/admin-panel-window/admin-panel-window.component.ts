@@ -11,7 +11,7 @@ import {ViewDirectionService} from '../../../services/view-direction.service';
   templateUrl: './admin-panel-window.component.html'
 })
 export class AdminPanelWindowComponent implements OnInit, OnDestroy {
-  rtlDirection: boolean;
+  rtlDirection = false;
   windowInstance: WindowInterface;
   data: ServiceInterface;
 
@@ -33,31 +33,31 @@ export class AdminPanelWindowComponent implements OnInit, OnDestroy {
     );
   }
 
-  activeWindow() {
+  activeWindow(): void {
     this.windowManagerService.activeWindow(this.data);
   }
 
-  minimize() {
+  minimize(): void {
     this.windowManagerService.minimizeWindow(this.data);
   }
 
-  maximize() {
+  maximize(): void {
     this.windowManagerService.maximizeWindow(this.data);
   }
 
-  restore() {
+  restore(): void {
     this.windowManagerService.restoreWindow(this.data);
   }
 
-  close() {
+  close(): void {
     this.windowManagerService.closeWindow(this.data);
   }
 
-  centerWindow() {
+  centerWindow(): void {
     this.windowManagerService.centerWindow();
   }
 
-  reload() {
+  reload(): void {
     this.webViewService.changeRefreshWebView(true);
   }
 

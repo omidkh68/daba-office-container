@@ -3,6 +3,7 @@ import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {CdrInterface} from '../logic/cdr.interface';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../message/service/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
@@ -35,23 +36,24 @@ export class SoftPhoneLogsComponent extends LoginDataClass implements OnChanges,
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
-  tabId: number = 2;
+  tabId = 2;
 
   @Input()
   softPhoneUsers: Array<SoftphoneUserInterface>;
 
-  loggedInUserExtension: string = '';
+  loggedInUserExtension = '';
   cdrList: Array<CdrInterface> = [];
-  callPopUpMinimizeStatus: boolean = false;
+  callPopUpMinimizeStatus = false;
   cdrExtensionList: Array<CdrExtensionListInterface> = [];
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
               private injector: Injector,
+              private messageService: MessageService,
               private userInfoService: UserInfoService,
               private softPhoneService: SoftPhoneService,
               private refreshLoginService: RefreshLoginService,
@@ -82,7 +84,7 @@ export class SoftPhoneLogsComponent extends LoginDataClass implements OnChanges,
     );
   }
 
-  getCdr() {
+  getCdr(): void {
     this.cdrExtensionList = [];
 
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
@@ -102,7 +104,7 @@ export class SoftPhoneLogsComponent extends LoginDataClass implements OnChanges,
           this.cdrList.map(item => {
             let cdrExtensionItem: CdrExtensionListInterface = null;
             let findUser: SoftphoneUserInterface = null;
-            let src = item.src.replace(`-${currentCompany.subdomain}`, '');
+            const src: string = item.src.replace(`-${currentCompany.subdomain}`, '');
 
             if (this.loggedInUserExtension === item.dst) {
               findUser = this.softPhoneUsers.filter(user => user.extension_no === src).pop();
@@ -191,6 +193,10 @@ export class SoftPhoneLogsComponent extends LoginDataClass implements OnChanges,
           });
         }
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message, 'error');
+        }
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
         this.refreshLoginService.openLoginDialog(error);

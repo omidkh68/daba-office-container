@@ -26,7 +26,7 @@ export class MessageService implements OnDestroy {
     this._durationInSeconds = value;
   }
 
-  showMessage(title: string, type: string = '', duration: number | null = null) {
+  showMessage(title: string, type = '', duration: number | null = null): void {
     const snackBar = this.snackBar.openFromComponent(MessageComponent, {
       data: title,
       duration: duration ? duration : this._durationInSeconds,

@@ -1,14 +1,14 @@
+/*
 import {ComponentType, ConnectionPositionPair, Overlay} from '@angular/cdk/overlay';
 import {ComponentPortal, PortalInjector, TemplatePortal} from '@angular/cdk/portal';
 import {ElementRef, Injectable, InjectionToken, Injector, TemplateRef} from '@angular/core';
-
 import {PopoverConfig} from './popover-config';
 import {PopoverRef} from './popover-ref';
 import {PopoverComponent} from './popover/popover.components';
 
-/**
+/!**
  * Injection token that can be used to access the data that was passed in to a popover.
- * */
+ * *!/
 export const POPOVER_DATA = new InjectionToken('popover.data');
 
 const defaultConfig: PopoverConfig = {
@@ -19,9 +19,9 @@ const defaultConfig: PopoverConfig = {
   arrowSize: 20
 };
 
-/**
+/!**
  * Service to open modal and manage popovers.
- */
+ *!/
 @Injectable({
   providedIn: 'root'
 })
@@ -161,3 +161,4 @@ export class PopoverService {
     return popoverRef;
   }
 }
+*/

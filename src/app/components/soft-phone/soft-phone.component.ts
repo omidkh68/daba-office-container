@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Inject, ViewChild, ViewContainerRef} from '@angular/core';
+import {AfterViewInit, Component, ComponentRef, Inject, ViewChild, ViewContainerRef} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ServiceInterface} from '../services/logic/service-interface';
 import {LazyComponentService} from '../../services/lazy-component.service';
@@ -14,8 +14,8 @@ export class SoftPhoneComponent implements AfterViewInit {
               @Inject(MAT_DIALOG_DATA) public data: ServiceInterface) {
   }
 
-  async ngAfterViewInit() {
-    const ref = this.lazyComponentService.loadComponent('softPhoneModuleId', this.container);
+  ngAfterViewInit(): void {
+    const ref: Promise<ComponentRef<any>> = this.lazyComponentService.loadComponent('softPhoneModuleId', this.container);
 
     ref.then(result => {
       result.instance.data = this.data;

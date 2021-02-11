@@ -1,5 +1,5 @@
+import {Component, ComponentRef, EmbeddedViewRef, ViewChild} from '@angular/core';
 import {BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal} from '@angular/cdk/portal';
-import {Component, ComponentRef, EmbeddedViewRef, ViewChild} from '@angular/core'
 
 /**
  * Internal component that wraps user-provided popover content.

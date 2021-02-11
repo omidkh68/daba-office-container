@@ -5,7 +5,7 @@ import {AppConfig} from '../../../../environments/environment';
 import {ActionTypeInterface} from './action-type.interface';
 import {AddReminderInterface, EventHandlerInterface} from './event-handler.interface';
 import {ReminderTypeInterface} from './event-reminder.interface';
-import {EventHandlerEmailDate} from "../../users/logic/user-container.interface";
+import {EventHandlerEmailDate} from '../../users/logic/user-container.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +27,8 @@ export class EventApiService {
   constructor(private http: HttpClient) {
   }
 
-  getAllActionType(): Observable<ActionTypeInterface[]> {
-    return this.http.get<ActionTypeInterface[]>(`${this.API_URL}/actionType/getAllActionType`);
+  getAllActionType(): Observable<Array<ActionTypeInterface>> {
+    return this.http.get<Array<ActionTypeInterface>>(`${this.API_URL}/actionType/getAllActionType`);
   }
 
   addNewEvent(event: EventHandlerInterface): Observable<EventHandlerInterface> {

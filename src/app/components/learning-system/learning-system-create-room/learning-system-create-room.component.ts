@@ -1,4 +1,4 @@
-import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -6,7 +6,7 @@ import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {LmsInterface, LmsResultInterface} from '../logic/lms.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
@@ -16,13 +16,12 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 })
 export class LearningSystemCreateRoomComponent extends LoginDataClass implements OnInit, OnDestroy {
   form: FormGroup;
-  rtlDirection: boolean;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = null;
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private injector: Injector,
               private apiService: ApiService,
               private userInfoService: UserInfoService,
@@ -42,10 +41,10 @@ export class LearningSystemCreateRoomComponent extends LoginDataClass implements
   }
 
   ngOnInit(): void {
-    this.createForm();
+    this.createForm().finally();
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         banner: new FormControl(this.getTranslate('learning.welcome_banner')),
@@ -61,19 +60,19 @@ export class LearningSystemCreateRoomComponent extends LoginDataClass implements
         isPrivateChatDisable: new FormControl(''),
         isPublicChatDisable: new FormControl(''),
         moderatorWelcomeMsg: new FormControl(''),
-        userName: new FormControl(this.loggedInUser.email),
+        userName: new FormControl(this.loggedInUser.email.split('@')[0]),
         welcomeText: new FormControl('')
       });
 
-      resolve();
+      resolve(true);
     });
   }
 
-  cancelBtn() {
+  cancelBtn(): void {
     this.dialogRef.close(false);
   }
 
-  submit() {
+  submit(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'createRoom'});
 
     const formValue: LmsInterface = this.form.value;
@@ -94,14 +93,18 @@ export class LearningSystemCreateRoomComponent extends LoginDataClass implements
 
         if (resp.result === 'SUCCESSFUL') {
           this.dialogRef.close(resp.content);
+        } else {
+          this.form.enable();
         }
       }, () => {
+        this.form.enable();
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'createRoom'});
       })
     );
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

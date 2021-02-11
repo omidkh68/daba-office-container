@@ -40,10 +40,10 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
   @Output()
   formOutput = new EventEmitter();
 
-  rtlDirection: boolean;
+  rtlDirection = false;
   task: TaskInterface = null;
-  projectsList: ProjectInterface[] = [];
-  usersList: UserInterface[] = [];
+  projectsList: Array<ProjectInterface> = [];
+  usersList: Array<UserInterface> = [];
   durationMinute: Array<number> = [0, 15, 30, 45];
   hours: Array<string> = [];
   boardsList = [];
@@ -87,15 +87,15 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
     const minutes = ['00', '15', '30', '45'];
 
     for (let i = 0; i <= 23; i++) {
-      for (let minute of minutes) {
-        let hourTmp = i < 10 ? '0' + i : i.toString(10);
+      for (const minute of minutes) {
+        const hourTmp = i < 10 ? `0${i}` : i.toString(10);
 
         this.hours.push(`${hourTmp}:${minute}`);
       }
     }
   }
 
-  setupDatepickers() {
+  setupDatepickers(): void {
     this.datePicker = {
       locale: this.rtlDirection ? 'fa' : 'en',
       firstDayOfWeek: this.rtlDirection ? 'sa' : 'mo',
@@ -105,7 +105,7 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
     };
   }
 
-  setupTaskStatusWords() {
+  setupTaskStatusWords(): void {
     setTimeout(() => {
       this.boardsList = [
         {
@@ -120,7 +120,7 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
           id: 'done',
           name: this.getTranslate('tasks.boards.done')
         }
-      ]
+      ];
     }, 200);
   }
 
@@ -140,12 +140,12 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
     }
   }
 
-  cancelBtn() {
+  cancelBtn(): void {
     this.cancel.emit(true);
   }
 
-  changeBoardStatus(event) {
-    if (event.value === 'done') {
+  changeBoardStatus(event: string): void {
+    if (event === 'done') {
       this.form.get('percentage').setValue(100);
     } else {
       if (this.data.action === 'detail') {
@@ -158,9 +158,9 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
     }
   }
 
-  selectCurrentTime() {
+  selectCurrentTime(): void {
     const curDate = new Date();
-    const curHour = curDate.getHours() < 10 ? '0' + curDate.getHours() : curDate.getHours();
+    const curHour = curDate.getHours() < 10 ? `0${curDate.getHours()}` : curDate.getHours();
     const curMinute = curDate.getMinutes();
     let selectedMinute = '';
 
@@ -174,13 +174,13 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
       selectedMinute = '45';
     }
 
-    const totalCurrentTime = curHour + ':' + selectedMinute;
+    const totalCurrentTime = `${curHour}:${selectedMinute}`;
 
     this.form.get('startTime').setValue(totalCurrentTime);
     this.form.get('stopTime').setValue(totalCurrentTime);
   }
 
-  public findInvalidControls() {
+  /*public findInvalidControls() {
     const invalid = [];
     const controls = this.form.controls;
     for (const name in controls) {
@@ -189,13 +189,15 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
       }
     }
     return invalid.join(', ');
+  }*/
+
+  submit(): void {
+    if (this.form.valid) {
+      this.formOutput.emit(this.form);
+    }
   }
 
-  submit() {
-    this.formOutput.emit(this.form);
-  }
-
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 

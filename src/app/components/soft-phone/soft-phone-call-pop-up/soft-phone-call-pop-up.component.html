@@ -139,7 +139,7 @@
         *ngFor="let key of dialPadKeys"
         [colspan]="1"
         [rowspan]="1">
-        <button (mousedown)="dialKeyPress($event, key)"
+        <button (mousedown)="dialKeyPress(key)"
                 class="dial-pad-key cursor-pointer no-box-shadow no-padding no-border font-full-plus-half-em width-50 height-50 line-height-50 text-center round-corner-all"
                 mat-raised-button>
           {{key.num}}

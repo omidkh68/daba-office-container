@@ -28,17 +28,17 @@ export class CompanySelectorService {
     return this.companyList.getValue();
   }
 
-  changeCompanyList(companyList: Array<CompanyInterface>) {
+  changeCompanyList(companyList: Array<CompanyInterface>): void {
     this.companyList.next(companyList);
   }
 
-  changeSelectedCompany(selectedCompany: CompanyInterface) {
+  changeSelectedCompany(selectedCompany: CompanyInterface): void {
     this.changeCompanyFromLoggedInDataFile(selectedCompany).then(() => {
       this.selectedCompany.next(selectedCompany);
     });
   }
 
-  changeCompanyFromLoggedInDataFile(company: CompanyInterface) {
+  changeCompanyFromLoggedInDataFile(company: CompanyInterface): Promise<boolean> {
     return new Promise((resolve) => {
       let loginData;
       let loginDataPath;

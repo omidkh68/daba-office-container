@@ -2,15 +2,15 @@ import {Component, Injector, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfig} from '../../../../environments/environment';
 import {ApiService} from '../../users/logic/api.service';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {LoginResultInterface} from '../logic/login.interface';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {LoginInfoInterface, LoginInterface, LoginResultInterface} from '../logic/login.interface';
 
 @Component({
   selector: 'app-login-form',
@@ -20,9 +20,9 @@ export class LoginFormComponent implements OnInit {
   @Input()
   type: boolean;
 
-  rtlDirection: boolean;
+  rtlDirection = false;
   form: FormGroup;
-  hide: boolean = true;
+  hide = true;
   dialogData = null;
   dialogRef = null;
 
@@ -46,12 +46,12 @@ export class LoginFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createForm();
+    this.createForm().finally();
 
     // setTimeout(() => this.login(), 200); // todo: remove this in production
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         username: new FormControl(''),
@@ -64,10 +64,10 @@ export class LoginFormComponent implements OnInit {
     });
   }
 
-  login() {
+  login(): void {
     this.form.disable();
 
-    const formValue = this.form.value;
+    const formValue: LoginInfoInterface = this.form.value;
 
     this._subscription.add(
       this.api.login(formValue).subscribe((resp: LoginResultInterface) => {
@@ -79,8 +79,8 @@ export class LoginFormComponent implements OnInit {
           if (this.dialogData) {
             this.dialogRef.close();
           } else {
-            this.router.navigateByUrl(`/selectCompany`);
-            // this.router.navigateByUrl(`/`);
+            this.router.navigateByUrl(`/selectCompany`).finally();
+            // this.router.navigateByUrl(`/`).finally();
           }
         } else {
           this.showErrorLogin();
@@ -91,7 +91,7 @@ export class LoginFormComponent implements OnInit {
     );
   }
 
-  createFile(data) {
+  createFile(data: LoginInterface): void {
     if (this.electronService.isElectron) {
       const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 
@@ -103,7 +103,7 @@ export class LoginFormComponent implements OnInit {
     }
   }
 
-  showErrorLogin() {
+  showErrorLogin(): void {
     this.form.enable();
 
     const failedMessage = this.getTranslate('login_info.login_failed');
@@ -111,7 +111,7 @@ export class LoginFormComponent implements OnInit {
     this.messageService.showMessage(failedMessage, 'error');
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 

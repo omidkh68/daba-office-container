@@ -1,6 +1,6 @@
-import {ActionTypeInterface, ActionTypeJobInterface, UserEventHandlerInterface} from "./action-type.interface";
-import {ReminderInterface} from "./event-reminder.interface";
-import {UserContainerInterface} from "../../users/logic/user-container.interface";
+import {ActionTypeInterface, ActionTypeJobInterface, UserEventHandlerInterface} from './action-type.interface';
+import {ReminderInterface} from './event-reminder.interface';
+import {UserContainerInterface} from '../../users/logic/user-container.interface';
 
 export interface EventHandlerInterface {
   actionType: ActionTypeInterface;
@@ -17,7 +17,7 @@ export interface EventHandlerInterface {
   creatorUser: UserEventHandlerInterface;
   sTime?: string;
   reminders?: ReminderInterface[];
-  users: UserContainerInterface[];
+  users: Array<UserContainerInterface>;
   actionCallback?: string;
 }
 

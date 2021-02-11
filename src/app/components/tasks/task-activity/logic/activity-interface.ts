@@ -1,9 +1,9 @@
+import {UserInterface} from '../../../users/logic/user-interface';
+
 export interface ActivityInterface {
-  commentId: number;
-  adminId: number;
-  componentId: number;
-  commentText: string;
-  isLog: number;
+  logType: number;
+  logText?: string;
+  icon?: string;
   creationDate: string;
-  activityIcon: string;
+  user: UserInterface;
 }

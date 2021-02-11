@@ -4,8 +4,8 @@ import {ProjectInterface} from '../../projects/logic/project-interface';
 
 export interface FilterTaskInterface {
   filterData: FilterInterface;
-  usersList: UserInterface[];
-  projectsList: ProjectInterface[];
+  usersList: Array<UserInterface>;
+  projectsList: Array<ProjectInterface>;
   loginData?: any;
   rtlDirection?: boolean
 }

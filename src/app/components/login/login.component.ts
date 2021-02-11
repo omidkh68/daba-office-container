@@ -10,7 +10,7 @@ import {ViewDirectionService} from '../../services/view-direction.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  rtlDirection: boolean;
+  rtlDirection = false;
   version: string = '';
 
   private _subscription: Subscription = new Subscription();

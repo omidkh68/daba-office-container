@@ -8,12 +8,16 @@ import {UserInterface} from '../../../users/logic/user-interface';
 import {LoginInterface} from '../../../login/logic/login.interface';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {LoginDataClass} from '../../../../services/loginData.class';
+import {MessageService} from '../../../message/service/message.service';
 import {UserInfoService} from '../../../users/services/user-info.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import {FilterTaskInterface} from '../../logic/filter-task-interface';
 import {RefreshLoginService} from '../../../login/services/refresh-login.service';
 import {TaskDurationInterface} from '../../logic/task-duration-interface';
 import {LoadingIndicatorService} from '../../../../services/loading-indicator.service';
+import {MatOptionSelectionChange} from '@angular/material/core/option/option';
 import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
+import {ResultFilterCalendarDurationInterface} from '../../logic/filter-interface';
 
 @Component({
   selector: 'app-task-calendar-filter',
@@ -26,18 +30,19 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
   @Input()
   calendarComponent: any;
 
-  rtlDirection: boolean;
+  rtlDirection = false;
   loginData: LoginInterface;
-  usersList: UserInterface[];
+  usersList: Array<UserInterface>;
   userSelected: UserInterface;
   form: FormGroup;
   datePicker: IDatePickerDirectiveConfig;
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: FilterTaskInterface,
               private injector: Injector,
               private apiService: ApiService,
+              private messageService: MessageService,
               private userInfoService: UserInfoService,
               private refreshLoginService: RefreshLoginService,
               private loadingIndicatorService: LoadingIndicatorService,
@@ -67,7 +72,7 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
     this.setupDatepickers();
   }
 
-  setupDatepickers() {
+  setupDatepickers(): void {
     this.datePicker = {
       locale: this.rtlDirection ? 'fa' : 'en',
       firstDayOfWeek: this.rtlDirection ? 'sa' : 'mo',
@@ -77,7 +82,7 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
     };
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = new FormGroup({
         adminId: new FormControl(null, Validators.required),
@@ -87,24 +92,27 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
         email: new FormControl(this.loggedInUser.email)
       });
 
-      resolve();
+      resolve(true);
     });
   }
 
-  updateImage(event: any, user: any) {
+  updateImage(event: MatOptionSelectionChange, user: UserInterface): void {
     if (event.isUserInput) {
       this.userSelected = user;
     }
   }
 
-  closeDialog(toggle) {
+  closeDialog(toggle: boolean): void {
     this.dialogRef.close(toggle);
   }
 
-  submit() {
+  submit(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-    let formValue: TaskDurationInterface = {...this.form.value};
+    const formValue: TaskDurationInterface = {...this.form.value};
+
+    delete(formValue.email);
+    delete(formValue.userImg);
 
     if (this.rtlDirection) {
       formValue.dateStart = jalaliMoment.from(formValue.dateStart, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
@@ -119,11 +127,11 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
     this.form.disable();
 
     this._subscription.add(
-      this.apiService.boardsCalendarDurationTask(formValue).subscribe((resp: any) => {
+      this.apiService.boardsCalendarDurationTask(formValue).subscribe((resp: ResultFilterCalendarDurationInterface) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
         try {
           if (resp.result === 1) {
-            let calendarEvent = [];
+            const calendarEvent = [];
 
             resp.content[0].map(time => {
               const taskEvent = {
@@ -137,7 +145,7 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
 
             this.sumTime = resp.content[1][0].timeSum;
 
-            let parameter = {
+            const parameter = {
               sumTime: this.sumTime,
               calendarEvent: calendarEvent,
               dateStart: formValue.dateStart,
@@ -152,6 +160,10 @@ export class TaskCalendarFilterComponent extends LoginDataClass implements OnIni
           console.log(e);
         }
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message, 'error');
+        }
+
         this.form.enable();
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});

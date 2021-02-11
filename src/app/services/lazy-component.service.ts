@@ -1,4 +1,4 @@
-import {Compiler, Injectable, Injector} from '@angular/core';
+import {Compiler, ComponentRef, Injectable, Injector, ViewContainerRef} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,8 @@ export class LazyComponentService {
               private injector: Injector) {
   }
 
-  async loadComponent(moduleId, container) {
-    let ref;
+  async loadComponent(moduleId: string, container: ViewContainerRef): Promise<ComponentRef<any>> {
+    let ref: ComponentRef<any> = null;
 
     try {
       const moduleObj = await this.componentRefs[moduleId];

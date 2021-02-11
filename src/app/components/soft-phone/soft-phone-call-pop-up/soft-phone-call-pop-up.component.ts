@@ -4,7 +4,6 @@ import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
-import {NotificationService} from '../../../services/notification.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
@@ -43,21 +42,20 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   callTimer = '00:00';
   counter = null;
   timeCounter;
-  hour: number = 0;
-  minute: number = 0;
-  second: number = 0;
-  muteStatus: boolean = false;
-  connectedStatus: boolean = false;
+  hour = 0;
+  minute = 0;
+  second = 0;
+  muteStatus = false;
+  connectedStatus = false;
   extensionList: Array<ConferenceOnlineExtensionInterface> = [];
   keys: Array<KeysInterface> = [];
-  activeExtensionList: boolean = false;
-  activeDialPad: boolean = false;
-  timerDueTime: number = 0;
-  timerPeriod: number = 5000;
+  activeExtensionList = false;
+  activeDialPad = false;
+  timerDueTime = 0;
+  timerPeriod = 5000;
   globalTimer = null;
   globalTimerSubscription: Subscription;
   userJoinOrLeftTheConf: JoinedOrLeftTheConfInterface | null = null;
-
   dialPadKeys: Array<DialPadKeysInterface> = [
     {num: '1'}, {num: '2'}, {num: '3'},
     {num: '4'}, {num: '5'}, {num: '6'},
@@ -70,8 +68,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   constructor(private apiService: ApiService,
               private viewDirection: ViewDirectionService,
               private userInfoService: UserInfoService,
-              private softPhoneService: SoftPhoneService,
-              private notificationService: NotificationService) {
+              private softPhoneService: SoftPhoneService) {
     this._subscription.add(
       this.userInfoService.currentUserInfo.subscribe(user => this.loggedInUser = user)
     );
@@ -127,7 +124,11 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
               }
             }
 
-            this.callTimer = (this.hour < 10 ? '0' + this.hour : this.hour) + ':' + (this.minute < 10 ? '0' + this.minute : this.minute) + ':' + (this.second < 10 ? '0' + this.second : this.second);
+            const tmpHour = this.hour < 10 ? `0${this.hour}` : `${this.hour}`;
+            const tmpMinute = this.minute < 10 ? `0${this.minute}` : `${this.minute}`;
+            const tmpSecond = this.second < 10 ? `0${this.second}` : `${this.second}`;
+
+            this.callTimer = `${tmpHour}:${tmpMinute}:${tmpSecond}`;
           });
 
           // get conference online users every 5 secs when conf_id exist in bottomSheet Data
@@ -150,7 +151,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     this.softPhoneService.sipCall('call-audio', this.data.extension_no);
   }
 
-  callEvent(key: KeysInterface) {
+  callEvent(key: KeysInterface): void {
     switch (key.type) {
       case 'mute_unmute': {
         const muteInfo: MuteUnMuteInterface = {
@@ -196,11 +197,11 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     }
   }
 
-  minimizePopUp() {
+  minimizePopUp(): void {
     this.softPhoneService.changeMinimizeCallPopUp(true);
   }
 
-  getConferenceOnlineUser() {
+  getConferenceOnlineUser(): void {
     this._subscription.add(
       this.apiService.getConferenceOnlineUser(this.data.extension_no).subscribe((resp: ResultConfOnlineExtensionApiInterface) => {
         if (resp.success) {
@@ -212,12 +213,11 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     );
   }
 
-  joinOrLeftToConf(arr1: Array<ConferenceOnlineExtensionInterface>, arr2: Array<ConferenceOnlineExtensionInterface>) {
+  joinOrLeftToConf(arr1: Array<ConferenceOnlineExtensionInterface>, arr2: Array<ConferenceOnlineExtensionInterface>): Promise<boolean> {
     return new Promise((resolve) => {
-      let diffArr1 = arr1.filter(this.arrayComparer(arr2));
-      let diffArr2 = arr2.filter(this.arrayComparer(arr1));
-
-      let getDiff = diffArr1.concat(diffArr2);
+      const diffArr1: Array<ConferenceOnlineExtensionInterface> = arr1.filter(this.arrayComparer(arr2));
+      const diffArr2: Array<ConferenceOnlineExtensionInterface> = arr2.filter(this.arrayComparer(arr1));
+      const getDiff: Array<ConferenceOnlineExtensionInterface> = diffArr1.concat(diffArr2);
 
       if (getDiff.length && getDiff.length === 1) {
         let status = '';
@@ -251,14 +251,12 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
   }
 
   arrayComparer(arrayParam: Array<ConferenceOnlineExtensionInterface>) {
-    return (current: ConferenceOnlineExtensionInterface) => {
-      return arrayParam.filter((other: ConferenceOnlineExtensionInterface) => {
-        return other.extension_no == current.extension_no && other.extension_no == current.extension_no
-      }).length == 0;
-    }
+    return (current: ConferenceOnlineExtensionInterface): boolean => {
+      return arrayParam.filter((other: ConferenceOnlineExtensionInterface) => (other.extension_no == current.extension_no) && (other.extension_no == current.extension_no)).length == 0;
+    };
   }
 
-  hangUp() {
+  hangUp(): void {
     this.softPhoneService.sipHangUp();
 
     if (this.timeCounter) {
@@ -275,7 +273,7 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     }
   }
 
-  dialKeyPress(event, key: DialPadKeysInterface) {
+  dialKeyPress(key: DialPadKeysInterface): void {
     this.softPhoneService.sipSendDTMF(key.num);
 
     if (key.num === '#') {
@@ -283,7 +281,8 @@ export class SoftPhoneCallPopUpComponent implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
+  @HostListener('document:keydown.escape', ['$event'])
+  onKeydownHandler(): void {
     this.activeExtensionList = false;
   }
 

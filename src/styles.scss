@@ -216,6 +216,10 @@ a {
   overflow: hidden;
 }
 
+.cdk-drop-list-dragging .mat-card {
+  cursor: move;
+}
+
 .mat-snack-bar-container {
   min-width: inherit !important;
   margin: 70px 14px !important;

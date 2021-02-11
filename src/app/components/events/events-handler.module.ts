@@ -10,7 +10,7 @@ import {EventHandlerDetailComponent} from './event-handler-detail/event-handler-
 import {A11yModule} from '@angular/cdk/a11y';
 import {EventsHandlerAddReminderComponent} from './events-handler-add-reminder/events-handler-add-reminder.component';
 import {EventHandlerBottomSheetComponent} from './event-handler-bottom-sheet/event-handler-bottom-sheet.component';
-import {DpDatePickerModule} from "ng2-jalali-date-picker";
+import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 
 @NgModule({
   declarations: [

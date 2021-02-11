@@ -5,15 +5,17 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
   providedIn: 'root'
 })
 export class WebViewService {
-  private _refreshWebView: boolean = false;
+  private _refreshWebView = false;
   private refreshWebView = new BehaviorSubject(this._refreshWebView);
   public currentRefreshWebView = this.refreshWebView.asObservable();
 
-  changeRefreshWebView(status: boolean) {
+  changeRefreshWebView(status: boolean): void {
     this.refreshWebView.next(status);
 
     if (status) {
-      setTimeout(() => this.changeRefreshWebView(false), 500);
+      setTimeout(() => {
+        this.changeRefreshWebView(false);
+      }, 500);
     }
   }
 }

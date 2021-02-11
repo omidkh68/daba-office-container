@@ -9,7 +9,7 @@ import {WindowManagerService} from '../../../../services/window-manager.service'
 })
 export class WindowAppContainerComponent {
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
   windowManager: Array<WindowInterface>;

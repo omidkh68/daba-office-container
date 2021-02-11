@@ -26,19 +26,18 @@ export interface TabInterface {
 })
 export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: SoftPhoneBottomSheetComponent;
-  @ViewChild('audioRemote', {static: false}) audioRemote: ElementRef;
-  @ViewChild('ringtone', {static: false}) ringtone: ElementRef;
-  @ViewChild('ringbacktone', {static: false}) ringbacktone: ElementRef;
-  @ViewChild('dtmfTone', {static: false}) dtmfTone: ElementRef;
+  @ViewChild('audioRemote', {static: false}) audioRemote: ElementRef<HTMLAudioElement>;
+  @ViewChild('ringtone', {static: false}) ringtone: ElementRef<HTMLAudioElement>;
+  @ViewChild('ringbacktone', {static: false}) ringbacktone: ElementRef<HTMLAudioElement>;
+  @ViewChild('dtmfTone', {static: false}) dtmfTone: ElementRef<HTMLAudioElement>;
 
-  rtlDirection: boolean;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = null;
-  // activeTab = new FormControl(0);
-  activeTab: number = 0;
+  activeTab = 0;
   tabs: Array<TabInterface> = [];
-  callPopUpMinimizeStatus: boolean = false;
+  callPopUpMinimizeStatus = false;
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
-  activePermissionRequest: string = 'prompt';
+  activePermissionRequest = 'prompt';
 
   private _subscription: Subscription = new Subscription();
 
@@ -74,25 +73,6 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
       // this.softPhoneService.currentActiveTab.subscribe(tab => this.activeTab.setValue(tab))
       this.softPhoneService.currentActiveTab.subscribe(tab => this.activeTab = tab)
     );
-
-    /*this._subscription.add(
-      this.notificationService.currentNotification.subscribe(notification => {
-        if (notification) {
-          const bottomSheetConfig: SoftPhoneBottomSheetInterface = {
-            component: SoftPhoneCallPopUpComponent,
-            height: '100%',
-            width: '100%',
-            data: notification.data ? notification.data : notification
-          };
-
-          /!*notification.onclick = () => {
-            console.log('in subscribe :D', notification.data);
-          };*!/
-
-          this.openButtonSheet(bottomSheetConfig);
-        }
-      })
-    );*/
   }
 
   ngOnInit(): void {
@@ -133,19 +113,19 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
     );
   }
 
-  microphonePremissionRequest() {
+  microphonePremissionRequest(): void {
     navigator.permissions.query({name: 'microphone'})
       .then((permission) => {
         this.activePermissionRequest = permission.state;
         if (this.activePermissionRequest != 'granted') {
           this.getPermissionAccess();
         }
-      }).catch((error) => {
-      this.activePermissionRequest = null;
-    })
+      }).catch(() => {
+        this.activePermissionRequest = null;
+      });
   }
 
-  changeMainTabLanguage() {
+  changeMainTabLanguage(): void {
     setTimeout(() => {
       this.tabs = [
         {
@@ -176,11 +156,11 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
     }, 200);
   }
 
-  tabChange(event: MatTabChangeEvent) {
+  tabChange(event: MatTabChangeEvent): void {
     this.activeTab = event.index;
   }
 
-  openButtonSheet(bottomSheetConfig: SoftPhoneBottomSheetInterface) {
+  openButtonSheet(bottomSheetConfig: SoftPhoneBottomSheetInterface): void {
     try {
       bottomSheetConfig.bottomSheetRef = this.bottomSheet;
 
@@ -190,39 +170,11 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
     }
   }
 
-  call(data: any) {
-    this.openButtonSheet(data);
-  }
-
-  maximizeCallPopUp() {
+  maximizeCallPopUp(): void {
     this.softPhoneService.changeMinimizeCallPopUp(false);
   }
 
-  /*async askForMediaAccess(): Promise<boolean> {
-    try {
-      if (!this.electronService.isElectron) {
-        return true;
-      }
-
-      const status = await this.electronService.systemPreferences.getMediaAccessStatus("microphone");
-      console.log("Current microphone access status:", status);
-
-      if (status === "not-determined") {
-        const success = await this.electronService.systemPreferences.askForMediaAccess("microphone");
-        console.log("Result of microphone access:", success.valueOf() ? "granted" : "denied");
-        return success.valueOf();
-      }
-
-      return status === "granted";
-    } catch (error) {
-      console.log("Could not get microphone permission:", error.message);
-    }
-    return false;
-  }*/
-
-  getPermissionAccess() {
-    // this.askForMediaAccess();
-
+  getPermissionAccess(): void {
     navigator.getUserMedia({audio: true}, () => {
       this.activePermissionRequest = 'granted';
     }, (err) => {
@@ -234,7 +186,7 @@ export class SoftPhoneMainComponent implements AfterViewInit, OnInit, OnDestroy 
     });
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 

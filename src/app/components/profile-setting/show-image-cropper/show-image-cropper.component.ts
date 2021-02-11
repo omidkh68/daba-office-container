@@ -7,6 +7,7 @@ import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
+import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -27,18 +28,19 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
   showCropper = false;
   containWithinAspectRatio = false;
   transform: ImageTransform = {};
-  rtlDirection: boolean;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'imageCropper'};
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Event,
               public dialogRef: MatDialogRef<ShowImageCropperComponent>,
               private injector: Injector,
               private translate: TranslateService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
               private viewDirection: ViewDirectionService,
+              private refreshLoginService: RefreshLoginService,
               private profileSettingService: ProfileSettingService,
               private loadingIndicatorService: LoadingIndicatorService) {
     super(injector, userInfoService);
@@ -52,17 +54,17 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
     );
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.dialogData = this.data;
 
     this.fileChangeEvent(this.dialogData.data);
   }
 
-  closeModal() {
+  closeModal(): void {
     this.dialogRef.close(false);
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'imageCropper'});
 
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
@@ -95,63 +97,69 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
           this.dialogRef.close(true);
         }
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message, 'error');
+        }
+
+        this.refreshLoginService.openLoginDialog(error);
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'imageCropper'});
       })
     );
   }
 
-  fileChangeEvent(event: any): void {
+  fileChangeEvent(event: Event): void {
     this.imageChangedEvent = event;
   }
 
-  imageCropped(event: ImageCroppedEvent) {
+  imageCropped(event: ImageCroppedEvent): void {
     this.croppedImage = event.base64;
   }
 
-  imageLoaded() {
+  imageLoaded(): void {
     this.showCropper = true;
   }
 
-  loadImageFailed() {
+  loadImageFailed(): void {
     const successfulMessage = this.getTranslate('profileSettings.error_upload');
 
     this.messageService.showMessage(successfulMessage, 'error');
   }
 
-  rotateLeft() {
+  rotateLeft(): void {
     this.canvasRotation--;
 
     this.flipAfterRotate();
   }
 
-  rotateRight() {
+  rotateRight(): void {
     this.canvasRotation++;
 
     this.flipAfterRotate();
   }
 
-  flipHorizontal() {
+  flipHorizontal(): void {
     this.transform = {
       ...this.transform,
       flipH: !this.transform.flipH
     };
   }
 
-  flipVertical() {
+  flipVertical(): void {
     this.transform = {
       ...this.transform,
       flipV: !this.transform.flipV
     };
   }
 
-  resetImage() {
+  resetImage(): void {
     this.scale = 1;
     this.rotation = 0;
     this.canvasRotation = 0;
     this.transform = {};
   }
 
-  zoomOut() {
+  zoomOut(): void {
     this.scale -= .1;
     this.transform = {
       ...this.transform,
@@ -159,7 +167,7 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
     };
   }
 
-  zoomIn() {
+  zoomIn(): void {
     this.scale += .1;
     this.transform = {
       ...this.transform,
@@ -167,11 +175,11 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
     };
   }
 
-  toggleContainWithinAspectRatio() {
+  toggleContainWithinAspectRatio(): void {
     this.containWithinAspectRatio = !this.containWithinAspectRatio;
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 
@@ -181,7 +189,7 @@ export class ShowImageCropperComponent extends LoginDataClass implements OnInit,
     }
   }
 
-  private flipAfterRotate() {
+  private flipAfterRotate(): void {
     const flippedH = this.transform.flipH;
     const flippedV = this.transform.flipV;
     this.transform = {

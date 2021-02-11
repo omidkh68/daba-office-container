@@ -9,7 +9,7 @@ import {ViewDirectionService} from '../../services/view-direction.service';
   styleUrls: ['./approve.component.scss']
 })
 export class ApproveComponent implements OnInit, OnDestroy {
-  rtlDirection: boolean = false;
+  rtlDirection = false;
   dialogData: any;
 
   private _subscription: Subscription = new Subscription();
@@ -20,13 +20,13 @@ export class ApproveComponent implements OnInit, OnDestroy {
     this.dialogData = data;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._subscription.add(
       this.viewDirection.currentDirection.subscribe(direction => this.rtlDirection = direction)
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }

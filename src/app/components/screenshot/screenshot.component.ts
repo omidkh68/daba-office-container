@@ -25,8 +25,8 @@ export interface AvailableHoursInterface {
   template: ``
 })
 export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
-  timerDueTime: number = 30000;
-  timerPeriod: number = 30000;
+  timerDueTime = 30000;
+  timerPeriod = 30000;
   loggedInUser: UserContainerInterface;
   userCurrentStatus: UserStatusInterface | string = '';
   currentTasks: Array<TaskInterface> | null = null;
@@ -47,9 +47,9 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
   constructor(private api: ApiService,
               private injector: Injector,
               private electronService: ElectronService,
-              private changeStatusService: ChangeStatusService,
+              private userInfoService: UserInfoService,
               private currentTaskService: CurrentTaskService,
-              private userInfoService: UserInfoService) {
+              private changeStatusService: ChangeStatusService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -78,7 +78,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
     );
   }
 
-  runTimerForScreenshot() {
+  runTimerForScreenshot(): void {
     if (!AppConfig.production) return;
 
     this.globalTimer = timer(
@@ -122,17 +122,17 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
     );
   }
 
-  takeAScreenShot() {
-    let options = {
+  takeAScreenShot(): void {
+    const options = {
       types: ['screen'],
       thumbnailSize: {width: 800, height: 600},
       fetchWindowIcons: true
     };
 
-    this.electronService.desktopCapturer.getSources(options).then(async sources => {
-      let screenshots: Array<string> = [];
+    this.electronService.desktopCapturer.getSources(options).then(sources => {
+      const screenshots: Array<string> = [];
 
-      await sources.map(source => {
+      sources.map(source => {
         const screenshotData: string = source.thumbnail.toDataURL({scaleFactor: 1});
 
         screenshots.push(screenshotData);
@@ -146,7 +146,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.api.userScreenshot(data).subscribe((resp: any) => {
+        this.api.userScreenshot(data).subscribe(() => {
           // console.log(resp);
         }, err => {
           console.log(err);
@@ -158,7 +158,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
     });
   }
 
-  determineScreenShot() {
+  /*determineScreenShot(): Dimensions {
     const screenSize = this.electronService.electronScreen.getPrimaryDisplay().workAreaSize;
     const maxDimension = Math.max(screenSize.width, screenSize.height);
 
@@ -166,7 +166,7 @@ export class ScreenshotComponent extends LoginDataClass implements OnDestroy {
       width: maxDimension * window.devicePixelRatio,
       height: maxDimension * window.devicePixelRatio
     };
-  }
+  }*/
 
   ngOnDestroy(): void {
     if (this._subscription) {

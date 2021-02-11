@@ -28,7 +28,7 @@ export class UserInfoService {
     return this.userInfo.getValue();
   }
 
-  changeUserInfo(user: UserContainerInterface) {
+  changeUserInfo(user: UserContainerInterface): void {
     if (user.dark_mode) {
       this.body.classList.add('dark-mode');
     } else {
@@ -38,7 +38,7 @@ export class UserInfoService {
     this.userInfo.next(user);
   }
 
-  changeDarkMode() {
+  changeDarkMode(): void {
     const user = this.userInfo.getValue();
 
     user.dark_mode = user.dark_mode ? 0 : 1;
@@ -52,7 +52,7 @@ export class UserInfoService {
     }
   }
 
-  changeLoginData(loginData: LoginInterface | null) {
+  changeLoginData(loginData: LoginInterface | null): void {
     if (!loginData) {
       this.removeLoginDataFileContent();
     }
@@ -60,7 +60,7 @@ export class UserInfoService {
     this.loginData.next(loginData);
   }
 
-  removeLoginDataFileContent() {
+  removeLoginDataFileContent(): void {
     if (this.electronService.isElectron) {
       const homeDirectory = AppConfig.production ? this.electronService.remote.app.getPath('userData') : this.electronService.remote.app.getAppPath();
 

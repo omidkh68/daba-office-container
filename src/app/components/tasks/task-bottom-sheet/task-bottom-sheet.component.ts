@@ -14,7 +14,7 @@ export class TaskBottomSheetComponent {
               private cfr: ComponentFactoryResolver) {
   }
 
-  toggleBottomSheet(bottomSheetConfig: TaskBottomSheetInterface, toggle: boolean = true) {
+  toggleBottomSheet(bottomSheetConfig: TaskBottomSheetInterface, toggle = true): void {
     this.container.clear();
 
     const parentNode = this.oBottomSheet.nativeElement.parentNode.parentNode;
@@ -40,7 +40,7 @@ export class TaskBottomSheetComponent {
     }
   }
 
-  close(data?: any) {
+  close(): void {
     this.toggleBottomSheet(null, false);
   }
 }

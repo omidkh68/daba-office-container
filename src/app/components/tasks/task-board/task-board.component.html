@@ -4,8 +4,12 @@
                  [colspan]="board.cols"
                  [rowspan]="board.rows">
     <div
-      class="board-name pos-abs top-0 right-0 full-width full-height padding-mini-t-b padding-r-l display-flex flex-space-between align-items-center pos-rel">
-      <span class="font-9-em">{{board.name | translate}}</span>
+      class="board-name pos-abs top-0 right-0 full-width full-height padding-mini-t-b padding-mini-r-l display-flex flex-space-between align-items-center pos-rel">
+      <span class="flex-center">
+        <mat-icon class="text-gray-600 width-20 height-20 font-full-plus-half-em">{{board.icon}}</mat-icon>
+      </span>
+
+      <span class="font-9-em padding-mini-r-l">{{board.name | translate}}</span>
 
       <a (click)="showFilterArgs[board.id]=true; focusSearchBox(board.id)"
          [ngClass]="rtlDirection ? 'margin-l-full margin-r-auto' : 'margin-r-full margin-l-auto'"
@@ -60,7 +64,7 @@
         </span>
       </div>
 
-      <mat-card class="margin-b-full bg-white card-hover"
+      <mat-card class="margin-b-full bg-white card-hover cursor-pointer"
                 [ngClass]="{'overdue-task': task.overdue}"
                 [cdkDragData]="task"
                 [cdkDragDisabled]="task.assignTo.email !== loggedInUser.email"
@@ -94,7 +98,7 @@
         <mat-card-footer class="padding-mini-t-b padding-r-l height-45 display-flex flex-space-between">
           <span class="display-flex align-items-center">
             <img [src]="'assets/profileImg/'+task.assignTo.email+'.jpg'"
-                 onerror="this.src='assets/profileImg/0.jpg'"
+                 (error)="$event.target.src='assets/profileImg/0.jpg'"
                  class="display-block width-25 height-25 round-corner-all mat-elevation-z1"
                  [alt]="task.assignTo.name + ' ' + task.assignTo.family">
             <span class="display-block full-height line-height-25 padding-mini-r-l text-eclipse width-150">
@@ -113,7 +117,7 @@
 
           <span class="width-25 height-25 round-corner-all mat-elevation-z1 pos-rel"
                 matTooltip="{{'tasks.boards.task_percentage' | translate}}"
-                [matTooltipPosition]="rtlDirection ? 'left' : 'right'">
+                [matTooltipPosition]="rtlDirection ? 'right' : 'left'">
             <span
               class="font-6-em text-gray-800 pos-abs left-0 right-0 top-0 bottom-0 margin-auto text-center line-height-25 text-weight-500">
               {{task.percentage}}

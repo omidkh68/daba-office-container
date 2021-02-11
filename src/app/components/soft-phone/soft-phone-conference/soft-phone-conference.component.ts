@@ -32,10 +32,10 @@ import {SoftPhoneCallToActionComponent} from '../soft-phone-call-to-action/soft-
 })
 export class SoftPhoneConferenceComponent extends LoginDataClass implements OnInit, OnChanges, OnDestroy {
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
-  tabId: number = 3;
+  tabId = 3;
 
   @Input()
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
@@ -44,8 +44,8 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
   conferenceList: Array<SoftphoneConferenceInterface> = [];
-  callPopUpMinimizeStatus: boolean = false;
-  softPhoneConnectedStatus: boolean = false;
+  callPopUpMinimizeStatus = false;
+  softPhoneConnectedStatus = false;
 
   private _subscription: Subscription = new Subscription();
 
@@ -78,7 +78,7 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
     );
   }
 
-  getConferenceList() {
+  getConferenceList(): void {
     this.conferenceList = [];
 
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
@@ -91,7 +91,7 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
 
         if (resp.success) {
           resp.data.map(item => {
-            let confTransferItem: SoftphoneConferenceInterface = {
+            const confTransferItem: SoftphoneConferenceInterface = {
               username: '0',
               is_online: 0,
               extension_name: item.conf_name,
@@ -102,9 +102,13 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
             };
 
             this.conferenceList.push(confTransferItem);
-          })
+          });
         }
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message, 'error');
+        }
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
         this.refreshLoginService.openLoginDialog(error);
@@ -112,7 +116,7 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
     );
   }
 
-  openSheet(user: SoftphoneConferenceInterface) {
+  openSheet(user: SoftphoneConferenceInterface): void {
     if (this.softPhoneConnectedStatus) {
       if (this.callPopUpMinimizeStatus) {
         this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
@@ -129,7 +133,7 @@ export class SoftPhoneConferenceComponent extends LoginDataClass implements OnIn
     }
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

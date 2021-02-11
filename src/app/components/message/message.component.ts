@@ -5,12 +5,11 @@ import {ViewDirectionService} from '../../services/view-direction.service';
 
 @Component({
   selector: 'app-message',
-  templateUrl: './message.component.html',
-  styleUrls: ['./message.component.scss']
+  templateUrl: './message.component.html'
 })
 export class MessageComponent {
   title: string;
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   private _subscription: Subscription = new Subscription();
 
@@ -24,7 +23,7 @@ export class MessageComponent {
     );
   }
 
-  hideMessage() {
+  hideMessage(): void {
     this.snackbarRef.dismiss();
   }
 }

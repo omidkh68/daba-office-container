@@ -16,7 +16,7 @@ import {UserStatusComponent} from './dashboard-toolbar/user-status/user-status.c
 import {ProfileMenuComponent} from './dashboard-toolbar/profile-menu/profile-menu.component';
 import {ChangeStatusComponent} from '../status/change-status/change-status.component';
 import {TimeAreaClockComponent} from './dashboard-toolbar/time-area/time-area-clock/time-area-clock.component';
-import {PopoverContnetComponent} from '../popover-widget/popover/popover-content/popover-content.component';
+import {PopoverContentComponent} from '../popover-widget/popover/popover-content/popover-content.component';
 import {ProfileSettingComponent} from '../profile-setting/profile-setting.component';
 import {CompanySelectorComponent} from './dashboard-toolbar/company-selector/company-selector.component';
 import {DashboardToolbarComponent} from './dashboard-toolbar/dashboard-toolbar.component';
@@ -39,7 +39,7 @@ import {SoftPhoneIncomingCallComponent} from '../soft-phone/soft-phone-incoming-
     ChangeStatusComponent,
     TimeAreaClockComponent,
     ProfileSettingComponent,
-    PopoverContnetComponent,
+    PopoverContentComponent,
     CompanySelectorComponent,
     DashboardToolbarComponent,
     ShowImageCropperComponent,

@@ -22,7 +22,13 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInterface} from '../../users/logic/user-interface';
 import {TaskInterface} from '../logic/task-interface';
-import {BoardInterface, ResultInterface} from '../logic/board-interface';
+import {
+  BoardInterface,
+  ResultFilterInterface,
+  ResultInterface,
+  ResultTaskInterface,
+  UsersProjectsListInterface
+} from '../logic/board-interface';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
@@ -37,8 +43,10 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
+import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
+import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
+import {IgnoreAutoRefreshService} from '../services/ignore-auto-refresh.service';
 
 @Component({
   selector: 'app-task-board',
@@ -49,39 +57,38 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   @ViewChildren('searchBox') searchBoxes: QueryList<ElementRef>;
 
   @Output()
-  triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
+  pushTaskEssentialInfo = new EventEmitter<UsersProjectsListInterface>();
 
   @Output()
-  pushTaskEssentialInfo = new EventEmitter();
-
-  @Output()
-  resetFilter = new EventEmitter<boolean>();
+  resetFilter: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Input()
   pushTaskToBoard;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
-  refreshData: boolean = false;
+  refreshData = false;
 
   @Input()
   filterBoards: any;
 
-  // socket;
+  @Input()
+  bottomSheetRef: TaskBottomSheetComponent;
+
   myTasks: Array<TaskInterface> = [];
-  rowHeight: string = '0';
+  rowHeight = '0';
   connectedTo = [];
-  boards: BoardInterface[] = [];
-  usersList: UserInterface[] = [];
-  projectsList: ProjectInterface[] = [];
+  boards: Array<BoardInterface> = [];
+  usersList: Array<UserInterface> = [];
+  projectsList: Array<ProjectInterface> = [];
   currentTasks: Array<TaskInterface> | null = null;
   filterArgs = null;
   showFilterArgs = null;
 
-  timerDueTime: number = 0;
-  timerPeriod: number = 30000;
+  timerDueTime = 0;
+  timerPeriod = 2 * 60 * 1000; // refresh board every two minutes
   globalTimer = null;
   globalTimerSubscription: Subscription;
 
@@ -98,7 +105,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
               private windowManagerService: WindowManagerService,
               private buttonSheetDataService: ButtonSheetDataService,
               private loadingIndicatorService: LoadingIndicatorService,
-              private taskEssentialInfoService: TaskEssentialInfoService) {
+              private taskEssentialInfoService: TaskEssentialInfoService,
+              private ignoreAutoRefreshService: IgnoreAutoRefreshService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -108,8 +116,6 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this._subscription.add(
       this.refreshBoardService.currentDoRefresh.subscribe(doRefresh => {
         if (doRefresh) {
-          /*this.getBoards();*/
-
           this.doResetFilter();
 
           this.clearTimer();
@@ -121,13 +127,23 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
     this._subscription.add(
       this.userInfoService.currentLoginData.subscribe(() => {
-        /*this.getBoards();*/
-
         this.doResetFilter();
 
         this.clearTimer();
 
         setTimeout(() => this.startTimer(), 200);
+      })
+    );
+
+    this._subscription.add(
+      this.ignoreAutoRefreshService.currentAutoRefresh.subscribe((status: boolean) => {
+        if (status) {
+          this.clearTimer();
+        } else {
+          this.clearTimer();
+
+          setTimeout(() => this.startTimer(), 200);
+        }
       })
     );
   }
@@ -138,7 +154,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this.resetColumnFilter();
   }
 
-  resetColumnFilter() {
+  resetColumnFilter(): void {
     this.filterArgs = {
       todo: null,
       inProgress: null,
@@ -152,23 +168,20 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     };
   }
 
-  changeStatus(event: CdkDragDrop<string[]>) {
+  changeStatus(event: CdkDragDrop<Array<TaskInterface>>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
 
-      let taskData = event.item.data;
+      const taskData = event.item.data;
 
       this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this._subscription.add(
-        this.apiService.taskChangeStatus(taskData, event.container.id).subscribe(async (resp: any) => {
+        this.apiService.taskChangeStatus(taskData, event.container.id).subscribe((resp: ResultTaskInterface) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           if (resp.result) {
@@ -193,13 +206,13 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     }
   }
 
-  async assignNewTaskToBoard(newTask: TaskInterface, prevContainer, newContainer) {
-    const project: ProjectInterface = await this.projectsList.filter(project => project.projectId === newTask.project.projectId).pop();
-    const assignTo: UserInterface = await this.usersList.filter(user => user.adminId === newTask.assignTo.adminId).pop();
+  assignNewTaskToBoard(newTask: TaskInterface, prevContainer: string, newContainer: string): void {
+    const project: ProjectInterface = this.projectsList.filter(project => project.projectId === newTask.project.projectId).pop();
+    const assignTo: UserInterface = this.usersList.filter(user => user.adminId === newTask.assignTo.adminId).pop();
 
     this.myTasks = [];
 
-    await this.boards.map((board: BoardInterface) => {
+    this.boards.map((board: BoardInterface) => {
       if (board.id === newContainer) {
         board.tasks.map((task: TaskInterface) => {
           if (task.taskId === newTask.taskId) {
@@ -247,7 +260,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this.resetColumnFilter();
   }
 
-  showTaskStopModal(task) {
+  showTaskStopModal(task: TaskInterface): void {
     const dialogRef = this.dialog.open(TaskStopComponent, {
       data: task,
       autoFocus: false,
@@ -273,7 +286,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     );
   }
 
-  showTaskDetail(task, boardStatus) {
+  showTaskDetail(task: TaskInterface, boardStatus: string): void {
     const data: TaskDataInterface = {
       action: 'detail',
       usersList: this.usersList,
@@ -283,7 +296,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       boardsList: this.boards
     };
 
-    const finalData = {
+    const finalData: TaskBottomSheetInterface = {
+      bottomSheetRef: this.bottomSheetRef,
       component: TaskDetailComponent,
       height: '98%',
       width: '95%',
@@ -295,22 +309,22 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this.buttonSheetDataService.changeButtonSheetData(finalData);
   }
 
-  putTasksToAllBoards(info) {
-    let todo_tasks: TaskInterface[] = [];
-    let inProgress_tasks: TaskInterface[] = [];
-    let done_tasks: TaskInterface[] = [];
+  putTasksToAllBoards(info: ResultFilterInterface | ResultInterface): void {
+    const todo_tasks: Array<TaskInterface> = [];
+    const inProgress_tasks: Array<TaskInterface> = [];
+    const done_tasks: Array<TaskInterface> = [];
 
     this.boards = [];
     this.connectedTo = [];
 
-    this.usersList = info.content.users.list;
-    this.projectsList = info.content.projects.list;
+    this.usersList = info.contents.users.list;
+    this.projectsList = info.contents.projects.list;
 
     this.pushTaskEssentialInfo.emit({usersList: this.usersList, projectsList: this.projectsList});
 
     this.myTasks = [];
 
-    info.content.boards.list.map((task: TaskInterface) => {
+    info.contents.boards.list.map((task: TaskInterface) => {
       // collect all logged in user`s task into myTasks
       if (task.assignTo.email === this.loggedInUser.email && task.boardStatus === 'inProgress') {
         this.myTasks.push(task);
@@ -347,6 +361,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       cols: 1,
       rows: 1,
       name: 'tasks.boards.todo',
+      icon: 'add_task',
       tasks: todo_tasks
     });
 
@@ -355,6 +370,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       cols: 1,
       rows: 1,
       name: 'tasks.boards.in_progress',
+      icon: 'playlist_play',
       tasks: inProgress_tasks
     });
 
@@ -363,10 +379,11 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
       cols: 1,
       rows: 1,
       name: 'tasks.boards.done',
+      icon: 'done_all',
       tasks: done_tasks
     });
 
-    for (let board of this.boards) {
+    for (const board of this.boards) {
       this.connectedTo.push(board.id);
     }
 
@@ -377,7 +394,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     this.resetColumnFilter();
   }
 
-  getBoards() {
+  getBoards(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     if (this.loginData && this.loginData.token_type) {
@@ -390,17 +407,21 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
           if (resp.result === 1) {
 
             const data = {
-              'usersList': resp.content.users.list,
-              'projectsList': resp.content.projects.list
+              'usersList': resp.contents.users.list,
+              'projectsList': resp.contents.projects.list
             };
 
-            this.taskEssentialInfoService.changeUsersProjectsList(data)
+            this.taskEssentialInfoService.changeUsersProjectsList(data);
 
             this.putTasksToAllBoards(resp);
 
             this.resetColumnFilter();
           }
         }, (error: HttpErrorResponse) => {
+          if (error.message) {
+            this.messageService.showMessage(error.message, 'error');
+          }
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
           this.refreshLoginService.openLoginDialog(error);
@@ -409,7 +430,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     }
   }
 
-  getColor(percentage: number) {
+  getColor(percentage: number): string {
     if (percentage < 10 && percentage >= 0) {
       return 'spinner-color-red';
     } else if (percentage <= 30 && percentage > 10) {
@@ -423,11 +444,11 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     }
   }
 
-  doResetFilter() {
+  doResetFilter(): void {
     this.resetFilter.emit(true);
   }
 
-  focusSearchBox(boardId) {
+  focusSearchBox(boardId: string): void {
     this.searchBoxes.toArray().map((searchBox: ElementRef) => {
       const el = searchBox.nativeElement;
 
@@ -437,7 +458,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     });
   }
 
-  startTimer() {
+  startTimer(): void {
     if (this.globalTimer) {
       this.globalTimer = null;
     }
@@ -457,7 +478,8 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
     });
   }
 
-  clearTimer() {
+  clearTimer(): void {
+    console.log('in clear');
     if (this.globalTimerSubscription) {
       this.globalTimerSubscription.unsubscribe();
       this.globalTimer = null;
@@ -504,7 +526,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   pure: false
 })
 export class MyFilterPipe implements PipeTransform {
-  transform(items: TaskInterface[], filter: string): TaskInterface[] {
+  transform(items: Array<TaskInterface>, filter: string): Array<TaskInterface> {
     if (!items || !filter) {
       return items;
     }

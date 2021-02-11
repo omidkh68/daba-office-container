@@ -1,4 +1,4 @@
-import {Component, Injector, OnInit} from '@angular/core';
+import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfig} from '../../../environments/environment';
 import {ApiService} from '../users/logic/api.service';
@@ -36,10 +36,10 @@ import {animate, query, stagger, style, transition, trigger} from '@angular/anim
     ])
   ]
 })
-export class SelectCompanyComponent extends LoginDataClass implements OnInit {
+export class SelectCompanyComponent extends LoginDataClass implements OnInit, OnDestroy {
   rtlDirection;
   companies: Array<CompanyInterface> = [];
-  showBackLink: boolean = false;
+  showBackLink = false;
 
   private _subscription: Subscription = new Subscription();
 
@@ -62,7 +62,7 @@ export class SelectCompanyComponent extends LoginDataClass implements OnInit {
     this.getUserCompanies();
   }
 
-  getUserCompanies() {
+  getUserCompanies(): void {
     if (this.loginData && this.loginData.token_type) {
       this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
     }
@@ -76,14 +76,14 @@ export class SelectCompanyComponent extends LoginDataClass implements OnInit {
 
           if (this.companies.length === 1) {
             this.changeSelectedCompany(this.companies[0]).then(() => {
-              this.router.navigateByUrl(`/`);
+              this.router.navigateByUrl(`/`).finally();
             });
           }
         }
       }, () => {
         this.userInfoService.changeLoginData(null);
 
-        this.router.navigateByUrl(`/login`);
+        this.router.navigateByUrl(`/login`).finally();
       })
     );
   }
@@ -125,27 +125,33 @@ export class SelectCompanyComponent extends LoginDataClass implements OnInit {
     });
   }
 
-  changeSelectedCompany(company: CompanyInterface) {
+  changeSelectedCompany(company: CompanyInterface): Promise<boolean> {
     return new Promise((resolve) => {
       this.getLoginDataAndWriteCompanyInfo(company).then(() => {
         this.companySelectorService.changeSelectedCompany(company);
 
         resolve(true);
-      })
+      });
     });
   }
 
-  goHome(company: CompanyInterface) {
+  goHome(company: CompanyInterface): void {
     this.changeSelectedCompany(company).then(() => {
-      this.router.navigateByUrl(`/`);
+      this.router.navigateByUrl(`/`).finally();
     });
   }
 
-  goToLogin() {
+  goToLogin(): void {
     this.userInfoService.changeLoginData(null);
 
     setTimeout(() => this.showBackLink = false, 500);
 
-    this.router.navigateByUrl(`/login`);
+    this.router.navigateByUrl(`/login`).finally();
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
   }
 }

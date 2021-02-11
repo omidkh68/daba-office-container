@@ -25,13 +25,13 @@ export class PopoverArrowDirective {
   @HostBinding('style.left.px')
   offsetLeft: number;
 
-  private subscription = new Subscription();
+  private _subscription = new Subscription();
 
   constructor(private popoverRef: PopoverRef,
               private cd: ChangeDetectorRef) {
     this.arrowSize = popoverRef.config.arrowSize;
 
-    this.subscription = popoverRef.positionChanges().subscribe(p => {
+    this._subscription = popoverRef.positionChanges().subscribe(p => {
       const {offsetX, offsetY} = p.connectionPair;
 
       this.offsetTop = offsetY >= 0 ? offsetY * -1 : null;
@@ -44,6 +44,6 @@ export class PopoverArrowDirective {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 }

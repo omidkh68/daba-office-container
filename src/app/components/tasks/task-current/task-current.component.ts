@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {TaskInterface} from '../logic/task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
@@ -10,7 +10,6 @@ import {CurrentTaskService} from '../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
-import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
 
 @Component({
@@ -19,31 +18,25 @@ import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.serv
   styleUrls: ['./task-current.component.scss']
 })
 export class TaskCurrentComponent implements OnChanges, OnDestroy {
-  @Output()
-  triggerBottomSheet: EventEmitter<TaskBottomSheetInterface> = new EventEmitter<TaskBottomSheetInterface>();
-
-  @Output()
-  pushTaskToBoard = new EventEmitter();
-
   @Input()
   taskEssentialInfo: TaskEssentialInfo;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
-  projectsList: ProjectInterface[] = [];
-  usersList: UserInterface[] = [];
+  projectsList: Array<ProjectInterface> = [];
+  usersList: Array<UserInterface> = [];
   user: UserContainerInterface;
   currentTasks: Array<TaskInterface> | null = null;
-  message: string = '';
-  notification: boolean = false;
+  message = '';
+  notification = false;
 
   private _subscription: Subscription = new Subscription();
 
   constructor(private userInfoService: UserInfoService,
+              private currentTaskService: CurrentTaskService,
               private buttonSheetDataService: ButtonSheetDataService,
-              private taskEssentialInfoService: TaskEssentialInfoService,
-              private currentTaskService: CurrentTaskService) {
+              private taskEssentialInfoService: TaskEssentialInfoService) {
     this._subscription.add(
       this.currentTaskService.currentTask.subscribe(currentTasks => this.currentTasks = currentTasks)
     );
@@ -53,17 +46,8 @@ export class TaskCurrentComponent implements OnChanges, OnDestroy {
     );
   }
 
-  showTask(task: TaskInterface) {
-    /*this._subscription.add(
-      this.taskEssentialInfoService.currentUsersProjectsList.subscribe((data) => {
-          this.usersList = data.usersList;
-          this.projectsList = data.projectsList;
-        }
-      )
-    );*/
-
+  showTask(task: TaskInterface): void {
     this.usersList = this.taskEssentialInfoService.getUsersProjectsList.usersList;
-
     this.projectsList = this.taskEssentialInfoService.getUsersProjectsList.projectsList;
 
     setTimeout(() => {
@@ -72,8 +56,7 @@ export class TaskCurrentComponent implements OnChanges, OnDestroy {
         usersList: this.usersList,
         projectsList: this.projectsList,
         task: task,
-        boardStatus: task.boardStatus,
-        breadcrumbList: null
+        boardStatus: task.boardStatus
       };
 
       const finalData = {
@@ -84,22 +67,7 @@ export class TaskCurrentComponent implements OnChanges, OnDestroy {
       };
 
       this.buttonSheetDataService.changeButtonSheetData(finalData);
-    }, 500)
-
-    /*const data: TaskDataInterface = {
-      action: 'detail',
-      usersList: this.usersList,
-      projectsList: this.projectsList,
-      task: task,
-      boardStatus: 'inProgress'
-    };
-
-    this.triggerBottomSheet.emit({
-      component: TaskDetailComponent,
-      height: '98%',
-      width: '95%',
-      data: data
-    });*/
+    }, 500);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

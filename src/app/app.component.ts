@@ -20,8 +20,8 @@ import {CompanySelectorService} from './components/select-company/services/compa
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
-  rtlDirection: boolean;
-  showConnectionOverlay: boolean = false;
+  rtlDirection = false;
+  showConnectionOverlay = false;
   onlineEvent: Observable<Event>;
   offlineEvent: Observable<Event>;
 
@@ -46,7 +46,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.offlineEvent = fromEvent(window, 'offline');
 
     this._subscription.add(
-      this.onlineEvent.subscribe(e => {
+      this.onlineEvent.subscribe(() => {
         this.showConnectionOverlay = false;
         this.messageService.showMessage(this.getTranslate('global.online'), '', 5);
 
@@ -60,6 +60,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
             this.companySelectorService.changeCompanyList(resp.data.companies);
           }, (error: HttpErrorResponse) => {
+            if (error.message) {
+              this.messageService.showMessage(error.message, 'error');
+            }
+
             this.refreshLoginService.openLoginDialog(error);
           })
         );
@@ -67,7 +71,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     );
 
     this._subscription.add(
-      this.offlineEvent.subscribe(e => {
+      this.offlineEvent.subscribe(() => {
         this.showConnectionOverlay = true;
 
         this.messageService.durationInSeconds = 0;
@@ -76,7 +80,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 

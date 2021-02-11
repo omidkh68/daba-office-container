@@ -6,9 +6,8 @@ import {BoardInterface} from './board-interface';
 export interface TaskDataInterface {
   action?: string;
   task?: TaskInterface;
-  usersList: UserInterface[];
-  projectsList: ProjectInterface[];
+  usersList: Array<UserInterface>;
+  projectsList: Array<ProjectInterface>;
   boardStatus?: string;
-  boardsList?: BoardInterface[];
-  breadcrumbList?: any;
+  boardsList?: Array<BoardInterface>;
 }

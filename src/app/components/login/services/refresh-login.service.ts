@@ -12,7 +12,6 @@ import {WindowManagerService} from '../../../services/window-manager.service';
   providedIn: 'root'
 })
 export class RefreshLoginService {
-
   private _subscription: Subscription = new Subscription();
 
   constructor(public dialog: MatDialog,
@@ -22,7 +21,7 @@ export class RefreshLoginService {
               private windowManagerService: WindowManagerService) {
   }
 
-  openLoginDialog(error: HttpErrorResponse) {
+  openLoginDialog(error: HttpErrorResponse): void {
     if (error.status === 401) {
       const dialogRef = this.dialog.open(LoginFormComponent, {
         autoFocus: false,
@@ -54,7 +53,7 @@ export class RefreshLoginService {
     }
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 }

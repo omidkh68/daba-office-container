@@ -1,5 +1,5 @@
-import * as io from 'socket.io-client';
-import {AppConfig} from '../../environments/environment';
+// import * as io from 'socket.io-client';
+// import {AppConfig} from '../../environments/environment';
 import {Injectable} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {UserInfoService} from '../components/users/services/user-info.service';
@@ -20,7 +20,7 @@ export class SocketioService {
     );
   }
 
-  setupSocketConnection(componentName) {
+  /*setupSocketConnection(componentName) {
     this.socket = io(AppConfig.SOCKET_URL, {
       query: {
         token: 'cde',
@@ -29,12 +29,12 @@ export class SocketioService {
       }
     });
 
-    /*this.socket.emit('my message', 'hello there from angular');
+    /!*this.socket.emit('my message', 'hello there from angular');
 
     this.socket.on('my broadcast', (data: string) => {
       console.log(data);
-    });*/
+    });*!/
 
     return this.socket;
-  }
+  }*/
 }

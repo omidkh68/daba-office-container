@@ -1,4 +1,4 @@
-import {Directive, Input, OnInit} from '@angular/core'
+import {Directive, Input, OnInit} from '@angular/core';
 import {catchError, map} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
@@ -23,11 +23,10 @@ export class ImagePreloadDirective implements OnInit {
     });
   }
 
-  getImage() {
+  getImage(): Promise<string> {
     return new Promise((resolve) => {
       const folderPath = this.defaultImg;
       const defaultPath = 'assets/profileImg/0.jpg';
-
 
       this.http
         .get(`${folderPath}`, {observe: 'response', responseType: 'blob'})
@@ -40,10 +39,9 @@ export class ImagePreloadDirective implements OnInit {
           })
         ).subscribe((src) => {
           resolve(src);
-      }, () => {
-        resolve(defaultPath);
-      });
-
+        }, () => {
+          resolve(defaultPath);
+        });
     });
   }
 }

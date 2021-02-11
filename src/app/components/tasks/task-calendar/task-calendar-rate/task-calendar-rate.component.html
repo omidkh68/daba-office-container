@@ -1,7 +1,6 @@
 <mat-drawer-container autosize class="full-width rate-calendar display-flex flex-space-between">
   <mat-drawer #drawer [disableClose]="true" class="round-corner mat-elevation-z1 padding-tiny-r-l" mode="side">
     <div *ngIf="userSelected && userSelected.email" class="padding-half">
-      <!--            <mat-icon class="cursor-pointer" (click)="drawer.toggle()" aria-hidden="false">close</mat-icon>-->
       <img [alt]="userSelected.name + ' ' + userSelected.family" [src]="'/assets/profileImg/'+userSelected.email+'.jpg'"
            class="width-70 height-70 display-block margin-t-b margin-auto text-center round-corner-all margin-auto pos-rel top-six-tenth mat-elevation-z2">
 

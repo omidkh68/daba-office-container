@@ -1,8 +1,7 @@
-import {ConnectedOverlayPositionChange, FlexibleConnectedPositionStrategy, OverlayRef} from '@angular/cdk/overlay';
-import {Observable, Subject} from 'rxjs';
 import {filter} from 'rxjs/operators';
-
 import {PopoverConfig} from './popover-config';
+import {Observable, Subject} from 'rxjs';
+import {ConnectedOverlayPositionChange, FlexibleConnectedPositionStrategy, OverlayRef} from '@angular/cdk/overlay';
 
 /**
  * Reference to a popover opened via the Popover service.
@@ -10,9 +9,9 @@ import {PopoverConfig} from './popover-config';
 export class PopoverRef<T = any> {
   private afterClosedSubject = new Subject<T>();
 
-  constructor(private overlayRef: OverlayRef,
-              private positionStrategy: FlexibleConnectedPositionStrategy,
-              public config: PopoverConfig) {
+  constructor(public config: PopoverConfig,
+              private overlayRef: OverlayRef,
+              private positionStrategy: FlexibleConnectedPositionStrategy) {
     if (!config.disableClose) {
       this.overlayRef.backdropClick().subscribe(() => {
         this.close();

@@ -1,6 +1,4 @@
 import {app, BrowserWindow, ipcMain, Menu, screen, webFrame} from 'electron';
-import {join} from 'path';
-import {format} from 'url';
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -55,12 +53,6 @@ function createWindow(): BrowserWindow {
     Menu.setApplicationMenu(null);
 
     win.loadURL('https://webcontainer.dabacenter.ir');
-
-    /*win.loadURL(format({
-      pathname: join(__dirname, 'dist/index.html'),
-      protocol: 'file:',
-      slashes: true
-    }));*/
   }
 
   win.on('closed', () => {

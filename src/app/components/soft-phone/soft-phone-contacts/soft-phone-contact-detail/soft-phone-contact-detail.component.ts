@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
 import {SoftPhoneBottomSheetInterface} from '../../soft-phone-bottom-sheet/logic/soft-phone-bottom-sheet.interface';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-soft-phone-contact-detail',
@@ -36,11 +36,11 @@ export class SoftPhoneContactDetailComponent implements OnInit, OnDestroy {
         });
       });
     } else {
-      this.createForm();
+      this.createForm().finally();
     }
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         name: new FormControl('', Validators.required),
@@ -48,11 +48,11 @@ export class SoftPhoneContactDetailComponent implements OnInit, OnDestroy {
         extension_no: new FormControl(0, Validators.required)
       });
 
-      resolve();
+      resolve(true);
     });
   }
 
-  closeBottomSheet() {
+  closeBottomSheet(): void {
     this.bottomSheetData.bottomSheetRef.close();
   }
 

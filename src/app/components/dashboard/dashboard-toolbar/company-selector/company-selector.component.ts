@@ -28,7 +28,7 @@ export class CompanySelectorComponent implements OnDestroy {
   loggedInUser: UserContainerInterface;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   companyList: Array<CompanyInterface> = null;
   currentCompany: CompanyInterface;
@@ -56,7 +56,7 @@ export class CompanySelectorComponent implements OnDestroy {
     );
   }
 
-  selectCompany(company: CompanyInterface) {
+  selectCompany(company: CompanyInterface): void {
     if (this.currentCompany.id === company.id) {
       return;
     }
@@ -82,45 +82,48 @@ export class CompanySelectorComponent implements OnDestroy {
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            this.companySelectorService.changeSelectedCompany(company);
+        if (result) {
+          this.companySelectorService.changeSelectedCompany(company);
 
-            setTimeout(() => {
-              this._subscription.add(
-                this.apiService.checkLogin().subscribe((resp: CheckLoginInterface) => {
-                  this.windowManagerService.closeAllServices().then(() => {
-                    setTimeout(() => {
-                      this.userInfoService.changeUserInfo(resp.data);
+          setTimeout(() => {
+            this._subscription.add(
+              this.apiService.checkLogin().subscribe((resp: CheckLoginInterface) => {
+                this.windowManagerService.closeAllServices().then(() => {
+                  setTimeout(() => {
+                    this.userInfoService.changeUserInfo(resp.data);
 
-                      this.viewDirection.changeDirection(resp.data.lang === 'fa');
+                    this.viewDirection.changeDirection(resp.data.lang === 'fa');
 
-                      this.changeStatusService.changeUserStatus(resp.data.user_status);
+                    this.changeStatusService.changeUserStatus(resp.data.user_status);
 
-                      this.companySelectorService.changeCompanyList(resp.data.companies);
+                    this.companySelectorService.changeCompanyList(resp.data.companies);
 
-                      let translateTitle = 'select_company.your_default_company';
+                    const translateTitle = 'select_company.your_default_company';
 
-                      let titleMessage = this.getTranslate(translateTitle) + ' (' + company.name + ')';
+                    let titleMessage = this.getTranslate(translateTitle) + ' (' + company.name + ')';
 
-                      if (this.rtlDirection) {
-                        titleMessage += ' ' + this.getTranslate('select_company.is');
-                      }
+                    if (this.rtlDirection) {
+                      titleMessage += ' ' + this.getTranslate('select_company.is');
+                    }
 
-                      this.messageService.showMessage(titleMessage)
-                    }, 1000);
-                  });
-                }, (error: HttpErrorResponse) => {
-                  this.refreshLoginService.openLoginDialog(error);
-                })
-              )
-            }, 500);
-          }
+                    this.messageService.showMessage(titleMessage);
+                  }, 1000);
+                });
+              }, (error: HttpErrorResponse) => {
+                if (error.message) {
+                  this.messageService.showMessage(error.message, 'error');
+                }
+
+                this.refreshLoginService.openLoginDialog(error);
+              })
+            );
+          }, 500);
         }
-      )
+      })
     );
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

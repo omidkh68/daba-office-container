@@ -12,20 +12,19 @@ import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/so
 
 @Component({
   selector: 'app-soft-phone-settings',
-  templateUrl: './soft-phone-settings.component.html',
-  styleUrls: ['./soft-phone-settings.component.scss']
+  templateUrl: './soft-phone-settings.component.html'
 })
 export class SoftPhoneSettingsComponent extends LoginDataClass implements OnInit {
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
-  tabId: number = 4;
+  tabId = 4;
 
   @Output()
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
-  url: string = '';
+  url = '';
 
   constructor(private injector: Injector,
               private addressService: AddressService,
@@ -44,10 +43,10 @@ export class SoftPhoneSettingsComponent extends LoginDataClass implements OnInit
     }
   }
 
-  openSoftphoneExtension() {
+  openSoftphoneExtension(): void {
     const currentCompany: CompanyInterface = this.companySelectorService.currentCompany;
 
-    let url = AppConfig.PBX_LOGIN_EXTENSION + `/login.php?action=loginbytoken&comp_id=${currentCompany.id}&token=${this.loginData.access_token}`;
+    const url = `${AppConfig.PBX_LOGIN_EXTENSION}/login.php?action=loginbytoken&comp_id=${currentCompany.id}&token=${this.loginData.access_token}`;
 
     const service: ServiceInterface = this.windowManagerService.serviceList.filter(service => service.service_name === 'web_browser').pop();
 
@@ -64,7 +63,7 @@ export class SoftPhoneSettingsComponent extends LoginDataClass implements OnInit
     });
   }
 
-  get isElectron() {
+  get isElectron(): boolean {
     return this.electronService.isElectron;
   }
 }

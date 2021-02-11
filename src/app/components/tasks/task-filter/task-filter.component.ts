@@ -30,7 +30,7 @@ export interface filterType {
   templateUrl: './task-filter.component.html'
 })
 export class TaskFilterComponent extends LoginDataClass implements OnInit, AfterViewInit, OnDestroy {
-  rtlDirection: boolean;
+  rtlDirection = false;
   filterData: FilterInterface = {
     userId: 0,
     adminId: 0,
@@ -44,10 +44,10 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
     status: 0,
     percentageStatus: false
   };
-  projectsList: ProjectInterface[] = [];
-  usersList: UserInterface[] = [];
+  projectsList: Array<ProjectInterface> = [];
+  usersList: Array<UserInterface> = [];
   form: FormGroup;
-  filterTypes: filterType[] = [
+  filterTypes: Array<filterType> = [
     {
       index: 0,
       typeName: 'byCreateDate',
@@ -188,7 +188,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
     this.setupDatepickers();
   }
 
-  setupDatepickers() {
+  setupDatepickers(): void {
     this.datePicker = {
       locale: this.rtlDirection ? 'fa' : 'en',
       firstDayOfWeek: this.rtlDirection ? 'sa' : 'mo',
@@ -198,7 +198,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
     };
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         userId: new FormControl(0, Validators.required),
@@ -219,7 +219,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
     });
   }
 
-  checkFormValidation() {
+  checkFormValidation(): void {
     if (this.form.get('type').value !== 'byProject' && this.form.get('type').value !== 'byUser') {
       this.dateRequiredValidation();
     }
@@ -278,18 +278,13 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
     );
   }
 
-  dateRequiredValidation() {
+  dateRequiredValidation(): void {
     const dateStartControl = this.form.get('dateStart');
     const dateStopControl = this.form.get('dateStop');
 
     this.resetFormValidation();
 
-    if (dateStartControl.value === '' || dateStopControl.value === '') {
-      dateStartControl.setErrors({'incorrect': true});
-      dateStopControl.setErrors({'incorrect': true});
-      dateStartControl.markAsTouched();
-      dateStopControl.markAsTouched();
-    } else if (dateStartControl.value === '' && dateStopControl.value !== '') {
+    if (dateStartControl.value === '' && dateStopControl.value !== '') {
       dateStartControl.setErrors({'incorrect': true});
       dateStopControl.setErrors({'incorrect': true});
       dateStartControl.markAsTouched();
@@ -299,17 +294,22 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
       dateStopControl.setErrors({'incorrect': true});
       dateStartControl.markAsTouched();
       dateStopControl.markAsTouched();
+    } else if (dateStartControl.value === '' || dateStopControl.value === '') {
+      dateStartControl.setErrors({'incorrect': true});
+      dateStopControl.setErrors({'incorrect': true});
+      dateStartControl.markAsTouched();
+      dateStopControl.markAsTouched();
     }
   }
 
-  resetFormValidation() {
+  resetFormValidation(): void {
     this.form.get('projectId').setErrors(null);
     this.form.get('dateStart').setErrors(null);
     this.form.get('dateStop').setErrors(null);
     this.form.get('adminId').setErrors(null);
   }
 
-  submit() {
+  submit(): void {
     this.dialogRef.disableClose = true;
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'taskFilter'});
 
@@ -368,7 +368,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
             {
               result: 1,
               filterData: this.filterData,
-              content: resp.content
+              contents: resp.contents
             }
           );
         } else {
@@ -396,7 +396,7 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
     );
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 

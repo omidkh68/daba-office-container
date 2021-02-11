@@ -14,8 +14,8 @@ import {EventHandlerService} from './event-handler.service';
 import {EventHandlerInterface} from '../logic/event-handler.interface';
 import {EventHandlerEmailDate, UserContainerInterface} from '../../users/logic/user-container.interface';
 
-declare var SockJS;
-declare var Stomp;
+declare let SockJS;
+declare let Stomp;
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +52,7 @@ export class EventHandlerSocketService {
                 item.startDate = this.dateTimeservice.getDateByTimezone(item.startDate, user.timezone);
                 item.endDate = this.dateTimeservice.getDateByTimezone(item.endDate, user.timezone);
                 if (item.reminders.length)
-                  reminders = [...reminders, ...item.reminders]
+                  reminders = [...reminders, ...item.reminders];
               });
               reminders.map((item: ReminderInterface) => {
                 item.startdate_format = new Date(item.startReminder).toLocaleDateString();
@@ -60,7 +60,7 @@ export class EventHandlerSocketService {
                 item.startReminder = this.dateTimeservice.getDateByTimezone(item.startReminder, user.timezone);
                 item.endReminder = this.dateTimeservice.getDateByTimezone(item.endReminder, user.timezone);
               });
-              let data = {events: events, reminders: reminders};
+              const data = {events: events, reminders: reminders};
               this.eventHandlerService.moveEventsReminders(data);
               resolve(data);
             }
@@ -74,7 +74,7 @@ export class EventHandlerSocketService {
 
           resolve({events: [], reminders: []});
         }
-      })
+      });
     });
   }
 
@@ -122,12 +122,12 @@ export class EventHandlerSocketService {
                     });
                   }
                 }
-                let eventhandlerModel: EventHandlerEmailDate = {
+                const eventhandlerModel: EventHandlerEmailDate = {
                   email: this.loggedInUsers.email,
                   date: moment(new Date()).format('YYYY-MM-DD')
                 };
                 this.getEventsByEmail(eventhandlerModel, this.loggedInUsers);
-              })
+              });
             }
           }
 
@@ -159,7 +159,7 @@ export class EventHandlerSocketService {
         });
         this.stompClient.subscribe('/actionReminder', (message) => {
           // console.log("actionReminder" , message);
-        })
+        });
       }, (error) => {
         // console.log(error);
         reject();
@@ -168,7 +168,7 @@ export class EventHandlerSocketService {
     });
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

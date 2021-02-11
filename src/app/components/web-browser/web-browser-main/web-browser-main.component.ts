@@ -30,14 +30,14 @@ export interface UrlInterface {
 export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('webFrame') webFrames: QueryList<ElementRef>;
 
-  rtlDirection: boolean;
+  rtlDirection = false;
   addresses: Array<AddressInterface> = [
     {
       title: 'Google',
       url: 'https://www.google.com'
     }
   ];
-  selectCurrentTab: number = 0;
+  selectCurrentTab = 0;
   loadingIndicator: LoadingIndicatorInterface = null;
 
   private _subscription: Subscription = new Subscription();
@@ -91,8 +91,8 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  enterAddress($event, index: number): void {
-    const currentUrl = $event.target.value;
+  enterAddress($event: KeyboardEvent, index: number): void {
+    const currentUrl = ($event.target as HTMLInputElement).value;
 
     const findItem = this.addresses[index];
 
@@ -103,15 +103,13 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  readyWebView(webFrame: ElementRef, findItem: AddressInterface, url): void {
-    // let finalUrl = this.urlFixer(this.parseURL(url));
-
-    let finalUrl = !(/(http(s?)):\/\//i.test(url)) ? 'http://' + url : url;
+  readyWebView(webFrame: ElementRef, findItem: AddressInterface, url: string): void {
+    const finalUrl = !(/(http(s?)):\/\//i.test(url)) ? `http://${url}` : url;
 
     webFrame.nativeElement.setAttribute('src', finalUrl);
 
     webFrame.nativeElement.addEventListener('did-start-loading', () => {
-      this.electronService.remote.webContents.fromId(webFrame.nativeElement.getWebContentsId()).session.clearCache();
+      this.electronService.remote.webContents.fromId(webFrame.nativeElement.getWebContentsId()).session.clearCache().finally();
 
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'webBrowser'});
     });
@@ -175,7 +173,7 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
     this.selectCurrentTab = this.addresses.length - 1;
   }
 
-  addTab() {
+  addTab(): void {
     this.addresses.push({
       title: '',
       url: null,
@@ -186,7 +184,7 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
     this.selectCurrentTab = this.addresses.length - 1;
   }
 
-  parseURL(url): UrlInterface {
+  /*parseURL(url: string): UrlInterface {
     const a = document.createElement('a');
     a.href = url;
     return {
@@ -196,11 +194,11 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
       port: a.port,
       query: a.search,
       params: (() => {
-        let ret = {},
-          seg = a.search.replace(/^\?/, '').split('&'),
-          len = seg.length,
-          i = 0,
-          s;
+        let ret = {};
+        let seg = a.search.replace(/^\?/, '').split('&');
+        let len = seg.length;
+        let i = 0;
+        let s;
         for (; i < len; i++) {
           if (!seg[i]) {
             continue;
@@ -216,7 +214,7 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
       relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ''])[1],
       segments: a.pathname.replace(/^\//, '').split('/')
     };
-  }
+  }*/
 
   urlFixer(urlParams: UrlInterface): string {
     let url = urlParams.protocol + '://' + urlParams.host;
@@ -244,7 +242,7 @@ export class WebBrowserMainComponent implements AfterViewInit, OnDestroy {
     return url;
   }
 
-  getTranslate(word): string {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

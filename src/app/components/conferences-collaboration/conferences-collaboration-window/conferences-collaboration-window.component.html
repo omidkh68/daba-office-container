@@ -2,7 +2,8 @@
      [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 bottom-0 top-0 full-width">
   <div (dblclick)="!windowInstance.isMaximized ? maximize() : restore()"
        cdkDrag
-       cdkDragBoundary=".dashboard-app-boundary" cdkDragRootElement=".cdk-overlay-pane" class="window-heading full-width height-45 padding-mini-r-l display-flex align-items-center">
+       cdkDragBoundary=".dashboard-app-boundary" cdkDragRootElement=".cdk-overlay-pane"
+       class="window-heading full-width height-45 padding-mini-r-l display-flex align-items-center">
     <ng-template [ngIfElse]="notDraggableHeading" [ngIf]="windowInstance.isDraggable">
       <h3 cdkDragHandle
           class="window-title full-width full-height font-full-plus-one-tenth-em text-dark-mode-color display-flex align-items-center no-margin">
@@ -23,13 +24,6 @@
 
     <div [ngClass]="rtlDirection ? ' margin-r-auto' : ' margin-l-auto'"
          class="window-actions display-flex">
-      <!--<button (click)="centerWindow(); $event.stopPropagation();"
-              class="width-30 height-30 text-center line-height-35 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">
-        <mat-icon
-          class="text-dark-mode-color full-width full-height text-center font-9-em text-gray-600 text-weight-bold">
-          center_focus_strong
-        </mat-icon>
-      </button>-->
       <button (click)="minimize(); $event.stopPropagation();"
               *ngIf="!windowInstance.isMinimized"
               class="width-30 height-30 text-center line-height-25 no-padding no-border no-bg cursor-pointer font-full-plus-two-tenth-em">

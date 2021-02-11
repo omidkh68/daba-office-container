@@ -22,8 +22,8 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
-import {TaskCalendarService} from './services/task-calendar.service';
-import {EventHandlerService} from "../../events/service/event-handler.service";
+import {CalendarAndTaskItemsInterface, TaskCalendarService} from './services/task-calendar.service';
+import {EventHandlerService} from '../../events/service/event-handler.service';
 
 @Component({
   selector: 'app-task-calendar',
@@ -41,20 +41,19 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
   filterBoards: any;
 
   @Input()
-  refreshData: boolean = false;
+  refreshData = false;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
-  @Output() onTabLoaded: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  onTabLoaded: EventEmitter<string> = new EventEmitter<string>();
 
-  tasks: TaskInterface[] = [];
-  usersList: UserInterface[] = [];
-  projectsList: ProjectInterface[] = [];
-  // socket = io(AppConfig.SOCKET_URL);
-  calendarEvents = [];
+  tasks: Array<TaskInterface> = [];
+  usersList: Array<UserInterface> = [];
+  projectsList: Array<ProjectInterface> = [];
+  calendarEvents: Array<CalendarAndTaskItemsInterface> = [];
   holidays = [];
-
   viewModeTypes = 'calendar_task';
 
   private _subscription: Subscription = new Subscription();
@@ -74,41 +73,42 @@ export class TaskCalendarComponent extends LoginDataClass implements OnInit, OnD
     this.getBoards();
   }
 
-  changeViewMode(mode) {
+  changeViewMode(mode: string): void {
     this.viewModeTypes = mode;
     this.onTabLoaded.emit(this.viewModeTypes);
   }
 
-  openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {
+  openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface): void {
     bottomSheetConfig.bottomSheetRef = this.bottomSheet;
 
     this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
   }
 
-  getBoards() {
+  getBoards(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
+
     if (this.loggedInUser && this.loggedInUser.email) {
       this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
       this._subscription.add(
-          this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+        this.api.boardsCalendar(this.loggedInUser.email).subscribe((resp: any) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
-            if (resp.result === 1) {
-              this.usersList = resp.content.users.list;
-              this.projectsList = resp.content.projects.list;
-              this.tasks = resp.content.boards.list;
-              this.taskCalendarService.holidays = resp.content.boards.holidays;
-              this.calendarEvents = this.taskCalendarService.prepareTaskItems(resp);
-              this.eventHandlerService.moveCalendarItem(this.calendarEvents)
-            }
-          }, (error: HttpErrorResponse) => {
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+          if (resp.result === 1) {
+            this.usersList = resp.contents.users.list;
+            this.projectsList = resp.contents.projects.list;
+            this.tasks = resp.contents.boards.list;
+            this.taskCalendarService.holidays = resp.contents.boards.holidays;
+            this.calendarEvents = this.taskCalendarService.prepareTaskItems(resp);
+            this.eventHandlerService.moveCalendarItem(this.calendarEvents);
+          }
+        }, (error: HttpErrorResponse) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
-            this.refreshLoginService.openLoginDialog(error);
-          })
+          this.refreshLoginService.openLoginDialog(error);
+        })
       );
     }
   }

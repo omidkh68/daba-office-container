@@ -15,7 +15,7 @@ export class JalaliPipe implements PipeTransform {
         return jalaliMoment(value, 'YYYY-MM-DD').locale('fa').format('YYYY/MM/DD');
       }
       else {
-        return '-'
+        return '-';
       }
     } else {
       return value;

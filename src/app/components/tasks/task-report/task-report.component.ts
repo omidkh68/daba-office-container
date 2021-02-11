@@ -14,7 +14,13 @@ import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {TaskReportDescriptionComponent} from '../task-description/task-report-description.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {ResultTaskReportInterface, TaskReportInterface} from '../logic/board-interface';
+import {ResultTaskReportInterface, TaskReportDescriptionInterface, TaskReportInterface} from '../logic/board-interface';
+
+export interface TotalWorkingTimeInterface {
+  hours: string;
+  minutes: string;
+  seconds: string;
+}
 
 @Component({
   selector: 'app-task-report',
@@ -22,11 +28,10 @@ import {ResultTaskReportInterface, TaskReportInterface} from '../logic/board-int
   templateUrl: './task-report.component.html'
 })
 export class TaskReportComponent implements OnInit, OnDestroy {
-  @ViewChild
-  (MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
   loginData: LoginInterface;
@@ -45,7 +50,7 @@ export class TaskReportComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<TaskReportInterface>(this.taskReports);
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'project-report-report'};
   dataChange = false;
-  total;
+  total: TotalWorkingTimeInterface = null;
 
   private _subscription: Subscription = new Subscription();
 
@@ -70,14 +75,17 @@ export class TaskReportComponent implements OnInit, OnDestroy {
       if (length === 0 || pageSize === 0) {
         return `0 ${this.getTranslate('global.pagination.from')} ${length}`;
       }
+
       length = Math.max(length, 0);
+
       const startIndex = page * pageSize;
       const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+
       return `${startIndex + 1} - ${endIndex} ${this.getTranslate('global.pagination.from')} ${length}`;
     };
   }
 
-  getTaskReport() {
+  getTaskReport(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project-report'});
 
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
@@ -93,22 +101,22 @@ export class TaskReportComponent implements OnInit, OnDestroy {
 
           this.taskReports.map(item => {
             if (item.taskDateStop !== '0000-00-00 00:00:00') {
-              let timeStart = new Date(item.taskDateStart);
-              let timeEnd = new Date(item.taskDateStop);
-              let diff = Math.abs(timeEnd.getTime() - timeStart.getTime());
+              const timeStart = new Date(item.taskDateStart);
+              const timeEnd = new Date(item.taskDateStop);
+              const diff = Math.abs(timeEnd.getTime() - timeStart.getTime());
               totalTime = totalTime + diff;
             }
           });
 
-          let ms = totalTime % 1000;
+          const ms = totalTime % 1000;
           totalTime = (totalTime - ms) / 1000;
-          let secs = totalTime % 60;
+          const secs = totalTime % 60;
           totalTime = (totalTime - secs) / 60;
-          let mins = totalTime % 60;
-          let hrs = (totalTime - mins) / 60;
-          let hr = hrs < 10 ? '0' + hrs : hrs;
-          let min = mins < 10 ? '0' + mins : mins;
-          let sec = secs < 10 ? '0' + secs : secs;
+          const mins = totalTime % 60;
+          const hrs = (totalTime - mins) / 60;
+          const hr = hrs < 10 ? `0${hrs}` : `${hrs}`;
+          const min = mins < 10 ? `0${mins}` : `${mins}`;
+          const sec = secs < 10 ? `0${secs}` : `${secs}`;
 
           this.total = {hours: hr, minutes: min, seconds: sec};
 
@@ -153,16 +161,20 @@ export class TaskReportComponent implements OnInit, OnDestroy {
     );
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 
-  descriptionTask(element) {
+  descriptionTask(description: string, percentage: number, taskDateStop: string): void {
+    const data: TaskReportDescriptionInterface = {
+      task: this.task,
+      description: description,
+      percentage: percentage,
+      taskDateStop: taskDateStop
+    };
+
     const dialogRef = this.dialog.open(TaskReportDescriptionComponent, {
-      data: {
-        task: this.task,
-        element: element
-      },
+      data: data,
       autoFocus: false,
       width: '500px',
       height: '250px'
@@ -186,7 +198,6 @@ export class TaskReportComponent implements OnInit, OnDestroy {
       })
     );
   }
-
 
   ngOnDestroy(): void {
     if (this._subscription) {

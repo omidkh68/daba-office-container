@@ -3,9 +3,10 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {ReminderInterface} from '../logic/event-reminder.interface';
 import {EventHandlerInterface, EventsReminderInterface} from '../logic/event-handler.interface';
 import {
+  CalendarAndTaskItemsInterface,
   CalendarItemsInterface,
   TaskCalendarRateInterface
-} from "../../tasks/task-calendar/services/task-calendar.service";
+} from '../../tasks/task-calendar/services/task-calendar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class EventHandlerService {
   private eventsTask = new BehaviorSubject(this._eventsTask);
   public currentEventsTaskList = this.eventsTask.asObservable();
 
-  private _calendarItems: Array<CalendarItemsInterface> | null = null;
+  private _calendarItems: Array<CalendarAndTaskItemsInterface> | null = null;
   private calendarItems = new BehaviorSubject(this._calendarItems);
   public currentCalendarItems = this.calendarItems.asObservable();
 
@@ -43,39 +44,39 @@ export class EventHandlerService {
   private day = new BehaviorSubject(this._day);
   public currentDate = this.day.asObservable();
 
-  get calendarItemsData() {
+  get calendarItemsData(): Array<CalendarAndTaskItemsInterface> | null {
     return this.calendarItems.getValue();
   }
 
-  public moveEventsReminders(eventReminders: EventsReminderInterface | null) {
+  public moveEventsReminders(eventReminders: EventsReminderInterface | null): void {
     this.event_reminder.next(eventReminders);
   }
 
-  public moveEventsTask(eventsTask: Array<any> | null) {
+  public moveEventsTask(eventsTask: Array<any> | null): void {
     this.eventsTask.next(eventsTask);
   }
 
-  public moveCalendarRate(calendarRate: TaskCalendarRateInterface | null) {
+  public moveCalendarRate(calendarRate: TaskCalendarRateInterface | null): void {
     this.calendarRate.next(calendarRate);
   }
 
-  public moveCalendarItem(calendarItem: Array<CalendarItemsInterface> | null) {
+  public moveCalendarItem(calendarItem: Array<CalendarAndTaskItemsInterface> | null): void {
     this.calendarItems.next(calendarItem);
   }
 
-  public moveEvents(events: Array<EventHandlerInterface> | null) {
+  public moveEvents(events: Array<EventHandlerInterface> | null): void {
     this.events.next(events);
   }
 
-  public moveEventItems(eventItems: EventHandlerInterface | null) {
+  public moveEventItems(eventItems: EventHandlerInterface | null): void {
     this.eventItems.next(eventItems);
   }
 
-  public moveReminders(reminders: Array<ReminderInterface> | null) {
+  public moveReminders(reminders: Array<ReminderInterface> | null): void {
     this.reminders.next(reminders);
   }
 
-  public moveDay(date: Date | null) {
+  public moveDay(date: Date | null): void {
     this.day.next(date);
   }
 

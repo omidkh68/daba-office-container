@@ -1,10 +1,7 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {switchMap} from 'rxjs/operators';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable, Subscription} from 'rxjs';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {MessageService} from '../../message/service/message.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
@@ -12,7 +9,10 @@ import {CheckLoginInterface} from '../../login/logic/check-login.interface';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {ProfileSettingService} from '../logic/profile-setting.service';
+import {Observable, Subscription} from 'rxjs';
 import {WallpaperSelectorService} from '../../../services/wallpaper-selector.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   showProgress = false;
   showDelete = false;
   environment;
-  rtlDirection: boolean = false;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'wallpaper'};
   wallpapersPictures = [
     {
@@ -167,7 +167,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
   files: any[] = [];
   imageSrc;
   sellersPermitFile: any;
-  wallpaperUrl: string = '';
+  wallpaperUrl = '';
 
   private _subscription: Subscription = new Subscription();
 
@@ -195,11 +195,11 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     );
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.environment = this.electronService.remote.screen.getPrimaryDisplay().workAreaSize;
   }
 
-  onFileDropped(files) {
+  onFileDropped(files: Array<any>): void {
     this.prepareFilesList(files);
 
     const file: File = files[0];
@@ -208,10 +208,10 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.handleInputChange(file); //turn into base64
   }
 
-  fileBrowseHandler(files) {
+  fileBrowseHandler(files): void {
     this.prepareFilesList(files.target.files);
 
-    let fileList: FileList = files.target.files;
+    const fileList: FileList = files.target.files;
 
     if (fileList.length > 0) {
       const file: File = fileList[0];
@@ -222,15 +222,14 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     }
   }
 
-  deleteFile(index: number) {
+  deleteFile(index: number): void {
     this.files.splice(index, 1);
-
     this.wallpaperUrl = '';
     this.showProgress = false;
     this.showDelete = false;
   }
 
-  uploadFilesSimulator(index: number) {
+  uploadFilesSimulator(index: number): void {
     setTimeout(() => {
       if (index === this.files.length) {
         return;
@@ -246,10 +245,10 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
           }
         }, 200);
       }
-    }, 1000);
+    }, 500);
   }
 
-  prepareFilesList(files: Array<any>) {
+  prepareFilesList(files: Array<any>): void {
     for (const item of files) {
       item.progress = 0;
       this.files.push(item);
@@ -257,7 +256,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.uploadFilesSimulator(0);
   }
 
-  formatBytes(bytes, decimals = 0) {
+  formatBytes(bytes: number, decimals = 0): string {
     if (bytes === 0) {
       return '0 Bytes';
     }
@@ -265,13 +264,13 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     const dm = decimals <= 0 ? 0 : decimals || 2;
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
   }
 
-  handleInputChange(files) {
-    let file = files;
-    let pattern = /image-*/;
-    let reader = new FileReader();
+  handleInputChange(files): void {
+    const file = files;
+    const pattern = /image-*/;
+    const reader = new FileReader();
     if (!file.type.match(pattern)) {
       alert('invalid format');
       return;
@@ -280,9 +279,9 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     reader.readAsDataURL(file);
   }
 
-  _handleReaderLoaded(e) {
-    let reader = e.target;
-    let base64result = reader.result;
+  _handleReaderLoaded(e): void {
+    const reader = e.target;
+    const base64result = reader.result;
 
     this.imageSrc = base64result;
     this.wallpaperUrl = base64result;
@@ -291,7 +290,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'wallpaper'});
   }
 
-  onSubmit(img) {
+  onSubmit(img: string): void {
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     const formValue = {};
@@ -321,6 +320,10 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
           this.dialogRef.close();
         }
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message, 'error');
+        }
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'wallpaper'});
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
         this.showProgress = false;
@@ -331,7 +334,7 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     );
   }
 
-  changeWallpaperPhysical(value) {
+  changeWallpaperPhysical(value: string): void {
     this.http.get(value, {responseType: 'blob'})
       .pipe(
         switchMap(blob => this.convertBlobToBase64(blob))
@@ -342,10 +345,10 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
       });
   }
 
-  convertBlobToBase64(blob: Blob) {
+  convertBlobToBase64(blob: Blob): Observable<any> {
     return Observable.create(observer => {
       const reader = new FileReader();
-      const binaryString = reader.readAsDataURL(blob);
+      reader.readAsDataURL(blob);
       reader.onload = (event: any) => {
         observer.next(event.target.result);
         observer.complete();
@@ -358,15 +361,15 @@ export class WallpaperComponent extends LoginDataClass implements OnInit, OnDest
     });
   }
 
-  changeWallpaper(value) {
+  changeWallpaper(value: string): void {
     this.wallPaperSelector.changeWallpaper(value);
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }

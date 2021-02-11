@@ -1,6 +1,5 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {AppConfig} from '../../../environments/environment';
 import {ApiService} from '../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../message/service/message.service';
@@ -25,14 +24,14 @@ import {ApiService as StatusApiService} from '../status/logic/api.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent extends LoginDataClass implements OnInit, OnDestroy {
-  rtlDirection: boolean;
+  rtlDirection = false;
   windowManager: Array<WindowInterface>;
-  serviceList: ServiceInterface[] = [];
+  serviceList: Array<ServiceInterface> = [];
   wallpaper: string;
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(@Inject('windowObject') public window,
+  constructor(@Inject('windowObject') public window: Window,
               public dialog: MatDialog,
               private api: ApiService,
               private injector: Injector,
@@ -88,32 +87,32 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   ngOnInit(): void {
-    //this.stopWorkingBeforeCloseApp();
+    // this.stopWorkingBeforeCloseApp();
   }
 
-  stopWorkingBeforeCloseApp() {
+  /*stopWorkingBeforeCloseApp() {
     // if environment in production mode change status when user want to close app
     if (AppConfig.production) {
-      this.window.onbeforeunload = async (event) => {
-        await this.softPhoneService.sipHangUp();
-        await this.softPhoneService.sipUnRegister();
+      this.window.onbeforeunload = (event) => {
+        this.softPhoneService.sipHangUp();
+        this.softPhoneService.sipUnRegister();
 
         event.returnValue = true;
 
         // todo: remove when app ready in opmtimize performance
-        /*const resultOfStatus = await this.changeStatus();
+        /!*const resultOfStatus = await this.changeStatus();
 
         setTimeout(() => {
           this.electronService.remote.app.quit();
           this.electronService.remote.app.exit(0);
 
           event.returnValue = true;
-        }, 200);*/
+        }, 200);*!/
       };
     }
-  }
+  }*/
 
-  changeStatus() {
+  changeStatus(): Promise<boolean> {
     return new Promise((resolve) => {
       const currentCompany: CompanyInterface = this.companySelectorService.currentCompany;
 
@@ -163,7 +162,7 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
     });
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 
@@ -172,7 +171,7 @@ export class DashboardComponent extends LoginDataClass implements OnInit, OnDest
       this._subscription.unsubscribe();
     }
 
-    this.window.onbeforeunload = async (event) => {
+    this.window.onbeforeunload = (event) => {
       event.returnValue = true;
     };
   }

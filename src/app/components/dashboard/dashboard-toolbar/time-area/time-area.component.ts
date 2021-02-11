@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Renderer2, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit, Renderer2} from '@angular/core';
 import {TimezonesInterface} from './timezones.interface';
 import {Observable} from 'rxjs/internal/Observable';
 import {FormControl} from '@angular/forms';
@@ -19,19 +19,17 @@ export class TimeAreaComponent implements OnInit {
   loggedInUser: UserContainerInterface;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   datetime: DatetimeInterface;
-
-  checkMoreClock: boolean = false;
-  checkMoreClockContent: boolean = false;
-  cityClocksList: TimezonesInterface[];
+  checkMoreClock = false;
+  checkMoreClockContent = false;
+  cityClocksList: Array<TimezonesInterface>;
   item: number;
   currentTimezone: string;
-
   myControl = new FormControl();
-  options: TimezonesInterface[];
-  filteredOptions: Observable<TimezonesInterface[]>;
+  options: Array<TimezonesInterface>;
+  filteredOptions: Observable<Array<TimezonesInterface>>;
 
   private _subscription: Subscription = new Subscription();
 
@@ -59,34 +57,6 @@ export class TimeAreaComponent implements OnInit {
     );
   }
 
-  displayFn(timezone: TimezonesInterface): string {
-    return timezone && timezone.city ? timezone.city : '';
-  }
-
-  onEnter(evt: any){
-    console.log(evt);
-    /*if (evt.source.selected) {
-      alert("hello ");
-    }*/
-  }
-
-  setClockCity(option) {
-    this.checkMoreClock = false;
-    this.checkMoreClockContent = false;
-    if (this.cityClocksList.some(item => item.timezone !== option.timezone)) {
-      this.cityClocksList.push(option)
-    }
-
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.getDateTime();
-  }
-
-  getDateTime(): void {
-    this.datetime = this.datetimeService.changeDatetimeLabel(this.rtlDirection);
-  }
-
   ngOnInit(): void {
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
@@ -96,7 +66,28 @@ export class TimeAreaComponent implements OnInit {
       );
   }
 
-  init() {
+  displayFn(timezone: TimezonesInterface): string {
+    return timezone && timezone.city ? timezone.city : '';
+  }
+
+  setClockCity(option: TimezonesInterface): void {
+    this.checkMoreClock = false;
+    this.checkMoreClockContent = false;
+
+    if (this.cityClocksList.some(item => item.timezone !== option.timezone)) {
+      this.cityClocksList.push(option);
+    }
+  }
+
+  ngOnChanges(): void {
+    this.getDateTime();
+  }
+
+  getDateTime(): void {
+    this.datetime = this.datetimeService.changeDatetimeLabel(this.rtlDirection);
+  }
+
+  init(): void {
     setInterval(() => {
       this.datetime.time = new Date().toLocaleTimeString('en-US', {
         timeZone: this.cityClocksList[0].timezone,
@@ -105,10 +96,9 @@ export class TimeAreaComponent implements OnInit {
     }, 1000);
   }
 
-  private filter(name: string): TimezonesInterface[] {
+  private filter(name: string): Array<TimezonesInterface> {
     const filterValue = name.toLowerCase();
 
     return this.options.filter(option => option.city.toLowerCase().indexOf(filterValue) === 0);
   }
-
 }

@@ -8,8 +8,7 @@ import {LoadingIndicatorService} from '../../../services/loading-indicator.servi
 @Component({
   selector: 'app-learning-system-webview',
   templateUrl: './learning-system-webview.component.html',
-  styles: [
-    `
+  styles: [`
     :host {
       position: absolute;
       right: 0;
@@ -18,17 +17,16 @@ import {LoadingIndicatorService} from '../../../services/loading-indicator.servi
       width: 100%;
       height: 100%;
     }
-    `
-  ]
+  `]
 })
 export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('webFrame', {static: false}) webFrame: ElementRef;
+
   @Input()
   showFrame;
 
   @Input()
-  frameUrl;
-
-  @ViewChild('webFrame', {static: false}) webFrame: ElementRef;
+  frameUrl: string;
 
   reloadWebView: RefreshInterface;
 
@@ -45,14 +43,12 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
           if (this.isElectron) {
             this.webFrame.nativeElement.reloadIgnoringCache();
           } else {
-            const src = this.webFrame.nativeElement.getAttribute('src');
+            const src: string = this.webFrame.nativeElement.getAttribute('src');
 
             this.webFrame.nativeElement.setAttribute('src', '');
 
-            const rndTime = Date.now();
-
             setTimeout(() => {
-              this.webFrame.nativeElement.setAttribute('src', src + `&var=${rndTime}`);
+              this.webFrame.nativeElement.setAttribute('src', `${src}`);
             }, 500);
           }
         }
@@ -62,13 +58,11 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
 
   ngAfterViewInit(): void {
     if (this.webFrame) {
-      const rndTime = Date.now();
-
-      this.webFrame.nativeElement.setAttribute('src', this.frameUrl + `&var=${rndTime}`);
+      this.webFrame.nativeElement.setAttribute('src', `${this.frameUrl}`);
 
       if (this.isElectron) {
         this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-          this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+          this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache().finally();
 
           this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'learningSystem'});
         });
@@ -82,7 +76,7 @@ export class LearningSystemWebviewComponent implements AfterViewInit, OnDestroy 
     }
   }
 
-  get isElectron() {
+  get isElectron(): boolean {
     return this.electronService.isElectron;
   }
 

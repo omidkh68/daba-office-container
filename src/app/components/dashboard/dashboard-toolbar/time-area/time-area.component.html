@@ -71,7 +71,8 @@
                  [matAutocomplete]="auto">
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
                             class="text-dark-mode-color">
-            <mat-option (onSelectionChange)="setClockCity(option)" (click)="setClockCity(option)" *ngFor="let option of filteredOptions | async" [value]="option">
+            <mat-option (onSelectionChange)="setClockCity(option)" (click)="setClockCity(option)"
+                        *ngFor="let option of filteredOptions | async" [value]="option">
               {{option.city}} - {{option.timezone}}
             </mat-option>
           </mat-autocomplete>

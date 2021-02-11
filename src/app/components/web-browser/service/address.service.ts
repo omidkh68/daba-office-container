@@ -10,7 +10,7 @@ export class AddressService {
   private address = new BehaviorSubject(this._address);
   public currentAddress = this.address.asObservable();
 
-  changeAddress(address: AddressInterface) {
+  changeAddress(address: AddressInterface): void {
     this.address.next(address);
 
     setTimeout(() => this.address.next(null), 5000);

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, Pipe, PipeTransform, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {MessageService} from '../../message/service/message.service';
 import {SoftPhoneService} from '../service/soft-phone.service';
@@ -25,10 +25,10 @@ export class SoftPhoneContactsComponent implements OnInit {
   triggerCloseBottomSheet = new EventEmitter();
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
-  fromPopUp: boolean = false;
+  fromPopUp = false;
 
   @Input()
   softPhoneUsers: Array<SoftphoneUserInterface>;
@@ -39,8 +39,8 @@ export class SoftPhoneContactsComponent implements OnInit {
   filteredUsers: Array<SoftphoneUserInterface>;
   bottomSheetData: SoftPhoneBottomSheetInterface;
   data: any;
-  disableContacts: boolean = false;
-  callPopUpMinimizeStatus: boolean = false;
+  disableContacts = false;
+  callPopUpMinimizeStatus = false;
   filterArgs = null;
 
   private _subscription: Subscription = new Subscription();
@@ -59,7 +59,7 @@ export class SoftPhoneContactsComponent implements OnInit {
     this.filterArgs = {email: this.loggedInUser.email};
   }
 
-  filterContacts(value) {
+  filterContacts(value: string): void {
     if (!value) {
       this.assignCopy();
     }
@@ -70,11 +70,11 @@ export class SoftPhoneContactsComponent implements OnInit {
     );
   }
 
-  assignCopy() {
-    this.filteredUsers = Object.assign([], this.softPhoneUsers);
+  assignCopy(): void {
+    this.filteredUsers = [...this.softPhoneUsers];
   }
 
-  openSheet(contact: SoftphoneUserInterface) {
+  openSheet(contact: SoftphoneUserInterface): void {
     if (this.callPopUpMinimizeStatus) {
       this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
 
@@ -89,7 +89,7 @@ export class SoftPhoneContactsComponent implements OnInit {
     });
   }
 
-  addNewContact() {
+  addNewContact(): void {
     if (this.callPopUpMinimizeStatus) {
       this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
 
@@ -103,7 +103,7 @@ export class SoftPhoneContactsComponent implements OnInit {
     });
   }
 
-  editContact(contact) {
+  editContact(contact: SoftphoneUserInterface): void {
     if (this.callPopUpMinimizeStatus) {
       this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
 
@@ -118,7 +118,7 @@ export class SoftPhoneContactsComponent implements OnInit {
     });
   }
 
-  transferCall(contact: SoftphoneUserInterface) {
+  transferCall(contact: SoftphoneUserInterface): void {
     this.disableContacts = true;
 
     this.softPhoneService.sipTransfer(contact.extension_no);
@@ -126,24 +126,11 @@ export class SoftPhoneContactsComponent implements OnInit {
     setTimeout(() => this.triggerCloseBottomSheet.emit(), 1000);
   }
 
-  dismissTransferCall() {
+  dismissTransferCall(): void {
     this.triggerCloseBottomSheet.emit();
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
-  }
-}
-
-@Pipe({
-  name: 'myFilter',
-  pure: false
-})
-export class MyFilterPipe implements PipeTransform {
-  transform(items: any[], filter: any): any {
-    if (!items || !filter) {
-      return items;
-    }
-    return items.filter((item: SoftphoneUserInterface) => item.username !== filter.email);
   }
 }

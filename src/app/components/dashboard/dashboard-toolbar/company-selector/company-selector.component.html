@@ -21,7 +21,8 @@
     <span class="font-full-plus-two-tenth-em display-flex flex-space-between">
       <span class="text-capitalize">{{company.name}}</span>
 
-      <span *ngIf="company.id === currentCompany.id" class="font-7-em text-italic">{{'global.default' | translate}}</span>
+      <span *ngIf="company.id === currentCompany.id"
+            class="font-7-em text-italic">{{'global.default' | translate}}</span>
     </span>
   </button>
 </mat-menu>

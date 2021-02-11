@@ -12,15 +12,14 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 
 @Component({
   selector: 'app-admin-panel-main',
-  templateUrl: './admin-panel-main.component.html',
-  styleUrls: ['./admin-panel-main.component.scss']
+  templateUrl: './admin-panel-main.component.html'
 })
 export class AdminPanelMainComponent extends LoginDataClass implements AfterViewInit, OnDestroy {
   @ViewChild('webFrame', {static: false}) webFrame: ElementRef;
 
-  rtlDirection: boolean;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = null;
-  reloadWebView: boolean = false;
+  reloadWebView = false;
 
   private _subscription: Subscription = new Subscription();
 
@@ -71,7 +70,7 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
 
       if (this.electronService.isElectron) {
         this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
-          this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+          this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache().finally();
 
           this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'adminPanel'});
         });
@@ -83,11 +82,11 @@ export class AdminPanelMainComponent extends LoginDataClass implements AfterView
     }
   }
 
-  get isElectron() {
+  get isElectron(): boolean {
     return this.electronService.isElectron;
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

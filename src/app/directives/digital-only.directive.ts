@@ -66,7 +66,7 @@ export class digitalOnlyDirective implements OnChanges {
   }
 
   @HostListener('keydown', ['$event'])
-  onKeyDown(e: KeyboardEvent) {
+  onKeyDown(e: KeyboardEvent): void {
     if (
       this.navigationKeys.indexOf(e.key) > -1 || // Allow: navigation keys: backspace, delete, arrows etc.
       (e.key === 'a' && e.ctrlKey === true) || // Allow: Ctrl+A
@@ -107,21 +107,21 @@ export class digitalOnlyDirective implements OnChanges {
   }
 
   @HostListener('keyup', ['$event'])
-  onKeyUp(e: KeyboardEvent) {
+  onKeyUp(): void {
     this.updateDecimalPoint();
 
     this.onValueChanged.emit(this.inputElement.value);
   }
 
   @HostListener('paste', ['$event'])
-  onPaste(event: ClipboardEvent) {
+  onPaste(event: ClipboardEvent): void {
     const pastedInput: string = event.clipboardData.getData('text/plain');
     this.pasteData(pastedInput);
     event.preventDefault();
   }
 
   @HostListener('drop', ['$event'])
-  onDrop(event: DragEvent) {
+  onDrop(event: DragEvent): void {
     const textData = event.dataTransfer.getData('text');
     this.inputElement.focus();
     this.pasteData(textData);
@@ -146,7 +146,7 @@ export class digitalOnlyDirective implements OnChanges {
   }
 
   private sanitizeInput(input: string): string {
-    let result = '';
+    let result;
     if (this.decimal && this.isValidDecimal(input)) {
       const regex = new RegExp(`[^0-9${this.decimalSeparator}]`, 'g');
       result = input.replace(regex, '');

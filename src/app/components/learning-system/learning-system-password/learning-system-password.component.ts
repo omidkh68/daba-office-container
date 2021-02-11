@@ -3,13 +3,13 @@ import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
+import {MessageService} from '../../message/service/message.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {TranslateService} from '@ngx-translate/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ViewDirectionService} from '../../../services/view-direction.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {JoinInterface, LmsResultInterface, RoomInterface} from '../logic/lms.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {MessageService} from '../../message/service/message.service';
 
 @Component({
   selector: 'app-learning-system-password',
@@ -17,7 +17,7 @@ import {MessageService} from '../../message/service/message.service';
 })
 export class LearningSystemPasswordComponent extends LoginDataClass implements OnInit, OnDestroy {
   form: FormGroup;
-  rtlDirection: boolean;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = null;
 
   private _subscription: Subscription = new Subscription();
@@ -44,26 +44,26 @@ export class LearningSystemPasswordComponent extends LoginDataClass implements O
   }
 
   ngOnInit(): void {
-    this.createForm();
+    this.createForm().finally();
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         meetingID: new FormControl(this.data.roomName),
         password: new FormControl(''),
-        userName: new FormControl(this.loggedInUser.email)
+        userName: new FormControl(this.loggedInUser.email.split('@')[0])
       });
 
-      resolve();
+      resolve(true);
     });
   }
 
-  cancelBtn() {
+  cancelBtn(): void {
     this.dialogRef.close(false);
   }
 
-  submit() {
+  submit(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'roomPassword'});
 
     const formValue: JoinInterface = this.form.value;
@@ -84,12 +84,14 @@ export class LearningSystemPasswordComponent extends LoginDataClass implements O
           this.form.get('password').setErrors({'incorrect': true});
         }
       }, () => {
+        this.form.enable();
+
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'roomPassword'});
       })
     );
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

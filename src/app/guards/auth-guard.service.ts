@@ -25,11 +25,11 @@ export interface DataInterface {
   providedIn: 'root'
 })
 export class AuthGuardService extends LoginDataClass implements CanActivate, OnDestroy {
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(@Inject('windowObject') private window,
+  constructor(@Inject('windowObject') private window: Window,
               private router: Router,
               private api: ApiService,
               private injector: Injector,
@@ -64,14 +64,14 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
         });
 
       }).catch(() => {
-        this.router.navigateByUrl(`/login`);
+        this.router.navigateByUrl(`/login`).finally();
         resolve(true);
       });
     });
   }
 
-  getUserLoginInfo() {
-    return new Promise(async (resolve, reject) => {
+  getUserLoginInfo(): Promise<boolean | LoginInterface> {
+    return new Promise( (resolve, reject) => {
       this.getLoginDataFile().then((loginData: LoginInterface) => {
         if (!loginData) {
           reject(false);
@@ -117,7 +117,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
   checkLogin(): Promise<UserContainerInterface> {
     return new Promise((resolve, reject) => {
       if (!this.loginData) {
-        this.router.navigateByUrl(`/login`);
+        this.router.navigateByUrl(`/login`).finally();
       } else {
         this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
         this.api.checkLogin().subscribe((resp: CheckLoginInterface) => {
@@ -125,7 +125,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
             resolve(resp.data);
           }
         }, () => {
-          this.router.navigateByUrl(`/login`);
+          this.router.navigateByUrl(`/login`).finally();
 
           reject(false);
         });
@@ -133,27 +133,27 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     });
   }
 
-  async setUserData(data: DataInterface) {
-    await this.userInfoService.changeLoginData(data.loginData);
+  setUserData(data: DataInterface): void {
+    this.userInfoService.changeLoginData(data.loginData);
 
-    await this.userInfoService.changeUserInfo(data.userInfo);
+    this.userInfoService.changeUserInfo(data.userInfo);
 
-    await this.viewDirection.changeDirection(data.userInfo.lang === 'fa');
+    this.viewDirection.changeDirection(data.userInfo.lang === 'fa');
 
-    await this.changeStatusService.changeUserStatus(data.userInfo.user_status);
+    this.changeStatusService.changeUserStatus(data.userInfo.user_status);
 
-    await this.companySelectorService.changeCompanyList(data.userInfo.companies);
+    this.companySelectorService.changeCompanyList(data.userInfo.companies);
 
-    await this.wallpaperSelectorService.changeWallpaper(data.userInfo.background_image ? data.userInfo.background_image : '');
+    this.wallpaperSelectorService.changeWallpaper(data.userInfo.background_image ? data.userInfo.background_image : '');
 
     setTimeout(() => {
-      this.getTranslate(data.userInfo.lang, 'login_info.login_successfully').then((successfulMessage: string) => {
+      this.getTranslate('login_info.login_successfully').then((successfulMessage: string) => {
         this.messageService.showMessage(successfulMessage, 'success');
       });
     });
   }
 
-  getTranslate(lang, word) {
+  getTranslate(word: string): Promise<string> {
     return new Promise((resolve) => {
       const translatedWord = this.translate.instant(word);
 
@@ -161,7 +161,7 @@ export class AuthGuardService extends LoginDataClass implements CanActivate, OnD
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }

@@ -13,7 +13,7 @@ import {SoftPhoneBottomSheetInterface} from '../soft-phone-bottom-sheet/logic/so
   styleUrls: ['./soft-phone-transfer-call.component.scss']
 })
 export class SoftPhoneTransferCallComponent implements OnInit, OnDestroy {
-  rtlDirection: boolean = false;
+  rtlDirection = false;
   bottomSheetData: SoftPhoneBottomSheetInterface;
   viewModeTypes = 'contact';
   loggedInUser: UserContainerInterface;
@@ -40,11 +40,11 @@ export class SoftPhoneTransferCallComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-  changeViewMode(mode) {
+  changeViewMode(mode: string): void {
     this.viewModeTypes = mode;
   }
 
-  closeTransferBottomSheet() {
+  closeTransferBottomSheet(): void {
     this.bottomSheetData.bottomSheetRef.close();
   }
 

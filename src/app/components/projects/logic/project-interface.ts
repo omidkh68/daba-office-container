@@ -1,3 +1,5 @@
+import {UserInterface} from '../../users/logic/user-interface';
+
 export interface ProjectInterface {
   projectId: number;
   projectName: string;
@@ -9,4 +11,7 @@ export interface ProjectInterface {
   description?: string;
   projectStatus?: string;
   projectActiveStatus?: number;
+  userCreator?: UserInterface;
+  creationDate?: string;
+  deletedStatus?: number;
 }

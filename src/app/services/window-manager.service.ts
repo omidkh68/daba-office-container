@@ -30,7 +30,7 @@ export class WindowManagerService {
               public dialog: MatDialog,
               private electronService: ElectronService) {
     if (this.electronService.isElectron) {
-      window.addEventListener('resize', this.fixPositionByTransform.bind(this))
+      window.addEventListener('resize', this.fixPositionByTransform.bind(this));
     }
   }
 
@@ -42,16 +42,16 @@ export class WindowManagerService {
     return this.services.getValue();
   }
 
-  changeServices(services: Array<ServiceInterface> | null) {
+  changeServices(services: Array<ServiceInterface> | null): void {
     this.services.next(services);
   }
 
-  openWindowState(service: ServiceInterface) {
+  openWindowState(service: ServiceInterface): Promise<boolean> {
     return new Promise((resolve) => {
       let component: any = null;
-      let maximizable: boolean = true;
-      let windowWidth = service && service.width ? service.width : 0;
-      let windowHeight = service && service.height ? service.height : 0;
+      let maximizable = true;
+      const windowWidth = service && service.width ? service.width : 0;
+      const windowHeight = service && service.height ? service.height : 0;
 
       try {
         switch (service.service_name) {
@@ -110,7 +110,7 @@ export class WindowManagerService {
             disableClose: true,
           });
 
-          let maxZIndex = this.getNextZIndex();
+          const maxZIndex = this.getNextZIndex();
 
           const mwindow: WindowInterface = {
             windowRef: dialogRef,
@@ -141,30 +141,34 @@ export class WindowManagerService {
           resolve(true);
         }
       } catch (e) {
+        //
       }
     });
   }
 
-  fixPositionByTransform(event) {
+  fixPositionByTransform(event: Event): void {
     event.preventDefault();
+
     this.windowListArray.map((windowInstance: any) => {
-      let displays = this.electronService.remote.screen.getAllDisplays();
-      let externalDisplay = displays.find((display) => {
-        return display.bounds.x !== 0 || display.bounds.y !== 0
+      const displays = this.electronService.remote.screen.getAllDisplays();
+      const externalDisplay = displays.find((display) => {
+        return display.bounds.x !== 0 || display.bounds.y !== 0;
       });
-      let primaryDisplay = displays.find((display) => {
-        return display.bounds.x === 0 || display.bounds.y === 0
+
+      const primaryDisplay = displays.find((display) => {
+        return display.bounds.x === 0 || display.bounds.y === 0;
       });
+
       if (externalDisplay) {
         const element = windowInstance.windowRef._overlayRef._portalOutlet.outletElement;
         const temp_size = this.electronService.remote.getCurrentWindow().getBounds().width - primaryDisplay.bounds.width;
         const size = temp_size / 2;
-        element.style.transform = 'translate3d(' + size + 'px, ' + 0 + 'px, 0px)';
+        element.style.transform = `translate3d(${size}px, 0px, 0px)`;
       }
     });
   }
 
-  minimizeWindow(service: ServiceInterface) {
+  minimizeWindow(service: ServiceInterface): void {
     const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
 
     windowInstance.isMinimized = true;
@@ -174,7 +178,7 @@ export class WindowManagerService {
     windowInstance.windowRef.addPanelClass('minimized');
   }
 
-  maximizeWindow(service: ServiceInterface) {
+  maximizeWindow(service: ServiceInterface): void {
     const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
 
     windowInstance.isMinimized = false;
@@ -186,7 +190,7 @@ export class WindowManagerService {
     this.activeWindow(service);
   }
 
-  restoreWindow(service: ServiceInterface) {
+  restoreWindow(service: ServiceInterface): void {
     const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
 
     windowInstance.isMinimized = false;
@@ -198,14 +202,14 @@ export class WindowManagerService {
     this.activeWindow(service);
   }
 
-  activeWindow(service: ServiceInterface) {
+  activeWindow(service: ServiceInterface): void {
     const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
 
     let priority = this.getMaxZIndex();
 
     const dialogId = windowInstance.windowRef.id;
 
-    this.element = document.querySelector('#' + dialogId) as HTMLElement;
+    this.element = document.querySelector('#' + dialogId) ;
 
     if (windowInstance.priority === priority) {
       if (this.windowListArray.length === 1) {
@@ -234,7 +238,7 @@ export class WindowManagerService {
     this.windows.next(this.windowListArray);
   }
 
-  closeWindow(service: ServiceInterface) {
+  closeWindow(service: ServiceInterface): void {
     const windowInstance = this.windowListArray.filter(window => window.windowService.service_name === service.service_name).pop();
     const findIndex = this.windowListArray.findIndex(window => window.windowService.service_name === service.service_name);
 
@@ -243,9 +247,9 @@ export class WindowManagerService {
     windowInstance.windowRef.close();
   }
 
-  closeAllServices() {
-    return new Promise(async (resolve) => {
-      await this.windowListArray.map((item: WindowInterface) => {
+  closeAllServices(): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.windowListArray.map((item: WindowInterface) => {
         setTimeout(() => this.closeWindow(item.windowService));
       });
 
@@ -253,7 +257,7 @@ export class WindowManagerService {
     });
   }
 
-  centerWindow() {
+  centerWindow(): void {
     // const dialogId = windowInstance.windowRef.id;
     //
     // this.element = document.querySelector('#' + dialogId) as HTMLElement;
@@ -264,7 +268,7 @@ export class WindowManagerService {
   }
 
   getMaxZIndex(): number {
-    let zIndex = 1000;
+    const zIndex = 1000;
 
     if (this.windowListArray.length === 1 || this.windowListArray.length === 0) {
       return zIndex;
@@ -293,18 +297,18 @@ export class WindowManagerService {
     return exist;
   }
 
-  dialogOnTop(dialogId: string) {
+  dialogOnTop(dialogId: string): void {
     setTimeout(() => {
-      let maxWindowZIndex = (this.getMaxZIndex() + 500).toString();
+      const maxWindowZIndex = (this.getMaxZIndex() + 500).toString();
 
       let element: HTMLElement;
 
       if (dialogId === 'snackBar') {
-        element = document.querySelector('.mat-snack-bar-container') as HTMLElement;
+        element = document.querySelector('.mat-snack-bar-container') ;
         element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
       } else if (dialogId === 'popover') {
         setTimeout(() => {
-          element = document.querySelector('.cdk-overlay-backdrop-showing') as HTMLElement;
+          element = document.querySelector('.cdk-overlay-backdrop-showing') ;
           element.style.zIndex = maxWindowZIndex;
         }, 100);
       } else {
@@ -313,15 +317,15 @@ export class WindowManagerService {
         if (overlayHtmlElements.length === 1) {
           const elementOverlay = overlayHtmlElements[0] as HTMLElement;
           elementOverlay.style.zIndex = maxWindowZIndex;
-          element = document.querySelector('#' + dialogId) as HTMLElement;
+          element = document.querySelector('#' + dialogId) ;
           element.parentElement.parentElement.style.zIndex = maxWindowZIndex;
         } else if (overlayHtmlElements.length > 1) {
           // if dialog open on another dialog, second overlay has to more z-index
-          let elementOverlay = overlayHtmlElements[1] as HTMLElement;
-          let maxZIndex = (parseInt(maxWindowZIndex, 10) + 11).toString();
+          const elementOverlay = overlayHtmlElements[1] as HTMLElement;
+          const maxZIndex = (parseInt(maxWindowZIndex, 10) + 11).toString();
 
           elementOverlay.style.zIndex = maxZIndex;
-          element = document.querySelector('#' + dialogId) as HTMLElement;
+          element = document.querySelector('#' + dialogId) ;
           element.parentElement.parentElement.style.zIndex = maxZIndex;
         }
       }

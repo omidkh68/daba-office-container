@@ -1,10 +1,12 @@
 <div [dir]="rtlDirection ? 'rtl' : 'ltr'" class="pos-abs left-0 right-0 top-0 bottom-0 full-width full-height">
-  <div class="padding-full height-40 border-bottom line-height">
-    <span class="text-pink-600">
+  <div class="padding-full height-40 border-bottom line-height display-flex">
+    <span class="text-pink-600 display-flex">
       {{'tasks.task_report.total_time' | translate}}:
     </span>
-    <span class="margin-r-l text-gray-700">
-      {{total.hours}} {{'global.hours' | translate}} - {{total.minutes}} {{'global.minutes' | translate}} - {{total.seconds}} {{'global.seconds' | translate}}
+    <span class="margin-r-l text-gray-700 display-flex">
+      <span>{{total && total.hours ? total.hours : 0}} {{'global.hours' | translate}} - </span>
+      <span>{{total && total.minutes ? total.minutes : 0}} {{'global.minutes' | translate}} - </span>
+      <span>{{total && total.seconds ? total.seconds : 0}} {{'global.seconds' | translate}}</span>
     </span>
   </div>
 
@@ -63,7 +65,8 @@
             </a>
           </span>
 
-          <a (click)="descriptionTask(element)" *ngIf="element.description.length"
+          <a *ngIf="element.description.length"
+             (click)="descriptionTask(element.description, element.percentage, element.taskDateStop)"
              class="line-height-30 font-9-em overflow-hide text-weight-normal no-box-shadow cursor-pointer">
             <span class="text-blue">{{'tasks.task_detail.overview_description' | translate}}</span>
           </a>
@@ -80,7 +83,7 @@
   <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'project-report'"
        class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
     <div class="text-center">
-      <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" version="1.1" viewBox="0 0 24 30"
+      <svg height="30px" id="Layer_1" style="enable-background:new 0 0 50 50;" viewBox="0 0 24 30"
            width="24px" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" y="0px">
         <rect fill="#333" height="5" width="4" x="0" y="13">
           <animate attributeName="height" attributeType="XML" begin="0s" dur="0.6s" repeatCount="indefinite"

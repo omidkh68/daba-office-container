@@ -7,19 +7,17 @@ import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomShe
 })
 export class ButtonSheetDataService {
   private _defaultButtonSheetData: TaskBottomSheetInterface | null = null;
-
   private buttonSheetData = new BehaviorSubject(this._defaultButtonSheetData);
-
   public currentButtonSheetData = this.buttonSheetData.asObservable();
 
   constructor() {
   }
 
-  changeButtonSheetData(buttonSheetData: TaskBottomSheetInterface | null) {
+  changeButtonSheetData(buttonSheetData: TaskBottomSheetInterface | null): void {
     this.buttonSheetData.next(buttonSheetData);
 
     setTimeout(() => {
       this.buttonSheetData.next(null);
-    }, 500)
+    }, 200);
   }
 }

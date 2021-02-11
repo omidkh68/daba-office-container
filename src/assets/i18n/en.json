@@ -160,7 +160,14 @@
       "task_completion_percentage": "Task Completion Percentage",
       "completed": "Completed",
       "not_completed": "Not Completed",
-      "task_count" : "Tasks Count"
+      "task_count": "Tasks Count",
+      "created": "created the task",
+      "edited": "edited the task",
+      "deleted": "removed the task",
+      "started": "started the task",
+      "stopped": "stopped the task",
+      "done": "completed the task",
+      "described": "entered the task description"
     },
     "boards": {
       "task_percentage": "Task Percentage",
@@ -365,7 +372,8 @@
     "delete_room": "Delete Conference Room",
     "delete_room_error": "The room you are looking for not exist or has been deleted before",
     "delete_room_success": "Room has been deleted",
-    "confirm_delete_room": "Are you sure want to delete this room?"
+    "confirm_delete_room": "Are you sure want to delete this room?",
+    "warning_test": "Make sure pop up is not disabled in your browser"
   },
   "conference_collaboration": {
     "audio_only": "Audio Conference",

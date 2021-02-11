@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../status/logic/api.service';
 import {ApiService as TasksApiService} from '../../../tasks/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {TaskInterface} from '../../../tasks/logic/task-interface';
 import {MessageService} from '../../../message/service/message.service';
 import {LoginDataClass} from '../../../../services/loginData.class';
 import {UserInfoService} from '../../../users/services/user-info.service';
@@ -41,7 +42,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
   loggedInUser: UserContainerInterface;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
   serviceList: Array<ServiceInterface>;
@@ -71,7 +72,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     this.checkToStartWorking();
   }
 
-  checkToStartWorking() {
+  checkToStartWorking(): void {
     this._subscription.add(
       this.changeStatusService.currentUserStatus.subscribe(status => this.userCurrentStatus = status)
     );
@@ -141,7 +142,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     this.changeDetector.detectChanges();
   }
 
-  openIncompleteTasks() {
+  openIncompleteTasks(): void {
     const service = this.loggedInUser.services.filter(service => service.service_name === 'project').pop();
 
     if (service) {
@@ -150,10 +151,14 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
 
         this._subscription.add(
           this.tasksApiService.incompleteTasks(this.loggedInUser.email).subscribe((resp: ResultIncompleteTaskInterface) => {
-            if (resp.result === 1 && resp.content.length !== 0) {
-              this.openDialogIncompleteTasks(resp.content);
+            if (resp.result === 1 && resp.contents.length !== 0) {
+              this.openDialogIncompleteTasks(resp.contents);
             }
           }, (error: HttpErrorResponse) => {
+            if (error.message) {
+              this.messageService.showMessage(error.message, 'error');
+            }
+
             this.refreshLoginService.openLoginDialog(error);
           })
         );
@@ -161,7 +166,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     }
   }
 
-  changeStatus() {
+  changeStatus(): void {
     const dialogRef = this.dialog.open(ChangeStatusComponent, {
       autoFocus: false,
       width: '500px',
@@ -176,7 +181,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     );
   }
 
-  getElapsedTime(entry): void {
+  getElapsedTime(entry: string): void {
     const curDate = new Date(new Date(entry).getTime());
 
     let totalSeconds = Math.floor((new Date().getTime() - curDate.getTime()) / 1000);
@@ -201,7 +206,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     };
   }
 
-  openSoftPhone() {
+  openSoftPhone(): void {
     setTimeout(() => {
       const service = this.loggedInUser.services.filter(service => service.service_name === 'pbx').pop();
 
@@ -211,7 +216,7 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     }, 2000);
   }
 
-  openDialogIncompleteTasks(taskList) {
+  openDialogIncompleteTasks(taskList: Array<TaskInterface>): void {
     const dialogRef = this.dialog.open(TaskIncompleteTaskComponent, {
       data: taskList,
       autoFocus: false,
@@ -227,11 +232,11 @@ export class UserStatusComponent extends LoginDataClass implements OnInit, OnDes
     );
   }
 
-  openService(service: ServiceInterface) {
-    this.windowManagerService.openWindowState(service);
+  openService(service: ServiceInterface): void {
+    this.windowManagerService.openWindowState(service).finally();
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

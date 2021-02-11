@@ -24,21 +24,22 @@ export class SoftPhoneKeypadComponent {
   triggerCloseBottomSheet = new EventEmitter();
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
-  tabId: number = 1;
+  tabId = 1;
 
   @Input()
-  fromPopUp: boolean = false;
+  fromPopUp = false;
 
   @Input()
   softPhoneUsers: Array<SoftphoneUserInterface>;
 
   numeric: string | any = '';
   oldNumeric: string | any = '';
-  disableKeypad: boolean = false;
-  callPopUpMinimizeStatus: boolean = false;
+  disableKeypad = false;
+  callPopUpMinimizeStatus = false;
+  findContact: SoftphoneUserInterface = null;
 
   keys: Array<KeysInterface> = [
     {num: '1'}, {num: '2'}, {num: '3'},
@@ -65,45 +66,51 @@ export class SoftPhoneKeypadComponent {
     );
   }
 
-  keyPress(event, key: KeysInterface) {
+  keyPress(key: KeysInterface): void {
     this.numeric += key.num;
 
-    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric.includes(item.extension_no)).pop();
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric === item.extension_no).pop();
 
     this.softPhoneService.sipSendDTMF(key.num);
 
     if (contact) {
-      this.oldNumeric = this.numeric;
-
-      // this.numeric = contact.name + ' ' + contact.family;
-      this.numeric = contact.extension_name;
+      this.findContact = contact;
+    } else {
+      this.findContact = null;
     }
   }
 
-  removeFromNumber() {
+  removeFromNumber(): void {
     if (this.oldNumeric !== '') {
       this.numeric = this.oldNumeric;
 
       this.oldNumeric = '';
     } else {
       this.numeric = this.numeric.substring(0, this.numeric.length - 1);
+
+      const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric === item.extension_no).pop();
+
+      if (contact) {
+        this.findContact = contact;
+      } else {
+        this.findContact = null;
+      }
     }
   }
 
-  changeNumber(event) {
+  changeNumber(event: number | any): void {
     this.numeric = event;
 
-    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric.includes(item.extension_no)).pop();
+    const contact: SoftphoneUserInterface = this.softPhoneUsers.filter(item => this.numeric === item.extension_no).pop();
 
     if (contact) {
-      this.oldNumeric = this.numeric;
-
-      // this.numeric = contact.name + ' ' + contact.family;
-      this.numeric = contact.extension_name;
+      this.findContact = contact;
+    } else {
+      this.findContact = null;
     }
   }
 
-  openButtonSheet() {
+  openButtonSheet(): void {
     if (this.callPopUpMinimizeStatus) {
       this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
 
@@ -132,7 +139,7 @@ export class SoftPhoneKeypadComponent {
     });
   }
 
-  transferCall() {
+  transferCall(): void {
     this.disableKeypad = true;
 
     let contactInfo: any;
@@ -150,11 +157,11 @@ export class SoftPhoneKeypadComponent {
     setTimeout(() => this.triggerCloseBottomSheet.emit(), 1000);
   }
 
-  dismissTransferCall() {
+  dismissTransferCall(): void {
     this.triggerCloseBottomSheet.emit();
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

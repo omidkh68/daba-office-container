@@ -1,32 +1,32 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
-import {EventHandlerInterface} from "../../events/logic/event-handler.interface";
+import {EventHandlerInterface} from '../../events/logic/event-handler.interface';
 
 @Component({
   selector: 'app-task-morelist',
   templateUrl: './task-morelist.component.html'
 })
-export class TaskMorelistComponent {
-  rtlDirection: boolean;
+export class TaskMoreListComponent {
+  rtlDirection = false;
   filterData: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: FilterTaskInterface,
-              public dialogRef: MatDialogRef<TaskMorelistComponent>) {
+              public dialogRef: MatDialogRef<TaskMoreListComponent>) {
 
     this.filterData = this.data;
   }
 
-  alternativeImage(event) {
-    event.target.src = '/assets/profileImg/0.jpg';
+  alternativeImage(event): void{
+    (event.target as HTMLImageElement).src = '/assets/profileImg/0.jpg';
   }
 
   closeDialog(item) {
     this.dialogRef.close(item);
   }
 
-  addDialog() {
-    let eventItems: EventHandlerInterface = {
+  addDialog(): void {
+    const eventItems: EventHandlerInterface = {
       actionCallback: 'add',
       actionType: null,
       id: null,

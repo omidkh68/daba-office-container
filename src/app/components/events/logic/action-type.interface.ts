@@ -6,7 +6,7 @@ export interface ActionTypeJobInterface {
 export interface ActionTypeInterface {
   id?: number;
   actionDescription?: any;
-  actionTypeJobModels: ActionTypeJobInterface[];
+  actionTypeJobModels: Array<ActionTypeJobInterface>;
 }
 
 export interface UserEventHandlerInterface {

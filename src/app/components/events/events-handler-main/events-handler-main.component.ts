@@ -16,7 +16,7 @@ import * as jalaliMoment from 'jalali-moment';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../services/loginData.class';
-import {PopoverService} from '../../popover-widget/popover.service';
+// import {PopoverService} from '../../popover-widget/popover.service';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -24,7 +24,7 @@ import {TaskCalendarService} from '../../tasks/task-calendar/services/task-calen
 import {EventHandlerService} from '../service/event-handler.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {TaskMorelistComponent} from '../../tasks/task-morelist/task-morelist.component';
+import {TaskMoreListComponent} from '../../tasks/task-morelist/task-morelist.component';
 import {EventHandlerEmailDate} from '../../users/logic/user-container.interface';
 import {EventHandlerSocketService} from '../service/event-handler-socket.service';
 import {EventHandlerDetailComponent} from '../event-handler-detail/event-handler-detail.component';
@@ -43,7 +43,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
   @ViewChild('dateCalendar') datePickerDirective: any;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Output()
   triggerBottomSheet: EventEmitter<EventHandlerBottomSheetInterface> = new EventEmitter<EventHandlerBottomSheetInterface>();
@@ -60,7 +60,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
   constructor(public dialog: MatDialog,
               private injector: Injector,
               private elemRef: ElementRef,
-              private popoverService: PopoverService,
+              // private popoverService: PopoverService,
               private userInfoService: UserInfoService,
               private datetimeService: DatetimeService,
               private translateService: TranslateService,
@@ -103,7 +103,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
           setTimeout(() => {
             this.eventItems = currentEventItems;
             this.loadBottomSheet(this.eventItems);
-          }, 100)
+          }, 100);
         } else {
           if (this.currentDate) {
             this.loadBottomSheet();
@@ -127,41 +127,41 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     }
 
     setTimeout(() => {
-      let date =
+      const date =
         this.rtlDirection ?
           event.locale('fa').format('YYYY/M/D') :
           event.locale('en').format('DD-MM-YYYY');
 
-      let element: HTMLElement = document.querySelector('.main-calendar .dp-calendar-day[data-date="' + date + '"]');
+      const element: HTMLElement = document.querySelector(`.main-calendar .dp-calendar-day[data-date="${date}"]`);
 
       if (element) {
         let count = 0;
         this.events_reminders.events.map(item => {
           if (this.datetimeService.getDateByTimezoneReturnDate(new Date(item.startDate)).toLocaleDateString() == event._d.toLocaleDateString()) {
             if (count < 1) {
-              element.insertAdjacentHTML('beforeend', '<div class=\'custom-event-box\'>' + item.name + '</div>');
+              element.insertAdjacentHTML('beforeend', `<div class='custom-event-box'>${item.name}</div>`);
             }
             count++;
           }
         });
         if (count > 1) {
-          element.insertAdjacentHTML('beforeend', '<div class=\'custom-event-count\'>+' + count + '</div>');
+          element.insertAdjacentHTML('beforeend', `<div class='custom-event-count'>${count}</div>`);
         }
       }
-    })
+    });
   }
 
   setupCalendar() {
     this.datePickerConfig = {
       locale: this.rtlDirection ? 'fa' : 'en',
       dayBtnCssClassCallback: (event) => {
-        this.dayBtnCssClassCallback(event)
+        this.dayBtnCssClassCallback(event);
       }
     };
   }
 
   getEvents() {
-    let eventhandlerModel: EventHandlerEmailDate = {
+    const eventhandlerModel: EventHandlerEmailDate = {
       email: this.loggedInUser.email,
       date: moment(this.datetimeService.getDateByTimezoneReturnDate(new Date())).format('YYYY-MM-DD')
     };
@@ -171,7 +171,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         this.events_reminders = result
       );
 
-      let goToDate = this.rtlDirection ?
+      const goToDate = this.rtlDirection ?
         jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(new Date())) :
         moment(this.datetimeService.getDateByTimezoneReturnDate(new Date()));
 
@@ -182,7 +182,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
   }
 
   eventClick(event) {
-    let eventTemp = this.events_reminders.events.filter((item: EventHandlerInterface) => {
+    const eventTemp = this.events_reminders.events.filter((item: EventHandlerInterface) => {
       return new Date(item.startDate).toLocaleDateString() == event.date._d.toLocaleDateString();
     });
 
@@ -192,7 +192,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         rtlDirection: this.rtlDirection
       };
 
-      const dialogRef = this.dialog.open(TaskMorelistComponent, {
+      const dialogRef = this.dialog.open(TaskMoreListComponent, {
         data: data,
         autoFocus: false,
         width: '400px',
@@ -222,7 +222,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
         this.currentDate = event.date._d;
 
         this.loadBottomSheet();
-      }, 500)
+      }, 500);
     }
   }
 
@@ -231,7 +231,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
   }
 
   loadBottomSheet(eventItems: EventHandlerInterface = null) {
-    let data: EventHandlerDataInterface = {
+    const data: EventHandlerDataInterface = {
       action: 'add',
       eventItems: eventItems,
       currentDate: this.currentDate,
@@ -253,7 +253,7 @@ export class EventsHandlerMainComponent extends LoginDataClass implements AfterV
     });
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): Promise<string> {
     return new Promise((resolve) => {
       const translate = this.translateService.instant(word);
 

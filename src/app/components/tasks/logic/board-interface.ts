@@ -3,12 +3,18 @@ import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
 import {ActivityInterface} from '../task-activity/logic/activity-interface';
 
+export interface BreadcrumbTaskInterface {
+  taskId: number;
+  taskName: string;
+}
+
 export interface BoardInterface {
   id: string;
   name: string;
   cols: number;
   rows: number;
-  tasks: TaskInterface[];
+  icon: string;
+  tasks: Array<TaskInterface>;
 }
 
 export interface BoardsListResultInterface {
@@ -31,17 +37,35 @@ export interface UsersResultInterface {
 export interface ResultInterface {
   result: number;
   message: string;
-  content: {
+  contents: {
     boards: BoardsListResultInterface;
     projects?: ProjectsResultInterface;
     users?: UsersResultInterface;
   };
 }
 
+export interface ResultTodoInterface {
+  result: number;
+  message: string;
+  contents: Array<TaskInterface>;
+}
+
+export interface ResultTaskDetailInterface {
+  result: number;
+  message: string;
+  content: TaskInterface;
+}
+
+export interface ResultBreadcrumbInterface {
+  result: number;
+  message: string;
+  contents: Array<BreadcrumbTaskInterface>;
+}
+
 export interface ResultIncompleteTaskInterface {
   result: number;
   message: string;
-  content: TaskInterface[];
+  contents: Array<TaskInterface>;
 }
 
 export interface ResultTaskInterface {
@@ -53,7 +77,7 @@ export interface ResultTaskInterface {
 export interface ResultFilterInterface {
   result: number;
   message: string;
-  content: {
+  contents: {
     boards: BoardsListResultInterface;
     projects: ProjectsResultInterface;
     users: UsersResultInterface;
@@ -88,4 +112,29 @@ export interface ResultTaskActivitiesInterface {
   message: string;
   recordCount: number;
   result: number;
+}
+
+export interface TaskStopInterface {
+  taskId: string;
+  description: string;
+  percentage: number;
+  email: string;
+}
+
+export interface ResultTaskStopInterface {
+  content: TaskInterface;
+  message: string;
+  result: number;
+}
+
+export interface UsersProjectsListInterface {
+  usersList: Array<UserInterface>;
+  projectsList: Array<ProjectInterface>;
+}
+
+export interface TaskReportDescriptionInterface {
+  task: TaskInterface;
+  description: string;
+  percentage: number;
+  taskDateStop: string;
 }

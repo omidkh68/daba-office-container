@@ -14,7 +14,7 @@ import {CompanySelectorService} from '../../select-company/services/company-sele
 })
 export class DashboardToolbarComponent {
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
   windowManager: Array<WindowInterface>;
@@ -27,10 +27,10 @@ export class DashboardToolbarComponent {
 
   companies: Array<CompanyInterface> = null;
 
-  private subscription: Subscription = new Subscription();
+  private _subscription: Subscription = new Subscription();
 
   constructor(private companySelectorService: CompanySelectorService) {
-    this.subscription.add(
+    this._subscription.add(
       this.companySelectorService.currentCompanyList.subscribe(companies => this.companies = companies)
     );
   }

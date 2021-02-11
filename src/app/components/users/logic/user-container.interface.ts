@@ -1,7 +1,7 @@
 import {RoleInterface} from './role.interface';
 import {ServiceInterface} from '../../services/logic/service-interface';
-import {UserStatusInterface} from '../../status/logic/status-interface';
 import {CompanyInterface} from '../../select-company/logic/company-interface';
+import {UserStatusInterface} from '../../status/logic/status-interface';
 
 export interface UserContainerInterface {
   id: number;
@@ -9,7 +9,7 @@ export interface UserContainerInterface {
   email: string;
   timezone: string;
   status: number;
-  services?: ServiceInterface[],
+  services?: Array<ServiceInterface>,
   role?: RoleInterface;
   user_status: UserStatusInterface;
   lang: string;
@@ -21,7 +21,18 @@ export interface UserContainerInterface {
   phoneNumber?: string;
   companies: Array<CompanyInterface>;
 }
+
 export interface EventHandlerEmailDate {
   email?: string
   date?: string;
+}
+
+export interface ResultSubsetUsersInterface {
+  data: Array<UserContainerInterface>;
+  success: boolean;
+}
+
+export interface ResultLogoutInterface {
+  msg: string;
+  success: boolean;
 }

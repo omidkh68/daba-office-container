@@ -8,6 +8,11 @@ export interface LoginInterface {
   company?: CompanyInterface;
 }
 
+export interface LoginInfoInterface {
+  username: string;
+  password: string;
+}
+
 export interface LoginResultInterface {
   success: boolean;
   data: LoginInterface;

@@ -13,7 +13,7 @@ export class WebViewService {
   constructor() {
   }
 
-  changeRefreshWebView(status: RefreshInterface | null) {
+  changeRefreshWebView(status: RefreshInterface | null): void {
     this.refreshWebView.next(status);
 
     if (status.doRefresh) {

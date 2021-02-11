@@ -6,3 +6,8 @@ export interface CompanyInterface {
   updated_at: string | null;
   subdomain: string;
 }
+
+export interface ResultCompanyListInterface {
+  data: Array<CompanyInterface>;
+  success: boolean;
+}

@@ -11,13 +11,14 @@
       <div class="display-flex margin-r-l-reverse">
         <div class="full-width padding-mini-r-l">
           <mat-form-field class="full-width font-9-em">
-            <input class="full-width" formControlName="taskName" matInput placeholder="{{'tasks.form.task_name' | translate}}"
+            <input class="full-width" formControlName="taskName" matInput
+                   placeholder="{{'tasks.form.task_name' | translate}}"
                    required tabindex="1" type="text">
             <mat-label>
               {{'tasks.form.task_name' | translate}}
             </mat-label>
 
-            <mat-error *ngIf="!form.get('taskName').valid && form.get('taskName').touched">
+            <mat-error *ngIf="!form.get('taskName').valid">
               {{'tasks.form.task_name_error' | translate}}
             </mat-error>
           </mat-form-field>
@@ -28,12 +29,13 @@
         <div class="half-width padding-mini-r-l">
           <mat-form-field class="full-width font-full-em">
             <mat-label>{{'tasks.form.task_status' | translate}}</mat-label>
-            <mat-select (selectionChange)="changeBoardStatus($event)" formControlName="boardStatus" tabIndex="2">
+            <mat-select (selectionChange)="changeBoardStatus($event.value)" formControlName="boardStatus" tabIndex="2"
+                        required>
               <mat-option *ngFor="let board of boardsList" [value]="board.id">
                 <span [ngClass]="board.id" class="task-count">{{board.name}}</span>
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="!form.get('boardStatus').valid && form.get('boardStatus').touched">
+            <mat-error *ngIf="!form.get('boardStatus').valid">
               {{'tasks.form.task_status_error' | translate}}
             </mat-error>
           </mat-form-field>
@@ -56,17 +58,17 @@
         </div>
       </div>
 
-      <div class="display-flex margin-r-l-reverse">
+      <div class="display-flex margin-r-l-reverse margin-b-half">
         <div class="half-width padding-mini-r-l">
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'tasks.form.task_project' | translate}}</mat-label>
-            <mat-select formControlName="project" tabIndex="4">
+            <mat-select formControlName="project" tabIndex="4" required>
               <mat-option *ngFor="let project of projectsList" [value]="project">
                 {{project.projectName}}
               </mat-option>
             </mat-select>
 
-            <mat-error *ngIf="!form.get('project').valid && form.get('project').touched">
+            <mat-error *ngIf="!form.get('project').valid">
               {{'tasks.form.task_project_error' | translate}}
             </mat-error>
           </mat-form-field>
@@ -76,22 +78,22 @@
             <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                  [src]="'assets/profileImg/'+form.get('email').value +'.jpg'"
                  class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
-                 matPrefix>
+                 matPrefix alt="">
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
-            <mat-select formControlName="assignTo" tabIndex="5">
+            <mat-select formControlName="assignTo" tabIndex="5" required>
               <mat-option *ngFor="let user of usersList" [value]="user" class="font-full-em">
                 <div class="display-flex align-items-center">
                   <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
                        [src]="'assets/profileImg/'+user.email+'.jpg'"
                        class="width-20 height-20 round-corner-all pos-rel"
-                       matPrefix
+                       matPrefix [alt]="user.name + ' ' + user.family"
                        (error)="$event.target.src='assets/profileImg/0.jpg'">
                   <span class="line-height-40">{{user.name + ' ' + user.family}}</span>
                 </div>
               </mat-option>
             </mat-select>
 
-            <mat-error *ngIf="!form.get('assignTo').valid && form.get('assignTo').touched">
+            <mat-error *ngIf="!form.get('assignTo').valid">
               {{'tasks.form.assign_to_error' | translate}}
             </mat-error>
           </mat-form-field>
@@ -101,13 +103,14 @@
       <div class="display-flex margin-b-half margin-r-l-reverse">
         <div class="half-width padding-mini-r-l">
           <mat-form-field class="full-width font-9-em">
-            <input class="full-width" formControlName="taskDurationHours" matInput placeholder="{{'tasks.form.task_durationHours' | translate}}"
+            <input class="full-width" formControlName="taskDurationHours" matInput
+                   placeholder="{{'tasks.form.task_durationHours' | translate}}"
                    required tabindex="6" type="number" min="1" max="999">
             <mat-label>
               {{'tasks.form.task_durationHours' | translate}}
             </mat-label>
 
-            <mat-error *ngIf="!form.get('taskDurationHours').valid && form.get('taskDurationHours').touched">
+            <mat-error *ngIf="!form.get('taskDurationHours').valid">
               {{'tasks.form.task_durationHours_error' | translate}}
             </mat-error>
           </mat-form-field>
@@ -133,9 +136,9 @@
                    attachTo=".dpDateStartPicker"
                    autocomplete="off"
                    tabindex="8"
-                   theme="dp-material" matInput placeholder="" readonly>
+                   theme="dp-material" matInput placeholder="" readonly required>
 
-            <mat-error *ngIf="!form.get('startAt').valid && form.get('startAt').touched">
+            <mat-error *ngIf="!form.get('startAt').valid">
               {{'tasks.form.start_at_error' | translate}}
             </mat-error>
           </mat-form-field>
@@ -143,13 +146,13 @@
         <div class="quarter-width padding-mini-r-l">
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'tasks.form.start_time' | translate}}</mat-label>
-            <mat-select formControlName="startTime" tabIndex="9">
+            <mat-select formControlName="startTime" tabIndex="9" required>
               <mat-option *ngFor="let hour of hours" [value]="hour">
                 {{hour}}
               </mat-option>
             </mat-select>
 
-            <mat-error *ngIf="!form.get('startTime').valid && form.get('startTime').touched">
+            <mat-error *ngIf="!form.get('startTime').valid">
               {{'tasks.form.start_time_error' | translate}}
             </mat-error>
           </mat-form-field>
@@ -163,9 +166,9 @@
                    formControlName="stopAt"
                    attachTo=".dpDateStopPicker"
                    tabindex="10"
-                   theme="dp-material" matInput placeholder="" readonly>
+                   theme="dp-material" matInput placeholder="" readonly required>
 
-            <mat-error *ngIf="!form.get('stopAt').valid && form.get('stopAt').touched">
+            <mat-error *ngIf="!form.get('stopAt').valid">
               {{'tasks.form.stop_at_error' | translate}}
             </mat-error>
           </mat-form-field>
@@ -173,13 +176,13 @@
         <div class="quarter-width padding-mini-r-l">
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'tasks.form.stop_time' | translate}}</mat-label>
-            <mat-select formControlName="stopTime" tabIndex="11">
+            <mat-select formControlName="stopTime" tabIndex="11" required>
               <mat-option *ngFor="let hour of hours" [value]="hour">
                 {{hour}}
               </mat-option>
             </mat-select>
 
-            <mat-error *ngIf="!form.get('stopTime').valid && form.get('stopTime').touched">
+            <mat-error *ngIf="!form.get('stopTime').valid">
               {{'tasks.form.stop_time_error' | translate}}
             </mat-error>
           </mat-form-field>
@@ -227,7 +230,6 @@
     </button>
 
     <button *ngIf="editable"
-            [disabled]="!form.valid"
             class="display-flex full-height green-gradient text-white line-height-30 font-9-em overflow-hide text-weight-normal"
             mat-raised-button
             tabindex="16"

@@ -45,25 +45,25 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   triggerBottomSheet: EventEmitter<SoftPhoneBottomSheetInterface> = new EventEmitter<SoftPhoneBottomSheetInterface>();
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
   activePermissionRequest: string;
 
   @Input()
-  tabId: number = 0;
+  tabId = 0;
 
   softPhoneUsers: Array<SoftphoneUserInterface> = [];
 
-  timerDueTime: number = 0;
-  timerPeriod: number = 15000;
+  timerDueTime = 0;
+  timerPeriod = 15000;
   globalTimer = null;
   globalTimerSubscription: Subscription;
   loggedInUserExtension: LoggedInUserExtensionInterface = null;
-  filterArgs = null;
-  callPopUpMinimizeStatus: boolean = false;
-  softphoneConnectedStatus: boolean = false;
-  currentIp: string = '';
+  filterArgs = '';
+  callPopUpMinimizeStatus = false;
+  softphoneConnectedStatus = false;
+  currentIp = '';
 
   private extensionStatusSubscription: Subscription = new Subscription();
   private softphoneConnectedStatusSubscription: Subscription = new Subscription();
@@ -103,16 +103,16 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   }
 
   ngOnInit(): void {
-    this.filterArgs = {email: this.loggedInUser.email};
+    this.filterArgs = this.loggedInUser.email;
   }
 
-  async getEssentialData() {
+  async getEssentialData(): Promise<any> {
     await this.getExtensions();
     await this.setDefaultUnMuteExtension();
-    await this.startTimer();
+    this.startTimer();
   }
 
-  getExtensions() {
+  getExtensions(): Promise<boolean> {
     return new Promise((resolve) => {
       this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'pbx'});
 
@@ -134,6 +134,10 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
             resolve(true);
           }
         }, (error: HttpErrorResponse) => {
+          if (error.message) {
+            this.messageService.showMessage(error.message, 'error');
+          }
+
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'pbx'});
 
           this.refreshLoginService.openLoginDialog(error);
@@ -144,12 +148,12 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     });
   }
 
-  getExtensionStatus() {
+  getExtensionStatus(): void {
     if (this.extensionStatusSubscription) {
       this.extensionStatusSubscription.unsubscribe();
     }
 
-    this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe(async (resp: ResultApiInterface) => {
+    this.extensionStatusSubscription = this.apiService.getExtensionStatus().subscribe((resp: ResultApiInterface) => {
       if (resp.success) {
         if (this.currentIp && this.currentIp != resp.meta.ip) {
           this.softPhoneService.sipUnRegister();
@@ -167,7 +171,7 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
           // const extensionsList: Array<ExtensionInterface> = lodash.merge(this.softPhoneUsers, extensionList);
           const extensionsList: Array<ExtensionInterface> = [];
 
-          await this.softPhoneUsers.map((softphoneUser: ExtensionInterface) => {
+          this.softPhoneUsers.map((softphoneUser: ExtensionInterface) => {
             const findExtStatus = extensionList.filter((ext: ExtensionInterface) => ext.username === softphoneUser.username).pop();
 
             if (findExtStatus) {
@@ -196,11 +200,11 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
             this.softphoneConnectedStatusSubscription.unsubscribe();
           }
 
-          this.softphoneConnectedStatusSubscription = this.softPhoneService.currentSoftphoneConnected.subscribe(async status => {
+          this.softphoneConnectedStatusSubscription = this.softPhoneService.currentSoftphoneConnected.subscribe(status => {
             if (status) {
               this.softphoneConnectedStatus = this.softPhoneService.getSoftphoneConnectedStatus;
 
-              await extensionsList.map(item => {
+              extensionsList.map(item => {
                 if (item.username === this.loggedInUser.email) {
                   this.loggedInUserExtension = {
                     user: this.loggedInUser,
@@ -213,13 +217,16 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
         }
       }
     }, (error: HttpErrorResponse) => {
+      if (error.message) {
+        this.messageService.showMessage(error.message, 'error');
+      }
       this.clearTimer();
 
       this.refreshLoginService.openLoginDialog(error);
     });
   }
 
-  setDefaultUnMuteExtension() {
+  setDefaultUnMuteExtension(): Promise<boolean> {
     return new Promise((resolve) => {
       const muteInfo: MuteUnMuteInterface = {
         extension_no: `${this.loggedInUser.extension_no}`,
@@ -227,7 +234,7 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
       };
 
       this._subscription.add(
-        this.apiService.muteUnMute(muteInfo).subscribe((resp: ResultMuteUnMuteApiInterface) => {
+        this.apiService.muteUnMute(muteInfo).subscribe(() => {
           resolve(true);
         }, (error: HttpErrorResponse) => {
           if (error.message) {
@@ -242,7 +249,7 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     });
   }
 
-  openSheet(user) {
+  openSheet(user: SoftphoneUserInterface): void {
     if (this.callPopUpMinimizeStatus) {
       this.messageService.showMessage(this.getTranslate('soft_phone.main.you_are_in_call'));
 
@@ -257,11 +264,11 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     });
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 
-  changeSoftphoneStatus(event: MatSlideToggleChange) {
+  changeSoftphoneStatus(event: MatSlideToggleChange): void {
     if (event.checked) {
       this.softPhoneService.sipRegister();
     } else {
@@ -269,7 +276,7 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     }
   }
 
-  startTimer() {
+  startTimer(): void {
     if (this.globalTimer) {
       this.globalTimer = null;
     }
@@ -289,7 +296,7 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     });
   }
 
-  clearTimer() {
+  clearTimer(): void {
     if (this.globalTimerSubscription) {
       this.globalTimerSubscription.unsubscribe();
       this.globalTimer = null;
@@ -306,7 +313,7 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
     }
 
     if (changes.activePermissionRequest && changes.activePermissionRequest.currentValue === 'granted') {
-      this.getEssentialData();
+      this.getEssentialData().finally();
     }
   }
 
@@ -332,10 +339,10 @@ export class SoftPhoneInformationComponent extends LoginDataClass implements OnI
   pure: false
 })
 export class MyFilterPipe implements PipeTransform {
-  transform(items: SoftphoneUserInterface[], filter: any): any {
+  transform(items: Array<SoftphoneUserInterface>, filter: string): Array<SoftphoneUserInterface> {
     if (!items || !filter) {
       return items;
     }
-    return items.filter((item: SoftphoneUserInterface) => item.username !== filter.email);
+    return items.filter((item: SoftphoneUserInterface) => item.username !== filter);
   }
 }

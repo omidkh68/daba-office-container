@@ -160,7 +160,14 @@
       "task_completion_percentage": "درصد تکمیل بودن تسک",
       "completed": "تکمیل شده",
       "not_completed": "تکمیل نشده",
-      "task_count" : "تعداد تسک ها"
+      "task_count": "تعداد تسک ها",
+      "created": "تسک را ایجاد کرد",
+      "edited": "تسک را ویرایش کرد",
+      "deleted": "تسک را حذف کرد",
+      "started": "تسک را شروع کرد",
+      "stopped": "تسک را متوقف کرد",
+      "done": "تسک را به اتمام رساند",
+      "described": "توضیح تسک را وارد نمود"
     },
     "boards": {
       "task_percentage": "درصد پیشبرد",
@@ -365,7 +372,8 @@
     "delete_room": "حذف اتاق کنفرانس",
     "delete_room_error": "اتاق مورد نظر یافت نشد و یا قبلا حذف شده است",
     "delete_room_success": "اتاق حذف شد",
-    "confirm_delete_room": "آیا از حذف این اتاق اطمینان دارید؟"
+    "confirm_delete_room": "آیا از حذف این اتاق اطمینان دارید؟",
+    "warning_test": "مطمئن شوید که pop up در مرورگر شما غیر فعال نشده باشد"
   },
   "conference_collaboration": {
     "audio_only": "کنفرانس صوتی",

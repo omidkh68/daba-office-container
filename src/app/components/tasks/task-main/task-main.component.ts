@@ -14,19 +14,21 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {CurrentTaskService} from '../services/current-task.service';
 import {FilterTaskInterface} from '../logic/filter-task-interface';
 import {TaskFilterComponent} from '../task-filter/task-filter.component';
-import {EventHandlerService} from "../../events/service/event-handler.service";
+import {EventHandlerService} from '../../events/service/event-handler.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
-import {TaskCalendarRateInterface} from "../task-calendar/services/task-calendar.service";
+import {IgnoreAutoRefreshService} from '../services/ignore-auto-refresh.service';
+import {TaskCalendarRateInterface} from '../task-calendar/services/task-calendar.service';
+import {UsersProjectsListInterface} from '../logic/board-interface';
 import {TaskCalendarFilterComponent} from '../task-calendar/task-calendar-filter/task-calendar-filter.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 
 export interface TaskEssentialInfo {
-  projectsList: ProjectInterface[];
-  usersList: UserInterface[];
+  projectsList: Array<ProjectInterface>;
+  usersList: Array<UserInterface>;
 }
 
 @Component({
@@ -36,22 +38,22 @@ export interface TaskEssentialInfo {
 export class TaskMainComponent extends LoginDataClass implements AfterViewInit, OnDestroy {
   @ViewChild('bottomSheet', {static: false}) bottomSheet: TaskBottomSheetComponent;
 
-  rtlDirection: boolean;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'project'};
   taskEssentialInfo: TaskEssentialInfo;
   pushTaskToBoard;
-  doResetFilter: boolean = false;
-  disableButton: boolean = false;
-  activeTab: number = 0;
-  refreshBoardData: boolean = false;
+  doResetFilter = false;
+  disableButton = false;
+  activeTab = 0;
+  refreshBoardData = false;
   filterData: FilterInterface = null;
-  filteredBoardsData: any;
+  filteredBoardsData: any = null;
   tabs = [];
   checksTab: string;
   calendarParameters = {};
   currentTasks: Array<TaskInterface> | null = null;
-  projectsList: ProjectInterface[] = [];
-  usersList: UserInterface[] = [];
+  projectsList: Array<ProjectInterface> = [];
+  usersList: Array<UserInterface> = [];
 
   private _subscription: Subscription = new Subscription();
 
@@ -64,7 +66,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
               private eventHandlerService: EventHandlerService,
               private windowManagerService: WindowManagerService,
               private buttonSheetDataService: ButtonSheetDataService,
-              private loadingIndicatorService: LoadingIndicatorService) {
+              private loadingIndicatorService: LoadingIndicatorService,
+              private ignoreAutoRefreshService: IgnoreAutoRefreshService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -102,17 +105,16 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
 
     this._subscription.add(
       this.buttonSheetDataService.currentButtonSheetData.subscribe((data: TaskBottomSheetInterface) => {
-          if (data !== null) {
-            data.bottomSheetRef = this.bottomSheet;
+        if (data) {
+          data.bottomSheetRef = this.bottomSheet;
 
-            this.bottomSheet.toggleBottomSheet(data);
-          }
+          this.bottomSheet.toggleBottomSheet(data);
         }
-      )
+      })
     );
   }
 
-  changeMainTabLanguage() {
+  changeMainTabLanguage(): void {
     setTimeout(() => {
       this.tabs = [
         {
@@ -129,10 +131,10 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     }, 200);
   }
 
-  addNewTask() {
+  addNewTask(): void {
     this.disableButton = true;
 
-    let data: TaskDataInterface = {
+    const data: TaskDataInterface = {
       action: 'add',
       usersList: this.taskEssentialInfo.usersList,
       projectsList: this.taskEssentialInfo.projectsList
@@ -148,11 +150,15 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     this._subscription.add(
       dialogRef.afterOpened().subscribe(() => {
         this.windowManagerService.dialogOnTop(dialogRef.id);
+
+        this.ignoreAutoRefreshService.changeCurrentAutoRefresh(true);
       })
     );
 
     this._subscription.add(
       dialogRef.afterClosed().subscribe(result => {
+        this.ignoreAutoRefreshService.changeCurrentAutoRefresh(false);
+
         this.disableButton = false;
 
         if (result) {
@@ -164,21 +170,21 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     );
   }
 
-  tabChange(event: MatTabChangeEvent) {
+  tabChange(event: MatTabChangeEvent): void {
     this.activeTab = event.index;
 
     this.doResetFilter = false;
   }
 
-  getTaskEssentialInfo(event) {
+  getTaskEssentialInfo(event: UsersProjectsListInterface): void {
     this.taskEssentialInfo = event;
   }
 
-  getTaskToBoardData(event) {
+  /*getTaskToBoardData(event): void {
     this.pushTaskToBoard = event;
-  }
+  }*/
 
-  showCalendarFilter() {
+  showCalendarFilter(): void {
     const data: FilterTaskInterface = {
       filterData: this.filterData,
       usersList: this.taskEssentialInfo.usersList,
@@ -211,7 +217,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     );
   }
 
-  showTaskFilter() {
+  showTaskFilter(): void {
     const data: FilterTaskInterface = {
       filterData: this.filterData,
       usersList: this.taskEssentialInfo.usersList,
@@ -228,6 +234,8 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     this._subscription.add(
       dialogRef.afterOpened().subscribe(() => {
         this.windowManagerService.dialogOnTop(dialogRef.id);
+
+        this.ignoreAutoRefreshService.changeCurrentAutoRefresh(true);
       })
     );
 
@@ -245,12 +253,14 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
           };
           this.eventHandlerService.moveEventsTask(resp);
           this.doResetFilter = true;
+        } else {
+          this.ignoreAutoRefreshService.changeCurrentAutoRefresh(false);
         }
       })
     );
   }
 
-  showFilter() {
+  showFilter(): void {
     this.disableButton = true;
 
     if (this.checksTab === undefined || this.checksTab == 'calendar_task' || !this.activeTab) {
@@ -262,7 +272,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     }
   }
 
-  resetFilter() {
+  resetFilter(): void {
     this.refreshBoardData = true;
     this.filterData = null;
 
@@ -272,22 +282,22 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     }, 200);
   }
 
-  makeFilterReset(event) {
+  makeFilterReset(event: boolean): void {
     if (event) {
       this.resetFilter();
     }
   }
 
-  openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {
+  /*openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {
     // bottomSheetConfig.bottomSheetRef = this.bottomSheet;
     // this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
-  }
+  }*/
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 
-  doSomething(data: any): void {
+  doSomething(data: string): void {
     this.checksTab = data;
   }
 

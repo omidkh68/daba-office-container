@@ -3,3 +3,7 @@ export interface ConferenceInterface {
   confname?: string;
   confAddress?: string;
 }
+
+export interface ConferenceAddInterface {
+  action: string;
+}

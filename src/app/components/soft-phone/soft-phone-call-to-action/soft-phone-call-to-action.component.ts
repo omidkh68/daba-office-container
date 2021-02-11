@@ -38,7 +38,7 @@ export class SoftPhoneCallToActionComponent implements OnInit, OnDestroy {
     this.data = this.bottomSheetData.data;
   }
 
-  call(data: SoftphoneUserInterface) {
+  call(data: SoftphoneUserInterface): void {
     /*const notification: Notification = new Notification(`${this.loggedInUser.name} ${this.loggedInUser.family}`, {
       body: `${user.name} ${user.family}`,
       icon: 'assets/profileImg/' + user.adminId + '.jpg',
@@ -51,7 +51,7 @@ export class SoftPhoneCallToActionComponent implements OnInit, OnDestroy {
     // this.softPhoneService.sipHangUp();
   }
 
-  closeBottomSheet() {
+  closeBottomSheet(): void {
     this.bottomSheetData.bottomSheetRef.close();
   }
 

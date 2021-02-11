@@ -16,7 +16,7 @@
              cdkDropList
              [cdkDropListData]="tasks"
              (cdkDropListDropped)="changeTodo($event)">
-          <mat-card *ngFor="let task of tasks"
+          <mat-card *ngFor="let task of tasks; let i = index"
                     class="height-auto cursor-pointer border-bottom no-padding bg-grey no-box-shadow"
                     cdkDragLockAxis="y"
                     cdkDrag>
@@ -54,7 +54,9 @@
                    (click)="openTask(task)"
                    [ngClass]="task.percentage === 100 ? 'text-green-200' : 'text-gray-700'">
                 <div class="no-text-eclipse font-full-em height-auto padding-mini-t-b padding-mini-r-l"
-                     [ngClass]="{'text-line-through': task.percentage === 100}">{{task.taskName}}</div>
+                     [ngClass]="{'text-line-through': task.percentage === 100}">
+                  {{i+1}}. {{task.taskName}}
+                </div>
 
                 <!--<div class="text-italic font-7-em padding-mini-r-l">{{task.creationDate | jalali:rtlDirection}}</div>-->
               </div>
@@ -83,21 +85,21 @@
       </div>
 
       <div class="enter-todo-container height-45">
-        <div class="full-height">
+        <div class="full-height pos-rel">
           <mat-form-field appearance="outline" class="full-width height-45 font-9-em" color="primary">
             <input matInput
                    formControlName="taskName"
                    placeholder="{{'tasks.task_todo.add_an_item' | translate}}"
                    name="inputValue"
                    (keydown)="$event.code === 'Enter' ? edit ? saveTask() : addTask() : ''">
-
-            <button mat-raised-button matSuffix
-                    type="button"
-                    [disabled]="form.get('taskName').value === ''"
-                    (click)="edit ? saveTask() : addTask()">
-              <mat-icon>check</mat-icon>
-            </button>
           </mat-form-field>
+          <button class="no-bg no-border width-30 no-padding pos-abs top-full-plus-one-tenth cursor-pointer"
+                  [ngClass]="rtlDirection ? 'left-half' : 'right-half'"
+                  type="button"
+                  [disabled]="form.get('taskName').value === ''"
+                  (click)="edit ? saveTask() : addTask()">
+            <mat-icon class="text-blue-500">send</mat-icon>
+          </button>
         </div>
       </div>
       <!--end of btn submit-->
@@ -107,7 +109,7 @@
   <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'todo'"
        class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-9999">
     <div class="text-center">
-      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+      <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
            width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
         <rect x="0" y="13" width="4" height="5" fill="#333">
           <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"

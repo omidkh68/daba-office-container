@@ -14,7 +14,7 @@ export class LoadingIndicatorService {
   private loadingStatus = new BehaviorSubject(this._loadingStatus);
   public currentLoadingStatus = this.loadingStatus.asObservable();
 
-  changeLoadingStatus(status: LoadingIndicatorInterface) {
+  changeLoadingStatus(status: LoadingIndicatorInterface): void {
     this.loadingStatus.next(status);
   }
 }

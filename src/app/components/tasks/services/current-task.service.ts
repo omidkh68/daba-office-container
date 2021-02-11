@@ -10,7 +10,7 @@ export class CurrentTaskService {
   private task = new BehaviorSubject(this._task);
   public currentTask = this.task.asObservable();
 
-  changeCurrentTask(currentTask: Array<TaskInterface> | null) {
+  changeCurrentTask(currentTask: Array<TaskInterface> | null): void {
     this.task.next(currentTask);
   }
 }

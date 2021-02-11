@@ -18,10 +18,15 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {TaskStopComponent} from '../task-stop/task-stop.component';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
+import {
+  BreadcrumbTaskInterface,
+  ResultBreadcrumbInterface,
+  ResultTaskDetailInterface
+} from '../logic/board-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
+import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
 
@@ -30,15 +35,15 @@ import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.serv
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent extends LoginDataClass implements OnInit, AfterViewInit, OnDestroy {
-  rtlDirection: boolean;
-  editable: boolean = false;
+  rtlDirection = false;
+  editable = false;
   task: TaskInterface = null;
-  breadcrumbList: TaskInterface[] = [];
-  projectsList: ProjectInterface[] = [];
-  usersList: UserInterface[] = [];
+  breadcrumbList: Array<BreadcrumbTaskInterface> = [];
+  projectsList: Array<ProjectInterface> = [];
+  usersList: Array<UserInterface> = [];
 
-  projectsListNew: ProjectInterface[] = [];
-  usersListNew: UserInterface[] = [];
+  projectsListNew: Array<ProjectInterface> = [];
+  usersListNew: Array<UserInterface> = [];
   form: FormGroup;
   viewModeTypes = 'info';
   bottomSheetData: TaskBottomSheetInterface;
@@ -58,8 +63,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
               private refreshBoardService: RefreshBoardService,
               private windowManagerService: WindowManagerService,
               private buttonSheetDataService: ButtonSheetDataService,
-              private taskEssentialInfoService: TaskEssentialInfoService,
-              private loadingIndicatorService: LoadingIndicatorService) {
+              private loadingIndicatorService: LoadingIndicatorService,
+              private taskEssentialInfoService: TaskEssentialInfoService) {
     super(injector, userInfoService);
 
     this._subscription.add(
@@ -73,7 +78,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     );
   }
 
-  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
+  @HostListener('document:keydown.escape', ['$event'])
+  onKeydownHandler(): void {
     this.bottomSheetData.bottomSheetRef.close();
   }
 
@@ -82,20 +88,20 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     this.usersList = this.data.usersList;
     this.projectsList = this.data.projectsList;
     this.task = this.data.task;
-    this.breadcrumbList = this.data.breadcrumbList
+    this.breadcrumbList = this.data.breadcrumbList;
   }
 
   ngAfterViewInit(): void {
-    this.createForm().then(async () => {
+    this.createForm().then(() => {
       if (this.data.action === 'detail') {
-        await this.formPatchValue();
+        this.formPatchValue();
 
-        await this.formValidationCheck();
+        this.formValidationCheck();
       }
     });
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         taskId: new FormControl(0),
@@ -119,17 +125,17 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         trackable: new FormControl(0)
       });
 
-      resolve();
+      resolve(true);
     });
   }
 
-  updateForm(event) {
+  updateForm(event: FormGroup): void {
     this.form = event;
 
     this.submit();
   }
 
-  cancelBtn(event) {
+  cancelBtn(event: boolean): void {
     this.form.disable();
 
     if (event) {
@@ -145,7 +151,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     }
   }
 
-  formPatchValue() {
+  formPatchValue(): void {
     this.form.disable();
     this.editable = false;
 
@@ -199,7 +205,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     });
   }
 
-  formValidationCheck() {
+  formValidationCheck(): void {
     this._subscription.add(
       this.form.get('taskName').valueChanges.subscribe((selectedValue: string) => {
         const taskNameControl = this.form.get('taskName');
@@ -232,7 +238,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         const stopAt = stopAtControl.value;
 
         if (stopAt) {
-          let m = null;
+          let m;
 
           if (this.rtlDirection) {
             m = jalaliMoment(selectedValue, 'YYYY/MM/DD').isAfter(jalaliMoment(stopAt, 'YYYY/MM/DD'));
@@ -258,7 +264,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         const startAt = startAtControl.value;
 
         if (startAt) {
-          let m = null;
+          let m;
 
           if (this.rtlDirection) {
             m = jalaliMoment(selectedValue, 'YYYY/MM/DD').isBefore(jalaliMoment(startAt, 'YYYY/MM/DD'));
@@ -278,7 +284,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     );
   }
 
-  editableForm() {
+  editableForm(): void {
     this.editable = true;
 
     if (this.editable) {
@@ -288,7 +294,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     }
   }
 
-  deleteTask() {
+  deleteTask(): void {
     const dialogRef = this.dialog.open(ApproveComponent, {
       data: {
         title: this.getTranslate('tasks.task_detail.delete_title'),
@@ -315,7 +321,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
           this.apiService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
           this._subscription.add(
-            this.apiService.deleteTask(this.task).subscribe((resp: any) => {
+            this.apiService.deleteTask(this.task, this.loggedInUser.email).subscribe((resp: any) => {
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
               if (resp.result) {
@@ -339,10 +345,10 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     );
   }
 
-  submit() {
+  submit(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
-    const formValue = {...this.form.value};
+    const formValue: TaskInterface = {...this.form.value};
 
     if (this.rtlDirection) {
       formValue.startAt = jalaliMoment.from(formValue.startAt, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD');
@@ -403,7 +409,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     );
   }
 
-  showTaskStopModal(task) {
+  showTaskStopModal(task: TaskInterface): void {
     const dialogRef = this.dialog.open(TaskStopComponent, {
       data: task,
       autoFocus: false,
@@ -429,51 +435,52 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     );
   }
 
-  openTask(task) {
+  openTask(taskId: number): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'project'});
 
     this.getBoardData().then(() => {
-      this.getBreadcrumbData(task.taskId).then(() => {
-        this.bottomSheetData.bottomSheetRef.close();
+      this.getTaskDetail(taskId).then((task: TaskInterface) => {
+        this.getBreadcrumbData(task.taskId).then(() => {
+          this.bottomSheetData.bottomSheetRef.close();
 
-        this.usersListNew.map(user => {
-          if (task.assignTo === user.adminId) {
-            task.assignTo = user
-          }
+          this.usersListNew.map(user => {
+            if (task.assignTo.adminId === user.adminId) {
+              task.assignTo = user;
+            }
+          });
+
+          this.projectsListNew.map(project => {
+            if (task.project.projectId === project.projectId) {
+              task.project = project;
+            }
+          });
+
+          setTimeout(() => {
+            const data: TaskDataInterface = {
+              action: 'detail',
+              usersList: this.usersListNew,
+              projectsList: this.projectsListNew,
+              task: task,
+              boardStatus: task.boardStatus
+            };
+
+            const finalData = {
+              component: TaskDetailComponent,
+              height: '98%',
+              width: '95%',
+              data: data
+            };
+
+            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+            this.buttonSheetDataService.changeButtonSheetData(finalData);
+          }, 500);
         });
-
-        this.projectsListNew.map(project => {
-          if (task.project === project.projectId) {
-            task.project = project
-          }
-        });
-
-        setTimeout(() => {
-          const data: TaskDataInterface = {
-            action: 'detail',
-            usersList: this.usersListNew,
-            projectsList: this.projectsListNew,
-            task: task,
-            boardStatus: task.boardStatus,
-            breadcrumbList: this.breadcrumbList
-          };
-
-          const finalData = {
-            component: TaskDetailComponent,
-            height: '98%',
-            width: '95%',
-            data: data
-          };
-
-          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-          this.buttonSheetDataService.changeButtonSheetData(finalData);
-        }, 500)
       });
     });
   }
 
-  getBoardData() {
+  getBoardData(): Promise<boolean> {
     return new Promise((resolve) => {
       this.usersListNew = this.taskEssentialInfoService.getUsersProjectsList.usersList;
 
@@ -483,12 +490,28 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     });
   }
 
-  getBreadcrumbData(taskId) {
+  getTaskDetail(taskId: number): Promise<TaskInterface> {
     return new Promise((resolve) => {
       this._subscription.add(
-        this.apiService.getBreadcrumb(taskId).subscribe((resp: any) => {
+        this.apiService.getTaskDetail(taskId).subscribe((resp: ResultTaskDetailInterface) => {
+          if (resp.result) {
+            resolve(resp.content);
+          }
+        }, (error: HttpErrorResponse) => {
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.refreshLoginService.openLoginDialog(error);
+        })
+      );
+    });
+  }
+
+  getBreadcrumbData(taskId: number): Promise<boolean> {
+    return new Promise((resolve) => {
+      this._subscription.add(
+        this.apiService.getBreadcrumb(taskId).subscribe((resp: ResultBreadcrumbInterface) => {
           if (resp.result === 1) {
-            this.breadcrumbList = resp.content;
+            this.breadcrumbList = resp.contents;
 
             resolve(true);
           }
@@ -501,11 +524,11 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     });
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 
-  changeViewMode(mode) {
+  changeViewMode(mode: string): void {
     this.viewModeTypes = mode;
   }
 

@@ -17,9 +17,9 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
   rtlDirection;
 
   currentPhoneNumber = '';
-  incomingStatus: boolean = false;
+  incomingStatus = false;
   incomingData: any = null;
-  softPhoneUsers: SoftphoneUserInterface[] = [];
+  softPhoneUsers: Array<SoftphoneUserInterface> = [];
   onCallUser: SoftphoneUserInterface | null = null;
 
   private _subscription: Subscription = new Subscription();
@@ -52,7 +52,7 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
             const translateIncomingCall = this.getTranslate('soft_phone.incoming_call.want_to_call_with_you');
 
             if (this.softPhoneUsers) {
-              let currentUser = this.softPhoneUsers.filter(user => user.extension_no === this.currentPhoneNumber).pop();
+              const currentUser = this.softPhoneUsers.filter(user => user.extension_no === this.currentPhoneNumber).pop();
 
               if (currentUser) {
                 this.onCallUser = currentUser;
@@ -96,18 +96,18 @@ export class SoftPhoneIncomingCallComponent implements OnDestroy {
     );
   }
 
-  decline_call() {
+  decline_call(): void {
     this.softPhoneService.sipHangUp();
     this.softPhoneService.changeIncomingCallStatus({status: false});
   }
 
-  accept_call() {
+  accept_call(): void {
     this.softPhoneService.sipCall('call-audio');
     this.softPhoneService.changeOnCallUser(this.onCallUser);
     this.softPhoneService.changeIncomingCallStatus({status: false});
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

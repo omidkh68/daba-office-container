@@ -1,5 +1,5 @@
-import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/internal/Observable';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -17,6 +17,7 @@ import {RefreshLoginService} from '../login/services/refresh-login.service';
 import {ViewDirectionService} from '../../services/view-direction.service';
 import {WindowManagerService} from '../../services/window-manager.service';
 import {ProfileSettingService} from './logic/profile-setting.service';
+import {ProfileSettingsInterface} from './logic/profile-settings.interface';
 import {ShowImageCropperComponent} from './show-image-cropper/show-image-cropper.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../services/loading-indicator.service';
 
@@ -36,20 +37,20 @@ export interface LangInterface {
   styleUrls: ['./profile-setting.component.scss']
 })
 export class ProfileSettingComponent extends LoginDataClass implements OnInit, OnDestroy {
-  changeValueForm: boolean = false;
+  changeValueForm = false;
   viewModeTypes = 'information';
   resetInput;
   defaultLang;
   selectDarkMode;
   form: FormGroup;
-  rtlDirection: boolean;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'changeLang'};
   filteredOptions: Observable<any>;
   options;
   checkMoreClock: boolean;
   checkMoreClockContent: boolean;
   cityClocksList: Timezones[];
-  langs: LangInterface[] = [
+  languages: Array<LangInterface> = [
     {
       id: 'en',
       name: 'English'
@@ -62,8 +63,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              public dialog: MatDialog,
+  constructor(public dialog: MatDialog,
               public dialogRef: MatDialogRef<ProfileSettingComponent>,
               private fb: FormBuilder,
               private injector: Injector,
@@ -106,17 +106,17 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     );
 
     this._subscription.add(
-      this.form.valueChanges.subscribe(value => {
+      this.form.valueChanges.subscribe(() => {
         this.changeValueForm = true;
       })
     );
   }
 
-  changeViewMode(mode) {
+  changeViewMode(mode: string): void {
     this.viewModeTypes = mode;
   }
 
-  createForm() {
+  createForm(): Promise<boolean> {
     return new Promise((resolve) => {
       this.form = this.fb.group({
         name: new FormControl('', Validators.required),
@@ -127,11 +127,12 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
         dark_mode: new FormControl(0),
         lang: new FormControl(this.rtlDirection ? 'fa' : 'en'),
       });
+
       resolve(true);
     });
   }
 
-  formPatchValue() {
+  formPatchValue(): void {
     if (this.loggedInUser.lang !== null) {
       this.defaultLang = this.loggedInUser.lang;
     }
@@ -158,7 +159,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     this.changeValueForm = false;
   }
 
-  close() {
+  close(): void {
     this.dialogRef.close();
   }
 
@@ -166,23 +167,25 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     return timezone && timezone.city ? timezone.city : '';
   }
 
-  changeDarkMode($event) {
-    this.form.get('dark_mode').setValue($event.target.checked ? 1 : 0);
+  changeDarkMode(event): void {
+    this.form.get('dark_mode').setValue(event.target.checked ? 1 : 0);
   }
 
-  changeLang(language) {
+  changeLang(language): void {
     this.form.get('lang').setValue(language.value);
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.profileSettingService.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'changeLang'});
 
-    const formValue: any = {};
-
-    formValue['email'] = this.form.get('email').value;
-    formValue['name'] = this.form.get('name').value;
-    formValue['timezone'] = this.form.get('timezone').value.timezone;
+    const formValue: ProfileSettingsInterface = {
+      email: this.form.get('email').value,
+      name: this.form.get('name').value,
+      timezone: this.form.get('timezone').value.timezone,
+      lang: this.form.get('lang').value,
+      dark_mode: this.form.get('dark_mode').value
+    };
 
     if (this.form.get('c_password').value !== null && this.form.get('c_password').value.length) {
       formValue['c_password'] = this.form.get('c_password').value;
@@ -192,9 +195,6 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     if (this.form.get('extension_no').value !== null) {
       formValue['extension_no'] = this.form.get('extension_no').value;
     }
-
-    formValue['lang'] = this.form.get('lang').value;
-    formValue['dark_mode'] = this.form.get('dark_mode').value;
 
     const currentLang = this.viewDirection.getCurrentLang();
     const compareFormLangAndCurrentLang = formValue['lang'] !== currentLang;
@@ -221,7 +221,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
       this._subscription.add(
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
-            this.updateUser(formValue, compareFormLangAndCurrentLang);
+            this.updateUser(formValue);
           } else {
             this.defaultLang = currentLang;
 
@@ -232,11 +232,11 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
         })
       );
     } else {
-      this.updateUser(formValue, false);
+      this.updateUser(formValue);
     }
   }
 
-  updateUser(formValue, hasReload: boolean) {
+  updateUser(formValue: ProfileSettingsInterface): void {
     this._subscription.add(
       this.profileSettingService.updateUser(formValue, this.loggedInUser.id).subscribe((resp: CheckLoginInterface) => {
         if (resp.success) {
@@ -291,6 +291,10 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
 
         this.changeValueForm = false;
       }, (error: HttpErrorResponse) => {
+        if (error.message) {
+          this.messageService.showMessage(error.message, 'error');
+        }
+
         this.form.enable();
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'changeLang'});
@@ -300,17 +304,17 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     );
   }
 
-  setClockCity(option) {
+  setClockCity(option: Timezones): void {
     this.checkMoreClock = false;
     this.checkMoreClockContent = false;
     this.cityClocksList.push(option);
   }
 
-  fileChangeEvent(event: any): void {
+  fileChangeEvent(event: Event): void {
     this.showCropperImage(event);
   }
 
-  showCropperImage(event) {
+  showCropperImage(event: Event): void {
     const dialogRef = this.dialog.open(ShowImageCropperComponent, {
       data: {data: event},
       autoFocus: false,
@@ -336,7 +340,7 @@ export class ProfileSettingComponent extends LoginDataClass implements OnInit, O
     );
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translate.instant(word);
   }
 

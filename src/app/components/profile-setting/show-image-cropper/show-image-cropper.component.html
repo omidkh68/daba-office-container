@@ -27,7 +27,7 @@
           {{'profileSettings.insert_picture' | translate}}
         </label>-->
 
-        <!--<input (change)="fileChangeEvent($event)" hidden id="fileChange" type="file"/>-->
+        <!--<input (change)="fileChangeEvent($event)" hidden id="fileChange" type="file">-->
 
         <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" style="width: 50% !important;">
           <image-cropper (imageCropped)="imageCropped($event)"
@@ -52,7 +52,7 @@
         </div>
 
         <div [ngClass]="rtlDirection ? 'float-right' : 'float-left'" class="padding-l-half padding-r-half half-width">
-          <img [src]="croppedImage" class="round-corner full-width"/>
+          <img [src]="croppedImage" class="round-corner full-width" alt="">
         </div>
 
         <div class="container-tools display-inline-block full-width height-50 margin-t-full">
@@ -144,7 +144,7 @@
 <div *ngIf="loadingIndicator.status && loadingIndicator.serviceName === 'imageCropper'"
      class="loading-container pos-abs top-0 left-0 bottom-0 right-0 full-width full-height flex-center z-index-999">
   <div class="text-center">
-    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+    <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
          width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
         <rect x="0" y="13" width="4" height="5" fill="#333">
           <animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s"

@@ -10,7 +10,7 @@ export class ChangeStatusService {
   private userStatus = new BehaviorSubject(this._defaultUserStatus);
   public currentUserStatus = this.userStatus.asObservable();
 
-  changeUserStatus(newUserStatus: UserStatusInterface | null) {
+  changeUserStatus(newUserStatus: UserStatusInterface | null): void {
     this.userStatus.next(newUserStatus);
   }
 

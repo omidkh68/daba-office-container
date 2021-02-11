@@ -1,7 +1,7 @@
 import {Component, Inject, Injector, Input, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import * as PackageJson  from '../../../../../../package.json';
+import * as PackageJson from '../../../../../../package.json';
 import {ApiService} from '../../../users/logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {LoginDataClass} from '../../../../services/loginData.class';
@@ -9,8 +9,8 @@ import {UserInfoService} from '../../../users/services/user-info.service';
 import {ElectronService} from '../../../../core/services';
 import {SoftPhoneService} from '../../../soft-phone/service/soft-phone.service';
 import {WindowManagerService} from '../../../../services/window-manager.service';
-import {UserContainerInterface} from '../../../users/logic/user-container.interface';
 import {ProfileSettingComponent} from '../../../profile-setting/profile-setting.component';
+import {ResultLogoutInterface, UserContainerInterface} from '../../../users/logic/user-container.interface';
 
 @Component({
   selector: 'app-profile-menu',
@@ -18,16 +18,16 @@ import {ProfileSettingComponent} from '../../../profile-setting/profile-setting.
 })
 export class ProfileMenuComponent extends LoginDataClass implements OnInit, OnDestroy {
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
   loggedInUser: UserContainerInterface;
 
-  version: string = '';
+  version = '';
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(@Inject('windowObject') private window,
+  constructor(@Inject('windowObject') private window: Window,
               public dialog: MatDialog,
               private router: Router,
               private api: ApiService,
@@ -47,11 +47,11 @@ export class ProfileMenuComponent extends LoginDataClass implements OnInit, OnDe
     }
   }
 
-  logout() {
+  logout(): void {
     this.api.accessToken = this.loginData.token_type + ' ' + this.loginData.access_token;
 
     this._subscription.add(
-      this.api.logout().subscribe((resp: any) => {
+      this.api.logout().subscribe((resp: ResultLogoutInterface) => {
         if (resp.success) {
           this.clearData();
         }
@@ -61,18 +61,20 @@ export class ProfileMenuComponent extends LoginDataClass implements OnInit, OnDe
     );
   }
 
-  clearData() {
+  clearData(): void {
     this.userInfoService.changeLoginData(null);
 
     this.softPhoneService.sipHangUp();
     this.softPhoneService.sipUnRegister();
 
     this.windowManagerService.closeAllServices().then(() => {
-      setTimeout(() => this.router.navigateByUrl(`/login`), 500);
+      setTimeout(() => {
+        this.router.navigateByUrl(`/login`).finally();
+      }, 500);
     });
   }
 
-  showProfileSetting() {
+  showProfileSetting(): void {
     const dialogRef = this.dialog.open(ProfileSettingComponent, {
       autoFocus: false,
       width: '480px',

@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, Injector, OnDestroy} from '@angular/core';
+import {timer} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -6,6 +7,7 @@ import {MessageService} from '../../message/service/message.service';
 import {LoginDataClass} from '../../../services/loginData.class';
 import {WebViewService} from '../service/web-view.service';
 import {UserInfoService} from '../../users/services/user-info.service';
+import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
 import {ApproveComponent} from '../../approve/approve.component';
 import {ViewDirectionService} from '../../../services/view-direction.service';
@@ -14,7 +16,6 @@ import {LearningSystemPasswordComponent} from '../learning-system-password/learn
 import {LmsResultInterface, RoomInterface} from '../logic/lms.interface';
 import {LearningSystemCreateRoomComponent} from '../learning-system-create-room/learning-system-create-room.component';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
-import {timer} from 'rxjs';
 
 @Component({
   selector: 'app-learning-system-main',
@@ -23,12 +24,12 @@ import {timer} from 'rxjs';
 })
 export class LearningSystemMainComponent extends LoginDataClass implements AfterViewInit, OnDestroy {
   rooms: Array<RoomInterface> = null;
-  rtlDirection: boolean;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = null;
-  showFrame: boolean = false;
+  showFrame = false;
   frameUrl: string;
-  timerDueTime: number = 5000;
-  timerPeriod: number = 20000;
+  timerDueTime = 5000;
+  timerPeriod = 20000;
   globalTimer = null;
   globalTimerSubscription: Subscription;
 
@@ -40,6 +41,7 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
               private messageService: MessageService,
               private webViewService: WebViewService,
               private userInfoService: UserInfoService,
+              private electronService: ElectronService,
               private translateService: TranslateService,
               private viewDirection: ViewDirectionService,
               private windowManagerService: WindowManagerService,
@@ -63,7 +65,7 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
     this.globalTimerSubscription = this.globalTimer.subscribe(() => this.getRooms());
   }
 
-  getRooms() {
+  getRooms(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'learningSystem'});
 
     this._subscription.add(
@@ -79,7 +81,7 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
     );
   }
 
-  createNewTask() {
+  createNewRoom(): void {
     const dialogRef = this.dialog.open(LearningSystemCreateRoomComponent, {
       autoFocus: false,
       width: '500px',
@@ -101,11 +103,11 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
     );
   }
 
-  joinRoom(room: RoomInterface) {
+  joinRoom(room: RoomInterface): void {
     const dialogRef = this.dialog.open(LearningSystemPasswordComponent, {
       autoFocus: false,
-      width: '380px',
-      height: '180px',
+      width: '420px',
+      height: '220px',
       data: room
     });
 
@@ -120,15 +122,19 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
         if (url) {
           this.getRooms();
 
-          this.frameUrl = url;
+          if (this.electronService.isElectron) {
+            this.frameUrl = url;
 
-          this.showFrame = true;
+            this.showFrame = true;
+          } else {
+            window.open(url, '_blank');
+          }
         }
       })
     );
   }
 
-  exitRoom() {
+  exitRoom(): void {
     const dialogRef = this.dialog.open(ApproveComponent, {
       data: {
         title: this.getTranslate('learning.exit_room'),
@@ -160,7 +166,7 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
     );
   }
 
-  deleteRoom(roomId: number) {
+  deleteRoom(roomId: number): void {
     const dialogRef = this.dialog.open(ApproveComponent, {
       data: {
         title: this.getTranslate('learning.delete_room'),
@@ -206,7 +212,7 @@ export class LearningSystemMainComponent extends LoginDataClass implements After
     );
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

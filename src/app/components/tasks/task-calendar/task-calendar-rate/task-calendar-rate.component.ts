@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  OnDestroy,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
 import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
 import {FormGroup} from '@angular/forms';
@@ -15,9 +8,9 @@ import {UtilsService} from '../../../../services/utils.service';
 import {UserInterface} from '../../../users/logic/user-interface';
 import {LoginInterface} from '../../../login/logic/login.interface';
 import {TranslateService} from '@ngx-translate/core';
-import {TaskCalendarRateInterface, TaskCalendarService} from '../services/task-calendar.service';
+import {EventHandlerService} from '../../../events/service/event-handler.service';
 import {ViewDirectionService} from '../../../../services/view-direction.service';
-import {EventHandlerService} from "../../../events/service/event-handler.service";
+import {CalendarItemInterface, TaskCalendarRateInterface, TaskCalendarService} from '../services/task-calendar.service';
 
 @Component({
   selector: 'app-task-calendar-rate',
@@ -34,14 +27,14 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
   @Input()
   loginData: LoginInterface;
 
-  calendarEvents: any;
+  calendarEvents: CalendarItemInterface[];
   sumTime: any;
   userSelected: UserInterface;
-  rtlDirection: boolean;
+  rtlDirection = false;
   form: FormGroup;
   datePickerConfig: any = null;
 
-  private isVisible: boolean = false;
+  private isVisible = false;
   private _subscription: Subscription = new Subscription();
 
   constructor(private api: ApiService,
@@ -55,23 +48,27 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
     );
 
     this._subscription.add(
-        this.eventHandlerService.currentCalendarRate.subscribe((resp:TaskCalendarRateInterface) => {
-          if(resp){
-            this.calendarEvents = resp.calendarEvent;
-            this.sumTime = resp.sumTime;
-            this.userSelected = resp.userSelected;
-            setTimeout(() => {
-              this.drawer.open();
-              let goToDate =
-                  this.rtlDirection ? jalaliMoment(new Date(resp.filterData.dateStart)) :
-                      moment(new Date(resp.filterData.dateStart));
-              this.datePickerDirective.api.moveCalendarTo(goToDate);
-              document.querySelector('.rate-calendar .custom-full-calendar').classList.add('margin-r-full');
-              this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
-              this.isVisible = true;
-            },1000)
-          }
-        })
+      this.eventHandlerService.currentCalendarRate.subscribe((resp: TaskCalendarRateInterface) => {
+        if (resp) {
+          this.calendarEvents = resp.calendarEvent;
+          this.sumTime = resp.sumTime;
+          this.userSelected = resp.userSelected;
+
+          setTimeout(() => {
+            const goToDate = this.rtlDirection ? jalaliMoment(new Date(resp.filterData.dateStart)) : moment(new Date(resp.filterData.dateStart));
+
+            this.drawer.open();
+
+            this.datePickerDirective.api.moveCalendarTo(goToDate);
+
+            document.querySelector('.rate-calendar .custom-full-calendar').classList.add('margin-r-full');
+
+            this.datePickerConfig.locale = this.rtlDirection ? 'fa' : 'en';
+
+            this.isVisible = true;
+          }, 1000);
+        }
+      })
     );
   }
 
@@ -79,37 +76,34 @@ export class TaskCalendarRateComponent implements AfterViewInit, OnDestroy {
     this.setupCalendar();
   }
 
-  dayBtnCssClassCallback(event) {
+  dayBtnCssClassCallback(event: any): void {
     if(this.calendarEvents){
       setTimeout(() => {
-        let date =
-            this.rtlDirection ?
-                event.locale('fa').format('YYYY/M/D') :
-                event.locale('en').format('DD-MM-YYYY');
+        const date: string = this.rtlDirection ? event.locale('fa').format('YYYY/M/D') : event.locale('en').format('DD-MM-YYYY');
 
-        let element: HTMLElement = document.querySelector('.rate-calendar .dp-calendar-day[data-date="' + date + '"]');
+        const element: HTMLElement = document.querySelector(`.rate-calendar .dp-calendar-day[data-date="${date}"]`);
         if (element) {
-          this.calendarEvents.map(item => {
+          this.calendarEvents.map((item: CalendarItemInterface) => {
             if (item.start.toLocaleDateString() == event._d.toLocaleDateString()) {
-              element.insertAdjacentHTML('beforeend', "<div class='custom-event-box'>" + item.title + "</div>");
+              element.insertAdjacentHTML('beforeend', `<div class='custom-event-box'>${item.title}</div>`);
             }
-          })
+          });
         }
-      })
+      });
     }
   }
 
-  setupCalendar() {
+  setupCalendar(): void {
     this.datePickerConfig = {
       locale: this.rtlDirection ? 'fa' : 'en',
       firstDayOfWeek: this.rtlDirection ? 'sa' : 'mo',
       dayBtnCssClassCallback: (event) => {
-        this.dayBtnCssClassCallback(event)
+        this.dayBtnCssClassCallback(event);
       }
     };
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

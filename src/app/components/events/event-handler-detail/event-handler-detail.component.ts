@@ -17,12 +17,12 @@ import {MatTableDataSource} from '@angular/material/table';
 import {EventHandlerService} from '../service/event-handler.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {EventHandlerSocketService} from '../service/event-handler-socket.service';
 import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 import {EventsHandlerAddReminderComponent} from '../events-handler-add-reminder/events-handler-add-reminder.component';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {ResultSubsetUsersInterface, UserContainerInterface} from '../../users/logic/user-container.interface';
 import {EventHandlerBottomSheetInterface, EventHandlerDataInterface} from '../logic/event-handler-data.interface';
 import {ActionTypeInterface, ActionTypeJobInterface, UserEventHandlerInterface} from '../logic/action-type.interface';
 
@@ -31,15 +31,15 @@ import {ActionTypeInterface, ActionTypeJobInterface, UserEventHandlerInterface} 
   templateUrl: './event-handler-detail.component.html'
 })
 export class EventHandlerDetailComponent extends LoginDataClass implements OnInit, OnDestroy {
-  editable: boolean = false;
+  editable = false;
   form: FormGroup;
-  rtlDirection: boolean;
-  usersList: UserContainerInterface[] = [];
+  rtlDirection = false;
+  usersList: Array<UserContainerInterface> = [];
   displayedColumns: string[] = ['select', 'name', 'symbol'];
   dataSource = null;
   selection = new SelectionModel<UserContainerInterface>(true, []);
-  actionTypeList: ActionTypeInterface[] = [];
-  actionTypeJobList: ActionTypeJobInterface[] = [];
+  actionTypeList: Array<ActionTypeInterface> = [];
+  actionTypeJobList: Array<ActionTypeJobInterface> = [];
   bottomSheetData: EventHandlerBottomSheetInterface;
   data: EventHandlerDataInterface;
   hours = hours;
@@ -94,7 +94,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     });
 
     this._subscription.add(
-      this.api.getHRUsers().subscribe((resp: any) => {
+      this.api.getHRUsers().subscribe((resp: ResultSubsetUsersInterface) => {
         if (resp.success) {
           this.usersList = resp.data;
           this.dataSource = new MatTableDataSource<UserContainerInterface>(this.usersList);
@@ -104,9 +104,9 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
                 this.data.eventItems.users.forEach(row_2 => {
                   if (row_2.email == row.email) {
                     row.phoneNumber = row_2.phoneNumber;
-                    this.selection.select(row)
+                    this.selection.select(row);
                   }
-                })
+                });
 
               });
             }
@@ -155,14 +155,14 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     };
   }
 
-  drop(event: CdkDragDrop<UserContainerInterface[]>) {
+  drop(event: CdkDragDrop<Array<UserContainerInterface>>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
     }
   }
 
@@ -198,14 +198,14 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     });
   }
 
-  editUser(user: UserEventHandlerInterface, $event, type: string = '') {
+  editUser(user: UserEventHandlerInterface, $event, type = '') {
     $event.stopPropagation();
     user.editable = !(type == 'close' || type == 'submit');
     user.phoneNumber = type == 'submit' && user.phoneNumberTemp ? user.phoneNumberTemp : user.phoneNumber;
   }
 
-  onKeyPhoneNumber(user: UserEventHandlerInterface, $event) {
-    user.phoneNumber = $event.target.value;
+  onKeyPhoneNumber(user: UserEventHandlerInterface, $event: KeyboardEvent) {
+    user.phoneNumber = ($event.target as HTMLInputElement).value;
   }
 
   enableForm() {
@@ -250,7 +250,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
             } else {
               this.messageService.showMessage(this.getTranslate('events_handler.form.delete_reminder_successful'));
             }
-          })
+          });
         }
       })
     );
@@ -293,7 +293,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
             } else {
               this.messageService.showMessage(this.getTranslate('events_handler.form.delete_event_error'));
             }
-          })
+          });
         }
       })
     );
@@ -304,13 +304,13 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
       this.actionTypeJobList = event.value.actionTypeJobModels;
     else {
       this.actionTypeJobList = [];
-      this.form.get('actionTypeJobModel').setValue([])
+      this.form.get('actionTypeJobModel').setValue([]);
     }
 
   }
 
   submit() {
-    let formValue = {...this.form.value};
+    const formValue = {...this.form.value};
     formValue.creatorUser = this.loggedInUser;
     if (this.rtlDirection) {
       formValue.startDate = jalaliMoment.from(this.form.value.startDate, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD') + ' ' + this.form.value.startTime + ':00';
@@ -340,11 +340,11 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     }
   }
 
-  addNewEvent(formValue, isUpdate: boolean = false) {
+  addNewEvent(formValue, isUpdate = false) {
     this._subscription.add(
       this.eventApi.addNewEvent(formValue).subscribe((resp: any) => {
         if (resp.result == 'successful') {
-          let msg = isUpdate ? this.getTranslate('events_handler.form.update_event_successful')
+          const msg = isUpdate ? this.getTranslate('events_handler.form.update_event_successful')
             : this.getTranslate('events_handler.form.add_event_successful');
           this.messageService.showMessage(msg);
           this.refreshEvents();
@@ -399,15 +399,15 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
 
   createForm() {
     return new Promise((resolve) => {
-      let sdateFinal = this.data.eventItems ? new Date(this.data.eventItems?.startDate) : this.data.currentDate;
-      let edateFinal = this.data.eventItems ? new Date(this.data.eventItems?.endDate) : this.data.currentDate;
+      const sdateFinal = this.data.eventItems ? new Date(this.data.eventItems?.startDate) : this.data.currentDate;
+      const edateFinal = this.data.eventItems ? new Date(this.data.eventItems?.endDate) : this.data.currentDate;
 
-      let sdate = jalaliMoment.from(this.dateTimeService.formatDate(sdateFinal), 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
-      let edate = jalaliMoment.from(this.dateTimeService.formatDate(edateFinal), 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
+      const sdate = jalaliMoment.from(this.dateTimeService.formatDate(sdateFinal), 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
+      const edate = jalaliMoment.from(this.dateTimeService.formatDate(edateFinal), 'en', 'YYYY-MM-DD').locale(this.rtlDirection ? 'fa' : 'en').format('YYYY/MM/DD');
 
 
-      let stime = this.data.eventItems ? this.dateTimeService.formatTime(this.data.eventItems?.startDate) : this.selectCurrentTime();
-      let etime = this.data.eventItems ? this.dateTimeService.formatTime(this.data.eventItems?.endDate) : this.selectCurrentTime();
+      const stime = this.data.eventItems ? this.dateTimeService.formatTime(this.data.eventItems?.startDate) : this.selectCurrentTime();
+      const etime = this.data.eventItems ? this.dateTimeService.formatTime(this.data.eventItems?.endDate) : this.selectCurrentTime();
 
       this.form = this.fb.group({
         users: new FormControl(this.data.eventItems ? this.data.eventItems.users : []),
@@ -427,7 +427,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
   }
 
   openAddReminderDialog() {
-    let data: any = {
+    const data: any = {
       action: 'add',
       eventItems: this.data.eventItems,
       rtlDirection: this.rtlDirection,
@@ -447,7 +447,7 @@ export class EventHandlerDetailComponent extends LoginDataClass implements OnIni
     );
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

@@ -3,14 +3,14 @@ import * as moment from 'moment';
 import * as jalaliMoment from 'jalali-moment';
 import {MatDialog} from '@angular/material/dialog';
 import {Subscription} from 'rxjs/internal/Subscription';
-import {PopoverService} from '../../popover-widget/popover.service';
+// import {PopoverService} from '../../popover-widget/popover.service';
 import {EventApiService} from '../logic/api.service';
 import {DatetimeService} from '../../dashboard/dashboard-toolbar/time-area/service/datetime.service';
 import {ServiceInterface} from '../../services/logic/service-interface';
 import {EventHandlerService} from '../service/event-handler.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
-import {TaskMorelistComponent} from '../../tasks/task-morelist/task-morelist.component';
+import {TaskMoreListComponent} from '../../tasks/task-morelist/task-morelist.component';
 import {EventHandlerSocketService} from '../service/event-handler-socket.service';
 import {EventHandlerEmailDate, UserContainerInterface} from '../../users/logic/user-container.interface';
 import {EventHandlerInterface, EventsReminderInterface} from '../logic/event-handler.interface';
@@ -31,7 +31,7 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
   indexID: string;
 
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
   serviceList: Array<ServiceInterface> = [];
@@ -47,7 +47,7 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
               private elemRef: ElementRef,
               private eventApi: EventApiService,
               private viewDirection: ViewDirectionService,
-              private popoverService: PopoverService,
+              // private popoverService: PopoverService,
               private datetimeService: DatetimeService,
               private eventHandlerService: EventHandlerService,
               private eventHandlerSocketService: EventHandlerSocketService,
@@ -84,14 +84,14 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
       this.datePickerConfig = {
         locale: this.rtlDirection ? 'fa' : 'en',
         dayBtnCssClassCallback: (event) => {
-          this.dayBtnCssClassCallback(event)
+          this.dayBtnCssClassCallback(event);
         }
       };
 
-      let goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(new Date())) : moment(this.datetimeService.getDateByTimezoneReturnDate(new Date()));
+      const goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(new Date())) : moment(this.datetimeService.getDateByTimezoneReturnDate(new Date()));
 
       this.datePickerDirective.api.moveCalendarTo(goToDate);
-    })
+    });
   }
 
   dayBtnCssClassCallback(event) {
@@ -100,18 +100,18 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
     }
 
     setTimeout(() => {
-      let date =
+      const date =
         this.rtlDirection ?
           event.locale('fa').format('YYYY/M/D') :
           event.locale('en').format('DD-MM-YYYY');
 
-      let element: HTMLElement = document.querySelector('#' + this.indexID + ' .dp-calendar-day[data-date="' + date + '"]');
+      const element: HTMLElement = document.querySelector('#' + this.indexID + ' .dp-calendar-day[data-date="' + date + '"]');
 
       if (element) {
         let count = 0;
 
         this.events_reminders.events.map(item => {
-          let date: Date = this.datetimeService.getDateByTimezoneReturnDate(item.startDate);
+          const date: Date = this.datetimeService.getDateByTimezoneReturnDate(item.startDate);
           if (date.toLocaleDateString() == event._d.toLocaleDateString()) {
             if (count < 1) {
               element.insertAdjacentHTML('beforeend', '<div data-objects=\'' + JSON.stringify(item) + '\' class=\'event-point\'></div>');
@@ -124,8 +124,8 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
   }
 
   eventClick(event) {
-    let eventTemp = this.events_reminders.events.filter((item: EventHandlerInterface) => {
-      let date: Date = this.datetimeService.getDateByTimezoneReturnDate(item.startDate);
+    const eventTemp = this.events_reminders.events.filter((item: EventHandlerInterface) => {
+      const date: Date = this.datetimeService.getDateByTimezoneReturnDate(item.startDate);
       return date.toLocaleDateString() == event.date._d.toLocaleDateString();
     });
 
@@ -135,7 +135,7 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
         rtlDirection: this.rtlDirection
       };
 
-      const dialogRef = this.dialog.open(TaskMorelistComponent, {
+      const dialogRef = this.dialog.open(TaskMoreListComponent, {
         data: data,
         autoFocus: false,
         width: '400px',
@@ -166,7 +166,7 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
     }
   }
 
-  showEventHandlerWindow(eventItems: EventHandlerInterface = null, openWindow: boolean = false) {
+  showEventHandlerWindow(eventItems: EventHandlerInterface = null, openWindow = false) {
     if (openWindow) {
       this.eventHandlerService.moveDay(null);
     } else {
@@ -176,10 +176,10 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
     this.eventHandlerService.moveEventItems(eventItems ? eventItems : null);
 
     if (this.serviceList) {
-      let service: Array<ServiceInterface> = this.serviceList.filter(obj => {
-        return obj.service_name == 'events_calendar'
+      const service: Array<ServiceInterface> = this.serviceList.filter(obj => {
+        return obj.service_name == 'events_calendar';
       });
-      this.windowManagerService.openWindowState(service[0])
+      this.windowManagerService.openWindowState(service[0]);
     }
   }
 
@@ -197,7 +197,7 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
       goToDate = this.rtlDirection ? jalaliMoment(this.datetimeService.getDateByTimezoneReturnDate(date)) : moment(this.datetimeService.getDateByTimezoneReturnDate(date));
     }
 
-    let eventhandlerModel: EventHandlerEmailDate = {
+    const eventhandlerModel: EventHandlerEmailDate = {
       email: this.loggedInUser.email,
       date: finalDate
     };
@@ -205,8 +205,8 @@ export class EventsHandlerCalendarComponent implements OnInit, OnDestroy, AfterV
       this.events_reminders = result;
       setTimeout(() => {
         this.datePickerDirective.api.moveCalendarTo(goToDate);
-      })
-    })
+      });
+    });
   }
 
   ngOnDestroy(): void {

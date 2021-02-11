@@ -8,7 +8,7 @@ import {LoginDataClass} from '../../../services/loginData.class';
 import {UserInfoService} from '../../users/services/user-info.service';
 import {ElectronService} from '../../../core/services';
 import {TranslateService} from '@ngx-translate/core';
-import {ConferenceInterface} from '../logic/conference.interface';
+import {ConferenceAddInterface, ConferenceInterface} from '../logic/conference.interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
 import {ConferenceAddComponent} from '../conference-add/conference-add.component';
@@ -22,11 +22,11 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
 export class ConferenceMainComponent extends LoginDataClass implements OnDestroy {
   @ViewChild('webFrame', {static: false}) webFrame: ElementRef;
 
-  rtlDirection: boolean;
+  rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'videoConference'};
-  showFrame: boolean = false;
-  confAddress: string = '';
-  reloadWebView: boolean = false;
+  showFrame = false;
+  confAddress = '';
+  reloadWebView = false;
 
   private _subscription: Subscription = new Subscription();
 
@@ -58,14 +58,14 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
           if (this.isElectron) {
             this.webFrame.nativeElement.reloadIgnoringCache();
           } else {
-            const src = this.webFrame.nativeElement.getAttribute('src');
+            const src: string = this.webFrame.nativeElement.getAttribute('src');
 
             this.webFrame.nativeElement.setAttribute('src', '');
 
-            const rndTime = Date.now();
+            const rndTime: string = Date.now().toString(10);
 
             setTimeout(() => {
-              this.webFrame.nativeElement.setAttribute('src', src + '&var=' + rndTime);
+              this.webFrame.nativeElement.setAttribute('src', `${src}&var=${rndTime}`);
             }, 500);
           }
         }
@@ -73,12 +73,16 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
     );
   }
 
-  addNewVideoConf() {
+  addNewVideoConf(): void {
+    const data: ConferenceAddInterface = {
+      action: 'add'
+    };
+
     const dialogRef = this.dialog.open(ConferenceAddComponent, {
       autoFocus: false,
       width: '350px',
       height: '280px',
-      data: {action: 'add'}
+      data: data
     });
 
     this._subscription.add(
@@ -103,7 +107,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
           if (this.isElectron) {
             this.webFrame.nativeElement.addEventListener('did-start-loading', () => {
 
-              this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache();
+              this.electronService.remote.webContents.fromId(this.webFrame.nativeElement.getWebContentsId()).session.clearCache().finally();
 
               this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'videoConference'});
             });
@@ -121,16 +125,16 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
     );
   }
 
-  get isElectron() {
+  get isElectron(): boolean {
     return this.electronService.isElectron;
   }
 
-  copyInClipBoard() {
+  copyInClipBoard(): void {
     const message = this.getTranslate('conference.added_to_clipboard');
-    this.messageService.showMessage(message)
+    this.messageService.showMessage(message);
   }
 
-  exitOfConference() {
+  exitOfConference(): void {
     this.webFrame.nativeElement.setAttribute('src', '');
 
     if (this.isElectron) {
@@ -140,7 +144,7 @@ export class ConferenceMainComponent extends LoginDataClass implements OnDestroy
     this.showFrame = false;
   }
 
-  getTranslate(word) {
+  getTranslate(word: string): string {
     return this.translateService.instant(word);
   }
 

@@ -7,7 +7,4 @@ import {Component, Input} from '@angular/core';
 })
 export class ProgressComponent {
   @Input() progress = 0;
-
-  constructor() {
-  }
 }

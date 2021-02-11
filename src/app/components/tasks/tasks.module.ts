@@ -17,7 +17,7 @@ import {TaskWindowComponent} from './task-window/task-window.component';
 import {TaskCurrentComponent} from './task-current/task-current.component';
 import {TaskCalendarComponent} from './task-calendar/task-calendar.component';
 import {TaskActivityComponent} from './task-activity/task-activity.component';
-import {TaskMorelistComponent} from "./task-morelist/task-morelist.component";
+import {TaskMoreListComponent} from './task-morelist/task-morelist.component';
 import {TaskBottomSheetComponent} from './task-bottom-sheet/task-bottom-sheet.component';
 import {TaskCalendarRateComponent} from './task-calendar/task-calendar-rate/task-calendar-rate.component';
 import {TaskCalendarFilterComponent} from './task-calendar/task-calendar-filter/task-calendar-filter.component';
@@ -39,7 +39,7 @@ import {TaskReportDescriptionComponent} from './task-description/task-report-des
     TaskWindowComponent,
     TaskCurrentComponent,
     TaskCalendarComponent,
-    TaskMorelistComponent,
+    TaskMoreListComponent,
     TaskActivityComponent,
     TaskBottomSheetComponent,
     TaskCalendarRateComponent,

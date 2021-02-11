@@ -1,22 +1,21 @@
-import {DatetimeInterface} from '../logic/datetime.interface';
 import {Injectable, Injector} from '@angular/core';
 import * as moment from 'jalali-moment';
-import {TimezonesInterface} from '../timezones.interface';
 import {TimezonesList} from '../logic/timezones';
-import {LoginDataClass} from "../../../../../services/loginData.class";
-import {UserInfoService} from "../../../../users/services/user-info.service";
+import {LoginDataClass} from '../../../../../services/loginData.class';
+import {UserInfoService} from '../../../../users/services/user-info.service';
+import {DatetimeInterface} from '../logic/datetime.interface';
+import {TimezonesInterface} from '../timezones.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DatetimeService extends LoginDataClass {
-  public timezones: TimezonesInterface[] = TimezonesList;
-
+  public timezones: Array<TimezonesInterface> = TimezonesList;
   private weekDaysFa = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
-  private monthFa = ['', 'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+  private monthFa = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
   private weekDaysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   private datetime: DatetimeInterface;
-  private todayJalali = moment().locale('fa').format('D') + ' ' + this.monthFa[moment().locale('fa').format('M')] + ' ' + moment().locale('fa').format('YYYY');
+  private todayJalali = `${moment().locale('fa').format('D')} ${this.monthFa[moment().locale('fa').format('M')]} ${moment().locale('fa').format('YYYY')}`;
   private todayGregorian = moment().locale('en').format('D') + ' ' + moment().locale('en').format('MMMM') + ' ' + moment().locale('en').format('YYYY');
   private todayJalaliDayName = this.weekDaysFa[new Date().getDay() + 1];
   private todayGregorianDayName = this.weekDaysEn[new Date().getDay()];
@@ -25,28 +24,28 @@ export class DatetimeService extends LoginDataClass {
     super(injector, userInfoService);
   }
 
-  changeDatetimeLabel(rtlDirection: boolean) {
+  changeDatetimeLabel(rtlDirection: boolean): DatetimeInterface {
     if (rtlDirection) {
       this.datetime = {
         time: '',
         date: this.todayJalali,
         weekday: this.todayJalaliDayName
-      }
+      };
     } else {
       this.datetime = {
         time: '',
         date: this.todayGregorian,
         weekday: this.todayGregorianDayName
-      }
+      };
     }
 
     return this.datetime;
   }
 
-  formatTime(date, gmt: boolean = false) {
-    let d = new Date(date),
-      hour = '' + (gmt ? d.getUTCHours().toString() : d.getHours().toString()),
-      min = '' + gmt ? d.getUTCMinutes().toString() : d.getMinutes().toString();
+  formatTime(date: string | Date, gmt = false): string {
+    const d = new Date(date);
+    let hour = gmt ? d.getUTCHours().toString() : d.getHours().toString();
+    let min = gmt ? d.getUTCMinutes().toString() : d.getMinutes().toString();
 
     if (hour.length < 2) hour = '0' + hour;
 
@@ -55,33 +54,31 @@ export class DatetimeService extends LoginDataClass {
     return [hour, min].join(':');
   }
 
-  formatDate(date, gmt: boolean = false) {
-    let d = new Date(date),
-      month = '' + (gmt ? d.getMonth() + 1 : d.getMonth() + 1),
-      day = '' + gmt ? d.getDate().toString() : d.getDate().toString(),
-      year = gmt ? d.getFullYear() : d.getFullYear();
+  formatDate(date: string | Date, gmt = false): string {
+    const d = new Date(date);
+    const year = gmt ? d.getFullYear() : d.getFullYear();
+    const month = (gmt ? d.getMonth() + 1 : d.getMonth() + 1);
+    const day = gmt ? d.getDate().toString() : d.getDate();
+    const tmpMonth = month < 10 ? `0${month}` : `${month}`;
+    const tmpDay = day < 10 ? `0${day}` : `${day}`;
 
-    if (month.length < 2) month = '0' + month;
-
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('-');
+    return [year, tmpMonth, tmpDay].join('-');
   }
 
-  convertToGMT(date: string, time: string) {
+  convertToGMT(date: string, time: string): string {
     return this.formatDate(new Date(date + ' ' + time), true)
       + ' ' +
       this.formatTime(new Date(date + ' ' + time), true) + ':00';
   }
 
-  getDateByTimezone(date: string, timezone: string) {
-    let _date = new Date(date).toLocaleString('en-US', {timeZone: timezone});
+  getDateByTimezone(date: string, timezone: string): string {
+    const _date = new Date(date).toLocaleString('en-US', {timeZone: timezone});
 
     return this.formatDate(_date) + ' ' + this.formatTime(_date);
   }
 
-  getDateByTimezoneReturnDate(date: string | Date) {
-    let _date = '';
+  getDateByTimezoneReturnDate(date: string | Date): Date {
+    let _date;
     if (typeof date == 'string') {
       _date = new Date(date).toLocaleString('en-US', {timeZone: this.loggedInUser.timezone});
     } else if (typeof date == 'object') {

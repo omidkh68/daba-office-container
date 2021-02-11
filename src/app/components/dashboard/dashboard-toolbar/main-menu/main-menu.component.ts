@@ -10,7 +10,7 @@ import {UserContainerInterface} from '../../../users/logic/user-container.interf
 })
 export class MainMenuComponent {
   @Input()
-  rtlDirection: boolean;
+  rtlDirection = false;
 
   @Input()
   loggedInUser: UserContainerInterface;
@@ -21,7 +21,7 @@ export class MainMenuComponent {
   constructor(private windowManagerService: WindowManagerService) {
   }
 
-  openService(service: ServiceInterface) {
+  openService(service: ServiceInterface): void {
     this.windowManagerService.openWindowState(service);
   }
 }

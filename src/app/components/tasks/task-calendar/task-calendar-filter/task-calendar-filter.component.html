@@ -8,7 +8,7 @@
         <div class="full-width padding-r-l">
           <mat-form-field class="full-width font-8-em">
             <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                 [src]="'assets/profileImg/'+form.get('userImg').value +'.jpg'"
+                 [src]="'assets/profileImg/'+form.get('userImg').value +'.jpg'" alt=""
                  class="width-20 height-20 round-corner-all pos-rel top-three-tenth"
                  matPrefix>
             <mat-label>{{'tasks.form.assign_to' | translate}}</mat-label>
@@ -18,7 +18,7 @@
                           class="font-full-em">
                 <div class="display-flex align-items-center">
                   <img [ngClass]="rtlDirection ? 'margin-l-half' : 'margin-r-half'"
-                       [src]="'assets/profileImg/'+user.email+'.jpg'"
+                       [src]="'assets/profileImg/'+user.email+'.jpg'" alt=""
                        class="width-20 height-20 round-corner-all pos-rel"
                        matPrefix
                        (error)="$event.target.src='assets/profileImg/0.jpg'">

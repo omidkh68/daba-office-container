@@ -25,7 +25,7 @@ export class ViewDirectionService {
     localStorage.setItem('defaultLang', DEFAULT_LANG !== null ? DEFAULT_LANG : 'en');
   }
 
-  changeDirection(direction: boolean) {
+  changeDirection(direction: boolean): void {
     this._rtlDirection.next(direction);
 
     localStorage.setItem('defaultLang', direction === true ? 'fa' : 'en');
@@ -45,7 +45,7 @@ export class ViewDirectionService {
     }
   }
 
-  public getCurrentLang() {
+  public getCurrentLang(): string {
     return this.translate.getDefaultLang();
   }
 }

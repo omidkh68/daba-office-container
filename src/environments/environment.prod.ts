@@ -1,4 +1,6 @@
-export const AppConfig: any = {
+import {EnvironmentInterface} from './environment-interface';
+
+export const AppConfig: EnvironmentInterface = {
   production: true,
   environment: 'PROD',
   API_URL: 'http://192.168.110.179:3000/api',

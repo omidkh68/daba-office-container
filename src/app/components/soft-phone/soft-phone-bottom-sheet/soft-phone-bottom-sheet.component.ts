@@ -1,4 +1,12 @@
-import {Component, ComponentFactoryResolver, ElementRef, Renderer2, ViewChild, ViewContainerRef} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  Renderer2,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {SoftPhoneService} from '../service/soft-phone.service';
 import {SoftPhoneBottomSheetInterface} from './logic/soft-phone-bottom-sheet.interface';
@@ -8,37 +16,36 @@ import {SoftPhoneBottomSheetInterface} from './logic/soft-phone-bottom-sheet.int
   templateUrl: './soft-phone-bottom-sheet.component.html',
   styleUrls: ['./soft-phone-bottom-sheet.component.scss']
 })
-export class SoftPhoneBottomSheetComponent {
-  @ViewChild('oBottomSheet') oBottomSheet: ElementRef;
+export class SoftPhoneBottomSheetComponent implements AfterViewInit {
+  @ViewChild('oBottomSheet') oBottomSheet: ElementRef<HTMLElement>;
   @ViewChild('container', {read: ViewContainerRef}) container;
 
-  minimizeStatus: boolean = false;
+  minimizeStatus = false;
 
   private _subscription: Subscription = new Subscription();
 
-  constructor(private cfr: ComponentFactoryResolver,
-              private renderer: Renderer2,
+  constructor(private renderer: Renderer2,
+              private cfr: ComponentFactoryResolver,
               private softPhoneService: SoftPhoneService) {
+  }
+
+  ngAfterViewInit(): void {
     this._subscription.add(
       this.softPhoneService.currentMinimizeCallPopUp.subscribe(status => {
         this.minimizeStatus = status;
 
-        try {
-          const parentNode = this.oBottomSheet.nativeElement.parentNode.parentNode;
+        const parentNode = this.oBottomSheet.nativeElement.parentNode.parentNode;
 
-          if (this.minimizeStatus) {
-            this.renderer.addClass(parentNode, 'minimizePopUp');
-          } else {
-            this.renderer.removeClass(parentNode, 'minimizePopUp');
-          }
-        } catch (e) {
-
+        if (this.minimizeStatus) {
+          this.renderer.addClass(parentNode, 'minimizePopUp');
+        } else {
+          this.renderer.removeClass(parentNode, 'minimizePopUp');
         }
       })
     );
   }
 
-  toggleBottomSheet(bottomSheetConfig: SoftPhoneBottomSheetInterface, toggle: boolean = true) {
+  toggleBottomSheet(bottomSheetConfig: SoftPhoneBottomSheetInterface, toggle = true): void {
     this.container.clear();
 
     const parentNode = this.oBottomSheet.nativeElement.parentNode.parentNode;
@@ -64,7 +71,7 @@ export class SoftPhoneBottomSheetComponent {
     }
   }
 
-  close() {
+  close(): void {
     this.toggleBottomSheet(null, false);
   }
 }

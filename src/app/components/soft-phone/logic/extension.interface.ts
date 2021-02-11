@@ -7,6 +7,7 @@ export interface ExtensionInterface {
   extension_type?: string;
   is_online?: number;
   is_mute?: number;
+  timezone?: string;
 }
 
 export interface ConferenceOnlineExtensionInterface extends ExtensionInterface {

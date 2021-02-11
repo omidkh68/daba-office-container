@@ -11,3 +11,21 @@ export interface FilterInterface {
   email: string;
   status?: number;
 }
+
+export interface CalendarDurationInterface {
+  startDate: string;
+  stopDate: string;
+  timediff: string;
+}
+
+export interface TotalCalendarDurationInterface {
+  timeSum: string;
+}
+
+export interface ResultFilterCalendarDurationInterface {
+  content: {
+    0: Array<CalendarDurationInterface>;
+    1: TotalCalendarDurationInterface;
+  };
+  result: number;
+}

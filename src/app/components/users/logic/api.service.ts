@@ -1,17 +1,18 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs/internal/Observable';
 import {AppConfig} from '../../../../environments/environment';
-import {CompanyInterface} from '../../select-company/logic/company-interface';
+import {Observable} from 'rxjs/internal/Observable';
 import {CheckLoginInterface} from '../../login/logic/check-login.interface';
-import {LoginResultInterface} from '../../login/logic/login.interface';
 import {CompanySelectorService} from '../../select-company/services/company-selector.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {ResultLogoutInterface, ResultSubsetUsersInterface} from './user-container.interface';
+import {LoginInfoInterface, LoginResultInterface} from '../../login/logic/login.interface';
+import {CompanyInterface, ResultCompanyListInterface} from '../../select-company/logic/company-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  public accessToken: string = '';
+  public accessToken = '';
   private currentCompany: CompanyInterface = null;
   private API_URL = AppConfig.CONTAINER_URL;
 
@@ -29,7 +30,7 @@ export class ApiService {
               private companySelectorService: CompanySelectorService) {
   }
 
-  login(loginInfo): Observable<LoginResultInterface> {
+  login(loginInfo: LoginInfoInterface): Observable<LoginResultInterface> {
     return this.http.post<LoginResultInterface>(`${this.API_URL}/login`, loginInfo);
   }
 
@@ -43,29 +44,29 @@ export class ApiService {
     return this.http.get<CheckLoginInterface>(`${this.API_URL}/checkLogin${compId}`, this.headers);
   }
 
-  logout(): Observable<any> {
+  logout(): Observable<ResultLogoutInterface> {
     this.currentCompany = this.companySelectorService.currentCompany;
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
 
-    return this.http.post(`${this.API_URL}/logout${compId}`, null, this.headers);
+    return this.http.post<ResultLogoutInterface>(`${this.API_URL}/logout${compId}`, null, this.headers);
   }
 
-  getHRUsers(): Observable<any> {
+  getHRUsers(): Observable<ResultSubsetUsersInterface> {
     this.currentCompany = this.companySelectorService.currentCompany;
 
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
     const compId = this.currentCompany ? `?comp_id=${this.currentCompany.id}` : '';
 
-    return this.http.get(`${this.API_URL}/users/subset${compId}`, this.headers);
+    return this.http.get<ResultSubsetUsersInterface>(`${this.API_URL}/users/subset${compId}`, this.headers);
   }
 
-  getUserCompanies() {
+  getUserCompanies(): Observable<ResultCompanyListInterface> {
     this.headers.headers = this.headers.headers.set('Authorization', this.accessToken);
 
-    return this.http.get(`${this.API_URL}/users/company`, this.headers);
+    return this.http.get<ResultCompanyListInterface>(`${this.API_URL}/users/company`, this.headers);
   }
 }

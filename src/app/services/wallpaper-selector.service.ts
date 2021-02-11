@@ -13,7 +13,7 @@ export class WallpaperSelectorService {
   constructor(private userInfoService: UserInfoService) {
   }
 
-  changeWallpaper(newWallpaper) {
+  changeWallpaper(newWallpaper: string): void {
     if (newWallpaper !== '') {
       this.wallpaper.next(newWallpaper);
     }
