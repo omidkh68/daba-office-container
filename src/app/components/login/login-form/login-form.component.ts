@@ -1,4 +1,4 @@
-import {Component, Injector, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Injector, Input, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfig} from '../../../../environments/environment';
 import {ApiService} from '../../users/logic/api.service';
@@ -17,6 +17,8 @@ import {LoginInfoInterface, LoginInterface, LoginResultInterface} from '../logic
   templateUrl: './login-form.component.html'
 })
 export class LoginFormComponent implements OnInit {
+  @ViewChild('username') username: ElementRef<HTMLInputElement>;
+
   @Input()
   type: boolean;
 
@@ -46,7 +48,9 @@ export class LoginFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createForm().finally();
+    this.createForm().then(() => {
+      this.username.nativeElement.focus();
+    });
 
     // setTimeout(() => this.login(), 200); // todo: remove this in production
   }

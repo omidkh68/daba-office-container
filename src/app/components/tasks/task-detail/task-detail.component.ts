@@ -25,7 +25,7 @@ import {
 } from '../logic/board-interface';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
+import {BottomSheetDataService} from '../services/BottomSheetData.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
@@ -62,7 +62,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
               private refreshLoginService: RefreshLoginService,
               private refreshBoardService: RefreshBoardService,
               private windowManagerService: WindowManagerService,
-              private buttonSheetDataService: ButtonSheetDataService,
+              private bottomSheetDataService: BottomSheetDataService,
               private loadingIndicatorService: LoadingIndicatorService,
               private taskEssentialInfoService: TaskEssentialInfoService) {
     super(injector, userInfoService);
@@ -73,6 +73,17 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
         if (this.form) {
           this.formPatchValue();
+        }
+      })
+    );
+
+    this._subscription.add(
+      this.bottomSheetDataService.currentButtonSheetData.subscribe((sheetData: TaskBottomSheetInterface) => {
+        if (sheetData) {
+          this.bottomSheetData = sheetData;
+
+          this.breadcrumbList = this.bottomSheetData.data.breadCrumbList && this.bottomSheetData.data.breadCrumbList.length ? this.bottomSheetData.data.breadCrumbList : [] ;
+          console.log(this.breadcrumbList);
         }
       })
     );
@@ -88,7 +99,7 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     this.usersList = this.data.usersList;
     this.projectsList = this.data.projectsList;
     this.task = this.data.task;
-    this.breadcrumbList = this.data.breadcrumbList;
+    // this.breadcrumbList = this.data.breadcrumbList;
   }
 
   ngAfterViewInit(): void {
@@ -97,6 +108,10 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
         this.formPatchValue();
 
         this.formValidationCheck();
+
+        this.getBreadcrumbData(this.task.taskId).then((breadCrumbs: Array<BreadcrumbTaskInterface>) => {
+          this.breadcrumbList = breadCrumbs;
+        });
       }
     });
   }
@@ -148,6 +163,8 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
       } else {
         this.bottomSheetData.bottomSheetRef.close();
       }
+    } else {
+      this.bottomSheetData.bottomSheetRef.close();
     }
   }
 
@@ -295,6 +312,9 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
   }
 
   deleteTask(): void {
+    this.form.disable();
+    this.editable = false;
+
     const dialogRef = this.dialog.open(ApproveComponent, {
       data: {
         title: this.getTranslate('tasks.task_detail.delete_title'),
@@ -440,42 +460,43 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
 
     this.getBoardData().then(() => {
       this.getTaskDetail(taskId).then((task: TaskInterface) => {
-        this.getBreadcrumbData(task.taskId).then(() => {
-          this.bottomSheetData.bottomSheetRef.close();
+        // this.getBreadcrumbData(task.taskId).then(() => {
+        this.bottomSheetData.bottomSheetRef.close();
 
-          this.usersListNew.map(user => {
-            if (task.assignTo.adminId === user.adminId) {
-              task.assignTo = user;
-            }
-          });
-
-          this.projectsListNew.map(project => {
-            if (task.project.projectId === project.projectId) {
-              task.project = project;
-            }
-          });
-
-          setTimeout(() => {
-            const data: TaskDataInterface = {
-              action: 'detail',
-              usersList: this.usersListNew,
-              projectsList: this.projectsListNew,
-              task: task,
-              boardStatus: task.boardStatus
-            };
-
-            const finalData = {
-              component: TaskDetailComponent,
-              height: '98%',
-              width: '95%',
-              data: data
-            };
-
-            this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-            this.buttonSheetDataService.changeButtonSheetData(finalData);
-          }, 500);
+        this.usersListNew.map(user => {
+          if (task.assignTo.adminId === user.adminId) {
+            task.assignTo = user;
+          }
         });
+
+        this.projectsListNew.map(project => {
+          if (task.project.projectId === project.projectId) {
+            task.project = project;
+          }
+        });
+
+        setTimeout(() => {
+          const data: TaskDataInterface = {
+            action: 'detail',
+            usersList: this.usersListNew,
+            projectsList: this.projectsListNew,
+            task: task,
+            boardStatus: task.boardStatus,
+            breadCrumbList: this.breadcrumbList
+          };
+
+          const finalData = {
+            component: TaskDetailComponent,
+            height: '98%',
+            width: '95%',
+            data: data
+          };
+
+          this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+          this.bottomSheetDataService.changeButtonSheetData(finalData);
+        }, 500);
+        // });
       });
     });
   }
@@ -506,14 +527,12 @@ export class TaskDetailComponent extends LoginDataClass implements OnInit, After
     });
   }
 
-  getBreadcrumbData(taskId: number): Promise<boolean> {
+  getBreadcrumbData(taskId: number): Promise<Array<BreadcrumbTaskInterface>> {
     return new Promise((resolve) => {
       this._subscription.add(
         this.apiService.getBreadcrumb(taskId).subscribe((resp: ResultBreadcrumbInterface) => {
           if (resp.result === 1) {
-            this.breadcrumbList = resp.contents;
-
-            resolve(true);
+            resolve(resp.contents);
           }
         }, (error: HttpErrorResponse) => {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});

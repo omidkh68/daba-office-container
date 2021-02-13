@@ -1,7 +1,7 @@
 import {TaskInterface} from './task-interface';
 import {UserInterface} from '../../users/logic/user-interface';
 import {ProjectInterface} from '../../projects/logic/project-interface';
-import {BoardInterface} from './board-interface';
+import {BoardInterface, BreadcrumbTaskInterface} from './board-interface';
 
 export interface TaskDataInterface {
   action?: string;
@@ -10,4 +10,5 @@ export interface TaskDataInterface {
   projectsList: Array<ProjectInterface>;
   boardStatus?: string;
   boardsList?: Array<BoardInterface>;
+  breadCrumbList?: Array<BreadcrumbTaskInterface>;
 }

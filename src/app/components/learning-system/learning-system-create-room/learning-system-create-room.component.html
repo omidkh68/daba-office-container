@@ -10,7 +10,8 @@
         <div class="full-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
             <input class="full-width" formControlName="meetingID" matInput
-                   autocomplete="off"
+                   #roomName
+                   autocomplete="new-password"
                    placeholder="{{'learning.meeting_name' | translate}}"
                    required tabindex="1" type="text">
             <mat-label>
@@ -28,7 +29,7 @@
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
             <input class="full-width" formControlName="viewerPassword" matInput
-                   autocomplete="off"
+                   autocomplete="new-password"
                    placeholder="{{'learning.room_pass' | translate}}"
                    required tabindex="2" type="password">
             <mat-label>
@@ -44,7 +45,7 @@
           <mat-form-field class="full-width font-9-em">
             <input class="full-width" formControlName="moderatorPassword" matInput
                    placeholder="{{'learning.room_moderator_pass' | translate}}"
-                   autocomplete="off"
+                   autocomplete="new-password"
                    required tabindex="3" type="password">
             <mat-label>
               {{'learning.room_moderator_pass' | translate}}

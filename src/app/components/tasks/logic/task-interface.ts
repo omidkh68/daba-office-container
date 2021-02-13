@@ -21,6 +21,7 @@ export interface TaskInterface {
   boardStatus: string;
   trackable: number;
   todoCount?: number;
+  todoCountDone?: number;
   creationDate?: string;
   overdue?: boolean;
   startTime?: string;

@@ -106,13 +106,14 @@
             </span>
           </span>
 
-          <span [ngClass]="rtlDirection ? 'margin-l-full margin-r-auto' : 'margin-r-full margin-l-auto'"
+          <span *ngIf="(task.todoCount + task.todoCountDone)"
+                [ngClass]="rtlDirection ? 'margin-l-full margin-r-auto' : 'margin-r-full margin-l-auto'"
                 class="display-flex padding-tiny-t-b" matTooltip="{{'tasks.boards.todo_count' | translate}}"
                 [matTooltipPosition]="rtlDirection ? 'right' : 'left'">
             <mat-icon class="width-18 height-18 font-full-plus-three-tenth-em line-height-20 margin-mini-r-l">
               rule
             </mat-icon>
-            {{task.todoCount}}
+            {{task.todoCountDone}}/{{task.todoCount + task.todoCountDone}}
           </span>
 
           <span class="width-25 height-25 round-corner-all mat-elevation-z1 pos-rel"

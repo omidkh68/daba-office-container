@@ -9,7 +9,7 @@ import {TaskDataInterface} from '../logic/task-data-interface';
 import {CurrentTaskService} from '../services/current-task.service';
 import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
-import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
+import {BottomSheetDataService} from '../services/BottomSheetData.service';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
 
 @Component({
@@ -35,7 +35,7 @@ export class TaskCurrentComponent implements OnChanges, OnDestroy {
 
   constructor(private userInfoService: UserInfoService,
               private currentTaskService: CurrentTaskService,
-              private buttonSheetDataService: ButtonSheetDataService,
+              private bottomSheetDataService: BottomSheetDataService,
               private taskEssentialInfoService: TaskEssentialInfoService) {
     this._subscription.add(
       this.currentTaskService.currentTask.subscribe(currentTasks => this.currentTasks = currentTasks)
@@ -66,7 +66,7 @@ export class TaskCurrentComponent implements OnChanges, OnDestroy {
         data: data
       };
 
-      this.buttonSheetDataService.changeButtonSheetData(finalData);
+      this.bottomSheetDataService.changeButtonSheetData(finalData);
     }, 500);
   }
 

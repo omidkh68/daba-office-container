@@ -1,4 +1,4 @@
-import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, Injector, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -10,12 +10,15 @@ import {ViewDirectionService} from '../../../services/view-direction.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {JoinInterface, LmsResultInterface, RoomInterface} from '../logic/lms.interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
+import {ElectronService} from '../../../core/services';
 
 @Component({
   selector: 'app-learning-system-password',
   templateUrl: './learning-system-password.component.html'
 })
 export class LearningSystemPasswordComponent extends LoginDataClass implements OnInit, OnDestroy {
+  @ViewChild('roomPass') roomPass: ElementRef<HTMLInputElement>;
+
   form: FormGroup;
   rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = null;
@@ -28,6 +31,7 @@ export class LearningSystemPasswordComponent extends LoginDataClass implements O
               private apiService: ApiService,
               private messageService: MessageService,
               private userInfoService: UserInfoService,
+              private electronService: ElectronService,
               private translateService: TranslateService,
               private viewDirectionService: ViewDirectionService,
               private loadingIndicatorService: LoadingIndicatorService,
@@ -44,7 +48,9 @@ export class LearningSystemPasswordComponent extends LoginDataClass implements O
   }
 
   ngOnInit(): void {
-    this.createForm().finally();
+    this.createForm().then(() => {
+      this.roomPass.nativeElement.focus();
+    });
   }
 
   createForm(): Promise<boolean> {
@@ -89,6 +95,10 @@ export class LearningSystemPasswordComponent extends LoginDataClass implements O
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'roomPassword'});
       })
     );
+  }
+
+  get isElectron(): boolean {
+    return this.electronService.isElectron;
   }
 
   getTranslate(word: string): string {

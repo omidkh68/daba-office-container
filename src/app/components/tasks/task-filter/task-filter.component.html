@@ -10,7 +10,7 @@
         <div class="half-width padding-r-l">
           <mat-form-field class="full-width font-9-em">
             <mat-label>{{'tasks.task_filter.filter_types' | translate}}</mat-label>
-            <mat-select formControlName="type" required tabIndex="1">
+            <mat-select formControlName="type" required tabIndex="1" #typeSelect>
               <mat-option *ngFor="let type of filterTypes" [value]="type.typeName" class="font-full-em">
                 {{type.textName | translate}}
               </mat-option>

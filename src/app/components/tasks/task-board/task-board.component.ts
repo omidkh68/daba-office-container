@@ -41,7 +41,7 @@ import {TaskDetailComponent} from '../task-detail/task-detail.component';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
+import {BottomSheetDataService} from '../services/BottomSheetData.service';
 import {LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
@@ -103,7 +103,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
               private refreshLoginService: RefreshLoginService,
               private refreshBoardService: RefreshBoardService,
               private windowManagerService: WindowManagerService,
-              private buttonSheetDataService: ButtonSheetDataService,
+              private bottomSheetDataService: BottomSheetDataService,
               private loadingIndicatorService: LoadingIndicatorService,
               private taskEssentialInfoService: TaskEssentialInfoService,
               private ignoreAutoRefreshService: IgnoreAutoRefreshService) {
@@ -306,7 +306,7 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
 
     this.clearTimer();
 
-    this.buttonSheetDataService.changeButtonSheetData(finalData);
+    this.bottomSheetDataService.changeButtonSheetData(finalData);
   }
 
   putTasksToAllBoards(info: ResultFilterInterface | ResultInterface): void {
@@ -479,7 +479,6 @@ export class TaskBoardComponent extends LoginDataClass implements OnInit, OnDest
   }
 
   clearTimer(): void {
-    console.log('in clear');
     if (this.globalTimerSubscription) {
       this.globalTimerSubscription.unsubscribe();
       this.globalTimer = null;

@@ -5,7 +5,7 @@ import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomShe
 @Injectable({
   providedIn: 'root'
 })
-export class ButtonSheetDataService {
+export class BottomSheetDataService {
   private _defaultButtonSheetData: TaskBottomSheetInterface | null = null;
   private buttonSheetData = new BehaviorSubject(this._defaultButtonSheetData);
   public currentButtonSheetData = this.buttonSheetData.asObservable();

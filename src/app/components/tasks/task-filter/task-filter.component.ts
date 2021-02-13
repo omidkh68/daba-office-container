@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -18,6 +18,7 @@ import {ResultFilterInterface} from '../logic/board-interface';
 import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../services/loading-indicator.service';
 import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatSelect} from '@angular/material/select';
 
 export interface filterType {
   index: number;
@@ -30,6 +31,8 @@ export interface filterType {
   templateUrl: './task-filter.component.html'
 })
 export class TaskFilterComponent extends LoginDataClass implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('typeSelect') typeSelect: ElementRef<MatSelect>;
+
   rtlDirection = false;
   filterData: FilterInterface = {
     userId: 0,
@@ -186,6 +189,8 @@ export class TaskFilterComponent extends LoginDataClass implements OnInit, After
 
   ngAfterViewInit(): void {
     this.setupDatepickers();
+
+    this.typeSelect.nativeElement.focus();
   }
 
   setupDatepickers(): void {

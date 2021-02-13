@@ -1,13 +1,13 @@
 import {
   AfterViewInit,
-  Component,
+  Component, ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges, ViewChild
 } from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -25,6 +25,8 @@ import {IDatePickerDirectiveConfig} from 'ng2-jalali-date-picker';
   styleUrls: ['./task-form.component.scss']
 })
 export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDestroy {
+  @ViewChild('taskName') taskName: ElementRef<HTMLInputElement>;
+
   @Input()
   form: FormGroup;
 
@@ -81,6 +83,10 @@ export class TaskFormComponent implements AfterViewInit, OnChanges, OnInit, OnDe
 
   ngAfterViewInit(): void {
     this.setupDatepickers();
+
+    if (this.editable) {
+      this.taskName.nativeElement.focus();
+    }
   }
 
   fillHoursDropdown(): void {

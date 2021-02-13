@@ -12,7 +12,8 @@ export const AppConfig: EnvironmentInterface = {
   REALM: 'wrtcdaba.dabacenter.ir',
   PBX_LOGIN_EXTENSION: 'https://wrtcdaba.dabacenter.ir',
   WEBSOCKET_PROXY_URL: 'wss://wrtcdaba.dabacenter.ir:8089/ws',
-  EVENT_HANDLER_URL : 'http://94.139.172.74:8080/eventhandler-0.0.1',
+  // EVENT_HANDLER_URL : 'http://94.139.172.74:8080/eventhandler-0.0.1',
+  EVENT_HANDLER_URL : 'http://94.139.172.74:8884',
   // LMS_API: 'https://94.139.172.74:8080/bbb-0.0.1-SNAPSHOT'
   LMS_API: 'https://onlinelms.dabacenter.ir/bbb-0.0.1-SNAPSHOT'
 };

@@ -1,4 +1,4 @@
-import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, Injector, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs/internal/Subscription';
@@ -15,6 +15,8 @@ import {LoadingIndicatorInterface, LoadingIndicatorService} from '../../../servi
   templateUrl: './learning-system-create-room.component.html'
 })
 export class LearningSystemCreateRoomComponent extends LoginDataClass implements OnInit, OnDestroy {
+  @ViewChild('roomName') roomName: ElementRef<HTMLInputElement>;
+
   form: FormGroup;
   rtlDirection = false;
   loadingIndicator: LoadingIndicatorInterface = null;
@@ -41,7 +43,9 @@ export class LearningSystemCreateRoomComponent extends LoginDataClass implements
   }
 
   ngOnInit(): void {
-    this.createForm().finally();
+    this.createForm().then(() => {
+      this.roomName.nativeElement.focus();
+    });
   }
 
   createForm(): Promise<boolean> {

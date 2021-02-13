@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../logic/api.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
@@ -13,7 +13,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {RefreshBoardService} from '../services/refresh-board.service';
 import {RefreshLoginService} from '../../login/services/refresh-login.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
+import {BottomSheetDataService} from '../services/BottomSheetData.service';
 import {UserContainerInterface} from '../../users/logic/user-container.interface';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {TaskEssentialInfoService} from '../../../services/taskEssentialInfo.service';
@@ -33,6 +33,8 @@ import {
   styleUrls: ['./task-todo.component.scss']
 })
 export class TaskTodoComponent implements OnInit, OnDestroy {
+  @ViewChild('searchBox') searchBox: ElementRef<HTMLInputElement>;
+
   @Input()
   taskId = 0;
 
@@ -52,7 +54,9 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   edit = false;
   user: UserContainerInterface;
   loadingIndicator: LoadingIndicatorInterface = {status: false, serviceName: 'todo'};
-  tasks: Array<TaskInterface> = [];
+  subTasks: Array<TaskInterface> = [];
+  subTasksRemain = 0;
+  subTasksDone = 0;
   bottomSheetData = null;
   usersList: any = [];
   projectsList: any = [];
@@ -68,7 +72,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
               private refreshLoginService: RefreshLoginService,
               private refreshBoardService: RefreshBoardService,
               private windowManagerService: WindowManagerService,
-              private buttonSheetDataService: ButtonSheetDataService,
+              private bottomSheetDataService: BottomSheetDataService,
               private loadingIndicatorService: LoadingIndicatorService,
               private taskEssentialInfoService: TaskEssentialInfoService) {
     this._subscription.add(
@@ -78,7 +82,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._subscription.add(
-      this.buttonSheetDataService.currentButtonSheetData.subscribe((data: TaskBottomSheetInterface | null) => {
+      this.bottomSheetDataService.currentButtonSheetData.subscribe((data: TaskBottomSheetInterface | null) => {
         if (data) {
           this.bottomSheetData = data;
         }
@@ -87,7 +91,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
     this.createForm();
 
-    this.getTaskList();
+    this.getTodoList();
   }
 
   createForm(): void {
@@ -163,7 +167,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   }
 
   sortTodo(): void {
-    this.tasks.sort((first, second) => {
+    this.subTasks.sort((first, second) => {
       const a = first.priority;
       const b = second.priority;
       let comparison = 0;
@@ -178,7 +182,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
     });
   }
 
-  getTaskList(): void {
+  getTodoList(): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
     this.form.disable();
@@ -193,15 +197,23 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       this.apiService.getSubsetTask(this.loggedInUser.email, this.parentTaskData.taskId).subscribe((resp: ResultTodoInterface) => {
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
-        if (resp.result === 1) {
-          this.tasks = resp.contents;
+        if (resp.result === 1 && resp.contents.length) {
+          this.subTasks = resp.contents;
+          this.subTasksRemain = 0;
+          this.subTasksDone = 0;
 
-          this.tasks.map(task => {
+          this.subTasks.map(task => {
             task.assignTo = this.usersList.filter(user => user.adminId === task.assignTo).pop();
 
             task.assigner = this.usersList.filter(user => user.adminId === task.assigner).pop().email;
 
             task.project = this.projectsList.filter(project => project.projectId === task.project).pop();
+
+            if (task.percentage === 100) {
+              this.subTasksDone++;
+            } else {
+              this.subTasksRemain++;
+            }
 
             return task;
           });
@@ -264,12 +276,14 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
         if (resp.result) {
           const newTask = resp.content;
 
-          this.tasks = this.tasks.map(task => {
+          this.subTasks = this.subTasks.map(task => {
             if (task.taskId === newTask.taskId) {
               task = Object.assign(task, newTask);
             }
             return task;
           });
+
+          this.getTodoList();
 
           this.sortTodo();
         }
@@ -283,6 +297,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
         if (error.message) {
           this.messageService.showMessage(error.message, 'error');
         }
+
+        this.getTodoList();
 
         this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
@@ -326,7 +342,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
                 this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
-                this.tasks = this.tasks.filter(newTask => newTask.taskId !== task.taskId);
+                this.subTasks = this.subTasks.filter(newTask => newTask.taskId !== task.taskId);
 
                 this.sortTodo();
               }
@@ -343,7 +359,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
 
               this.form.enable();
 
-              this.getTaskList();
+              this.getTodoList();
 
               this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
@@ -389,7 +405,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'todo'});
 
           if (resp.result === 1) {
-            this.tasks.push(resp.content);
+            this.subTasks.push(resp.content);
 
             this.form.reset();
 
@@ -440,6 +456,8 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
       trackable: task.trackable,
       parentTaskId: task.parentTaskId,
     });
+
+    this.searchBox.nativeElement.focus();
   }
 
   saveTask(): void {
@@ -457,7 +475,7 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
           if (resp.result === 1) {
             const newTask = resp.content;
 
-            this.tasks = this.tasks.map(task => {
+            this.subTasks = this.subTasks.map(task => {
               if (task.taskId === newTask.taskId) {
                 task = Object.assign(task, newTask);
               }
@@ -492,27 +510,25 @@ export class TaskTodoComponent implements OnInit, OnDestroy {
   openTask(task: TaskInterface): void {
     this.loadingIndicatorService.changeLoadingStatus({status: true, serviceName: 'todo'});
 
-    this.getBreadcrumbData(task.taskId).then(() => {
+    this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
+
+    this.bottomSheetData.bottomSheetRef.close();
+
+    setTimeout(() => {
+      const data: TaskDataInterface = {
+        action: 'detail',
+        usersList: this.usersList,
+        projectsList: this.projectsList,
+        task: task,
+        boardStatus: task.boardStatus
+      };
+
+      const finalData = {...this.bottomSheetData, data: data};
+
       this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
 
-      this.bottomSheetData.bottomSheetRef.close();
-
-      setTimeout(() => {
-        const data: TaskDataInterface = {
-          action: 'detail',
-          usersList: this.usersList,
-          projectsList: this.projectsList,
-          task: task,
-          boardStatus: task.boardStatus
-        };
-
-        const finalData = {...this.bottomSheetData, data: data};
-
-        this.loadingIndicatorService.changeLoadingStatus({status: false, serviceName: 'project'});
-
-        this.buttonSheetDataService.changeButtonSheetData(finalData);
-      }, 500);
-    });
+      this.bottomSheetDataService.changeButtonSheetData(finalData);
+    }, 500);
   }
 
   getBreadcrumbData(taskId: number): Promise<boolean> {

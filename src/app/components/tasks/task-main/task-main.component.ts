@@ -17,7 +17,7 @@ import {TaskFilterComponent} from '../task-filter/task-filter.component';
 import {EventHandlerService} from '../../events/service/event-handler.service';
 import {ViewDirectionService} from '../../../services/view-direction.service';
 import {WindowManagerService} from '../../../services/window-manager.service';
-import {ButtonSheetDataService} from '../services/ButtonSheetData.service';
+import {BottomSheetDataService} from '../services/BottomSheetData.service';
 import {TaskBottomSheetComponent} from '../task-bottom-sheet/task-bottom-sheet.component';
 import {TaskBottomSheetInterface} from '../task-bottom-sheet/logic/TaskBottomSheet.interface';
 import {IgnoreAutoRefreshService} from '../services/ignore-auto-refresh.service';
@@ -65,7 +65,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
               private currentTaskService: CurrentTaskService,
               private eventHandlerService: EventHandlerService,
               private windowManagerService: WindowManagerService,
-              private buttonSheetDataService: ButtonSheetDataService,
+              private bottomSheetDataService: BottomSheetDataService,
               private loadingIndicatorService: LoadingIndicatorService,
               private ignoreAutoRefreshService: IgnoreAutoRefreshService) {
     super(injector, userInfoService);
@@ -104,7 +104,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     };
 
     this._subscription.add(
-      this.buttonSheetDataService.currentButtonSheetData.subscribe((data: TaskBottomSheetInterface) => {
+      this.bottomSheetDataService.currentButtonSheetData.subscribe((data: TaskBottomSheetInterface) => {
         if (data) {
           data.bottomSheetRef = this.bottomSheet;
 
@@ -143,7 +143,7 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
     const dialogRef = this.dialog.open(TaskAddComponent, {
       data: data,
       autoFocus: false,
-      width: '50%',
+      width: '45%',
       height: '560px'
     });
 
@@ -179,10 +179,6 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
   getTaskEssentialInfo(event: UsersProjectsListInterface): void {
     this.taskEssentialInfo = event;
   }
-
-  /*getTaskToBoardData(event): void {
-    this.pushTaskToBoard = event;
-  }*/
 
   showCalendarFilter(): void {
     const data: FilterTaskInterface = {
@@ -287,11 +283,6 @@ export class TaskMainComponent extends LoginDataClass implements AfterViewInit, 
       this.resetFilter();
     }
   }
-
-  /*openButtonSheet(bottomSheetConfig: TaskBottomSheetInterface) {
-    // bottomSheetConfig.bottomSheetRef = this.bottomSheet;
-    // this.bottomSheet.toggleBottomSheet(bottomSheetConfig);
-  }*/
 
   getTranslate(word: string): string {
     return this.translate.instant(word);
